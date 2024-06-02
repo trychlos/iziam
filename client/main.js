@@ -16,7 +16,7 @@
  *      |
  *      +- ... import global client libraries and definitions
  *      |
- *      +- ./display-unit.js                   Define the display units (pages and modals)
+ *      +- ./display-units.js                  Define the display units (pages and modals)
  *      +- ./routes.js                         FlowRouter routes
  *
  * Because an empty ('/') route is defined, the corresponding page is displayed

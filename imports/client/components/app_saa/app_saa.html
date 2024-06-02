@@ -1,0 +1,17 @@
+<template name="app_saa">
+    <div class="x-component c-app-saa">
+
+        {{#if saaHasPackage }}
+            {{#if saaReady }}
+                {{#if saaShouldDisplay }}
+                    {{> saaCreate (saaArgs) }}
+                {{else}}
+                    {{> app_layout }}
+                {{/if}}
+            {{/if}}
+        {{else}}
+            {{> app_layout }}
+        {{/if}}
+
+    </div>
+</template>

@@ -76,7 +76,7 @@ pwix:bootbox@1.5.6-rc
 pwix:cookie-manager@1.4.2-rc
 pwix:core-app@1.0.0-rc
 pwix:editor@1.4.3-rc
-pwix:env-settings@2.0.1-rc
+pwix:env-settings@2.0.2-rc
 pwix:i18n@1.5.8-rc
 pwix:jquery-ui@1.0.4-rc
 pwix:jstree@1.0.7-rc

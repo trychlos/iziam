@@ -1,0 +1,27 @@
+<template name="app_content">
+    <div class="x-component c-app-content">
+
+        {{#if wantConnection }}
+            {{#if isConnected }}
+                {{#if wantScope }}
+                    {{#if orgReady }}
+                        {{#if orgCurrent }}
+                            {{> Template.dynamic template=(contentTemplate) }}
+                        {{else}}
+                            {{#if orgSeveral }}
+                                {{> app_tiers (parmsTiersSelect) }}
+                            {{/if}}
+                        {{/if}}
+                    {{/if}}
+                {{else}}
+                    {{> Template.dynamic template=(contentTemplate) }}
+                {{/if}}
+            {{else}}
+                {{> app_tiers (parmsTiersLogin) }}
+            {{/if}}
+        {{else}}
+            {{> Template.dynamic template=(contentTemplate) }}
+        {{/if}}
+
+    </div>
+</template>

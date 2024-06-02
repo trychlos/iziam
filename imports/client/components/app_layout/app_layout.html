@@ -1,0 +1,15 @@
+<template name="app_layout">
+    <div class="c-app-layout {{ themeClass }}">
+
+        {{#if wantHeader }}
+            {{> app_header runContext=runContext }}
+        {{/if}}
+
+        {{> app_content runContext=runContext }}
+
+        {{#if wantFooter }}
+            {{> app_footer runContext=runContext }}
+        {{/if}}
+
+    </div>
+</template>
