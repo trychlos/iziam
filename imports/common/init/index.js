@@ -10,13 +10,15 @@ if( false ){
     //require( '@vestergaard-company/js-mixin/package.json' );
 }
 
-//import './app.js';
-//import './constants.js';
+import './app.js';
+import './constants.js';
+import './defaults.js';
 //
 //import './accounts-ui.js';
 //import './cookie-manager.js';
 //import './core-app.js';
 //import './date.js';
+import './env-settings.js';
 //import './ext-notes.js';
 //import './ext-oauth-metadata.js';
 //import './ext-openid.js';
@@ -33,3 +35,5 @@ if( false ){
 //import './ext-openid-functions.js';
 //import './providers.js';
 //import './reserved-words.js';
+
+//import '../../openmct/MCT.js';

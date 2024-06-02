@@ -9,9 +9,24 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.23.5",
+    "@popperjs/core": "^2.11.8",
+    "@vestergaard-company/js-mixin": "^1.0.3",
+    "bootstrap": "^5.3.3",
+    "detect-it": "^4.0.1",
+    "ellipsize": "^0.5.1",
+    "email-validator": "^2.0.4",
     "jquery": "^3.7.1",
+    "jquery-resizable-dom": "^0.35.0",
+    "jquery-ui": "^1.13.3",
+    "js-yaml": "^4.1.0",
+    "jstree": "^3.3.16",
     "lodash": "^4.17.21",
-    "meteor-node-stubs": "^1.2.7"
+    "meteor-node-stubs": "^1.2.7",
+    "printf": "^0.6.1",
+    "redis": "^4.6.14",
+    "strftime": "^0.10.2",
+    "uuid": "^9.0.1",
+    "zxcvbn": "^4.4.2"
   },
   "meteor": {
     "mainModule": {

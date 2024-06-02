@@ -13,9 +13,6 @@
  *      |   +- ... import global common libraries and definitions
  *      |
  *      +- ... import global server libraries and definitions
- *      |
- *      +- APP = new AppServer()
- *      +- APP->run()
  */
 
 import '/imports/server/init/index.js';

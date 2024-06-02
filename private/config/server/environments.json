@@ -1,0 +1,73 @@
+{
+    "izIAM": {
+        "environments": {
+            "comments": [
+                "An environment is identified by its key name (e.g. 'dev.1').",
+                "Because some JS packages may rely only on 'development' or 'production', the type qualifies our environment.",
+                "",
+                "The application reads its current running environment from the APP_ENV variable",
+                "(see maintainer/docs/Environment for a rationale).",
+                "As a consequence, the data adressed per environment is only available on the server (as the APP_ENV variable is a server variable).",
+                "",
+                "Other used variables:",
+                "   - MONGO_URL: the MongoDB URI.",
+                "   - ROOT_URL: the public root URL of our application.",
+                "   - NODE_ENV: development|staging|production",
+                "",
+				"Please note that the configuration from this folder is ONLY available on the server.",
+                "",
+				"For consistency reasons, the environment keys here should be the same than in maintainer/targets.json.",
+                "",
+				"- uploadUrl: teEditor configuration",
+				"- editable: whether this environment let the user edit the documents through the teEditor, defaulting to false",
+				"- hasTESwitch: whether this environment has a edition toggle switch, defaulting to false",
+				"   only considered is 'editable' above is true",
+				"",
+				"CAUTION: the environment content (below) may be returned to the client via the 'settings.environment()' method call.",
+				" You MUST take care of not putting any sensible information here."
+            ],
+            "dev:0": {
+                "type": "development",
+                "comments": [
+                    "The development environment on developer laptop."
+                ],
+                "sender": "Webmaster <noreply@localhost",
+                "contact": "DevFakeContact",
+                "title": "<span class=\"iziam\">izIAM</span> <i>[dev:0]</i>",
+                "wantEditionSwitch": true,
+                "packages": {
+                    "pwix:accounts-ui": {
+                        "global": "AccountsUI",
+                        "conf": {
+                            "passwordLength": 4,
+                            "passwordStrength": {
+                                "constant": "AccountsUI.C.Password.VERYWEAK"
+                            }
+                        }
+                    }
+                },
+                "issuer": "http://localhost:3003"
+            },
+            "staging-name": {
+                "type": "staging",
+                "comments": [
+                    "A way to present the current development state to the outside as a showcase."
+                ],
+                "sender": "Webmaster <noreply@trychlos.org",
+                "contact": "p.wieser@trychlos.org",
+                "title": "AppTemplateStaging",
+                "issuer": "https://trychlos.org"
+            },
+            "production-name": {
+                "type": "production",
+                "comments": [
+                    "The production environment."
+                ],
+                "sender": "Webmaster <noreply@pwi-consulting.fr",
+                "contact": "pierre@wpwi-consulting.fr",
+                "title": "AppTemplateProd",
+                "issuer": "https://trychlos.org"
+            }
+        }
+    }
+}

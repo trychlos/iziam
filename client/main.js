@@ -11,18 +11,13 @@
  *      +- /imports/common/init/index.js
  *      |   |
  *      |   +- ... import global common libraries and definitions
+ *      |   |
+ *      |   +- Meteor.APP = {}
  *      |
  *      +- ... import global client libraries and definitions
- *      |  |
- *      |  +- popper
- *      |  +- Bootstrap js/css
- *      |  +- Fontawesome js
  *      |
- *      +- ./pages.js                          Define pages based on CoreApp classes
+ *      +- ./display-unit.js                   Define the display units (pages and modals)
  *      +- ./routes.js                         FlowRouter routes
- *      |
- *      +- APP = new AppClient()
- *      +- APP->run()
  *
  * Because an empty ('/') route is defined, the corresponding page is displayed
  * as soon as the route exists in the system.
