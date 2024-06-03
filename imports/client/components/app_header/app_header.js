@@ -7,7 +7,7 @@
  * - runContext = RunContext.plainContext()
  */
 
-//import '/imports/client/components/app_menu_button/app_menu_button.js';
+import '/imports/client/components/app_menu_button/app_menu_button.js';
 import '/imports/client/components/app_edit_button/app_edit_button.js';
 //import '/imports/client/components/organization_header/organization_header.js';
 //import '/imports/client/components/organization_select/organization_select.js';

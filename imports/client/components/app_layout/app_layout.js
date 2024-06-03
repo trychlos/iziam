@@ -26,7 +26,7 @@ import '/imports/client/components/app_saa/app_saa.js';
 //import '/imports/client/components/app_tiers/app_tiers.js';
 //import '/imports/client/components/app_tiers/app_saa.js';
 //import '/imports/client/components/home_page/home_page.js';
-//import '/imports/client/components/managers_page/managers_page.js';
+import '/imports/client/components/managers_page/managers_page.js';
 //import '/imports/client/components/organization_go/organization_go.js';
 //import '/imports/client/components/organization_page/organization_page.js';
 //import '/imports/client/components/organization_select/organization_select.js';

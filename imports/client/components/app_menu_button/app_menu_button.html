@@ -1,0 +1,38 @@
+<template name="app_menu_button">
+    <div class="c-app-menu-button">
+
+        <div class="dropdown">
+
+            <!-- the 'dropdown-toggle' class displays the small 'v' after the button content -->
+            <button class="btn" data-bs-toggle="dropdown" aria-expanded="false" title="{{ i18n key="header.available_pages" }}">
+                <span class="fa-solid fa-fw fa-bars"></span>
+            </button>
+
+            <ul class="dropdown-menu">
+
+                <!-- NB: keep this uiSMView helper consistant with the relevant media query in app.less -->
+                {{#if uiSMView }}
+                    {{> acMenuItems name="appHeader" }}
+                    <li><hr class="dropdown-divider"></li>
+                {{/if}}
+
+                {{#each it in userMenu }}
+                    <li>
+                        <a class="dropdown-item {{ classes it }} d-flex align-items-center justify-content-start" id="{{ it.name }}" href="#">
+                            <span class="fa-solid fa-fw fa-chevron-right"></span>
+                            <p>{{ label it }}</p>
+                        </a>
+                    </li>
+                {{/each}}
+
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <p class="dropdown-item version disabled ca-ml175">v {{ version }}</p>
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+</template>

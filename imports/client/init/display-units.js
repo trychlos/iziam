@@ -83,7 +83,7 @@ Meteor.APP.displaySet = new CoreApp.DisplaySet({
     },
     */
     settings: {
-        template: 'settings_edit',
+        template: 'app_settings_edit',
         inMenus: [ 'app_menu_button' ],
         menuLabel: 'header.menu.settings',
         rolesAccess: [ Meteor.APP.C.appAdmin ],

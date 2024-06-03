@@ -535,7 +535,7 @@ Meteor.APP.i18n = {
                     managers: 'Managers',
                     configuration: 'Configuration',
                     properties: 'Main properties',
-                    settings: 'Settings'
+                    settings: 'Application settings'
                 },
                 my_roles: 'My roles',
                 switch_label: 'Edit',
