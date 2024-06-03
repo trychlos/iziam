@@ -4,7 +4,7 @@
 
 import { RunContext } from '../classes/run-context.class';
 
-Meteor.APP.runContext = new RunContext();
+Meteor.APP.runContext = new RunContext({ title: Meteor.APP.name });
 
 /*
 {

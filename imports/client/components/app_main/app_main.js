@@ -24,8 +24,6 @@
  *          +- app_footer
  */
 
-import { EnvSettings } from 'meteor/pwix:env-settings';
-
 import '/imports/client/components/app_layout/app_layout.js';
 
 import './app_main.html';
@@ -36,15 +34,7 @@ Template.app_main.onCreated( function(){
 });
 
 Template.app_main.onRendered( function(){
-    const self = this;
     console.log( 'Template.app_main.onRendered()' );
-
-    // get the application title from settings per environment
-    self.autorun(() => {
-        if( EnvSettings.ready()){
-            Meteor.APP.runContext.title( Meteor.settings.public[Meteor.APP.name].environment.title || '' );
-        }
-    });
 });
 
 Template.app_main.helpers({

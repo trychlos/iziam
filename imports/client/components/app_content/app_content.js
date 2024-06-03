@@ -30,10 +30,6 @@ Template.app_content.helpers({
         if( page ){
             check( page, CoreApp.DisplayUnit );
             template = page.get( 'template' );
-            //const wantScope = await page.wantScope();
-            //if( template ){
-            //    console.log( 'rendering', template, '(wantScope='+wantScope+')' );
-            //}
         }
         return template;
     },
