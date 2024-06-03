@@ -22,8 +22,9 @@ Template.app_header.helpers({
     parmsUserLogin(){
         return {
             name: 'izerm:app-header:user-login',
-            loggedItemsAfter: Meteor.APP.AccountsUI.loggedItemsAfter(),
-            mdClassesContent: Meteor.APP.runContext.page().get( 'theme' ),
+            initialDisplay: AccountsUI.C.Display.DROPDOWNBUTTON,
+            //loggedItemsAfter: Meteor.APP.AccountsUI.loggedItemsAfter(),
+            mdClassesContent: Meteor.APP.runContext.pageClasses().join( ' ' ),
         };
     }
 });

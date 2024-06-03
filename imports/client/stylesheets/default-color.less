@@ -3,6 +3,8 @@
  */
 
 @bgcolor: #fffff0;
+@darkerbg: #ecece0; // Alabaster - see https://coolors.co/ecece0
+@hoverbg: darken( @bgcolor, 10% );
 
 .app-color(){
     filter: invert(19%) sepia(64%) saturate(1268%) hue-rotate(146deg) brightness(95%) contrast(99%);    // darkteal
@@ -16,9 +18,15 @@
     textarea:focus {
         background-color: @bgcolor;
     }
+    .dropdown-menu {
+        background-color: @darkerbg;
+    }
 }
 .t-default-color.modal-content {
     background-color: @bgcolor;
+    .dropdown-menu {
+        background-color: @darkerbg;
+    }
 }
 
 // app-footer is displayed as a droppable ribbon on bottom of the page, with links
@@ -43,15 +51,8 @@
 
  /*
 
-.iziam {
-    font-family: 'Serpentine';
-    font-style: italic;
-    font-size: 125%;
-    margin-right: 0.5em;
-}
-// a mixin which provide the izIAM application color
+ // a mixin which provide the izIAM application color
 //.input-readonly-bg( @bg ){ @color: lighten( @bg, 50% ); }
-
 
 .c-app-main,
 .c-app-saa {

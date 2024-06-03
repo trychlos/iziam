@@ -44,4 +44,18 @@ export class RunContext extends CoreApp.RunContext {
 
         return this;
     }
+
+    /**
+     * @summary Return the classes to be provided to other display units than the current page
+     * @returns {Array} the list of color and layout themes
+     */
+    pageClasses(){
+        const page = this.page();
+        const colorTheme = page ? page.get( 'colorTheme' ) || Meteor.APP.defaults.colorTheme : Meteor.APP.defaults.colorTheme;
+        const layoutTheme = page ? page.get( 'layoutTheme' ) || Meteor.APP.defaults.layoutTheme : Meteor.APP.defaults.layoutTheme;
+        let classesArray = [];
+        classesArray.push( colorTheme );
+        classesArray.push( layoutTheme );
+        return classesArray;
+    }
 }
