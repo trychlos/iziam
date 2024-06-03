@@ -43,17 +43,6 @@ export class RunContext extends CoreApp.Base {
     }
 
     /**
-     * Getter
-     * @returns {Object} the current running context as a plain Javascript object to be used as data template
-     */
-    context(){
-        return {
-            isConnected: Meteor.userId() !== null,
-            title: this.title()
-        };
-    }
-
-    /**
      * Getter/Setter
      * @summary
      *  The data context is attached to the current route.
@@ -87,6 +76,22 @@ export class RunContext extends CoreApp.Base {
             this.#page.set( du );
         }
         return this.#page.get();
+    }
+
+    /**
+     * Getter
+     * @summary
+     *  The returned object is passed as a template datacontext from app_layout to below sub-templates.
+     *  Data is so made reactive and the display is expected to be refreshed on data changes
+     * @returns {Object} the current running context as a plain Javascript object to be used as data template
+     */
+    plainContext(){
+        return {
+            isConnected: Meteor.userId() !== null,
+            title: this.title(),
+            wantFooter: true,
+            wantHeader: true
+        };
     }
 
     /**

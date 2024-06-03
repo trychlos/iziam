@@ -1,23 +1,25 @@
 <template name="app_footer">
-    <div class="x-component c-app-footer">
+    <div class="c-app-footer">
 
-        <div class="footer-left">
-            {{> site_copyright }}
-            {{> powered_by }}
-        </div>
+        {{#if runContext.wantFooter }}
+            <div class="footer-left">
+                {{> site_copyright }}
+                {{> powered_by }}
+            </div>
 
-        <div class="footer-middle">
-            <div class="ca-ml1"></div>
-            {{> cmManagerLink }}
-        </div>
+            <div class="footer-middle">
+                <div class="ca-ml1"></div>
+                {{> cmManagerLink }}
+            </div>
 
-        <div class="footer-right">
-            <div class="ca-ml1"></div>
-            {{> coreLegalsLink (parmsLegals) }}
-            {{> coreGTULink (parmsGTU) }}
-            {{> coreCookiesLink (parmsCookies) }}
-            {{> coreGDPRLink (parmsGDPR) }}
-        </div>
+            <div class="footer-right">
+                <div class="ca-ml1"></div>
+                {{> coreLegalsLink (parmsLegals) }}
+                {{> coreGTULink (parmsGTU) }}
+                {{> coreCookiesLink (parmsCookies) }}
+                {{> coreGDPRLink (parmsGDPR) }}
+            </div>
+        {{/if}}
     
     </div>
 </template>

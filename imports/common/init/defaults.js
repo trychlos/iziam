@@ -5,7 +5,9 @@
 Meteor.APP.defaults = {
 
     // display
-    theme: 't-page',
+    colorTheme: 't-default-color',
+    layoutTheme: 't-default-layout',
+
     useBootstrapValidationClasses: true,
 
     // Default endpoints

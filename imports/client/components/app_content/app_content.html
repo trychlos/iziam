@@ -1,8 +1,8 @@
 <template name="app_content">
-    <div class="x-component c-app-content">
+    <div class="c-app-content">
 
         {{#if wantConnection }}
-            {{#if isConnected }}
+            {{#if runContext.isConnected }}
                 {{#if wantScope }}
                     {{#if orgReady }}
                         {{#if orgCurrent }}

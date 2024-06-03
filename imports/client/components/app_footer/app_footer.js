@@ -1,5 +1,8 @@
 /*
  * /imports/client/components/app_footer/app_footer.js
+ * 
+ * Data context:
+ * - runContext = RunContext.plainContext()
  */
 
 import '/imports/client/components/powered_by/powered_by.js';

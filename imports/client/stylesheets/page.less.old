@@ -1,0 +1,814 @@
+/*
+ * /imports/client/stylesheets/page.less
+ */
+
+@bgcolor: #fffff0;
+
+.iziam {
+    font-family: 'Serpentine';
+    font-style: italic;
+    font-size: 125%;
+    margin-right: 0.5em;
+}
+// a mixin which provide the izIAM application color
+//.input-readonly-bg( @bg ){ @color: lighten( @bg, 50% ); }
+
+.app-color(){
+    filter: invert(19%) sepia(64%) saturate(1268%) hue-rotate(146deg) brightness(95%) contrast(99%);    // darkteal
+}
+
+
+.c-app-main,
+.c-app-saa {
+    height: 100vh;
+}
+
+.t-page {
+    background-color: @bgcolor;
+    input,
+    select,
+    textarea,
+    textarea:focus {
+        background-color: @bgcolor;
+    }
+}
+.t-page.modal-content {
+    background-color: @bgcolor;
+}
+
+// this makes the app-content fill all the vertical space
+//  only works because c-app-content is a direct descendant of c-app-layout
+.t-page.c-app-layout {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    .c-app-content {
+        flex-grow: 1;
+        overflow: auto;
+    }
+}
+
+// app-header is displayed as a thick ribbon on top of the page, with item menus and buttons
+//  we like to have a small padding and a border above the content
+.t-page {
+    .c-app-header {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.5em;
+        margin-bottom: 0.5em;
+        .header-left {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: start;
+            a {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: start;
+            }
+            a:hover {
+                text-decoration: none;
+                color: inherit;
+            }
+            a img {
+                width: 1.75em;
+            }
+            a p {
+                margin-left: 0.5em;
+                font-weight: bold;
+            }
+        }
+        .header-right {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: end;
+        }
+        .iziam {
+            font-size: 175%;
+        }
+        .c-site-logo,
+        .iziam {
+            .app-color();
+        }
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+        border-bottom-color: lightgray;
+    }
+}
+
+.t-page {
+    .c-app-tiers {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        align-items: center;
+        height: 100%;
+        .two-three {
+            width: 100%;
+            max-height: 50%;
+        }
+        .two,
+        .three {
+            width: 40%;
+        }
+        .two img {
+            width: 75%;
+        }
+        .preamble {
+            font-size: 200%;
+            font-weight: bold;
+            text-align: center;
+        }
+        .two-three {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            align-items: center;
+        }
+        .not-allowed {
+            margin: 5em;
+            font-size: 120%;
+            font-weight: bold;
+        }
+    }
+}
+
+// utilities
+.t-page {
+    // button.btn default to have a border when they are primary, secondary, and so on...
+    //  say that our dropdowns also have a border -> all the buttons
+    .btn {
+        --bs-btn-border-color: gray;
+        --bs-btn-hover-border-color: gray;
+    }
+    .btn:disabled {
+        font-style: italic;
+    }
+    .btn-dialog-item-new {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        button {
+            border-color: var( --bs-primary );
+        }
+        button:disabled {
+            border-color: lightgray;
+            color: lightgray;
+        }
+    }
+    // align input field and the icon on the right
+    .input-svg-at-end {
+        display: flex;
+        align-items: center;
+    }
+    .input-svg-at-end input {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        margin-right: 0;
+        border-right: 0;
+    }
+    .input-svg-at-end svg {
+        position: relative;
+        left: -0.75em;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        border-top-right-radius: 0.375rem;
+        border-bottom-right-radius: 0.375rem;
+        padding: 0.7rem;
+        //background-color: @bgcolor;
+        border: 1px solid lightgray;
+        border-left: 0;
+        margin-left: 0;
+        &:hover {
+            background-color: darken( @bgcolor, 2.5% );
+            cursor: pointer;
+        }
+    }
+    // make the standard blurred border a bit thinner
+    input:focus {
+        box-shadow: 0 0 0 0.2rem rgba(13,110,253,.25);
+    }
+    // dropdown in the header (or elsewhere ?)
+    .dropdown-menu {
+        .dropdown-item:hover {
+            text-decoration: none;
+        }
+        .dropdown-item.disabled {
+            font-style: italic;
+        }
+        .dropdown-item svg {
+            margin-right: 0.5em;
+        }
+    }
+    // fieldsets inside the panels
+    fieldset {
+        border: 1px solid lightgray;
+        border-radius: 0.5em;
+        -moz-border-radius: 0.5em;
+        padding: 0.5em;
+    }
+
+    // legend
+    fieldset legend {
+        font-size: 1em;
+        float: inherit;
+        width: auto;
+        padding-left: 0.5em;
+        padding-right: 0.5em;
+    }
+    .form-check-input {
+        margin-top: auto;
+        vertical-align: middle;
+    }
+    // we use jqwTable to display our lists
+    .jqwtable {
+        border-collapse: separate;
+        -webkit-border-vertical-spacing: 0.15em;
+    }
+    label.disabled,
+    input:disabled,
+    div.disabled,
+    div.disabled .url,
+    td.disabled,
+    td.disabled select {
+        font-style: italic;
+        color: gray;
+    }
+    // multiple-select adjustements
+    .multiple-select {
+        button.ms-choice {
+            border: 0;
+            span {
+                top: 0.3em;
+            }
+            span.placeholder {
+                color: x-transparent;
+                cursor: inherit;
+                background-color: inherit;
+            }
+        }
+    }
+    // nav and tabs
+    .nav-link {
+        --bs-nav-link-color: var( --bs-gray-800 );
+        --bs-nav-tabs-link-active-color: black;
+    }
+    // dropdown items do not decorate their links
+    .nav-link .dropdown {
+        margin-left: 0.5em;
+    }
+    .nav-link.active {
+        background-color: darken( @bgcolor, 2.5% );
+    }
+    // all managers page may have this page
+    .not-allowed {
+        margin: 5em;
+        font-size: 120%;
+        font-weight: bold;
+    }
+    .url {
+        color: var( --bs-primary );
+        white-space: nowrap;
+    }
+    .x-page {
+        padding: 0.5em;
+    }
+    .x-tab .title:first-child {
+        padding: 1em 1em 0 1em;
+    }
+    .x-tab .title:not( :first-child ){
+        padding: 0.5em 1em 0 1em;
+    }
+}
+
+// components
+.t-page {
+    .c-account-edit {
+        .c-account-roles-panel .mgr-buttons button:not( :first-child ){
+            margin-left: 0.25em;
+        }
+    }
+    .c-accounts-select {
+        .ms-drop {
+            top: 2.5em;
+            left: 0;
+        }
+    }
+    .c-client-auth-fieldset {
+        tr:last-child select {
+            margin-bottom: 0.5em;
+        }
+    }
+    .c-client-id-panel {
+        table {
+            tr.secret:hover {
+                background-color: lightgray;
+            }
+        }
+    }
+    .c-client-new-assistant {
+        width: 74em;
+        height: 35em;
+        min-height:35em;
+        fieldset.summary {
+            font-size: 90%;
+            color: #013583; // darken( var( --bs-primary ), 50 );
+            legend {
+                font-size: 1.1em;
+                margin-bottom: 0;
+            }
+            .recap {
+                margin-left: 0.75em;
+            }
+            .form-text {
+                margin-top: 0;
+            }
+        }
+        .c-client-new-assistant-pane {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            .content {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-around;
+                flex-grow: 1;
+            }
+            .chooser {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            .by-item {
+                margin: 0.25em;
+                white-space: nowrap;
+                border: 1px solid transparent;
+            }
+            .by-item.selected {
+                border: 1px solid gray;
+                border-radius: 0.5em;
+            }
+        }
+        .c-client-new-assistant-auth-method .by-item {
+            padding: 0.5em 1em;
+            min-width: 23em;
+            .by-item:hover {
+                cursor: pointer;
+            }
+        }
+        .c-client-new-assistant-done {
+            .success {
+                font-weight: bold;
+                color: var( --bs-success );
+            }
+            .result {
+                font-weight: bold;
+            }
+        }
+        .c-client-new-assistant-grant-type .by-item {
+            padding: 0.5em 2em;
+            min-width: 18em;
+        }
+        .c-client-new-assistant-introduction {
+            justify-content: center;
+            margin-right: 1em;
+        }
+        .c-client-new-assistant-nature {
+            .chooser {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .by-item {
+                width: 12em;
+                height: 22em;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin: 0.5em;
+                padding: 0.5em;
+                white-space: wrap;
+                img {
+                    width: 6em;
+                }
+            }
+            .by-item:hover {
+                cursor: pointer;
+            }
+        }
+    }
+    .c-client-registration-fieldset {
+        .form-check {
+            margin-left: 1em;
+        }
+        .form-check:not( :first-child ){
+            margin-top: 0.5em;
+        }
+        p.form-text {
+            margin-top: 0;
+        }
+    }
+    .c-collapsable-template {
+        border: 1px solid lightgray;
+        border-radius: 0.25em;
+        .header {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            padding: 0.25em 0.5em;
+            a {
+                width: 100%;
+                text-decoration: none;
+                cursor: pointer;
+            }
+            svg {
+                margin-top: 0.25em;
+            }
+        }
+        .content {
+            padding: 0 0.5em;
+        }
+    }
+    .c-count-badge {
+        border: 1px solid var( --bs-primary );
+        border-radius: 0.3em;
+        max-width: fit-content;
+        padding: 0 0.7em;
+    }
+    .c-date-input {
+        .help {
+            white-space: nowrap;
+            margin-left: 0.5em;
+            color: gray;
+            font-style: italic;
+        }
+    }
+    .c-error-msg {
+        padding-top: 0.5em;
+        font-style: italic;
+        .ERROR {
+            color: var( --bs-danger );
+        }
+        .WARNING {
+            color: #d7951a; //var( --bs-warning ); contrast is too small
+        }
+    }
+    .c-group-edit {
+        height: 32em;
+    }
+    .c-identity-edit {
+        .jqwtable {
+            th {
+                font-weight: normal;
+            }
+        }
+        .c-zoneinfo-select,
+        .c-locale-select {
+            width: 100%;
+        }
+    }
+    .c-image-includer {
+        .includer-top-picture {
+            height: 10em;
+            .includer-picture {
+                width: 10em;
+                //height: 10em;
+                border: 1px solid lightgray;
+                border-radius: 0.5em;
+                padding: 0.25em;
+                svg {
+                    width: 9.5em;
+                    height: 9.5em;
+                    color: lightgray;
+                }
+                img {
+                    width: 9.5em;
+                }
+            }
+        }
+    }
+    .c-memberships-pane {
+        // display svg and have a bit more space before the text
+        a > .jstree-icon {
+            background-size: contain!important;
+            margin-right: 0.5em;
+        }
+        // have lines a bit heigher
+        .jstree-icon,
+        .jstree-anchor,
+        .jstree-wholerow {
+            height: 2em;
+            line-height: 2em;
+        }
+        // increase the level indentation
+        ul[role="group"] .jstree-node {
+            margin-left: 2em;
+        }
+    }
+    .c-oauth-dynamic-registration-dialog {
+        width: 50em;
+    }
+    .c-oauth-endpoints-dialog {
+        width: 60em;
+    }
+    .c-oauth-jwks-dialog {
+        width: 90em;
+    }
+    .c-oauth-jwks-pane,
+    .c-oauth-keygrip-secrets-pane,
+    .c-resource-scopes-panel {
+        .js-trash {
+            border-color: var( --bs-warning );
+            cursor: default;
+        }
+    }
+    .c-oauth-keygrip-dialog {
+        width: 50em;
+    }
+    .c-oauth-summary-pane {
+        padding: 0.5em 1em;
+        .theme {
+            margin: 0.5em 0;
+        }
+        .sumtitle {
+            font-weight: bold;
+        }
+    }
+    .c-openid-tab {
+        .pane-title {
+            font-weight: bold;
+        }
+    }
+    .c-organization-edit {
+        width: 41em;    // the mean between md (32em) and lg (50em)
+        div.url {
+            color: gray;
+            white-space: nowrap;
+            font-style: italic;
+        }
+        .x-pane {
+            padding: 0.5em 0;
+        }
+        .c-organization-properties-pane {
+            .js-edit-managers {
+                border-color: lightgray;
+            }
+        }
+    }
+    .c-organization-go {
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        button {
+            margin-top: 1em;
+        }
+    }
+    .c-organization-header {
+        display: flex;
+        .c-organization-select {
+            select {
+                font-weight: bold;
+                color: var( --bs-primary );
+                cursor: pointer;
+            }
+        }
+        .c-validities-select {
+            margin-left: 0.5em;
+        }
+    }
+    .c-resource-edit {
+        width: 40em;
+    }
+}
+
+.t-page .x-panel {
+    padding-top: 0.5em;
+
+    .checkbox-2-lines{
+        display: flex;
+        align-items: start;
+        input {
+            margin-top: 0.3em;
+        }
+        label {
+            margin-left: 0.5em;
+        }
+    }
+    // when we have two div besides each one
+    .leftset {
+        margin-right: 0.25em;
+    }
+    .rightset {
+        margin-left: 0.25em;
+    }
+
+    .label-besides-table {
+        padding-top: 0.35em;
+    }
+}
+
+// most of our forms are layouted inside of tables
+table.form-table {
+    width: 100%;
+    tr:not( :last-child ) th {
+        padding-bottom: 0.5em;
+    }
+    tr:not( :last-child ) td {
+        padding-bottom: 0.25em;
+    }
+    td.label,
+    .td-label {
+        text-align: end;
+        padding-right: 0.5em;
+        white-space: nowrap;
+    }
+    .form-label {
+        margin: 0;
+        white-space: nowrap;
+    }
+}
+table.colpad025 {
+    td:not( :first-child ),
+    th:not( :first-child ){
+        padding-left: 0.25em;
+    }
+}
+
+// app-footer is displayed as a droppable ribbon on bottom of the page, with links
+//  we like to have a small padding and a border under the content
+.t-page {
+    .c-app-footer {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.5em;
+        margin-top: 0.5em;
+        font-size: 90%;
+        a:hover {
+            color: inherit;
+        }
+        .footer-left {
+            display: flex;
+            flex-direction: column;
+            align-items: start;
+            justify-content: center;
+
+            .c-site-copyright a {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: start;
+                img {
+                    width: 1.5em;
+                }
+            }
+            .c-powered-by a {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: start;
+            }
+        }
+        .footer-middle {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .footer-right {
+            display: flex;
+            flex-direction: column;
+            align-items: end;
+            justify-content: center;
+        }
+        border-top-width: 1px;
+        border-top-style: solid;
+        border-top-color: lightgray;
+    }
+}
+
+// a responsive padding left and right
+.app-hpad5 {
+    padding-left: 0.25em;
+    padding-right: 0.25em;
+    @media screen and ( min-width: @ui-sm-width ){
+        margin-left: 1em;
+        margin-right: 1em;
+    }
+    @media screen and ( min-width: @ui-md-width ){
+        margin-left: 2.5em;
+        margin-right: 2.5em;
+    }
+    @media screen and ( min-width: @ui-lg-width ){
+        margin-left: 5em;
+        margin-right:5em;
+    }
+}
+
+// a responsive padding left and right
+.app-hpad10 {
+    padding-left: 0.25em;
+    padding-right: 0.25em;
+    @media screen and ( min-width: @ui-sm-width ){
+        margin-left: 2em;
+        margin-right: 2em;
+    }
+    @media screen and ( min-width: @ui-md-width ){
+        margin-left: 5em;
+        margin-right: 5em;
+    }
+    @media screen and ( min-width: @ui-lg-width ){
+        margin-left: 10em;
+        margin-right:10em;
+    }
+    @media screen and ( min-width: @ui-xl-width ){
+        margin-left: 20em;
+        margin-right: 20em;
+    }
+}
+
+// horizontally center in the screen the inner element
+.app-hcenter {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+// vertically center in the screen the inner element
+.app-vcenter {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.ca-assistant-template {
+    height: 100%;
+    .ca-navs-encloser {
+        margin-right: 1em;
+        border-right: 1px solid gray;
+    }
+    .ca-tabbed-navs {
+        ul,
+        ul li {
+            border: none;
+        }
+        :focus-visible {
+            outline: none;
+        }
+        .nav-link {
+            transition: none;
+        }
+        .nav-link.active {
+            font-weight: bold;
+            background-color: inherit;
+            border: none;
+        }
+        .nav-link.ca-inactive {
+            cursor: default;
+            pointer-events: none;
+        }
+        .nav-link:focus {
+            border: none;
+        }
+        .nav-link:hover {
+            cursor: auto;
+            border: none;
+            color: var( --bs-nav-link-color );
+        }
+        .nav-link.disabled {
+            font-style: italic;
+        }
+    }
+}
+.ca-assistant-actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    .ca-caller {
+        display: flex;
+        flex-direction: row;
+        justify-content: start;
+    }
+    .ca-own {
+        display: flex;
+        flex-direction: row;
+        justify-content: end;
+        button {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+        button.ca-dnone {
+            display: none;
+        }
+    }
+}

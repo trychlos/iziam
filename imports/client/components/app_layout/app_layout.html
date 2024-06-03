@@ -1,15 +1,11 @@
 <template name="app_layout">
-    <div class="c-app-layout {{ themeClass }}">
+    <div class="c-app-layout {{ colorTheme }} {{ layoutTheme }}">
 
-        {{#if wantHeader }}
-            {{> app_header runContext=runContext }}
-        {{/if}}
+        {{> app_header runContext=plainContext }}
 
-        {{> app_content runContext=runContext }}
+        {{> app_saa runContext=plainContext }}
 
-        {{#if wantFooter }}
-            {{> app_footer runContext=runContext }}
-        {{/if}}
+        {{> app_footer runContext=plainContext }}
 
     </div>
 </template>

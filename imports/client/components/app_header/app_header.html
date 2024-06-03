@@ -1,34 +1,36 @@
 <template name="app_header">
     <div class="c-app-header">
 
-        <div class="header-left">
-            <a href="/">
-                {{> site_logo }}
-                <p>{{{ runContext.title }}}</p>
-            </a>
-            <div class="ca-ml1"></div>
+        {{#if runContext.wantHeader }}
+            <div class="header-left">
+                <a href="/">
+                    {{> site_logo }}
+                    <p>{{{ runContext.title }}}</p>
+                </a>
+                <div class="ca-ml1"></div>
+                <!--
+                {{> organization_header }}
+                -->
+            </div>
+
+            <div class="header-middle">
+                <div class="ca-ml1"></div>
+            </div>
+
+            <div class="header-right">
             <!--
-            {{> organization_header }}
+                <div class="ca-ml1"></div>
+                {{> edit_button }}
+                <span class="ca-ml1"></span>
+                {{> acUserLogin (parmsUserLogin) }}
+
+                {{#if runContext.isConnected }}
+                    <span class="ca-ml05"></span>
+                    {{> app_menu_button }}
+                {{/if}}
             -->
-        </div>
-
-        <div class="header-middle">
-            <div class="ca-ml1"></div>
-        </div>
-
-        <div class="header-right">
-        <!--
-            <div class="ca-ml1"></div>
-            {{> edit_button }}
-            <span class="ca-ml1"></span>
-            {{> acUserLogin (parmsUserLogin) }}
-
-            {{#if runContext.isConnected }}
-                <span class="ca-ml05"></span>
-                {{> app_menu_button }}
-            {{/if}}
-        -->
-        </div>
+            </div>
+        {{/if}}
 
     </div>
 </template>

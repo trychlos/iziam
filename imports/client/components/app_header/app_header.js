@@ -2,6 +2,9 @@
  * /imports/client/components/app_header/app_header.js
  *
  *  Manage here the events of the menu button and of the menu header
+ * 
+ * Data context:
+ * - runContext = RunContext.plainContext()
  */
 
 //import '/imports/client/components/app_menu_button/app_menu_button.js';
@@ -14,11 +17,6 @@ import '/imports/client/components/site_logo/site_logo.js';
 import './app_header.html';
 
 Template.app_header.helpers({
-    // whether a user is actually connected
-    //isConnected(){
-    //    return Meteor.userId() !== null;
-    //},
-
     // have a acUserLogin template to manage connection flows with default values
     //  this template is no more displayed in small screens
     parmsUserLogin(){

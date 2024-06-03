@@ -19,6 +19,7 @@ import { Modal } from 'meteor/pwix:modal';
 import '/imports/client/components/app_content/app_content.js';
 import '/imports/client/components/app_footer/app_footer.js';
 import '/imports/client/components/app_header/app_header.js';
+import '/imports/client/components/app_saa/app_saa.js';
 //import '/imports/client/components/app_login/app_login.js';
 //import '/imports/client/components/app_page/app_page.js';
 //import '/imports/client/components/app_serializer/app_serializer.js';
@@ -33,24 +34,19 @@ import '/imports/client/components/app_header/app_header.js';
 import './app_layout.html';
 
 Template.app_layout.helpers({
-    // pass a running context to the below templates
-    runContext(){
-        return Meteor.APP.runContext.context();
+    // write the name of the theme of the page as a class name
+    colorTheme(){
+        return Meteor.APP.runContext.page()?.get( 'colorTheme' ) || Meteor.APP.defaults.colorTheme;
     },
 
     // write the name of the theme of the page as a class name
-    themeClass(){
-        return Meteor.APP.runContext.page()?.get( 'theme' ) || Meteor.APP.defaults.theme;
+    layoutTheme(){
+        return Meteor.APP.runContext.page()?.get( 'layoutTheme' ) || Meteor.APP.defaults.layoutTheme;
     },
 
-    // whether to display the app footer
-    wantFooter(){
-        return true;
-    },
-
-    // whether to display the app header
-    wantHeader(){
-        return true;
+    // pass a running context to the below templates
+    plainContext(){
+        return Meteor.APP.runContext.plainContext();
     }
 });
 

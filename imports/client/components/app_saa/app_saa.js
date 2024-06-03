@@ -2,6 +2,9 @@
  * /imports/client/components/app_saa/app_saa.js
  *
  * Manage startup-app-admin workflow if package is present
+ * 
+ * Data context:
+ * - runContext = RunContext.plainContext()
  */
 
 import './app_saa.html';

@@ -1,0 +1,110 @@
+/*
+ * /imports/client/stylesheets/color-dark.less
+ * See:
+ * - https://pinetools.com/lighten-color and https://pinetools.com/darken-color for lighten and darken colors
+ * - https://isotropic.co/tool/hex-color-to-css-filter/ for filters computing
+ *
+ * Rationale:
+ * - https://web.dev/articles/prefers-color-scheme
+ *
+ * As of 2023-11-27, this stylesheet is not ended nor event debugged. It is cancelled and we instead take advantage of https://vinorodrigues.github.io/bootstrap-dark-5/.
+ */
+
+@import "{pwix:core-app}/src/client/stylesheets/core_app.less";
+
+// font should be very clear but not white -> bs-gray-100 #f8f9fa
+@font-color: #f8f9fa;
+
+// disabled-font: darker than font though light enough to be easily visible
+@font-disabled-color: darken( @font-color, 15% );
+
+// used (and declined) as a primary color
+@primary-color: @commonteal;
+
+// page background: rather dark (but not black) -> so somewhere between bs-gray-800 (#343a40) and bs-gray-900 (#212529) -> #2a2f34
+@page-bg-color: #2a2f34;
+
+// a mixin to be repeatead with dropdowns and so on
+.font-color( @color ){
+    color: @color;
+    svg { color: @color; }
+}
+
+// other colors are derived from the background color of their container, either a page or a modal or a dropdown or so on...
+//  the choice is mainly a matter of contrast to make all DOM elements and actions easily visible and visually distincts
+.hover-border( @bg ){ @color: lighten( @bg, 80% ); }
+.hover-secondary-border( @bg ){ @color: lighten( @bg, 50% ); }
+.widget-hover-bg( @bg ){ @color: lighten( @bg, 20% ); }
+.widget-border( @bg ){ @color: lighten( @bg, 20% ); }
+.layout-border( @bg ){ @color: lighten( @bg, 7.5% ); }
+.widget-bg( @bg ){ @color: lighten( @bg, 7.5% ); }
+
+.t-page.t-dark {
+    background-color: @page-bg-color;
+    color: @font-color;
+
+    --bs-body-bg: @page-bg-color;
+
+    .btn {
+        --bs-btn-color: @font-color;
+        --bs-btn-hover-border-color: .hover-border( @page-bg-color )[@color];
+    }
+    .btn-close {
+        filter: invert(1) grayscale(100%) brightness(200%);
+    }
+    .btn-outline-primary {
+        .x-btn-outline-variant( @primary-color );
+    }
+    .btn-primary {
+        .x-btn-variant( @primary-color );
+    }
+    .btn-secondary {
+        --bs-btn-hover-border-color: .hover-secondary-border( @page-bg-color )[@color];
+    }
+    .c-app-header,
+    .modal-header {
+        border-bottom-color: .layout-border( @page-bg-color )[@color];
+    }
+    .c-app-footer,
+    .modal-footer {
+        border-top-color: .layout-border( @page-bg-color )[@color];
+    }
+    .dropdown-menu.show {
+        .font-color( @font-color );
+        --bs-dropdown-link-color: @font-color;
+        --bs-dropdown-link-active-bg: @page-bg-color;
+        --bs-dropdown-link-hover-color: @font-color;
+        --bs-dropdown-link-disabled-color: @font-disabled-color;
+        --bs-dropdown-link-hover-bg: .widget-hover-bg( @page-bg-color )[@color];
+        --bs-dropdown-bg: .widget-bg( @page-bg-color )[@color];
+        --bs-dropdown-border-color: .widget-border( @page-bg-color )[@color];
+    }
+    .form-control {
+        --bs-input-bg: var( --bs-body-bg );
+        background-color: var( --bs-body-bg );
+        border-color: .layout-border( @page-bg-color )[@color];
+    }
+    .jqwtable {
+        th {
+            color: darken( @font-color, 10% );
+        }
+        tbody {
+            tr:nth-child(2n+1){
+                background-color: lighten( @page-bg-color, 10% );
+            }
+            tr:hover {
+                background-color: lighten( @page-bg-color, 20% );
+            }
+        }
+    }
+    .x-extlink.x-svg::after {
+        filter: invert(1) grayscale(100%) brightness(200%);
+    }
+}
+.t-page.t-dark.modal-content {
+    --bs-modal-bg: .widget-bg( @page-bg-color )[@color];
+    --bs-modal-border-color: .widget-border( @page-bg-color )[@color];
+    .modal-title {
+        color: darken( @font-color, 10% );
+    }
+}

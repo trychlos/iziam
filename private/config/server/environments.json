@@ -31,7 +31,7 @@
                 "comments": [
                     "The development environment on developer laptop."
                 ],
-                "sender": "Webmaster <noreply@localhost",
+                "sender": "AppMaster <noreply@localhost",
                 "contact": "DevFakeContact",
                 "title": "<span class=\"iziam\">izIAM</span> <i>[dev:0]</i>",
                 "wantEditionSwitch": true,
@@ -53,7 +53,7 @@
                 "comments": [
                     "A way to present the current development state to the outside as a showcase."
                 ],
-                "sender": "Webmaster <noreply@trychlos.org",
+                "sender": "izIAM AppAdmin <noreply@trychlos.org",
                 "contact": "p.wieser@trychlos.org",
                 "title": "AppTemplateStaging",
                 "issuer": "https://trychlos.org"
@@ -63,7 +63,7 @@
                 "comments": [
                     "The production environment."
                 ],
-                "sender": "Webmaster <noreply@pwi-consulting.fr",
+                "sender": "izIAM ppAdmin <noreply@pwi-consulting.fr",
                 "contact": "pierre@wpwi-consulting.fr",
                 "title": "AppTemplateProd",
                 "issuer": "https://trychlos.org"

@@ -25,10 +25,10 @@ import './env-settings.js';
 //import './ext-openid-metadata.js';
 //import './ext-publisher.js';
 //import './helpers.js';
-//import './i18n.js';
+import './i18n.js';
 //import './roles.js';
 //import './startup.js';
-//import './startup-app-admin.js';
+import './startup-app-admin.js';
 //import './validity.js';
 // followings import a collection, so all must have been defined before them
 //import './ext-oauth-functions.js';
