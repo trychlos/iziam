@@ -26,7 +26,7 @@ import './env-settings.js';
 //import './ext-publisher.js';
 //import './helpers.js';
 import './i18n.js';
-//import './roles.js';
+import './roles.js';
 //import './startup.js';
 import './startup-app-admin.js';
 //import './validity.js';

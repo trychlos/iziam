@@ -24,16 +24,16 @@ Template.app_content.onRendered( function(){
 Template.app_content.helpers({
     // returns the template to be used as the content
     //  doesn't complain if page is not yet set
-    async contentTemplate(){
+    contentTemplate(){
         const page = Meteor.APP.runContext.page();
         let template = '';
         if( page ){
             check( page, CoreApp.DisplayUnit );
             template = page.get( 'template' );
-            const wantScope = await page.wantScope();
-            if( template ){
-                console.log( 'rendering', template, '(wantScope='+wantScope+')' );
-            }
+            //const wantScope = await page.wantScope();
+            //if( template ){
+            //    console.log( 'rendering', template, '(wantScope='+wantScope+')' );
+            //}
         }
         return template;
     },
@@ -85,7 +85,7 @@ Template.app_content.helpers({
     },
 
     // does the asked route is scoped ?
-    //  or are the roles required by the page, and held by the user, themselves scoped ?
+    //  or are the roles required by the page themselves scoped ?
     //  DisplayUnit.wantScope() returns a Promise which eventually resolves to true|false
     wantScope(){
         const page = Meteor.APP.runContext.page();
