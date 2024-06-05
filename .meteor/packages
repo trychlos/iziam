@@ -53,3 +53,5 @@ pwix:modal-info
 pwix:accounts-ui
 pwix:roles
 pwix:startup-app-admin
+pwix:accounts-list
+aldeed:tabular

@@ -11,7 +11,6 @@ const roles = {
         {
             // appAdmin may do anything in the application
             name: Meteor.APP.C.appAdmin,
-            /*
             children: [
                 {
                     // manage application user accounts
@@ -21,7 +20,7 @@ const roles = {
                             name: 'ACCOUNTS_LIST'
                         },
                         {
-                            name: 'ACCOUNT_CRU'
+                            name: 'ACCOUNT_EDIT'
                         },
                         {
                             name: 'ACCOUNT_DELETE'
@@ -36,7 +35,7 @@ const roles = {
                             name: 'ORG_LIST'
                         },
                         {
-                            name: 'ORG_CRU'
+                            name: 'ORG_EDIT'
                         },
                         {
                             name: 'ORG_DELETE'
@@ -52,7 +51,6 @@ const roles = {
                     ]
                 }
             ]
-            */
         },
         {
             // manage *one* (or several) organization (scoped role)

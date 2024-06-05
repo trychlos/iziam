@@ -3,7 +3,7 @@
  */
 
 @bgcolor: #fffff0;
-@darkerbg: #ecece0; // Alabaster - see https://coolors.co/ecece0
+@darkerbg: #f6efe8; // Linen
 @hoverbg: darken( @bgcolor, 5% );
 
 .app-color(){
@@ -46,6 +46,24 @@
             .app-color();
         }
         border-bottom-color: lightgray;
+    }
+}
+
+.t-default-color {
+    .dropdown .btn {
+        --bs-btn-border-radius: 0.25em;
+        border: 1px solid lightgray;
+    }
+    .dropdown .btn:hover {
+        --bs-btn-border-radius: 0.25em;
+        border: 1px solid gray;
+    }
+    a.dropdown-item:hover {
+        text-decoration: none;
+        background-color: @hoverbg;
+    }
+    .nav-tabs .nav-link.active {
+        background-color: @darkerbg;    
     }
 }
 

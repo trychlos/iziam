@@ -14,9 +14,9 @@ import './app.js';
 import './constants.js';
 import './defaults.js';
 //
-//import './accounts-ui.js';
-//import './cookie-manager.js';
-//import './core-app.js';
+import './accounts-ui.js';
+import './cookie-manager.js';
+import './core-app.js';
 //import './date.js';
 import './env-settings.js';
 //import './ext-notes.js';
@@ -27,7 +27,7 @@ import './env-settings.js';
 //import './helpers.js';
 import './i18n.js';
 import './roles.js';
-//import './startup.js';
+import './startup.js';
 import './startup-app-admin.js';
 //import './validity.js';
 // followings import a collection, so all must have been defined before them

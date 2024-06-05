@@ -33,7 +33,7 @@ Template.app_menu_button.onCreated( function(){
                 //&& ( !page.wantScope() || Meteor.APP.OrganizationContext.currentReady())){
                 && ( !page.wantScope())){
 
-                    console.debug( 'pushing', page );
+                    //console.debug( 'pushing', page );
                     pages.push( page );
             }
             return true;

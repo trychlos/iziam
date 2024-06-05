@@ -1,0 +1,28 @@
+<template name="accounts_tab">
+    <div class="x-tab c-accounts-tab">
+
+        <div class="title d-flex align-items-center justify-content-between">
+            <p class="preamble">{{{ i18n key="accounts.manager.preamble" }}}</p>
+            {{#if havePlusButton }}
+                {{> plusButton (parmsPlusButton) }}
+            {{/if}}
+        </div>
+
+        {{#if listAllowed }}
+            <div class="content container-fluid ca-mt1">
+                {{> AccountsList (parmsAccountsList) }}
+            </div>
+
+            <div class="total">
+                {{ itemsCount }}
+            </div>
+        {{else}}
+            <div class="not-allowed app-hcenter app-vcenter">
+                <p>
+                    {{ i18n key="accounts.manager.list_not_allowed" }}
+                </p>
+            </div>
+        {{/if}}
+
+    </div>
+</template>
