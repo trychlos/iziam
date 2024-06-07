@@ -124,8 +124,22 @@
 
 .t-default-layout {
     .c-app-content {
+        height: 100%;
+        .x-page {
+            padding: 0 0.5em;
+        }
         .x-tab {
-            padding-left: 1em;
+            padding: 0 0.5em;
+        }
+        .x-tab .title:first-child {
+            padding: 0.5em 0 0 0.5em;
+        }
+        .x-tab .title:not( :first-child ){
+            //padding: 0.5em 1em 0 1em;
+        }
+        .x-tab .content.container-fluid {
+            margin-top: 0.5em;
+            padding-right: 0;
         }
     }
 }

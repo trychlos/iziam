@@ -28,7 +28,7 @@ Meteor.APP.i18n = {
                     ident_title: 'Identity',
                     last_th: 'Last seen',
                     new_title: 'Defining a new account',
-                    preamble: 'Register and manage here the accounts allowed to connect to the applications.',
+                    preamble: 'Register and manage here the accounts allowed to connect to izIAM.',
                     roles_btn: 'Edit the roles',
                     roles_th: 'Roles',
                     roles_title: 'Roles',

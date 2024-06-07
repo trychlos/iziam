@@ -6,13 +6,12 @@
  * Because the application aims to be an identity manager, most of the persons who are referenced as an 'identified' person do not are actual users.
  */
 
-import { AccountsList } from 'meteor/pwix:accounts-list';
+import { AccountsManager } from 'meteor/pwix:accounts-manager';
 import { Bootbox } from 'meteor/pwix:bootbox';
 import { CoreApp } from 'meteor/pwix:core-app';
 import { Modal } from 'meteor/pwix:modal';
 import { PlusButton } from 'meteor/pwix:plus-button';
 import { pwixI18n } from 'meteor/pwix:i18n';
-import { Roles as alRoles } from 'meteor/alanning:roles';
 import { Roles } from 'meteor/pwix:roles';
 import { Tolert } from 'meteor/pwix:tolert';
 
@@ -31,8 +30,16 @@ Template.accounts_tab.onRendered( function(){
 Template.accounts_tab.helpers({
 
     // whether the current user is allowed to define a new account
-    havePlusButton(){
-        return Meteor.userId() && alRoles.userIsInRole( Meteor.userId(), 'ACCOUNT_CRU' );
+    canCreate(){
+        return Meteor.userId() && Roles.userIsInRoles( Meteor.userId(), 'ACCOUNT_EDIT' );
+    },
+
+    // only APP_ADMINISTRATOR should have access to this page
+    //  check anyway that we have the ACCOUNTS_LIST permission
+    canList(){
+        const allowed = Meteor.userId() && Roles.userIsInRoles( Meteor.userId(), 'ACCOUNTS_LIST' );
+        //console.debug( 'allowed', allowed );
+        return allowed;
     },
 
     // string translation
@@ -40,23 +47,13 @@ Template.accounts_tab.helpers({
         return pwixI18n.label( I18N, arg.hash.key );
     },
 
-    // count of known accounts
-    itemsCount(){
-        //const count = Template.instance().APP.accounts.list.get().length;
-        //return pwixI18n.label( I18N, 'accounts.manager.total_count', count );
-    },
-
-    // only APP_ADMINISTRATOR should have access to this page
-    //  check anyway that we have the ACCOUNTS_LIST permission
-    listAllowed(){
-        const allowed = Meteor.userId() && Roles.userIsInRoles( Meteor.userId(), 'ACCOUNTS_LIST' );
-        console.debug( 'allowed', allowed );
-        return allowed;
-    },
-
     // AccountsList parameters
     parmsAccountsList(){
-        return {};
+        return {
+            canDelete: Roles.userIsInRoles( Meteor.userId(), 'ACCOUNTS_DELETE' ),
+            canEdit: Roles.userIsInRoles( Meteor.userId(), 'ACCOUNTS_LIST' ),
+            canInfo: true
+        };
     },
 
     // plusButton parameters

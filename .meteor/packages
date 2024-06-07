@@ -39,7 +39,6 @@ pwix:env-settings
 pwix:i18n
 pwix:jquery-ui
 pwix:jstree
-pwix:layout
 pwix:options
 pwix:plus-button
 pwix:ssr
@@ -53,5 +52,13 @@ pwix:modal-info
 pwix:accounts-ui
 pwix:roles
 pwix:startup-app-admin
-pwix:accounts-list
 aldeed:tabular
+pwix:accounts-manager
+aldeed:schema-deny
+matb33:collection-hooks@2.0.0-beta.1
+coffeescript@2.7.0
+pwix:collection-behaviours
+pwix:collection-timestampable
+pwix:tabular-ext
+pwix:ui-layout
+pwix:ui-utils

@@ -31,7 +31,13 @@ Template.app_content.helpers({
             check( page, CoreApp.DisplayUnit );
             template = page.get( 'template' );
         }
+        console.debug( 'template', template );
         return template;
+    },
+
+    // whether a user is currently connected
+    isConnected(){
+        return Meteor.APP.runContext.isConnected();
     },
 
     // whether there is a current organization
@@ -76,17 +82,16 @@ Template.app_content.helpers({
     wantConnection(){
         const roles = Meteor.APP.runContext.page()?.get( 'rolesAccess' ) || [];
         const wantConnection = roles.length > 0;
-        //console.debug( 'rolesAccess', Meteor.APP.runContext.page().rolesAccess(), 'wantConnection', wantConnection );
+        console.debug( 'rolesAccess', roles, 'wantConnection', wantConnection );
         return wantConnection;
     },
 
     // does the asked route is scoped ?
     //  or are the roles required by the page themselves scoped ?
-    //  DisplayUnit.wantScope() returns a Promise which eventually resolves to true|false
     wantScope(){
         const page = Meteor.APP.runContext.page();
-        const wantScope = page ? page.wantScope() : Promise.resolve( false );
-        //console.debug( 'wantScope', wantScope );
+        const wantScope = page ? page.wantScope() : false;
+        console.debug( 'wantScope', wantScope );
         return wantScope;
     }
 });

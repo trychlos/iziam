@@ -1,8 +1,5 @@
 /*
  * /imports/client/components/app_footer/app_footer.js
- * 
- * Data context:
- * - runContext = RunContext.plainContext()
  */
 
 import '/imports/client/components/powered_by/powered_by.js';
@@ -30,5 +27,9 @@ Template.app_footer.helpers({
         return {
             route: '/lm.legals'
         };
+    },
+    // whether we want display the page footer
+    wantFooter(){
+        return Meteor.APP.runContext.wantFooter();
     }
 });

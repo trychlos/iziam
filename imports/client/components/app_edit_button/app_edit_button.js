@@ -13,17 +13,6 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 
 import './app_edit_button.html';
 
-Template.app_edit_button.onCreated( function(){
-    const self = this;
-
-    // reset the Run.asked reactive var each time the user logs out
-    self.autorun(() => {
-        if( !Meteor.userId()){
-            Meteor.APP.runContext.asked( false );
-        }
-    });
-});
-
 Template.app_edit_button.onRendered( function(){
     const self = this;
 
@@ -43,7 +32,7 @@ Template.app_edit_button.helpers({
             labelLeft: pwixI18n.label( I18N, 'header.switch_label' ),
             title: pwixI18n.label( I18N, 'header.switch_title' ),
             name: 'editionButton',
-            state: Meteor.APP.runContext.asked()
+            state: Meteor.APP.runContext.editionAsked()
         }
     },
     // remind that helpers are first triggered before full initialization
@@ -57,7 +46,7 @@ Template.app_edit_button.helpers({
 });
 
 Template.app_edit_button.events({
-    'ts-state .c-edit-button'( event, instance, data ){
-        Meteor.APP.Run.asked.set( data.state );
+    'ts-state .c-app-edit-button'( event, instance, data ){
+        Meteor.APP.runContext.editionAsked( data.state );
     }
 });

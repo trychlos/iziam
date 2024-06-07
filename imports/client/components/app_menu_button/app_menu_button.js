@@ -65,7 +65,7 @@ Template.app_menu_button.onRendered( function(){
 Template.app_menu_button.helpers({
     // a class which qualify the item
     classes( it ){
-        return it.get( 'classes' ) || 'item-user';
+        return it.get( 'classes' ).join( ' ' )+' item-user';
     },
 
     // text translation
@@ -78,7 +78,7 @@ Template.app_menu_button.helpers({
         return pwixI18n.label( I18N, it.get( 'menuLabel' ));
     },
 
-    // returns a list of items displayable in the top menu for a user
+    // returns a list of DisplayUnit items displayable in the top menu for a user
     //  the list has been built to only display the allowed items
     userMenu(){
         return Template.instance().APP.userMenu.get();

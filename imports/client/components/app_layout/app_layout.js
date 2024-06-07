@@ -22,10 +22,10 @@ import '/imports/client/components/app_header/app_header.js';
 import '/imports/client/components/app_saa/app_saa.js';
 //import '/imports/client/components/app_login/app_login.js';
 //import '/imports/client/components/app_page/app_page.js';
-//import '/imports/client/components/app_serializer/app_serializer.js';
+import '/imports/client/components/app_serializer/app_serializer.js';
 //import '/imports/client/components/app_tiers/app_tiers.js';
 //import '/imports/client/components/app_tiers/app_saa.js';
-//import '/imports/client/components/home_page/home_page.js';
+import '/imports/client/components/home_page/home_page.js';
 import '/imports/client/components/managers_page/managers_page.js';
 //import '/imports/client/components/organization_go/organization_go.js';
 //import '/imports/client/components/organization_page/organization_page.js';
@@ -42,11 +42,6 @@ Template.app_layout.helpers({
     // write the name of the theme of the page as a class name
     layoutTheme(){
         return Meteor.APP.runContext.page()?.get( 'layoutTheme' ) || Meteor.APP.defaults.layoutTheme;
-    },
-
-    // pass a running context to the below templates
-    plainContext(){
-        return Meteor.APP.runContext.plainContext();
     }
 });
 

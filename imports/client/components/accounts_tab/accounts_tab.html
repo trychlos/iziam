@@ -3,18 +3,14 @@
 
         <div class="title d-flex align-items-center justify-content-between">
             <p class="preamble">{{{ i18n key="accounts.manager.preamble" }}}</p>
-            {{#if havePlusButton }}
+            {{#if canCreate }}
                 {{> plusButton (parmsPlusButton) }}
             {{/if}}
         </div>
 
-        {{#if listAllowed }}
-            <div class="content container-fluid ca-mt1">
+        {{#if canList }}
+            <div class="content container-fluid ui-mt05">
                 {{> AccountsList (parmsAccountsList) }}
-            </div>
-
-            <div class="total">
-                {{ itemsCount }}
             </div>
         {{else}}
             <div class="not-allowed app-hcenter app-vcenter">
