@@ -31,7 +31,7 @@ Template.app_content.helpers({
             check( page, CoreApp.DisplayUnit );
             template = page.get( 'template' );
         }
-        console.debug( 'template', template );
+        //console.debug( 'template', template );
         return template;
     },
 
@@ -82,7 +82,7 @@ Template.app_content.helpers({
     wantConnection(){
         const roles = Meteor.APP.runContext.page()?.get( 'rolesAccess' ) || [];
         const wantConnection = roles.length > 0;
-        console.debug( 'rolesAccess', roles, 'wantConnection', wantConnection );
+        //console.debug( 'rolesAccess', roles, 'wantConnection', wantConnection );
         return wantConnection;
     },
 
@@ -91,7 +91,7 @@ Template.app_content.helpers({
     wantScope(){
         const page = Meteor.APP.runContext.page();
         const wantScope = page ? page.wantScope() : false;
-        console.debug( 'wantScope', wantScope );
+        //console.debug( 'wantScope', wantScope );
         return wantScope;
     }
 });

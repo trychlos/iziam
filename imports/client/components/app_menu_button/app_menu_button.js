@@ -8,9 +8,9 @@
  */
 
 import { AccountsUI } from 'meteor/pwix:accounts-ui';
-import { Layout } from 'meteor/pwix:layout';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { Roles } from 'meteor/pwix:roles';
+import { UILayout } from 'meteor/pwix:ui-layout';
 
 import './app_menu_button.html';
 
@@ -52,7 +52,7 @@ Template.app_menu_button.onRendered( function(){
         const button = self.$( '.c-app-menu-button .dropdown button' );
         const btnClass = 'dropdown-toggle d-flex align-items-center';
         let html = '<span class="fa-solid fa-fw fa-bars"></span>';
-        if( Meteor.userId() && Layout.view() === Layout.C.View.SM ){
+        if( Meteor.userId() && UILayout.view() === UILayout.C.View.SM ){
             html = '<p>'+AccountsUI.User.firstEmailAddress()+'</p>';
             button.addClass( btnClass );
         } else {
