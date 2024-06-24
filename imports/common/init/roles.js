@@ -5,6 +5,7 @@
  */
 
 import { Roles } from 'meteor/pwix:roles';
+import { Tracker } from 'meteor/tracker';
 
 const roles = {
     hierarchy: [
@@ -17,29 +18,35 @@ const roles = {
                     name: 'ACCOUNTS_MANAGER',
                     children: [
                         {
-                            name: 'ACCOUNTS_LIST'
+                            name: 'ACCOUNT_CREATE'
+                        },
+                        {
+                            name: 'ACCOUNT_DELETE'
                         },
                         {
                             name: 'ACCOUNT_EDIT'
                         },
                         {
-                            name: 'ACCOUNT_DELETE'
+                            name: 'ACCOUNTS_LIST'
                         }
                     ]
                 },
                 {
                     // manage organizations
-                    name: 'ORG_MANAGER',
+                    name: 'TENANTS_MANAGER',
                     children: [
                         {
-                            name: 'ORG_LIST'
+                            name: 'TENANT_CREATE'
                         },
                         {
-                            name: 'ORG_EDIT'
+                            name: 'TENANT_DELETE'
                         },
                         {
-                            name: 'ORG_DELETE'
-                        }
+                            name: 'TENANT_EDIT'
+                        },
+                        {
+                            name: 'TENANTS_LIST'
+                        },
                     ]
                 },
                 {
@@ -146,3 +153,14 @@ Roles.configure({
     verbosity: Roles.C.Verbose.READY
     //verbosity: 65535
 });
+
+if( Meteor.isClient ){
+    // track readyness of the package
+    Tracker.autorun(() => {
+        console.debug( 'pwix:roles ready', Roles.ready());
+    });
+    // track current user roles
+    Tracker.autorun(() => {
+        console.debug( 'pwix:roles current', Roles.current());
+    });
+}

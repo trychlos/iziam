@@ -1,0 +1,14 @@
+<template name="organizations_tab">
+    <div class="x-tab c-organizations-tab">
+
+        <div class="title d-flex align-items-center justify-content-between">
+            <p class="preamble">{{{ i18n key="organizations.manager.preamble" }}}</p>
+            {{> TenantNewButton (parmsNewTenant) }}
+        </div>
+
+        <div class="content container-fluid">
+            {{> TenantsList }}
+        </div>
+
+    </div>
+</template>

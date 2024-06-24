@@ -5,7 +5,7 @@
 import { pwixI18n } from 'meteor/pwix:i18n';
 
 import '/imports/client/components/accounts_tab/accounts_tab.js';
-//import '/imports/client/components/organizations_tab/organizations_tab.js';
+import '/imports/client/components/organizations_tab/organizations_tab.js';
 //import '/imports/client/components/providers_tab/providers_tab.js';
 
 import './managers_page.html';

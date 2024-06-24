@@ -16,8 +16,6 @@ Meteor.APP.i18n = {
                 manager: {
                     allowed_th: 'Login allowed',
                     api_allowed_th: 'API allowed',
-                    btn_plus_label: 'New account',
-                    btn_plus_title: 'Define a new account',
                     delete_btn: 'Delete the "%s" account',
                     delete_confirm: 'You are about to delete the "%s" account.<br />Are you sure ?',
                     delete_success: 'The "%s" has been successfully deleted',
@@ -27,8 +25,7 @@ Meteor.APP.i18n = {
                     email_th: 'Email address',
                     ident_title: 'Identity',
                     last_th: 'Last seen',
-                    new_title: 'Defining a new account',
-                    preamble: 'Register and manage here the accounts allowed to connect to izIAM.',
+                    preamble: 'Register and manage here the accounts allowed to connect to the izIAM Identity and Access Manager.',
                     roles_btn: 'Edit the roles',
                     roles_th: 'Roles',
                     roles_title: 'Roles',
@@ -1037,8 +1034,6 @@ Meteor.APP.i18n = {
                 },
                 manager: {
                     api_th: 'API',
-                    btn_plus_label: 'New organization',
-                    btn_plus_title: 'Define a new organization',
                     delete_btn_title: 'Delete the "%s" organization',
                     delete_confirm: 'You are about to delete the "%s" organization.<br />Are you sure ?',
                     delete_success: 'Organization "%s" successively deleted',
@@ -1073,7 +1068,6 @@ Meteor.APP.i18n = {
                     edit_success: 'The "%s" organization has been successfully updated.',
                     logo_tab: 'Logo',
                     new_success: 'The "%s" organization has been successfully created.',
-                    new_title: 'Create an organization',
                     properties_tab: 'Properties',
                     urls_tab: 'URLs of Interest'
                 },

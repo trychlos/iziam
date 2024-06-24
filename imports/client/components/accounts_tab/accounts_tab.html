@@ -3,22 +3,12 @@
 
         <div class="title d-flex align-items-center justify-content-between">
             <p class="preamble">{{{ i18n key="accounts.manager.preamble" }}}</p>
-            {{#if canCreate }}
-                {{> plusButton (parmsPlusButton) }}
-            {{/if}}
+            {{> AccountNewButton (parmsNewAccount) }}
         </div>
 
-        {{#if canList }}
-            <div class="content container-fluid ui-mt05">
-                {{> AccountsList (parmsAccountsList) }}
-            </div>
-        {{else}}
-            <div class="not-allowed app-hcenter app-vcenter">
-                <p>
-                    {{ i18n key="accounts.manager.list_not_allowed" }}
-                </p>
-            </div>
-        {{/if}}
+        <div class="content container-fluid">
+            {{> AccountsList }}
+        </div>
 
     </div>
 </template>

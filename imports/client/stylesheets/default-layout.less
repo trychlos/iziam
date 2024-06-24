@@ -127,19 +127,27 @@
         height: 100%;
         .x-page {
             padding: 0 0.5em;
+            height: 100%;
         }
         .x-tab {
-            padding: 0 0.5em;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
         }
         .x-tab .title:first-child {
-            padding: 0.5em 0 0 0.5em;
+            //padding: 0.5em 0 0 0.5em;
         }
         .x-tab .title:not( :first-child ){
             //padding: 0.5em 1em 0 1em;
         }
-        .x-tab .content.container-fluid {
+        .x-tab .content {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
             margin-top: 0.5em;
-            padding-right: 0;
+        }
+        .x-tab .content.container-fluid {
+            padding: 0 0.5em;
         }
     }
 }

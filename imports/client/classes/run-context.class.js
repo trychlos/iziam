@@ -47,6 +47,7 @@ export class RunContext extends CoreApp.RunContext {
 
     /**
      * @summary Return the classes to be provided to other display units than the current page
+     *  This may come from the application defaults, from the page itself, or from the user preferences
      * @returns {Array} the list of color and layout themes
      */
     pageClasses(){
