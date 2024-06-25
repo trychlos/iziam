@@ -526,6 +526,9 @@ Meteor.APP.i18n = {
                     tab_title: 'Notes'
                 }
             },
+            fieldset: {
+                api_allowed_dt_title: 'Is API allowed'
+            },
             header: {
                 available_pages: 'The available pages',
                 menu: {

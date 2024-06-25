@@ -16,7 +16,6 @@
 |    9 | 2023- 9- 6 | feat: manage authorization providers |
 |   17 | 2023-11-30 | have user settings |
 |   21 | 2023-12-16 | Review the roles per account edition, replacing the not suitable prEdit relatively to scopes |
-|   22 | 2023-12-16 | local accounts management shoud be packaged |
 |   23 | 2023-12-16 | organizations/clients management shoud be derived from a 'validity-oriented' collection package class |
 |   25 | 2023-12-19 | different panes (e.g. clients management) are not reactive between them, but should |
 |   26 | 2023-12-20 | oidc-provider NOTICE: default ttl.ClientCredentials function called, you SHOULD change it in order to define the expiration for ClientCredentials artifacts |
@@ -42,6 +41,7 @@
 |   56 | 2024- 1- 8 | membership.hierarchy: have a right-click context menu with new/insert group/identity |
 |   59 | 2024- 1- 9 | resources, scopes and claims should not be identified by their label, but with an identifier (for example a random id) |
 |   60 | 2024- 1-10 | have a Error-derived class to throw our own exceptions |
+|      | 2024- 6-24 | what is the added value or the use case ? |
 |   61 | 2024- 1-10 | identities: add titre, titre post-nominal |
 |   64 | 2024- 1-10 | display the picture in organizations list, identities list |
 |   65 | 2024- 1-11 | oauth_jwks_pane: have a button to display the JWK |
@@ -80,6 +80,7 @@
 |  109 | 2024- 1-20 | set removeUnsetValues be a collection behavior (item timestampable) |
 |  110 | 2024- 1-20 | client_edit: when erasing a notes, dmbs write is ok (notes is removed) but reactive reload is not (note is still here) |
 |  111 | 2024- 1-20 | account_edit should have an account_tabbed |
+|  112 | 2024- 6-24 | customize the new account mail to verify the address |
 |  112 |  |  |
 
 ---
@@ -122,6 +123,8 @@
 |      | 2023-12-16 | fixed |
 |   20 | 2023-12-16 | Organization.Properties modal menu item for an organization manager should only be displayed when there is a current scope |
 |      | 2024- 1-14 | obsolete |
+|   22 | 2023-12-16 | local accounts management shoud be packaged |
+|      | 2024- 6-24 | in work with pwix:accounts-manager |
 |   24 | 2023-12-19 | obsolete field_check_indicator and field_type_indicator components |
 |      | 2024- 1- 8 | field_check_indicator is removed |
 |      | 2024- 1- 8 | field_type_indicator is removed |

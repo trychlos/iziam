@@ -13,6 +13,7 @@ if( false ){
 import './app.js';
 import './constants.js';
 import './defaults.js';
+import './i18n.js';
 //
 import './accounts-manager.js';
 import './accounts-ui.js';
@@ -27,7 +28,6 @@ import './forms.js';
 //import './ext-openid-metadata.js';
 //import './ext-publisher.js';
 //import './helpers.js';
-import './i18n.js';
 import './notes.js';
 import './roles.js';
 import './startup.js';
