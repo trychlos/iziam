@@ -36,6 +36,7 @@ import './tabbed.js';
 import './tabular.js';
 import './tenants-manager.js';
 import './ui-layout.js';
+import './validity.js';
 // followings import a collection, so all must have been defined before them
 //import './ext-oauth-functions.js';
 //import './ext-openid-functions.js';
