@@ -16,15 +16,15 @@ Template.managers_page.helpers({
         return {
             tabs: [
                 {
-                    navLabel: pwixI18n.label( I18N, 'accounts.manager.tab_title' ),
+                    navLabel: pwixI18n.label( I18N, 'manager.accounts.tab_title' ),
                     paneTemplate: 'manager_accounts_tab'
                 },
                 {
-                    navLabel: pwixI18n.label( I18N, 'organizations.manager.tab_title' ),
+                    navLabel: pwixI18n.label( I18N, 'manager.organizations.tab_title' ),
                     paneTemplate: 'manager_organizations_tab'
                 },
                 {
-                    navLabel: pwixI18n.label( I18N, 'providers.manager.tab_title' ),
+                    navLabel: pwixI18n.label( I18N, 'manager.providers.tab_title' ),
                     paneTemplate: 'providers_tab'
                 }
             ],

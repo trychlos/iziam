@@ -7,14 +7,16 @@ Meteor.APP.i18n = {
     ...{
         en: {
             accounts: {
+                /*
                 check: {
                     email_exists: 'This email address already exists',
                     email_invalid: 'This email address is not valid',
                     email_unset: 'An email address is mandatory',
                     username_exists: 'This username already exists'
                 },
+                */
                 manager: {
-                    allowed_th: 'Login allowed',
+                    //allowed_th: 'Login allowed',
                     api_allowed_th: 'API allowed',
                     delete_btn: 'Delete the "%s" account',
                     delete_confirm: 'You are about to delete the "%s" account.<br />Are you sure ?',
@@ -25,7 +27,6 @@ Meteor.APP.i18n = {
                     email_th: 'Email address',
                     ident_title: 'Identity',
                     last_th: 'Last seen',
-                    preamble: 'Register and manage here the accounts allowed to connect to the izIAM Identity and Access Manager.',
                     roles_btn: 'Edit the roles',
                     roles_th: 'Roles',
                     roles_title: 'Roles',
@@ -36,7 +37,6 @@ Meteor.APP.i18n = {
                     set_verified_false: 'The "%s" email address has been reset as "not verified"',
                     set_verified_true: 'The "%s" email address has been set as "verified"',
                     settings_title: 'Settings',
-                    tab_title: 'Accounts Management',
                     total_count: '%s registered account(s)',
                     username_th: 'Username',
                     verified_th: 'Verified',
@@ -695,6 +695,18 @@ Meteor.APP.i18n = {
                     url_ph: 'https://ww.example.com/picture'
                 }
             },
+            manager: {
+                accounts: {
+                    preamble: 'Register and manage here the accounts allowed to connect to the izIAM Identity and Access Manager.',
+                    tab_title: 'Accounts Management'
+                },
+                organizations: {
+                    preamble: 'Register and manage here the involved organizations.<br />'
+                        +'Organizations can take advantage of validity periods.<br />'
+                        +'Do not omit to define at least one manager per organization so that this later can be autonomous.<br />',
+                    tab_title: 'Organizations Management'
+                }
+            },
             memberships: {
                 check: {
                     //name_empty: 'Name is empty',
@@ -1051,11 +1063,7 @@ Meteor.APP.i18n = {
                     label_th: 'Label',
                     list_unallowed: 'You are unfortunately not allowed to consult this list. Please contact your administrator.',
                     managers_th: 'Managers',
-                    preamble: 'Register and manage here the involved organizations.<br />'
-                        +'Organizations can take advantage of validity periods.<br />'
-                        +'Do not omit to define at least one manager per organization so that this later can be autonomous.<br />',
                     start_th: 'Validity start',
-                    tab_title: 'Organizations Management',
                     total_count: '%s registered organization(s)',
                     validities_count: '%s validity periods'
                 },
