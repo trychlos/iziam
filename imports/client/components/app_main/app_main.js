@@ -4,7 +4,7 @@
  * The (main) topmost component of the application UI:
  *  - get the window title from the settings
  *  - get back the data context as initialized by the router.
- * 
+ *
  * General layout:
  * --------------
  *  +- app_main                         get default window title from settings for this environment
@@ -29,8 +29,7 @@ import '/imports/client/components/app_layout/app_layout.js';
 import './app_main.html';
 
 Template.app_main.onCreated( function(){
-    const self = this;
-    console.log( 'Template.app_main.onCreated()', self, Template.currentData());
+    console.log( 'Template.app_main.onCreated()', this );
 });
 
 Template.app_main.onRendered( function(){

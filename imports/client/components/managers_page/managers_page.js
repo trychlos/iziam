@@ -4,8 +4,8 @@
 
 import { pwixI18n } from 'meteor/pwix:i18n';
 
-import '/imports/client/components/accounts_tab/accounts_tab.js';
-import '/imports/client/components/organizations_tab/organizations_tab.js';
+import '/imports/client/components/manager_accounts_tab/manager_accounts_tab.js';
+import '/imports/client/components/manager_organizations_tab/manager_organizations_tab.js';
 //import '/imports/client/components/providers_tab/providers_tab.js';
 
 import './managers_page.html';
@@ -17,11 +17,11 @@ Template.managers_page.helpers({
             tabs: [
                 {
                     navLabel: pwixI18n.label( I18N, 'accounts.manager.tab_title' ),
-                    paneTemplate: 'accounts_tab'
+                    paneTemplate: 'manager_accounts_tab'
                 },
                 {
                     navLabel: pwixI18n.label( I18N, 'organizations.manager.tab_title' ),
-                    paneTemplate: 'organizations_tab'
+                    paneTemplate: 'manager_organizations_tab'
                 },
                 {
                     navLabel: pwixI18n.label( I18N, 'providers.manager.tab_title' ),

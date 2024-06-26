@@ -1,5 +1,5 @@
 /*
- * /imports/client/contents/accounts_tab/accounts_tab.js
+ * /imports/client/contents/manager_accounts_tab/manager_accounts_tab.js
  *
  * Users management.
  * By 'users', one must understand izIAM's users, i.e. the user who want make a direct use of this application.
@@ -9,9 +9,9 @@
 import { PlusButton } from 'meteor/pwix:plus-button';
 import { pwixI18n } from 'meteor/pwix:i18n';
 
-import './accounts_tab.html';
+import './manager_accounts_tab.html';
 
-Template.accounts_tab.helpers({
+Template.manager_accounts_tab.helpers({
 
     // string translation
     i18n( arg ){

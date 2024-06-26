@@ -22,6 +22,7 @@ Meteor.APP.displaySet.enumerate(( name, page ) => {
         FlowRouter.route( route, {
             name: name,
             action(){
+                console.debug( 'BlazeLayout.rendering()', name );
                 BlazeLayout.render( 'app_main', { dataContext: { name: name }});
             }
         });

@@ -52,7 +52,6 @@ pwix:modal-info
 pwix:accounts-ui
 pwix:roles
 pwix:startup-app-admin
-pwix:accounts-manager
 aldeed:schema-deny
 matb33:collection-hooks@2.0.0-beta.1
 coffeescript@2.7.0
@@ -62,12 +61,14 @@ pwix:ui-layout
 pwix:ui-utils
 pwix:ui-fontawesome6
 pwix:ui-bootstrap5
-pwix:tabbed
 pwix:orderable-stack
 pwix:typed-message
 pwix:notes
-pwix:forms
-pwix:tenants-manager
 aldeed:tabular
-pwix:tabular
 pwix:field
+pwix:validity
+pwix:tenants-manager
+pwix:accounts-manager
+pwix:tabular
+pwix:tabbed
+pwix:forms

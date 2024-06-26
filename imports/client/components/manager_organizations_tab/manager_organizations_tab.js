@@ -1,5 +1,5 @@
 /*
- * /imports/client/components/organizations_tab/organizations_tab.js
+ * /imports/client/components/manager_organizations_tab/manager_organizations_tab.js
  *
  * Organizations management.
  */
@@ -8,9 +8,9 @@ import _ from 'lodash';
 
 import { pwixI18n } from 'meteor/pwix:i18n';
 
-import './organizations_tab.html';
+import './manager_organizations_tab.html';
 
-Template.organizations_tab.helpers({
+Template.manager_organizations_tab.helpers({
 
     // string translation
     i18n( arg ){
