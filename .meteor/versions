@@ -83,7 +83,7 @@ pwix:collection-behaviours@2.0.3-rc
 pwix:collection-timestampable@2.0.3-rc
 pwix:cookie-manager@2.0.2-rc
 pwix:core-app@1.0.0-rc
-pwix:date@1.0.1-rc
+pwix:date@1.0.2-rc
 pwix:date-input@1.0.1-rc
 pwix:editor@1.4.4-rc
 pwix:env-settings@2.0.3-rc
