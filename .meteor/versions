@@ -1,6 +1,6 @@
 accounts-base@3.0.0-rc300.4
 accounts-password@3.0.0-rc300.4
-alanning:roles@4.0.0-alpha.2
+alanning:roles@4.0.0-alpha.4
 aldeed:collection2@4.0.2
 aldeed:schema-deny@4.0.1
 aldeed:simple-schema@1.13.1
@@ -83,6 +83,8 @@ pwix:collection-behaviours@2.0.3-rc
 pwix:collection-timestampable@2.0.3-rc
 pwix:cookie-manager@2.0.2-rc
 pwix:core-app@1.0.0-rc
+pwix:date@1.0.1-rc
+pwix:date-input@1.0.1-rc
 pwix:editor@1.4.4-rc
 pwix:env-settings@2.0.3-rc
 pwix:field@1.2.0-rc
@@ -109,7 +111,7 @@ pwix:ui-bootstrap5@2.0.3-rc
 pwix:ui-fontawesome6@1.0.2-rc
 pwix:ui-layout@2.0.2-rc
 pwix:ui-utils@1.2.1-rc
-pwix:validity@1.0.0-rc
+pwix:validity@1.1.0-rc
 raix:eventemitter@1.0.0
 random@1.2.2-rc300.4
 rate-limit@1.1.2-rc300.4
