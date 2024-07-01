@@ -93,7 +93,7 @@ pwix:i18n@1.5.9-rc
 pwix:jquery-ui@1.0.5-rc
 pwix:jstree@1.0.8-rc
 pwix:modal@2.0.2-rc
-pwix:modal-info@1.8.1-rc
+pwix:modal-info@1.9.1-rc
 pwix:notes@1.2.1-rc
 pwix:options@2.1.2-rc
 pwix:orderable-stack@1.1.3-rc
