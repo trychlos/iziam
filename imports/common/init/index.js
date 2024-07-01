@@ -16,6 +16,7 @@ import './defaults.js';
 import './i18n.js';
 //
 import './accounts-manager.js';
+import './accounts-tools.js';
 import './accounts-ui.js';
 import './cookie-manager.js';
 import './core-app.js';
@@ -29,6 +30,7 @@ import './forms.js';
 //import './ext-openid-metadata.js';
 //import './ext-publisher.js';
 //import './helpers.js';
+import './modal-info.js';
 import './notes.js';
 import './roles.js';
 import './startup.js';
