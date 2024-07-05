@@ -15,6 +15,7 @@ import './constants.js';
 import './defaults.js';
 import './i18n.js';
 //
+import './accounts-conf.js';
 import './accounts-manager.js';
 import './accounts-tools.js';
 import './accounts-ui.js';
