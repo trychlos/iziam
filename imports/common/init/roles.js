@@ -5,7 +5,7 @@
  */
 
 import { Roles } from 'meteor/pwix:roles';
-import { Tracker } from 'meteor/tracker';
+import { TenantsManager } from 'meteor/pwix:tenants-manager';
 
 const roles = {
     hierarchy: [
@@ -56,111 +56,114 @@ const roles = {
                             name: 'PROVIDERS_LIST'
                         }
                     ]
+                },
+                {
+                    // manage *one* (or several) organization (scoped role)
+                    name: 'ORG_SCOPED_MANAGER',
+                    scoped: true,
+                    children: [
+                        {
+                            name: 'SCOPED_PROVIDERS_MANAGER',
+                            children: [
+                                {
+                                    name: 'SCOPED_PROVIDERS_LIST'
+                                }
+                            ]
+                        },
+                        {
+                            name: 'SCOPED_AUTHORIZATIONS_MANAGER',
+                            children: [
+                                {
+                                    name: 'SCOPED_AUTHORIZATION_CREATE'
+                                },
+                                {
+                                    name: 'SCOPED_AUTHORIZATION_DELETE'
+                                },
+                                {
+                                    name: 'SCOPED_AUTHORIZATION_EDIT'
+                                },
+                                {
+                                    name: 'SCOPED_AUTHORIZATION_LIST'
+                                }
+                            ]
+                        },
+                    /*
+                        {
+                            name: 'CLIENTS_MANAGER',
+                            children: [
+                                {
+                                    name: 'CLIENTS_LIST'
+                                },
+                                {
+                                    name: 'CLIENT_CRU'
+                                },
+                                {
+                                    name: 'CLIENT_DELETE'
+                                }
+                            ]
+                        },
+                        {
+                            name: 'IDENTITIES_MANAGER',
+                            children: [
+                                {
+                                    name: 'GROUPS_LIST'
+                                },
+                                {
+                                    name: 'GROUP_CRU'
+                                },
+                                {
+                                    name: 'GROUP_DELETE'
+                                },
+                                {
+                                    name: 'IDENT_LIST'
+                                },
+                                {
+                                    name: 'IDENT_CRU'
+                                },
+                                {
+                                    name: 'IDENT_DELETE'
+                                },
+                                {
+                                    name: 'MEMBER_LIST'
+                                },
+                                {
+                                    name: 'MEMBER_CRU'
+                                },
+                                {
+                                    name: 'MEMBER_DELETE'
+                                }
+                            ]
+                        },
+                        {
+                            name: 'RESOURCES_MANAGER',
+                            children: [
+                                {
+                                    name: 'RES_LIST'
+                                },
+                                {
+                                    name: 'RES_CRU'
+                                },
+                                {
+                                    name: 'RES_DELETE'
+                                }
+                            ]
+                        }
+                    */
+                    ]
                 }
             ]
-        },
-        {
-            // manage *one* (or several) organization (scoped role)
-            name: 'ORG_SCOPED_MANAGER',
-            scoped: true,
-            /*
-            children: [
-                {
-                    name: 'PROVIDERS_LIST'
-                },
-                {
-                    name: 'AUTHORIZATIONS_MANAGER',
-                    children: [
-                        {
-                            name: 'AUTHOR_LIST'
-                        },
-                        {
-                            name: 'AUTHOR_CRU'
-                        },
-                        {
-                            name: 'AUTHOR_DELETE'
-                        }
-                    ]
-                },
-                {
-                    name: 'CLIENTS_MANAGER',
-                    children: [
-                        {
-                            name: 'CLIENTS_LIST'
-                        },
-                        {
-                            name: 'CLIENT_CRU'
-                        },
-                        {
-                            name: 'CLIENT_DELETE'
-                        }
-                    ]
-                },
-                {
-                    name: 'IDENTITIES_MANAGER',
-                    children: [
-                        {
-                            name: 'GROUPS_LIST'
-                        },
-                        {
-                            name: 'GROUP_CRU'
-                        },
-                        {
-                            name: 'GROUP_DELETE'
-                        },
-                        {
-                            name: 'IDENT_LIST'
-                        },
-                        {
-                            name: 'IDENT_CRU'
-                        },
-                        {
-                            name: 'IDENT_DELETE'
-                        },
-                        {
-                            name: 'MEMBER_LIST'
-                        },
-                        {
-                            name: 'MEMBER_CRU'
-                        },
-                        {
-                            name: 'MEMBER_DELETE'
-                        }
-                    ]
-                },
-                {
-                    name: 'RESOURCES_MANAGER',
-                    children: [
-                        {
-                            name: 'RES_LIST'
-                        },
-                        {
-                            name: 'RES_CRU'
-                        },
-                        {
-                            name: 'RES_DELETE'
-                        }
-                    ]
-                }
-            ]
-            */
         }
     ]
 };
 
 Roles.configure({
     roles: roles,
-    verbosity: Roles.C.Verbose.READY
-    //verbosity: 65535
+    //roles: null,
+    //maintainHierarchy: true,
+    //scopeLabelFn: null,
+    //scopesFn: null,
+    scopesPub: 'pwix_tenants_manager_tenants_get_scopes',
+    //scopesPub: null,
+    verbosity: Roles.C.Verbose.CONFIGURE | Roles.C.Verbose.READY | Roles.C.Verbose.CURRENT
+    //verbosity: Roles.C.Verbose.CONFIGURE
 });
-
-if( Meteor.isClient ){
-    // track readyness of the package
-    Tracker.autorun(() => {
-        console.debug( 'pwix:roles ready', Roles.ready());
-    });
-    // track current user roles
-    Tracker.autorun(() => {
-        console.debug( 'pwix:roles current', Roles.current());
-    });
-}
