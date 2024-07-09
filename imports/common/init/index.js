@@ -19,6 +19,7 @@ import './accounts-conf.js';
 import './accounts-manager.js';
 import './accounts-tools.js';
 import './accounts-ui.js';
+import './collection2.js';
 import './cookie-manager.js';
 import './core-app.js';
 import './date.js';

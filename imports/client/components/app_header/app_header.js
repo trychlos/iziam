@@ -25,7 +25,7 @@ Template.app_header.helpers({
         return {
             name: 'izerm:app-header:user-login',
             initialDisplay: AccountsUI.C.Display.DROPDOWNBUTTON,
-            //loggedItemsAfter: Meteor.APP.AccountsUI.loggedItemsAfter(),
+            loggedItemsAfter: Meteor.APP.AccountsUI.loggedItemsAfter(),
             mdClassesContent: Meteor.APP.runContext.pageClasses().join( ' ' ),
         };
     },

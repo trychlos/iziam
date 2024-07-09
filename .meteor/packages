@@ -69,9 +69,9 @@ pwix:startup-app-admin
 pwix:tabular
 pwix:accounts-manager
 pwix:validity
-pwix:tenants-manager
 pwix:core-app
 pwix:date-input
 pwix:date
 pwix:meta-app
 pwix:accounts-conf
+pwix:tenants-manager

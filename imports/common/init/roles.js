@@ -5,7 +5,6 @@
  */
 
 import { Roles } from 'meteor/pwix:roles';
-import { TenantsManager } from 'meteor/pwix:tenants-manager';
 
 const roles = {
     hierarchy: [

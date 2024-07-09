@@ -7,12 +7,26 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 
 // configure the AccountsUI package for production
 AccountsUI.configure({
-    //haveEmailAddress: AC_FIELD_MANDATORY,
-    //haveUsername: AC_FIELD_NONE
+    //informWrongEmail: AccountsUI.C.WrongEmail.ERROR,
+    //coloredBorders: AccountsUI.C.Colored.NEVER,
+    //onEmailVerifiedBeforeFn: null,
+    //onEmailVerifiedBox: true,
+    //onEmailVerifiedBoxCb: null,
+    //onEmailVerifiedBoxMessage: { namespace: I18N, i18n: 'user.verify_text' },
+    //onEmailVerifiedBoxTitle: { namespace: I18N, i18n: 'user.verify_title' },
+    //passwordLength: 8,
+    //passwordStrength: AccountsUI.C.Password.MEDIUM,
+    //passwordTwice: true,
+    //resetPasswordTwice: _passwordTwice,
+    //resetPwdTextOne: { namespace: I18N, i18n: 'reset_pwd.textOne' },
+    //resetPwdTextTwo: '',
+    //sendVerificationEmail: true,
+    //usernameLength: 4,
+    //verbosity: AccountsUI.C.Verbose.CONFIGURE
 });
 
 // provides the item to be added to acUserLogin logged/unlogged (client) menus
-// please note that the 'click' event should be handled at layout level
+// please note that the 'click' event are handled at app_layout level
 if( Meteor.isClient ){
     Meteor.APP.AccountsUI = {
         loggedItemsAfter(){
