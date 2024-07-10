@@ -59,7 +59,8 @@ Meteor.APP.displaySet = new CoreApp.DisplaySet({
         inMenus: [ 'app_menu_button' ],
         menuLabel: 'header.menu.managers',
         rolesAccess: [ Meteor.APP.C.appAdmin ],
-        wantEditionSwitch: true
+        wantEditionSwitch: true,
+        wantPermission: 'menus.managers'
     },
     organization: {
         template: 'organization_page',
@@ -87,6 +88,7 @@ Meteor.APP.displaySet = new CoreApp.DisplaySet({
         inMenus: [ 'app_menu_button' ],
         menuLabel: 'header.menu.settings',
         rolesAccess: [ Meteor.APP.C.appAdmin ],
-        classes: 'item-modal'
+        classes: 'item-modal',
+        wantPermission: 'menus.app.settings'
     }
 });

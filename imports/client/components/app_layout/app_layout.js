@@ -70,7 +70,7 @@ Template.app_layout.events({
             done = true;
         }
         if( !done && $( event.currentTarget ).hasClass( 'item-modal' )){
-            const page = Meteor.APP.displaySet.get( id );
+            const page = Meteor.APP.displaySet.byName( id );
             const parms = {
                 mdBody: page.get( 'template' ),
                 mdClasses: 'modal-lg',

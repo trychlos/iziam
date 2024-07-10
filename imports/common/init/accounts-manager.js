@@ -26,8 +26,6 @@ AccountsManager.configure({
             },
         }]
     },
-    //haveEmailAddress: AC_FIELD_MANDATORY,
-    //haveUsername: AC_FIELD_NONE
     hideDisabled: false,
     roles: {
         list: 'ACCOUNTS_LIST',

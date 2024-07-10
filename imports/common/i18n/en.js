@@ -533,7 +533,7 @@ Meteor.APP.i18n = {
                 available_pages: 'The available pages',
                 menu: {
                     managers: 'Managers',
-                    configuration: 'Configuration',
+                    configuration: 'Organization configuration',
                     properties: 'Main properties',
                     settings: 'Application settings'
                 },

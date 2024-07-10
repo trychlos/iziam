@@ -6,10 +6,11 @@
  * 
  * Note: on a small-size display, this menu also embeds login items.
  */
+import _ from 'lodash';
+const assert = require( 'assert' ).strict;
 
 import { AccountsUI } from 'meteor/pwix:accounts-ui';
 import { pwixI18n } from 'meteor/pwix:i18n';
-import { Roles } from 'meteor/pwix:roles';
 import { UILayout } from 'meteor/pwix:ui-layout';
 
 import './app_menu_button.html';
@@ -18,27 +19,22 @@ Template.app_menu_button.onCreated( function(){
     const self = this;
 
     self.APP = {
-        thisMenu: 'app_menu_button',
-        userMenu: new ReactiveVar( [] ),
+        menuName: 'app_menu_button',
+        menuUnits: new ReactiveVar( [], _.isEqual ),
     };
 
     // build the user menu
     //  set in this user menu only allowed items
+    //  permissions are async, but we want keep the defined pages order
     self.autorun(() => {
-        let pages = [];
-        const userId = Meteor.userId();
-        Meteor.APP.displaySet.enumerate(( name, page ) => {
-            if( page.get( 'inMenus' ).includes( self.APP.thisMenu )
-                && ( !page.get( 'rolesAccess' ).length || Roles.userIsInRoles( userId, page.get( 'rolesAccess' ), { anyScope: true }))
-                //&& ( !page.wantScope() || Meteor.APP.OrganizationContext.currentReady())){
-                && ( !page.wantScope())){
-
-                    //console.debug( 'pushing', page );
-                    pages.push( page );
-            }
-            return true;
+        Meteor.APP.displaySet.buildMenu( self.APP.menuName, Meteor.APP.Permissions.isAllowed ).then(( res ) => {
+            self.APP.menuUnits.set( res );
         });
-        self.APP.userMenu.set( pages );
+    });
+
+    // track user menu content
+    self.autorun(() => {
+        //console.debug( 'menuUnits', self.APP.menuUnits.get());
     });
 });
 
@@ -80,8 +76,8 @@ Template.app_menu_button.helpers({
 
     // returns a list of DisplayUnit items displayable in the top menu for a user
     //  the list has been built to only display the allowed items
-    userMenu(){
-        return Template.instance().APP.userMenu.get();
+    menuUnits(){
+        return Template.instance().APP.menuUnits.get();
     },
 
     // return the current version of the application

@@ -31,7 +31,7 @@ export class RunContext extends CoreApp.RunContext {
         Tracker.autorun(() => {
             const dc = self.dataContext();
             if( dc && dc.name ){
-                self.page( Meteor.APP.displaySet.get( dc.name ));
+                self.page( Meteor.APP.displaySet.byName( dc.name ));
             }
         });
 
@@ -50,7 +50,7 @@ export class RunContext extends CoreApp.RunContext {
      *  This may come from the application defaults, from the page itself, or from the user preferences
      * @returns {Array} the list of color and layout themes
      */
-    pageClasses(){
+    pageUIClasses(){
         const page = this.page();
         const colorTheme = page ? page.get( 'colorTheme' ) || Meteor.APP.defaults.colorTheme : Meteor.APP.defaults.colorTheme;
         const layoutTheme = page ? page.get( 'layoutTheme' ) || Meteor.APP.defaults.layoutTheme : Meteor.APP.defaults.layoutTheme;

@@ -34,6 +34,7 @@ import './forms.js';
 //import './helpers.js';
 import './modal-info.js';
 import './notes.js';
+import './permissions.js';
 import './roles.js';
 import './startup.js';
 import './startup-app-admin.js';
