@@ -58,7 +58,6 @@ Meteor.APP.displaySet = new CoreApp.DisplaySet({
         route: '/managers',
         inMenus: [ 'app_menu_button' ],
         menuLabel: 'header.menu.managers',
-        rolesAccess: [ Meteor.APP.C.appAdmin ],
         wantEditionSwitch: true,
         wantPermission: 'menus.managers'
     },
@@ -67,7 +66,6 @@ Meteor.APP.displaySet = new CoreApp.DisplaySet({
         route: '/org',
         inMenus: [ 'app_menu_button' ],
         menuLabel: 'header.menu.configuration',
-        rolesAccess: [ 'ORG_SCOPED_MANAGER' ],
         rolesEdit: [ 'ORG_SCOPED_MANAGER' ],
         wantScope: true,
         wantEditionSwitch: true
@@ -78,7 +76,6 @@ Meteor.APP.displaySet = new CoreApp.DisplaySet({
         templateParms: Meteor.APP.OrganizationContext.editTemplateParms,
         inMenus: [ 'app_menu_button' ],
         menuLabel: 'header.menu.properties',
-        rolesAccess: [ 'ORG_SCOPED_MANAGER' ],
         wantScope: true,
         classes: 'item-modal'
     },
@@ -87,7 +84,6 @@ Meteor.APP.displaySet = new CoreApp.DisplaySet({
         template: 'app_settings_edit',
         inMenus: [ 'app_menu_button' ],
         menuLabel: 'header.menu.settings',
-        rolesAccess: [ Meteor.APP.C.appAdmin ],
         classes: 'item-modal',
         wantPermission: 'menus.app.settings'
     }

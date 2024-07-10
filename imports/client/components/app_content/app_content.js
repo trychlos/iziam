@@ -80,10 +80,8 @@ Template.app_content.helpers({
 
     // does the asked route want a connected user ?
     wantConnection(){
-        const roles = Meteor.APP.runContext.page()?.get( 'rolesAccess' ) || [];
-        const wantConnection = roles.length > 0;
-        //console.debug( 'rolesAccess', roles, 'wantConnection', wantConnection );
-        return wantConnection;
+        const wantPermission = Meteor.APP.runContext.page()?.get( 'wantPermission' ) || null;
+        return wantPermission !== null;
     },
 
     // does the asked route is scoped ?
