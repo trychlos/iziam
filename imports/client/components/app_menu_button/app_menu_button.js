@@ -34,7 +34,7 @@ Template.app_menu_button.onCreated( function(){
 
     // track user menu content
     self.autorun(() => {
-        console.debug( 'menuUnits', self.APP.menuUnits.get());
+        //console.debug( 'menuUnits', self.APP.menuUnits.get());
     });
 });
 

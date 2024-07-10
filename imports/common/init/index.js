@@ -32,6 +32,7 @@ import './forms.js';
 //import './ext-openid-metadata.js';
 //import './ext-publisher.js';
 //import './helpers.js';
+import './modal.js';
 import './modal-info.js';
 import './notes.js';
 import './permissions.js';
