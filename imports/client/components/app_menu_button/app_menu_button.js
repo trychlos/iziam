@@ -34,7 +34,7 @@ Template.app_menu_button.onCreated( function(){
 
     // track user menu content
     self.autorun(() => {
-        //console.debug( 'menuUnits', self.APP.menuUnits.get());
+        console.debug( 'menuUnits', self.APP.menuUnits.get());
     });
 });
 
@@ -76,7 +76,7 @@ Template.app_menu_button.helpers({
 
     // returns a list of DisplayUnit items displayable in the top menu for a user
     //  the list has been built to only display the allowed items
-    menuUnits(){
+    userMenu(){
         return Template.instance().APP.menuUnits.get();
     },
 

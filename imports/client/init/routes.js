@@ -22,8 +22,18 @@ Meteor.APP.displaySet.enumerate(( name, page ) => {
         FlowRouter.route( route, {
             name: name,
             action(){
-                console.debug( 'BlazeLayout.rendering()', name );
-                BlazeLayout.render( 'app_main', { dataContext: { name: name }});
+                // make sure the current user is allowed
+                const unit = Meteor.APP.displaySet.byName( name );
+                const wantPermission = unit.get( 'wantPermission' );
+                Promise.resolve( !wantPermission || Meteor.APP.Permissions.isAllowed( wantPermission )).then(( allowed ) => {
+                    if( allowed ){
+                        console.debug( 'BlazeLayout.rendering()', name );
+                        BlazeLayout.render( 'app_main', { dataContext: { name: name }});
+                    } else {
+                        console.warn( 'user appears as not allowed to \''+name+'\'' );
+                        FlowRouter.go( '/' );
+                    }
+                });
             }
         });
     }
