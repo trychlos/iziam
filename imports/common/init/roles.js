@@ -4,6 +4,7 @@
  *  Defines the roles used in the application, along with their hierarchy.
  */
 
+import { Permissions } from 'meteor/pwix:permissions';
 import { Roles } from 'meteor/pwix:roles';
 
 const roles = {
@@ -156,9 +157,11 @@ const roles = {
 };
 
 Roles.configure({
+    allowFn: Permissions.isAllowed,
+    //allowFn: null,
+    //maintainHierarchy: true,
     roles: roles,
     //roles: null,
-    //maintainHierarchy: true,
     //scopeLabelFn: null,
     //scopesFn: null,
     scopesPub: 'pwix_tenants_manager_tenants_get_scopes',
@@ -166,3 +169,5 @@ Roles.configure({
     verbosity: Roles.C.Verbose.CONFIGURE | Roles.C.Verbose.READY | Roles.C.Verbose.CURRENT
     //verbosity: Roles.C.Verbose.CONFIGURE
 });
+
+Permissions.set( Roles.suggestedPermissions());

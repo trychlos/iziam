@@ -703,7 +703,7 @@ Meteor.APP.i18n = {
                 organizations: {
                     preamble: 'Register and manage here the involved organizations.<br />'
                         +'Organizations can take advantage of validity periods.<br />'
-                        +'Do not omit to define at least one manager per organization so that this later can be autonomous.<br />',
+                        +'Do not omit to define at least one manager per organization so that he/she can later be autonomous.<br />',
                     tab_title: 'Organizations Management'
                 }
             },
@@ -1251,6 +1251,7 @@ Meteor.APP.i18n = {
                     tab_title: 'Status'
                 }
             },
+            /*
             validities: {
                 band: {
                     free_from: 'Free from %s',
@@ -1306,6 +1307,7 @@ Meteor.APP.i18n = {
                     to: 'To %s'
                 }
             }
+                */
         }
     }
 };

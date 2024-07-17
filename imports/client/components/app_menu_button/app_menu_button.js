@@ -10,6 +10,7 @@ import _ from 'lodash';
 const assert = require( 'assert' ).strict;
 
 import { AccountsUI } from 'meteor/pwix:accounts-ui';
+import { Permissions } from 'meteor/pwix:permissions';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { UILayout } from 'meteor/pwix:ui-layout';
 
@@ -27,7 +28,7 @@ Template.app_menu_button.onCreated( function(){
     //  set in this user menu only allowed items
     //  permissions are async, but we want keep the defined pages order
     self.autorun(() => {
-        Meteor.APP.displaySet.buildMenu( self.APP.menuName, Meteor.APP.Permissions.isAllowed ).then(( res ) => {
+        Meteor.APP.displaySet.buildMenu( self.APP.menuName, Permissions.isAllowed ).then(( res ) => {
             self.APP.menuUnits.set( res );
         });
     });

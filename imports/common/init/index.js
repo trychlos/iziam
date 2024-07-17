@@ -14,6 +14,7 @@ import './app.js';
 import './constants.js';
 import './defaults.js';
 import './i18n.js';
+import './permissions.js';
 //
 import './accounts-conf.js';
 import './accounts-manager.js';
@@ -35,7 +36,6 @@ import './forms.js';
 import './modal.js';
 import './modal-info.js';
 import './notes.js';
-import './permissions.js';
 import './roles.js';
 import './startup.js';
 import './startup-app-admin.js';

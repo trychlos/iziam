@@ -33,7 +33,7 @@ raix:eventemitter
 ostrio:flow-router-extra@3.11.0-rc300.0
 tmeasday:check-npm-versions@2.0.0-rc300.0
 aldeed:schema-deny
-matb33:collection-hooks@2.0.0-beta.1
+matb33:collection-hooks@2.0.0-rc.0
 coffeescript@2.7.0
 aldeed:tabular
 pwix:blaze-layout
@@ -75,3 +75,5 @@ pwix:date
 pwix:meta-app
 pwix:accounts-conf
 pwix:tenants-manager
+pwix:permissions
+alanning:roles@4.0.0-rc.1

@@ -7,6 +7,7 @@
 
 import { BlazeLayout } from 'meteor/pwix:blaze-layout';
 import { FlowRouter } from 'meteor/ostrio:flow-router-extra';
+import { Permissions } from 'meteor/pwix:permissions';
 
 import '/imports/client/components/app_main/app_main.js';
 
@@ -25,7 +26,7 @@ Meteor.APP.displaySet.enumerate(( name, page ) => {
                 // make sure the current user is allowed
                 const unit = Meteor.APP.displaySet.byName( name );
                 const wantPermission = unit.get( 'wantPermission' );
-                Promise.resolve( !wantPermission || Meteor.APP.Permissions.isAllowed( wantPermission )).then(( allowed ) => {
+                Promise.resolve( !wantPermission || Permissions.isAllowed( wantPermission )).then(( allowed ) => {
                     if( allowed ){
                         console.debug( 'BlazeLayout.rendering()', name );
                         BlazeLayout.render( 'app_main', { dataContext: { name: name }});

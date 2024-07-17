@@ -11,65 +11,30 @@
 
 import _ from 'lodash';
 
+import { Permissions } from 'meteor/pwix:permissions';
 import { Roles } from 'meteor/pwix:roles';
 
-Meteor.APP.Permissions = {
-    tasks: {
-        // the permissions needed to have an item in the specified menu
-        menus: {
-            app: {
-                // application settings
-                async settings( user ){
-                    return await Roles.userIsInRoles( user, Meteor.APP.C.appAdmin );
-                }
-            },
-            async managers( user ){
-                return await Roles.userIsInRoles( user, [ 'ACCOUNTS_MANAGER', 'TENANTS_MANAGER' ]);
-        }
-        }
-    },
+Permissions.configure({
+    allowedIfTaskNotFound: false,
+    //allowedIfTaskNotFound: true,
+    //warnIfTaskNotFound: true,
+    verbosity: Permissions.C.Verbose.CONFIGURE | Permissions.C.Verbose.NOT_ALLOWED
+    //verbosity: Permissions.C.Verbose.CONFIGURE
+});
 
-    /**
-     * @param {String} task can be dot.named 
-     * @param {Object|String} user either a user identifier or a user document, mandatory server side, defaulting client side to current user
-     * @returns {Boolean} whether the user is allowed to do that
-     */
-    async isAllowed( task, user=null ){
-        if( Meteor.isClient && !user ){
-            user = Meteor.userId();
+Permissions.set({
+    // the permissions needed to have an item in the specified menu
+    menus: {
+        app: {
+            // application settings
+            async settings( user ){
+                return await Roles.userIsInRoles( user, Meteor.APP.C.appAdmin );
+            }
+        },
+        // managers page (have accounts, tenants, providers)
+        //  this is global app management
+        async managers( user ){
+            return await Roles.userIsInRoles( user, [ 'ACCOUNTS_MANAGER', 'TENANTS_MANAGER' ]);
         }
-        let allowed = false;
-        if( user ){
-            // find the task
-            const words = task.split( '.' );
-            let taskobj = Meteor.APP.Permissions.tasks;
-            let promises = [];
-            words.every(( it ) => {
-                let iter = false;
-                if( taskobj[it] ){
-                    if( _.isFunction( taskobj[it] )){
-                        promises.push( taskobj[it]( user ));
-                    } else if( _.isString( taskobj[it] )){
-                        promises.push( Roles.userIsInRoles( user, taskobj[it] ));
-                    } else if( _.isArray( taskobj[it] )){
-                        promises.push( Roles.userIsInRoles( user, taskobj[it] ));
-                    } else if( _.isObject( taskobj[it] )){
-                        taskobj = taskobj[it];
-                        iter = true;
-                    } else {
-                        console.error( 'unmanaged task definition', taskobj[it] );
-                    }
-                } else {
-                    console.error( 'task not defined', task );
-                }
-                return iter;
-            });
-            const res = await Promise.allSettled( promises );
-            allowed = res[0].value;
-        } else {
-            console.warn( 'user is not provided, considering allowed=false ('+task+')' );
-        }
-        //console.debug( 'isAllowed', task, user, allowed );
-        return allowed;
     }
-};
+});
