@@ -20,7 +20,7 @@ import '/imports/client/components/app_content/app_content.js';
 import '/imports/client/components/app_footer/app_footer.js';
 import '/imports/client/components/app_header/app_header.js';
 import '/imports/client/components/app_saa/app_saa.js';
-//import '/imports/client/components/app_login/app_login.js';
+import '/imports/client/components/app_login/app_login.js';
 //import '/imports/client/components/app_page/app_page.js';
 import '/imports/client/components/app_serializer/app_serializer.js';
 //import '/imports/client/components/app_tiers/app_tiers.js';

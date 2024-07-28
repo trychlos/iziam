@@ -1,17 +1,7 @@
 <template name="app_saa">
     <div class="c-app-saa ui-h100">
 
-        {{#if saaHasPackage }}
-            {{#if saaReady }}
-                {{#if saaShouldDisplay }}
-                    {{> saaCreate (saaArgs) }}
-                {{else}}
-                    {{> app_content }}
-                {{/if}}
-            {{/if}}
-        {{else}}
-            {{> app_content }}
-        {{/if}}
+        {{> saaCreate (saaArgs) }}
 
     </div>
 </template>

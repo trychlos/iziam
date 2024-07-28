@@ -1,31 +1,7 @@
 <template name="app_content">
     <div class="c-app-content ui-h100">
 
-        {{#if wantConnection }}
-            {{#if isConnected }}
-                {{#if wantScope }}
-                    {{#if orgReady }}
-                        {{#if orgCurrent }}
-                            {{> Template.dynamic template=(contentTemplate) }}
-                            <!--
-                        {{else}}
-                            {{#if orgSeveral }}
-                                {{> app_tiers (parmsTiersSelect) }}
-                            {{/if}}
-                            -->
-                        {{/if}}
-                    {{/if}}
-                {{else}}
-                    {{> Template.dynamic template=(contentTemplate) }}
-                {{/if}}
-                <!--
-            {{else}}
-                {{> app_tiers (parmsTiersLogin) }}
-                -->
-            {{/if}}
-        {{else}}
-            {{> Template.dynamic template=(contentTemplate) }}
-        {{/if}}
+        {{> Template.dynamic template=(template) data=(data) }}
 
     </div>
 </template>

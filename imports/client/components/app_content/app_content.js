@@ -1,7 +1,12 @@
 /*
  * /imports/client/components/app_content/app_content.js
  *
- * Force the user to log in.
+ * Compute and render the to-be-displayed template.
+ * 
+ * The HTML is very simple: render the computed template with the computed data (if any).
+ * All the logic is built with ReactiveVar's:
+ * - whether we already have an app admin or not
+ * - whether the requester route wants a connection, or a particular role
  * 
  * Data context (inherited from app_saa):
  * - runContext = RunContext.plainContext()
@@ -9,8 +14,32 @@
 
 import { CoreApp } from 'meteor/pwix:core-app';
 import { pwixI18n } from 'meteor/pwix:i18n';
+import { ReactiveVar } from 'meteor/reactive-var';
 
 import './app_content.html';
+
+Template.app_content.onCreated( function(){
+    const self = this;
+
+    self.APP = {
+        template: new ReactiveVar( null ),
+        data: new ReactiveVar( null )
+    };
+
+    // track the runContext to compute the to-be-displayed template
+    self.autorun(() => {
+        if( Meteor.APP.runContext.saaWantDisplay()){
+            self.APP.template.set( 'app_saa' );
+        }
+    });
+
+    // track the runContext to compute the to-be-displayed template
+    self.autorun(() => {
+        if( Meteor.APP.runContext.saaWantDisplay()){
+            self.APP.template.set( 'app_saa' );
+        }
+    });
+});
 
 Template.app_content.onRendered( function(){
     const self = this;
@@ -33,6 +62,15 @@ Template.app_content.helpers({
         }
         //console.debug( 'template', template );
         return template;
+    },
+
+    // the computed data context, defaulting to this current data context
+    data(){
+        let data = Template.instance().APP.data.get();
+        if( !data ){
+            data = this;
+        }
+        return data;
     },
 
     // whether a user is currently connected
@@ -76,6 +114,12 @@ Template.app_content.helpers({
             image: '/images/organization-hq.svg',
             template: 'organization_go'
         };
+    },
+
+    // the computed template
+    template(){
+        const template = Template.instance().APP.template.get();
+        return template;
     },
 
     // does the asked route want a connected user ?

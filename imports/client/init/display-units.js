@@ -4,9 +4,10 @@
  *  Define here the DisplayUnit's of the application, and some of their relevant properties.
  */
 
-import { CoreApp } from 'meteor/pwix:core-app';
+import { DisplaySet } from '../classes/display-set.class.js';
+import { DisplayUnit } from '../classes/display-unit.class.js';
 
-Meteor.APP.displaySet = new CoreApp.DisplaySet({
+Meteor.APP.displaySet = new DisplaySet({
     contact: {
         route: '/pub/contact',
         template: 'contact_page',
@@ -87,4 +88,6 @@ Meteor.APP.displaySet = new CoreApp.DisplaySet({
         classes: 'item-modal',
         wantPermission: 'menus.app.settings'
     }
+}, {
+    unitfn: DisplayUnit
 });

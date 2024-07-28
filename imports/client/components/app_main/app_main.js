@@ -16,10 +16,7 @@
  *          |
  *          +- app_header
  *          |
- *          +- app_content              dynamically load the template depending of the connected user and the asked route
- *          |   |
- *          |   +- app_saa              manage startup-app-admin
- *          |   +- app_login            manage user login
+ *          +- app_content              compute and render the to-be-displayed template
  *          |
  *          +- app_footer
  */

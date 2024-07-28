@@ -12,7 +12,7 @@ AccountsManager.configure({
     allowFn: Permissions.isAllowed,
     //allowFn: null,
     fields: {
-        before: 'adminNotes',
+    before: 'adminNotes',
         fields: [{
             name: 'apiAllowed',
             type: Boolean,
@@ -30,6 +30,8 @@ AccountsManager.configure({
         }]
     },
     hideDisabled: false,
+    //hideDisabled: true,
+    //tabularActiveCheckboxes: false,
     // verbosity: AccountsManager.C.Verbose.CONFIGURE
 });
 

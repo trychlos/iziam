@@ -5,5 +5,9 @@
 import { DateInput } from 'meteor/pwix:date-input';
 
 DateInput.configure({
-    // verbosity: DateInput.C.Verbose.CONFIGURE
+    //helpFormat: '%e %b %Y',
+    //inputFormat: '%Y-%m-%d',
+    //placeholder: 'yyyy-mm-dd',
+    //verbosity: DateInput.C.Verbose.CONFIGURE,
+    //withHelp: false
 });
