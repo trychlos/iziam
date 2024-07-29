@@ -9,6 +9,7 @@ import { Roles } from 'meteor/pwix:roles';
 AppEdit.configure({
     allowFn: Permissions.isAllowed,
     //allowFn: null,
+    //collection: 'contents',
     //toggleHiddenWhenNotConnected: true,
     //toggleHiddenWhenUnallowed: true,
     //verbosity: AppEdit.C.Verbose.CONFIGURE
@@ -32,9 +33,7 @@ Permissions.set({
                         if( wantSwitch ){
                             const roles = page.get( 'wantEditionRoles' );
                             if( roles && roles.length ){
-                                Roles.userIsInRoles( user, roles ).then(( res ) => {
-                                    allowed = res;
-                                });
+                                allowed = await Roles.userIsInRoles( user, roles );
                             }
                         }
                     }

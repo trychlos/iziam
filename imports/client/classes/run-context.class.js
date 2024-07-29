@@ -26,17 +26,6 @@ export class RunContext extends CoreApp.RunContext {
         super( ...arguments );
         const self = this;
 
-        // track the current datacontext to track the currently (routed) displayed page
-        //  rationale: the router cannot pass an object instance as part of the datacontext, so get here the DisplayUnit for the page
-        /*
-        Tracker.autorun(() => {
-            const dc = self.dataContext();
-            if( dc && dc.name ){
-                self.page( Meteor.APP.displaySet.byName( dc.name ));
-            }
-        });
-        */
-
         // get the application title from settings per environment
         Tracker.autorun(() => {
             if( EnvSettings.ready()){

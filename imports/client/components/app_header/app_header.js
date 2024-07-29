@@ -4,6 +4,8 @@
  *  Manage here the events of the menu button and of the menu header
  */
 
+import { UILayout } from 'meteor/pwix:ui-layout';
+
 import '/imports/client/components/app_menu_button/app_menu_button.js';
 //import '/imports/client/components/app_edit_button/app_edit_button.js';
 //import '/imports/client/components/organization_header/organization_header.js';
@@ -17,6 +19,19 @@ Template.app_header.helpers({
     // whether a user is currently connected
     isConnected(){
         return Meteor.userId() !== null;
+    },
+
+    // arguments object for piLanguageSelector
+    //  just the flag, not any label, on a small view
+    parmsLanguageSelector(){
+        let o = {
+            languages: Meteor.APP.C.managedLanguages
+        };
+        if( !UILayout.isSM()){
+            o.buttonLabel = pwixI18n.C.BtnLabel.LEFT;
+        }
+        //console.debug( 'parmsLanguageSelector', o );
+        return o;
     },
 
     // have a acUserLogin template to manage connection flows with default values

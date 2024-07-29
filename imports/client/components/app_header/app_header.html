@@ -19,16 +19,19 @@
 
             <div class="header-right">
 
-                <div class="ui-ml1"></div>
+                <div class="ui-ml05"></div>
                 {{> AppEditButton }}
 
-                <span class="ui-ml1"></span>
+                <span class="ui-ml05"></span>
                 {{> acUserLogin (parmsUserLogin) }}
 
                 {{#if isConnected }}
                     <span class="ui-ml05"></span>
                     {{> app_menu_button }}
                 {{/if}}
+
+                <div class="ui-ml05"></div>
+                {{> piLanguageSelector (parmsLanguageSelector) }}
             </div>
 
         {{/if}}

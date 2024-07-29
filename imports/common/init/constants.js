@@ -12,7 +12,12 @@ Meteor.APP.C = {
         REQUIRED: 'REQUIRED',
         RECOMMENDED: 'RECOMMENDED',
         OPTIONAL: 'OPTIONAL',
-    }
+    },
+
+    managedLanguages: [
+        'en',
+        'fr'
+    ],
 }
 
 I18N = 'izIAM.Internationalization';
