@@ -89,5 +89,5 @@ Meteor.APP.displaySet = new DisplaySet({
         wantPermission: 'menus.app.settings'
     }
 }, {
-    unitfn: DisplayUnit
+    unitFn: DisplayUnit
 });

@@ -43,6 +43,7 @@ import './startup-app-admin.js';
 import './tabbed.js';
 import './tabular.js';
 import './tenants-manager.js';
+import './tolert.js';
 import './ui-layout.js';
 import './validity.js';
 // followings import a collection, so all must have been defined before them

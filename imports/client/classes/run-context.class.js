@@ -28,12 +28,14 @@ export class RunContext extends CoreApp.RunContext {
 
         // track the current datacontext to track the currently (routed) displayed page
         //  rationale: the router cannot pass an object instance as part of the datacontext, so get here the DisplayUnit for the page
+        /*
         Tracker.autorun(() => {
             const dc = self.dataContext();
             if( dc && dc.name ){
                 self.page( Meteor.APP.displaySet.byName( dc.name ));
             }
         });
+        */
 
         // get the application title from settings per environment
         Tracker.autorun(() => {
@@ -51,7 +53,7 @@ export class RunContext extends CoreApp.RunContext {
      * @returns {Array} the list of color and layout themes
      */
     pageUIClasses(){
-        const page = this.page();
+        const page = this.ipageablePage();
         const colorTheme = page ? page.get( 'colorTheme' ) || Meteor.APP.defaults.colorTheme : Meteor.APP.defaults.colorTheme;
         const layoutTheme = page ? page.get( 'layoutTheme' ) || Meteor.APP.defaults.layoutTheme : Meteor.APP.defaults.layoutTheme;
         let classesArray = [];

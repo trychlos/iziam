@@ -28,7 +28,7 @@ Template.app_menu_button.onCreated( function(){
     //  set in this user menu only allowed items
     //  permissions are async, but we want keep the defined pages order
     self.autorun(() => {
-        Meteor.APP.displaySet.buildMenu( self.APP.menuName, Permissions.isAllowed ).then(( res ) => {
+        Meteor.APP.runContext.ipageableBuildMenu( self.APP.menuName, Permissions.isAllowed ).then(( res ) => {
             self.APP.menuUnits.set( res );
         });
     });

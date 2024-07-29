@@ -5,6 +5,8 @@
 import { Tolert } from 'meteor/pwix:tolert';
 
 Tolert.configure({
-    //timeout: -1,
-    //stackFromTop: false
+    //stackFromTop: true,
+    //timeout: 3000,
+    //verbosityè: Tolert.C.Verbose.CONFIGURE
 });
+    

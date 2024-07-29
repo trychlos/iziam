@@ -37,7 +37,7 @@ Template.app_edit_button.helpers({
     },
     // remind that helpers are first triggered before full initialization
     wantSwitch(){
-        const currentPage = Meteor.APP.runContext.page();
+        const currentPage = Meteor.APP.runContext.ipageablePage();
         const settings = Meteor.settings.public[Meteor.APP.name].environment;
         const wantSwitch = currentPage && settings ? currentPage.get( 'wantEditionSwitch' ) && settings.wantEditionSwitch === true : false;
         //console.debug( 'wantSwitch', wantSwitch );

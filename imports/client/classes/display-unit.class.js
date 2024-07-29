@@ -22,7 +22,6 @@ export class DisplayUnit extends AppPages.DisplayUnit {
      * @returns {DisplayUnit} this instance
      */
     constructor(){
-        console.debug( 'instanciating DisplayUnit' );
         super( ...arguments );
         return this;
     }

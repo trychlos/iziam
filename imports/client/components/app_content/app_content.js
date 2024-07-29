@@ -12,14 +12,16 @@
  * - runContext = RunContext.plainContext()
  */
 
-import { CoreApp } from 'meteor/pwix:core-app';
+import { AppPages } from 'meteor/pwix:app-pages';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
+import { UIU } from 'meteor/pwix:ui-utils';
 
 import './app_content.html';
 
 Template.app_content.onCreated( function(){
     const self = this;
+    console.debug( this );
 
     self.APP = {
         template: new ReactiveVar( null ),
@@ -30,13 +32,8 @@ Template.app_content.onCreated( function(){
     self.autorun(() => {
         if( Meteor.APP.runContext.saaWantDisplay()){
             self.APP.template.set( 'app_saa' );
-        }
-    });
-
-    // track the runContext to compute the to-be-displayed template
-    self.autorun(() => {
-        if( Meteor.APP.runContext.saaWantDisplay()){
-            self.APP.template.set( 'app_saa' );
+        } else {
+            self.APP.template.set( Meteor.APP.runContext.ipageablePage().get( 'template' ));
         }
     });
 });
@@ -46,7 +43,7 @@ Template.app_content.onRendered( function(){
 
     // when the user must log in, the acUserLogin doesn't take the focus
     //  this works (i.e. resolves with the INPUT element, but doesn't gain the focus either)
-    CoreApp.DOM.waitFor( '.c-app-content .user-login .acUserLogin input' )
+    UIU.DOM.waitFor( '.c-app-content .user-login .acUserLogin input' )
         .then(( res ) => { self.$( res ).focus(); });
 });
 
@@ -57,7 +54,7 @@ Template.app_content.helpers({
         const page = Meteor.APP.runContext.page();
         let template = '';
         if( page ){
-            check( page, CoreApp.DisplayUnit );
+            check( page, AppPages.DisplayUnit );
             template = page.get( 'template' );
         }
         //console.debug( 'template', template );
