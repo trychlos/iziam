@@ -30,7 +30,7 @@ Template.app_content.onCreated( function(){
 
     // track the runContext to compute the to-be-displayed template
     self.autorun(() => {
-        if( Meteor.APP.runContext.saaWantDisplay()){
+        if( Meteor.APP.runContext.isaaWantDisplay()){
             self.APP.template.set( 'app_saa' );
         } else {
             self.APP.template.set( Meteor.APP.runContext.ipageablePage().get( 'template' ));
