@@ -20,6 +20,7 @@ import './accounts-conf.js';
 import './accounts-manager.js';
 import './accounts-tools.js';
 import './accounts-ui.js';
+import './app-edit.js';
 import './app-pages.js';
 import './collection2.js';
 import './cookie-manager.js';

@@ -537,9 +537,7 @@ Meteor.APP.i18n = {
                     properties: 'Main properties',
                     settings: 'Application settings'
                 },
-                my_roles: 'My roles',
-                switch_label: 'Edit',
-                switch_title: 'Activate Edition mode'
+                my_roles: 'My roles'
             },
             groups: {
                 check: {

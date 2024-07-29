@@ -11,12 +11,14 @@ Meteor.APP.displaySet = new DisplaySet({
     contact: {
         route: '/pub/contact',
         template: 'contact_page',
-        wantEditionSwitch: true
+        wantEditionSwitch: true,
+        wantEditionRoles: [ 'EDITOR' ]
     },
     home: {
         route: '/',
         template: 'home_page',
-        wantEditionSwitch: true
+        wantEditionSwitch: true,
+        wantEditionRoles: [ 'EDITOR' ]
     },
     lm_cookies: {
         template: 'app_page',
@@ -25,7 +27,8 @@ Meteor.APP.displaySet = new DisplaySet({
             document: 'cookies-policy-231001'
         },
         route: '/pub/lm.cookies',
-        wantEditionSwitch: true
+        wantEditionSwitch: true,
+        wantEditionRoles: [ 'EDITOR' ]
     },
     lm_gdpr: {
         template: 'app_page',
@@ -34,7 +37,8 @@ Meteor.APP.displaySet = new DisplaySet({
             document: 'gdpr-231001'
         },
         route: '/pub/lm.gdpr',
-        wantEditionSwitch: true
+        wantEditionSwitch: true,
+        wantEditionRoles: [ 'EDITOR' ]
     },
     lm_gtu: {
         template: 'app_page',
@@ -43,7 +47,8 @@ Meteor.APP.displaySet = new DisplaySet({
             document: 'gtu-231001'
         },
         route: '/pub/lm.gtu',
-        wantEditionSwitch: true
+        wantEditionSwitch: true,
+        wantEditionRoles: [ 'EDITOR' ]
     },
     lm_legals: {
         template: 'app_page',
@@ -52,7 +57,8 @@ Meteor.APP.displaySet = new DisplaySet({
             document: 'legals-231001'
         },
         route: '/pub/lm.legals',
-        wantEditionSwitch: true
+        wantEditionSwitch: true,
+        wantEditionRoles: [ 'EDITOR' ]
     },
     managers: {
         template: 'managers_page',
@@ -60,6 +66,7 @@ Meteor.APP.displaySet = new DisplaySet({
         inMenus: [ 'app_menu_button' ],
         menuLabel: 'header.menu.managers',
         wantEditionSwitch: true,
+        wantEditionRoles: [ 'EDITOR' ],
         wantPermission: 'menus.managers'
     },
     organization: {
@@ -69,7 +76,8 @@ Meteor.APP.displaySet = new DisplaySet({
         menuLabel: 'header.menu.configuration',
         rolesEdit: [ 'ORG_SCOPED_MANAGER' ],
         wantScope: true,
-        wantEditionSwitch: true
+        wantEditionSwitch: true,
+        wantEditionRoles: [ 'EDITOR', 'SCOPED_EDITOR' ]
     },
     /*
     properties: {

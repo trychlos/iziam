@@ -5,7 +5,7 @@
  */
 
 import '/imports/client/components/app_menu_button/app_menu_button.js';
-import '/imports/client/components/app_edit_button/app_edit_button.js';
+//import '/imports/client/components/app_edit_button/app_edit_button.js';
 //import '/imports/client/components/organization_header/organization_header.js';
 //import '/imports/client/components/organization_select/organization_select.js';
 import '/imports/client/components/site_logo/site_logo.js';
@@ -16,7 +16,7 @@ import './app_header.html';
 Template.app_header.helpers({
     // whether a user is currently connected
     isConnected(){
-        return Meteor.APP.runContext.isConnected();
+        return Meteor.userId() !== null;
     },
 
     // have a acUserLogin template to manage connection flows with default values

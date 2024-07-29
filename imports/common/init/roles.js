@@ -58,6 +58,9 @@ const roles = {
                     ]
                 },
                 {
+                    name: 'EDITOR',
+                },
+                {
                     // manage *one* (or several) organization (scoped role)
                     name: 'ORG_SCOPED_MANAGER',
                     scoped: true,
@@ -87,7 +90,10 @@ const roles = {
                                 }
                             ]
                         },
-                    /*
+                        {
+                            name: 'SCOPED_EDITOR',
+                        },
+                            /*
                         {
                             name: 'CLIENTS_MANAGER',
                             children: [

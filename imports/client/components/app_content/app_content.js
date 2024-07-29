@@ -21,7 +21,7 @@ import './app_content.html';
 
 Template.app_content.onCreated( function(){
     const self = this;
-    console.debug( this );
+    //console.debug( this );
 
     self.APP = {
         template: new ReactiveVar( null ),
@@ -68,11 +68,6 @@ Template.app_content.helpers({
             data = this;
         }
         return data;
-    },
-
-    // whether a user is currently connected
-    isConnected(){
-        return Meteor.APP.runContext.isConnected();
     },
 
     // whether there is a current organization

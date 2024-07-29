@@ -78,13 +78,14 @@ pwix:accounts-conf@1.0.1-rc
 pwix:accounts-manager@1.0.1-rc
 pwix:accounts-tools@2.2.0-rc
 pwix:accounts-ui@1.7.0-rc
-pwix:app-pages@1.0.0-rc
+pwix:app-edit@1.0.0-rc
+pwix:app-pages@1.0.1-rc
 pwix:blaze-layout@2.3.4-rc
 pwix:bootbox@1.5.7-rc
 pwix:collection-behaviours@2.0.4-rc
 pwix:collection-timestampable@2.1.1-rc
 pwix:cookie-manager@2.0.2-rc
-pwix:core-app@1.0.0-rc
+pwix:core-app@1.0.1-rc
 pwix:date@1.0.3-rc
 pwix:date-input@1.1.2-rc
 pwix:editor@1.4.4-rc
