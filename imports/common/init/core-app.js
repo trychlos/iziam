@@ -8,6 +8,5 @@ import { CoreApp } from 'meteor/pwix:core-app';
 CoreApp.configure({
     appName: Meteor.APP.name,
     adminRole: Meteor.APP.C.appAdmin,
-    classes: [ Meteor.APP.defaults.layoutTheme, Meteor.APP.defaults.colorTheme ],
     //verbosity: CoreApp.C.Verbose.CONFIGURE
 });
