@@ -54,8 +54,15 @@ FlowRouter.route( '*', {
 });
 
 // on user logout, go back to home
+let isConnected = false;
 Tracker.autorun(() => {
-    if( !Meteor.userId()){
+    if( Meteor.userId()){
+        isConnected = true;
+    }
+});
+Tracker.autorun(() => {
+    if( isConnected && !Meteor.userId()){
+        isConnected = false;
         FlowRouter.go( '/' );
     }
 });

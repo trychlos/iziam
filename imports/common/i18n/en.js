@@ -575,6 +575,12 @@ Meteor.APP.i18n = {
                     select_text: 'Select groups'
                 }
             },
+            home: {
+                hero: {
+                    iziam: '<span class="iziam">izIAM</span>'
+                        +'<span style="font-size: 24px; font-family: &quot;Josefin Sans&quot;, sans-serif;"> the Easy Identity Manager</span>'
+                }
+            },
             identities: {
                 check: {
                     emailaddress_empty: 'Email address is empty',
