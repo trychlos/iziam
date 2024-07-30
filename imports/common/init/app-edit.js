@@ -1,5 +1,9 @@
 /*
  * /imports/common/init/app-edit.js
+ *
+ * AppEdit needs two additional DisplayUnit parameters to manage the display of the edit toggle button and the permissions of the user to actually edit the document:
+ * - wantEditionSwitch: whether the edit toggle button must be displayed
+ * - wantEditionRoles: whether the user is allowed to edit the current page documents
  */
 
 import { AppEdit } from 'meteor/pwix:app-edit';

@@ -7,14 +7,10 @@ Meteor.APP.i18n = {
     ...{
         en: {
             accounts: {
-                /*
-                check: {
-                    email_exists: 'This email address already exists',
-                    email_invalid: 'This email address is not valid',
-                    email_unset: 'An email address is mandatory',
-                    username_exists: 'This username already exists'
+                login: {
+                    preamble: 'The page you are requesting requires permissions which are only given to identified user accounts.<br />'
+                        +'Please connect and enjoy.'
                 },
-                */
                 manager: {
                     //allowed_th: 'Login allowed',
                     api_allowed_th: 'API allowed',

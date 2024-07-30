@@ -67,17 +67,17 @@ Meteor.APP.displaySet = new DisplaySet({
         menuLabel: 'header.menu.managers',
         wantEditionSwitch: true,
         wantEditionRoles: [ 'EDITOR' ],
-        wantPermission: 'menus.managers'
+        wantPermission: 'pwix.app_pages.menus.managers'
     },
     organization: {
         template: 'organization_page',
-        route: '/org',
+        route: '/organization',
         inMenus: [ 'app_menu_button' ],
         menuLabel: 'header.menu.configuration',
-        rolesEdit: [ 'ORG_SCOPED_MANAGER' ],
-        wantScope: true,
         wantEditionSwitch: true,
-        wantEditionRoles: [ 'EDITOR', 'SCOPED_EDITOR' ]
+        wantEditionRoles: [ 'EDITOR', 'SCOPED_EDITOR' ],
+        wantPermission: 'pwix.app_pages.menus.organization',
+        wantScope: true
     },
     /*
     properties: {
@@ -85,8 +85,8 @@ Meteor.APP.displaySet = new DisplaySet({
         templateParms: Meteor.APP.OrganizationContext.editTemplateParms,
         inMenus: [ 'app_menu_button' ],
         menuLabel: 'header.menu.properties',
-        wantScope: true,
-        classes: 'item-modal'
+        classes: 'item-modal',
+        wantScope: true
     },
     */
     settings: {
@@ -94,7 +94,7 @@ Meteor.APP.displaySet = new DisplaySet({
         inMenus: [ 'app_menu_button' ],
         menuLabel: 'header.menu.settings',
         classes: 'item-modal',
-        wantPermission: 'menus.app.settings'
+        wantPermission: 'pwix.app_pages.menus.app.settings'
     }
 }, {
     unitFn: DisplayUnit

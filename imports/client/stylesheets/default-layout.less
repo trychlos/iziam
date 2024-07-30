@@ -125,6 +125,41 @@
 .t-default-layout {
     .c-app-content {
         height: 100%;
+        .c-app-preamble {
+            height: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            padding: calc( var( --ui-resp-5-1-5 ) * 0.25em );
+            .one {
+                font-size: 200%;
+                font-weight: bold;
+                text-align: center;
+            }
+            .two {
+                width: 35%;
+                img {
+                    width: 100%;
+                }
+            }
+            .three {
+                width: 65%;
+                margin-left: 2em;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                .acUserLogin .ac-text-one {
+                    font-size: 105%;
+                    font-weight: bold;
+                    margin-bottom: 0.5em;
+                }
+            }
+            .not-allowed {
+                margin: 5em;
+                font-weight: bold;
+            }
+        }
         .x-page {
             padding: 0 0.5em;
             height: 100%;
@@ -150,9 +185,6 @@
         .x-tab .content.container-fluid {
             padding: 0 0.5em;
         }
-        .saaCreate {
-            
-        }
     }
 }
 
@@ -164,43 +196,6 @@
 .c-app-main,
 .c-app-saa {
     height: 100vh;
-}
-
-.t-page {
-    .c-app-tiers {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-evenly;
-        align-items: center;
-        height: 100%;
-        .two-three {
-            width: 100%;
-            max-height: 50%;
-        }
-        .two,
-        .three {
-            width: 40%;
-        }
-        .two img {
-            width: 75%;
-        }
-        .preamble {
-            font-size: 200%;
-            font-weight: bold;
-            text-align: center;
-        }
-        .two-three {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-evenly;
-            align-items: center;
-        }
-        .not-allowed {
-            margin: 5em;
-            font-size: 120%;
-            font-weight: bold;
-        }
-    }
 }
 
 // utilities

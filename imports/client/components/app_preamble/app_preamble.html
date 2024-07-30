@@ -1,0 +1,21 @@
+<template name="app_preamble">
+    <div class="c-app-preamble">
+
+        <div class="one">
+            {{{ preamble }}}
+        </div>
+            
+        <div class="ui-w80 d-flex justify-content-evenly">
+
+            <div class="two">
+                <img src="{{ image }}" />
+            </div>
+
+            <div class="three">
+                {{> Template.dynamic template=(template) }}
+            </div>
+
+        </div>
+
+    </div>
+</template>

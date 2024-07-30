@@ -28,12 +28,36 @@ Template.app_content.onCreated( function(){
         data: new ReactiveVar( null )
     };
 
-    // track the runContext to compute the to-be-displayed template
+    // compute the to-be-displayed template
     self.autorun(() => {
-        if( Meteor.APP.runContext.isaaWantDisplay()){
+        const forceSAA = false;
+        const forceLogin = false;
+        if( Meteor.APP.runContext.isaaWantDisplay() || forceSAA ){
             self.APP.template.set( 'app_saa' );
+            self.APP.data.set( null );
         } else {
-            self.APP.template.set( Meteor.APP.runContext.ipageablePage().get( 'template' ));
+            const page = Meteor.APP.runContext.ipageablePage();
+            const wantLogin = page.get( 'wantPermission' );
+            if( wantLogin || forceLogin ){
+                if( Meteor.userId() && !forceLogin ){
+                    wantScope = page.get( 'wantScope' );
+                    if( wantScope ){
+
+                    } else {
+                        self.APP.template.set( Meteor.APP.runContext.ipageablePage().get( 'template' ));
+                        self.APP.data.set( null );
+                    }
+                } else {
+                    self.APP.template.set( 'app_preamble' );
+                    self.APP.data.set({
+                        image: '/images/login-image.svg',
+                        template: 'app_login'
+                    });
+                }
+            } else {
+                self.APP.template.set( Meteor.APP.runContext.ipageablePage().get( 'template' ));
+                self.APP.data.set( null );
+            }
         }
     });
 });
@@ -119,13 +143,4 @@ Template.app_content.helpers({
         const wantPermission = Meteor.APP.runContext.page()?.get( 'wantPermission' ) || null;
         return wantPermission !== null;
     },
-
-    // does the asked route is scoped ?
-    //  or are the roles required by the page themselves scoped ?
-    wantScope(){
-        const page = Meteor.APP.runContext.page();
-        const wantScope = page ? page.wantScope() : false;
-        //console.debug( 'wantScope', wantScope );
-        return wantScope;
-    }
 });

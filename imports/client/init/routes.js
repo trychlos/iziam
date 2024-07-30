@@ -23,11 +23,15 @@ Meteor.APP.displaySet.enumerate(( name, page ) => {
         FlowRouter.route( route, {
             name: name,
             action(){
-                // make sure the current user is allowed
+                // as the usual rule, users which are not allowed to a page are redirected to home which is expected to be public
+                // in izIAM, the app_login component manages a login panel to force the user to connect
+                //  so let the code go until app_content
+                const contentManaged = true;
+                // make sure the current user is allowed (or that the login is managed at app_content level)
                 const unit = Meteor.APP.displaySet.byName( name );
                 const wantPermission = unit.get( 'wantPermission' );
                 Promise.resolve( !wantPermission || Permissions.isAllowed( wantPermission )).then(( allowed ) => {
-                    if( allowed ){
+                    if( allowed || contentManaged ){
                         console.debug( 'BlazeLayout.rendering()', name );
                         BlazeLayout.render( 'app_main', { dataContext: { name: name }});
                     } else {
@@ -47,4 +51,11 @@ FlowRouter.route( '*', {
         console.log( 'catch-all route', FlowRouter.current());
         FlowRouter.go( '/' );
     },
+});
+
+// on user logout, go back to home
+Tracker.autorun(() => {
+    if( !Meteor.userId()){
+        FlowRouter.go( '/' );
+    }
 });
