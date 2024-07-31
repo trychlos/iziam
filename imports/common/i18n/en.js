@@ -7,6 +7,11 @@ Meteor.APP.i18n = {
     ...{
         en: {
             accounts: {
+                edit: {
+                    api_allowed_label: 'Is REST API allowed: ',
+                    api_last_label: 'Last API connection: ',
+                    tab_title: 'Application'
+                },
                 login: {
                     preamble: 'The page you are requesting requires permissions which are only given to identified user accounts.<br />'
                         +'Please connect and enjoy.'
@@ -523,7 +528,8 @@ Meteor.APP.i18n = {
                 }
             },
             fieldset: {
-                api_allowed_dt_title: 'Is API allowed'
+                api_allowed_dt_title: 'Is API allowed',
+                api_connection_dt_title: 'Last API connection'
             },
             header: {
                 available_pages: 'The available pages',

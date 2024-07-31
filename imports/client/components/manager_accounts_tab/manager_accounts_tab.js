@@ -3,7 +3,7 @@
  *
  * Users management.
  * By 'users', one must understand izIAM's users, i.e. the user who want make a direct use of this application.
- * Because the application aims to be an identity manager, most of the persons who are referenced as an 'identified' person are not actual users.
+ * Because the application aims to be an identity manager, most of the persons who are referenced as an 'identified' person are not actual izIAM users, but rather organizations users.
  */
 
 import { PlusButton } from 'meteor/pwix:plus-button';
@@ -16,6 +16,20 @@ Template.manager_accounts_tab.helpers({
     // string translation
     i18n( arg ){
         return pwixI18n.label( I18N, arg.hash.key );
+    },
+
+    // AccountsList parameters
+    parmsAccountsList(){
+        return {
+            tabs: [
+                {
+                    tabid: 'app_account_tab',
+                    paneid: 'app_account_pane',
+                    navLabel: pwixI18n.label( I18N, 'accounts.edit.tab_title' ),
+                    paneTemplate: 'account_edit_pane'
+                }
+            ]
+        };
     },
 
     // AccountNewButton parameters

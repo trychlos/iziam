@@ -8,12 +8,17 @@ import { Permissions } from 'meteor/pwix:permissions';
 import { Roles } from 'meteor/pwix:roles';
 import { pwixI18n } from 'meteor/pwix:i18n';
 
+import { appAccounts } from '../collections/accounts/index.js';
+
+import '../collections/accounts/index.js';
+
 AccountsManager.configure({
     allowFn: Permissions.isAllowed,
     //allowFn: null,
     fields: {
     before: 'adminNotes',
         fields: [{
+            // whether the account is allowed to use the REST API
             name: 'apiAllowed',
             type: Boolean,
             defaultValue: false,
@@ -27,6 +32,20 @@ AccountsManager.configure({
                     enabled: true
                 };
             },
+            form_status: false,
+            form_check: appAccounts.checks.apiAllowed
+        },{
+            // last API connection
+            name: 'apiConnection',
+            type: Date,
+            optional: true,
+            dt_title: pwixI18n.label( I18N, 'fieldset.api_connection_dt_title' ),
+            dt_render( data, type, rowData ){
+                return rowData.apiConnection ? strftime( AccountsManager.configure().datetime, rowData.lastConnection ) : '';
+            },
+            dt_className: 'dt-center',
+            form_status: false,
+            form_check: false
         }]
     },
     hideDisabled: false,

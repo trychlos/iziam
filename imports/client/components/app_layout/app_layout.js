@@ -16,6 +16,7 @@ import _ from 'lodash';
 import { FlowRouter } from 'meteor/ostrio:flow-router-extra';
 import { Modal } from 'meteor/pwix:modal';
 
+import '/imports/client/components/account_edit_pane/account_edit_pane.js';
 import '/imports/client/components/app_content/app_content.js';
 import '/imports/client/components/app_footer/app_footer.js';
 import '/imports/client/components/app_header/app_header.js';
@@ -53,7 +54,7 @@ Template.app_layout.events({
         switch( id ){
             case 'app-roles-item':
                 Blaze.renderWithData( Template.prView, {
-                    mdClassesContent: Meteor.APP.runContext.page().get( 'theme' ),
+                    mdClassesContent: Meteor.APP.runContext.ipageablePage().get( 'theme' ),
                 }, $( 'body' )[0] );
                 done = true;
                 break;
