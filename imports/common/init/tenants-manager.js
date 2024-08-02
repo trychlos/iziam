@@ -11,7 +11,26 @@ TenantsManager.configure({
     allowFn: Permissions.isAllowed,
     //allowFn: null,
     hideDisabled: false,
-    // verbosity: TenantsManager.C.Verbose.CONFIGURE
+    recordFields: [
+        {
+            fields: [
+                // --
+                // list of selected providers
+                {
+                    name: 'selectedProviders',
+                    type: Array,
+                    optional: true
+                },
+                // the provider IIdent identifier
+                {
+                    name: 'selectedProviders.$',
+                    type: String
+                }
+            ]
+        }
+    ],
+    //recordFields: null,
+    //verbosity: TenantsManager.C.Verbose.CONFIGURE
 });
 
 Permissions.set({

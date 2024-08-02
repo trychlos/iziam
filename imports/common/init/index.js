@@ -40,6 +40,7 @@ import './forms.js';
 import './modal.js';
 import './modal-info.js';
 import './notes.js';
+import './providers.js';
 import './roles.js';
 import './startup.js';
 import './startup-app-admin.js';
@@ -52,7 +53,6 @@ import './validity.js';
 // followings import a collection, so all must have been defined before them
 //import './ext-oauth-functions.js';
 //import './ext-openid-functions.js';
-//import './providers.js';
 //import './reserved-words.js';
 
 //import '../../openmct/MCT.js';
