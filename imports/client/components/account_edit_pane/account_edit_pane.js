@@ -2,6 +2,12 @@
  * /imports/client/components/account_edit_pane/account_edit_pane.js
  *
  * A pane to be rendered in a Tabbed to edit application-specific account data.
+ *
+ * Parms:
+ * - item: a ReactiveVar which holds the account object to edit (may be empty, but not null)
+ * - isNew: true|false
+ * - checker: a ReactiveVar which holds the parent Checker
+ * - amInstance: a ReactiveVar which holds the amClass instance
  */
 
 import _ from 'lodash';
@@ -37,12 +43,13 @@ Template.account_edit_pane.onRendered( function(){
 
     // initialize the Checker for this panel as soon as we get the parent Checker
     self.autorun(() => {
+        const amInstance = Template.currentData().amInstance.get();
         const parentChecker = Template.currentData().checker.get();
         const checker = self.APP.checker.get();
-        if( parentChecker && !checker ){
+        if( amInstance && parentChecker && !checker ){
             self.APP.checker.set( new Forms.Checker( self, {
                 parent: parentChecker,
-                panel: new Forms.Panel( self.APP.fields, AccountsManager.fieldSet.get()),
+                panel: new Forms.Panel( self.APP.fields, amInstance.fieldSet()),
                 data: {
                     item: Template.currentData().item
                 },

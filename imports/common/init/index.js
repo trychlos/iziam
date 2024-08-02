@@ -18,6 +18,8 @@ import './permissions.js';
 //
 import './accounts-conf.js';
 import './accounts-manager.js';
+import './accounts-manager-accounts.js';
+import './accounts-manager-users.js';
 import './accounts-tools.js';
 import './accounts-ui.js';
 import './app-edit.js';

@@ -4,7 +4,7 @@
 
 const assert = require( 'assert' ).strict;
 
-import { appAccounts } from './index.js';
+import { Accounts } from './index.js';
 
 // fields check
 //  - value: mandatory, the value to be tested
@@ -33,10 +33,10 @@ const _id2index = function( array, id ){
     return -1;
 }
 
-appAccounts.checks = {
+Accounts.checks = {
     // apiAllowed
     async apiAllowed( value, data, opts ){
-        _assert_data_itemrv( 'appAccounts.checks.apiAllowed()', data );
+        _assert_data_itemrv( 'Accounts.checks.apiAllowed()', data );
         const item = data.item.get();
         if( opts.update !== false ){
             item.apiAllowed = value;

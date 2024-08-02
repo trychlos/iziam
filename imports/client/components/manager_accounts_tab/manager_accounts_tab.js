@@ -18,9 +18,10 @@ Template.manager_accounts_tab.helpers({
         return pwixI18n.label( I18N, arg.hash.key );
     },
 
-    // AccountsList parameters
+    // AccountsList parameters and its additional tabs
     parmsAccountsList(){
         return {
+            name: 'users',
             tabs: [
                 {
                     tabid: 'app_account_tab',
@@ -35,6 +36,7 @@ Template.manager_accounts_tab.helpers({
     // AccountNewButton parameters
     parmsNewAccount(){
         return {
+            name: 'users',
             shape: PlusButton.C.Shape.RECTANGLE
         }
     }

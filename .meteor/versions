@@ -74,7 +74,7 @@ observe-sequence@2.0.0-rc300.2
 ordered-dict@1.2.0
 ostrio:flow-router-extra@3.11.0-rc300.1
 promise@1.0.0
-pwix:accounts-conf@1.0.1-rc
+pwix:accounts-conf@1.0.2-rc
 pwix:accounts-manager@1.1.0-rc
 pwix:accounts-tools@2.2.0-rc
 pwix:accounts-ui@1.7.0-rc

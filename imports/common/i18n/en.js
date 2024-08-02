@@ -583,8 +583,11 @@ Meteor.APP.i18n = {
             },
             home: {
                 hero: {
-                    iziam: '<span class="iziam">izIAM</span>'
-                        +'<span style="font-size: 24px; font-family: &quot;Josefin Sans&quot;, sans-serif;"> the Easy Identity Manager</span>'
+                    iziam: ''
+                        +'<span class="iziam">'
+                        +' <span class="name">izIAM</span>'
+                        +' <span class="label"> the Easy Identity Manager</span>'
+                        +'</span>'
                 }
             },
             identities: {

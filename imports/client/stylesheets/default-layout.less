@@ -2,15 +2,27 @@
  * /imports/client/stylesheets/default-layout.less
  */
 
+body {
+    --bs-body-font-family: 'Josefin Sans';
+    // with the above police, have to force the alignment of FA images
+    svg.svg-inline--fa {
+        vertical-align: middle;
+    }
+}
+
 .c-app-main {
     height: 100vh;
 }
 
 .iziam {
-    font-family: 'Serpentine';
-    font-style: italic;
     font-size: 150%;
-    margin-right: 0.5em;
+    .name {
+        font-family: 'Serpentine';
+        font-style: italic;
+        margin-right: 0.5em;
+    }
+    .label {
+    }
 }
 
 // this makes the app-content fill all the vertical space
