@@ -53,7 +53,17 @@ Meteor.APP.i18n = {
                 }
             },
             organizations: {
+                checks: {
+                    baseurl_exists: 'The candidate REST Base URL is already used by another organization',
+                    baseurl_onelevel: 'The REST Base URL must have a single level path',
+                    baseurl_reserved: 'The candidate REST Base URL is a reserved path',
+                    baseurl_short: 'The REST Base URL is too short',
+                    baseurl_starts: 'The REST Base URL must be an absolute path (must start with \'/\')'
+                },
                 edit: {
+                    baseurl_label: 'REST Base URL: ',
+                    baseurl_ph: '/base',
+                    baseurl_title: 'The first level of all REST URL\'s managed by and available to this organization. This is mandatory to have access to the Authorization Server REST API.',
                     providers_tab_title: 'Providers',
                     urls_tab_title: 'URL\'s'
                 }

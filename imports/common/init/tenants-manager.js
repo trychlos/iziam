@@ -2,40 +2,18 @@
  * /imports/common/init/tenants-manager.js
  */
 
-import { Forms } from 'meteor/pwix:forms';
 import { Permissions } from 'meteor/pwix:permissions';
 import { Roles } from 'meteor/pwix:roles';
 import { TenantsManager } from 'meteor/pwix:tenants-manager';
+
+import { Organizations } from '/imports/common/collections/organizations/index.js';
 
 TenantsManager.configure({
     allowFn: Permissions.isAllowed,
     //allowFn: null,
     hideDisabled: false,
-    recordFields: [
-        {
-            fields: [
-                // the REST base URL to be used as the base path for all REST requests
-                // mandatory to enable the REST API, must be unique between all organizations
-                {
-                    name: 'baseUrl',
-                    type: String,
-                    optional: true
-                },
-                // --
-                // list of selected providers
-                {
-                    name: 'selectedProviders',
-                    type: Array,
-                    optional: true
-                },
-                // the provider IIdent identifier
-                {
-                    name: 'selectedProviders.$',
-                    type: String
-                }
-            ]
-        }
-    ],
+    entityFields: Organizations.entityFieldset(),
+    recordFields: Organizations.recordFieldset(),
     //recordFields: null,
     //verbosity: TenantsManager.C.Verbose.CONFIGURE
 });

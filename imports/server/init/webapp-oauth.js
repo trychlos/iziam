@@ -63,9 +63,12 @@
 import { WebApp } from 'meteor/webapp';
 
 // non-scoped REST API
-//  caution: the first level of path must be added to the Meteor.APP.ReservedWords array (see /imports/common/init/reserved-words.js)
+//  As a design decision, all global REST API must start with /vnn
 const globals = {
     GET: [
+        {
+            path: '/v1'
+        }
     ]
 }
 

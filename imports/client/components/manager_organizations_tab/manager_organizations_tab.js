@@ -15,7 +15,7 @@ Template.manager_organizations_tab.onCreated( function(){
     const self = this;
 
     self.APP = {
-        tabs: [
+        recordTabs: [
             {
                 tabid: 'app_organization_providers_tab',
                 paneid: 'app_organization_providers_pane',
@@ -41,7 +41,7 @@ Template.manager_organizations_tab.helpers({
     // TenantNewButton parameters
     parmsNewTenant(){
         return {
-            tabs: Template.instance().APP.tabs,
+            recordTabs: Template.instance().APP.recordTabs,
             shape: PlusButton.C.Shape.RECTANGLE
         }
     },
@@ -49,7 +49,7 @@ Template.manager_organizations_tab.helpers({
     // TenantsList parameters
     parmsTenantsList(){
         return {
-            tabs: Template.instance().APP.tabs
+            recordTabs: Template.instance().APP.recordTabs
         }
     }
 });

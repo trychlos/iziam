@@ -1,15 +1,14 @@
 <template name="organization_urls_pane">
     <div class="c-organization-urls-pane">
 
-
-
-        {{#if canList }}
-            {{> tabular_ext table=TabularTables.Providers id=tabularId selector=selector class="table table-striped table-bordered table-condensed" }}
-        {{else}}
-            <div class="not-allowed">
-                {{{ i18n key="manager.providers.not_allowed" }}}
-            </div>
-        {{/if}}
+        <table class="form-table ui-w100">
+            <tr>
+                <td class="ui-w20 label"><label class="form-label" for="baseurl-label">{{ i18n key="organizations.edit.baseurl_label" }}</label></td>
+                <td class="ui-w100">
+                    <input class="form-control flex-grow-1 js-baseurl" type="text" id="baseurl-label" placeholder="{{ i18n key="organizations.edit.baseurl_ph" }}" title="{{ i18n key="organizations.edit.baseurl_title" }}" />
+                </td>
+            </tr>
+        </table>
 
     </div>
 </template>
