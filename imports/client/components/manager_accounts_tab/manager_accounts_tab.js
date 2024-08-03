@@ -11,8 +11,22 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 
 import './manager_accounts_tab.html';
 
-Template.manager_accounts_tab.helpers({
+Template.manager_accounts_tab.onCreated( function(){
+    const self = this;
 
+    self.APP = {
+        tabs: [
+            {
+                tabid: 'app_account_tab',
+                paneid: 'app_account_pane',
+                navLabel: pwixI18n.label( I18N, 'accounts.edit.tab_title' ),
+                paneTemplate: 'account_edit_pane'
+            }
+        ]
+    };
+});
+
+Template.manager_accounts_tab.helpers({
     // string translation
     i18n( arg ){
         return pwixI18n.label( I18N, arg.hash.key );
@@ -22,14 +36,7 @@ Template.manager_accounts_tab.helpers({
     parmsAccountsList(){
         return {
             name: 'users',
-            tabs: [
-                {
-                    tabid: 'app_account_tab',
-                    paneid: 'app_account_pane',
-                    navLabel: pwixI18n.label( I18N, 'accounts.edit.tab_title' ),
-                    paneTemplate: 'account_edit_pane'
-                }
-            ]
+            tabs: Template.instance().APP.tabs
         };
     },
 
@@ -37,6 +44,7 @@ Template.manager_accounts_tab.helpers({
     parmsNewAccount(){
         return {
             name: 'users',
+            tabs: Template.instance().APP.tabs,
             shape: PlusButton.C.Shape.RECTANGLE
         }
     }

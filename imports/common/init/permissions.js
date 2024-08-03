@@ -23,6 +23,13 @@ Permissions.configure({
 });
 
 Permissions.set({
+    feat: {
+        providers: {
+            async list( user ){
+                return await Roles.userIsInRoles( user, Meteor.APP.C.appAdmin );
+            }
+        }
+    },
     // the permissions needed to have an item in the specified menu
     menus: {
         app: {

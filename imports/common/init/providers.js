@@ -4,27 +4,63 @@
 
 import _ from 'lodash';
 
+import { Field } from 'meteor/pwix:field';
+import { pwixI18n } from 'meteor/pwix:i18n';
+
 import { IIdent } from '/imports/common/interfaces/iident.iface.js';
 
-//import { OpenIDProvider } from '/imports/common/providers/openid-provider.class.js';
+import { OpenIDProvider } from '/imports/common/providers/openid-provider.class.js';
 
 Meteor.APP.Providers = {
+
+    // the list of registered providers
     _p: [],
 
+    // the defined field.set
+    _fieldSet: null,
+
+    /**
+     * @returns {Array} the registered providers
+     */
     allProviders(){
-        return this.p;
+        return this._p;
     },
 
-    // returns the identified izProvider
+    /**
+     * @param {String} id the Provider IIdent identifier
+     * @returns {izProvider} the found izProvider
+     */
     byId( id ){
         let found = null;
-        this._p.every(( p ) => {
+        this.allProviders().every(( p ) => {
             if( p instanceof IIdent && p.identId() === id ){
                 found = p;
             }
             return found === null;
         });
         return found;
+    },
+
+    /**
+     * @returns {Array} the fieldset columns array
+     */
+    fieldSet(){
+        if( this._fieldSet === null ){
+            let columns = [
+                {
+                    name: 'ident',
+                    schema: false,
+                    dt_title: pwixI18n.label( I18N, 'managers.providers.list_ident_th' )
+                },
+                {
+                    name: 'features',
+                    schema: false,
+                    dt_title: pwixI18n.label( I18N, 'managers.providers.list_features_th' )
+                }
+            ];
+            this._fieldSet = new Field.Set( columns );
+        }
+        return this._fieldSet;
     },
 
     /**
@@ -65,9 +101,13 @@ Meteor.APP.Providers = {
         }
     },
 
+    /**
+     * @param {String} type the searched type (e.g. IIdent)
+     * @returns {Array} the list of providers which implement this type, which may be empty
+     */
     getInstancesOf( type ){
         let res = [];
-        this._p.forEach(( p ) => {
+        this.allProviders().forEach(( p ) => {
             if( p instanceof type ){
                 res.push( p );
             }
@@ -78,5 +118,5 @@ Meteor.APP.Providers = {
 
 //Meteor.APP.Providers._p.push( new IdentityProvider());
 //Meteor.APP.Providers._p.push( new LooseDynRegistrar());
-//Meteor.APP.Providers._p.push( new OpenIDProvider());
+Meteor.APP.Providers._p.push( new OpenIDProvider());
 //Meteor.APP.Providers._p.push( new UserResourceProvider());

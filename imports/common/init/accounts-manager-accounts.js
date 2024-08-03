@@ -26,7 +26,7 @@ Meteor.APP.AccountsManager.Accounts = new AccountsManager.amClass({
             name: 'apiAllowed',
             type: Boolean,
             defaultValue: false,
-            dt_title: pwixI18n.label( I18N, 'fieldset.api_allowed_dt_title' ),
+            dt_title: pwixI18n.label( I18N, 'accounts.fieldset.api_allowed_dt_title' ),
             dt_template: 'dt_checkbox',
             dt_className: 'dt-center',
             dt_templateContext( rowData ){
@@ -43,7 +43,7 @@ Meteor.APP.AccountsManager.Accounts = new AccountsManager.amClass({
             name: 'apiConnection',
             type: Date,
             optional: true,
-            dt_title: pwixI18n.label( I18N, 'fieldset.api_connection_dt_title' ),
+            dt_title: pwixI18n.label( I18N, 'accounts.fieldset.api_connection_dt_title' ),
             dt_render( data, type, rowData ){
                 return rowData.apiConnection ? strftime( AccountsManager.configure().datetime, rowData.lastConnection ) : '';
             },

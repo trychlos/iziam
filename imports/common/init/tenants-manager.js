@@ -14,6 +14,13 @@ TenantsManager.configure({
     recordFields: [
         {
             fields: [
+                // the REST base URL to be used as the base path for all REST requests
+                // mandatory to enable the REST API, must be unique between all organizations
+                {
+                    name: 'baseUrl',
+                    type: String,
+                    optional: true
+                },
                 // --
                 // list of selected providers
                 {

@@ -1,12 +1,12 @@
 /*
  * /imports/common/classes/iz-provider.class.js
  *
- * A base class for the providers.
+ * A base class for the feature providers.
  * 
  * Each provider:
  * - is identified both with a machine identifier and a human readable string, through IIdent interface
  * - defaults to not be selected
- * - should advertize of its features
+ * - should advertize of its features, through the IFeatured interface
  * - should advertize of its claims and scopes
  */
 
@@ -16,10 +16,11 @@ import mix from '@vestergaard-company/js-mixin';
 
 import { IFeatured } from '/imports/common/interfaces/ifeatured.iface.js';
 import { IIdent } from '/imports/common/interfaces/iident.iface.js';
+import { IRequires } from '/imports/common/interfaces/irequires.iface.js';
 
 import { izObject } from './iz-object.class.js';
 
-export class izProvider extends mix( izObject ).with( IIdent ){
+export class izProvider extends mix( izObject ).with( IFeatured, IIdent, IRequires ){
 
     // static data
 
@@ -28,7 +29,7 @@ export class izProvider extends mix( izObject ).with( IIdent ){
     // private data
 
     // whether the provider defaults to be selected
-    #selected = false;
+    #defaultSelected = false;
 
     // private methods
 
@@ -50,10 +51,10 @@ export class izProvider extends mix( izObject ).with( IIdent ){
      * @param {Boolean} whether this provider should be selected by default
      * @returns {Boolean} whether this provider is selected by default
      */
-    selected( selected ){
+    defaultSelected( selected ){
         if( selected === true || selected === false ){
-            this.#selected = selected
+            this.#defaultSelected = selected
         }
-        return this.#selected;
+        return this.#defaultSelected;
     }
 }

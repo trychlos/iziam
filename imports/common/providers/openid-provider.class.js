@@ -29,15 +29,17 @@ export class OpenIDProvider extends mix( izProvider ).with(){
     constructor(){
         super({
             iident: {
-                id: 'pwi.trychlos.iziam.provider.openid.0',
+                id: 'org.trychlos.iziam.provider.openid.0',
                 label: 'izIAM OpenID Provider',
                 origin: 'izIAM'
             },
-            /*
             ifeatured: [
-                'openid-connect-1.0',
-                'openid'
+                'openid-connect-1.0'
             ],
+            irequires: [
+                'oauth-2.0-6749'
+            ]
+            /*
             iresource: {
                 '.': {
                     openid: [
@@ -49,7 +51,7 @@ export class OpenIDProvider extends mix( izProvider ).with(){
         });
 
         // this provider defaults to be selected
-        this.selected( true );
+        this.defaultSelected( true );
 
         return this;
     }

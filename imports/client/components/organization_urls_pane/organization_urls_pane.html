@@ -1,0 +1,15 @@
+<template name="organization_urls_pane">
+    <div class="c-organization-urls-pane">
+
+
+
+        {{#if canList }}
+            {{> tabular_ext table=TabularTables.Providers id=tabularId selector=selector class="table table-striped table-bordered table-condensed" }}
+        {{else}}
+            <div class="not-allowed">
+                {{{ i18n key="manager.providers.not_allowed" }}}
+            </div>
+        {{/if}}
+
+    </div>
+</template>

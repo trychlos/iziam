@@ -9,5 +9,5 @@ import './email_templates.js';
 //import './openid.js';
 //import './run.js';
 import './startup.js';
-//import './webapp-oid.js';
-//import './webapp-workaround.js';
+import './webapp-oauth.js';
+import './webapp-workaround.js';
