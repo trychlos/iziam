@@ -1,38 +1,52 @@
 /*
  * pwix:tenants-manager/src/client/components/organization_providers_pane/organization_providers_pane.js
  *
+ * Display all the selected providers and their features.
+ * Let the user select/unselect the items.
+ *
  * Parms:
  * - see README
  */
 
-import { Modal } from 'meteor/pwix:modal';
 import { pwixI18n } from 'meteor/pwix:i18n';
-import { ReactiveVar } from 'meteor/reactive-var';
-import { Tolert } from 'meteor/pwix:tolert';
+
+import { Providers } from '/imports/common/collections/providers/index.js';
 
 import './organization_providers_pane.html';
 
 Template.organization_providers_pane.onCreated( function(){
     const self = this;
+    //console.debug( this, Template.currentData());
 
     self.APP = {
+        tabular: null,
+
+        // whether the current provider can be selected
+        can( checked ){
+
+        }
     };
 
+    // get the data context and instanciate the client tabular instance
     self.autorun(() => {
+        const dataContext = Template.currentData();
+        const entity = dataContext.entity.get();
+        const record = entity.DYN.records[dataContext.index].get();
+        self.APP.tabular = Providers.tabular({ entity: entity, record: record });
     });
 });
 
 Template.organization_providers_pane.helpers({
-    // whether the current user has the permission to see the list of tenants
-    canList(){
-        return true;
-        const res = TenantsManager.isAllowed( 'pwix.tenants_manager.pub.list_all' );
-        //console.debug( 'res', res );
-        return res;
-    },
-
     // string translation
     i18n( arg ){
         return pwixI18n.label( I18N, arg.hash.key );
+    }
+});
+
+Template.organization_providers_pane.events({
+    // data context is { enabled, fieldDef, item }
+    'click .tabular-checkbox input'( event, instance ){
+        const checked = instance.$( event.currentTarget ).prop( 'checked' );
+        console.debug( 'checked', checked );
     }
 });

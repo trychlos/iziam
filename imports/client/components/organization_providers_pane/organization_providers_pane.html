@@ -1,15 +1,11 @@
 <template name="organization_providers_pane">
     <div class="c-organization-providers-pane">
 
+        <div class="preamble">
+            {{{ i18n key="organizations.providers.list_preamble" }}}
+        </div>
 
-
-        {{#if canList }}
-            {{> tabular_ext table=TabularTables.Providers id=tabularId selector=selector class="table table-striped table-bordered table-condensed" }}
-        {{else}}
-            <div class="not-allowed">
-                {{{ i18n key="manager.providers.not_allowed" }}}
-            </div>
-        {{/if}}
+        {{> tabular_ext table=TabularTables.Providers id=tabularId selector=selector options=options class="table table-striped table-bordered table-condensed" }}
 
     </div>
 </template>

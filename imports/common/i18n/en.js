@@ -66,6 +66,14 @@ Meteor.APP.i18n = {
                     baseurl_title: 'The first level of all REST URL\'s managed by and available to this organization. This is mandatory to have access to the Authorization Server REST API.',
                     providers_tab_title: 'Providers',
                     urls_tab_title: 'URL\'s'
+                },
+                providers: {
+                    list_features_th: 'Features',
+                    list_ident_th: 'Identifier',
+                    list_label_th: 'Label',
+                    list_origin_th: 'Origin',
+                    list_preamble: 'These are the available feature providers.<br />Some are rather required while others may be freely chosen at your convenience.',
+                    list_selected_th: 'Selected'
                 }
             },
             powered_by: {

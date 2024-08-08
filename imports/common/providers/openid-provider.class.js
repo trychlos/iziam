@@ -53,6 +53,9 @@ export class OpenIDProvider extends mix( izProvider ).with(){
         // this provider defaults to be selected
         this.defaultSelected( true );
 
+        // let this provider be user selectable (do not use OpenID ?)
+        //this.userSelectable( false );
+
         return this;
     }
 

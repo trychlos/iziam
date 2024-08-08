@@ -18,6 +18,14 @@ Meteor.APP.C = {
         'en',
         'fr'
     ],
+
+    // some publication which have a special target collection
+    pub: {
+        xxxxxx: {
+            collection: 'iziam_providers_tabular_collection',
+            publish: 'iziam_providers_tabular_pub'
+        }
+    }
 }
 
 I18N = 'izIAM.Internationalization';

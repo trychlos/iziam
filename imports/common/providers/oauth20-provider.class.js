@@ -35,20 +35,14 @@ export class OAuth20Provider extends mix( izProvider ).with(){
             },
             ifeatured: [
                 'oauth-2.0-6749'
-            ],
-            /*
-            iresource: {
-                '.': {
-                    openid: [
-                        'sub'
-                    ]
-                }
-            },
-            */
+            ]
         });
 
         // this provider defaults to be selected
         this.defaultSelected( true );
+
+        // this provider defaults to be selected
+        this.userSelectable( false );
 
         return this;
     }

@@ -4,6 +4,7 @@
 
 import { CoreApp } from 'meteor/pwix:core-app';
 import { EnvSettings } from 'meteor/pwix:env-settings';
+import { ReactiveVar } from 'meteor/reactive-var';
 
 export class RunContext extends CoreApp.RunContext {
 
@@ -12,6 +13,10 @@ export class RunContext extends CoreApp.RunContext {
     // static methods
 
     // private data
+
+    // the current organization and validity period
+    #entity = new ReactiveVar( null );
+    #record = new ReactiveVar( null );
 
     // private methods
 

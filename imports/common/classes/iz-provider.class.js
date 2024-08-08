@@ -5,7 +5,6 @@
  * 
  * Each provider:
  * - is identified both with a machine identifier and a human readable string, through IIdent interface
- * - defaults to not be selected
  * - should advertize of its features, through the IFeatured interface
  * - should advertize of its claims and scopes
  */
@@ -31,6 +30,9 @@ export class izProvider extends mix( izObject ).with( IFeatured, IIdent, IRequir
     // whether the provider defaults to be selected
     #defaultSelected = false;
 
+    // whether the user can modify the selection
+    #userSelectable = true;
+
     // private methods
 
     // protected data
@@ -48,7 +50,7 @@ export class izProvider extends mix( izObject ).with( IFeatured, IIdent, IRequir
 
     /**
      * Getter/Setter
-     * @param {Boolean} whether this provider should be selected by default
+     * @param {Boolean} selected whether this provider should be selected by default
      * @returns {Boolean} whether this provider is selected by default
      */
     defaultSelected( selected ){
@@ -56,5 +58,17 @@ export class izProvider extends mix( izObject ).with( IFeatured, IIdent, IRequir
             this.#defaultSelected = selected
         }
         return this.#defaultSelected;
+    }
+
+    /**
+     * Getter/Setter
+     * @param {Boolean} selectable whether the allowded user can choose himself to select or not the provider
+     * @returns {Boolean} the current selectability status
+     */
+    userSelectable( selectable ){
+        if( selectable === true || selectable === false ){
+            this.#userSelectable = selectable
+        }
+        return this.#userSelectable;
     }
 }
