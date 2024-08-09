@@ -5,6 +5,8 @@
 import { Field } from 'meteor/pwix:field';
 import { pwixI18n } from 'meteor/pwix:i18n';
 
+import { Organizations } from '/imports/common/collections/organizations/index.js';
+
 import { IIdent } from '/imports/common/interfaces/iident.iface.js';
 import { IFeatured } from '/imports/common/interfaces/ifeatured.iface.js';
 import { IRequires } from '/imports/common/interfaces/irequires.iface.js';
@@ -16,11 +18,14 @@ Providers._fieldset = null;
 
 /**
  * @locus Anywhere
+ * @param {Object} tenant 
  * @returns {Array} the fieldset columns array
  */
-Providers.dataSet = function(){
+Providers.dataSet = function( tenant ){
     if( Providers._dataset === null ){
         Providers._dataset = [];
+        const selected = Organizations.selectedProvidersIds( tenant );
+        //console.debug( 'selected', selected );
         Providers.allProviders().forEach(( it ) => {
             let o = {};
             if( it instanceof IIdent ){
@@ -35,6 +40,7 @@ Providers.dataSet = function(){
             if( it instanceof IRequires ){
                 o.requires = it.requires().join( ', ' );
             }
+            o.selected = Object.keys( selected ).includes( o.id );
             Providers._dataset.push( o );
         });
     }
@@ -49,7 +55,8 @@ Providers.dataSet = function(){
  */
 Providers.fieldSet = function( tenant=null ){
     if( Providers._fieldset === null ){
-        const selected = tenant.selectedProviders || [];
+        const selected = Organizations.selectedProvidersIds( tenant );
+        const features = Providers.featuresByIds( Object.keys( selected ));
         let columns = [
             {
                 name: 'id',
@@ -85,6 +92,7 @@ Providers.fieldSet = function( tenant=null ){
                 dt_template: 'dt_checkbox',
                 dt_templateContext( rowData ){
                     return {
+                        organization: tenant,
                         item: rowData,
                         // the provider can be selected (i.e. is enabled) if all its requirements are already selected and it is itself user selectable
                         enabled: ( dataContext ) => {
@@ -93,8 +101,8 @@ Providers.fieldSet = function( tenant=null ){
                             if( provider ){
                                 enabled = provider.userSelectable();
                                 if( enabled ){
-                                    provider.requires().every(( feat ) => {
-                                        enabled &&= selected.includes( feat );
+                                    provider.requires().every(( req ) => {
+                                        enabled &&= features.includes( req );
                                         return enabled;
                                     });
                                 }

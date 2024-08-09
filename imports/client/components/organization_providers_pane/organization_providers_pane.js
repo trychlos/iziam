@@ -19,12 +19,7 @@ Template.organization_providers_pane.onCreated( function(){
     //console.debug( this, Template.currentData());
 
     self.APP = {
-        tabular: null,
-
-        // whether the current provider can be selected
-        can( checked ){
-
-        }
+        tabular: null
     };
 
     // get the data context and instanciate the client tabular instance
@@ -47,6 +42,13 @@ Template.organization_providers_pane.events({
     // data context is { enabled, fieldDef, item }
     'click .tabular-checkbox input'( event, instance ){
         const checked = instance.$( event.currentTarget ).prop( 'checked' );
-        console.debug( 'checked', checked );
+        const record = this.organization.record;
+        record.selectedProviders = record.selectedProviders || [];
+        if( checked ){
+            record.selectedProviders.push( this.item.id );
+        } else {
+            record.selectedProviders = record.selectedProviders.filter( id => id !== this.item.id );
+        }
+        //console.debug( 'record.selectedProviders', record.selectedProviders );
     }
 });

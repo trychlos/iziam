@@ -20,7 +20,7 @@ Providers.tabular = function( tenant ){
     return new Tabular.Table({
         name: 'Providers',
         collection: null,
-        data: Providers.dataSet(),
+        data: Providers.dataSet( tenant ),
         columns: Providers.fieldSet( tenant ).toTabular(),
         serverSide: false,
         ajax: null,

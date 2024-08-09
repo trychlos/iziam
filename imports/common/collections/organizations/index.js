@@ -6,3 +6,4 @@ export { Organizations } from './collection.js';
 
 import './checks.js';
 import './fieldset.js';
+import './functions.js';

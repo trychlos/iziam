@@ -2,10 +2,12 @@
  * /import/common/collections/providers/functions.js
  */
 
+import _ from 'lodash';
 const assert = require( 'assert' ).strict;
 
 import { izProvider } from '/imports/common/classes/iz-provider.class.js';
 
+import { IFeatured } from '/imports/common/interfaces/ifeatured.iface.js';
 import { IIdent } from '/imports/common/interfaces/iident.iface.js';
 
 import { Providers } from './index.js';
@@ -35,6 +37,24 @@ Providers.byId = function( id ){
         return found === null;
     });
     return found;
+};
+
+/**
+ * @locus Anywhere
+ * @summary Compute and returns the list of features provided by a list of provider id's
+ * @param {Array<String>} ids an array of izProvider IIdent identifiers
+ * @returns {Array<String>} the provided IFeatured's
+ */
+Providers.featuresByIds = function( ids ){
+    ids = _.isArray( ids ) ? ids : [ids];
+    let features = [];
+    ids.forEach(( id ) => {
+        const p = Providers.byId( id );
+        if( p && p instanceof IFeatured ){
+            features = features.concat( p.features());
+        }
+    });
+    return features;
 };
 
     /**
