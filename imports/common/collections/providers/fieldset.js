@@ -24,7 +24,7 @@ Providers._fieldset = null;
 Providers.dataSet = function( tenant ){
     if( Providers._dataset === null ){
         Providers._dataset = [];
-        const selected = Organizations.selectedProvidersIds( tenant );
+        const selected = Organizations.fn.selectedProvidersIds( tenant );
         //console.debug( 'selected', selected );
         Providers.allProviders().forEach(( it ) => {
             let o = {};
@@ -55,7 +55,7 @@ Providers.dataSet = function( tenant ){
  */
 Providers.fieldSet = function( tenant=null ){
     if( Providers._fieldset === null ){
-        const selected = Organizations.selectedProvidersIds( tenant );
+        const selected = Organizations.fn.selectedProvidersIds( tenant );
         const features = Providers.featuresByIds( Object.keys( selected ));
         let columns = [
             {
