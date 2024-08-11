@@ -10,7 +10,7 @@ import '/imports/common/init/index.js';
 //import './datepicker.js';
 import './display-units.js';
 //import './organization-context.js';
-//import './ready.js';
+import './providers.js';
 import './routes.js';
 import './run-context.js';
 //import './startup.js';

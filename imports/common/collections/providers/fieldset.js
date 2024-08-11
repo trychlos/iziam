@@ -4,6 +4,7 @@
 
 import { Field } from 'meteor/pwix:field';
 import { pwixI18n } from 'meteor/pwix:i18n';
+import { ReactiveVar } from 'meteor/reactive-var';
 
 import { Organizations } from '/imports/common/collections/organizations/index.js';
 
@@ -15,6 +16,7 @@ import { Providers } from './index.js';
 
 Providers._dataset = null;
 Providers._fieldset = null;
+Providers._selected = new ReactiveVar( null );
 
 /**
  * @locus Anywhere
@@ -24,7 +26,7 @@ Providers._fieldset = null;
 Providers.dataSet = function( tenant ){
     if( Providers._dataset === null ){
         Providers._dataset = [];
-        const selected = Organizations.fn.selectedProvidersIds( tenant );
+        const selected = Organizations.fn.selectedProviders( tenant );
         //console.debug( 'selected', selected );
         Providers.allProviders().forEach(( it ) => {
             let o = {};
@@ -55,8 +57,7 @@ Providers.dataSet = function( tenant ){
  */
 Providers.fieldSet = function( tenant=null ){
     if( Providers._fieldset === null ){
-        const selected = Organizations.fn.selectedProvidersIds( tenant );
-        const features = Providers.featuresByIds( Object.keys( selected ));
+        Providers._selected.set( Organizations.fn.selectedProviders( tenant ));
         let columns = [
             {
                 name: 'id',
@@ -89,28 +90,12 @@ Providers.fieldSet = function( tenant=null ){
                 dt_type: 'string',
                 dt_title: pwixI18n.label( I18N, 'organizations.providers.list_selected_th' ),
                 dt_className: 'dt-center',
-                dt_template: 'dt_checkbox',
+                dt_template: Meteor.isClient && Template.provider_selection_checkbox,
                 dt_templateContext( rowData ){
                     return {
                         organization: tenant,
                         item: rowData,
-                        // the provider can be selected (i.e. is enabled) if all its requirements are already selected and it is itself user selectable
-                        enabled: ( dataContext ) => {
-                            const provider = Providers.byId( dataContext.item.id );
-                            let enabled = false;
-                            if( provider ){
-                                enabled = provider.userSelectable();
-                                if( enabled ){
-                                    provider.requires().every(( req ) => {
-                                        enabled &&= features.includes( req );
-                                        return enabled;
-                                    });
-                                }
-                            } else {
-                                console.warn( 'unable to get a provider for id='+dataContext.item.id );
-                            }
-                            return enabled;
-                        }
+                        selectedRv: Providers._selected
                     }
                 }
             }

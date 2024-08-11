@@ -49,7 +49,7 @@ export class OAuth20Provider extends mix( izProvider ).with(){
      * @returns {Boolean} whether this provider is selectable, i.e. when the input checkbox can be enabled to be selected by the user
      */
     isSelectable( selected ){
-        let selectable = super( selected );
+        let selectable = super.isSelectable( selected );
         if( selectable ){
             if( selected.includes( 'org.trychlos.iziam.provider.oauth21.11' )){
                 selectable = false;

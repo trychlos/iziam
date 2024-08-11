@@ -15,7 +15,7 @@ import mix from '@vestergaard-company/js-mixin';
 
 import { izProvider } from '/imports/common/classes/iz-provider.class.js';
 
-export class OAuth20Provider extends mix( izProvider ).with(){
+export class OAuth21Provider extends mix( izProvider ).with(){
 
     // static data
 
@@ -29,7 +29,7 @@ export class OAuth20Provider extends mix( izProvider ).with(){
 
     /**
      * Constructor
-     * @returns {OAuth20Provider}
+     * @returns {OAuth21Provider}
      */
     constructor(){
         super({
@@ -53,7 +53,7 @@ export class OAuth20Provider extends mix( izProvider ).with(){
      * @returns {Boolean} whether this provider is selectable, i.e. when the input checkbox can be enabled to be selected by the user
      */
     isSelectable( selected ){
-        let selectable = super( selected );
+        let selectable = super.isSelectable( selected );
         if( selectable ){
             if( selected.includes( 'org.trychlos.iziam.provider.oauth20.0' )){
                 selectable = false;

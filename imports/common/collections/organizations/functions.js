@@ -29,7 +29,7 @@ Organizations.fn = {
      * - provider: the izProvider instance
      * - features: an array of the provided IFeatured's
      */
-    selectedProvidersIds( tenant ){
+    selectedProviders( tenant ){
         let selectedIds = tenant.record.selectedProviders || [];
         // add providers non-selectable by the user, which default to be selected
         Providers.allProviders().forEach(( p ) => {
