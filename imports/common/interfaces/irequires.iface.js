@@ -1,7 +1,7 @@
 /*
  * /imports/common/interfaces/irequires.iface.js
  *
- * Register IFeatured requirements.
+ * Let a provider check that its prerequisites are met by defining a list of required features.
  * 
  * A provider which implements IRequires may declare the IFeatured it requires, so that if none of the registered/selected providers implement such a IFeature, then this provider cannot be selected.
  */
@@ -29,6 +29,13 @@ export const IRequires = DeclareMixin(( superclass ) => class extends superclass
         }
 
         return this;
+    }
+
+    /**
+     * @returns {Array<String>} the list of the required features
+     */
+    requires(){
+        return this.#priv?.requires || [];
     }
 
     /**

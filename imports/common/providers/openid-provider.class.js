@@ -34,10 +34,11 @@ export class OpenIDProvider extends mix( izProvider ).with(){
                 origin: 'izIAM'
             },
             ifeatured: [
+                'openid',
                 'openid-connect-1.0'
             ],
             irequires: [
-                'oauth-2.0-6749'
+                'oauth2'
             ]
             /*
             iresource: {
@@ -49,12 +50,6 @@ export class OpenIDProvider extends mix( izProvider ).with(){
             },
             */
         });
-
-        // this provider defaults to be selected
-        this.defaultSelected( true );
-
-        // let this provider be user selectable (do not use OpenID ?)
-        //this.userSelectable( false );
 
         return this;
     }

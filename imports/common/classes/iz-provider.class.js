@@ -16,22 +16,17 @@ import mix from '@vestergaard-company/js-mixin';
 import { IFeatured } from '/imports/common/interfaces/ifeatured.iface.js';
 import { IIdent } from '/imports/common/interfaces/iident.iface.js';
 import { IRequires } from '/imports/common/interfaces/irequires.iface.js';
+import { ISelectable } from '/imports/common/interfaces/iselectable.iface.js';
 
 import { izObject } from './iz-object.class.js';
 
-export class izProvider extends mix( izObject ).with( IFeatured, IIdent, IRequires ){
+export class izProvider extends mix( izObject ).with( IFeatured, IIdent, IRequires, ISelectable ){
 
     // static data
 
     // static methods
 
     // private data
-
-    // whether the provider defaults to be selected
-    #defaultSelected = false;
-
-    // whether the user can modify the selection
-    #userSelectable = true;
 
     // private methods
 
@@ -46,29 +41,5 @@ export class izProvider extends mix( izObject ).with( IFeatured, IIdent, IRequir
     constructor(){
         super( ...arguments );
         return this;
-    }
-
-    /**
-     * Getter/Setter
-     * @param {Boolean} selected whether this provider should be selected by default
-     * @returns {Boolean} whether this provider is selected by default
-     */
-    defaultSelected( selected ){
-        if( selected === true || selected === false ){
-            this.#defaultSelected = selected
-        }
-        return this.#defaultSelected;
-    }
-
-    /**
-     * Getter/Setter
-     * @param {Boolean} selectable whether the allowded user can choose himself to select or not the provider
-     * @returns {Boolean} the current selectability status
-     */
-    userSelectable( selectable ){
-        if( selectable === true || selectable === false ){
-            this.#userSelectable = selectable
-        }
-        return this.#userSelectable;
     }
 }

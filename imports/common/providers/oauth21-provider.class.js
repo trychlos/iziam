@@ -3,7 +3,10 @@
  *
  *  2024- 8- 9: an IETF draft v 11 (may 2024).
  *
- * A simple (though mandatory) provider which advertizes of the OAuth 2.0 RFC 6749 implementation.
+ * A protocol provider for the OAuth 2.1 draft v11 implementation.
+ * 
+ * Exactly one of Oauth 2.0 / OAuth 2.1 must be selected by the organization.
+ * Both of these OAuth providers have their own list of defined client types.
  */
 
 import _ from 'lodash';
@@ -31,21 +34,31 @@ export class OAuth20Provider extends mix( izProvider ).with(){
     constructor(){
         super({
             iident: {
-                id: 'org.trychlos.iziam.provider.oauth20.0',
-                label: 'izIAM OAUth 2.0 Provider (RFC 6749)',
+                id: 'org.trychlos.iziam.provider.oauth21.11',
+                label: 'izIAM OAUth 2.1 Provider (Draft v11)',
                 origin: 'izIAM'
             },
             ifeatured: [
-                'oauth-2.0-6749'
+                'oauth2',
+                'oauth-2.1-draft-v11'
             ]
         });
 
-        // this provider defaults to be selected
-        this.defaultSelected( true );
-
-        // this provider defaults to be selected
-        this.userSelectable( false );
-
         return this;
+    }
+
+    /**
+     * @summary Overrides ISelectable.isSelectable() method so that OAuth 2.0 cannot be selected if OAuth 2.1 is already selected
+     * @param {Array<String>} selected the list of currently selected providers id's
+     * @returns {Boolean} whether this provider is selectable, i.e. when the input checkbox can be enabled to be selected by the user
+     */
+    isSelectable( selected ){
+        let selectable = super( selected );
+        if( selectable ){
+            if( selected.includes( 'org.trychlos.iziam.provider.oauth20.0' )){
+                selectable = false;
+            }
+        }
+        return selectable;
     }
 }
