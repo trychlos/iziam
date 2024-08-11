@@ -4,6 +4,8 @@
 
 import '/imports/collections/accounts/server/index.js';
 //import '/imports/collections/authorizations/server/index.js';
+import '/imports/collections/clients_entities/server/index.js';
+import '/imports/collections/clients_records/server/index.js';
 import '/imports/collections/clients/server/index.js';
 //import '/imports/collections/groups/server/index.js';
 //import '/imports/collections/identities/server/index.js';

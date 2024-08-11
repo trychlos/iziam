@@ -1,13 +1,13 @@
 /*
- * /imports/collections/clients/server/deny.js
+ * /imports/collections/clients_entities/server/deny.js
  */
 
-import { Clients } from '../index.js';
+import { ClientsEntities } from '../index.js';
 
 // Deny all client-side updates
 // cf. https://guide.meteor.com/security.html#allow-deny
 
-Clients.deny({
+ClientsEntities.deny({
     insert(){ return true; },
     update(){ return true; },
     remove(){ return true; },

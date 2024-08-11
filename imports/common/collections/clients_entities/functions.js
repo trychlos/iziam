@@ -1,5 +1,7 @@
 /*
- * /imports/collections/clients/functions.js
+ * /imports/collections/clients_entities/functions.js
+ *
+ * The clients registered with an organization.
  */
 
 import _ from 'lodash';
@@ -7,9 +9,9 @@ const assert = require( 'assert' ).strict; // up to nodejs v16.x
 
 import { ReactiveVar } from 'meteor/reactive-var';
 
-import { Clients } from './index.js';
+import { ClientsEntities } from './index.js';
 
-Clients.fn = {
+ClientsEntities.fn = {
     /**
      * @param {<Client>} client 
      * @return {Promise} which eventually resolves to the result object with following keys:
