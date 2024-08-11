@@ -10,13 +10,13 @@ import validUrl from 'valid-url';
 //import { CoreApp } from 'meteor/pwix:core-app';
 import { pwixI18n } from 'meteor/pwix:i18n';
 
-import { AuthMethod } from '/imports/common/definitions/auth-method.def.js';
-import { ClientNature } from '/imports/common/definitions/client-nature.def.js';
-import { ClientType } from '/imports/common/definitions/client-type.def.js';
-import { GrantType } from '/imports/common/definitions/grant-type.def.js';
-import { ResponseType } from '/imports/common/definitions/response-type.def.js';
+//import { AuthMethod } from '/imports/common/definitions/auth-method.def.js';
+//import { ClientNature } from '/imports/common/definitions/client-nature.def.js';
+//import { ClientType } from '/imports/common/definitions/client-type.def.js';
+//import { GrantType } from '/imports/common/definitions/grant-type.def.js';
+//import { ResponseType } from '/imports/common/definitions/response-type.def.js';
 
-import { Clients } from './clients.js';
+import { Clients } from './index.js';
 
 // check( item) is used to check a full item, typically when creating/updating an item via the REST API
 //  the item must be intrasically correct and compatible with already existing items
@@ -37,6 +37,7 @@ Clients.check = function( item ){
 }
 */
 
+/*
 // these functions check that the passed data are enough to check the field
 //  this is the minimum, and is generally enough
 //  item is expected to be a ReactiveVar
@@ -340,4 +341,4 @@ Clients.checks = {
             });
     }
 };
-
+*/

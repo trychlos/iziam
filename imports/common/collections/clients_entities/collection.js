@@ -3,5 +3,9 @@
  */
 
 import { Mongo } from 'meteor/mongo';
+import { ReactiveVar } from 'meteor/reactive-var';
 
-export const ClientsEntities = new Mongo.Collection( 'clients_e' );
+export const ClientsEntities = {
+    collection: new Mongo.Collection( 'clients_e' ),
+    fieldSet: new ReactiveVar( null )
+};

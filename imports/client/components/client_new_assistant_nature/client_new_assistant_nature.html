@@ -1,0 +1,19 @@
+<template name="client_new_assistant_nature">
+    <div class="x-dialog c-client-new-assistant-nature c-client-new-assistant-pane">
+
+        <div class="text">
+            {{> app_serializer document="client-new-nature" }}
+        </div>
+
+        <div class="chooser">
+            {{#each it in itemsList }}
+                <div class="by-item" data-item-id="{{ itId it }}">
+                    <img src="{{ itImage it }}" />
+                    <div class="label">{{ itLabel it }}</div>
+                    <div class="description form-text">{{ itDescription it }}</div>
+                </div>
+            {{/each}}
+        </div>
+
+    </div>
+</template>

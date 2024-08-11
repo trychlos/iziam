@@ -9,7 +9,7 @@ import { ClientsEntities } from './index.js';
 
 Tracker.autorun(() => {
     const fieldSet = ClientsEntities.fieldSet?.get();
-    if( ClientsEntities.collectionReady.get() && fieldSet ){
+    if( fieldSet ){
         ClientsEntities.collection.attachSchema( new SimpleSchema( fieldSet.toSchema()), { replace: true });
         ClientsEntities.collection.attachBehaviour( 'timestampable', { replace: true });
     }

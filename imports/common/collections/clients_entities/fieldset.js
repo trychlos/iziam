@@ -32,32 +32,7 @@ const _defaultFieldSet = function(){
 };
 
 Tracker.autorun(() => {
-    let columns = _defaultFieldSet( conf );
+    let columns = _defaultFieldSet();
     let fieldset = new Field.Set( columns );
-    // update the fieldSet definitions to display start and end effect dates
-    let def = fieldset.byName( 'effectStart' );
-    if( def ){
-        def.set({
-            dt_visible: true,
-            dt_title: pwixI18n.label( I18N, 'clients.list.effect_start_th' ),
-            dt_templateContext( rowData ){
-                return {
-                    date: rowData.effectStart
-                };
-            }
-        });
-    }
-    def = fieldset.byName( 'effectEnd' );
-    if( def ){
-        def.set({
-            dt_visible: true,
-            dt_title: pwixI18n.label( I18N, 'clients.list.effect_end_th' ),
-            dt_templateContext( rowData ){
-                return {
-                    date: rowData.effectEnd
-                };
-            }
-        });
-    }
     ClientsEntities.fieldSet.set( fieldset );
 });

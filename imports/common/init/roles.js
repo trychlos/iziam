@@ -93,21 +93,24 @@ const roles = {
                         {
                             name: 'SCOPED_EDITOR',
                         },
-                            /*
                         {
-                            name: 'CLIENTS_MANAGER',
+                            name: 'SCOPED_CLIENTS_MANAGER',
                             children: [
                                 {
-                                    name: 'CLIENTS_LIST'
+                                    name: 'SCOPED_CLIENT_CREATE'
                                 },
                                 {
-                                    name: 'CLIENT_CRU'
+                                    name: 'SCOPED_CLIENT_DELETE'
                                 },
                                 {
-                                    name: 'CLIENT_DELETE'
+                                    name: 'SCOPED_CLIENT_EDIT'
+                                },
+                                {
+                                    name: 'SCOPED_CLIENTS_LIST'
                                 }
                             ]
                         },
+                            /*
                         {
                             name: 'IDENTITIES_MANAGER',
                             children: [

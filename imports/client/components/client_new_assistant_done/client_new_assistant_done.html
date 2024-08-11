@@ -1,0 +1,24 @@
+<template name="client_new_assistant_done">
+    <div class="x-dialog c-client-new-assistant-done c-client-new-assistant-pane">
+
+        {{> client_new_assistant_current (parmsCurrent) }}
+
+        <div class="content">
+            {{#if haveError }}
+                <p class="error">{{ error }}</p>
+            {{else}}
+                <div>
+                    <p class="success">{{ success }}</p>
+                    <p class="sub-success">{{ sub_success }}</p>
+                </div>
+                <table class="form-table">
+                    <tr>
+                        <td class="label"><label class="form-label">{{ i18n key="clients.panel.clientid_label" }}</label></td>
+                        <td class="ca-w100"><p class="result">{{ clientId }}</p></td>
+                    </tr>
+                </table>
+            {{/if}}
+        </div>
+
+    </div>
+</template>

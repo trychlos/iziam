@@ -9,3 +9,4 @@ export { ClientsRecords } from './collection.js';
 import './checks.js';
 import './fieldset.js';
 import './functions.js';
+import './schema.js';

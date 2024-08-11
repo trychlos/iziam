@@ -1,0 +1,32 @@
+<template name="client_new_assistant_jwt">
+    <div class="x-dialog c-client-new-assistant-jwt c-client-new-assistant-pane">
+
+        {{> client_new_assistant_current (parmsCurrent) }}
+
+        <div class="content">
+            <div class="text">
+                {{> app_serializer document="client-new-jwt" }}
+            </div>
+
+            <div class="jwt">
+                <table class="form-table">
+                    <tr>
+                        <td class="label"><label class="form-label" for="client-jwt-source">{{ i18n key="clients.panel.jwtsource_label" }}</label></td>
+                        <td class="ca-w100">{{> jwt_private_select }}</td>
+                    </tr>
+                    <tr>
+                        <td class="label ca-vatop"><label class="form-label" for="client-jwt-data">{{ i18n key="clients.panel.jwtdata_label" }}</label></td>
+                        <td class="ca-w100">
+                            {{#if haveInput }}
+                                <input class="form-control js-data" type="text" id="client-jwt-data" placeholder="{{ i18n key="clients.panel.jwtdata_ph" }}" title="{{ i18n key="clients.panel.jwtdata_title" }}" />
+                            {{else}}
+                                <textarea class="form-control js-data" aria-label="JWT Privacy Source" size="9" placeholder="{{ i18n key="clients.panel.jwtdata_ph" }}" title="{{ i18n key="clients.panel.jwtdata_title" }}"></textarea>
+                            {{/if}}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</template>

@@ -1,0 +1,13 @@
+<template name="client_new_assistant_summary">
+    <div class="x-dialog c-client-new-assistant-summary c-client-new-assistant-pane">
+
+        {{> client_new_assistant_current (parmsCurrent) }}
+
+        <div class="content">
+            <div class="text">
+                {{> app_serializer document="client-new-summary" }}
+            </div>
+        </div>
+
+    </div>
+</template>

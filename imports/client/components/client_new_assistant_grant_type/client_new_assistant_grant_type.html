@@ -1,0 +1,27 @@
+<template name="client_new_assistant_grant_type">
+    <div class="x-dialog c-client-new-assistant-grant-type c-client-new-assistant-pane">
+
+        {{> client_new_assistant_current (parmsCurrent) }}
+
+        <div class="content">
+            <div class="text">
+                {{> app_serializer document="client-new-grant-type" }}
+            </div>
+    
+            <div class="chooser">
+                <div class="chooser-content">
+                    {{#each it in itemsList }}
+                        <div class="item d-flex flex-row align-items-center">
+                            <div class="by-item {{ itDisabled it }} {{ itSelected it }} " data-item-id="{{ itId it }}">
+                                <input class="form-check-input ca-mr025 js-check" id="{{ itId it }}" type="checkbox" {{ itChecked it }} {{ itDisabled it }} />
+                                <label class="form-label {{ itDisabled it }}" for="{{ itId it }}">{{ itLabel it }}</label>
+                            </div>
+                            <p class="form-text ca-ml05">{{ itDescription it }}</p>
+                        </div>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</template>

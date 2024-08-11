@@ -6,6 +6,7 @@
 
 import { pwixI18n } from 'meteor/pwix:i18n';
 
+import '../organization_clients_pane/organization_clients_pane.js';
 import '../organization_providers_pane/organization_providers_pane.js';
 import '../organization_urls_pane/organization_urls_pane.js';
 
@@ -15,6 +16,14 @@ Template.manager_organizations_tab.onCreated( function(){
     const self = this;
 
     self.APP = {
+        entityTabs: [
+            {
+                tabid: 'app_organization_clients_tab',
+                paneid: 'app_organization_clients_pane',
+                navLabel: pwixI18n.label( I18N, 'organizations.edit.clients_tab_title' ),
+                paneTemplate: 'organization_clients_pane'
+            },
+        ],
         recordTabs: [
             {
                 tabid: 'app_organization_providers_tab',
@@ -41,6 +50,7 @@ Template.manager_organizations_tab.helpers({
     // TenantNewButton parameters
     parmsNewTenant(){
         return {
+            entityTabs: Template.instance().APP.entityTabs,
             recordTabs: Template.instance().APP.recordTabs,
             shape: PlusButton.C.Shape.RECTANGLE
         }
@@ -49,6 +59,7 @@ Template.manager_organizations_tab.helpers({
     // TenantsList parameters
     parmsTenantsList(){
         return {
+            entityTabs: Template.instance().APP.entityTabs,
             recordTabs: Template.instance().APP.recordTabs
         }
     }

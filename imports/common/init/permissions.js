@@ -24,6 +24,25 @@ Permissions.configure({
 
 Permissions.set({
     feat: {
+        clients: {
+            async delete( user, scope ){
+                return await Roles.userIsInRoles( user, 'SCOPED_CLIENT_DELETE', { scope: scope });
+            },
+            async new( user, scope ){
+                return await Roles.userIsInRoles( user, 'SCOPED_CLIENT_CREATE', { scope: scope });
+            },
+            pub: {
+                async closests( user, scope ){
+                    return await Roles.userIsInRoles( user, 'SCOPED_CLIENTS_LIST', { scope: scope });
+                },
+                async list_all( user, scope ){
+                    return await Roles.userIsInRoles( user, 'SCOPED_CLIENTS_LIST', { scope: scope });
+                },
+                async tabular( user, scope ){
+                    return await Roles.userIsInRoles( user, 'SCOPED_CLIENTS_LIST', { scope: scope });
+                }
+            }
+        },
         providers: {
             async list( user ){
                 return await Roles.userIsInRoles( user, Meteor.APP.C.appAdmin );
