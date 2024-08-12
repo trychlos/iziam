@@ -25,18 +25,6 @@ Organizations.recordFieldset = function(){
                     optional: true,
                     form_check: Organizations.checks.baseUrl,
                     form_type: Forms.FieldType.C.OPTIONAL
-                },
-                // --
-                // list of selected providers
-                {
-                    name: 'selectedProviders',
-                    type: Array,
-                    optional: true
-                },
-                // the provider IIdent identifier
-                {
-                    name: 'selectedProviders.$',
-                    type: String
                 }
             ]
         }

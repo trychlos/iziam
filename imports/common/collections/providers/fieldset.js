@@ -6,7 +6,7 @@ import { Field } from 'meteor/pwix:field';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 
-import { Organizations } from '/imports/common/collections/organizations/index.js';
+import { Clients } from '/imports/common/collections/clients/index.js';
 
 import { IIdent } from '/imports/common/interfaces/iident.iface.js';
 import { IFeatured } from '/imports/common/interfaces/ifeatured.iface.js';
@@ -20,13 +20,13 @@ Providers._selected = new ReactiveVar( null );
 
 /**
  * @locus Anywhere
- * @param {Object} tenant 
+ * @param {Object} client 
  * @returns {Array} the fieldset columns array
  */
-Providers.dataSet = function( tenant ){
+Providers.dataSet = function( client ){
     if( Providers._dataset === null ){
         Providers._dataset = [];
-        const selected = Organizations.fn.selectedProviders( tenant );
+        const selected = Clients.fn.selectedProviders( client );
         //console.debug( 'selected', selected );
         Providers.allProviders().forEach(( it ) => {
             let o = {};
@@ -52,12 +52,12 @@ Providers.dataSet = function( tenant ){
 
 /**
  * @locus Anywhere
- * @param {Object} tenant 
+ * @param {Object} client 
  * @returns 
  */
-Providers.fieldSet = function( tenant=null ){
+Providers.fieldSet = function( client=null ){
     if( Providers._fieldset === null ){
-        Providers._selected.set( Organizations.fn.selectedProviders( tenant ));
+        Providers._selected.set( Clients.fn.selectedProviders( client ));
         let columns = [
             {
                 name: 'id',
@@ -66,7 +66,7 @@ Providers.fieldSet = function( tenant=null ){
             {
                 name: 'label',
                 dt_type: 'string',
-                dt_title: pwixI18n.label( I18N, 'organizations.providers.list_label_th' )
+                dt_title: pwixI18n.label( I18N, 'clients.providers.list_label_th' )
             },
             {
                 name: 'description',
@@ -79,7 +79,7 @@ Providers.fieldSet = function( tenant=null ){
             {
                 name: 'features',
                 dt_type: 'string',
-                dt_title: pwixI18n.label( I18N, 'organizations.providers.list_features_th' )
+                dt_title: pwixI18n.label( I18N, 'clients.providers.list_features_th' )
             },
             {
                 name: 'requires',
@@ -88,12 +88,12 @@ Providers.fieldSet = function( tenant=null ){
             {
                 name: 'selected',
                 dt_type: 'string',
-                dt_title: pwixI18n.label( I18N, 'organizations.providers.list_selected_th' ),
+                dt_title: pwixI18n.label( I18N, 'clients.providers.list_selected_th' ),
                 dt_className: 'dt-center',
                 dt_template: Meteor.isClient && Template.provider_selection_checkbox,
                 dt_templateContext( rowData ){
                     return {
-                        organization: tenant,
+                        client: client,
                         item: rowData,
                         selectedRv: Providers._selected
                     }

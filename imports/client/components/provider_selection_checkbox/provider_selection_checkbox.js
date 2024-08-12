@@ -3,12 +3,12 @@
  *
  * Data context is provided at the constructor level:
  * - item: the provider bject
- * - organization: the current organization as an object { entity, record }
+ * - client: the current client as an object { entity, record }
  * - field: the Field.Def definition
  * - selectedRv: a ReactiveVar which contains the currently selected providers as an object
  */
 
-import { Organizations } from '/imports/common/collections/organizations/index.js';
+import { Clients } from '/imports/common/collections/clients/index.js';
 import { Providers } from '/imports/common/collections/providers/index.js';
 
 import './provider_selection_checkbox.html';
@@ -38,14 +38,14 @@ Template.provider_selection_checkbox.helpers({
 Template.provider_selection_checkbox.events({
     'click .c-provider-selection-checkbox input'( event, instance ){
         const checked = instance.$( event.currentTarget ).prop( 'checked' );
-        let organization = this.organization;
+        let client = this.client;
         const providerId = this.item.id;
         if( checked ){
-            organization.record.selectedProviders = organization.record.selectedProviders || [];
-            organization.record.selectedProviders.push( providerId );
+            client.record.selectedProviders = client.record.selectedProviders || [];
+            client.record.selectedProviders.push( providerId );
         } else {
-            organization.record.selectedProviders = organization.record.selectedProviders.filter( it => it !== providerId );
+            client.record.selectedProviders = client.record.selectedProviders.filter( it => it !== providerId );
         }
-        this.selectedRv.set( Organizations.fn.selectedProviders( this.organization ))
+        this.selectedRv.set( Clients.fn.selectedProviders( client ))
     }
 });

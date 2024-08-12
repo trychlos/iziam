@@ -1,5 +1,5 @@
 /*
- * pwix:tenants-manager/src/client/components/organization_providers_pane/organization_providers_pane.js
+ * pwix:tenants-manager/src/client/components/client_providers_pane/client_providers_pane.js
  *
  * Display all the selected providers and their features.
  * Let the user select/unselect the items.
@@ -12,9 +12,9 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 
 import { Providers } from '/imports/common/collections/providers/index.js';
 
-import './organization_providers_pane.html';
+import './client_providers_pane.html';
 
-Template.organization_providers_pane.onCreated( function(){
+Template.client_providers_pane.onCreated( function(){
     const self = this;
     //console.debug( this, Template.currentData());
 
@@ -31,14 +31,14 @@ Template.organization_providers_pane.onCreated( function(){
     });
 });
 
-Template.organization_providers_pane.helpers({
+Template.client_providers_pane.helpers({
     // string translation
     i18n( arg ){
         return pwixI18n.label( I18N, arg.hash.key );
     }
 });
 
-Template.organization_providers_pane.events({
+Template.client_providers_pane.events({
     // data context is { enabled, fieldDef, item }
     'click .tabular-checkbox input'( event, instance ){
         const checked = instance.$( event.currentTarget ).prop( 'checked' );

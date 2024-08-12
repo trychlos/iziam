@@ -30,6 +30,18 @@ const _defaultFieldSet = function(){
             name: 'type',
             type: String
         },
+        // --
+        // list of selected providers
+        {
+            name: 'selectedProviders',
+            type: Array,
+            optional: true
+        },
+        // the provider IIdent identifier
+        {
+            name: 'selectedProviders.$',
+            type: String
+        },
         Notes.fieldDef(),
         Validity.recordsFieldDef(),
         Timestampable.fieldDef()
