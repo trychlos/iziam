@@ -11,7 +11,7 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 import { TM } from 'meteor/pwix:typed-message';
 
 //import { AuthMethod } from '/imports/common/definitions/auth-method.def.js';
-//import { ClientNature } from '/imports/common/definitions/client-nature.def.js';
+import { ClientProfile } from '/imports/common/definitions/client-profile.def.js';
 import { ClientType } from '/imports/common/definitions/client-type.def.js';
 //import { GrantType } from '/imports/common/definitions/grant-type.def.js';
 //import { ResponseType } from '/imports/common/definitions/response-type.def.js';

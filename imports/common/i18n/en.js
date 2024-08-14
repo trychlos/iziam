@@ -195,10 +195,19 @@ Meteor.APP.i18n = {
                         +'Capabilities of the clients depend of their type and of the chozen authorization grant flow.',
                 },
                 edit: {
-                    baseurl_label: 'REST Base URL: ',
+                    baseurl_label: 'REST Base URL : ',
                     baseurl_ph: '/base',
                     baseurl_title: 'The first level of all REST URL\'s managed by and available to this organization. This is mandatory to have access to the Authorization Server REST API.',
                     clients_tab_title: 'Clients',
+                    dynconfidential_label: 'Accept dynamic registration from confidential client applications',
+                    dynconfidential_title: 'Whether a confidential client can be configured to allow dynamic registration of other client applications',
+                    dynpublic_label: 'Accept dynamic registration from public client applications',
+                    dynpublic_title: 'Whether a public client can be configured to allow dynamic registration of other client applications (be cautious with that)',
+                    dynregistration_preamble: 'Define here if the organization will allow some clients or users to perform dynamic registration.<br />'
+                        +'Please be cautious with this feature as they can lead to unknown clients making fake requests to your authorization server.',
+                    dynregistration_tab_title: 'Dynamic registration',
+                    dynuser_label: 'Accept dynamic registration from allowed identified users',
+                    dynuser_title: 'Whether an identified user can be allowed to perform dynamic registration of client applications',
                     providers_tab_title: 'Providers',
                     urls_tab_title: 'URL\'s'
                 },

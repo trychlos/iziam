@@ -26,7 +26,7 @@ import './client_properties_pane.html';
 
 Template.client_properties_pane.onCreated( function(){
     const self = this;
-    console.debug( this );
+    //console.debug( this );
 
     self.APP = {
         fields: {

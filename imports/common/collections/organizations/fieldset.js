@@ -43,19 +43,22 @@ Organizations.recordFieldset = function(){
                 {
                     name: 'dynamicRegistrationByConfidential',
                     type: Boolean,
-                    defaultValue: false
+                    defaultValue: false,
+                    form_check: Organizations.checks.dynamicRegistrationByConfidential
                 },
                 // whether the organization allow dynamic registration by public clients
                 {
                     name: 'dynamicRegistrationByPublic',
                     type: Boolean,
-                    defaultValue: false
+                    defaultValue: false,
+                    form_check: Organizations.checks.dynamicRegistrationByPublic
                 },
                 // whether the organization allow dynamic registration by allowed identified users
                 {
                     name: 'dynamicRegistrationByUser',
                     type: Boolean,
-                    defaultValue: false
+                    defaultValue: false,
+                    form_check: Organizations.checks.dynamicRegistrationByUser
                 }
             ]
         }

@@ -130,5 +130,35 @@ Organizations.checks = {
                     }
                 }
             });
+    },
+
+    // whether the organization allow dynamic registration by confidential clients
+    async dynamicRegistrationByConfidential( value, data, opts ){
+        _assert_data_itemrv( 'Organizations.checks.dynamicRegistrationByConfidential()', data );
+        let item = data.entity.get().DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.dynamicRegistrationByConfidential = value;
+        }
+        return null;
+    },
+
+    // whether the organization allow dynamic registration by public clients
+    async dynamicRegistrationByPublic( value, data, opts ){
+        _assert_data_itemrv( 'Organizations.checks.dynamicRegistrationByPublic()', data );
+        let item = data.entity.get().DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.dynamicRegistrationByPublic = value;
+        }
+        return null;
+    },
+
+    // whether the organization allow dynamic registration by identified allowed users
+    async dynamicRegistrationByUser( value, data, opts ){
+        _assert_data_itemrv( 'Organizations.checks.dynamicRegistrationByUser()', data );
+        let item = data.entity.get().DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.dynamicRegistrationByUser = value;
+        }
+        return null;
     }
 };

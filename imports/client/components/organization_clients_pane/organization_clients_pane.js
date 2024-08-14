@@ -14,8 +14,6 @@ import { Permissions } from 'meteor/pwix:permissions';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { Tolert } from 'meteor/pwix:tolert';
 
-import { Clients } from '/imports/common/collections/clients/index.js';
-
 import '../client_new_button/client_new_button.js';
 
 import './organization_clients_pane.html';
