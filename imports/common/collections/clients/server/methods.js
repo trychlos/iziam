@@ -5,7 +5,7 @@
 import { Clients } from '../index.js';
 
 Meteor.methods({
-
+/*
     // empty the collection before importing
     'client.empty'(){
         return Clients.remove({});
@@ -63,4 +63,5 @@ Meteor.methods({
     'client.upsert'( itemsArray ){
         return Clients.s.upsert( itemsArray, this.userId );
     }
+        */
 });

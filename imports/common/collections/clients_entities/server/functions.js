@@ -8,11 +8,21 @@ import { Random } from 'meteor/random';
 
 import { ClientsEntities } from '../index.js';
 
-ClientEntities.s = {
-    // returns the queried items
-    async getBy( query ){
-        let res = ClientsEntities.find( query ).fetchAsync();
-        //console.log( 'ClientEntities.s.getBy', query, res );
+ClientsEntities.server = {
+    /*
+    * @param {Object} selector
+    * @param {String} userId
+    * @returns {Array} may be empty
+    */
+    async getBy( selector, userId ){
+        check( selector, Object );
+        check( userId, String );
+        let scope;
+        if( !await Permissions.isAllowed( 'feat.clients.fn.get_by', userId, scope )){
+            return null;
+        }
+        const res = await ClientsEntities.collection.find( selector ).fetchAsync();
+        //console.debug( 'records', selector, res );
         return res;
-    },
+    }
 };

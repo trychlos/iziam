@@ -28,6 +28,11 @@ Permissions.set({
             async delete( user, scope ){
                 return await Roles.userIsInRoles( user, 'SCOPED_CLIENT_DELETE', { scope: scope });
             },
+            fn :{
+                async getBy( user, scope ){
+                    return await Roles.userIsInRoles( user, 'SCOPED_CLIENTS_LIST', { scope: scope });
+                }
+            },
             async new( user, scope ){
                 return await Roles.userIsInRoles( user, 'SCOPED_CLIENT_CREATE', { scope: scope });
             },

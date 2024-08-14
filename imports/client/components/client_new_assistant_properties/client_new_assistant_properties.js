@@ -9,6 +9,8 @@ import _ from 'lodash';
 
 import { pwixI18n } from 'meteor/pwix:i18n';
 
+import '/imports/client/components/client_properties_pane/client_properties_pane.js';
+
 import './client_new_assistant_properties.html';
 
 Template.client_new_assistant_properties.onRendered( function(){
@@ -16,15 +18,11 @@ Template.client_new_assistant_properties.onRendered( function(){
 
     // tracks the selection to enable/disable the Next button when the pane is active
     self.autorun(() => {
-        const dataDict = Template.currentData().parentAPP.dataParts;
+        const dataDict = Template.currentData().parentAPP.assistantStatus;
         if( dataDict.get( 'activePane' ) === 'properties' ){
-            const name = dataDict.get( 'name' );
-            dataDict.set( 'next', Boolean( name?.length ));
+            const label = Template.currentData().parentAPP.entity.get().DYN.records[0].get().label;
+            self.$( '.c-client-new-assistant-properties' ).trigger( 'assistant-do-action-set', { action: 'next', enable: Boolean( label?.length ) });
         }
-    });
-
-    // tracks the selection for updating data and UI (doesn't depend of the current pane as soon as natureId changes)
-    self.autorun(() => {
     });
 });
 
@@ -43,10 +41,13 @@ Template.client_new_assistant_properties.helpers({
     },
 
     // parms for re-use the client_edit properties panel
-    parmsPropertiesPanel(){
+    parmsPropertiesPane(){
         return {
-            item: this.parentAPP.item,
-            entityChecker: this.parentAPP.entityChecker
+            ...this,
+            entity: this.parentAPP.entity,
+            index: 0,
+            checker: this.parentAPP.checker,
+            enableChecks: false
         };
     }
 });
@@ -54,18 +55,11 @@ Template.client_new_assistant_properties.helpers({
 Template.client_new_assistant_properties.events({
     // enable/disable the action buttons
     'assistant-pane-to-show .c-client-new-assistant-properties'( event, instance, data ){
-        console.debug( event.type, data );
-        this.parentAPP.dataParts.set( 'prev', false );
-        this.parentAPP.dataParts.set( 'next', false );
+        instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'prev', enable: false });
+        instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'next',  enable: false });
     },
     'assistant-pane-shown .c-client-new-assistant-properties'( event, instance, data ){
-        console.debug( event.type, data );
-        this.parentAPP.dataParts.set( 'prev', true );
-    },
-    // we embed the client_properties_panel which itself uses a FormChecker
-    //  so the item is already up to date - Thanks to FormChecker
-    //  manage here the Next action
-    'panel-data .c-client-new-assistant-properties'( event, instance, data ){
-
+        instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'prev', enable: true });
+        instance.$( '.c-client-properties-pane' ).trigger( 'iz-enable-checks', true );
     }
 });

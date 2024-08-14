@@ -204,6 +204,107 @@ body {
  * Positionning
  */
 
+ .c-client-new-assistant {
+    display: flex;
+    min-height:35em;
+    .by-item {
+        margin: 0.25em;
+        white-space: nowrap;
+        border: 1px solid transparent;
+    }
+    .by-item:hover {
+        cursor: pointer;
+    }
+    .by-item.selected {
+        border: 1px solid gray;
+        border-radius: 0.5em;
+    }
+    .chooser {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    fieldset.summary {
+        font-size: 90%;
+        color: #013583; // darken( var( --bs-primary ), 50 );
+        legend {
+            font-size: 1.1em;
+            margin-bottom: 0;
+        }
+        .recap {
+            margin-left: 0.75em;
+        }
+        .form-text {
+            margin-top: 0;
+        }
+    }
+    .text {
+        margin-bottom: 1em;
+    }
+    .c-client-new-assistant-introduction {
+        justify-content: center;
+        margin-right: 1em;
+    }
+    .c-client-new-assistant-profile {
+        .chooser {
+            flex-direction: row;
+            justify-content: space-between;
+        }
+        .by-item {
+            width: 15em;
+            height: 22em;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0.5em;
+            padding: 0.5em;
+            white-space: wrap;
+            img {
+                width: 6em;
+            }
+        }
+    }
+    /*
+    .c-client-new-assistant-pane {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        .content {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            flex-grow: 1;
+        }
+    }
+        */
+    .c-client-new-assistant-auth-method .by-item {
+        padding: 0.5em 1em;
+        min-width: 23em;
+        .by-item:hover {
+            cursor: pointer;
+        }
+    }
+    .c-client-new-assistant-done {
+        .success {
+            font-weight: bold;
+            color: var( --bs-success );
+        }
+        .result {
+            font-weight: bold;
+        }
+    }
+    .c-client-new-assistant-grant-type .by-item {
+        padding: 0.5em 2em;
+        min-width: 18em;
+    }
+}
+.c-client-new-assistant > .Assistant {
+    overflow-y: hidden;
+}
+.c-client-new-assistant > * > * > * > .tabbed-navs-encloser {
+    margin-right: 1em;
+}
 .c-client-new-button .plusButton {
     position: inherit;
 }
@@ -772,69 +873,6 @@ table.colpad025 {
     @media screen and ( min-width: @ui-lg-width ){
         margin-left: 5em;
         margin-right:5em;
-    }
-}
-
-.ca-assistant-template {
-    height: 100%;
-    .ca-navs-encloser {
-        margin-right: 1em;
-        border-right: 1px solid gray;
-    }
-    .ca-tabbed-navs {
-        ul,
-        ul li {
-            border: none;
-        }
-        :focus-visible {
-            outline: none;
-        }
-        .nav-link {
-            transition: none;
-        }
-        .nav-link.active {
-            font-weight: bold;
-            background-color: inherit;
-            border: none;
-        }
-        .nav-link.ca-inactive {
-            cursor: default;
-            pointer-events: none;
-        }
-        .nav-link:focus {
-            border: none;
-        }
-        .nav-link:hover {
-            cursor: auto;
-            border: none;
-            color: var( --bs-nav-link-color );
-        }
-        .nav-link.disabled {
-            font-style: italic;
-        }
-    }
-}
-.ca-assistant-actions {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    .ca-caller {
-        display: flex;
-        flex-direction: row;
-        justify-content: start;
-    }
-    .ca-own {
-        display: flex;
-        flex-direction: row;
-        justify-content: end;
-        button {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-        }
-        button.ca-dnone {
-            display: none;
-        }
     }
 }
 */

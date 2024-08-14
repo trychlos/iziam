@@ -18,7 +18,7 @@ Template.client_new_assistant_auth_method.onRendered( function(){
 
     // tracks the selection to enable/disable the Next button when the pane is active
     self.autorun(() => {
-        const dataDict = Template.currentData().parentAPP.dataParts;
+        const dataDict = Template.currentData().parentAPP.assistantStatus;
         if( dataDict.get( 'activePane' ) === 'auth' ){
             const auth = dataDict.get( 'authMethod' );
             const grants = dataDict.get( 'grantTypes' );
@@ -27,7 +27,7 @@ Template.client_new_assistant_auth_method.onRendered( function(){
         }
     });
 
-    // tracks the selection for updating data and UI (doesn't depend of the current pane as soon as natureId changes)
+    // tracks the selection for updating data and UI (doesn't depend of the current pane as soon as profileId changes)
     self.autorun(() => {
     });
 });
@@ -41,7 +41,7 @@ Template.client_new_assistant_auth_method.helpers({
     // whether this item is selected ?
     itChecked( it ){
         const id = AuthMethod.id( it );
-        return ( this.parentAPP.dataParts.get( 'authMethod' ) || [] ).includes( id ) ? 'checked' : '';
+        return ( this.parentAPP.assistantStatus.get( 'authMethod' ) || [] ).includes( id ) ? 'checked' : '';
     },
 
     // description
@@ -54,7 +54,7 @@ Template.client_new_assistant_auth_method.helpers({
     itDisabled( it ){
         let enabled = true;
         if( AuthMethod.id( it ) === 'none' ){
-            enabled = !( this.parentAPP.dataParts.get( 'grantTypes' ) || [] ).includes( 'client_creds' );
+            enabled = !( this.parentAPP.assistantStatus.get( 'grantTypes' ) || [] ).includes( 'client_creds' );
         }
         return enabled ? '' : 'disabled';
     },
@@ -77,7 +77,7 @@ Template.client_new_assistant_auth_method.helpers({
     // whether this item is selected ?
     itSelected( it ){
         const id = AuthMethod.id( it );
-        return this.parentAPP.dataParts.get( 'authMethod' ) === id ? 'selected' : '';
+        return this.parentAPP.assistantStatus.get( 'authMethod' ) === id ? 'selected' : '';
     },
 
     // items list
@@ -98,17 +98,17 @@ Template.client_new_assistant_auth_method.events({
     // enable/disable the action buttons
     'assistant-pane-to-show .c-client-new-assistant-auth-method'( event, instance, data ){
         console.debug( event.type, data );
-        this.parentAPP.dataParts.set( 'prev', false );
-        this.parentAPP.dataParts.set( 'next', false );
+        this.parentAPP.assistantStatus.set( 'prev', false );
+        this.parentAPP.assistantStatus.set( 'next', false );
     },
     'assistant-pane-shown .c-client-new-assistant-auth-method'( event, instance, data ){
         console.debug( event.type, data );
-        this.parentAPP.dataParts.set( 'prev', true );
+        this.parentAPP.assistantStatus.set( 'prev', true );
     },
 
     // auth method selection
     'click .by-item'( event, instance ){
         const id = instance.$( event.currentTarget ).closest( '.by-item' ).data( 'item-id' );
-        this.parentAPP.dataParts.set( 'authMethod', id );
+        this.parentAPP.assistantStatus.set( 'authMethod', id );
     }
 });

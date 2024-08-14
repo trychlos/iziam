@@ -4,22 +4,36 @@
 
 import _ from 'lodash';
 
+import { check } from 'meteor/check';
+import { Permissions } from 'meteor/pwix:permissions';
 import { Random } from 'meteor/random';
 
 import { ClientsRecords } from '../index.js';
 
-ClientsRecords.s = {
+ClientsRecords.server = {
+    /*
+    * @param {Object} selector
+    * @param {String} userId
+    * @returns {Array} may be empty
+    */
+    async getBy( selector, userId ){
+        check( selector, Object );
+        check( userId, String );
+        let scope;
+        if( !await Permissions.isAllowed( 'feat.clients.fn.get_by', userId, scope )){
+            return null;
+        }
+        const res = await ClientsRecords.collection.find( selector ).fetchAsync();
+        //console.debug( 'records', selector, res );
+        return res;
+    },
+
+    /*
     // return a client by its name
     byName( name ){
         return Clients.findOne({ name: name });
     },
 
-    // returns the queried items
-    getBy( query ){
-        let res = Clients.find( query ).fetch();
-        //console.log( 'entOrganization.getBy', res );
-        return res;
-    },
 
     // update (actually replace) the data provided via the FormChecker fields
     updateByFields( item, fields, userId ){
@@ -125,4 +139,5 @@ ClientsRecords.s = {
         //console.debug( result );
         return result;
     }
+        */
 };

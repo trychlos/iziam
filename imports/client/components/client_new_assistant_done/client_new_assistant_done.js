@@ -37,15 +37,15 @@ Template.client_new_assistant_done.onRendered( function(){
     // create the client all results are in ReactiveVar's
     self.autorun(() => {
         const dataContext = Template.currentData();
-        const dataDict = dataContext.parentAPP.dataParts;
-        const natureDef = dataDict.get( 'natureDefinition' );
+        const dataDict = dataContext.parentAPP.assistantStatus;
+        const natureDef = dataDict.get( 'profileDefinition' );
         if( dataDict.get( 'activePane' ) === 'done' ){
             console.debug( 'dataContext', dataContext );
             const item = {
                 organization: dataContext.organization.get().entity,
                 name: dataDict.get( 'name' ),
-                nature: dataDict.get( 'natureId' ),
-                type: ClientNature.defaultType( natureDef ),
+                nature: dataDict.get( 'profileId' ),
+                type: ClientNature.defaultClientType( natureDef ),
                 registration: 'pre',
                 description: dataDict.get( 'description' ) || null,
                 grantTypes: dataDict.get( 'grantTypes' ),
@@ -113,11 +113,11 @@ Template.client_new_assistant_done.events({
     // enable/disable the action buttons
     'assistant-pane-to-show .c-client-new-assistant-properties'( event, instance, data ){
         console.debug( event.type, data );
-        this.parentAPP.dataParts.set( 'prev', false );
-        this.parentAPP.dataParts.set( 'next', false );
+        this.parentAPP.assistantStatus.set( 'prev', false );
+        this.parentAPP.assistantStatus.set( 'next', false );
     },
     'assistant-pane-shown .c-client-new-assistant-properties'( event, instance, data ){
         console.debug( event.type, data );
-        this.parentAPP.dataParts.set( 'prev', true );
+        this.parentAPP.assistantStatus.set( 'prev', true );
     },
 });

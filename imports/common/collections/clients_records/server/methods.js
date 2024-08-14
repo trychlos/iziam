@@ -5,7 +5,10 @@
 import { ClientsRecords } from '../index.js';
 
 Meteor.methods({
-
+    'clients_records_getBy'( selector ){
+        return ClientsRecords.server.getBy( selector, this.userId );
+    },
+/*
     // empty the collection before importing
     'client.empty'(){
         return Clients.remove({});
@@ -22,12 +25,6 @@ Meteor.methods({
             return true;
         });
         return ret;
-    },
-
-    // retrieve all queried records for the client
-    //  always returns an array, may be empty
-    'client.getBy'( query ){
-        return Clients.s.getBy( query );
     },
 
     // import an element from a JSON file
@@ -63,4 +60,5 @@ Meteor.methods({
     'client.upsert'( itemsArray ){
         return Clients.s.upsert( itemsArray, this.userId );
     }
+        */
 });

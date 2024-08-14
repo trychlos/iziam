@@ -20,7 +20,7 @@ Template.client_new_assistant_jwt.onRendered( function(){
     // tracks the selection to enable/disable the Next button when the pane is active
     //  must be set if authentification method uses private jwt
     self.autorun(() => {
-        const dataDict = Template.currentData().parentAPP.dataParts;
+        const dataDict = Template.currentData().parentAPP.assistantStatus;
         if( dataDict.get( 'activePane' ) === 'jwt' ){
             const method = dataDict.get( 'authMethod' );
             const origin = dataDict.get( 'jwtOrigin' );
@@ -33,7 +33,7 @@ Template.client_new_assistant_jwt.onRendered( function(){
 Template.client_new_assistant_jwt.helpers({
     // whether we use an input field or a textarea
     haveInput(){
-        const origin = this.parentAPP.dataParts.get( 'jwtOrigin' );
+        const origin = this.parentAPP.assistantStatus.get( 'jwtOrigin' );
         return origin === 'uri';
     },
 
@@ -55,15 +55,15 @@ Template.client_new_assistant_jwt.events({
     // enable/disable the action buttons
     'assistant-pane-to-show .c-client-new-assistant-jwt'( event, instance, data ){
         console.debug( event.type, data );
-        this.parentAPP.dataParts.set( 'prev', false );
-        this.parentAPP.dataParts.set( 'next', false );
+        this.parentAPP.assistantStatus.set( 'prev', false );
+        this.parentAPP.assistantStatus.set( 'next', false );
     },
     'assistant-pane-shown .c-client-new-assistant-jwt'( event, instance, data ){
         console.debug( event.type, data );
-        this.parentAPP.dataParts.set( 'prev', true );
+        this.parentAPP.assistantStatus.set( 'prev', true );
     },
     // get the fields values (at least the name must be set asap to be able to enable the Next button)
     'input .js-data'( event, instance, data ){
-        this.parentAPP.dataParts.set( 'jwtSource', instance.$( '.js-data' ).val());
+        this.parentAPP.assistantStatus.set( 'jwtSource', instance.$( '.js-data' ).val());
     }
 });

@@ -4,7 +4,7 @@
 
 import '/imports/common/init/index.js';
 
-//import './collections.js';
+import './collections.js';
 import './email_templates.js';
 //import './openid.js';
 //import './run.js';

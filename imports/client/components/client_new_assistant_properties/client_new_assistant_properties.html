@@ -1,14 +1,14 @@
 <template name="client_new_assistant_properties">
-    <div class="x-dialog c-client-new-assistant-properties c-client-new-assistant-pane">
+    <div class="c-client-new-assistant-properties">
 
         {{> client_new_assistant_current (parmsCurrent) }}
 
         <div class="content">
             <div class="text">
-                {{> app_serializer document="client-new-properties" }}
+                {{{ i18n key="clients.new_assistant.properties_text" }}}
             </div>
 
-            {{> client_properties_panel (parmsPropertiesPanel) }}
+            {{> client_properties_pane (parmsPropertiesPane) }}
         </div>
 
     </div>

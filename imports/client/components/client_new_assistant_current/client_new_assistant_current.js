@@ -13,7 +13,7 @@ import _ from 'lodash';
 import { pwixI18n } from 'meteor/pwix:i18n';
 
 import { AuthMethod } from '/imports/common/definitions/auth-method.def.js';
-import { ClientNature } from '/imports/common/definitions/client-nature.def.js';
+import { ClientProfile } from '/imports/common/definitions/client-profile.def.js';
 import { GrantType } from '/imports/common/definitions/grant-type.def.js';
 
 import './client_new_assistant_current.html';
@@ -21,23 +21,23 @@ import './client_new_assistant_current.html';
 Template.client_new_assistant_current.helpers({
     // authentification method
     authText(){
-        const def = AuthMethod.byId( this.parentAPP.dataParts.get( 'authMethod' ));
+        const def = AuthMethod.byId( this.parentAPP.assistantStatus.get( 'authMethod' ));
         return def ? AuthMethod.label( def ) : '';
     },
 
     // registered contacts
     contactsText(){
-        return ( this.parentAPP.dataParts.get( 'contacts' ) || [] ).join( ', ' );
+        return ( this.parentAPP.assistantStatus.get( 'contacts' ) || [] ).join( ', ' );
     },
 
     // registered endpoints
     endpointsText(){
-        return ( this.parentAPP.dataParts.get( 'endpoints' ) || [] ).join( ', ' );
+        return ( this.parentAPP.assistantStatus.get( 'endpoints' ) || [] ).join( ', ' );
     },
 
     // grant types
     grantText(){
-        return GrantType.joinedLabels( this.parentAPP.dataParts.get( 'grantTypes' ));
+        return GrantType.joinedLabels( this.parentAPP.assistantStatus.get( 'grantTypes' ));
     },
 
     // whether we want display the pane ?
@@ -52,30 +52,30 @@ Template.client_new_assistant_current.helpers({
 
     // client nature description
     natureDescription(){
-        const def = this.parentAPP.dataParts.get( 'natureDefinition' );
+        const def = this.parentAPP.assistantStatus.get( 'profileDefinition' );
         return def ? ClientNature.description( def ) : '';
     },
 
     // client nature description
     natureText(){
-        const def = this.parentAPP.dataParts.get( 'natureDefinition' );
+        const def = this.parentAPP.assistantStatus.get( 'profileDefinition' );
         return def ? ClientNature.label( def ) : '';
     },
 
     // client description
     propDescription(){
-        return this.parentAPP.dataParts.get( 'description' ) || '';
+        return this.parentAPP.assistantStatus.get( 'description' ) || '';
     },
 
     // client name
     propName(){
-        return this.parentAPP.dataParts.get( 'name' );
+        return this.parentAPP.assistantStatus.get( 'name' );
     },
 
     // client software description
     propSoftware(){
-        const softid = this.parentAPP.dataParts.get( 'softwareId' );
-        const softver = this.parentAPP.dataParts.get( 'softwareVersion' );
+        const softid = this.parentAPP.assistantStatus.get( 'softwareId' );
+        const softver = this.parentAPP.assistantStatus.get( 'softwareVersion' );
         return softid || softver ? ( softid || '' ) + ' ' + ( softver || '' ) : '';
     }
 });

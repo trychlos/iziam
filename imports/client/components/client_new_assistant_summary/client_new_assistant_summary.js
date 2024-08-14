@@ -22,12 +22,12 @@ Template.client_new_assistant_summary.events({
     // enable/disable the action buttons
     'assistant-pane-to-show .c-client-new-assistant-properties'( event, instance, data ){
         console.debug( event.type, data );
-        this.parentAPP.dataParts.set( 'prev', false );
-        this.parentAPP.dataParts.set( 'next', false );
+        this.parentAPP.assistantStatus.set( 'prev', false );
+        this.parentAPP.assistantStatus.set( 'next', false );
     },
     'assistant-pane-shown .c-client-new-assistant-properties'( event, instance, data ){
         console.debug( event.type, data );
-        this.parentAPP.dataParts.set( 'prev', true );
-        this.parentAPP.dataParts.set( 'next', true );
+        this.parentAPP.assistantStatus.set( 'prev', true );
+        this.parentAPP.assistantStatus.set( 'next', true );
     },
 });

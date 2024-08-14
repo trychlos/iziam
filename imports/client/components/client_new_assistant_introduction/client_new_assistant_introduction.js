@@ -18,14 +18,10 @@ Template.client_new_assistant_introduction.helpers({
 Template.client_new_assistant_introduction.events({
     // enable/disable the action buttons
     'assistant-pane-to-show .c-client-new-assistant-introduction'( event, instance, data ){
-        console.debug( event.type, data );
-        this.parentAPP.dataParts.set( 'prev', false );
-        this.parentAPP.dataParts.set( 'next', false );
+        instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'prev', enable: false });
+        instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'next',  enable: false });
     },
-
-    // we are expected to be able to act on the action buttons on 'show' and 'shown' events
     'assistant-pane-shown .c-client-new-assistant-introduction'( event, instance, data ){
-        console.debug( event.type, data );
-        this.parentAPP.dataParts.set( 'next', true );
+        instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'next', enable: true });
     }
 });

@@ -5,9 +5,7 @@
 import { ClientsEntities } from '../index.js';
 
 Meteor.methods({
-    // retrieve all queried records for the client
-    //  always returns an array, may be empty
-    'clients.entities.getBy'( query ){
-        return ClientsEntities.s.getBy( query );
+    async 'clients_entities_getBy'( selector ){
+        return await ClientsEntities.server.getBy( selector, this.userId );
     }
 });

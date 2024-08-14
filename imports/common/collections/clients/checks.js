@@ -7,16 +7,53 @@ import _ from 'lodash';
 const assert = require( 'assert' ).strict; // up to nodejs v16.x
 import validUrl from 'valid-url';
 
-//import { CoreApp } from 'meteor/pwix:core-app';
 import { pwixI18n } from 'meteor/pwix:i18n';
+import { TM } from 'meteor/pwix:typed-message';
 
 //import { AuthMethod } from '/imports/common/definitions/auth-method.def.js';
 //import { ClientNature } from '/imports/common/definitions/client-nature.def.js';
-//import { ClientType } from '/imports/common/definitions/client-type.def.js';
+import { ClientType } from '/imports/common/definitions/client-type.def.js';
 //import { GrantType } from '/imports/common/definitions/grant-type.def.js';
 //import { ResponseType } from '/imports/common/definitions/response-type.def.js';
 
+import { ClientsEntities } from '/imports/common/collections/clients_entities/index.js';
+import { ClientsRecords } from '/imports/common/collections/clients_records/index.js';
+
 import { Clients } from './index.js';
+
+// fields check
+//  - value: mandatory, the value to be tested
+//  - data: optional, the data passed to Checker instanciation
+//    if set the target item as a ReactiveVar, i.e. the item to be updated with this value
+//  - opts: an optional behaviour options, with following keys:
+//    > update: whether the item be updated with the value, defaults to true
+//    > id: the identifier of the edited row when editing an array
+// returns a TypedMessage, or an array of TypedMessage, or null
+
+// entity is a ReactiveVar which contains the edited entity document and its validity records
+const _assert_data_content = function( caller, data ){
+    assert.ok( data, caller+' data is required' );
+    assert.ok( data.entity && data.entity instanceof ReactiveVar, caller+' data.entity is expected to be set as a ReactiveVar, got '+data.entity );
+    const entity = data.entity.get();
+    assert.ok( entity.DYN && _.isObject( entity.DYN ), caller+' data.entity.DYN is expected to be set as a Object, got '+entity.DYN );
+    assert.ok( entity.DYN.records && _.isArray( entity.DYN.records ), caller+' data.entity.DYN.records is expected to be set as an Array, got '+entity.DYN.records );
+    entity.DYN.records.forEach(( it ) => {
+        assert.ok( it && it instanceof ReactiveVar, caller+' each record is expected to be a ReactiveVar, got '+it );
+    });
+    // this index because we are managing valdiity periods here
+    assert.ok( _.isNumber( data.index ) && data.index >= 0, caller+' data.index is expected to be a positive or zero integer, got '+data.index );
+}
+
+// returns the index of the identified row in the array
+const _id2index = function( array, id ){
+    for( let i=0 ; i<array.length ; ++i ){
+        if( array[i].id === id ){
+            return i;
+        }
+    }
+    console.warn( 'id='+id+' not found' );
+    return -1;
+}
 
 // check( item) is used to check a full item, typically when creating/updating an item via the REST API
 //  the item must be intrasically correct and compatible with already existing items
@@ -37,24 +74,8 @@ Clients.check = function( item ){
 }
 */
 
-/*
-// these functions check that the passed data are enough to check the field
-//  this is the minimum, and is generally enough
-//  item is expected to be a ReactiveVar
-_assert_data_itemrv = function( caller, data ){
-    assert.ok( data, caller+' data required' );
-    assert.ok( data.item, caller+' data.item required' );
-    assert.ok( data.item instanceof ReactiveVar, caller+' data.item expected to be a ReactiveVar' );
-}
-
-// when checking for validity periods, we need the other items of the edited group
-_assert_data_edited = function( caller, data ){
-    _assert_data_itemrv( caller, data );
-    assert.ok( data.edited, caller+' data.edited required' );
-    assert.ok( _.isArray( data.edited ), caller+' data.edited expected to be an array' );
-}
-
 Clients.checks = {
+    /*
     // the authentification method againt the token endpoint
     async authMethod( value, data, coreApp={} ){
         _assert_data_itemrv( 'Clients.check_authMethod()', data );
@@ -111,56 +132,39 @@ Clients.checks = {
                 });
             });
     },
+    */
 
-    async description( value, data, coreApp={} ){
-        _assert_data_itemrv( 'Clients.check_description()', data );
-        const item = data.item.get();
-        return Promise.resolve( null )
-            .then(() => {
-                if( coreApp.update !== false ){
-                    item.description = value;
-                    data.item.set( item );
-                }
-                return null;
+    // client type: mandatory, must exist
+    async clientType( value, data, opts ){
+        _assert_data_content( 'Clients.checks.clientType()', data );
+        let item = data.entity.get().DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.clientType = value;
+        }
+        if( value ){
+            const def = ClientType.byId( value );
+            return def ? null : new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'clients.checks.client_type_invalid' )
             });
+        } else {
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'clients.checks.client_type_unset' )
+            });
+        }
     },
 
-    // if date is set, it must be valid - it is expected in yyyy-mm-dd format
-    //  data comes from the edition panel, passed-in through the FormChecker instance
-    async effectEnd( value, data, coreApp={} ){
-        _assert_data_edited( 'Clients.check_effectEnd()', data );
-        const item = data.item.get();
-        return Promise.resolve( null )
-            .then(() => {
-                if( coreApp.update !== false ){
-                    item.effectEnd = value ? new Date( value ) : null;
-                    data.item.set( item );
-                }
-                const msg = Meteor.APP.Validity.checkEnd( data.edited, item );
-                return msg ? new CoreApp.TypedMessage({
-                    type: CoreApp.MessageType.C.ERROR,
-                    message: msg
-                }) : null;
-            });
+    async description( value, data, opts ){
+        _assert_data_content( 'Clients.checks.description()', data );
+        let item = data.entity.get().DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.description = value;
+        }
+        return null;
     },
 
-    async effectStart( value, data, coreApp={} ){
-        _assert_data_edited( 'Clients.check_effectStart()', data );
-        const item = data.item.get();
-        return Promise.resolve( null )
-            .then(() => {
-                if( coreApp.update !== false ){
-                    item.effectStart = value ? new Date( value ) : null;
-                    data.item.set( item );
-                }
-                const msg = Meteor.APP.Validity.checkStart( data.edited, item );
-                return msg ? new CoreApp.TypedMessage({
-                    type: CoreApp.MessageType.C.ERROR,
-                    message: msg
-                }) : null;
-            });
-    },
-
+    /*
     // not managed via FormChecker
     async endpoints( value ){
         return Promise.resolve( null )
@@ -233,42 +237,63 @@ Clients.checks = {
                 return ret;
             });
     },
+    */
 
-    // wants a label set, but doesn't need to be unique
-    async label( value, data, coreApp={} ){
-        _assert_data_itemrv( 'Clients.check_label()', data );
-        const item = data.item.get();
-        return Promise.resolve( null )
-            .then(() => {
-                if( coreApp.update !== false ){
-                    item.label = value || null;
-                    data.item.set( item );
+    // the label must be set, and must identify the client entity
+    // need to update the entity (or something) so that the new assistant is reactive
+    async label( value, data, opts ){
+        _assert_data_content( 'Clients.checks.label()', data );
+        const entity = data.entity.get();
+        let item = entity.DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.label = value;
+            data.entity.set( entity );
+        }
+        //console.debug( 'Clients.checks.label()', value, data );
+        if( value ){
+            const fn = function( result ){
+                let ok = true;
+                if( result.length ){
+                    // we have found an existing label
+                    //  this is normal if the found entity is the same than ours
+                    const found_entity = result[0].entity;
+                    ok = ( item.entity === found_entity );
                 }
-                return value && value.length && _.isString( value ) ? null : new CoreApp.TypedMessage({
-                    type: CoreApp.MessageType.C.ERROR,
-                    message: pwixI18n.label( I18N, 'clients.check.label_unset' )
+                return ok ? null : new TM.TypedMessage({
+                    level: TM.MessageLevel.C.ERROR,
+                    message: pwixI18n.label( I18N, 'clients.checks.label_exists' )
                 });
+            };
+            return Meteor.isClient ? Meteor.callAsync( 'clients_records_getBy', { label: value }) : ClientsRecords.server.getBy({ label: value })
+                .then(( result ) => {
+                    return fn( result );
+                });
+        } else {
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'clients.checks.label_unset' )
             });
+        }
     },
 
-    // client nature: must exist
-    async nature( value, data, coreApp={} ){
-        _assert_data_itemrv( 'Clients.check_nature()', data );
-        const item = data.item.get();
-        return Promise.resolve( null )
-            .then(() => {
-                if( coreApp.update !== false ){
-                    item.nature = value || null;
-                    data.item.set( item );
-                }
-                const def = ClientNature.byId( value );
-                return def ? null : new CoreApp.TypedMessage({
-                    type: CoreApp.MessageType.C.ERROR,
-                    message: pwixI18n.label( I18N, 'clients.check.nature_invalid' )
-                });
+    // client profile: optional, must exist
+    async profile( value, data, opts ){
+        _assert_data_content( 'Clients.checks.profile()', data );
+        let item = data.entity.get().DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.profile = value;
+        }
+        if( value ){
+            const def = ClientProfile.byId( value );
+            return def ? null : new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'clients.checks.profile_invalid' )
             });
+        }
+        return null;
     },
 
+    /*
     // the response types used on the token endpoint
     async responseTypes( value, data, coreApp={} ){
         _assert_data_itemrv( 'Clients.check_responseTypes()', data );
@@ -296,49 +321,23 @@ Clients.checks = {
                 return ret;
             });
     },
+    */
 
-    async softwareId( value, data, coreApp={} ){
-        _assert_data_itemrv( 'Clients.check_softwareId()', data );
-        const item = data.item.get();
-        return Promise.resolve( null )
-            .then(() => {
-                if( coreApp.update !== false ){
-                    item.softwareId = value;
-                    data.item.set( item );
-                }
-                return null;
-            });
+    async softwareId( value, data, opts ){
+        _assert_data_content( 'Clients.checks.softwareId()', data );
+        let item = data.entity.get().DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.softwareId = value;
+        }
+        return null;
     },
 
-    async softwareVersion( value, data, coreApp={} ){
-        _assert_data_itemrv( 'Clients.check_softwareVersion()', data );
-        const item = data.item.get();
-        return Promise.resolve( null )
-            .then(() => {
-                if( coreApp.update !== false ){
-                    item.softwareVersion = value;
-                    data.item.set( item );
-                }
-                return null;
-            });
-    },
-
-    // client type: must exist
-    async type( value, data, coreApp={} ){
-        _assert_data_itemrv( 'Clients.check_type()', data );
-        const item = data.item.get();
-        return Promise.resolve( null )
-            .then(() => {
-                if( coreApp.update !== false ){
-                    item.type = value || null;
-                    data.item.set( item );
-                }
-                const def = ClientType.byId( value );
-                return def ? null : new CoreApp.TypedMessage({
-                    type: CoreApp.MessageType.C.ERROR,
-                    message: pwixI18n.label( I18N, 'clients.check.type_invalid' )
-                });
-            });
+    async softwareVersion( value, data, opts ){
+        _assert_data_content( 'Clients.checks.softwareVersion()', data );
+        let item = data.entity.get().DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.softwareVersion = value;
+        }
+        return null;
     }
 };
-*/

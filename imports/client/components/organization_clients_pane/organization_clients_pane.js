@@ -1,11 +1,13 @@
 /*
- * pwix:tenants-manager/src/client/components/organization_clients_pane/organization_clients_pane.js
+ * /imports/client/components/organization_clients_pane/organization_clients_pane.js
  *
  * Display the clients.
  *
  * Parms:
  * - item: a ReactiveVar which contains the Organization
- * - checker: the parent Form.Checker
+ * - checker: the parent Forms.Checker
+ * - entityTabs
+ * - recordTabs
  */
 
 import { Permissions } from 'meteor/pwix:permissions';
@@ -31,7 +33,7 @@ Template.organization_clients_pane.onCreated( function(){
     self.autorun(() => {
         if( self.APP.handle.ready()){
             let closests = [];
-            Meteor.APP.collections.get( Meteor.APP.C.pub.closests.collection ).find().fetchAsync().then(( fetched ) => {
+            Meteor.APP.Collections.get( Meteor.APP.C.pub.closests.collection ).find().fetchAsync().then(( fetched ) => {
                 fetched.forEach(( it ) => {
                     closests.push( it._id );
                 });

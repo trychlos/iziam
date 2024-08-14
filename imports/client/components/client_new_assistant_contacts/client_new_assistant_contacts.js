@@ -45,7 +45,7 @@ Template.client_new_assistant_contacts.onRendered( function(){
     // tracks the selection to enable/disable the Next button when the pane is active
     //  must have at least one redirect URL unless we are a machine-to-machine client where we must not have any
     self.autorun(() => {
-        const dataDict = Template.currentData().parentAPP.dataParts;
+        const dataDict = Template.currentData().parentAPP.assistantStatus;
         if( dataDict.get( 'activePane' ) === 'contacts' ){
             const contacts = dataDict.get( 'contacts' ) || [];
             dataDict.set( 'next', contacts.length > 0 );
@@ -56,7 +56,7 @@ Template.client_new_assistant_contacts.onRendered( function(){
     //  the new contact must be set and not already registered
     self.autorun(() => {
         const label = self.APP.label.get();
-        const contacts = Template.currentData().parentAPP.dataParts.get( 'contacts' ) || [];
+        const contacts = Template.currentData().parentAPP.assistantStatus.get( 'contacts' ) || [];
         self.APP.addEnabled.set( Boolean( label && label.length && validator.validate( label ) && !contacts.includes( label )));
         self.APP.clearEnabled.set( Boolean( label && label.length ));
     });
@@ -75,7 +75,7 @@ Template.client_new_assistant_contacts.helpers({
 
     // whether we have contacts ?
     haveItems(){
-        return ( this.parentAPP.dataParts.get( 'contacts' ) || [] ).length > 0;
+        return ( this.parentAPP.assistantStatus.get( 'contacts' ) || [] ).length > 0;
     },
 
     // internationalization
@@ -95,7 +95,7 @@ Template.client_new_assistant_contacts.helpers({
 
     // items list
     itemsList(){
-        return ( this.parentAPP.dataParts.get( 'contacts' ) || [] );
+        return ( this.parentAPP.assistantStatus.get( 'contacts' ) || [] );
     },
 
     // parms for current choices
@@ -111,12 +111,12 @@ Template.client_new_assistant_contacts.events({
     // enable/disable the action buttons
     'assistant-pane-to-show .c-client-new-assistant-contacts'( event, instance, data ){
         console.debug( event.type, data );
-        this.parentAPP.dataParts.set( 'prev', false );
-        this.parentAPP.dataParts.set( 'next', false );
+        this.parentAPP.assistantStatus.set( 'prev', false );
+        this.parentAPP.assistantStatus.set( 'next', false );
     },
     'assistant-pane-shown .c-client-new-assistant-contacts'( event, instance, data ){
         console.debug( event.type, data );
-        this.parentAPP.dataParts.set( 'prev', true );
+        this.parentAPP.assistantStatus.set( 'prev', true );
     },
     // get the fields values (at least the name must be set asap to be able to enable the Next button)
     'click .js-clear'( event, instance, data ){
@@ -124,14 +124,14 @@ Template.client_new_assistant_contacts.events({
     },
     'click .js-add'( event, instance, data ){
         const label = instance.APP.label.get();
-        const array = this.parentAPP.dataParts.get( 'contacts' ) || [];
+        const array = this.parentAPP.assistantStatus.get( 'contacts' ) || [];
         array.push( label );
-        this.parentAPP.dataParts.set( 'contacts', array );
+        this.parentAPP.assistantStatus.set( 'contacts', array );
         instance.APP.clear();
     },
     'click .js-minus'( event, instance, data ){
         const label = instance.$( event.currentTarget ).closest( 'tr' ).data( 'item-id' );
-        const array = this.parentAPP.dataParts.get( 'contacts' ) || [];
+        const array = this.parentAPP.assistantStatus.get( 'contacts' ) || [];
         let idx = -1;
         for( let i=0 ; i<array.length ; ++i ){
             if( array[i] === label ){
@@ -141,7 +141,7 @@ Template.client_new_assistant_contacts.events({
         }
         if( idx >= 0 ){
             array.splice( idx, 1 );
-            this.parentAPP.dataParts.set( 'contacts', array );
+            this.parentAPP.assistantStatus.set( 'contacts', array );
         }
     },
     'input .js-label'( event, instance, data ){

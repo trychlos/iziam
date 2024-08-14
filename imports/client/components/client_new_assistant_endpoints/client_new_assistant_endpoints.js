@@ -47,9 +47,9 @@ Template.client_new_assistant_endpoints.onRendered( function(){
     // tracks the selection to enable/disable the Next button when the pane is active
     //  must have at least one redirect URL unless we are a machine-to-machine client where we must not have any
     self.autorun(() => {
-        const dataDict = Template.currentData().parentAPP.dataParts;
+        const dataDict = Template.currentData().parentAPP.assistantStatus;
         if( dataDict.get( 'activePane' ) === 'endpoints' ){
-            const natureDef = dataDict.get( 'natureDefinition' );
+            const natureDef = dataDict.get( 'profileDefinition' );
             const endpoints = dataDict.get( 'endpoints' ) || [];
             const valid = natureDef ? ( ClientNature.defaultHaveEndpoints( natureDef ) ? endpoints.length > 0 : endpoints.length === 0 ) : false;
             dataDict.set( 'next', valid );
@@ -64,7 +64,7 @@ Template.client_new_assistant_endpoints.onRendered( function(){
     //  the new url must be set and not already registered
     self.autorun(() => {
         const label = self.APP.label.get();
-        const endpoints = Template.currentData().parentAPP.dataParts.get( 'endpoints' ) || [];
+        const endpoints = Template.currentData().parentAPP.assistantStatus.get( 'endpoints' ) || [];
         self.APP.addEnabled.set( Boolean( label && label.length && validUrl.isUri( label ) && !endpoints.includes( label )));
         self.APP.clearEnabled.set( Boolean( label && label.length ));
     });
@@ -83,7 +83,7 @@ Template.client_new_assistant_endpoints.helpers({
 
     // whether we have endpoints ?
     haveItems(){
-        return ( this.parentAPP.dataParts.get( 'endpoints' ) || [] ).length > 0;
+        return ( this.parentAPP.assistantStatus.get( 'endpoints' ) || [] ).length > 0;
     },
 
     // internationalization
@@ -103,7 +103,7 @@ Template.client_new_assistant_endpoints.helpers({
 
     // items list
     itemsList(){
-        return ( this.parentAPP.dataParts.get( 'endpoints' ) || [] );
+        return ( this.parentAPP.assistantStatus.get( 'endpoints' ) || [] );
     },
 
     // parms for current choices
@@ -119,12 +119,12 @@ Template.client_new_assistant_endpoints.events({
     // enable/disable the action buttons
     'assistant-pane-to-show .c-client-new-assistant-endpoints'( event, instance, data ){
         console.debug( event.type, data );
-        this.parentAPP.dataParts.set( 'prev', false );
-        this.parentAPP.dataParts.set( 'next', false );
+        this.parentAPP.assistantStatus.set( 'prev', false );
+        this.parentAPP.assistantStatus.set( 'next', false );
     },
     'assistant-pane-shown .c-client-new-assistant-endpoints'( event, instance, data ){
         console.debug( event.type, data );
-        this.parentAPP.dataParts.set( 'prev', true );
+        this.parentAPP.assistantStatus.set( 'prev', true );
     },
     // get the fields values (at least the name must be set asap to be able to enable the Next button)
     'click .js-clear'( event, instance, data ){
@@ -132,14 +132,14 @@ Template.client_new_assistant_endpoints.events({
     },
     'click .js-add'( event, instance, data ){
         const url = instance.APP.label.get();
-        const array = this.parentAPP.dataParts.get( 'endpoints' ) || [];
+        const array = this.parentAPP.assistantStatus.get( 'endpoints' ) || [];
         array.push( url );
-        this.parentAPP.dataParts.set( 'endpoints', array );
+        this.parentAPP.assistantStatus.set( 'endpoints', array );
         instance.APP.clear();
     },
     'click .js-minus'( event, instance, data ){
         const url = instance.$( event.currentTarget ).closest( 'tr' ).data( 'item-id' );
-        const array = this.parentAPP.dataParts.get( 'endpoints' ) || [];
+        const array = this.parentAPP.assistantStatus.get( 'endpoints' ) || [];
         let idx = -1;
         for( let i=0 ; i<array.length ; ++i ){
             if( array[i] === url ){
@@ -149,7 +149,7 @@ Template.client_new_assistant_endpoints.events({
         }
         if( idx >= 0 ){
             array.splice( idx, 1 );
-            this.parentAPP.dataParts.set( 'endpoints', array );
+            this.parentAPP.assistantStatus.set( 'endpoints', array );
         }
     },
     'input .js-label'( event, instance, data ){

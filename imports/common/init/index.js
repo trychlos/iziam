@@ -24,6 +24,7 @@ import './accounts-tools.js';
 import './accounts-ui.js';
 import './app-edit.js';
 import './app-pages.js';
+import './assistant.js';
 import './collection2.js';
 import './collections-get.js';
 import './cookie-manager.js';

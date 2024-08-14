@@ -1,0 +1,32 @@
+<template name="client_properties_pane">
+    <div class="c-client-properties-pane">
+
+        <table class="form-table ui-w100">
+            <tr>
+                <td class="ui-w20 label"><label class="form-label" for="client-panel-label">{{ i18n key="clients.edit.label_label" }}</label></td>
+                <td class="ui-w100">
+                    <input class="form-control flex-grow-1 js-label" type="text" id="client-panel-label" placeholder="{{ i18n key="clients.edit.label_ph" }}" title="{{ i18n key="clients.edit.label_title" }}" />
+                </td>
+            </tr>
+            <tr>
+                <td class="label"><label class="form-label" for="client-panel-description">{{ i18n key="clients.edit.description_label" }}</label></td>
+                <td>
+                    <input class="form-control js-description" type="text" id="client-panel-description" placeholder="{{ i18n key="clients.edit.description_ph" }}" title="{{ i18n key="clients.edit.description_title" }}" />
+                </td>
+            </tr>
+            <tr>
+                <td class="label"><label class="form-label" for="client-panel-softid">{{ i18n key="clients.edit.softid_label" }}</label></td>
+                <td>
+                    <input class="form-control ui-w50 js-softid" type="text" id="client-panel-softid" placeholder="{{ i18n key="clients.edit.softid_ph" }}" title="{{ i18n key="clients.edit.softid_title" }}" />
+                </td>
+            </tr>
+            <tr>
+                <td class="label"><label class="form-label" for="client-panel-softver">{{ i18n key="clients.edit.softver_label" }}</label></td>
+                <td>
+                    <input class="form-control ui-w50 js-softver" type="text" id="client-panel-softver" placeholder="{{ i18n key="clients.edit.softver_ph" }}" title="{{ i18n key="clients.edit.softver_title" }}" />
+                </td>
+            </tr>
+        </table>
+
+    </div>
+</template>

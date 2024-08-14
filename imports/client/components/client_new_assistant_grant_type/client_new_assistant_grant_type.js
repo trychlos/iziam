@@ -18,20 +18,20 @@ Template.client_new_assistant_grant_type.onRendered( function(){
 
     // tracks the selection to enable/disable the Next button when the pane is active
     self.autorun(() => {
-        const dataDict = Template.currentData().parentAPP.dataParts;
+        const dataDict = Template.currentData().parentAPP.assistantStatus;
         if( dataDict.get( 'activePane' ) === 'grant' ){
             const array = dataDict.get( 'grantTypes' );
             dataDict.set( 'next', Boolean( array && _.isArray( array ) && array.length && GrantType.isValidSelection( array )));
         }
     });
 
-    // tracks the selection for updating data and UI (doesn't depend of the current pane as soon as natureId changes)
+    // tracks the selection for updating data and UI (doesn't depend of the current pane as soon as profileId changes)
     self.autorun(() => {
-        const dataDict = Template.currentData().parentAPP.dataParts;
+        const dataDict = Template.currentData().parentAPP.assistantStatus;
         const array = dataDict.get( 'grantTypes' );
         if( array ){
             // if the grant types doesn't include client credentials, then disable the corresponding pane
-            self.$( '.c-client-new-assistant-grant-type' ).closest( '.ca-assistant-template' ).trigger( 'do-enable-tab', { name: 'auth', enabled: array.includes( 'client_creds' )});
+            self.$( '.c-client-new-assistant-grant-type' ).closest( '.Assistant' ).trigger( 'do-enable-tab', { name: 'auth', enabled: array.includes( 'client_creds' )});
         }
     });
 });
@@ -45,7 +45,7 @@ Template.client_new_assistant_grant_type.helpers({
     // whether this item is selected ?
     itChecked( it ){
         const id = GrantType.id( it );
-        return ( this.parentAPP.dataParts.get( 'grantTypes' ) || [] ).includes( id ) ? 'checked' : '';
+        return ( this.parentAPP.assistantStatus.get( 'grantTypes' ) || [] ).includes( id ) ? 'checked' : '';
     },
 
     // description
@@ -76,7 +76,7 @@ Template.client_new_assistant_grant_type.helpers({
     // whether this item is selected ?
     itSelected( it ){
         const id = GrantType.id( it );
-        return ( this.parentAPP.dataParts.get( 'grantTypes' ) || [] ).includes( id ) ? 'selected' : '';
+        return ( this.parentAPP.assistantStatus.get( 'grantTypes' ) || [] ).includes( id ) ? 'selected' : '';
     },
 
     // items list
@@ -97,12 +97,12 @@ Template.client_new_assistant_grant_type.events({
     // enable/disable the action buttons
     'assistant-pane-to-show .c-client-new-assistant-grant-type'( event, instance, data ){
         console.debug( event.type, data );
-        this.parentAPP.dataParts.set( 'prev', false );
-        this.parentAPP.dataParts.set( 'next', false );
+        this.parentAPP.assistantStatus.set( 'prev', false );
+        this.parentAPP.assistantStatus.set( 'next', false );
     },
     'assistant-pane-shown .c-client-new-assistant-grant-type'( event, instance, data ){
         console.debug( event.type, data );
-        this.parentAPP.dataParts.set( 'prev', true );
+        this.parentAPP.assistantStatus.set( 'prev', true );
     },
 
     // handle the pane input
@@ -110,7 +110,7 @@ Template.client_new_assistant_grant_type.events({
         const $box = instance.$( event.currentTarget );
         const checked = $box.prop( 'checked' );
         const id = $box.closest( '.by-item' ).data( 'item-id' );
-        const array = this.parentAPP.dataParts.get( 'grantTypes' );
+        const array = this.parentAPP.assistantStatus.get( 'grantTypes' );
         if( checked ){
             array.push( id );
         } else {
@@ -125,13 +125,13 @@ Template.client_new_assistant_grant_type.events({
                 array.splice( idx, 1 );
             }
         }
-        this.parentAPP.dataParts.set( 'grantTypes', array );
+        this.parentAPP.assistantStatus.set( 'grantTypes', array );
         // if grant types includes client credentials, then make sure we have an auth method
         if( array.includes( 'client_creds' )){
-            const auth = this.parentAPP.dataParts.get( 'authMethod' );
+            const auth = this.parentAPP.assistantStatus.get( 'authMethod' );
             if( auth === 'none' ){
                 const def = GrantType.byId( 'client_creds' );
-                this.parentAPP.dataParts.set( 'authMethod', GrantType.defaultAuthMethod( def ));
+                this.parentAPP.assistantStatus.set( 'authMethod', GrantType.defaultAuthMethod( def ));
             }
         }
     }

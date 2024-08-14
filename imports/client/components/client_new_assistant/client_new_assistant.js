@@ -3,44 +3,46 @@
  * 
  * Parms:
  * - organization: a ReactiveVar which contains the current organization at date
+ * - item: null
  */
 
 import _ from 'lodash';
 
-import { Assistant } from 'meteor/pwix:assistant';
+import { Forms } from 'meteor/pwix:forms';
 import { Modal } from 'meteor/pwix:modal';
 import { pwixI18n } from 'meteor/pwix:i18n';
-import { ReactiveDict } from 'meteor/reactive-dict';
+import { ReactiveVar } from 'meteor/reactive-var';
 
 //import '/imports/client/components/client_new_assistant_auth_method/client_new_assistant_auth_method.js';
 //import '/imports/client/components/client_new_assistant_contacts/client_new_assistant_contacts.js';
-//import '/imports/client/components/client_new_assistant_current/client_new_assistant_current.js';
+import '/imports/client/components/client_new_assistant_current/client_new_assistant_current.js';
 //import '/imports/client/components/client_new_assistant_done/client_new_assistant_done.js';
 //import '/imports/client/components/client_new_assistant_endpoints/client_new_assistant_endpoints.js';
-//import '/imports/client/components/client_new_assistant_grant_type/client_new_assistant_grant_type.js';
+import '/imports/client/components/client_new_assistant_grant_type/client_new_assistant_grant_type.js';
 //import '/imports/client/components/client_new_assistant_jwt/client_new_assistant_jwt.js';
 import '/imports/client/components/client_new_assistant_introduction/client_new_assistant_introduction.js';
-//import '/imports/client/components/client_new_assistant_nature/client_new_assistant_nature.js';
-//import '/imports/client/components/client_new_assistant_properties/client_new_assistant_properties.js';
+import '/imports/client/components/client_new_assistant_profile/client_new_assistant_profile.js';
+import '/imports/client/components/client_new_assistant_properties/client_new_assistant_properties.js';
 //import '/imports/client/components/client_new_assistant_summary/client_new_assistant_summary.js';
-//import '/imports/client/components/client_properties_panel/client_properties_panel.js';
 //import '/imports/client/components/jwt_private_select/jwt_private_select.js';
 
 import './client_new_assistant.html';
 
 Template.client_new_assistant.onCreated( function(){
     const self = this;
+    //console.debug( this );
 
     self.APP = {
-        // the EntityChecker for the client (must be a ReactiveVar because used in template helpers)
-        entityChecker: new ReactiveVar( null ),
+        // the global Checker for this modal
+        checker: new ReactiveVar( null ),
         // the assistant name
         myName: 'client-new-assistant',
+        // the client item to be built
+        entity: new ReactiveVar( null ),
+        // whether we are running inside of a Modal
+        isModal: new ReactiveVar( false ),
         // a data dictionary to manage the assistant status (activation and actions)
-        dataParts: new ReactiveDict(),
-        // the item to be built
-        //  this is a ReactiveVar to be compliant with check_xxx() functions, but the reactivity is managed with dataParts
-        item: new ReactiveVar( null ),
+        assistantStatus: new ReactiveDict(),
 
         // returns the list of pages
         pages(){
@@ -51,9 +53,9 @@ Template.client_new_assistant.onCreated( function(){
                     label: pwixI18n.label( I18N, 'clients.new_assistant.introduction_nav' )
                 },
                 {
-                    name: 'nature',
-                    template: 'client_new_assistant_nature',
-                    label: pwixI18n.label( I18N, 'clients.new_assistant.nature_nav' )
+                    name: 'profile',
+                    template: 'client_new_assistant_profile',
+                    label: pwixI18n.label( I18N, 'clients.new_assistant.profile_nav' )
                 },
                 {
                     name: 'properties',
@@ -63,7 +65,7 @@ Template.client_new_assistant.onCreated( function(){
                 {
                     name: 'grant',
                     template: 'client_new_assistant_grant_type',
-                    label: pwixI18n.label( I18N, 'clients.new_assistant.grant_nav' )
+                    label: pwixI18n.label( I18N, 'clients.new_assistant.grant_type_nav' )
                 },
                 {
                     name: 'auth',
@@ -104,7 +106,7 @@ Template.client_new_assistant.onCreated( function(){
         //  suitable to use when display the summary on top on each pane
         previousPanes(){
             let array = [];
-            const activePane = self.APP.dataParts.get( 'activePane' );
+            const activePane = self.APP.assistantStatus.get( 'activePane' );
             const pages = self.APP.pages();
             for( let i=0 ; i<pages.length ; ++i ){
                 if( pages[i].name === activePane ){
@@ -117,48 +119,56 @@ Template.client_new_assistant.onCreated( function(){
     };
 
     // wait for assistant initialized itself
-    self.APP.dataParts.set( 'activated', false );
+    self.APP.assistantStatus.set( 'activated', false );
 
-    // track the data parts of the assistant
+    // build a suitable new client entity
+    self.APP.entity.set({
+        organization: Template.currentData().organization.get()._id,
+        DYN: {
+            records: [
+                new ReactiveVar( {} )
+            ]
+        }
+    });
+
+    // track the status of the assistant
     self.autorun(() => {
-        console.debug( 'dataParts', self.APP.dataParts.all());
+        console.debug( 'assistantStatus', self.APP.assistantStatus.all());
     });
 });
 
 Template.client_new_assistant.onRendered( function(){
     const self = this;
 
-    // set the assistant title
-    //  the modal target will be taken by the assistant
-    Modal.set({
-        title: pwixI18n.label( I18N, 'clients.new_assistant.assistant_title' )
+    // whether we are running inside of a Modal
+    self.autorun(() => {
+        self.APP.isModal.set( self.$( '.c-new-client-assistant' ).closest( '.modal-dialog' ).length > 0 );
     });
 
-    // enable/disable the action buttons
-    // this is not delegable to the assistant_template as the application MUST keep the control of the buttons
+    // set the modal title
     self.autorun(() => {
-        self.$( '.ca-assistant-template' ).trigger( 'do-enable-action', { action: 'cancel', enabled: self.APP.dataParts.get( 'cancel' )});
-    });
-    self.autorun(() => {
-        self.$( '.ca-assistant-template' ).trigger( 'do-enable-action', { action: 'close', enabled: self.APP.dataParts.get( 'close' )});
-    });
-    self.autorun(() => {
-        self.$( '.ca-assistant-template' ).trigger( 'do-enable-action', { action: 'next', enabled: self.APP.dataParts.get( 'next' )});
-    });
-    self.autorun(() => {
-        self.$( '.ca-assistant-template' ).trigger( 'do-enable-action', { action: 'prev', enabled: self.APP.dataParts.get( 'prev' )});
+        if( self.APP.isModal.get()){
+            Modal.set({
+                title: pwixI18n.label( I18N, 'clients.new_assistant.assistant_title' )
+            });
+        }
     });
 
-    // allocate an EntityChecker for the dialog/page
+    // allocate a Checker for this (topmost parent) template
     self.autorun(() => {
-        self.APP.entityChecker.set( new CoreApp.EntityChecker( self, {
-            $topmost: self.$( '.c-client-new-assistant' ),
-            validityEvent: 'panel-data',
-            okSetFn( valid ){
-                self.$( '.ca-assistant-template' ).trigger( 'do-enable-action', { action: 'next', enabled: valid });
+        self.APP.checker.set( new Forms.Checker( self, {
+            name: 'client_new_assistant',
+            okFn( valid ){
+                self.$( '.Assistant' ).trigger( 'assistant-do-action-set', { action: 'next', enabled: valid });
             }
         }));
     });
+
+    // make sure at startup that cancel/prev/next buttons are shown (though last two are disabled at startup)
+    self.$( '.Assistant' ).trigger( 'assistant-do-action-set', { action: 'cancel', show: true, enable: true });
+    self.$( '.Assistant' ).trigger( 'assistant-do-action-set', { action: 'prev', show: true, enable: false });
+    self.$( '.Assistant' ).trigger( 'assistant-do-action-set', { action: 'next', show: true, enable: false });
+    self.$( '.Assistant' ).trigger( 'assistant-do-action-set', { action: 'close', show: false, enable: false });
 });
 
 Template.client_new_assistant.helpers({
@@ -167,6 +177,7 @@ Template.client_new_assistant.helpers({
         const APP = Template.instance().APP;
         return {
             ...this,
+            checker: APP.checker,
             parentAPP: APP,
             name: APP.myName,
             pages(){
@@ -175,14 +186,14 @@ Template.client_new_assistant.helpers({
             onChange( prev, next ){
                 const pages = APP.pages();
                 if( pages[next].name === 'summary' ){
-                    self.$( '.ca-assistant-template' ).trigger( 'do-label-action', {
+                    self.$( '.Assistant' ).trigger( 'assistant-do-label-action', {
                         action: 'next',
                         html: pwixI18n.label( I18N, 'assistant.confirm_btn' ),
                         title: pwixI18n.label( I18N, 'assistant.title_btn' )
                     });
                 }
                 if( pages[next].prev === 'summary' ){
-                    self.$( '.ca-assistant-template' ).trigger( 'do-label-action', {
+                    self.$( '.Assistant' ).trigger( 'assistant-do-label-action', {
                         action: 'next',
                         html: pwixI18n.label( I18N, 'assistant.next_btn' ),
                         title: pwixI18n.label( I18N, 'assistant.next_btn' )
@@ -199,21 +210,20 @@ Template.client_new_assistant.events({
     // advertize of the assistant activation (panes shouldn't do anything before that)
     'assistant-activated .c-client-new-assistant'( event, instance, data ){
         if( data.name === instance.APP.myName ){
-            instance.APP.dataParts.set( 'activated', true );
-            console.debug( event.type, data );
+            instance.APP.assistantStatus.set( 'activated', true );
         }
     },
 
     // track the currently shown pane
     'assistant-pane-to-hide .c-client-new-assistant'( event, instance, data ){
-        instance.APP.dataParts.set( 'activePane', null );
+        instance.APP.assistantStatus.set( 'activePane', null );
     },
     'assistant-pane-shown .c-client-new-assistant'( event, instance, data ){
-        instance.APP.dataParts.set( 'activePane', data.paneName );
+        instance.APP.assistantStatus.set( 'activePane', data.paneName );
     },
 
     // we are expected to be able to act on the action buttons on 'show' and 'shown' events
     'assistant-pane-to-hide .c-client-new-assistant, assistant-pane-hidden .c-client-new-assistant, assistant-pane-to-show .c-client-new-assistant, assistant-pane-shown .c-client-new-assistant'( event, instance, data ){
-        console.debug( event.type, data );
+        //console.debug( event.type, data );
     }
 });

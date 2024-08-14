@@ -4,7 +4,9 @@
  * Let the organization manager define a new client.
  *
  * Parms:
- *  - none, though all plusButton parameters will be passed through
+ *  - checker
+ *  - item
+ *  - plus all plusButton parameters will be passed through
  */
 
 import _ from 'lodash';
@@ -47,6 +49,7 @@ Template.client_new_button.events({
     'click .plusButton'( event, instance ){
         Modal.run({
             ...this,
+            organization: this.item,
             mdBody: 'client_new_assistant',
             mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
             mdClasses: 'modal-xl',

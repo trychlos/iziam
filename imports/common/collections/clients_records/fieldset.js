@@ -10,25 +10,60 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 import { Tracker } from 'meteor/tracker';
 import { Validity } from 'meteor/pwix:validity';
 
+import { Clients } from '/imports/common/collections/clients/index.js';
+
 import { ClientsRecords } from './index.js';
 
 const _defaultFieldSet = function(){
     let columns = [
+        // -- properties
+        // the client displayed name, mandatory, unique
         {
-            // the client displayed name, mandatory, unique
             name: 'label',
-            type: String
+            type: String,
+            form_check: Clients.checks.label,
+            form_type: Forms.FieldType.C.MANDATORY
         },
+        // a not too long description (not a note)
         {
-            // the client chosen profile from ClientProfile which determines the client type
+            name: 'description',
+            type: String,
+            optional: true,
+            form_check: Clients.checks.description,
+            form_type: Forms.FieldType.C.OPTIONAL
+        },
+        // an identifier string of a software client (profile 'm-to-m') - in other words, how the client identifies itself
+        {
+            name: 'softwareId',
+            type: String,
+            optional: true,
+            form_check: Clients.checks.softwareId,
+            form_type: Forms.FieldType.C.OPTIONAL
+        },
+        // a qualifier string for the client - this may let it distinguish between several registration instances
+        {
+            name: 'softwareVersion',
+            type: String,
+            optional: true,
+            form_check: Clients.checks.softwareVersion,
+            form_type: Forms.FieldType.C.OPTIONAL
+        },
+        // -- profile
+        // the client chosen profile from ClientProfile which helps to determine the client type
+        // a client-new-assistant data
+        {
             name: 'profile',
-            type: String
+            type: String,
+            form_check: Clients.checks.profile,
+            form_type: Forms.FieldType.C.OPTIONAL
         },
+        // the client type in the OAuth 2 sense (https://datatracker.ietf.org/doc/html/rfc6749#section-2)
+        //  confidential or public
         {
-            // the client type in the OAuth 2 sense (https://datatracker.ietf.org/doc/html/rfc6749#section-2)
-            //  confidential or public
-            name: 'type',
-            type: String
+            name: 'clientType',
+            type: String,
+            form_check: Clients.checks.clientType,
+            form_type: Forms.FieldType.C.MANDATORY
         },
         // --
         // list of selected providers
