@@ -5,7 +5,7 @@
  *
  * Parms:
  * - item: a ReactiveVar which contains the Organization
- * - checker: the parent Forms.Checker
+ * - checker: a ReactiveVar which contains the parent Forms.Checker
  * - entityTabs
  * - recordTabs
  */

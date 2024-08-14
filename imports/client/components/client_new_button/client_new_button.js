@@ -4,9 +4,9 @@
  * Let the organization manager define a new client.
  *
  * Parms:
- *  - checker
- *  - item
- *  - plus all plusButton parameters will be passed through
+ * - item: a ReactiveVar which contains the Organization
+ * - checker: a ReactiveVar which contains the parent Forms.Checker
+ * - plus all plusButton parameters will be passed through
  */
 
 import _ from 'lodash';
@@ -22,6 +22,7 @@ import './client_new_button.html';
 
 Template.client_new_button.onCreated( function(){
     const self = this;
+    //console.debug( this );
 
     self.APP = {
         canCreate: new ReactiveVar( false )
@@ -47,9 +48,13 @@ Template.client_new_button.helpers({
 
 Template.client_new_button.events({
     'click .plusButton'( event, instance ){
+        const organization = {
+            entity: this.item.get(),
+            record: this.item.get().DYN.closest
+        };
         Modal.run({
             ...this,
-            organization: this.item,
+            organization: organization,
             mdBody: 'client_new_assistant',
             mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
             mdClasses: 'modal-xl',

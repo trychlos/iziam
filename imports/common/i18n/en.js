@@ -75,12 +75,7 @@ Meteor.APP.i18n = {
                     properties_text: 'Define some properties specific to your client application.'
                 },
                 providers: {
-                    list_features_th: 'Features',
-                    list_ident_th: 'Identifier',
-                    list_label_th: 'Label',
-                    list_origin_th: 'Origin',
-                    list_preamble: 'These are the available feature providers.<br />Some are rather required while others may be freely chosen at your convenience.',
-                    list_selected_th: 'Selected'
+                    list_preamble: 'Select here the providers among those allowed that your organization.'
                 }
             },
             definitions: {
@@ -204,11 +199,26 @@ Meteor.APP.i18n = {
                     baseurl_ph: '/base',
                     baseurl_title: 'The first level of all REST URL\'s managed by and available to this organization. This is mandatory to have access to the Authorization Server REST API.',
                     clients_tab_title: 'Clients',
+                    providers_tab_title: 'Providers',
                     urls_tab_title: 'URL\'s'
+                },
+                providers: {
+                    list_preamble: 'Select here the available providers that your organization is willing to manage.<br />'
+                        +'Each client will then be able to choose the exact provider(s) it wants use.'
                 }
             },
             powered_by: {
                 label: 'Powered by Meteor&trade;'
+            },
+            providers: {
+                list: {
+                    features_th: 'Features',
+                    ident_th: 'Identifier',
+                    label_th: 'Label',
+                    origin_th: 'Origin',
+                    preamble: 'These are featured providers.<br />Some are rather required while others may be freely chosen at your convenience.',
+                    selected_th: 'Selected'
+                }
             },
             validity: {
                 list: {

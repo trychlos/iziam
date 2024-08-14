@@ -71,18 +71,7 @@ Clients.fn = {
     selectedProviders( client ){
         let selectedIds = client.record.selectedProviders || [];
         // add providers non-selectable by the user, which default to be selected
-        Providers.allProviders().forEach(( p ) => {
-            assert( p && p instanceof izProvider, 'expects an instance of izProvider, got '+p );
-            assert( p && p instanceof IIdent, 'expects an instance of IIdent, got '+p );
-            if( !p.userSelectable()){
-                const pId = p.identId();
-                if( p.defaultSelected()){
-                    selectedIds.push( pId );
-                } else {
-                    selectedIds = selected.filter( id => id !== pId );
-                }
-            }
-        });
+        selectedIds = Providers.filterDefaultSelectedNonUserSelectable( selectedIds );
         // build a hash by id with provider and features
         //  features are not recorded in the collection as they can change from a version to another
         let result = {};
@@ -122,7 +111,7 @@ Clients.fn = {
         client.record.selectedProviders = Object.keys( result );
         return result;
     },
-    
+
     /**
      * @param {<Client>} client 
      * @return {Boolean} whether the client has a client_credentials grant type

@@ -25,6 +25,37 @@ Organizations.recordFieldset = function(){
                     optional: true,
                     form_check: Organizations.checks.baseUrl,
                     form_type: Forms.FieldType.C.OPTIONAL
+                },
+                // -- providers
+                // list of selected providers
+                {
+                    name: 'selectedProviders',
+                    type: Array,
+                    optional: true
+                },
+                // the provider IIdent identifier
+                {
+                    name: 'selectedProviders.$',
+                    type: String
+                },
+                // -- dynamic registration
+                // whether the organization allow dynamic registration by confidential clients
+                {
+                    name: 'dynamicRegistrationByConfidential',
+                    type: Boolean,
+                    defaultValue: false
+                },
+                // whether the organization allow dynamic registration by public clients
+                {
+                    name: 'dynamicRegistrationByPublic',
+                    type: Boolean,
+                    defaultValue: false
+                },
+                // whether the organization allow dynamic registration by allowed identified users
+                {
+                    name: 'dynamicRegistrationByUser',
+                    type: Boolean,
+                    defaultValue: false
                 }
             ]
         }

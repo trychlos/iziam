@@ -6,7 +6,15 @@
  * Each provider:
  * - is identified both with a machine identifier and a human readable string, through IIdent interface
  * - should advertize of its features, through the IFeatured interface
- * - should advertize of its claims and scopes
+ * - may require some features provided by another provider
+ * - should advertize of its claims and scopes.
+ * 
+ * All providers are registered in common/providers as a 'Providers' pseudo-collection.
+ * 
+ * Each organization should define the providers they wants use, or they want their clients may choose from.
+ * Each provider is so selectable by the organization, which defaults to true.
+ * 
+ * Each client can choose, between providers selected at the organization level, which providers it wants use.
  */
 
 import _ from 'lodash';

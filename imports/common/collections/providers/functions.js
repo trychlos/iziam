@@ -57,6 +57,30 @@ Providers.featuresByIds = function( ids ){
     return features;
 };
 
+/**
+ * @locus Anywhere
+ * @summary Filter and complete the provided list of identified with:
+ *  - adding non-user-selectable providers which default to be selected (so that we can see the mandatory providers)
+ *  - removing non-user-selectable providers which default to be non selected (because thety have been obsoleted)
+ * @param {Array} selected an array of provider identifiers
+ * @returns {Array} the list of the identifiers of the non-user-selectable providers which default to be selected
+ */
+Providers.filterDefaultSelectedNonUserSelectable = function( selected ){
+    this.allProviders().forEach(( p ) => {
+        assert( p && p instanceof izProvider, 'expects an instance of izProvider, got '+p );
+        assert( p && p instanceof IIdent, 'expects an instance of IIdent, got '+p );
+        if( !p.userSelectable()){
+            const pId = p.identId();
+            if( p.defaultSelected()){
+                selected.push( pId );
+            } else {
+                selected = selected.filter( id => id !== pId );
+            }
+        }
+    });
+    return selected;
+};
+
     /**
      * @summary Explore all selected providers to get their claims
      * @locus Server

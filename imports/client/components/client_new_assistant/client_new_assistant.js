@@ -2,7 +2,7 @@
  * /imports/client/components/client_new_assistant/client_new_assistant.js
  * 
  * Parms:
- * - organization: a ReactiveVar which contains the current organization at date
+ * - organization: an { entity, record } object which provides the current Organiaztion at date
  * - item: null
  */
 
@@ -123,7 +123,7 @@ Template.client_new_assistant.onCreated( function(){
 
     // build a suitable new client entity
     self.APP.entity.set({
-        organization: Template.currentData().organization.get()._id,
+        organization: Template.currentData().organization.entity,
         DYN: {
             records: [
                 new ReactiveVar( {} )
