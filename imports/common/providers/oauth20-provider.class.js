@@ -39,6 +39,7 @@ export class OAuth20Provider extends mix( izProvider ).with( IGrantType ){
                 'oauth2',
                 'oauth-2.0-6749'
             ],
+            // authorization grant types are defined by the spec
             igranttype: [
                 'auth_code_20',
                 'implicit_20',
