@@ -2,7 +2,10 @@
  * /import/common/collections/organizations/functions.js
  */
 
+import _ from 'lodash';
 const assert = require( 'assert' ).strict;
+
+import { Tracker } from 'meteor/tracker';
 
 import { izProvider } from '/imports/common/classes/iz-provider.class.js';
 
@@ -50,5 +53,45 @@ Organizations.fn = {
         // update the record with this current result
         organization.record.selectedProviders = Object.keys( result );
         return result;
+    },
+
+    /**
+     * @summary Compute and returns the list of selected providers for the entity/record client
+     * @param {Object} o an argument object with following keys:
+     * - caller: an { entity, record } organization
+     * @returns {Object} the selectedProviders() result
+     *  A reactive data source
+     */
+    _selected_providers: {
+        dep: new Tracker.Dependency()
+    },
+    selectedProvidersGet( o ){
+        const selected = Organizations.fn.selectedProviders( o.caller );
+        Organizations.fn._selected_providers.dep.depend();
+        return selected;
+    },
+    selectedProvidersAdd( o, providerId ){
+        o.caller.record.selectedProviders.push( providerId );
+        Organizations.fn._selected_providers.dep.changed();
+    },
+    selectedProvidersRemove( o, providerId ){
+        o.caller.record.selectedProviders = o.caller.record.selectedProviders.filter( id => id !== providerId );
+        Organizations.fn._selected_providers.dep.changed();
+    },
+
+    /**
+     * @summary Acts as the Providers.all() function for the client
+     * @param {Object} args the 'args' part of the providers_list data context
+     * - caller
+     * - parent
+     * @returns {Array<izProvider>} the selected providers
+     */
+    selectedProviderInstances( args ){
+        let res = [];
+        const providers = Organizations.fn.selectedProviders( args.parent );
+        Object.keys( providers ).forEach(( it ) => {
+            res.push( providers[it].provider );
+        });
+        return res;
     }
 };

@@ -37,21 +37,23 @@ Template.client_new_assistant_profile.onRendered( function(){
         const profile = dataDict.get( 'profileId' );
         // setup the selection appearance
         self.$( '.c-client-new-assistant-profile .by-item' ).removeClass( 'selected' );
+        const entity = Template.currentData().parentAPP.entity.get();
+        const index = 0;
+        const record = entity.DYN.records[index].get();
+        record.profile = profile;
         if( profile ){
             self.$( '.c-client-new-assistant-profile .by-item[data-item-id="'+profile+'"]' ).addClass( 'selected' );
             // setup dependant default values - must be done here so that other panes can modified them
-            const entity = Template.currentData().parentAPP.entity.get();
-            const index = 0;
-            const record = entity.DYN.records[index].get();
             const def = ClientProfile.byId( profile );
             assert( def, 'ClientProfile definition is empty' );
             dataDict.set( 'profileDefinition', def );
-            dataDict.set( 'haveAllowedApis', ClientProfile.defaultHaveAllowedApis( def ));
-            dataDict.set( 'haveEndpoints', ClientProfile.defaultHaveEndpoints( def ));
-            dataDict.set( 'haveUsers', ClientProfile.defaultHaveUsers( def ));
-            record.clientyType = ClientProfile.defaultClientType( def );
-            record.grantTypes = ClientProfile.defaultGrantTypes( def );
-            record.authMethod = ClientProfile.defaultAuthMethod( def );
+            dataDict.set( 'profileFeatures', ClientProfile.defaultFeatures( def ));
+            //dataDict.set( 'haveAllowedApis', ClientProfile.defaultHaveAllowedApis( def ));
+            //dataDict.set( 'haveEndpoints', ClientProfile.defaultHaveEndpoints( def ));
+            //dataDict.set( 'haveUsers', ClientProfile.defaultHaveUsers( def ));
+            //record.clientyType = ClientProfile.defaultClientType( def );
+            //record.grantTypes = ClientProfile.defaultGrantTypes( def );
+            //record.authMethod = ClientProfile.defaultAuthMethod( def );
         }
     });
 
@@ -92,6 +94,13 @@ Template.client_new_assistant_profile.helpers({
     // items list
     itemsList(){
         return ClientProfile.Knowns();
+    },
+
+    // parms for current choices
+    parmsCurrent(){
+        return {
+            parentAPP: this.parentAPP
+        };
     }
 });
 

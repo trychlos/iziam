@@ -15,7 +15,9 @@ import mix from '@vestergaard-company/js-mixin';
 
 import { izProvider } from '/imports/common/classes/iz-provider.class.js';
 
-export class OAuth21Provider extends mix( izProvider ).with(){
+import { IGrantType } from '/imports/common/interfaces/igranttype.iface.js';
+
+export class OAuth21Provider extends mix( izProvider ).with( IGrantType ){
 
     // static data
 
@@ -41,6 +43,10 @@ export class OAuth21Provider extends mix( izProvider ).with(){
             ifeatured: [
                 'oauth2',
                 'oauth-2.1-draft-v11'
+            ],
+            igranttype: [
+                'auth_code_21',
+                'client_credentials'
             ]
         });
 

@@ -67,15 +67,21 @@ Meteor.APP.i18n = {
                     grant_type_nav: 'Grant type',
                     introduction_nav: 'Introduction',
                     introduction_text: 'This assistant will guide you through the process of defining a new client to your Authorization Server.',
-                    profile_nav: 'Client Profile',
+                    profile_nav: 'Profile',
                     profile_text: 'Choose the application profile which corresponds best to your use case.<br />'
                         +'This will define many other parameters, but you still will be able to modify each of them at your convenience.<br />'
                         +'If none of the proposed profiles suit your needs, just choose the "Generic" one, and set each parameter to your taste.',
                     properties_nav: 'Properties',
-                    properties_text: 'Define some properties specific to your client application.'
+                    properties_text: 'Define some properties specific to your client application.',
+                    providers_nav: 'Providers',
+                    summary_features_label: 'Needed features :',
+                    summary_legend: 'Summary',
+                    summary_name_label: 'Label :',
+                    summary_profile_label: 'Profile :',
+                    summary_providers_label: 'Providers :'
                 },
                 providers: {
-                    list_preamble: 'Select here the providers among those allowed that your organization.'
+                    list_preamble: 'Select here the providers among those allowed by your organization to satisfy the features needed by the client profile you have chosen.'
                 }
             },
             definitions: {
@@ -133,18 +139,26 @@ Meteor.APP.i18n = {
                     },
                 },
                 grant_type: {
-                    authcode_label: 'Authorization code grant',
-                    authcode_description: 'The authorization server returns a single-use authorization code to the client. '
+                    authcode_20_label: 'Authorization code grant',
+                    authcode_20_description: 'The authorization server returns a single-use authorization code to the client. '
+                        +'The client then exchanges the code for an access token.',
+                    authcode_21_label: 'Authorization code grant + PKCE',
+                    authcode_21_description: 'The authorization server returns a single-use authorization code to the client. '
                         +'The client then exchanges the code for an access token.',
                     client_label: 'Client credentials grant',
                     client_description: 'A grant type suitable for machine-to-machine authentication.',
                     device_label: 'Device code grant',
                     device_description: 'Aimed at devices with limited input or display capabilities, such as game consoles or smart TVs.',
-                    implicit_label: 'Implicit grant',
-                    implicit_description: 'The client application receives the access token immediately after the user gives their consent. '
+                    hybrid_label: 'Hybrid authorization flow',
+                    hybrid_description: 'An OpenID authorization flow which enables clients to obtain some tokens straight from the Authorization Endpoint, '
+                        +'while still having the possibility to get others from the Token Endpoint.',
+                    implicit_20_label: 'Implicit grant',
+                    implicit_20_description: 'The client application receives the access token immediately after the user gives their consent. '
                         +'<b>This grant flow is deprecated in favor of Authorization code flow.</b>',
                     jwt_label: 'JWT Bearer token grant',
                     jwt_description: 'JSON Web Tokens encrypted and signed using JSON Web Key Sets.',
+                    password_label: 'Resource owner password credentials grant',
+                    password_description: 'This grant type should only be used when there is a high degree of trust between the resource owner and the client.',
                     reftoken_label: 'Refresh token grant',
                     reftoken_description: 'Optional, may be exchanged for another access token when the first has expired.',
                     //saml_label: 'SAML 2.0 Bearer Assertion',
@@ -212,7 +226,7 @@ Meteor.APP.i18n = {
                     urls_tab_title: 'URL\'s'
                 },
                 providers: {
-                    list_preamble: 'Select here the available providers that your organization is willing to manage.<br />'
+                    list_preamble: 'Select here, among all registered providers, those that your organization is willing to manage. '
                         +'Each client will then be able to choose the exact provider(s) it wants use.'
                 }
             },
@@ -225,7 +239,8 @@ Meteor.APP.i18n = {
                     ident_th: 'Identifier',
                     label_th: 'Label',
                     origin_th: 'Origin',
-                    preamble: 'These are featured providers.<br />Some are rather required while others may be freely chosen at your convenience.',
+                    preamble: 'Selecting providers is the same as saying which protocol(s) and which feature(s) you want use. '
+                        +'Some are strongly needed, or even required, while others may be freely chosen at your convenience.',
                     selected_th: 'Selected'
                 }
             },

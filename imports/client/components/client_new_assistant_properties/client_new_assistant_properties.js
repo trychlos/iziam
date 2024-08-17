@@ -9,7 +9,7 @@ import _ from 'lodash';
 
 import { pwixI18n } from 'meteor/pwix:i18n';
 
-import '/imports/client/components/client_properties_pane/client_properties_pane.js';
+import '/imports/client/components/client_properties_panel/client_properties_panel.js';
 
 import './client_new_assistant_properties.html';
 
@@ -35,13 +35,12 @@ Template.client_new_assistant_properties.helpers({
     // parms for current choices
     parmsCurrent(){
         return {
-            parentAPP: this.parentAPP,
-            display: this.parentAPP.previousPanes()
+            parentAPP: this.parentAPP
         };
     },
 
     // parms for re-use the client_edit properties panel
-    parmsPropertiesPane(){
+    parmsPropertiesPanel(){
         return {
             ...this,
             entity: this.parentAPP.entity,
@@ -60,6 +59,6 @@ Template.client_new_assistant_properties.events({
     },
     'assistant-pane-shown .c-client-new-assistant-properties'( event, instance, data ){
         instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'prev', enable: true });
-        instance.$( '.c-client-properties-pane' ).trigger( 'iz-enable-checks', true );
+        instance.$( '.c-client-properties-panel' ).trigger( 'iz-enable-checks', true );
     }
 });

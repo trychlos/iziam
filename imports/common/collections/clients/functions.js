@@ -6,6 +6,7 @@ import _ from 'lodash';
 const assert = require( 'assert' ).strict; // up to nodejs v16.x
 
 import { ReactiveVar } from 'meteor/reactive-var';
+import { Tracker } from 'meteor/tracker';
 
 import { izProvider } from '/imports/common/classes/iz-provider.class.js';
 
@@ -61,6 +62,9 @@ Clients.fn = {
      *  - plus maybe non-selectable provider(s) which default to be selected
      *  - minus non-selected pprovider(s) which default to be unselected (maybe because they are obsolete)
      *  - minus providers whose prerequisites are not satisfied by the above list
+     * @param {Object} organization the attached organization as an object with following keys:
+     * - entity
+     * - record
      * @param {Object} client the to-be-considered client as an object with following keys:
      * - entity
      * - record
@@ -68,7 +72,7 @@ Clients.fn = {
      * - provider: the izProvider instance
      * - features: an array of the provided IFeatured's
      */
-    selectedProviders( client ){
+    selectedProviders( organization, client ){
         let selectedIds = client.record.selectedProviders || [];
         // add providers non-selectable by the user, which default to be selected
         selectedIds = Providers.filterDefaultSelectedNonUserSelectable( selectedIds );
@@ -110,6 +114,31 @@ Clients.fn = {
         // update the record with this current result
         client.record.selectedProviders = Object.keys( result );
         return result;
+    },
+
+    /**
+     * @summary Compute and returns the list of selected providers for the entity/record client
+     * @param {Object} o an argument object with following keys:
+     * - caller: an { entity, record } client
+     * - parent: an { entity, record } organization
+     * @returns {Object} the selectedProviders() result
+     *  A reactive data source
+     */
+    _selected_providers: {
+        dep: new Tracker.Dependency()
+    },
+    selectedProvidersGet( o ){
+        const selected = Clients.fn.selectedProviders( o.parent, o.caller );
+        Clients.fn._selected_providers.dep.depend();
+        return selected;
+    },
+    selectedProvidersAdd( o, providerId ){
+        o.caller.record.selectedProviders.push( providerId );
+        Clients.fn._selected_providers.dep.changed();
+    },
+    selectedProvidersRemove( o, providerId ){
+        o.caller.record.selectedProviders = o.caller.record.selectedProviders.filter( id => id !== providerId );
+        Clients.fn._selected_providers.dep.changed();
     },
 
     /**

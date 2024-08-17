@@ -57,6 +57,7 @@ export const ISelectable = DeclareMixin(( superclass ) => class extends supercla
 
     /**
      * Getter
+     * @summary Given the features provided by the currently selected providers, is this provider selectable ?
      * @param {Array<String>} selected the list of currently selected providers id's
      * @returns {Boolean} whether this provider is selectable, i.e. when the input checkbox can be enabled to be selected by the user
      */

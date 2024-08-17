@@ -1,0 +1,15 @@
+<template name="client_new_assistant_providers">
+    <div class="c-client-new-assistant-providers">
+
+        {{> client_new_assistant_current (parmsCurrent) }}
+
+        <div class="content">
+            <div class="text">
+                {{{ i18n key="clients.new_assistant.providers_text" }}}
+            </div>
+
+            {{> client_providers_panel (parmsProvidersPanel) }}
+        </div>
+
+    </div>
+</template>

@@ -1,56 +1,70 @@
 <template name="client_new_assistant_current">
     <div class="c-client-new-assistant-current">
 
-        <fieldset class="summary">
-            <legend>{{ i18n key="clients.new_assistant.summary_legend" }}</legend>
-            <div class="recap">
-                <table class="form-table">
-                    {{#if havePane "nature" }}
-                        <tr>
-                            <td class="label ui-vatop">{{ i18n key="clients.new_assistant.summary_nature_label" }}</td>
-                            <td>
-                                <p class="text">{{ natureText }}</p>
-                                <p class="form-text">{{ natureDescription }}</p>
-                            </td>
-                        </tr>
-                    {{/if}}
-                    {{#if havePane "properties" }}
-                        <tr>
-                            <td class="label ui-vatop">{{ i18n key="clients.new_assistant.summary_name_label" }}</td>
-                            <td>
-                                <p class="text">{{ propName }}</p>
-                                <p class="form-text">{{ propDescription }}</p>
-                                <p class="form-text">{{ propSoftware }}</p>
-                            </td>
-                        </tr>
-                    {{/if}}
-                    {{#if havePane "grant" }}
-                        <tr>
-                            <td class="label ui-vatop">{{ i18n key="clients.new_assistant.summary_grant_label" }}</td>
-                            <td><p class="text">{{ grantText }}</p></td>
-                        </tr>
-                    {{/if}}
-                    {{#if havePane "auth" }}
-                        <tr>
-                            <td class="label ui-vatop">{{ i18n key="clients.new_assistant.summary_auth_label" }}</td>
-                            <td><p class="text">{{ authText }}</p></td>
-                        </tr>
-                    {{/if}}
-                    {{#if havePane "endpoints" }}
-                        <tr>
-                            <td class="label ui-vatop">{{ i18n key="clients.new_assistant.summary_endpoints_label" }}</td>
-                            <td><p class="text">{{ endpointsText }}</p></td>
-                        </tr>
-                    {{/if}}
-                    {{#if havePane "contacts" }}
-                        <tr>
-                            <td class="label ui-vatop">{{ i18n key="clients.new_assistant.summary_contacts_label" }}</td>
-                            <td><p class="text">{{ contactsText }}</p></td>
-                        </tr>
-                    {{/if}}
-                </table>
-            </div>
-        </fieldset>
+        {{#if haveSummary }}
+            <fieldset class="summary">
+                <legend>{{ i18n key="clients.new_assistant.summary_legend" }}</legend>
+                <div class="recap">
+                    <table class="form-table">
+                        {{#if havePane "properties" }}
+                            <tr>
+                                <td class="label ui-vatop">{{ i18n key="clients.new_assistant.summary_name_label" }}</td>
+                                <td class="ui-w100">
+                                    <p class="text">{{ propName }}</p>
+                                    <p class="text2">{{{ propDescription }}}</p>
+                                    <p class="text2">{{ propSoftware }}</p>
+                                </td>
+                            </tr>
+                        {{/if}}
+                        {{#if havePane "profile" }}
+                            <tr>
+                                <td class="label ui-vatop">{{ i18n key="clients.new_assistant.summary_profile_label" }}</td>
+                                <td>
+                                    <p class="text">{{ profileText }}</p>
+                                    <p class="text2">{{{ profileDescription }}}</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label ui-vatop">{{ i18n key="clients.new_assistant.summary_features_label" }}</td>
+                                <td>
+                                    <p class="text">{{ featuresText }}</p>
+                                </td>
+                            </tr>
+                        {{/if}}
+                        {{#if havePane "providers" }}
+                            <tr>
+                                <td class="label ui-vatop">{{ i18n key="clients.new_assistant.summary_providers_label" }}</td>
+                                <td><p class="text">{{{ providersText }}}</p></td>
+                            </tr>
+                        {{/if}}
+                        {{#if havePane "grant" }}
+                            <tr>
+                                <td class="label ui-vatop">{{ i18n key="clients.new_assistant.summary_grant_label" }}</td>
+                                <td><p class="text">{{ grantText }}</p></td>
+                            </tr>
+                        {{/if}}
+                        {{#if havePane "auth" }}
+                            <tr>
+                                <td class="label ui-vatop">{{ i18n key="clients.new_assistant.summary_auth_label" }}</td>
+                                <td><p class="text">{{ authText }}</p></td>
+                            </tr>
+                        {{/if}}
+                        {{#if havePane "endpoints" }}
+                            <tr>
+                                <td class="label ui-vatop">{{ i18n key="clients.new_assistant.summary_endpoints_label" }}</td>
+                                <td><p class="text">{{ endpointsText }}</p></td>
+                            </tr>
+                        {{/if}}
+                        {{#if havePane "contacts" }}
+                            <tr>
+                                <td class="label ui-vatop">{{ i18n key="clients.new_assistant.summary_contacts_label" }}</td>
+                                <td><p class="text">{{ contactsText }}</p></td>
+                            </tr>
+                        {{/if}}
+                    </table>
+                </div>
+            </fieldset>
+        {{/if}}
 
     </div>
 </template>

@@ -1,5 +1,5 @@
 /*
- * /imports/client/components/client_properties_pane/client_properties_pane.js
+ * /imports/client/components/client_properties_panel/client_properties_panel.js
  *
  * Client properties pane.
  * 
@@ -22,9 +22,9 @@ import { ReactiveVar } from 'meteor/reactive-var';
 
 import { ClientsRecords } from '/imports/common/collections/clients_records/index.js';
 
-import './client_properties_pane.html';
+import './client_properties_panel.html';
 
-Template.client_properties_pane.onCreated( function(){
+Template.client_properties_panel.onCreated( function(){
     const self = this;
     //console.debug( this );
 
@@ -48,7 +48,7 @@ Template.client_properties_pane.onCreated( function(){
     };
 });
 
-Template.client_properties_pane.onRendered( function(){
+Template.client_properties_panel.onRendered( function(){
     const self = this;
 
     // initialize the Checker for this panel as soon as we get the parent Checker
@@ -61,7 +61,7 @@ Template.client_properties_pane.onRendered( function(){
                 enabled = Template.currentData().enableChecks;
             }
             self.APP.checker.set( new Forms.Checker( self, {
-                name: 'client_properties_pane',
+                name: 'client_properties_panel',
                 parent: parentChecker,
                 panel: new Forms.Panel( self.APP.fields, ClientsRecords.fieldSet.get()),
                 data: {
@@ -75,20 +75,20 @@ Template.client_properties_pane.onRendered( function(){
     });
 });
 
-Template.client_properties_pane.helpers({
+Template.client_properties_panel.helpers({
     // string translation
     i18n( arg ){
         return pwixI18n.label( I18N, arg.hash.key );
     }
 });
 
-Template.client_properties_pane.events({
+Template.client_properties_panel.events({
     // ask for clear the panel
-    'iz-clear-panel .c-client-properties-pane'( event, instance ){
+    'iz-clear-panel .c-client-properties-panel'( event, instance ){
         instance.APP.checker.get().clear();
     },
     // ask for enabling the checker
-    'iz-enable-checks .c-client-properties-pane'( event, instance, enabled ){
+    'iz-enable-checks .c-client-properties-panel'( event, instance, enabled ){
         instance.APP.checker.get().enabled( enabled );
         if( enabled ){
             instance.APP.checker.get().check({ update: false });

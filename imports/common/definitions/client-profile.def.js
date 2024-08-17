@@ -21,7 +21,7 @@ export const ClientProfile = {
             haveUsers: false,
             authMethod: 'secret_basic',
             clientType: 'confidential',
-            requiredFeatures: [
+            features: [
                 'oauth2'
             ]
         },
@@ -36,7 +36,7 @@ export const ClientProfile = {
             ],
             haveAllowedApis: false,
             clientType: 'public',
-            requiredFeatures: [
+            features: [
                 'oauth2',
                 'openid'
             ]
@@ -54,7 +54,7 @@ export const ClientProfile = {
             haveAllowedApis: false,
             authMethod: 'secret_basic',
             clientType: 'confidential',
-            requiredFeatures: [
+            features: [
                 'oauth2'
             ]
         },
@@ -70,7 +70,7 @@ export const ClientProfile = {
             haveAllowedApis: false,
             authMethod: 'secret_basic',
             clientType: 'public',
-            requiredFeatures: [
+            features: [
                 'oauth2'
             ]
         }
@@ -105,6 +105,14 @@ export const ClientProfile = {
      */
     defaultClientType( def ){
         return def.clientType || 'public';
+    },
+
+    /**
+     * @param {Object} def a ClientProfile definition as returned by ClientProfile.Knowns()
+     * @returns {Array} the list of suggested features
+     */
+    defaultFeatures( def ){
+        return def.features;
     },
 
     /**

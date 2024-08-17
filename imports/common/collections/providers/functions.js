@@ -16,7 +16,7 @@ Providers._p = [];
 
 /**
  * @locus Anywhere
- * @returns {Array} the registered providers
+ * @returns {Array<izProvider>} the registered providers
  */
 Providers.allProviders = function(){
     return Providers._p;

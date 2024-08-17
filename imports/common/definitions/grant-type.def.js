@@ -36,23 +36,29 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 export const GrantType = {
     C: [
         {
-            // authorization code
-            id: 'auth_code',
-            label: 'definitions.grant_type.authcode_label',
-            description: 'definitions.grant_type.authcode_description',
+            // OAuth 2.0 authorization code
+            id: 'auth_code_20',
+            label: 'definitions.grant_type.authcode_20_label',
+            description: 'definitions.grant_type.authcode_20_description',
             image: '/images/grant-type.svg'
         },
         {
-            // implicit grant
-            id: 'implicit',
-            label: 'definitions.grant_type.implicit_label',
-            description: 'definitions.grant_type.implicit_description',
-            image: '/images/grant-type.svg',
-            enabled: false
+            // OAuth 2.1 authorization code + PKCE
+            id: 'auth_code_21',
+            label: 'definitions.grant_type.authcode_21_label',
+            description: 'definitions.grant_type.authcode_21_description',
+            image: '/images/grant-type.svg'
+        },
+        {
+            // implicit grant - oauth 2.0 ONLY
+            id: 'implicit_20',
+            label: 'definitions.grant_type.implicit_20_label',
+            description: 'definitions.grant_type.implicit_20_description',
+            image: '/images/grant-type.svg'
         },
         {
             // client credentials
-            id: 'client_creds',
+            id: 'client_credentials',
             label: 'definitions.grant_type.client_label',
             description: 'definitions.grant_type.client_description',
             image: '/images/grant-type.svg',
@@ -64,6 +70,21 @@ export const GrantType = {
             label: 'definitions.grant_type.device_label',
             description: 'definitions.grant_type.device_description',
             image: '/images/grant-type.svg'
+        },
+        {
+            // hybrid authorization flow for OpenID Connect
+            id: 'hybrid',
+            label: 'definitions.grant_type.hybrid_label',
+            description: 'definitions.grant_type.hybrid_description',
+            image: '/images/grant-type.svg'
+        },
+        {
+            // resource owner password credentials
+            id: 'password_credentials',
+            label: 'definitions.grant_type.password_label',
+            description: 'definitions.grant_type.password_description',
+            image: '/images/grant-type.svg',
+            authMethod: 'secret_basic'
         },
         {
             // The refresh token grant type defined in OAuth 2.0, Section 6

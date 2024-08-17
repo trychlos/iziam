@@ -5,7 +5,6 @@
  *
  * Parms:
  * - parentAPP: the assistant APP whole object
- * - display: an array of the page names to be displayed here
  */
 
 import _ from 'lodash';
@@ -17,6 +16,10 @@ import { ClientProfile } from '/imports/common/definitions/client-profile.def.js
 import { GrantType } from '/imports/common/definitions/grant-type.def.js';
 
 import './client_new_assistant_current.html';
+
+Template.client_new_assistant_current.onCreated( function(){
+    //console.debug( this );
+});
 
 Template.client_new_assistant_current.helpers({
     // authentification method
@@ -35,6 +38,11 @@ Template.client_new_assistant_current.helpers({
         return ( this.parentAPP.assistantStatus.get( 'endpoints' ) || [] ).join( ', ' );
     },
 
+    // required features from client profile
+    featuresText(){
+        return ClientProfile.defaultFeatures( this.parentAPP.assistantStatus.get( 'profileDefinition' )).join( ', ' );
+    },
+
     // grant types
     grantText(){
         return GrantType.joinedLabels( this.parentAPP.assistantStatus.get( 'grantTypes' ));
@@ -42,7 +50,15 @@ Template.client_new_assistant_current.helpers({
 
     // whether we want display the pane ?
     havePane( pane ){
-        return ( this.display || [] ).includes( pane );
+        const have = this.parentAPP.previousPanes().includes( pane );
+        //console.debug( 'havePane', pane, have );
+        return have;
+    },
+
+    // whether we have any summary ?
+    haveSummary(){
+        const array = this.parentAPP.previousPanes();
+        return array.length > 1;
     },
 
     // internationalization
@@ -50,32 +66,32 @@ Template.client_new_assistant_current.helpers({
         return pwixI18n.label( I18N, arg.hash.key );
     },
 
-    // client nature description
-    natureDescription(){
+    // client profile description
+    profileDescription(){
         const def = this.parentAPP.assistantStatus.get( 'profileDefinition' );
-        return def ? ClientNature.description( def ) : '';
+        return def ? ClientProfile.description( def ) : '';
     },
 
-    // client nature description
-    natureText(){
+    // client profile description
+    profileText(){
         const def = this.parentAPP.assistantStatus.get( 'profileDefinition' );
-        return def ? ClientNature.label( def ) : '';
+        return def ? ClientProfile.label( def ) : '';
     },
 
     // client description
     propDescription(){
-        return this.parentAPP.assistantStatus.get( 'description' ) || '';
+        return this.parentAPP.entity.get().DYN.records[0].get().description || '';
     },
 
     // client name
     propName(){
-        return this.parentAPP.assistantStatus.get( 'name' );
+        return this.parentAPP.entity.get().DYN.records[0].get().label || '';
     },
 
     // client software description
     propSoftware(){
-        const softid = this.parentAPP.assistantStatus.get( 'softwareId' );
-        const softver = this.parentAPP.assistantStatus.get( 'softwareVersion' );
+        const softid = this.parentAPP.entity.get().DYN.records[0].get().softwareId;
+        const softver = this.parentAPP.entity.get().DYN.records[0].get().softwareVersion;
         return softid || softver ? ( softid || '' ) + ' ' + ( softver || '' ) : '';
     }
 });

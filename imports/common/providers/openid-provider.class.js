@@ -10,7 +10,9 @@ import mix from '@vestergaard-company/js-mixin';
 
 import { izProvider } from '/imports/common/classes/iz-provider.class.js';
 
-export class OpenIDProvider extends mix( izProvider ).with(){
+import { IGrantType } from '/imports/common/interfaces/igranttype.iface.js';
+
+export class OpenIDProvider extends mix( izProvider ).with( IGrantType ){
 
     // static data
 
@@ -39,6 +41,12 @@ export class OpenIDProvider extends mix( izProvider ).with(){
             ],
             irequires: [
                 'oauth2'
+            ],
+            igranttype: [
+                'oauth_code_20',
+                'oauth_code_21',
+                'implicit_20',
+                'hybrid'
             ]
             /*
             iresource: {

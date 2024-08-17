@@ -23,6 +23,7 @@ import '/imports/client/components/client_new_assistant_grant_type/client_new_as
 import '/imports/client/components/client_new_assistant_introduction/client_new_assistant_introduction.js';
 import '/imports/client/components/client_new_assistant_profile/client_new_assistant_profile.js';
 import '/imports/client/components/client_new_assistant_properties/client_new_assistant_properties.js';
+import '/imports/client/components/client_new_assistant_providers/client_new_assistant_providers.js';
 //import '/imports/client/components/client_new_assistant_summary/client_new_assistant_summary.js';
 //import '/imports/client/components/jwt_private_select/jwt_private_select.js';
 
@@ -53,14 +54,19 @@ Template.client_new_assistant.onCreated( function(){
                     label: pwixI18n.label( I18N, 'clients.new_assistant.introduction_nav' )
                 },
                 {
+                    name: 'properties',
+                    template: 'client_new_assistant_properties',
+                    label: pwixI18n.label( I18N, 'clients.new_assistant.properties_nav' )
+                },
+                {
                     name: 'profile',
                     template: 'client_new_assistant_profile',
                     label: pwixI18n.label( I18N, 'clients.new_assistant.profile_nav' )
                 },
                 {
-                    name: 'properties',
-                    template: 'client_new_assistant_properties',
-                    label: pwixI18n.label( I18N, 'clients.new_assistant.properties_nav' )
+                    name: 'providers',
+                    template: 'client_new_assistant_providers',
+                    label: pwixI18n.label( I18N, 'clients.new_assistant.providers_nav' )
                 },
                 {
                     name: 'grant',
@@ -107,12 +113,14 @@ Template.client_new_assistant.onCreated( function(){
         previousPanes(){
             let array = [];
             const activePane = self.APP.assistantStatus.get( 'activePane' );
-            const pages = self.APP.pages();
-            for( let i=0 ; i<pages.length ; ++i ){
-                if( pages[i].name === activePane ){
-                    break;
+            if( activePane ){
+                const pages = self.APP.pages();
+                for( let i=0 ; i<pages.length ; ++i ){
+                    if( pages[i].name === activePane ){
+                        break;
+                    }
+                    array.push( pages[i].name );
                 }
-                array.push( pages[i].name );
             }
             return array;
         }

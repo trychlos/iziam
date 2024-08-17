@@ -9,9 +9,10 @@ const assert = require( 'assert' ).strict;
 import mix from '@vestergaard-company/js-mixin';
 
 import { izProvider } from '/imports/common/classes/iz-provider.class.js';
-import { ifError } from 'assert';
 
-export class OAuth20Provider extends mix( izProvider ).with(){
+import { IGrantType } from '/imports/common/interfaces/igranttype.iface.js';
+
+export class OAuth20Provider extends mix( izProvider ).with( IGrantType ){
 
     // static data
 
@@ -37,6 +38,12 @@ export class OAuth20Provider extends mix( izProvider ).with(){
             ifeatured: [
                 'oauth2',
                 'oauth-2.0-6749'
+            ],
+            igranttype: [
+                'auth_code_20',
+                'implicit_20',
+                'client_credentials',
+                'password_credentials'
             ]
         });
 

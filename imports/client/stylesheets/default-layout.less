@@ -224,23 +224,6 @@ body {
         flex-direction: column;
         align-items: center;
     }
-    fieldset.summary {
-        font-size: 90%;
-        color: #013583; // darken( var( --bs-primary ), 50 );
-        legend {
-            font-size: 1.1em;
-            margin-bottom: 0;
-        }
-        .recap {
-            margin-left: 0.75em;
-        }
-        .form-text {
-            margin-top: 0;
-        }
-    }
-    .text {
-        margin-bottom: 1em;
-    }
     .c-client-new-assistant-introduction {
         justify-content: center;
         margin-right: 1em;
@@ -308,7 +291,35 @@ body {
 .c-client-new-button .plusButton {
     position: inherit;
 }
-
+.Assistant {
+    fieldset.summary {
+        color: #013583; // darken( var( --bs-primary ), 50 );
+        margin-bottom: 1em;
+        border: 1px solid lightgray;
+        border-radius: 0.5em;
+        padding: 0.5em;
+        legend {
+            font-size: 1em;
+            margin: 0;
+            float: inherit;
+            width: auto;
+            padding-left: 0.5em;
+            padding-right: 0.5em;
+        }
+        .recap {
+            margin-left: 1em;
+            td.label {
+                white-space: nowrap;
+                padding-right: 0.25em;
+            }
+        }
+        p,
+        p.text,
+        p.text2 {
+            margin: 0;
+        }
+    }
+}
 /*
  * Utilities
  */
