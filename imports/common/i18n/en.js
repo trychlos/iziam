@@ -64,7 +64,11 @@ Meteor.APP.i18n = {
                 },
                 new_assistant: {
                     assistant_title: 'Defining a new client application',
+                    client_nav: 'Client type',
+                    client_text: 'The client type, in the sense of OAuth specifications, is automatically determined from your chosen client profile. '
+                        +'You shouldn\'t need to change it, unless you are really sure of what you are doing, but just in case...',
                     grant_type_nav: 'Grant type',
+                    grant_type_text: 'For each available grant nature, please choose below the grant type(s) you want for your client.',
                     introduction_nav: 'Introduction',
                     introduction_text: 'This assistant will guide you through the process of defining a new client to your Authorization Server.',
                     profile_nav: 'Profile',
@@ -74,9 +78,11 @@ Meteor.APP.i18n = {
                     properties_nav: 'Properties',
                     properties_text: 'Define some properties specific to your client application.',
                     providers_nav: 'Providers',
-                    summary_features_label: 'Needed features :',
+                    summary_client_label: 'Client type :',
                     summary_legend: 'Summary',
                     summary_name_label: 'Label :',
+                    summary_profile_client_label: 'Suggested client type :',
+                    summary_profile_features_label: 'Needed features :',
                     summary_profile_label: 'Profile :',
                     summary_providers_label: 'Providers :'
                 },
@@ -118,49 +124,54 @@ Meteor.APP.i18n = {
                     select_text: 'Choose the profile of your client application'
                 },
                 client_type: {
-                    client_type: {
-                        confidential_short: 'Confidential',
-                        confidential_label: 'Confidential client',
-                        confidential_text_oauth20: 'Clients which are considered as capable of maintaining the confidentiality of their credentials '
-                            +'(e.g., client implemented on a secure server with restricted access to the client credentials), or capable of secure '
-                            +'client authentication using other means.',
-                        confidential_text_oauth21: 'Clients that have credentials with the Authorization Server are designated as "confidential clients".',
-                        confidential_summary: 'The \'confidential\' type should be reserved to server-based code, and only when the Authorization Server '
-                            +'considers this server-based code as capable of maintaining the security of the allocated credentials.',
-                        public_short: 'Public',
-                        public_label: 'Public client',
-                        public_text_oauth20: 'Clients which are incapable of maintaining the confidentiality of their credentials '
-                            +'(e.g., clients executing on the device used by the resource owner, such as an installed native application or a web '
-                            +'browser-based application), and incapable of secure client authentication via any other means.',
-                        public_text_oauth21: 'Clients without credentials are called "public clients".',
-                        public_summary: 'The \'public\' type should be chosen for any code whose security cannot be guaranted, and, in particular, '
-                            +'for any code running on a user-accessible device.',
-                        select_text: 'Select the client application type',
-                    },
+                    confidential_description: 'The \'confidential\' type should be reserved to server-based code, and only when the Authorization Server '
+                        +'considers this server-based code as capable of maintaining the security of the allocated credentials.',
+                    confidential_label: 'Confidential client',
+                    confidential_short: 'Confidential',
+                    confidential_text_oauth20: 'Clients which are considered as capable of maintaining the confidentiality of their credentials '
+                        +'(e.g., client implemented on a secure server with restricted access to the client credentials), or capable of secure '
+                        +'client authentication using other means.',
+                    confidential_text_oauth21: 'Clients that have credentials with the Authorization Server are designated as "confidential clients".',
+                    public_description: 'The \'public\' type should be chosen for any code whose security cannot be guaranted, and, in particular, '
+                        +'for any code running on a user-accessible device.',
+                    public_label: 'Public client',
+                    public_short: 'Public',
+                    public_text_oauth20: 'Clients which are incapable of maintaining the confidentiality of their credentials '
+                        +'(e.g., clients executing on the device used by the resource owner, such as an installed native application or a web '
+                        +'browser-based application), and incapable of secure client authentication via any other means.',
+                    public_text_oauth21: 'Clients without credentials are called "public clients".',
+                    select_text: 'Select the client application type',
+                },
+                grant_nature: {
+                    access_label: 'Access token',
+                    format_label: 'Token formater',
+                    refresh_label: 'Refresh token',
                 },
                 grant_type: {
-                    authcode_20_label: 'Authorization code grant',
                     authcode_20_description: 'The authorization server returns a single-use authorization code to the client. '
                         +'The client then exchanges the code for an access token.',
-                    authcode_21_label: 'Authorization code grant + PKCE',
+                    authcode_20_label: 'Authorization code grant',
                     authcode_21_description: 'The authorization server returns a single-use authorization code to the client. '
                         +'The client then exchanges the code for an access token.',
-                    client_label: 'Client credentials grant',
+                    authcode_21_label: 'Authorization code grant + PKCE',
                     client_description: 'A grant type suitable for machine-to-machine authentication.',
-                    device_label: 'Device code grant',
+                    client_label: 'Client credentials grant',
                     device_description: 'Aimed at devices with limited input or display capabilities, such as game consoles or smart TVs.',
-                    hybrid_label: 'Hybrid authorization flow',
+                    device_label: 'Device code grant',
                     hybrid_description: 'An OpenID authorization flow which enables clients to obtain some tokens straight from the Authorization Endpoint, '
                         +'while still having the possibility to get others from the Token Endpoint.',
-                    implicit_20_label: 'Implicit grant',
+                    hybrid_label: 'Hybrid authorization flow',
                     implicit_20_description: 'The client application receives the access token immediately after the user gives their consent. '
                         +'<b>This grant flow is deprecated in favor of Authorization code flow.</b>',
-                    jwt_label: 'JWT Bearer token grant',
-                    jwt_description: 'JSON Web Tokens encrypted and signed using JSON Web Key Sets.',
-                    password_label: 'Resource owner password credentials grant',
+                    implicit_20_label: 'Implicit grant',
+                    jwt_bearer_description: 'JSON Web Tokens encrypted and signed using JSON Web Key Sets.',
+                    jwt_bearer_label: 'JWT Bearer token grant',
+                    jwt_profile_description: 'JSON Web Tokens encrypted and signed using JSON Web Key Sets.',
+                    jwt_profile_label: 'JWT Bearer token grant',
                     password_description: 'This grant type should only be used when there is a high degree of trust between the resource owner and the client.',
-                    reftoken_label: 'Refresh token grant',
+                    password_label: 'Resource owner password credentials grant',
                     reftoken_description: 'Optional, may be exchanged for another access token when the first has expired.',
+                    reftoken_label: 'Refresh token grant',
                     //saml_label: 'SAML 2.0 Bearer Assertion',
                     select_text: 'The grant types the client can use at the token endpoint'
                 }

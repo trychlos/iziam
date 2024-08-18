@@ -44,7 +44,7 @@ export class OpenIDProvider extends mix( izProvider ).with( IGrantType ){
             ],
             // OpenId accepts one of the two auth_code and also manages implicit and hybrid flows
             igranttype: [
-                [ 'oauth_code_20', 'oauth_code_21' ],
+                [ 'auth_code_20', 'auth_code_21' ],
                 'implicit_20',
                 'hybrid'
             ]

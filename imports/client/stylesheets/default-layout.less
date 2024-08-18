@@ -220,6 +220,7 @@ body {
         border-radius: 0.5em;
     }
     .chooser {
+        margin-left: 1em;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -230,6 +231,7 @@ body {
     }
     .c-client-new-assistant-profile {
         .chooser {
+            margin: 0;
             flex-direction: row;
             justify-content: space-between;
         }
@@ -315,11 +317,16 @@ body {
         }
         p,
         p.text,
-        p.text2 {
+        p.text2,
+        p.text3 {
             margin: 0;
+        }
+        p.text3 {
+            font-size: 95%;
         }
     }
 }
+
 /*
  * Utilities
  */

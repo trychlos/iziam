@@ -21,14 +21,29 @@
                                 <td class="label ui-vatop">{{ i18n key="clients.new_assistant.summary_profile_label" }}</td>
                                 <td>
                                     <p class="text">{{ profileText }}</p>
-                                    <p class="text2">{{{ profileDescription }}}</p>
+                                    <!-- <p class="text2">{{{ profileDescription }}}</p> -->
                                 </td>
                             </tr>
                             <tr>
-                                <td class="label ui-vatop">{{ i18n key="clients.new_assistant.summary_features_label" }}</td>
+                                <td></td>
                                 <td>
-                                    <p class="text">{{ featuresText }}</p>
+                                    <table class="ui-w100">
+                                        <tr>
+                                            <td class="label">{{ i18n key="clients.new_assistant.summary_profile_client_label" }}</td>
+                                            <td class="ui-w100"><p class="text">{{ profileClientText }}</p></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="label">{{ i18n key="clients.new_assistant.summary_profile_features_label" }}</td>
+                                            <td><p class="text">{{ profileFeaturesText }}</p></td>
+                                        </tr>
+                                    </table>
                                 </td>
+                            </tr>
+                        {{/if}}
+                        {{#if havePane "client" }}
+                            <tr>
+                                <td class="label ui-vatop">{{ i18n key="clients.new_assistant.summary_client_label" }}</td>
+                                <td><p class="text">{{{ clientText }}}</p></td>
                             </tr>
                         {{/if}}
                         {{#if havePane "providers" }}

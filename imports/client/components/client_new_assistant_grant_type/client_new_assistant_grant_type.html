@@ -5,21 +5,28 @@
 
         <div class="content">
             <div class="text">
-                <!-- {{> app_serializer document="client-new-grant-type" }} -->
+                {{{ i18n key="clients.new_assistant.grant_type_text" }}}
             </div>
-    
+
             <div class="chooser">
-                <div class="chooser-content">
-                    {{#each it in itemsList }}
-                        <div class="item d-flex flex-row align-items-center">
-                            <div class="by-item {{ itDisabled it }} {{ itSelected it }} " data-item-id="{{ itId it }}">
-                                <input class="form-check-input ca-mr025 js-check" id="{{ itId it }}" type="checkbox" {{ itChecked it }} {{ itDisabled it }} />
-                                <label class="form-label {{ itDisabled it }}" for="{{ itId it }}">{{ itLabel it }}</label>
-                            </div>
-                            <p class="form-text ca-ml05">{{ itDescription it }}</p>
-                        </div>
+                <table class="form-table">
+                    {{#each nature in naturesList }}
+                        <tr>
+                            <td colspan="2"><p class="ui-mt05 ui-fwbold">{{{ natureHeader nature }}}</p></td>
+                        </tr>
+                        {{#each it in itemsList nature }}
+                            <tr>
+                                <td class="ui-nowrap ui-vatop">
+                                    <input class="form-check-input ui-mr025 js-check" id="{{ it }}" type="{{ itInputType nature it }}" {{ itChecked nature it }} {{ itDisabled nature it }} />
+                                    <label class="form-check-label {{ itDisabled nature it }}" for="{{ it }}">{{ itLabel nature it }}</label>
+                                </td>
+                                <td>
+                                    <p class="text3 ui-ml05">{{{ itDescription nature it }}}</p>
+                                </td>
+                            </tr>
+                        {{/each}}
                     {{/each}}
-                </div>
+                </table>
             </div>
         </div>
 

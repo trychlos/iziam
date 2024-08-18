@@ -33,6 +33,12 @@ const assert = require( 'assert' ).strict;
 
 import { pwixI18n } from 'meteor/pwix:i18n';
 
+import { Providers } from '/imports/common/collections/providers/index.js';
+
+import { GrantNature } from '/imports/common/definitions/grant-nature.def.js';
+
+import { IGrantType } from '/imports/common/interfaces/igranttype.iface.js';
+
 export const GrantType = {
     C: [
         {
@@ -40,21 +46,24 @@ export const GrantType = {
             id: 'auth_code_20',
             label: 'definitions.grant_type.authcode_20_label',
             description: 'definitions.grant_type.authcode_20_description',
-            image: '/images/grant-type.svg'
+            image: '/images/grant-type.svg',
+            nature: 'access'
         },
         {
             // OAuth 2.1 authorization code + PKCE
             id: 'auth_code_21',
             label: 'definitions.grant_type.authcode_21_label',
             description: 'definitions.grant_type.authcode_21_description',
-            image: '/images/grant-type.svg'
+            image: '/images/grant-type.svg',
+            nature: 'access'
         },
         {
             // implicit grant - oauth 2.0 ONLY
             id: 'implicit_20',
             label: 'definitions.grant_type.implicit_20_label',
             description: 'definitions.grant_type.implicit_20_description',
-            image: '/images/grant-type.svg'
+            image: '/images/grant-type.svg',
+            nature: 'access'
         },
         {
             // client credentials
@@ -62,21 +71,24 @@ export const GrantType = {
             label: 'definitions.grant_type.client_label',
             description: 'definitions.grant_type.client_description',
             image: '/images/grant-type.svg',
-            authMethod: 'secret_basic'
+            authMethod: 'secret_basic',
+            nature: 'access'
         },
         {
             // device code
             id: 'device_code',
             label: 'definitions.grant_type.device_label',
             description: 'definitions.grant_type.device_description',
-            image: '/images/grant-type.svg'
+            image: '/images/grant-type.svg',
+            nature: 'access'
         },
         {
             // hybrid authorization flow for OpenID Connect
             id: 'hybrid',
             label: 'definitions.grant_type.hybrid_label',
             description: 'definitions.grant_type.hybrid_description',
-            image: '/images/grant-type.svg'
+            image: '/images/grant-type.svg',
+            nature: 'access'
         },
         {
             // resource owner password credentials
@@ -84,21 +96,32 @@ export const GrantType = {
             label: 'definitions.grant_type.password_label',
             description: 'definitions.grant_type.password_description',
             image: '/images/grant-type.svg',
-            authMethod: 'secret_basic'
+            authMethod: 'secret_basic',
+            nature: 'access'
         },
         {
             // The refresh token grant type defined in OAuth 2.0, Section 6
             id: 'refresh_token',
             label: 'definitions.grant_type.reftoken_label',
             description: 'definitions.grant_type.reftoken_description',
-            image: '/images/grant-type.svg'
+            image: '/images/grant-type.svg',
+            nature: 'refresh'
         },
         {
             // The JWT Bearer Token Grant Type defined in OAuth JWT Bearer Token Profiles [RFC7523]
             id: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-            label: 'definitions.grant_type.jwt_label',
-            description: 'definitions.grant_type.jwt_description',
-            image: '/images/grant-type.svg'
+            label: 'definitions.grant_type.jwt_bearer_label',
+            description: 'definitions.grant_type.jwt_bearer_description',
+            image: '/images/grant-type.svg',
+            nature: 'format'
+        },
+        {
+            // JSON Web Token (JWT) Profile for OAuth 2.0 Access Tokens [RFC9068]
+            id: 'jwt_profile',
+            label: 'definitions.grant_type.jwt_profile_label',
+            description: 'definitions.grant_type.jwt_profile_description',
+            image: '/images/grant-type.svg',
+            nature: 'format'
         },
         /*
         {
@@ -145,6 +168,20 @@ export const GrantType = {
      */
     enabled( def ){
         return _.isBoolean( def.enabled ) ? def.enabled : true;
+    },
+
+    /**
+     * @param {String} id a GrantType identifier
+     * @returns {Boolean} whether this item may be selected, defaulting to true
+     */
+    enabledById( id ){
+        const def = GrantType.byId( id );
+        if( def ){
+            return GrantType.enabled( def );
+        } else {
+            console.warn( 'unknown grant type', id );
+            return false;
+        }
     },
 
     /**
@@ -212,14 +249,95 @@ export const GrantType = {
     },
 
     /**
-     * @returns {Array} the array of selectables (non-deprecated) grant types
+     * @param {Object} def a GrantType definition as returned by GrantType.Knowns()
+     * @returns {String} the nature of the grant type
      */
-    Selectables(){
-        let array = [];
-        this.C.every(( it ) => {
-            it.enabled === false || array.push( it );
-            return true;
+    nature( def ){
+        return def.nature;
+    },
+
+    /**
+     * @summary Given the selected providers, and the grant types each of these providers manage, provider a list of selectable grant types ordered by grant nature
+     * @param {Array<String>} providers the array of selected providers
+     * @returns {Object} a hash of grant types per nature, as an object keyed per grant nature, where data is an object with following keys
+     *  - def: the GrantNature definition
+     *  - types: an object keyed by available grant types, where data is the GrantType definition
+     */
+    Selectables( providers ){
+        const selectablePush = function( result, id ){
+            const typeDef = GrantType.byId( id );
+            if( typeDef ){
+                const nature = GrantType.nature( typeDef );
+                const natureDef = GrantNature.byId( nature );
+                if( natureDef ){
+                    if( !result[nature] ){
+                        result[nature] = {
+                            def: natureDef,
+                            types: {}
+                        };
+                    }
+                    if( !result[nature].types[id] ){
+                        result[nature].types[id] = typeDef;
+                    }
+                } else {
+                    console.warn( 'unknown grant nature', nature )
+                }
+            } else {
+                console.warn( 'unknown grant type', id );
+            }
+        };
+        //console.debug( 'providers', providers );
+        // have the grant types per provider
+        let hash = {};
+        ( providers || [] ).forEach(( it ) => {
+            const provider = Providers.byId( it );
+            if( provider && provider instanceof IGrantType ){
+                const grants = provider.grantTypes();
+                hash[it] = {
+                    provider: provider,
+                    grants: grants
+                };
+            } else {
+                console.warn( 'unable to get a provider instance for', it );
+            }
         });
-        return array;
-    }
+        //console.debug( 'hash', hash );
+        // consolidate all possible grant types into a single list
+        let result = {};
+        Object.keys( hash ).forEach(( providerId ) => {
+            hash[providerId].grants.forEach(( it ) => {
+                // if an array, then one of the grant types must be provided by another provider: choose this one if it is not disabled
+                if( _.isArray( it )){
+                    let found = false;
+                    it.every(( gt ) => {
+                        if( GrantType.enabledById( gt )){
+                            Object.keys( hash ).every(( pid ) => {
+                                if( pid !== providerId ){
+                                    if( hash[pid].grants.includes( gt )){
+                                        selectablePush( result, gt );
+                                        found = true;
+                                    }
+                                }
+                                return !found;
+                            });
+                        }
+                        return !found;
+                    });
+                } else {
+                    if( GrantType.enabledById( it )){
+                        selectablePush( result, it );
+                    }
+                }
+            });
+        });
+        return result;
+    },
+
+    /**
+     * @param {Object} def a GrantType definition as returned by GrantType.Knowns()
+     * @returns {String} the grant type type
+     */
+    type( def ){
+        return def.type || null;
+    },
 };

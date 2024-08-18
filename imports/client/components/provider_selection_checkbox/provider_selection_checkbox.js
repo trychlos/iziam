@@ -1,5 +1,5 @@
 /*
- * pwix:tabular/src/client/components/provider_selection_checkbox/provider_selection_checkbox.js
+ * /imports/client/components/provider_selection_checkbox/provider_selection_checkbox.js
  *
  * Data context is provided at the constructor level:
  * - item: the provider object (not an instance)
@@ -26,7 +26,8 @@ Template.provider_selection_checkbox.helpers({
 
     // whether the checkbox is disabled ?
     // when selecting providers at the organization level, all displayed providers are selectable
-    //  at the client level, we must respect the constraints of each provider
+    //  at the client level, we must respect the constraints of each provider which means that
+    //  selecting a provider automatically select (and disable) all its constraints
     enabled(){
         //console.debug( this );
         let enabled = false;

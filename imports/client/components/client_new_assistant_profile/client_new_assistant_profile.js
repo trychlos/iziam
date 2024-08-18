@@ -31,16 +31,12 @@ Template.client_new_assistant_profile.onRendered( function(){
         }
     });
 
-    // tracks the selection for updating data and UI (doesn't depend of the current pane as soon as profileId changes)
+    // tracks the selection for updating data and UI
     self.autorun(() => {
         const dataDict = Template.currentData().parentAPP.assistantStatus;
         const profile = dataDict.get( 'profileId' );
         // setup the selection appearance
         self.$( '.c-client-new-assistant-profile .by-item' ).removeClass( 'selected' );
-        const entity = Template.currentData().parentAPP.entity.get();
-        const index = 0;
-        const record = entity.DYN.records[index].get();
-        record.profile = profile;
         if( profile ){
             self.$( '.c-client-new-assistant-profile .by-item[data-item-id="'+profile+'"]' ).addClass( 'selected' );
             // setup dependant default values - must be done here so that other panes can modified them
@@ -48,6 +44,7 @@ Template.client_new_assistant_profile.onRendered( function(){
             assert( def, 'ClientProfile definition is empty' );
             dataDict.set( 'profileDefinition', def );
             dataDict.set( 'profileFeatures', ClientProfile.defaultFeatures( def ));
+            dataDict.set( 'clientType', ClientProfile.defaultClientType( def ));
             //dataDict.set( 'haveAllowedApis', ClientProfile.defaultHaveAllowedApis( def ));
             //dataDict.set( 'haveEndpoints', ClientProfile.defaultHaveEndpoints( def ));
             //dataDict.set( 'haveUsers', ClientProfile.defaultHaveUsers( def ));
@@ -58,11 +55,13 @@ Template.client_new_assistant_profile.onRendered( function(){
     });
 
     // tracks the selection for updating data and UI (doesn't depend of the current pane as soon as profileId changes)
+    /*
     self.autorun(() => {
         const dataDict = Template.currentData().parentAPP.assistantStatus;
         const haveEndpoints = Boolean( dataDict.get( 'haveEndpoints' ));
         self.$( '.c-client-new-assistant-profile' ).trigger( 'assistant-do-enable-tab', { name: 'endpoints', enabled: haveEndpoints });
     });
+    */
 });
 
 Template.client_new_assistant_profile.helpers({
@@ -105,6 +104,11 @@ Template.client_new_assistant_profile.helpers({
 });
 
 Template.client_new_assistant_profile.events({
+    // on Next, non-reactively feed the record
+    'assistant-action-next .c-client-new-assistant-profile'( event, instance ){
+        const record = this.parentAPP.entity.get().DYN.records[0].get();
+        record.profile = this.parentAPP.assistantStatus.get( 'profileId' );
+    },
     // enable/disable the action buttons
     'assistant-pane-to-show .c-client-new-assistant-profile'( event, instance, data ){
         instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'prev', enable: false });

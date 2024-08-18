@@ -87,7 +87,7 @@ Template.client_properties_panel.events({
     'iz-clear-panel .c-client-properties-panel'( event, instance ){
         instance.APP.checker.get().clear();
     },
-    // ask for enabling the checker
+    // ask for enabling the checker (when this panel is used inside of an assistant)
     'iz-enable-checks .c-client-properties-panel'( event, instance, enabled ){
         instance.APP.checker.get().enabled( enabled );
         if( enabled ){

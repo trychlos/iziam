@@ -11,7 +11,7 @@ import _ from 'lodash';
 const assert = require( 'assert' ).strict;
 import { DeclareMixin } from '@vestergaard-company/js-mixin';
 
-export const IClientType = DeclareMixin(( superclass ) => class extends superclass {
+export const IGrantType = DeclareMixin(( superclass ) => class extends superclass {
 
     #priv = null;
 

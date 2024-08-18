@@ -14,6 +14,7 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 
 //import '/imports/client/components/client_new_assistant_auth_method/client_new_assistant_auth_method.js';
+import '/imports/client/components/client_new_assistant_client_type/client_new_assistant_client_type.js';
 //import '/imports/client/components/client_new_assistant_contacts/client_new_assistant_contacts.js';
 import '/imports/client/components/client_new_assistant_current/client_new_assistant_current.js';
 //import '/imports/client/components/client_new_assistant_done/client_new_assistant_done.js';
@@ -62,6 +63,11 @@ Template.client_new_assistant.onCreated( function(){
                     name: 'profile',
                     template: 'client_new_assistant_profile',
                     label: pwixI18n.label( I18N, 'clients.new_assistant.profile_nav' )
+                },
+                {
+                    name: 'client',
+                    template: 'client_new_assistant_client_type',
+                    label: pwixI18n.label( I18N, 'clients.new_assistant.client_nav' )
                 },
                 {
                     name: 'providers',

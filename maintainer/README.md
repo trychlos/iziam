@@ -35,12 +35,14 @@ Each organization can define:
 - [OAuth 2.0 Threat Model and Security Considerations](https://datatracker.ietf.org/doc/rfc6819/)
 - [OAuth 2.0 Token Revocation](https://datatracker.ietf.org/doc/html/rfc7009)
 - [JSON Web Token (JWT)](https://datatracker.ietf.org/doc/html/rfc7519)
+- [JSON Web Token (JWT) Profile for OAuth 2.0 Client Authentication and Authorization Grants](https://datatracker.ietf.org/doc/rfc7523/)
 - [OAuth 2.0 Dynamic Client Registration Protocol](https://datatracker.ietf.org/doc/html/rfc7591)
 - [OAuth 2.0 Dynamic Client Registration Management Protocol](https://datatracker.ietf.org/doc/html/rfc7592)
 - [Proof Key for Code Exchange by OAuth Public Clients](https://datatracker.ietf.org/doc/html/rfc7636)
 - [OAuth 2.0 for Native Apps](https://datatracker.ietf.org/doc/html/rfc8252)
 - [OAuth 2.0 Authorization Server Metadata](https://datatracker.ietf.org/doc/html/rfc8414)
 - [OAuth 2.0 Device Authorization Grant](https://datatracker.ietf.org/doc/rfc8628/)
+- [JSON Web Token (JWT) Profile for OAuth 2.0 Access Tokens](https://datatracker.ietf.org/doc/rfc9068/)
 
 ### And also
 

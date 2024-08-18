@@ -19,7 +19,7 @@ export const ClientType = {
                 'org.trychlos.iziam.provider.oauth20.0': 'definitions.client_type.confidential_text_oauth20',
                 'org.trychlos.iziam.provider.oauth21.11': 'definitions.client_type.confidential_text_oauth21'
             },
-            summary: 'definitions.client_type.confidential_summary'
+            description: 'definitions.client_type.confidential_description'
             //preferred_auth: AuthRFC.C.OAUTH
         },
         {
@@ -30,7 +30,7 @@ export const ClientType = {
                 'org.trychlos.iziam.provider.oauth20.0': 'definitions.client_type.public_text_oauth20',
                 'org.trychlos.iziam.provider.oauth21.11': 'definitions.client_type.public_text_oauth21'
             },
-            summary: 'definitions.client_type.public_summary'
+            description: 'definitions.client_type.public_description'
             //preferred_auth: AuthRFC.C.OPENID
         }
     ],
@@ -48,6 +48,14 @@ export const ClientType = {
             return found === null;
         });
         return found;
+    },
+
+    /**
+     * @param {Object} def a ClientType definition as returned by ClientType.Knowns()
+     * @returns {String} the description to be attached to the client type
+     */
+    description( def ){
+        return pwixI18n.label( I18N, def.description );
     },
 
     /**

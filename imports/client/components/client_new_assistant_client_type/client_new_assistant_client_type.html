@@ -1,0 +1,27 @@
+<template name="client_new_assistant_client_type">
+    <div class="c-client-new-assistant-client-type">
+
+        {{> client_new_assistant_current (parmsCurrent) }}
+
+        <div class="content">
+            <div class="text">
+                {{{ i18n key="clients.new_assistant.client_text" }}}
+            </div>
+    
+            <div class="chooser">
+                <div class="chooser-content">
+                    {{#each it in itemsList }}
+                        <div class="form-check">
+                            <div class="by-item" data-item-id="{{ itId it }}">
+                                <input class="form-check-input js-check" name="clienttype" id="{{ itId it }}" type="radio" {{ itChecked it }} />
+                                <label class="form-check-label" for="{{ itId it }}">{{ itLabel it }}</label>
+                            </div>
+                            <p class="text3 ui-ml05">{{ itDescription it }}</p>
+                        </div>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</template>

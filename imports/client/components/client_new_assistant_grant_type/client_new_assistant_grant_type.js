@@ -1,6 +1,11 @@
 /*
  * /imports/client/components/client_new_assistant_grant_type/client_new_assistant_grant_type.js
  *
+ * Grant types are selectable by nature of grant type:
+ * - one for the access token
+ * - maybe one for the refresh token
+ * - maybe several for the token formaters
+ *
  * Parms:
 * - parentAPP: the assistant APP whole object
 */
@@ -8,13 +13,37 @@
 import _ from 'lodash';
 
 import { pwixI18n } from 'meteor/pwix:i18n';
+import { ReactiveVar } from 'meteor/reactive-var';
 
+import { GrantNature } from '/imports/common/definitions/grant-nature.def.js';
 import { GrantType } from '/imports/common/definitions/grant-type.def.js';
 
 import './client_new_assistant_grant_type.html';
 
+Template.client_new_assistant_grant_type.onCreated( function(){
+    const self = this;
+
+    self.APP = {
+        selectables: new ReactiveVar( {} )
+    };
+
+    // set the selectables list
+    self.autorun(() => {
+        const selectables = GrantType.Selectables( Template.currentData().parentAPP.assistantStatus.get( 'selectedProviders' ));
+        self.APP.selectables.set( selectables );
+        console.debug( 'selectables', selectables );
+    });
+});
+
 Template.client_new_assistant_grant_type.onRendered( function(){
     const self = this;
+
+    // tracks the selected providers to enable/disable this pane
+    self.autorun(() => {
+        const dataDict = Template.currentData().parentAPP.assistantStatus;
+        const selected = dataDict.get( 'selectedProviders' );
+        self.$( '.c-client-new-assistant-grant-type' ).trigger( 'assistant-do-enable-tab', { name: 'grant',  enabled: selected && selected.length > 0 });
+    });
 
     // tracks the selection to enable/disable the Next button when the pane is active
     self.autorun(() => {
@@ -49,8 +78,9 @@ Template.client_new_assistant_grant_type.helpers({
     },
 
     // description
-    itDescription( it ){
-        return GrantType.description( it );
+    itDescription( nature, it ){
+        const selectables = Template.instance().APP.selectables.get();
+        return GrantType.description( selectables[nature].types[it] );
     },
 
     // whether this item is disabled ?
@@ -58,19 +88,16 @@ Template.client_new_assistant_grant_type.helpers({
         return GrantType.enabled( it ) ? '' : 'disabled';
     },
 
-    // identifier
-    itId( it ){
-        return GrantType.id( it );
-    },
-
-    // image
-    itImage( it ){
-        return GrantType.image( it );
+    // whether this input element is a checkbox or a radio button ?
+    itInputType( nature, it ){
+        const selectables = Template.instance().APP.selectables.get();
+        return GrantNature.acceptSeveral( selectables[nature].def ) ? 'checkbox' : 'radio';
     },
 
     // label
-    itLabel( it ){
-        return GrantType.label( it );
+    itLabel( nature, it ){
+        const selectables = Template.instance().APP.selectables.get();
+        return GrantType.label( selectables[nature].types[it] );
     },
 
     // whether this item is selected ?
@@ -79,9 +106,23 @@ Template.client_new_assistant_grant_type.helpers({
         return ( this.parentAPP.assistantStatus.get( 'grantTypes' ) || [] ).includes( id ) ? 'selected' : '';
     },
 
-    // items list
-    itemsList(){
-        return GrantType.Selectables();
+    // selectable list for one grant nature
+    itemsList( nature ){
+        const selectables = Template.instance().APP.selectables.get();
+        return nature ? Object.keys( selectables[nature].types ) : [];
+    },
+
+    // a label for the grant nature
+    natureHeader( nature ){
+        const selectables = Template.instance().APP.selectables.get();
+        const natureDef = nature ? selectables[nature].def : null;
+        return natureDef ? GrantNature.label( natureDef ) : '';
+    },
+
+    // list of available natures
+    naturesList(){
+        console.debug( Object.keys( Template.instance().APP.selectables.get()));
+        return Object.keys( Template.instance().APP.selectables.get());
     },
 
     // parms for current choices

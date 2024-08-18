@@ -13,12 +13,32 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 
 import { AuthMethod } from '/imports/common/definitions/auth-method.def.js';
 import { ClientProfile } from '/imports/common/definitions/client-profile.def.js';
+import { ClientType } from '/imports/common/definitions/client-type.def.js';
 import { GrantType } from '/imports/common/definitions/grant-type.def.js';
+
+import { ClientsEntities } from '/imports/common/collections/clients_entities/index.js';
+import { ClientsRecords } from '/imports/common/collections/clients_records/index.js';
+import { Clients } from '/imports/common/collections/clients/index.js';
 
 import './client_new_assistant_current.html';
 
 Template.client_new_assistant_current.onCreated( function(){
+    const self = this;
     //console.debug( this );
+
+    self.APP = {
+        client: null
+    };
+
+    self.autorun(() => {
+        const parentAPP = Template.currentData().parentAPP;
+        if( parentAPP ){
+            self.APP.client = {
+                entity: parentAPP.entity.get(),
+                record: parentAPP.entity.get().DYN.records[0].get()
+            };
+        }
+    });
 });
 
 Template.client_new_assistant_current.helpers({
@@ -26,6 +46,11 @@ Template.client_new_assistant_current.helpers({
     authText(){
         const def = AuthMethod.byId( this.parentAPP.assistantStatus.get( 'authMethod' ));
         return def ? AuthMethod.label( def ) : '';
+    },
+
+    // client type
+    clientText(){
+        return this.parentAPP.assistantStatus.get( 'clientType' );
     },
 
     // registered contacts
@@ -36,11 +61,6 @@ Template.client_new_assistant_current.helpers({
     // registered endpoints
     endpointsText(){
         return ( this.parentAPP.assistantStatus.get( 'endpoints' ) || [] ).join( ', ' );
-    },
-
-    // required features from client profile
-    featuresText(){
-        return ClientProfile.defaultFeatures( this.parentAPP.assistantStatus.get( 'profileDefinition' )).join( ', ' );
     },
 
     // grant types
@@ -72,6 +92,16 @@ Template.client_new_assistant_current.helpers({
         return def ? ClientProfile.description( def ) : '';
     },
 
+    // suggested client type from client profile
+    profileClientText(){
+        return ClientProfile.defaultClientType( this.parentAPP.assistantStatus.get( 'profileDefinition' ));
+    },
+
+    // needed features from client profile
+    profileFeaturesText(){
+        return ClientProfile.defaultFeatures( this.parentAPP.assistantStatus.get( 'profileDefinition' )).join( ', ' );
+    },
+
     // client profile description
     profileText(){
         const def = this.parentAPP.assistantStatus.get( 'profileDefinition' );
@@ -93,5 +123,11 @@ Template.client_new_assistant_current.helpers({
         const softid = this.parentAPP.entity.get().DYN.records[0].get().softwareId;
         const softver = this.parentAPP.entity.get().DYN.records[0].get().softwareVersion;
         return softid || softver ? ( softid || '' ) + ' ' + ( softver || '' ) : '';
+    },
+
+    // selected providers
+    providersText(){
+        const selected = Clients.fn.selectedProviders( this.parentAPP.organization, Template.instance().APP.client );
+        return Object.keys( selected ).join( ', ' );
     }
 });

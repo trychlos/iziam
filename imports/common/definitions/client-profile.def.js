@@ -14,12 +14,12 @@ export const ClientProfile = {
             label: 'definitions.client_profile.m2m_label',
             description: 'definitions.client_profile.m2m_description',
             image: '/images/profile-computer.svg',
-            grantTypes: [
-                'client_creds'
-            ],
-            haveEndpoints: false,
-            haveUsers: false,
-            authMethod: 'secret_basic',
+            //grantTypes: [
+            //    'client_creds'
+            //],
+            //haveEndpoints: false,
+            //haveUsers: false,
+            //authMethod: 'secret_basic',
             clientType: 'confidential',
             features: [
                 'oauth2'
@@ -30,11 +30,11 @@ export const ClientProfile = {
             label: 'definitions.client_profile.public_label',
             description: 'definitions.client_profile.public_description',
             image: '/images/profile-public.svg',
-            grantTypes: [
-                'auth_code',
-                'refresh_token'
-            ],
-            haveAllowedApis: false,
+            //grantTypes: [
+            //    'auth_code',
+            //    'refresh_token'
+            //],
+            //haveAllowedApis: false,
             clientType: 'public',
             features: [
                 'oauth2',
@@ -46,13 +46,13 @@ export const ClientProfile = {
             label: 'definitions.client_profile.confidential_label',
             description: 'definitions.client_profile.confidential_description',
             image: '/images/profile-confidential.svg',
-            grantTypes: [
-                'auth_code',
-                'refresh_token',
-                'client_creds'
-            ],
-            haveAllowedApis: false,
-            authMethod: 'secret_basic',
+            //grantTypes: [
+            //    'auth_code',
+            //    'refresh_token',
+            //    'client_creds'
+            //],
+            //haveAllowedApis: false,
+            //authMethod: 'secret_basic',
             clientType: 'confidential',
             features: [
                 'oauth2'
@@ -63,12 +63,12 @@ export const ClientProfile = {
             label: 'definitions.client_profile.generic_label',
             description: 'definitions.client_profile.generic_description',
             image: '/images/profile-generic.svg',
-            grantTypes: [
-                'auth_code',
-                'client_creds'
-            ],
-            haveAllowedApis: false,
-            authMethod: 'secret_basic',
+            //grantTypes: [
+            //    'auth_code',
+            //    'client_creds'
+            //],
+            //haveAllowedApis: false,
+            //authMethod: 'secret_basic',
             clientType: 'public',
             features: [
                 'oauth2'
