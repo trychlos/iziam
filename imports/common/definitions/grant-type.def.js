@@ -201,22 +201,53 @@ export const GrantType = {
     },
 
     /**
-     * @param {Array} array an array of grant type identifiers
+     * @param {Object} selectables an object which describe the selectable grant types:
+     *  - keyed whith grant nature id
+     *  - value being an object with
+     *    > def: the GrantNature definition
+     *    > types: an object keyed by available grant types, where data is the GrantType definition
+     * @param {Array} array an array of the currently selected grant type identifiers
      * @returns {Boolean} whether the selected grant types are valid for a client
      *  This is an intrinsic validation, which doesn't take care of other client parameters.
      *  Just make sure that this configuration may work.
+     *  + make sure the grant types which have a mandatory nature are set
      */
-    isValidSelection( array ){
-        // must have at least one
-        if( !array.length ){
-            return false;
-        }
-        // refresh token must be associated to an authorization code
-        if( array.includes( 'refresh_token' )){
-            return array.includes( 'auth_code' );
-        }
-        // other combinations are ok
-        return true;
+    isValidSelection( selectables, array ){
+        let valid = true;
+        // examine each selectable nature to see if its constraints are fullfilled
+        Object.keys( selectables ).every(( nature ) => {
+            // if mandatory, check that there is at least one - else, do not care
+            if( GrantNature.isMandatory( selectables[nature].def )){
+                let hasOne = false;
+                array.every(( it ) => {
+                    const def = GrantType.byId( it );
+                    if( def ){
+                        const grantNature = GrantType.nature( def );
+                        if( grantNature ){
+                            if( grantNature === nature ){
+                                hasOne = true;
+                            }
+                        } else {
+                            console.warn( 'GrantType has no nature', it );
+                        }
+                    } else {
+                        console.warn( 'unable to find a GrantType definition for', it );
+                    }
+                    return !hasOne;
+                });
+                if( !hasOne ){
+                    valid = false;
+                }
+            }
+            // refresh token must be associated to an authorization code
+            if( valid && nature === 'refresh' ){
+                valid &&= ( array.includes( 'auth_code_20' ) || array.includes( 'auth_code_21' ));
+            }
+            // stops as soon as we have found an error
+            return valid === true;
+        });
+        console.debug( 'selectables', selectables, 'array', array, 'valid', valid );
+        return valid;
     },
 
     /**

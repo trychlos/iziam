@@ -40,6 +40,9 @@ export class JwtBearerProvider extends mix( izProvider ).with( IGrantType ){
             ],
             irequires: [
                 'oauth2'
+            ],
+            igranttype: [
+                'urn:ietf:params:oauth:grant-type:jwt-bearer'
             ]
         });
 

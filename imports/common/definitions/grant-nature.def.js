@@ -29,7 +29,7 @@ export const GrantNature = {
             // a format token (e.g. JWT)
             id: 'format',
             label: 'definitions.grant_nature.format_label',
-            count: 'many'
+            several: true
         }
     ],
 
@@ -38,7 +38,7 @@ export const GrantNature = {
      * @returns {Boolean} whether we can have several grant types of this nature
      */
     acceptSeveral( def ){
-        return def.count === 'many';
+        return def.several === true;
     },
 
     /**
@@ -62,6 +62,14 @@ export const GrantNature = {
      */
     id( def ){
         return def.id;
+    },
+
+    /**
+     * @param {Object} def a GrantNature definition as returned by GrantNature.Knowns()
+     * @returns {Boolean} whether this grant nature is mandatory (must be set)
+     */
+    isMandatory( def ){
+        return def.mandatory === true;
     },
 
     /**

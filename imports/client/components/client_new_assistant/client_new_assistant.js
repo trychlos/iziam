@@ -18,7 +18,7 @@ import '/imports/client/components/client_new_assistant_client_type/client_new_a
 //import '/imports/client/components/client_new_assistant_contacts/client_new_assistant_contacts.js';
 import '/imports/client/components/client_new_assistant_current/client_new_assistant_current.js';
 //import '/imports/client/components/client_new_assistant_done/client_new_assistant_done.js';
-//import '/imports/client/components/client_new_assistant_endpoints/client_new_assistant_endpoints.js';
+import '/imports/client/components/client_new_assistant_endpoints/client_new_assistant_endpoints.js';
 import '/imports/client/components/client_new_assistant_grant_type/client_new_assistant_grant_type.js';
 //import '/imports/client/components/client_new_assistant_jwt/client_new_assistant_jwt.js';
 import '/imports/client/components/client_new_assistant_introduction/client_new_assistant_introduction.js';

@@ -88,23 +88,23 @@ Template.client_new_assistant_current.helpers({
 
     // client profile description
     profileDescription(){
-        const def = this.parentAPP.assistantStatus.get( 'profileDefinition' );
+        const def = this.parentAPP.assistantStatus.get( 'profileDef' );
         return def ? ClientProfile.description( def ) : '';
     },
 
     // suggested client type from client profile
     profileClientText(){
-        return ClientProfile.defaultClientType( this.parentAPP.assistantStatus.get( 'profileDefinition' ));
+        return ClientProfile.defaultClientType( this.parentAPP.assistantStatus.get( 'profileDef' ));
     },
 
     // needed features from client profile
     profileFeaturesText(){
-        return ClientProfile.defaultFeatures( this.parentAPP.assistantStatus.get( 'profileDefinition' )).join( ', ' );
+        return ClientProfile.defaultFeatures( this.parentAPP.assistantStatus.get( 'profileDef' )).join( ', ' );
     },
 
     // client profile description
     profileText(){
-        const def = this.parentAPP.assistantStatus.get( 'profileDefinition' );
+        const def = this.parentAPP.assistantStatus.get( 'profileDef' );
         return def ? ClientProfile.label( def ) : '';
     },
 

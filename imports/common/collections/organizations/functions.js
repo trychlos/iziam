@@ -31,6 +31,7 @@ Organizations.fn = {
      * - features: an array of the provided IFeatured's
      */
     selectedProviders( organization ){
+        //console.debug( 'organization', organization );
         let selectedIds = organization.record.selectedProviders || [];
         // add providers non-selectable by the user, which default to be selected
         selectedIds = Providers.filterDefaultSelectedNonUserSelectable( selectedIds );

@@ -71,11 +71,6 @@ Template.client_new_assistant_client_type.helpers({
 });
 
 Template.client_new_assistant_client_type.events({
-    // on Next, non-reactively feed the record
-    'assistant-action-next .c-client-new-assistant-client-type'( event, instance ){
-        const record = this.parentAPP.entity.get().DYN.records[0].get();
-        record.clientType = this.parentAPP.assistantStatus.get( 'clientType' );
-    },
     // enable/disable the action buttons
     'assistant-pane-to-show .c-client-new-assistant-client-type'( event, instance, data ){
         instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'prev', enable: false });
@@ -84,10 +79,14 @@ Template.client_new_assistant_client_type.events({
     'assistant-pane-shown .c-client-new-assistant-client-type'( event, instance, data ){
         instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'prev', enable: true });
     },
-
     // intercept the selection, updating the client type
     'click .js-check'( event, instance ){
         const id = instance.$( event.currentTarget ).prop( 'id' );
         this.parentAPP.assistantStatus.set( 'clientType', id );
+    },
+    // on Next, non-reactively feed the record
+    'assistant-action-next .c-client-new-assistant-client-type'( event, instance ){
+        const record = this.parentAPP.entity.get().DYN.records[0].get();
+        record.clientType = this.parentAPP.assistantStatus.get( 'clientType' );
     }
 });

@@ -23,7 +23,8 @@ export const ClientProfile = {
             clientType: 'confidential',
             features: [
                 'oauth2'
-            ]
+            ],
+            preferredGrantType: 'client_credentials'
         },
         {
             id: 'public',
@@ -39,7 +40,8 @@ export const ClientProfile = {
             features: [
                 'oauth2',
                 'openid'
-            ]
+            ],
+            preferredGrantType: 'auth_code_21'
         },
         {
             id: 'confidential',
@@ -56,7 +58,8 @@ export const ClientProfile = {
             clientType: 'confidential',
             features: [
                 'oauth2'
-            ]
+            ],
+            preferredGrantType: 'client_credentials'
         },
         {
             id: 'generic',
@@ -72,7 +75,8 @@ export const ClientProfile = {
             clientType: 'public',
             features: [
                 'oauth2'
-            ]
+            ],
+            preferredGrantType: 'auth_code_21'
         }
     ],
 
@@ -113,14 +117,6 @@ export const ClientProfile = {
      */
     defaultFeatures( def ){
         return def.features;
-    },
-
-    /**
-     * @param {Object} def a ClientProfile definition as returned by ClientProfile.Knowns()
-     * @returns {Array} the list of defaut grant types
-     */
-    defaultGrantTypes( def ){
-        return def.grantTypes;
     },
 
     /**
@@ -184,5 +180,13 @@ export const ClientProfile = {
      */
     label( def ){
         return pwixI18n.label( I18N, def.label );
+    },
+
+    /**
+     * @param {Object} def a ClientProfile definition as returned by ClientProfile.Knowns()
+     * @returns {String} the preferred grant type
+     */
+    preferredGrantType( def ){
+        return def.preferredGrantType;
     }
 };

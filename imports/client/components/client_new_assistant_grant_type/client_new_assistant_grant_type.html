@@ -17,8 +17,8 @@
                         {{#each it in itemsList nature }}
                             <tr>
                                 <td class="ui-nowrap ui-vatop">
-                                    <input class="form-check-input ui-mr025 js-check" id="{{ it }}" type="{{ itInputType nature it }}" {{ itChecked nature it }} {{ itDisabled nature it }} />
-                                    <label class="form-check-label {{ itDisabled nature it }}" for="{{ it }}">{{ itLabel nature it }}</label>
+                                    <input class="form-check-input ui-mr025 js-check" id="{{ it }}" type="{{ itInputType nature it }}" name="nature-{{ nature }}" {{ itChecked nature it }} />
+                                    <label class="form-check-label" for="{{ it }}">{{ itLabel nature it }}</label>
                                 </td>
                                 <td>
                                     <p class="text3 ui-ml05">{{{ itDescription nature it }}}</p>

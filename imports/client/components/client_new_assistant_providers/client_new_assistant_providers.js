@@ -18,11 +18,6 @@ import '/imports/client/components/client_providers_panel/client_providers_panel
 
 import './client_new_assistant_providers.html';
 
-Template.client_new_assistant_providers.onCreated( function(){
-    //console.debug( 'Template.currentData()', Template.currentData());
-    //Template.currentData().parentAPP.assistantStatus.set( 'profileId', null );
-});
-
 Template.client_new_assistant_providers.onRendered( function(){
     const self = this;
 
@@ -84,5 +79,10 @@ Template.client_new_assistant_providers.events({
     'assistant-pane-shown .c-client-new-assistant-providers'( event, instance, data ){
         instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'prev', enable: true });
         instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'next', enable: true });
+    },
+    // on Next, non-reactively feed the record
+    'assistant-action-next .c-client-new-assistant-providers'( event, instance ){
+        const record = this.parentAPP.entity.get().DYN.records[0].get();
+        record.selectedProviders = this.parentAPP.assistantStatus.get( 'selectedProviders' );
     }
 });

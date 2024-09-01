@@ -38,13 +38,13 @@ Template.client_new_assistant_done.onRendered( function(){
     self.autorun(() => {
         const dataContext = Template.currentData();
         const dataDict = dataContext.parentAPP.assistantStatus;
-        const natureDef = dataDict.get( 'profileDefinition' );
+        const natureDef = dataDict.get( 'profileDef' );
         if( dataDict.get( 'activePane' ) === 'done' ){
             console.debug( 'dataContext', dataContext );
             const item = {
                 organization: dataContext.organization.get().entity,
                 name: dataDict.get( 'name' ),
-                nature: dataDict.get( 'profileId' ),
+                //nature: dataDict.get( 'profileId' ),
                 type: ClientNature.defaultClientType( natureDef ),
                 registration: 'pre',
                 description: dataDict.get( 'description' ) || null,

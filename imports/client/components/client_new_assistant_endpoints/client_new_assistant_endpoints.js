@@ -11,9 +11,9 @@ import validUrl from 'valid-url';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 
-import { ClientNature } from '/imports/common/definitions/client-nature.def.js';
+//  import { ClientNature } from '/imports/common/definitions/client-nature.def.js';
 
-import '/imports/client/jquery/jqw-table/jqw-table.js';
+//import '/imports/client/jquery/jqw-table/jqw-table.js';
 
 import './client_new_assistant_endpoints.html';
 
@@ -49,7 +49,7 @@ Template.client_new_assistant_endpoints.onRendered( function(){
     self.autorun(() => {
         const dataDict = Template.currentData().parentAPP.assistantStatus;
         if( dataDict.get( 'activePane' ) === 'endpoints' ){
-            const natureDef = dataDict.get( 'profileDefinition' );
+            const natureDef = dataDict.get( 'profileDef' );
             const endpoints = dataDict.get( 'endpoints' ) || [];
             const valid = natureDef ? ( ClientNature.defaultHaveEndpoints( natureDef ) ? endpoints.length > 0 : endpoints.length === 0 ) : false;
             dataDict.set( 'next', valid );

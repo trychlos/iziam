@@ -67,6 +67,7 @@ Meteor.APP.i18n = {
                     client_nav: 'Client type',
                     client_text: 'The client type, in the sense of OAuth specifications, is automatically determined from your chosen client profile. '
                         +'You shouldn\'t need to change it, unless you are really sure of what you are doing, but just in case...',
+                    endpoints_nav: 'Endpoints',
                     grant_type_nav: 'Grant type',
                     grant_type_text: 'For each available grant nature, please choose below the grant type(s) you want for your client.',
                     introduction_nav: 'Introduction',
@@ -164,10 +165,10 @@ Meteor.APP.i18n = {
                     implicit_20_description: 'The client application receives the access token immediately after the user gives their consent. '
                         +'<b>This grant flow is deprecated in favor of Authorization code flow.</b>',
                     implicit_20_label: 'Implicit grant',
-                    jwt_bearer_description: 'JSON Web Tokens encrypted and signed using JSON Web Key Sets.',
-                    jwt_bearer_label: 'JWT Bearer token grant',
-                    jwt_profile_description: 'JSON Web Tokens encrypted and signed using JSON Web Key Sets.',
-                    jwt_profile_label: 'JWT Bearer token grant',
+                    jwt_bearer_description: 'JSON Web Token (JWT) Profile for OAuth 2.0 Client Authentication and Authorization Grants.',
+                    jwt_bearer_label: 'JWT Bearer token',
+                    jwt_profile_description: 'JSON Web Token (JWT) Profile for OAuth 2.0 Access Tokens.',
+                    jwt_profile_label: 'JWT Profile token',
                     password_description: 'This grant type should only be used when there is a high degree of trust between the resource owner and the client.',
                     password_label: 'Resource owner password credentials grant',
                     reftoken_description: 'Optional, may be exchanged for another access token when the first has expired.',
@@ -251,7 +252,7 @@ Meteor.APP.i18n = {
                     label_th: 'Label',
                     origin_th: 'Origin',
                     preamble: 'Selecting providers is the same as saying which protocol(s) and which feature(s) you want use. '
-                        +'Some are strongly needed, or even required, while others may be freely chosen at your convenience.',
+                        +'Some are strongly needed, or even just required, while others may be freely chosen at your convenience.',
                     selected_th: 'Selected'
                 }
             },

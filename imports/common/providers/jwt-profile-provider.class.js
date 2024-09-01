@@ -40,6 +40,9 @@ export class JwtProfileProvider extends mix( izProvider ).with( IGrantType ){
             ],
             irequires: [
                 'oauth2'
+            ],
+            igranttype: [
+                'jwt_profile'
             ]
         });
 
