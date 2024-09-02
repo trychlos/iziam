@@ -45,7 +45,7 @@ Template.client_new_assistant_properties.helpers({
             ...this,
             entity: this.parentAPP.entity,
             index: 0,
-            checker: this.parentAPP.checker,
+            checker: this.parentAPP.assistantCheckerRv,
             enableChecks: false
         };
     }

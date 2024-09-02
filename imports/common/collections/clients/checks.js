@@ -165,31 +165,6 @@ Clients.checks = {
     },
 
     /*
-    // not managed via FormChecker
-    async endpoints( value ){
-        return Promise.resolve( null )
-            .then(() => {
-                let err = null;
-                if( !value || !value.length || !_.isArray( value )){
-                    return new CoreApp.TypedMessage({
-                        type: CoreApp.MessageType.C.WARNING,
-                        message: pwixI18n.label( I18N, 'clients.check.endpoints_unset' )
-                    });
-                } else {
-                    value.every(( ep ) => {
-                        if( _.isNil( validUrl.isHttpsUri( ep ))){
-                            err = new CoreApp.TypedMessage({
-                                type: CoreApp.MessageType.C.WARNING,
-                                message: pwixI18n.label( I18N, 'clients.check.endpoint_invalid' )
-                            });
-                        }
-                        return err === null;
-                    });
-                    return err;
-                }
-            });
-    },
-
     // the grant types used on the token endpoint
     async grantTypes( value, data, coreApp={} ){
         _assert_data_itemrv( 'Clients.check_grantTypes()', data );
@@ -293,6 +268,61 @@ Clients.checks = {
         return null;
     },
 
+    // redirect urls, optional in the UI, must have at least one so that the client is operational
+    // see https://www.oauth.com/oauth2-servers/redirect-uris/redirect-uri-validation/
+    // any scheme is accepted, but http (which must be https)
+    // there must not be any fragment component
+    async redirectUrl( value, data, opts ){
+        _assert_data_content( 'Clients.checks.redirectUrl()', data );
+        let item = data.entity.get().DYN.records[data.index].get();
+        const index = opts.id ? _id2index( item.redirectUrls, opts.id ) : -1;
+        if( opts.update !== false ){
+            if( index < 0 ){
+                item.redirectUrls = item.redirectUrls || [];
+                item.redirectUrls.push({ id: opts.id });
+                index = 0;
+            }
+            item.redirectUrls[index].url = value;
+        }
+        if( value ){
+            if( _.isNil( validUrl.isUri( value ))){
+                return new TM.TypedMessage({
+                    level: TM.MessageLevel.C.ERROR,
+                    message: pwixI18n.label( I18N, 'clients.checks.redirect_invalid' )
+                });
+            } else if( value.indexOf( '#' ) > -1 ){
+                return new TM.TypedMessage({
+                    level: TM.MessageLevel.C.ERROR,
+                    message: pwixI18n.label( I18N, 'clients.checks.redirect_fragment' )
+                });
+            } else {
+                try {
+                    const url = new URL( value );
+                    if( url.protocol.toLowerCase() === 'http:' ){
+                        return new TM.TypedMessage({
+                            level: TM.MessageLevel.C.ERROR,
+                            message: pwixI18n.label( I18N, 'clients.checks.redirect_http' )
+                        });
+                    } else {
+                        return null;
+                    }
+                }
+                catch( e ){
+                    return new TM.TypedMessage({
+                        level: TM.MessageLevel.C.ERROR,
+                        message: pwixI18n.label( I18N, 'clients.checks.redirect_invalid' )
+                    });
+                }
+            }
+        } else {
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.WARNING,
+                message: pwixI18n.label( I18N, 'clients.checks.redirect_unset' )
+            });
+        }
+    },
+
+    
     /*
     // the response types used on the token endpoint
     async responseTypes( value, data, coreApp={} ){

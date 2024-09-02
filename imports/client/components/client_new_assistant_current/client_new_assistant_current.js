@@ -58,20 +58,18 @@ Template.client_new_assistant_current.helpers({
         return ( this.parentAPP.assistantStatus.get( 'contacts' ) || [] ).join( ', ' );
     },
 
-    // registered endpoints
-    endpointsText(){
-        return ( this.parentAPP.assistantStatus.get( 'endpoints' ) || [] ).join( ', ' );
-    },
-
     // grant types
     grantText(){
         return GrantType.joinedLabels( this.parentAPP.assistantStatus.get( 'grantTypes' ));
     },
 
     // whether we want display the pane ?
+    //  also returns false if the pane is disabled
     havePane( pane ){
-        const have = this.parentAPP.previousPanes().includes( pane );
-        //console.debug( 'havePane', pane, have );
+        let have = this.parentAPP.previousPanes().includes( pane );
+        if( have ){
+            have &&= ( this.parentAPP.assistantPck.enabledPanes.get( pane ) !== false );
+        }
         return have;
     },
 
@@ -125,9 +123,16 @@ Template.client_new_assistant_current.helpers({
         return softid || softver ? ( softid || '' ) + ' ' + ( softver || '' ) : '';
     },
 
-    // selected providers
+    // selected providers - which may be none
     providersText(){
         const selected = Clients.fn.selectedProviders( this.parentAPP.organization, Template.instance().APP.client );
-        return Object.keys( selected ).join( ', ' );
+        return Object.keys( selected ).join( ', ' ) || pwixI18n.label( I18N, 'clients.new_assistant.summary_providers_none' );
+    },
+
+    // registered redirect URLs
+    redirectsText(){
+        const redirectUrls = this.parentAPP.entity.get().DYN.records[0].get().redirectUrls;
+        const urls = redirectUrls.map(( it ) => { return it.url; });
+        return urls.join( ', ' );
     }
 });

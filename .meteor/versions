@@ -80,7 +80,7 @@ pwix:accounts-tools@2.2.0-rc
 pwix:accounts-ui@1.7.0-rc
 pwix:app-edit@1.0.1-rc
 pwix:app-pages@1.1.1-rc
-pwix:assistant@1.0.1-rc
+pwix:assistant@1.1.0-rc
 pwix:blaze-layout@2.3.4-rc
 pwix:bootbox@1.5.7-rc
 pwix:collection-behaviours@2.0.4-rc

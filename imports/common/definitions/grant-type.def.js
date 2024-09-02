@@ -246,7 +246,7 @@ export const GrantType = {
             // stops as soon as we have found an error
             return valid === true;
         });
-        console.debug( 'selectables', selectables, 'array', array, 'valid', valid );
+        //console.debug( 'selectables', selectables, 'array', array, 'valid', valid );
         return valid;
     },
 

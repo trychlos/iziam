@@ -28,6 +28,10 @@ Meteor.APP.i18n = {
                     label_exists: 'The label is already used by another client',
                     label_unset: 'The label is not set',
                     profile_invalid: 'The chosen profile is unknown or not valid',
+                    redirect_fragment: 'The redirect URL contains a fragment component, which is forbidden',
+                    redirect_http: 'Redirect URLs cannot use HTTP scheme for security reasons',
+                    redirect_invalid: 'The redirect URL is not a valid URI',
+                    redirect_unset: 'The redirect URL is not set'
                 },
                 delete: {
                     confirmation_text: 'You are about to delete the "%s" client.<br />Are you sure ?',
@@ -67,7 +71,6 @@ Meteor.APP.i18n = {
                     client_nav: 'Client type',
                     client_text: 'The client type, in the sense of OAuth specifications, is automatically determined from your chosen client profile. '
                         +'You shouldn\'t need to change it, unless you are really sure of what you are doing, but just in case...',
-                    endpoints_nav: 'Endpoints',
                     grant_type_nav: 'Grant type',
                     grant_type_text: 'For each available grant nature, please choose below the grant type(s) you want for your client.',
                     introduction_nav: 'Introduction',
@@ -79,16 +82,26 @@ Meteor.APP.i18n = {
                     properties_nav: 'Properties',
                     properties_text: 'Define some properties specific to your client application.',
                     providers_nav: 'Providers',
+                    redirects_nav: 'Redirect URLs',
+                    redirects_text: 'The Authorization Server will restrict the grant flow redirections to one of below URLs.',
                     summary_client_label: 'Client type :',
+                    summary_grant_label: 'Grant types :',
                     summary_legend: 'Summary',
                     summary_name_label: 'Label :',
                     summary_profile_client_label: 'Suggested client type :',
                     summary_profile_features_label: 'Needed features :',
                     summary_profile_label: 'Profile :',
-                    summary_providers_label: 'Providers :'
+                    summary_providers_label: 'Providers :',
+                    summary_providers_none: 'none'
                 },
                 providers: {
                     list_preamble: 'Select here the providers among those allowed by your organization to satisfy the features needed by the client profile you have chosen.'
+                },
+                redirects: {
+                    add_title: 'Add a new redirect URL',
+                    remove_title: 'Remove this redirect URL',
+                    url_ph: 'https://myapp/redirect?q=a',
+                    url_th: 'URL'
                 }
             },
             definitions: {

@@ -1,0 +1,15 @@
+<template name="client_new_assistant_redirects">
+    <div class="c-client-new-assistant-redirects">
+
+        {{> client_new_assistant_current (parmsCurrent) }}
+
+        <div class="content">
+            <div class="text">
+                {{{ i18n key="clients.new_assistant.redirects_text" }}}
+            </div>
+
+            {{> client_redirects_panel (parmsRedirectsPanel) }}
+        </div>
+
+    </div>
+</template>

@@ -77,6 +77,37 @@ const _defaultFieldSet = function(){
             name: 'selectedProviders.$',
             type: String
         },
+        // --
+        // selected grant types that the client can use against authorization and token endpoints
+        {
+            name: 'grantTypes',
+            type: Array,
+            optional: true
+        },
+        {
+            name: 'grantTypes.$',
+            type: String,
+        },
+        // --
+        // redirect urls - at least one is required (unless in the UI)
+        {
+            name: 'redirectUrls',
+            type: Array,
+            optional: true
+        },
+        {
+            name: 'redirectUrls.$',
+            type: Object
+        },
+        {
+            name: 'redirectUrls.$.url',
+            type: String,
+            form_check: Clients.checks.redirectUrl
+        },
+        {
+            name: 'redirectUrls.$.id',
+            type: String
+        },
         Notes.fieldDef(),
         Validity.recordsFieldDef(),
         Timestampable.fieldDef()

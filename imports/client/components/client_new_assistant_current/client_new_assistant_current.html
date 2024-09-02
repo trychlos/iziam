@@ -58,16 +58,16 @@
                                 <td><p class="text">{{ grantText }}</p></td>
                             </tr>
                         {{/if}}
+                        {{#if havePane "redirects" }}
+                            <tr>
+                                <td class="label ui-vatop">{{ i18n key="clients.new_assistant.summary_redirects_label" }}</td>
+                                <td><p class="text">{{ redirectsText }}</p></td>
+                            </tr>
+                        {{/if}}
                         {{#if havePane "auth" }}
                             <tr>
                                 <td class="label ui-vatop">{{ i18n key="clients.new_assistant.summary_auth_label" }}</td>
                                 <td><p class="text">{{ authText }}</p></td>
-                            </tr>
-                        {{/if}}
-                        {{#if havePane "endpoints" }}
-                            <tr>
-                                <td class="label ui-vatop">{{ i18n key="clients.new_assistant.summary_endpoints_label" }}</td>
-                                <td><p class="text">{{ endpointsText }}</p></td>
                             </tr>
                         {{/if}}
                         {{#if havePane "contacts" }}

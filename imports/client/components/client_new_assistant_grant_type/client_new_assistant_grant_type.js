@@ -5,6 +5,9 @@
  * - one for the access token
  * - maybe one for the refresh token
  * - maybe several for the token formaters
+ * 
+ * Grant types are only selectables when at least one provider has been chosen.
+ * In other words, this pane is only enabled when there is at least one selected provider.
  *
  * Parms:
 * - parentAPP: the assistant APP whole object
@@ -15,6 +18,7 @@ import _ from 'lodash';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 
+import { ClientProfile } from '/imports/common/definitions/client-profile.def.js';
 import { GrantNature } from '/imports/common/definitions/grant-nature.def.js';
 import { GrantType } from '/imports/common/definitions/grant-type.def.js';
 
@@ -31,7 +35,6 @@ Template.client_new_assistant_grant_type.onCreated( function(){
     self.autorun(() => {
         const selectables = GrantType.Selectables( Template.currentData().parentAPP.assistantStatus.get( 'selectedProviders' ));
         self.APP.selectables.set( selectables );
-        //console.debug( 'selectables', selectables );
     });
 });
 
@@ -43,6 +46,13 @@ Template.client_new_assistant_grant_type.onRendered( function(){
         const dataDict = Template.currentData().parentAPP.assistantStatus;
         const selected = dataDict.get( 'selectedProviders' );
         self.$( '.c-client-new-assistant-grant-type' ).trigger( 'assistant-do-enable-tab', { name: 'grant',  enabled: selected && selected.length > 0 });
+    });
+
+    // set a default grant type if one is defined for this client profile
+    self.autorun(() => {
+        const dataDict = Template.currentData().parentAPP.assistantStatus;
+        if( dataDict.get( 'activePane' ) === 'grant' ){
+        }
     });
 
     // tracks the selection to enable/disable the Next button when the pane is active
@@ -113,8 +123,7 @@ Template.client_new_assistant_grant_type.helpers({
     // parms for current choices
     parmsCurrent(){
         return {
-            parentAPP: this.parentAPP,
-            display: this.parentAPP.previousPanes()
+            parentAPP: this.parentAPP
         };
     }
 });
@@ -122,11 +131,11 @@ Template.client_new_assistant_grant_type.helpers({
 Template.client_new_assistant_grant_type.events({
     // enable/disable the action buttons
     'assistant-pane-to-show .c-client-new-assistant-grant-type'( event, instance, data ){
-        this.parentAPP.assistantStatus.set( 'prev', false );
-        this.parentAPP.assistantStatus.set( 'next', false );
+        instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'prev', enable: false });
+        instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'next',  enable: false });
     },
     'assistant-pane-shown .c-client-new-assistant-grant-type'( event, instance, data ){
-        this.parentAPP.assistantStatus.set( 'prev', true );
+        instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'prev', enable: true });
     },
     // handle the pane input
     'input input.js-check'( event, instance ){
@@ -134,7 +143,12 @@ Template.client_new_assistant_grant_type.events({
         instance.$( '.chooser input:checked' ).each( function(){
             array.push( instance.$( this ).prop( 'id' ));
         });
-        console.debug( 'array', array );
         this.parentAPP.assistantStatus.set( 'grantTypes', array );
+    },
+    // on Next, non-reactively feed the record
+    'assistant-action-next .c-client-new-assistant-grant-type'( event, instance ){
+        const record = this.parentAPP.entity.get().DYN.records[0].get();
+        const grantTypes = this.parentAPP.assistantStatus.get( 'grantTypes' ) || [];
+        record.grantTypes = grantTypes;
     }
 });

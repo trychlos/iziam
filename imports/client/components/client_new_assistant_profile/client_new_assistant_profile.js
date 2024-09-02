@@ -93,12 +93,6 @@ Template.client_new_assistant_profile.helpers({
 });
 
 Template.client_new_assistant_profile.events({
-    // on Next, non-reactively feed the record
-    'assistant-action-next .c-client-new-assistant-profile'( event, instance ){
-        const record = this.parentAPP.entity.get().DYN.records[0].get();
-        const profileDef = this.parentAPP.assistantStatus.get( 'profileDef' );
-        record.profile = profileDef ? ClientProfile.id( profileDef ) : null;
-    },
     // enable/disable the action buttons
     'assistant-pane-to-show .c-client-new-assistant-profile'( event, instance, data ){
         instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'prev', enable: false });
@@ -112,5 +106,11 @@ Template.client_new_assistant_profile.events({
         const id = instance.$( event.currentTarget ).closest( '.by-item' ).data( 'item-id' );
         const def = ClientProfile.byId( id );
         this.parentAPP.assistantStatus.set( 'profileDef', def );
+    },
+    // on Next, non-reactively feed the record
+    'assistant-action-next .c-client-new-assistant-profile'( event, instance ){
+        const record = this.parentAPP.entity.get().DYN.records[0].get();
+        const profileDef = this.parentAPP.assistantStatus.get( 'profileDef' );
+        record.profile = profileDef ? ClientProfile.id( profileDef ) : null;
     }
 });

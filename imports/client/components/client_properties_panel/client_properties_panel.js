@@ -53,13 +53,10 @@ Template.client_properties_panel.onRendered( function(){
 
     // initialize the Checker for this panel as soon as we get the parent Checker
     self.autorun(() => {
-        const parentChecker = Template.currentData().checker.get();
+        const parentChecker = Template.currentData().checker?.get();
         const checker = self.APP.checker.get();
         if( parentChecker && !checker ){
-            let enabled = true;
-            if( Object.keys( Template.currentData()).includes( 'enableChecks' )){
-                enabled = Template.currentData().enableChecks;
-            }
+            const enabled = Template.currentData().enableChecks !== false;
             self.APP.checker.set( new Forms.Checker( self, {
                 name: 'client_properties_panel',
                 parent: parentChecker,

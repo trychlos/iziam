@@ -18,7 +18,7 @@ import '/imports/client/components/client_new_assistant_client_type/client_new_a
 //import '/imports/client/components/client_new_assistant_contacts/client_new_assistant_contacts.js';
 import '/imports/client/components/client_new_assistant_current/client_new_assistant_current.js';
 //import '/imports/client/components/client_new_assistant_done/client_new_assistant_done.js';
-import '/imports/client/components/client_new_assistant_endpoints/client_new_assistant_endpoints.js';
+import '/imports/client/components/client_new_assistant_redirects/client_new_assistant_redirects.js';
 import '/imports/client/components/client_new_assistant_grant_type/client_new_assistant_grant_type.js';
 //import '/imports/client/components/client_new_assistant_jwt/client_new_assistant_jwt.js';
 import '/imports/client/components/client_new_assistant_introduction/client_new_assistant_introduction.js';
@@ -43,6 +43,10 @@ Template.client_new_assistant.onCreated( function(){
         entity: new ReactiveVar( null ),
         // whether we are running inside of a Modal
         isModal: new ReactiveVar( false ),
+        // the Assistant checker ReactiveVar, which will be the parent of the panes checkers
+        assistantCheckerRv: null,
+        // the Assistant PCK object
+        assistantPck: null,
         // a data dictionary to manage the assistant status (activation and actions)
         assistantStatus: new ReactiveDict(),
 
@@ -80,6 +84,11 @@ Template.client_new_assistant.onCreated( function(){
                     label: pwixI18n.label( I18N, 'clients.new_assistant.grant_type_nav' )
                 },
                 {
+                    name: 'redirects',
+                    template: 'client_new_assistant_redirects',
+                    label: pwixI18n.label( I18N, 'clients.new_assistant.redirects_nav' )
+                },
+                {
                     name: 'auth',
                     template: 'client_new_assistant_auth_method',
                     label: pwixI18n.label( I18N, 'clients.new_assistant.auth_nav' )
@@ -89,11 +98,6 @@ Template.client_new_assistant.onCreated( function(){
                     template: 'client_new_assistant_jwt',
                     label: pwixI18n.label( I18N, 'clients.new_assistant.jwt_nav' ),
                     enabled: false
-                },
-                {
-                    name: 'endpoints',
-                    template: 'client_new_assistant_endpoints',
-                    label: pwixI18n.label( I18N, 'clients.new_assistant.endpoints_nav' )
                 },
                 {
                     name: 'contacts',
@@ -225,7 +229,13 @@ Template.client_new_assistant.events({
     'assistant-activated .c-client-new-assistant'( event, instance, data ){
         if( data.name === instance.APP.myName ){
             instance.APP.assistantStatus.set( 'activated', true );
+            instance.APP.assistantPck = data.pck;
         }
+    },
+    // advertize of the assistant checker instanciation
+    'assistant-checker .c-client-new-assistant'( event, instance, data ){
+        console.debug( 'assistant-checker', data );
+        instance.APP.assistantCheckerRv = data.checker;
     },
 
     // track the currently shown pane
