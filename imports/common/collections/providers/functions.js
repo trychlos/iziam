@@ -136,6 +136,19 @@ Providers.getInstancesOf = function( type ){
 
 /**
  * @locus Anywhere
+ * @param {Array<String>} ids an array of izProvider IIdent identifiers
+ * @param {String} feature
+ * @returns {Boolean} whether one of the providers of the list provides the desired feature
+ */
+Providers.hasFeature = function( ids, feature ){
+    assert( ids && _.isArray( ids ), 'expects ids be an array' );
+    assert( feature, 'expects feature be a string' );
+    const features = Providers.featuresByIds( ids );
+    return features.includes( feature );
+};
+
+/**
+ * @locus Anywhere
  * @param {izProvider} provider
  */
 Providers.register = function( provider ){

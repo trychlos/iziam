@@ -45,7 +45,7 @@ Template.client_redirect_row.onCreated( function(){
                 recordRv.set( item );
                 self.APP.checker.get().removeMe();
             } else {
-                console.warn( id, 'not found' );
+                console.warn( id, 'not found', item );
                 const trs = $( '.c-client-redirects-panel tr.c-client-redirect-row' );
                 $.each( trs, function( index, object ){
                     console.debug( index, $( object ).data( 'item-id' ));

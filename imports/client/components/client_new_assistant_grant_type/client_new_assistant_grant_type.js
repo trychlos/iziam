@@ -18,6 +18,8 @@ import _ from 'lodash';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 
+import { Providers } from '/imports/common/collections/providers/index.js';
+
 import { ClientProfile } from '/imports/common/definitions/client-profile.def.js';
 import { GrantNature } from '/imports/common/definitions/grant-nature.def.js';
 import { GrantType } from '/imports/common/definitions/grant-type.def.js';
@@ -42,10 +44,11 @@ Template.client_new_assistant_grant_type.onRendered( function(){
     const self = this;
 
     // tracks the selected providers to enable/disable this pane
+    // this "grant types" pane requires to have a provider for oauth2 feature
     self.autorun(() => {
         const dataDict = Template.currentData().parentAPP.assistantStatus;
-        const selected = dataDict.get( 'selectedProviders' );
-        self.$( '.c-client-new-assistant-grant-type' ).trigger( 'assistant-do-enable-tab', { name: 'grant',  enabled: selected && selected.length > 0 });
+        const selected = dataDict.get( 'selectedProviders' ) || [];
+        self.$( '.c-client-new-assistant-grant-type' ).trigger( 'assistant-do-enable-tab', { name: 'grant',  enabled: Providers.hasFeature( selected, 'oauth2' ) });
     });
 
     // set a default grant type if one is defined for this client profile

@@ -74,6 +74,7 @@ Template.client_new_assistant_redirects.events({
     },
     // an event sent by client_redirects_panel to advertize of its status
     'iz-status .c-client-new-assistant-redirects'( event, instance, data ){
-        instance.APP.valid.set( data.status === Forms.CheckStatus.C.VALID );
+        //console.debug( 'iz-status', data );
+        instance.APP.valid.set( data.status === Forms.CheckStatus.C.VALID || data.status === Forms.CheckStatus.C.NONE );
     }
 });

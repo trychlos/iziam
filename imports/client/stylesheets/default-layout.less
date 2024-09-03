@@ -209,6 +209,7 @@ body {
     min-height:35em;
     .by-item {
         margin: 0.25em;
+        margin-bottom: 0;
         white-space: nowrap;
         border: 1px solid transparent;
     }
@@ -224,6 +225,9 @@ body {
         display: flex;
         flex-direction: column;
         align-items: center;
+        .form-check {
+            margin-top: 0.5em;
+        }
     }
     .c-client-new-assistant-introduction {
         justify-content: center;
@@ -249,27 +253,6 @@ body {
             }
         }
     }
-    /*
-    .c-client-new-assistant-pane {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        .content {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-            flex-grow: 1;
-        }
-    }
-        */
-    .c-client-new-assistant-auth-method .by-item {
-        padding: 0.5em 1em;
-        min-width: 23em;
-        .by-item:hover {
-            cursor: pointer;
-        }
-    }
     .c-client-new-assistant-done {
         .success {
             font-weight: bold;
@@ -286,6 +269,9 @@ body {
 }
 .c-client-new-assistant > .Assistant {
     overflow-y: hidden;
+    .tabbed-navs {
+        min-width: 15em;
+    }
 }
 .c-client-new-assistant > * > * > * > .tabbed-navs-encloser {
     margin-right: 1em;

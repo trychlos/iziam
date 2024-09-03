@@ -19,7 +19,12 @@ export const ClientProfile = {
             //],
             //haveEndpoints: false,
             //haveUsers: false,
-            //authMethod: 'secret_basic',
+            allowedAuthMethods: [
+                'secret_basic',
+                'secret_post',
+                'private_jwt',
+                'secret_jwt'
+            ],
             clientType: 'confidential',
             features: [
                 'oauth2'
@@ -36,6 +41,9 @@ export const ClientProfile = {
             //    'refresh_token'
             //],
             //haveAllowedApis: false,
+            allowedAuthMethods: [
+                'none'
+            ],
             clientType: 'public',
             features: [
                 'oauth2',
@@ -54,7 +62,12 @@ export const ClientProfile = {
             //    'client_creds'
             //],
             //haveAllowedApis: false,
-            //authMethod: 'secret_basic',
+            allowedAuthMethods: [
+                'secret_basic',
+                'secret_post',
+                'private_jwt',
+                'secret_jwt'
+            ],
             clientType: 'confidential',
             features: [
                 'oauth2'
@@ -71,7 +84,13 @@ export const ClientProfile = {
             //    'client_creds'
             //],
             //haveAllowedApis: false,
-            //authMethod: 'secret_basic',
+            allowedAuthMethods: [
+                'none',
+                'secret_basic',
+                'secret_post',
+                'private_jwt',
+                'secret_jwt'
+            ],
             clientType: 'public',
             features: [
                 'oauth2'
@@ -79,6 +98,14 @@ export const ClientProfile = {
             preferredGrantType: 'auth_code_21'
         }
     ],
+
+    /**
+     * @param {Object} def a ClientProfile definition as returned by ClientProfile.Knowns()
+     * @returns {Array<String>} the allowed authentification methods, defaulting to 'none'
+     */
+    allowedAuthMethods( def ){
+        return def.allowedAuthMethods || [ 'none' ];
+    },
 
     /**
      * @param {String} id a client profile identifier
@@ -93,14 +120,6 @@ export const ClientProfile = {
             return found === null;
         });
         return found;
-    },
-
-    /**
-     * @param {Object} def a ClientProfile definition as returned by ClientProfile.Knowns()
-     * @returns {String} the default authentification method, defaulting to 'none'
-     */
-    defaultAuthMethod( def ){
-        return def.authMethod || 'none';
     },
 
     /**

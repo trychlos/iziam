@@ -36,15 +36,27 @@ Template.client_properties_panel.onCreated( function(){
             description: {
                 js: '.js-description'
             },
+            logoUri: {
+                js: '.js-logo'
+            },
+            homeUri: {
+                js: '.js-home'
+            },
+            tosUri: {
+                js: '.js-tos'
+            },
+            privacyUri: {
+                js: '.js-privacy'
+            },
             softwareId: {
                 js: '.js-softid'
             },
             softwareVersion: {
                 js: '.js-softver'
-            },
+            }
         },
         // the Forms.Checker instance
-        checker: new ReactiveVar( null ),
+        checker: new ReactiveVar( null )
     };
 });
 

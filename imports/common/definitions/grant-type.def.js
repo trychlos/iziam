@@ -71,7 +71,6 @@ export const GrantType = {
             label: 'definitions.grant_type.client_label',
             description: 'definitions.grant_type.client_description',
             image: '/images/grant-type.svg',
-            authMethod: 'secret_basic',
             nature: 'access'
         },
         {
@@ -96,7 +95,6 @@ export const GrantType = {
             label: 'definitions.grant_type.password_label',
             description: 'definitions.grant_type.password_description',
             image: '/images/grant-type.svg',
-            authMethod: 'secret_basic',
             nature: 'access'
         },
         {
@@ -144,14 +142,6 @@ export const GrantType = {
             return found === null;
         });
         return found;
-    },
-
-    /**
-     * @param {Object} def a GrantType definition as returned by GrantType.Knowns()
-     * @returns {String} the default authentification method, defaulting to 'none'
-     */
-    defaultAuthMethod( def ){
-        return def.authMethod || 'none';
     },
 
     /**

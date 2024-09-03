@@ -1,0 +1,19 @@
+<template name="client_auth_method_panel">
+    <div class="c-client-auth-method-panel">
+
+        <div class="chooser">
+            <div class="chooser-content">
+                {{#each it in itemsList }}
+                    <div class="form-check">
+                        <div class="by-item" data-item-id="{{ itId it }}">
+                            <input class="form-check-input js-check" id="{{ itId it }}" type="radio" name="auth-method" {{ itChecked it }} />
+                            <label class="form-label" for="{{ itId it }}">{{ itLabel it }}</label>
+                        </div>
+                        <p class="text3 ui-ml05">{{ itDescription it }}</p>
+                    </div>
+                {{/each}}
+            </div>
+        </div>
+
+    </div>
+</template>

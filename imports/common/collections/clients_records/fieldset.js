@@ -32,6 +32,38 @@ const _defaultFieldSet = function(){
             form_check: Clients.checks.description,
             form_type: Forms.FieldType.C.OPTIONAL
         },
+        // the client logo (displayable to the end user)
+        {
+            name: 'logoUri',
+            type: String,
+            optional: true,
+            form_check: Clients.checks.logoUri,
+            form_type: Forms.FieldType.C.OPTIONAL
+        },
+        // the client home page (if applyable)
+        {
+            name: 'homeUri',
+            type: String,
+            optional: true,
+            form_check: Clients.checks.homeUri,
+            form_type: Forms.FieldType.C.OPTIONAL
+        },
+        // the client terms of service
+        {
+            name: 'tosUri',
+            type: String,
+            optional: true,
+            form_check: Clients.checks.tosUri,
+            form_type: Forms.FieldType.C.OPTIONAL
+        },
+        // privacy policy
+        {
+            name: 'privacyUri',
+            type: String,
+            optional: true,
+            form_check: Clients.checks.privacyUri,
+            form_type: Forms.FieldType.C.OPTIONAL
+        },
         // an identifier string of a software client (profile 'm-to-m') - in other words, how the client identifies itself
         {
             name: 'softwareId',
@@ -54,6 +86,7 @@ const _defaultFieldSet = function(){
         {
             name: 'profile',
             type: String,
+            optional: true,
             form_check: Clients.checks.profile,
             form_type: Forms.FieldType.C.OPTIONAL
         },
@@ -62,6 +95,7 @@ const _defaultFieldSet = function(){
         {
             name: 'clientType',
             type: String,
+            optional: true,
             form_check: Clients.checks.clientType,
             form_type: Forms.FieldType.C.MANDATORY
         },
@@ -76,6 +110,13 @@ const _defaultFieldSet = function(){
         {
             name: 'selectedProviders.$',
             type: String
+        },
+        // --
+        // the authentification method against the token endpoint
+        {
+            name: 'authMethod',
+            type: String,
+            optional: true
         },
         // --
         // selected grant types that the client can use against authorization and token endpoints

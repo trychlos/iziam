@@ -42,7 +42,7 @@ const _assert_data_content = function( caller, data ){
     });
     // this index because we are managing valdiity periods here
     assert.ok( _.isNumber( data.index ) && data.index >= 0, caller+' data.index is expected to be a positive or zero integer, got '+data.index );
-}
+};
 
 // returns the index of the identified row in the array
 const _id2index = function( array, id ){
@@ -53,7 +53,69 @@ const _id2index = function( array, id ){
     }
     console.warn( 'id='+id+' not found' );
     return -1;
-}
+};
+
+// check an URL
+// - value: the value to be checked
+// - opts: an optional options object with following keys
+//   > prefix: a prefix for the messages strings
+//   > acceptFragment: whether to accept fragment component, defaulting to true
+//   > acceptUnset: whether to accept unset URI, defaulting to true (if accepted, then no message is sent when it is empty)
+//   > acceptOthers: whether to accept other protocols, defaulting to true (defaulting to only accept https, when accepted also allows application-defined protocols)
+//   > wantHost: whether hostname is mandatory, defaulting to true (pathname only is accepted in not a special protocol)
+// returns a TypedMessage, or null if ok
+const _validUrl = function( value, opts ){
+    if( value ){
+        const specialProtocols = [ 'ftp:', 'file:', 'http:', 'https:', 'ws:', 'wss:' ];
+        if( _.isNil( validUrl.isUri( value ))){
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, opts.prefix+'_invalid' )
+            });
+        } else if( opts.acceptFragment === false && value.indexOf( '#' ) > -1 ){
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, opts.prefix+'_fragment' )
+            });
+        } else {
+            try {
+                const url = new URL( value );
+                console.debug( 'url', url );
+                if( opts.acceptOthers === false && url.protocol !== 'https:' ){
+                    return new TM.TypedMessage({
+                        level: TM.MessageLevel.C.ERROR,
+                        message: pwixI18n.label( I18N, opts.prefix+'_https' )
+                    });
+                } else if( opts.acceptOthers !== false && url.protocol === 'http:' ){
+                    return new TM.TypedMessage({
+                        level: TM.MessageLevel.C.ERROR,
+                        message: pwixI18n.label( I18N, opts.prefix+'_http' )
+                    });
+                } else if( opts.wantHost !== false && !url.hostname && specialProtocols.includes( url.protocol )){
+                    return new TM.TypedMessage({
+                        level: TM.MessageLevel.C.ERROR,
+                        message: pwixI18n.label( I18N, opts.prefix+'_host' )
+                    });
+                } else {
+                    return null;
+                }
+            }
+            catch( e ){
+                return new TM.TypedMessage({
+                    level: TM.MessageLevel.C.ERROR,
+                    message: pwixI18n.label( I18N, opts.prefix+'_invalid' )
+                });
+            }
+        }
+    } else if( opts.acceptUnset === false ){
+        return new TM.TypedMessage({
+            level: TM.MessageLevel.C.WARNING,
+            message: pwixI18n.label( I18N, opts.prefix+'_unset' )
+        });
+    } else {
+        return null;
+    }
+};
 
 // check( item) is used to check a full item, typically when creating/updating an item via the REST API
 //  the item must be intrasically correct and compatible with already existing items
@@ -214,6 +276,15 @@ Clients.checks = {
     },
     */
 
+    async homeUri( value, data, opts ){
+        _assert_data_content( 'Clients.checks.homeUri()', data );
+        let item = data.entity.get().DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.homeUri = value;
+        }
+        return _validUrl( value, { prefix: 'clients.checks.home', acceptHttp: false });
+    },
+
     // the label must be set, and must identify the client entity
     // need to update the entity (or something) so that the new assistant is reactive
     async label( value, data, opts ){
@@ -251,6 +322,24 @@ Clients.checks = {
         }
     },
 
+    async logoUri( value, data, opts ){
+        _assert_data_content( 'Clients.checks.logoUri()', data );
+        let item = data.entity.get().DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.logoUri = value;
+        }
+        return _validUrl( value, { prefix: 'clients.checks.logo', acceptOthers: false });
+    },
+
+    async privacyUri( value, data, opts ){
+        _assert_data_content( 'Clients.checks.privacyUri()', data );
+        let item = data.entity.get().DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.privacyUri = value;
+        }
+        return _validUrl( value, { prefix: 'clients.checks.privacy', acceptOthers: false });
+    },
+
     // client profile: optional, must exist
     async profile( value, data, opts ){
         _assert_data_content( 'Clients.checks.profile()', data );
@@ -284,44 +373,8 @@ Clients.checks = {
             }
             item.redirectUrls[index].url = value;
         }
-        if( value ){
-            if( _.isNil( validUrl.isUri( value ))){
-                return new TM.TypedMessage({
-                    level: TM.MessageLevel.C.ERROR,
-                    message: pwixI18n.label( I18N, 'clients.checks.redirect_invalid' )
-                });
-            } else if( value.indexOf( '#' ) > -1 ){
-                return new TM.TypedMessage({
-                    level: TM.MessageLevel.C.ERROR,
-                    message: pwixI18n.label( I18N, 'clients.checks.redirect_fragment' )
-                });
-            } else {
-                try {
-                    const url = new URL( value );
-                    if( url.protocol.toLowerCase() === 'http:' ){
-                        return new TM.TypedMessage({
-                            level: TM.MessageLevel.C.ERROR,
-                            message: pwixI18n.label( I18N, 'clients.checks.redirect_http' )
-                        });
-                    } else {
-                        return null;
-                    }
-                }
-                catch( e ){
-                    return new TM.TypedMessage({
-                        level: TM.MessageLevel.C.ERROR,
-                        message: pwixI18n.label( I18N, 'clients.checks.redirect_invalid' )
-                    });
-                }
-            }
-        } else {
-            return new TM.TypedMessage({
-                level: TM.MessageLevel.C.WARNING,
-                message: pwixI18n.label( I18N, 'clients.checks.redirect_unset' )
-            });
-        }
+        return _validUrl( value, { prefix: 'clients.checks.redirect', acceptUnset: false, acceptFragment: false });
     },
-
     
     /*
     // the response types used on the token endpoint
@@ -369,5 +422,14 @@ Clients.checks = {
             item.softwareVersion = value;
         }
         return null;
-    }
+    },
+
+    async tosUri( value, data, opts ){
+        _assert_data_content( 'Clients.checks.tosUri()', data );
+        let item = data.entity.get().DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.tosUri = value;
+        }
+        return _validUrl( value, { prefix: 'clients.checks.tos', acceptOthers: false });
+    },
 };

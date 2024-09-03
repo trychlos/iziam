@@ -5,22 +5,10 @@
 
         <div class="content">
             <div class="text">
-                <!-- {{> app_serializer document="client-new-auth-mode" }} -->
+                {{{ i18n key="clients.new_assistant.auth_method_text" }}}
             </div>
-    
-            <div class="chooser">
-                <div class="chooser-content">
-                    {{#each it in itemsList }}
-                        <div class="item d-flex flex-row align-items-center">
-                            <div class="by-item {{ itDisabled it }} {{ itSelected it }} " data-item-id="{{ itId it }}">
-                                <input class="form-check-input ca-mr025 js-check" id="{{ itId it }}" type="checkbox" {{ itChecked it }} {{ itDisabled it }} />
-                                <label class="form-label {{ itDisabled it }}" for="{{ itId it }}">{{ itLabel it }}</label>
-                            </div>
-                            <p class="form-text ca-ml05">{{ itDescription it }}</p>
-                        </div>
-                    {{/each}}
-                </div>
-            </div>
+
+            {{> client_auth_method_panel (parmsAuthMethod) }}
         </div>
 
     </div>

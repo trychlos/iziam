@@ -30,6 +30,8 @@ Template.client_redirects_panel.onCreated( function(){
         count: new ReactiveVar( 0 ),
         // the Form.Checker instance for this panel
         checker: new ReactiveVar( null ),
+        // whether we alrfeady have added one empty row at startup
+        haveAddedOne: false,
 
         // add an empty item to the redirectUrls array
         addOne( dataContext ){
@@ -40,6 +42,7 @@ Template.client_redirects_panel.onCreated( function(){
                 id: Random.id()
             });
             recordRv.set( item );
+            self.APP.haveAddedOne = true;
         }
     };
 
@@ -86,7 +89,7 @@ Template.client_redirects_panel.onRendered( function(){
     // if no redirect url yet, and not configured to not to, have an empty row
     self.autorun(() => {
         const haveOne = Template.currentData().haveOne !== false;
-        if( haveOne && !self.APP.count.get()){
+        if( haveOne && !self.APP.count.get() && !self.APP.haveAddedOne ){
             self.APP.addOne( Template.currentData());
         }
     });
