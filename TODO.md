@@ -200,7 +200,7 @@
 |      | 2024- 1-18 | done |
 |  100 | 2024- 1-18 | resource_edit: idem than #98 |
 |      | 2024- 1-19 | closed as a duplicate of #98 |
-|  101 | 2024- 1-18 | client_edit: add softwareId, softwareVersion, clientId |
+|  101 | 2024- 1-18 | client_edit: add software_id, software_version, clientId |
 |      | 2024- 1-19 | done |
 |  103 | 2024- 1-18 | remove clients_registration, clients_credentials and clients_checks from clients manager |
 |      | 2024- 1-19 | done |

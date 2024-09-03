@@ -33,12 +33,12 @@ Template.client_redirects_panel.onCreated( function(){
         // whether we alrfeady have added one empty row at startup
         haveAddedOne: false,
 
-        // add an empty item to the redirectUrls array
+        // add an empty item to the redirect_uris array
         addOne( dataContext ){
             const recordRv = dataContext.entity.get().DYN.records[dataContext.index];
             const item = recordRv.get();
-            item.redirectUrls = item.redirectUrls || [];
-            item.redirectUrls.push({
+            item.redirect_uris = item.redirect_uris || [];
+            item.redirect_uris.push({
                 id: Random.id()
             });
             recordRv.set( item );
@@ -51,7 +51,7 @@ Template.client_redirects_panel.onCreated( function(){
         const entity = Template.currentData().entity.get();
         const index = Template.currentData().index;
         const record = entity.DYN.records[index].get();
-        self.APP.count.set(( record.redirectUrls || [] ).length );
+        self.APP.count.set(( record.redirect_uris || [] ).length );
     });
 
     // tracking the count of redirect urls
@@ -104,7 +104,7 @@ Template.client_redirects_panel.helpers({
     // redirect urls list
     itemsList(){
         const count = Template.instance().APP.count.get();
-        return this.entity.get().DYN.records[this.index].get().redirectUrls || [];
+        return this.entity.get().DYN.records[this.index].get().redirect_uris || [];
     },
 
     // passes the same data context, just replacing the parent checker by our own

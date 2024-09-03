@@ -50,4 +50,11 @@ export class izProvider extends mix( izObject ).with( IFeatured, IIdent, IRequir
         super( ...arguments );
         return this;
     }
+
+    /**
+     * @returns {Boolean} whether this provider is mandatory
+     */
+    isMandatory(){
+        return false;
+    }
 }

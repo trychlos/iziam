@@ -48,12 +48,12 @@ Template.client_new_assistant_done.onRendered( function(){
                 type: ClientNature.defaultClientType( natureDef ),
                 registration: 'pre',
                 description: dataDict.get( 'description' ) || null,
-                grantTypes: dataDict.get( 'grantTypes' ),
-                authMethod: dataDict.get( 'authMethod' ),
+                grant_types: dataDict.get( 'grant_types' ),
+                token_endpoint_auth_method: dataDict.get( 'token_endpoint_auth_method' ),
                 contacts: dataDict.get( 'contacts' ),
                 endpoints: dataDict.get( 'endpoints' ),
-                softwareId: dataDict.get( 'softwareId' ) || null,
-                softwareVersion: dataDict.get( 'softwareVersion' ) || null,
+                software_id: dataDict.get( 'software_id' ) || null,
+                software_version: dataDict.get( 'software_version' ) || null,
             };
             $( 'body' ).css( 'cursor', 'progress' );
             Meteor.call( 'client.upsert', [ item ], ( err, res ) => {

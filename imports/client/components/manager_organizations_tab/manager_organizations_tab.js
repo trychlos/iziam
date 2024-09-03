@@ -6,10 +6,11 @@
 
 import { pwixI18n } from 'meteor/pwix:i18n';
 
-import '../organization_clients_pane/organization_clients_pane.js';
-import '../organization_dynregistration_pane/organization_dynregistration_pane.js';
-import '../organization_providers_pane/organization_providers_pane.js';
-import '../organization_urls_pane/organization_urls_pane.js';
+import '/imports/client/components/organization_clients_pane/organization_clients_pane.js';
+import '/imports/client/components/organization_config_pane/organization_config_pane.js';
+import '/imports/client/components/organization_dynregistration_pane/organization_dynregistration_pane.js';
+import '/imports/client/components/organization_providers_pane/organization_providers_pane.js';
+import '/imports/client/components/organization_urls_pane/organization_urls_pane.js';
 
 import './manager_organizations_tab.html';
 
@@ -37,6 +38,12 @@ Template.manager_organizations_tab.onCreated( function(){
                 paneid: 'app_organization_providers_pane',
                 navLabel: pwixI18n.label( I18N, 'organizations.edit.providers_tab_title' ),
                 paneTemplate: 'organization_providers_pane'
+            },
+            {
+                tabid: 'app_organization_config_tab',
+                paneid: 'app_organization_config_pane',
+                navLabel: pwixI18n.label( I18N, 'organizations.edit.config_tab_title' ),
+                paneTemplate: 'organization_config_pane'
             },
             {
                 tabid: 'app_organization_dynregistration_tab',

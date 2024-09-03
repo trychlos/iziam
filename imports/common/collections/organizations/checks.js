@@ -137,7 +137,7 @@ Organizations.checks = {
         _assert_data_itemrv( 'Organizations.checks.dynamicRegistrationByConfidential()', data );
         let item = data.entity.get().DYN.records[data.index].get();
         if( opts.update !== false ){
-            item.dynamicRegistrationByConfidential = value;
+            item.dynamicRegistrationByConfidential = Boolean( value );
         }
         return null;
     },
@@ -147,7 +147,7 @@ Organizations.checks = {
         _assert_data_itemrv( 'Organizations.checks.dynamicRegistrationByPublic()', data );
         let item = data.entity.get().DYN.records[data.index].get();
         if( opts.update !== false ){
-            item.dynamicRegistrationByPublic = value;
+            item.dynamicRegistrationByPublic = Boolean( value );
         }
         return null;
     },
@@ -157,7 +157,17 @@ Organizations.checks = {
         _assert_data_itemrv( 'Organizations.checks.dynamicRegistrationByUser()', data );
         let item = data.entity.get().DYN.records[data.index].get();
         if( opts.update !== false ){
-            item.dynamicRegistrationByUser = value;
+            item.dynamicRegistrationByUser = Boolean( value );
+        }
+        return null;
+    },
+
+    // whether the organization wants all clients use PKCE (rfc7636)
+    async wantsPkce( value, data, opts ){
+        _assert_data_itemrv( 'Organizations.checks.wantsPkce()', data );
+        let item = data.entity.get().DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.wantsPkce = Boolean( value );
         }
         return null;
     }

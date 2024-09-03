@@ -62,6 +62,7 @@ const _id2index = function( array, id ){
 //   > acceptFragment: whether to accept fragment component, defaulting to true
 //   > acceptUnset: whether to accept unset URI, defaulting to true (if accepted, then no message is sent when it is empty)
 //   > acceptOthers: whether to accept other protocols, defaulting to true (defaulting to only accept https, when accepted also allows application-defined protocols)
+//     ex: "com.example.app:///auth" as a scheme defined for a native mobile app
 //   > wantHost: whether hostname is mandatory, defaulting to true (pathname only is accepted in not a special protocol)
 // returns a TypedMessage, or null if ok
 const _validUrl = function( value, opts ){
@@ -139,13 +140,13 @@ Clients.check = function( item ){
 Clients.checks = {
     /*
     // the authentification method againt the token endpoint
-    async authMethod( value, data, coreApp={} ){
+    async token_endpoint_auth_method( value, data, coreApp={} ){
         _assert_data_itemrv( 'Clients.check_authMethod()', data );
         const item = data.item.get();
         return Promise.resolve( null )
             .then(() => {
                 if( coreApp.update !== false ){
-                    item.authMethod = value || null;
+                    item.token_endpoint_auth_method = value || null;
                     data.item.set( item );
                 }
                 if( value ){
@@ -197,11 +198,11 @@ Clients.checks = {
     */
 
     // client type: mandatory, must exist
-    async clientType( value, data, opts ){
-        _assert_data_content( 'Clients.checks.clientType()', data );
+    async client_type( value, data, opts ){
+        _assert_data_content( 'Clients.checks.client_type()', data );
         let item = data.entity.get().DYN.records[data.index].get();
         if( opts.update !== false ){
-            item.clientType = value;
+            item.client_type = value;
         }
         if( value ){
             const def = ClientType.byId( value );
@@ -228,13 +229,13 @@ Clients.checks = {
 
     /*
     // the grant types used on the token endpoint
-    async grantTypes( value, data, coreApp={} ){
+    async grant_types( value, data, coreApp={} ){
         _assert_data_itemrv( 'Clients.check_grantTypes()', data );
         const item = data.item.get();
         return Promise.resolve( null )
             .then(() => {
                 if( coreApp.update !== false ){
-                    item.grantTypes = value || null;
+                    item.grant_types = value || null;
                     data.item.set( item );
                 }
                 // value here can be an array
@@ -262,7 +263,7 @@ Clients.checks = {
                                 type: CoreApp.MessageType.C.WARNING,
                                 message: pwixI18n.label( I18N, 'clients.check.credentials_rtnone' )
                             });
-                        } else if( !data.item.authMethod || data.item.authMethod === 'none' ){
+                        } else if( !data.item.token_endpoint_auth_method || data.item.token_endpoint_auth_method === 'none' ){
                             ret = new CoreApp.TypedMessage({
                                 type: CoreApp.MessageType.C.WARNING,
                                 message: pwixI18n.label( I18N, 'clients.check.authmethod_none' )
@@ -276,11 +277,11 @@ Clients.checks = {
     },
     */
 
-    async homeUri( value, data, opts ){
-        _assert_data_content( 'Clients.checks.homeUri()', data );
+    async client_uri( value, data, opts ){
+        _assert_data_content( 'Clients.checks.client_uri()', data );
         let item = data.entity.get().DYN.records[data.index].get();
         if( opts.update !== false ){
-            item.homeUri = value;
+            item.client_uri = value;
         }
         return _validUrl( value, { prefix: 'clients.checks.home', acceptHttp: false });
     },
@@ -322,20 +323,20 @@ Clients.checks = {
         }
     },
 
-    async logoUri( value, data, opts ){
-        _assert_data_content( 'Clients.checks.logoUri()', data );
+    async logo_uri( value, data, opts ){
+        _assert_data_content( 'Clients.checks.logo_uri()', data );
         let item = data.entity.get().DYN.records[data.index].get();
         if( opts.update !== false ){
-            item.logoUri = value;
+            item.logo_uri = value;
         }
         return _validUrl( value, { prefix: 'clients.checks.logo', acceptOthers: false });
     },
 
-    async privacyUri( value, data, opts ){
-        _assert_data_content( 'Clients.checks.privacyUri()', data );
+    async policy_uri( value, data, opts ){
+        _assert_data_content( 'Clients.checks.policy_uri()', data );
         let item = data.entity.get().DYN.records[data.index].get();
         if( opts.update !== false ){
-            item.privacyUri = value;
+            item.policy_uri = value;
         }
         return _validUrl( value, { prefix: 'clients.checks.privacy', acceptOthers: false });
     },
@@ -357,21 +358,22 @@ Clients.checks = {
         return null;
     },
 
-    // redirect urls, optional in the UI, must have at least one so that the client is operational
+    // redirect_uris, optional in the UI
     // see https://www.oauth.com/oauth2-servers/redirect-uris/redirect-uri-validation/
-    // any scheme is accepted, but http (which must be https)
+    // see https://datatracker.ietf.org/doc/html/rfc7591#section-2
+    // must be https unless a native client which may define its own applicative scheme (e.g. com.example.app:///auth)
     // there must not be any fragment component
-    async redirectUrl( value, data, opts ){
-        _assert_data_content( 'Clients.checks.redirectUrl()', data );
+    async redirect_uri( value, data, opts ){
+        _assert_data_content( 'Clients.checks.redirect_uri()', data );
         let item = data.entity.get().DYN.records[data.index].get();
-        const index = opts.id ? _id2index( item.redirectUrls, opts.id ) : -1;
+        const index = opts.id ? _id2index( item.redirect_uris, opts.id ) : -1;
         if( opts.update !== false ){
             if( index < 0 ){
-                item.redirectUrls = item.redirectUrls || [];
-                item.redirectUrls.push({ id: opts.id });
+                item.redirect_uris = item.redirect_uris || [];
+                item.redirect_uris.push({ id: opts.id });
                 index = 0;
             }
-            item.redirectUrls[index].url = value;
+            item.redirect_uris[index].uri = value;
         }
         return _validUrl( value, { prefix: 'clients.checks.redirect', acceptUnset: false, acceptFragment: false });
     },
@@ -406,29 +408,29 @@ Clients.checks = {
     },
     */
 
-    async softwareId( value, data, opts ){
-        _assert_data_content( 'Clients.checks.softwareId()', data );
+    async software_id( value, data, opts ){
+        _assert_data_content( 'Clients.checks.software_id()', data );
         let item = data.entity.get().DYN.records[data.index].get();
         if( opts.update !== false ){
-            item.softwareId = value;
+            item.software_id = value;
         }
         return null;
     },
 
-    async softwareVersion( value, data, opts ){
-        _assert_data_content( 'Clients.checks.softwareVersion()', data );
+    async software_version( value, data, opts ){
+        _assert_data_content( 'Clients.checks.software_version()', data );
         let item = data.entity.get().DYN.records[data.index].get();
         if( opts.update !== false ){
-            item.softwareVersion = value;
+            item.software_version = value;
         }
         return null;
     },
 
-    async tosUri( value, data, opts ){
-        _assert_data_content( 'Clients.checks.tosUri()', data );
+    async tos_uri( value, data, opts ){
+        _assert_data_content( 'Clients.checks.tos_uri()', data );
         let item = data.entity.get().DYN.records[data.index].get();
         if( opts.update !== false ){
-            item.tosUri = value;
+            item.tos_uri = value;
         }
         return _validUrl( value, { prefix: 'clients.checks.tos', acceptOthers: false });
     },

@@ -30,7 +30,7 @@ const _defaultFieldSet = function(){
         },
         // client type
         {
-            name: 'clientType',
+            name: 'client_type',
             schema: false,
             dt_title: pwixI18n.label( I18N, 'clients.list.type_th' ),
         },

@@ -7,6 +7,7 @@
 import { Field } from 'meteor/pwix:field';
 import { Notes } from 'meteor/pwix:notes';
 import { pwixI18n } from 'meteor/pwix:i18n';
+import SimpleSchema from 'meteor/aldeed:simple-schema';
 import { Tracker } from 'meteor/tracker';
 import { Validity } from 'meteor/pwix:validity';
 
@@ -18,11 +19,13 @@ const _defaultFieldSet = function(){
     let columns = [
         // -- properties
         // the client displayed name, mandatory, unique
+        // this is the 'client_name' OAuth 2 client metadata
         {
             name: 'label',
             type: String,
             form_check: Clients.checks.label,
-            form_type: Forms.FieldType.C.MANDATORY
+            form_type: Forms.FieldType.C.MANDATORY,
+            help_tooltip: pwixI18n.label( I18N, 'clients.metadata.client_name' )
         },
         // a not too long description (not a note)
         {
@@ -32,57 +35,8 @@ const _defaultFieldSet = function(){
             form_check: Clients.checks.description,
             form_type: Forms.FieldType.C.OPTIONAL
         },
-        // the client logo (displayable to the end user)
-        {
-            name: 'logoUri',
-            type: String,
-            optional: true,
-            form_check: Clients.checks.logoUri,
-            form_type: Forms.FieldType.C.OPTIONAL
-        },
-        // the client home page (if applyable)
-        {
-            name: 'homeUri',
-            type: String,
-            optional: true,
-            form_check: Clients.checks.homeUri,
-            form_type: Forms.FieldType.C.OPTIONAL
-        },
-        // the client terms of service
-        {
-            name: 'tosUri',
-            type: String,
-            optional: true,
-            form_check: Clients.checks.tosUri,
-            form_type: Forms.FieldType.C.OPTIONAL
-        },
-        // privacy policy
-        {
-            name: 'privacyUri',
-            type: String,
-            optional: true,
-            form_check: Clients.checks.privacyUri,
-            form_type: Forms.FieldType.C.OPTIONAL
-        },
-        // an identifier string of a software client (profile 'm-to-m') - in other words, how the client identifies itself
-        {
-            name: 'softwareId',
-            type: String,
-            optional: true,
-            form_check: Clients.checks.softwareId,
-            form_type: Forms.FieldType.C.OPTIONAL
-        },
-        // a qualifier string for the client - this may let it distinguish between several registration instances
-        {
-            name: 'softwareVersion',
-            type: String,
-            optional: true,
-            form_check: Clients.checks.softwareVersion,
-            form_type: Forms.FieldType.C.OPTIONAL
-        },
         // -- profile
-        // the client chosen profile from ClientProfile which helps to determine the client type
-        // a client-new-assistant data
+        // the client chosen profile from ClientProfile which helps to determine other parameters
         {
             name: 'profile',
             type: String,
@@ -93,11 +47,12 @@ const _defaultFieldSet = function(){
         // the client type in the OAuth 2 sense (https://datatracker.ietf.org/doc/html/rfc6749#section-2)
         //  confidential or public
         {
-            name: 'clientType',
+            name: 'client_type',
             type: String,
             optional: true,
-            form_check: Clients.checks.clientType,
-            form_type: Forms.FieldType.C.MANDATORY
+            form_check: Clients.checks.client_type,
+            form_type: Forms.FieldType.C.MANDATORY,
+            help_tooltip: pwixI18n.label( I18N, 'clients.metadata.client_type' )
         },
         // --
         // list of selected providers
@@ -111,44 +66,310 @@ const _defaultFieldSet = function(){
             name: 'selectedProviders.$',
             type: String
         },
-        // --
-        // the authentification method against the token endpoint
+        // -- OAuth 2.0 Client Metadata
+        // https://datatracker.ietf.org/doc/html/rfc7591#section-2
+        // redirect uris - their presence depends of the chosen grant flow
         {
-            name: 'authMethod',
-            type: String,
-            optional: true
-        },
-        // --
-        // selected grant types that the client can use against authorization and token endpoints
-        {
-            name: 'grantTypes',
+            name: 'redirect_uris',
             type: Array,
-            optional: true
+            optional: true,
+            help_tooltip: pwixI18n.label( I18N, 'clients.metadata.redirect_uris' )
         },
         {
-            name: 'grantTypes.$',
-            type: String,
-        },
-        // --
-        // redirect urls - at least one is required (unless in the UI)
-        {
-            name: 'redirectUrls',
-            type: Array,
-            optional: true
-        },
-        {
-            name: 'redirectUrls.$',
+            name: 'redirect_uris.$',
             type: Object
         },
         {
-            name: 'redirectUrls.$.url',
+            name: 'redirect_uris.$.uri',
             type: String,
-            form_check: Clients.checks.redirectUrl
+            form_check: Clients.checks.redirect_uri
         },
         {
-            name: 'redirectUrls.$.id',
+            name: 'redirect_uris.$.id',
             type: String
         },
+        // the authentification method against the token endpoint
+        {
+            name: 'token_endpoint_auth_method',
+            type: String,
+            optional: true,
+            help_tooltip: pwixI18n.label( I18N, 'clients.metadata.token_endpoint_auth_method' )
+        },
+        // selected grant types that the client can use against token endpoint
+        {
+            name: 'grant_types',
+            type: Array,
+            optional: true,
+            help_tooltip: pwixI18n.label( I18N, 'clients.metadata.grant_types' )
+        },
+        {
+            name: 'grant_types.$',
+            type: String,
+        },
+        /*
+        // the OAuth 2.0 response type strings that the client can use against authorization endpoint
+        {
+            name: 'response_types',
+            type: Array,
+            optional: true,
+            help_tooltip: pwixI18n.label( I18N, 'clients.metadata.response_types' )
+        },
+        {
+            name: 'response_types.$',
+            type: String
+        },
+        */
+        // the client home page (if applyable)
+        {
+            name: 'client_uri',
+            type: String,
+            optional: true,
+            form_check: Clients.checks.client_uri,
+            form_type: Forms.FieldType.C.OPTIONAL,
+            help_tooltip: pwixI18n.label( I18N, 'clients.metadata.client_uri' )
+        },
+        // the client logo (displayable to the end user)
+        {
+            name: 'logo_uri',
+            type: String,
+            optional: true,
+            form_check: Clients.checks.logo_uri,
+            form_type: Forms.FieldType.C.OPTIONAL,
+            help_tooltip: pwixI18n.label( I18N, 'clients.metadata.logo_uri' )
+        },
+        /*
+        // the scope values that the client may use when requesting access tokens
+        // OAuth 2 defines that as a single space-separated string said 'scope'
+        {
+            name: 'scopes',
+            type: Array,
+            optional: true,
+            help_tooltip: pwixI18n.label( I18N, 'clients.metadata.scopes' )
+        },
+        {
+            name: 'scopes.$',
+            type: String
+        },
+        */
+        // the contacts as ways to contact people responsible for this client
+        {
+            name: 'contacts',
+            type: Array,
+            optional: true,
+            help_tooltip: pwixI18n.label( I18N, 'clients.metadata.contacts' )
+        },
+        {
+            name: 'contacts.$',
+            type: Object
+        },
+        {
+            name: 'contacts.$.email',
+            type: String,
+            //form_check: Clients.checks.redirect_uri
+        },
+        {
+            name: 'contacts.$.id',
+            type: String
+        },
+        // the client terms of service
+        {
+            name: 'tos_uri',
+            type: String,
+            optional: true,
+            form_check: Clients.checks.tos_uri,
+            form_type: Forms.FieldType.C.OPTIONAL,
+            help_tooltip: pwixI18n.label( I18N, 'clients.metadata.tos_uri' )
+        },
+        // privacy policy
+        {
+            name: 'policy_uri',
+            type: String,
+            optional: true,
+            form_check: Clients.checks.policy_uri,
+            form_type: Forms.FieldType.C.OPTIONAL,
+            help_tooltip: pwixI18n.label( I18N, 'clients.metadata.policy_uri' )
+        },
+        /*
+        // JWKS document uri - the document which contains the client's public keys
+        //  exclusive from jwks
+        {
+            name: 'jwks_uri',
+            type: String,
+            optional: true,
+            //form_check: Clients.checks.policy_uri,
+            form_type: Forms.FieldType.C.OPTIONAL,
+            help_tooltip: pwixI18n.label( I18N, 'clients.metadata.jwks_uri' )
+        },
+        // JWKS JSON object which contains the client's public keys
+        //  exclusive from jwks_uri
+        {
+            name: 'jwks',
+            type: String,
+            optional: true,
+            //form_check: Clients.checks.policy_uri,
+            form_type: Forms.FieldType.C.OPTIONAL,
+            help_tooltip: pwixI18n.label( I18N, 'clients.metadata.jwks' )
+        },
+        */
+        // an identifier string of a software client (profile 'm-to-m') - in other words, how the client identifies itself
+        {
+            name: 'software_id',
+            type: String,
+            optional: true,
+            form_check: Clients.checks.software_id,
+            form_type: Forms.FieldType.C.OPTIONAL,
+            help_tooltip: pwixI18n.label( I18N, 'clients.metadata.software_id' )
+        },
+        // a qualifier string for the client - this may let it distinguish between several registration instances
+        {
+            name: 'software_version',
+            type: String,
+            optional: true,
+            form_check: Clients.checks.software_version,
+            form_type: Forms.FieldType.C.OPTIONAL,
+            help_tooltip: pwixI18n.label( I18N, 'clients.metadata.software_version' )
+        },
+        /*
+        // -- OpenID Connect Dynamic Client Registration
+        // https://openid.net/specs/openid-connect-registration-1_0.html#ClientMetadata
+        // kind of the application, native or web
+        {
+            name: 'application_type',
+            type: String,
+            optional: true,
+            help_tooltip: pwixI18n.label( I18N, 'clients.metadata.application_type' )
+        },
+        // to be used in calculating Pseudonymous Identifiers
+        {
+            name: 'sector_identifier_uri',
+            type: String,
+            optional: true,
+            help_tooltip: pwixI18n.label( I18N, 'clients.metadata.sector_identifier_uri' )
+        },
+        // requested for responses to this Client
+        {
+            name: 'subject_type',
+            type: String,
+            optional: true,
+            help_tooltip: pwixI18n.label( I18N, 'clients.metadata.subject_type' )
+        },
+        // JWS alg algorithm [JWA] REQUIRED for signing the ID Token issued to this Client
+        {
+            name: 'id_token_signed_response_alg',
+            type: String,
+            optional: true,
+            help_tooltip: pwixI18n.label( I18N, 'clients.metadata.id_token_signed_response_alg' )
+        },
+        // JWE alg algorithm [JWA] REQUIRED for encrypting the ID Token issued to this Client
+        {
+            name: 'id_token_encrypted_response_alg',
+            type: String,
+            optional: true,
+            help_tooltip: pwixI18n.label( I18N, 'clients.metadata.id_token_encrypted_response_alg' )
+        },
+        // JWE enc algorithm [JWA] REQUIRED for encrypting the ID Token issued to this Client
+        {
+            name: 'id_token_encrypted_response_enc',
+            type: String,
+            optional: true,
+            help_tooltip: pwixI18n.label( I18N, 'clients.metadata.id_token_encrypted_response_enc' )
+        },
+        // JWS alg algorithm [JWA] REQUIRED for signing UserInfo Responses
+        {
+            name: 'userinfo_signed_response_alg',
+            type: String,
+            optional: true,
+            help_tooltip: pwixI18n.label( I18N, 'clients.metadata.userinfo_signed_response_alg' )
+        },
+        // JWE [JWE] alg algorithm [JWA] REQUIRED for encrypting UserInfo Responses
+        {
+            name: 'userinfo_encrypted_response_alg',
+            type: String,
+            optional: true,
+            help_tooltip: pwixI18n.label( I18N, 'clients.metadata.userinfo_encrypted_response_alg' )
+        },
+        // JWS [JWS] alg algorithm [JWA] that MUST be used for signing Request Objects sent to the OP
+        {
+            name: 'request_object_signing_alg',
+            type: String,
+            optional: true,
+            help_tooltip: pwixI18n.label( I18N, 'clients.metadata.request_object_signing_alg' )
+        },
+        // JWE [JWE] alg algorithm [JWA] the RP is declaring that it may use for encrypting Request Objects sent to the OP
+        {
+            name: 'request_object_encryption_alg',
+            type: String,
+            optional: true,
+            help_tooltip: pwixI18n.label( I18N, 'clients.metadata.request_object_encryption_alg' )
+        },
+        // JWE enc algorithm [JWA] the RP is declaring that it may use for encrypting Request Objects sent to the OP
+        {
+            name: 'request_object_encryption_enc',
+            type: String,
+            optional: true,
+            help_tooltip: pwixI18n.label( I18N, 'clients.metadata.request_object_encryption_enc' )
+        },
+        // JWS [JWS] alg algorithm [JWA] that MUST be used for signing the JWT [JWT] used to authenticate the
+        // Client at the Token Endpoint for the private_key_jwt and client_secret_jwt authentication methods
+        {
+            name: 'token_endpoint_auth_signing_alg',
+            type: String,
+            optional: true,
+            help_tooltip: pwixI18n.label( I18N, 'clients.metadata.token_endpoint_auth_signing_alg' )
+        },
+        // Default Maximum Authentication Age
+        {
+            name: 'default_max_age',
+            type: SimpleSchema.Integer,
+            optional: true,
+            help_tooltip: pwixI18n.label( I18N, 'clients.metadata.default_max_age' )
+        },
+        // Boolean value specifying whether the auth_time Claim in the ID Token is REQUIRED
+        {
+            name: 'require_auth_time',
+            type: Boolean,
+            optional: true,
+            help_tooltip: pwixI18n.label( I18N, 'clients.metadata.require_auth_time' )
+        },
+        // Default requested Authentication Context Class Reference values
+        {
+            name: 'default_acr_values',
+            type: Array,
+            optional: true,
+            help_tooltip: pwixI18n.label( I18N, 'clients.metadata.default_acr_values' )
+        },
+        {
+            name: 'default_acr_values.$',
+            type: String
+        },
+        // URI using the https scheme that a third party can use to initiate a login by the RP
+        {
+            name: 'initiate_login_uri',
+            type: String,
+            optional: true,
+            help_tooltip: pwixI18n.label( I18N, 'clients.metadata.initiate_login_uri' )
+        },
+        // Array of request_uri values that are pre-registered by the RP for use at the OP
+        {
+            name: 'request_uris',
+            type: Array,
+            optional: true,
+            help_tooltip: pwixI18n.label( I18N, 'clients.metadata.request_uris' )
+        },
+        {
+            name: 'request_uris.$',
+            type: Object
+        },
+        {
+            name: 'request_uris.$.uri',
+            type: String
+        },
+        {
+            name: 'request_uris.$.id',
+            type: String
+        },
+        */
+        // --
         Notes.fieldDef(),
         Validity.recordsFieldDef(),
         Timestampable.fieldDef()

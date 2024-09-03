@@ -23,6 +23,9 @@ export const AuthMethod = {
     C: [
         {
             // no secret
+            //  this is the "auth method" for public clients (i.e.: no auth method at all)
+            //  https://connect2id.com/products/server/docs/guides/client-registration#public-clients
+            //  must then use a PKCE grant type
             id: 'none',
             short: 'definitions.auth_method.none_short',
             label: 'definitions.auth_method.none_label',

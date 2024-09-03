@@ -35,7 +35,7 @@ export const IGrantType = DeclareMixin(( superclass ) => class extends superclas
     /**
      * @returns {Array<String>} the list of the managed grant types
      */
-    grantTypes(){
+    grant_types(){
         return this.#priv?.granttype || [];
     }
 });

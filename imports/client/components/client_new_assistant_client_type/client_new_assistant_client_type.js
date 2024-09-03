@@ -24,8 +24,8 @@ Template.client_new_assistant_client_type.onRendered( function(){
     self.autorun(() => {
         const dataDict = Template.currentData().parentAPP.assistantStatus;
         if( dataDict.get( 'activePane' ) === 'client' ){
-            const clientType = dataDict.get( 'clientType' ) || null;
-            self.$( '.c-client-new-assistant-client-type' ).trigger( 'assistant-do-action-set', { action: 'next',  enable: clientType !== null });
+            const client_type = dataDict.get( 'client_type' ) || null;
+            self.$( '.c-client-new-assistant-client-type' ).trigger( 'assistant-do-action-set', { action: 'next',  enable: client_type !== null });
         }
     });
 });
@@ -39,7 +39,7 @@ Template.client_new_assistant_client_type.helpers({
     // whether this item is selected ?
     itChecked( it ){
         const id = ClientType.id( it );
-        return this.parentAPP.assistantStatus.get( 'clientType' ) === id ? 'checked' : '';
+        return this.parentAPP.assistantStatus.get( 'client_type' ) === id ? 'checked' : '';
     },
 
     // description
@@ -82,11 +82,11 @@ Template.client_new_assistant_client_type.events({
     // intercept the selection, updating the client type
     'click .js-check'( event, instance ){
         const id = instance.$( event.currentTarget ).prop( 'id' );
-        this.parentAPP.assistantStatus.set( 'clientType', id );
+        this.parentAPP.assistantStatus.set( 'client_type', id );
     },
     // on Next, non-reactively feed the record
     'assistant-action-next .c-client-new-assistant-client-type'( event, instance ){
         const record = this.parentAPP.entity.get().DYN.records[0].get();
-        record.clientType = this.parentAPP.assistantStatus.get( 'clientType' );
+        record.client_type = this.parentAPP.assistantStatus.get( 'client_type' );
     }
 });

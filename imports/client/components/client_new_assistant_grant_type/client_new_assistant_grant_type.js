@@ -20,7 +20,6 @@ import { ReactiveVar } from 'meteor/reactive-var';
 
 import { Providers } from '/imports/common/collections/providers/index.js';
 
-import { ClientProfile } from '/imports/common/definitions/client-profile.def.js';
 import { GrantNature } from '/imports/common/definitions/grant-nature.def.js';
 import { GrantType } from '/imports/common/definitions/grant-type.def.js';
 
@@ -63,7 +62,7 @@ Template.client_new_assistant_grant_type.onRendered( function(){
     self.autorun(() => {
         const dataDict = Template.currentData().parentAPP.assistantStatus;
         if( dataDict.get( 'activePane' ) === 'grant' ){
-            const array = dataDict.get( 'grantTypes' ) || [];
+            const array = dataDict.get( 'grant_types' ) || [];
             self.$( '.c-client-new-assistant-grant-type' ).trigger( 'assistant-do-action-set', { action: 'next',  enable: GrantType.isValidSelection( self.APP.selectables.get(), array )});
         }
     });
@@ -78,7 +77,7 @@ Template.client_new_assistant_grant_type.helpers({
     // whether this item is selected ?
     itChecked( nature, it ){
         const id = GrantType.id( it );
-        return ( this.parentAPP.assistantStatus.get( 'grantTypes' ) || [] ).includes( id ) ? 'checked' : '';
+        return ( this.parentAPP.assistantStatus.get( 'grant_types' ) || [] ).includes( id ) ? 'checked' : '';
     },
 
     // description
@@ -102,7 +101,7 @@ Template.client_new_assistant_grant_type.helpers({
     // whether this item is selected ?
     itSelected( it ){
         const id = GrantType.id( it );
-        return ( this.parentAPP.assistantStatus.get( 'grantTypes' ) || [] ).includes( id ) ? 'selected' : null;
+        return ( this.parentAPP.assistantStatus.get( 'grant_types' ) || [] ).includes( id ) ? 'selected' : null;
     },
 
     // selectable list for one grant nature
@@ -146,12 +145,12 @@ Template.client_new_assistant_grant_type.events({
         instance.$( '.chooser input:checked' ).each( function(){
             array.push( instance.$( this ).prop( 'id' ));
         });
-        this.parentAPP.assistantStatus.set( 'grantTypes', array );
+        this.parentAPP.assistantStatus.set( 'grant_types', array );
     },
     // on Next, non-reactively feed the record
     'assistant-action-next .c-client-new-assistant-grant-type'( event, instance ){
         const record = this.parentAPP.entity.get().DYN.records[0].get();
-        const grantTypes = this.parentAPP.assistantStatus.get( 'grantTypes' ) || [];
-        record.grantTypes = grantTypes;
+        const grant_types = this.parentAPP.assistantStatus.get( 'grant_types' ) || [];
+        record.grant_types = grant_types;
     }
 });

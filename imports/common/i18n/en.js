@@ -63,7 +63,7 @@ Meteor.APP.i18n = {
                     logo_label: 'Logo URI :',
                     logo_ph: 'https://my.example.com/logo.png',
                     logo_title: 'The URI of a logo displayable to an end-user',
-                    privacy_label: 'Privacy policy URI :',
+                    privacy_label: 'Privacy policy page URI :',
                     privacy_ph: 'https://my.example.com/privacy',
                     privacy_title: 'The URI of a page which describes the privacy policy of the client',
                     providers_tab_title: 'Providers',
@@ -91,10 +91,128 @@ Meteor.APP.i18n = {
                     button_label: 'New client',
                     button_title: 'Define a new client in the organization'
                 },
+                metadata: {
+                    client_name: '<p class="source">https://datatracker.ietf.org/doc/html/rfc7591</p>'
+                        +'<p class="name">client_name</p>'
+                        +'<p class="text">Human-readable string name of the client to be presented to the end-user during authorization.<br />'
+                        +'If omitted, the authorization server MAY display the raw "client_id" value to the end-user instead.<br />'
+                        +'It is RECOMMENDED that clients always send this field.</p>',
+                    client_type: '<p class="source">https://datatracker.ietf.org/doc/html/rfc6749</p>'
+                        +'<p class="name">client_type</p>'
+                        +'<p class="text">OAuth defines two client types, based on their ability to authenticate securely with the authorization server '
+                        +'(i.e., ability to maintain the confidentiality of their client credentials):<br />'
+                        +'<ul><li><em>Confidential</em> clients are expected capable of maintaining the confidentiality of their credentials (e.g., client implemented '
+                        +'on a secure server with restricted access to the client credentials), or capable of secure client authentication using other means.</li>'
+                        +'<li><em>Public</em> clients incapable of maintaining the confidentiality of their credentials (e.g., clients executing on the device used by the '
+                        +'resource owner, such as an installed native application or a web browser-based application), and incapable of secure client authentication via '
+                        +'any other means./<li></ul></p>',
+                    client_uri: '<p class="source">https://datatracker.ietf.org/doc/html/rfc7591</p>'
+                        +'<p class="name">client_uri</p>'
+                        +'<p class="text">URL string of a web page providing information about the client.<br />'
+                        +'If present, the server SHOULD display this URL to the end-user in a clickable fashion.<br />'
+                        +'It is RECOMMENDED that clients always send this field. The value of this field MUST point to a valid web page.</p>',
+                    contacts: '<p class="source">https://datatracker.ietf.org/doc/html/rfc7591</p>'
+                        +'<p class="name">contacts</p>'
+                        +'<p class="text">Array of strings representing ways to contact people responsible for this client, typically email addresses.<br />'
+                        +'The authorization server MAY make these contact addresses available to end-users for support requests for the client.<br />'
+                        +'See Section 6 for information on Privacy Considerations.</p>',
+                    grant_types: '<p class="source">https://datatracker.ietf.org/doc/html/rfc7591</p>'
+                        +'<p class="name">grant_types</p>'
+                        +'<p class="text">Array of OAuth 2.0 grant type strings that the client can use at the token endpoint.<br >'
+                        +'These grant types are defined as follows:<br />'
+                        +'<ul><li><em>authorization_code</em>: The authorization code grant type defined in OAuth 2.0, Section 4.1.</li>'
+                        +'<li><em>implicit</em>: The implicit grant type defined in OAuth 2.0, Section 4.2.</li>'
+                        +'<li><em>password</em>: The resource owner password credentials grant type defined in OAuth 2.0, Section 4.3.</li>'
+                        +'<li><em>client_credentials</em>: The client credentials grant type defined in OAuth 2.0, Section 4.4.</li>'
+                        +'<li><em>refresh_token</em>: The refresh token grant type defined in OAuth 2.0, Section 6.</li>'
+                        +'<li><em>urn:ietf:params:oauth:grant-type:jwt-bearer</em>: The JWT Bearer Token Grant Type defined in OAuth JWT Bearer Token Profiles [RFC7523].</li>'
+                        +'<li><em>urn:ietf:params:oauth:grant-type:saml2-bearer</em>: The SAML 2.0 Bearer Assertion Grant defined in OAuth SAML 2 Bearer Token Profiles [RFC7522].</li>'
+                        +'</ul>'
+                        +'If the token endpoint is used in the grant type, the value of this parameter MUST be the same as the value of the "grant_type" '
+                        +'parameter passed to the token endpoint defined in the grant type definition.  Authorization servers MAY allow for other values as '
+                        +'defined in the grant type extension process described in OAuth 2.0, Section 4.5.  If omitted, the default behavior is that the '
+                        +'client will use only the "authorization_code" Grant Type</p>',
+                    jwks: '<p class="source">https://datatracker.ietf.org/doc/html/rfc7591</p>'
+                        +'<p class="name">jwks</p>'
+                        +'<p class="text">Client\'s JSON Web Key Set [RFC7517] document value, which contains the client\'s public keys.<br />'
+                        +'The value of this field MUST be a JSON object containing a valid JWK Set.<br />'
+                        +'These keys can be used by higher-level protocols that use signing or encryption.<br />'
+                        +'This parameter is intended to be used by clients that cannot use the "jwks_uri" parameter, such as native clients that cannot host public URLs.<br />'
+                        +'The "jwks_uri" and "jwks" parameters MUST NOT both be present in the same request or response.</p>',
+                    jwks_uri: '<p class="source">https://datatracker.ietf.org/doc/html/rfc7591</p>'
+                        +'<p class="name">jwks_uri</p>'
+                        +'<p class="text">URL string referencing the client\'s JSON Web Key (JWK) Set [RFC7517] document, which contains the client\'s public keys.<br />'
+                        +'The value of this field MUST point to a valid JWK Set document.<br />'
+                        +'These keys can be used by higher-level protocols that use signing or encryption. For instance, these keys might be used by some '
+                        +'applications for validating signed requests made to the token endpoint when using JWTs for client authentication [RFC7523].<br />'
+                        +'Use of this parameter is preferred over the "jwks" parameter, as it allows for easier key rotation.<br />'
+                        +'The "jwks_uri" and "jwks" parameters MUST NOT both be present in the same request or response.</p>',
+                    logo_uri: '<p class="source">https://datatracker.ietf.org/doc/html/rfc7591</p>'
+                        +'<p class="name">logo_uri</p>'
+                        +'<p class="text">URL string that references a logo for the client.<br />'
+                        +'If present, the server SHOULD display this image to the end-user during approval.<br />'
+                        +'The value of this field MUST point to a valid image file.</p>',
+                    policy_uri: '<p class="source">https://datatracker.ietf.org/doc/html/rfc7591</p>'
+                        +'<p class="name">policy_uri</p>'
+                        +'<p class="text">URL string that points to a human-readable privacy policy document that describes how the deployment organization '
+                        +'collects, uses, retains, and discloses personal data. The authorization server SHOULD display this URL to the end-user if it is provided.<br />'
+                        +'The value of this field MUST point to a valid web page.</p>',
+                    redirect_uris: '<p class="source">https://datatracker.ietf.org/doc/html/rfc7591</p>'
+                        +'<p class="name">redirect_uris</p>'
+                        +'<p class="text">Array of redirection URI strings for use in redirect-based flows such as the authorization code and implicit flows.<br />'
+                        +'As required by Section 2 of OAuth 2.0 [RFC6749], clients using flows with redirection MUST register their redirection URI values.<br />'
+                        +'Authorization servers that support dynamic registration for redirect-based flows MUST implement support for this metadata value.</p>',
+                    response_types: '<p class="source">https://datatracker.ietf.org/doc/html/rfc7591</p>'
+                        +'<p class="name">response_types</p>'
+                        +'<p class="text">Array of the OAuth 2.0 response type strings that the client can use at the authorization endpoint.<br />'
+                        +'These response types are defined as follows:<br />'
+                        +'<ul><li><em>code</em>: The authorization code response type defined in OAuth 2.0, Section 4.1.</li>'
+                        +'<li><em>token</em>: The implicit response type defined in OAuth 2.0, Section 4.2.</li></ul>'
+                        +'If the authorization endpoint is used by the grant type, the value of this parameter MUST be the same as the value '
+                        +'of the "response_type" parameter passed to the authorization endpoint defined in the grant type definition.<br >'
+                        +'Authorization servers MAY allow for other values as defined in the grant type extension process is described in OAuth 2.0, Section 4.5.<br />'
+                        +'If omitted, the default is that the client will use only the "code" response type.</p>',
+                    scopes: '<p class="source">https://datatracker.ietf.org/doc/html/rfc7591</p>'
+                        +'<p class="name">scopes</p>'
+                        +'<p class="text">Array of scope values (as described in Section 3.3 of OAuth 2.0 [RFC6749]) that the client can use when requesting access tokens.<br />'
+                        +'The semantics of values in this list are service specific.<br />'
+                        +'If omitted, an authorization server MAY register a client with a default set of scopes.</p>',
+                    software_id: '<p class="source">https://datatracker.ietf.org/doc/html/rfc7591</p>'
+                        +'<p class="name">software_id</p>'
+                        +'<p class="text">A unique identifier string (e.g., a Universally Unique Identifier (UUID)) assigned by the client developer or software publisher '
+                        +'used by registration endpoints to identify the client software to be dynamically registered.<br />'
+                        +'Unlike "client_id", which is issued by the authorization server and SHOULD vary between instances, the "software_id" SHOULD remain the same for '
+                        +'all instances of the client software. The "software_id" SHOULD remain the same across multiple updates or versions of the same piece of software.<br />'
+                        +'The value of this field is not intended to be human readable and is usually opaque to the client and authorization server.</p>',
+                    software_version: '<p class="source">https://datatracker.ietf.org/doc/html/rfc7591</p>'
+                        +'<p class="name">software_version</p>'
+                        +'<p class="text">A version identifier string for the client software identified by "software_id".<br />'
+                        +'The value of the "software_version" SHOULD change on any update to the client software identified by the same "software_id".<br />'
+                        +'The value of this field is intended to be compared using string equality matching and no other comparison semantics are defined by this specification. '
+                        +'The value of this field is outside the scope of this specification, but it is not intended to be human readable and is usually opaque to the client and '
+                        +'authorization server. The definition of what constitutes an update to client software that would trigger a change to this value is specific to the '
+                        +'software itself and is outside the scope of this specification.</p>',
+                    token_endpoint_auth_method: '<p class="source">https://datatracker.ietf.org/doc/html/rfc7591</p>'
+                        +'<p class="name">token_endpoint_auth_method</p>'
+                        +'<p class="text">String indicator of the requested authentication method for the token endpoint.<br />'
+                        +'Values defined by the specification are:<br />'
+                        +'<ul><li><em>none</em>: The client is a public client as defined in OAuth 2.0, Section 2.1, and does not have a client secret.</li>'
+                        +'<li><em>client_secret_post</em>: The client uses the HTTP POST parameters as defined in OAuth 2.0, Section 2.3.1.</li>'
+                        +'<li><em>client_secret_basic</em>: The client uses HTTP Basic as defined in OAuth 2.0, Section 2.3.1.</li></ul></p>',
+                    tos_uri: '<p class="source">https://datatracker.ietf.org/doc/html/rfc7591</p>'
+                        +'<p class="name">tos_uri</p>'
+                        +'<p class="text">URL string that points to a human-readable terms of service document for the client that describes a '
+                        +'contractual relationship between the end-user and the client that the end-user accepts when authorizing the client.<br />'
+                        +'The authorization server SHOULD display this URL to the end-user if it is provided.<br />'
+                        +'The value of this field MUST point to a valid web page.</p>'
+                },
                 new_assistant: {
                     assistant_title: 'Defining a new client application',
                     auth_method_nav: 'Authentification method',
-                    auth_method_text: 'Confidential clients must authenticate against the Authorization Server token endpoint. Please choose below your desired authentification method.',
+                    auth_method_confidential_text: 'Confidential clients must authenticate against the Authorization Server token endpoint.<br />'
+                        +'Please choose below your desired authentication method.',
+                    auth_method_public_text: 'Confidential clients must authenticate against the Authorization Server token endpoint.<br />'
+                        +'Please choose below your desired authentication method.',
                     client_nav: 'Client type',
                     client_text: 'The client type, in the sense of OAuth specifications, is automatically determined from your chosen client profile. '
                         +'You shouldn\'t need to change it, unless you are really sure of what you are doing, but just in case...',
@@ -143,8 +261,8 @@ Meteor.APP.i18n = {
                     none_desc: 'No secret at all',
                     none_label: 'None',
                     none_short: 'None',
-                    select_text: 'Select the client authentification method',
-                    shared_desc: 'A shared secret generated by the authorization server at registration time; the client must use Basic HTTP authentification scheme',
+                    select_text: 'Select the client authentication method',
+                    shared_desc: 'A shared secret generated by the authorization server at registration time; the client must use Basic HTTP authentication scheme',
                     shared_label: 'Shared secret - Basic HTTP scheme',
                     shared_short: 'Shared / Basic',
                     post_desc: 'A shared secret generated by the authorization server at registration time; the client uses HTTP POST parameters',
@@ -153,15 +271,15 @@ Meteor.APP.i18n = {
                 },
                 client_profile: {
                     confidential_label: 'Trusted user-oriented',
-                    confidential_description: 'Your client application requires user authentification and needs user consent, but runs on a trusted server.',
+                    confidential_description: 'Your client application requires user authentication and needs user consent, but runs on a trusted server.',
                     generic_label: 'Generic',
                     generic_description: 'If your use case doesn\'t fall in any of the previous categories, then you will have to dive '
                         +'into the full set of configuration parameters.',
                     m2m_label: 'Machine-to-Machine',
                     m2m_description: 'Machine-to-machine scenarii are not runned on behalf a particular user, nor they need any sort of user consent. '
-                        +'This gathers for example running automated tasks, background processes or server services.',
+                        +'This gathers for example running automated tasks, background processes or server services or apis.',
                     public_label: 'User-device user-oriented',
-                    public_description: 'A web single-page application as well as a mobile or a native desktop application which requires user authentication, '
+                    public_description: 'A web single-page application as well as any desktop application which requires user authentication, '
                         +'as soon as it runs on an (untrustable by nature) user device.',
                     select_text: 'Choose the profile of your client application'
                 },
@@ -190,12 +308,9 @@ Meteor.APP.i18n = {
                     refresh_label: 'Refresh token',
                 },
                 grant_type: {
-                    authcode_20_description: 'The authorization server returns a single-use authorization code to the client. '
+                    authcode_description: 'The authorization server returns a single-use authorization code to the client. '
                         +'The client then exchanges the code for an access token.',
-                    authcode_20_label: 'Authorization code grant',
-                    authcode_21_description: 'The authorization server returns a single-use authorization code to the client. '
-                        +'The client then exchanges the code for an access token.',
-                    authcode_21_label: 'Authorization code grant + PKCE',
+                    authcode_label: 'Authorization code grant',
                     client_description: 'A grant type suitable for machine-to-machine authentication.',
                     client_label: 'Client credentials grant',
                     device_description: 'Aimed at devices with limited input or display capabilities, such as game consoles or smart TVs.',
@@ -203,9 +318,9 @@ Meteor.APP.i18n = {
                     hybrid_description: 'An OpenID authorization flow which enables clients to obtain some tokens straight from the Authorization Endpoint, '
                         +'while still having the possibility to get others from the Token Endpoint.',
                     hybrid_label: 'Hybrid authorization flow',
-                    implicit_20_description: 'The client application receives the access token immediately after the user gives their consent. '
+                    implicit_description: 'The client application receives the access token immediately after the user gives their consent. '
                         +'<b>This grant flow is deprecated in favor of Authorization code flow.</b>',
-                    implicit_20_label: 'Implicit grant',
+                    implicit_label: 'Implicit grant',
                     jwt_bearer_description: 'JSON Web Token (JWT) Profile for OAuth 2.0 Client Authentication and Authorization Grants.',
                     jwt_bearer_label: 'JWT Bearer token',
                     jwt_profile_description: 'JSON Web Token (JWT) Profile for OAuth 2.0 Access Tokens.',
@@ -266,6 +381,8 @@ Meteor.APP.i18n = {
                     baseurl_ph: '/base',
                     baseurl_title: 'The first level of all REST URL\'s managed by and available to this organization. This is mandatory to have access to the Authorization Server REST API.',
                     clients_tab_title: 'Clients',
+                    config_preamble: 'Set here some configuration parameters common to all clients.',
+                    config_tab_title: 'Configuration',
                     dynconfidential_label: 'Accept dynamic registration from confidential client applications',
                     dynconfidential_title: 'Whether a confidential client can be configured to allow dynamic registration of other client applications',
                     dynpublic_label: 'Accept dynamic registration from public client applications',
@@ -275,6 +392,8 @@ Meteor.APP.i18n = {
                     dynregistration_tab_title: 'Dynamic registration',
                     dynuser_label: 'Accept dynamic registration from allowed identified users',
                     dynuser_title: 'Whether an identified user can be allowed to perform dynamic registration of client applications',
+                    pkce_label: 'Wants all clients use PKCE [RFC7636]',
+                    pkce_title: 'Make a proof key for code exchange mandatory for all public and confidential clients',
                     providers_tab_title: 'Providers',
                     urls_tab_title: 'URL\'s'
                 },

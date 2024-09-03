@@ -28,6 +28,13 @@ Template.client_new_assistant_redirects.onCreated( function(){
 Template.client_new_assistant_redirects.onRendered( function(){
     const self = this;
 
+    // tracks the selected providers to enable/disable this pane
+    // this pane requires to have at least a grant type which implements a redirected grant flow
+    self.autorun(() => {
+        const dataDict = Template.currentData().parentAPP.assistantStatus;
+        self.$( '.c-client-new-assistant-redirects' ).trigger( 'assistant-do-enable-tab', { name: 'redirects',  enabled: false });
+    });
+
     // enable the Next button if the panel is valid
     self.autorun(() => {
         const dataDict = Template.currentData().parentAPP.assistantStatus;

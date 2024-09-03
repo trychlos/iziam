@@ -36,22 +36,22 @@ Template.client_properties_panel.onCreated( function(){
             description: {
                 js: '.js-description'
             },
-            logoUri: {
+            logo_uri: {
                 js: '.js-logo'
             },
-            homeUri: {
+            client_uri: {
                 js: '.js-home'
             },
-            tosUri: {
+            tos_uri: {
                 js: '.js-tos'
             },
-            privacyUri: {
+            policy_uri: {
                 js: '.js-privacy'
             },
-            softwareId: {
+            software_id: {
                 js: '.js-softid'
             },
-            softwareVersion: {
+            software_version: {
                 js: '.js-softver'
             }
         },

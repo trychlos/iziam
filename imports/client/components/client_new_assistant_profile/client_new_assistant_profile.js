@@ -36,7 +36,7 @@ Template.client_new_assistant_profile.onRendered( function(){
             self.$( '.c-client-new-assistant-profile .by-item[data-item-id="'+ClientProfile.id( profileDef )+'"]' ).addClass( 'selected' );
             // setup dependant default values - must be done here so that other panes can modified them
             dataDict.set( 'profileFeatures', ClientProfile.defaultFeatures( profileDef ));
-            dataDict.set( 'clientType', ClientProfile.defaultClientType( profileDef ));
+            dataDict.set( 'client_type', ClientProfile.defaultClientType( profileDef ));
             //dataDict.set( 'haveAllowedApis', ClientProfile.defaultHaveAllowedApis( def ));
             //dataDict.set( 'haveEndpoints', ClientProfile.defaultHaveEndpoints( def ));
             //dataDict.set( 'haveUsers', ClientProfile.defaultHaveUsers( def ));

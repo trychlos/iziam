@@ -14,98 +14,59 @@ export const ClientProfile = {
             label: 'definitions.client_profile.m2m_label',
             description: 'definitions.client_profile.m2m_description',
             image: '/images/profile-computer.svg',
-            //grantTypes: [
-            //    'client_creds'
-            //],
-            //haveEndpoints: false,
-            //haveUsers: false,
-            allowedAuthMethods: [
-                'secret_basic',
-                'secret_post',
-                'private_jwt',
-                'secret_jwt'
-            ],
-            clientType: 'confidential',
+            client_type: 'confidential',
             features: [
                 'oauth2'
             ],
-            preferredGrantType: 'client_credentials'
+            //haveEndpoints: false,
+            //haveUsers: false,
+            grant_type: 'client_credentials'
         },
         {
             id: 'public',
             label: 'definitions.client_profile.public_label',
             description: 'definitions.client_profile.public_description',
             image: '/images/profile-public.svg',
-            //grantTypes: [
-            //    'auth_code',
-            //    'refresh_token'
-            //],
-            //haveAllowedApis: false,
-            allowedAuthMethods: [
-                'none'
-            ],
-            clientType: 'public',
+            client_type: 'public',
             features: [
                 'oauth2',
                 'openid'
             ],
-            preferredGrantType: 'auth_code_21'
+            //haveAllowedApis: false,
+            grant_type: 'authorization_code'
         },
         {
             id: 'confidential',
             label: 'definitions.client_profile.confidential_label',
             description: 'definitions.client_profile.confidential_description',
             image: '/images/profile-confidential.svg',
-            //grantTypes: [
-            //    'auth_code',
-            //    'refresh_token',
-            //    'client_creds'
-            //],
-            //haveAllowedApis: false,
-            allowedAuthMethods: [
-                'secret_basic',
-                'secret_post',
-                'private_jwt',
-                'secret_jwt'
-            ],
-            clientType: 'confidential',
+            client_type: 'confidential',
             features: [
                 'oauth2'
             ],
-            preferredGrantType: 'client_credentials'
+            //haveAllowedApis: false,
+            grant_type: 'client_credentials'
         },
         {
             id: 'generic',
             label: 'definitions.client_profile.generic_label',
             description: 'definitions.client_profile.generic_description',
             image: '/images/profile-generic.svg',
-            //grantTypes: [
-            //    'auth_code',
-            //    'client_creds'
-            //],
+            client_type: 'public',
+            features: [
+                'oauth2'
+            ],
             //haveAllowedApis: false,
-            allowedAuthMethods: [
+            auth_methods: [
                 'none',
                 'secret_basic',
                 'secret_post',
                 'private_jwt',
                 'secret_jwt'
             ],
-            clientType: 'public',
-            features: [
-                'oauth2'
-            ],
-            preferredGrantType: 'auth_code_21'
+            grant_type: 'authorization_code'
         }
     ],
-
-    /**
-     * @param {Object} def a ClientProfile definition as returned by ClientProfile.Knowns()
-     * @returns {Array<String>} the allowed authentification methods, defaulting to 'none'
-     */
-    allowedAuthMethods( def ){
-        return def.allowedAuthMethods || [ 'none' ];
-    },
 
     /**
      * @param {String} id a client profile identifier
@@ -124,10 +85,21 @@ export const ClientProfile = {
 
     /**
      * @param {Object} def a ClientProfile definition as returned by ClientProfile.Knowns()
+     * @returns {Array<String>} the default authentification methods
+     *  The proposed authentication methods of a client mainly depend of the client type and the selected providers
+     *  though this can be superseded here at the client profile level.
+     *  We return null if we accept to rely of computed values
+     */
+    defaultAuthMethods( def ){
+        return def.auth_methods || null;
+    },
+
+    /**
+     * @param {Object} def a ClientProfile definition as returned by ClientProfile.Knowns()
      * @returns {String} the ClientType type, defaulting to 'public'
      */
     defaultClientType( def ){
-        return def.clientType || 'public';
+        return def.client_type || 'public';
     },
 
     /**
@@ -136,6 +108,14 @@ export const ClientProfile = {
      */
     defaultFeatures( def ){
         return def.features;
+    },
+
+    /**
+     * @param {Object} def a ClientProfile definition as returned by ClientProfile.Knowns()
+     * @returns {String} the preferred grant type
+     */
+    defaultGrantType( def ){
+        return def.grant_type;
     },
 
     /**
@@ -200,12 +180,4 @@ export const ClientProfile = {
     label( def ){
         return pwixI18n.label( I18N, def.label );
     },
-
-    /**
-     * @param {Object} def a ClientProfile definition as returned by ClientProfile.Knowns()
-     * @returns {String} the preferred grant type
-     */
-    preferredGrantType( def ){
-        return def.preferredGrantType;
-    }
 };

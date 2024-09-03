@@ -19,8 +19,14 @@ export const ClientType = {
                 'org.trychlos.iziam.provider.oauth20.0': 'definitions.client_type.confidential_text_oauth20',
                 'org.trychlos.iziam.provider.oauth21.11': 'definitions.client_type.confidential_text_oauth21'
             },
-            description: 'definitions.client_type.confidential_description'
+            description: 'definitions.client_type.confidential_description',
             //preferred_auth: AuthRFC.C.OAUTH
+            auth_methods: [
+                'secret_basic',
+                'secret_post',
+                'private_jwt',
+                'secret_jwt'
+            ],
         },
         {
             id: 'public',
@@ -30,8 +36,11 @@ export const ClientType = {
                 'org.trychlos.iziam.provider.oauth20.0': 'definitions.client_type.public_text_oauth20',
                 'org.trychlos.iziam.provider.oauth21.11': 'definitions.client_type.public_text_oauth21'
             },
-            description: 'definitions.client_type.public_description'
+            description: 'definitions.client_type.public_description',
             //preferred_auth: AuthRFC.C.OPENID
+            auth_methods: [
+                'none'
+            ],
         }
     ],
 
@@ -48,6 +57,16 @@ export const ClientType = {
             return found === null;
         });
         return found;
+    },
+
+    /**
+     * @param {Object} def a ClientType definition as returned by ClientType.Knowns()
+     * @returns {Array<String>} the default authentification methods
+     *  The proposed authentication methods of a client mainly depend of the client type and the selected providers
+     *  though this can be superseded here at the client profile level.
+     */
+    defaultAuthMethods( def ){
+        return def.auth_methods || null;
     },
 
     /**
@@ -85,9 +104,11 @@ export const ClientType = {
      * @param {Object} def a ClientType definition as returned by ClientType.Knowns()
      * @returns {String} a AuthRFC identifier of the preferred protocol
      */
+    /*
     preferredAuth( def ){
         return def.preferred_auth;
     },
+    */
 
     /**
      * @param {Object} def a ClientType definition as returned by ClientType.Knowns()

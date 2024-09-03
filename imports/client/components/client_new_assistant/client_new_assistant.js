@@ -232,12 +232,11 @@ Template.client_new_assistant.events({
             instance.APP.assistantPck = data.pck;
         }
     },
-    // advertize of the assistant checker instanciation
+    // get informed of the assistant checker instanciation
+    //  this is a child of this checker, and will be the parent of panes checkers
     'assistant-checker .c-client-new-assistant'( event, instance, data ){
-        console.debug( 'assistant-checker', data );
         instance.APP.assistantCheckerRv = data.checker;
     },
-
     // track the currently shown pane
     'assistant-pane-to-hide .c-client-new-assistant'( event, instance, data ){
         instance.APP.assistantStatus.set( 'activePane', null );
@@ -245,7 +244,6 @@ Template.client_new_assistant.events({
     'assistant-pane-shown .c-client-new-assistant'( event, instance, data ){
         instance.APP.assistantStatus.set( 'activePane', data.paneName );
     },
-
     // we are expected to be able to act on the action buttons on 'show' and 'shown' events
     'assistant-pane-to-hide .c-client-new-assistant, assistant-pane-hidden .c-client-new-assistant, assistant-pane-to-show .c-client-new-assistant, assistant-pane-shown .c-client-new-assistant'( event, instance, data ){
         //console.debug( event.type, data );

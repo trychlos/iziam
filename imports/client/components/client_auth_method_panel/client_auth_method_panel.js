@@ -48,7 +48,7 @@ Template.client_auth_method_panel.onCreated( function(){
             const entity = Template.currentData().entity.get();
             const index = Template.currentData().index;
             const record = entity.DYN.records[index].get();
-            return record.authMethod === id;
+            return record.token_endpoint_auth_method === id;
         }
     };
 
@@ -146,8 +146,8 @@ Template.client_auth_method_panel.events({
         const entity = this.entity.get();
         const index = this.index;
         const record = entity.DYN.records[index].get();
-        record.authMethod = id;
+        record.token_endpoint_auth_method = id;
         // advertize the eventual caller (e.g. the client_new_assistant) of the new auth method
-        instance.$( '.c-client-auth-method-panel' ).trigger( 'iz-auth-method', { authMethod: id });
+        instance.$( '.c-client-auth-method-panel' ).trigger( 'iz-auth-method', { token_endpoint_auth_method: id });
     }
 });

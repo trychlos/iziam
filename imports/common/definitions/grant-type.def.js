@@ -42,31 +42,28 @@ import { IGrantType } from '/imports/common/interfaces/igranttype.iface.js';
 export const GrantType = {
     C: [
         {
-            // OAuth 2.0 authorization code
-            id: 'auth_code_20',
-            label: 'definitions.grant_type.authcode_20_label',
-            description: 'definitions.grant_type.authcode_20_description',
-            image: '/images/grant-type.svg',
-            nature: 'access'
-        },
-        {
-            // OAuth 2.1 authorization code + PKCE
-            id: 'auth_code_21',
-            label: 'definitions.grant_type.authcode_21_label',
-            description: 'definitions.grant_type.authcode_21_description',
+            // OAuth 2.0/2.1 authorization code
+            id: 'authorization_code',
+            label: 'definitions.grant_type.authcode_label',
+            description: 'definitions.grant_type.authcode_description',
             image: '/images/grant-type.svg',
             nature: 'access'
         },
         {
             // implicit grant - oauth 2.0 ONLY
-            id: 'implicit_20',
-            label: 'definitions.grant_type.implicit_20_label',
-            description: 'definitions.grant_type.implicit_20_description',
+            // deprecated
+            id: 'implicit',
+            label: 'definitions.grant_type.implicit_label',
+            description: 'definitions.grant_type.implicit_description',
             image: '/images/grant-type.svg',
             nature: 'access'
         },
         {
             // client credentials
+            // https://connect2id.com/products/server/docs/guides/client-registration#example-client-credentials-grant
+            // The client credentials grant is intended for clients that act on their own behalf (the client is also the resource owner),
+            // as opposed to the general OAuth case where the client acts on behalf of an end-user. This grant type is often used in
+            // microservice and B2B service scenarios.
             id: 'client_credentials',
             label: 'definitions.grant_type.client_label',
             description: 'definitions.grant_type.client_description',
@@ -74,8 +71,8 @@ export const GrantType = {
             nature: 'access'
         },
         {
-            // device code
-            id: 'device_code',
+            // device code [RFC8628]
+            id: 'urn:ietf:params:oauth:grant-type:device_code',
             label: 'definitions.grant_type.device_label',
             description: 'definitions.grant_type.device_description',
             image: '/images/grant-type.svg',
@@ -91,6 +88,7 @@ export const GrantType = {
         },
         {
             // resource owner password credentials
+            // deprecated
             id: 'password_credentials',
             label: 'definitions.grant_type.password_label',
             description: 'definitions.grant_type.password_description',
@@ -231,7 +229,7 @@ export const GrantType = {
             }
             // refresh token must be associated to an authorization code
             if( valid && nature === 'refresh' ){
-                valid &&= ( array.includes( 'auth_code_20' ) || array.includes( 'auth_code_21' ));
+                valid &&= ( array.includes( 'authorization_code' ));
             }
             // stops as soon as we have found an error
             return valid === true;
@@ -313,7 +311,7 @@ export const GrantType = {
         ( providers || [] ).forEach(( it ) => {
             const provider = Providers.byId( it );
             if( provider && provider instanceof IGrantType ){
-                const grants = provider.grantTypes();
+                const grants = provider.grant_types();
                 hash[it] = {
                     provider: provider,
                     grants: grants

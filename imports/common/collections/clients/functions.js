@@ -14,6 +14,7 @@ import { IFeatured } from '/imports/common/interfaces/ifeatured.iface.js';
 import { IIdent } from '/imports/common/interfaces/iident.iface.js';
 import { IRequires } from '/imports/common/interfaces/irequires.iface.js';
 
+import { Organizations } from '/imports/common/collections/organizations/index.js';
 import { Providers } from '/imports/common/collections/providers/index.js';
 
 import { Clients } from './index.js';
@@ -34,13 +35,13 @@ Clients.fn = {
         const edited = Clients.find({ entity: client.entity }).fetch();
         const itemrv = new ReactiveVar( client );
         let promises = [];
-        promises.push( Clients.check_authMethod( client.authMethod, { item: itemrv }, { update: false }));
+        promises.push( Clients.check_authMethod( client.token_endpoint_auth_method, { item: itemrv }, { update: false }));
         promises.push( Clients.check_clientId( client.clientId, { item: itemrv }, { update: false }));
         promises.push( Clients.check_clientSecrets( client.clientSecrets, { item: itemrv }, { update: false }));
         promises.push( Clients.check_effectEnd( client.effectEnd, { item: itemrv, edited: edited }, { update: false }));
         promises.push( Clients.check_effectStart( client.effectStart, { item: itemrv, edited: edited }, { update: false }));
         promises.push( Clients.check_endpoints( client.endpoints ));
-        promises.push( Clients.check_grantTypes( client.grantTypes, { item: itemrv }, { update: false }));
+        promises.push( Clients.check_grantTypes( client.grant_types, { item: itemrv }, { update: false }));
         promises.push( Clients.check_label( client.label, { item: itemrv }, { update: false }));
         promises.push( Clients.check_responseTypes( client.responseTypes, { item: itemrv }, { update: false }));
         promises.push( Clients.check_type( client.type, { item: itemrv }, { update: false }));
@@ -76,6 +77,9 @@ Clients.fn = {
         let selectedIds = client.record.selectedProviders || [];
         // add providers non-selectable by the user, which default to be selected
         selectedIds = Providers.filterDefaultSelectedNonUserSelectable( selectedIds );
+        if( Organizations.fn.wantsPkce( organization )){
+            selectedIds.push( 'org.trychlos.iziam.provider.pkce.0' );
+        }
         // build a hash by id with provider and features
         //  features are not recorded in the collection as they can change from a version to another
         let result = {};
@@ -92,7 +96,7 @@ Clients.fn = {
                 console.log( 'provider not found', id );
             }
         });
-        // check the requisite features
+        // check the requisite features, adding the missing providers
         let selected = [];
         Object.keys( result ).forEach(( id ) => {
             const p = result[id].provider;
@@ -101,8 +105,13 @@ Clients.fn = {
                 const requires = p.requires();
                 requires.every(( reqId ) => {
                     if( !allFeatures.includes( reqId )){
-                        console.log( 'prerequisite not found', 'provider='+id, 'requires='+reqId );
-                        found = false;
+                        const providingsReq = Providers.forFeature( reqId );
+                        if( providingsReq.length ){
+                            result[providingsReq[0].identId()] = providingsReq[0];
+                        } else {
+                            console.log( 'prerequisite not found', 'provider='+id, 'requires='+reqId );
+                            found = false;
+                        }
                     }
                     return found;
                 });
@@ -149,7 +158,7 @@ Clients.fn = {
     wantsClientCredentials( client ){
         let wants = false;
         if( client.clientSecrets && client.clientSecrets.length > 0 ){
-            client.grantTypes.every(( type ) => {
+            client.grant_types.every(( type ) => {
                 if( type === 'client_credentials' ){
                     wants = true;
                 }

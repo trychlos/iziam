@@ -44,13 +44,13 @@ Template.client_new_assistant_current.onCreated( function(){
 Template.client_new_assistant_current.helpers({
     // authentification method
     authText(){
-        const def = AuthMethod.byId( this.parentAPP.assistantStatus.get( 'authMethod' ));
+        const def = AuthMethod.byId( this.parentAPP.assistantStatus.get( 'token_endpoint_auth_method' ));
         return def ? AuthMethod.label( def ) : '';
     },
 
     // client type
     clientText(){
-        return this.parentAPP.assistantStatus.get( 'clientType' );
+        return this.parentAPP.assistantStatus.get( 'client_type' );
     },
 
     // registered contacts
@@ -60,7 +60,7 @@ Template.client_new_assistant_current.helpers({
 
     // grant types
     grantText(){
-        return GrantType.joinedLabels( this.parentAPP.assistantStatus.get( 'grantTypes' ));
+        return GrantType.joinedLabels( this.parentAPP.assistantStatus.get( 'grant_types' ));
     },
 
     // whether we want display the pane ?
@@ -118,8 +118,8 @@ Template.client_new_assistant_current.helpers({
 
     // client software description
     propSoftware(){
-        const softid = this.parentAPP.entity.get().DYN.records[0].get().softwareId;
-        const softver = this.parentAPP.entity.get().DYN.records[0].get().softwareVersion;
+        const softid = this.parentAPP.entity.get().DYN.records[0].get().software_id;
+        const softver = this.parentAPP.entity.get().DYN.records[0].get().software_version;
         return softid || softver ? ( softid || '' ) + ' ' + ( softver || '' ) : '';
     },
 
@@ -131,8 +131,8 @@ Template.client_new_assistant_current.helpers({
 
     // registered redirect URLs
     redirectsText(){
-        const redirectUrls = this.parentAPP.entity.get().DYN.records[0].get().redirectUrls;
-        const urls = redirectUrls.map(( it ) => { return it.url; });
+        const redirect_uris = this.parentAPP.entity.get().DYN.records[0].get().redirect_uris;
+        const urls = redirect_uris.map(( it ) => { return it.url; });
         return urls.join( ', ' );
     }
 });

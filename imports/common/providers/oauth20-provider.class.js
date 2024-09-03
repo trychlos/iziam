@@ -37,14 +37,15 @@ export class OAuth20Provider extends mix( izProvider ).with( IGrantType ){
             },
             ifeatured: [
                 'oauth2',
-                'oauth-2.0-6749'
+                'oauth-2.0-6749',
+                'authorization_code'
             ],
             // authorization grant types are defined by the spec
             igranttype: [
-                'auth_code_20',
-                'implicit_20',
-                'client_credentials',
-                'password_credentials'
+                'authorization_code',
+                'implicit',
+                'password_credentials',
+                'client_credentials'
             ]
         });
 

@@ -42,10 +42,16 @@ Each organization can define:
 - [OAuth 2.0 for Native Apps](https://datatracker.ietf.org/doc/html/rfc8252)
 - [OAuth 2.0 Authorization Server Metadata](https://datatracker.ietf.org/doc/html/rfc8414)
 - [OAuth 2.0 Device Authorization Grant](https://datatracker.ietf.org/doc/rfc8628/)
+- [OAuth 2.0 Token Exchange](https://datatracker.ietf.org/doc/html/rfc8693)
 - [JSON Web Token (JWT) Profile for OAuth 2.0 Access Tokens](https://datatracker.ietf.org/doc/rfc9068/)
+
+### OpenID
+
+- [OpenID Connect Dynamic Client Registration](https://openid.net/specs/openid-connect-registration-1_0.html#ClientMetadata)
 
 ### And also
 
+- [OAuth 2.0 client authentication](https://connect2id.com/products/server/docs/guides/oauth-client-authentication)
 - [OAuth 2.0 Security Best Current Practice](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-security-topics)
 - [It's Time for OAuth 2.1](https://aaronparecki.com/2019/12/12/21/its-time-for-oauth-2-dot-1)
 - [The OAuth 2.1 Authorization Framework](https://datatracker.ietf.org/doc/draft-ietf-oauth-v2-1/)

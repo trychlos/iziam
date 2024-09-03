@@ -41,6 +41,27 @@ Providers.byId = function( id ){
 
 /**
  * @locus Anywhere
+ * @summary Compute and returns a list of providers which are able to provides the listed features
+ * @param {Array<String>} feats an array of features identifiers
+ * @returns {Object} the providers definitions as an object:
+ *  - indexed by provider identifier
+ *  - whose values are object with following keys:
+ *    > def: the izProvider instance
+ */
+Providers.byFeatures = function( feats ){
+    assert( _.isArray( feats ), 'expects feats be an array, got '+feats );
+    let result = {};
+    feats.forEach(( it ) => {
+        // list the providers which provide the 'it' feature
+        const found = Providers.forFeature( it );
+        const first = sorted[0];
+        result[first.identId()] = first;
+    });
+    return result;
+};
+
+/**
+ * @locus Anywhere
  * @summary Compute and returns the list of features provided by a list of provider id's
  * @param {Array<String>} ids an array of izProvider IIdent identifiers
  * @returns {Array<String>} the provided IFeatured's
@@ -79,6 +100,26 @@ Providers.filterDefaultSelectedNonUserSelectable = function( selected ){
         }
     });
     return selected;
+};
+
+/**
+ * @locus Anywhere
+ * @summary Compute and returns a list of providers which provide the listed feature
+ * @param {String} feat a feature identifier
+ * @returns {Array<izProvider>} the providers which provide this feature, sorted in descending order
+ */
+Providers.forFeature = function( feat ){
+    let found = [];
+    Providers.allProviders().forEach(( p ) => {
+        if( p instanceof IFeatured ){
+            const pFeatures = p.features();
+            if( pFeatures.includes( feat )){
+                found.push( p );
+            }
+        }
+    });
+    const sorted = found.sort(( a, b ) => { return -1*( a.identId().localeCompare( b.identId(), { usage: 'search' })); });
+    return sorted;
 };
 
     /**

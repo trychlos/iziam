@@ -1,11 +1,11 @@
 /*
  * /imports/client/components/provider_selection_checkbox/provider_selection_checkbox.js
  *
- * Data context is provided at the constructor level:
+ * Data context is provided at the tabular level:
  * - item: the provider object (not an instance)
  * - field: the Field.Def definition
  * +
- * - the providers_list data context:
+ * - the providers_list data context (including withConstraints set in providers_list)
  */
 
 import { Providers } from '/imports/common/collections/providers/index.js';
@@ -33,7 +33,17 @@ Template.provider_selection_checkbox.helpers({
         let enabled = false;
         const provider = Providers.byId( this.item.id );
         if( provider ){
-            enabled = this.withConstraints ? provider.isSelectable( Object.keys( this.selectedProvidersGetFn( this.args ))) : provider.userSelectable();
+            enabled = true;
+            if( this.withConstraints ){
+                enabled = provider.isSelectable( Object.keys( this.selectedProvidersGetFn( this.args )));
+                if( enabled ){
+                    if( provider.isMandatory( this.args.parent )){
+                            enabled = false;
+                    }
+                }
+            } else {
+                enabled = provider.userSelectable();
+            }
         } else {
             console.warn( 'unable to get a provider for id='+this.item.id );
         }

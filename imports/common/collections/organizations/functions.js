@@ -94,5 +94,14 @@ Organizations.fn = {
             res.push( providers[it].provider );
         });
         return res;
+    },
+
+    /**
+     * @locus Anywhere
+     * @param {Object} organization the organization, as an object { entity, record }
+     * @returns {Boolean} whether this organization wants all clients make use of PKCE
+     */
+    wantsPkce( organization ){
+        return organization.record.wantsPkce !== false;
     }
 };

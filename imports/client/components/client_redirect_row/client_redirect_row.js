@@ -32,7 +32,7 @@ Template.client_redirect_row.onCreated( function(){
         removeById( id ){
             const recordRv = Template.currentData().entity.get().DYN.records[Template.currentData().index];
             let item = recordRv.get();
-            let rows = item.redirectUrls || [];
+            let rows = item.redirect_uris || [];
             let found = -1;
             for( let i=0 ; i<rows.length ; ++i ){
                 if( rows[i].id === id ){
@@ -57,7 +57,7 @@ Template.client_redirect_row.onCreated( function(){
     // whether this row is the last of the array ?
     self.autorun(() => {
         const myId = Template.currentData().it.id;
-        const rows = Template.currentData().entity.get().DYN.records[Template.currentData().index].get().redirectUrls || [];
+        const rows = Template.currentData().entity.get().DYN.records[Template.currentData().index].get().redirect_uris || [];
         let found = -1;
         for( let i=0 ; i<rows.length ; ++i ){
             if( rows[i].id === myId ){
@@ -82,7 +82,7 @@ Template.client_redirect_row.onRendered( function(){
             self.APP.checker.set( new Forms.Checker( self, {
                 parent: parentChecker,
                 panel: new Forms.Panel({
-                    'redirectUrls.$.url': {
+                    'redirect_uris.$.uri': {
                         js: '.js-url',
                         formFrom( $node ){
                             return $node.val();
