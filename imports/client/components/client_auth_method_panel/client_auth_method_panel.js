@@ -1,7 +1,7 @@
 /*
  * /imports/client/components/client_auth_method_panel/client_auth_method_panel.js
  *
- * Client properties pane.
+ * Client authentication methods selection panel.
  * 
  * This pane is written to be usable:
  * - either inside of the client-new-assistant
@@ -11,19 +11,18 @@
  * - entity: the currently edited client entity as a ReactiveVar
  * - index: the index of the edited record
  * - checker: the Forms.Checker which manages the parent component as a ReactiveVar
- * - enableChecks: whether the checks should be enabled at startup, defaulting to true
  * - selectables: the list of selectables auth methods
+ * 
+ * Forms.Checker doesn't manage well radio buttons: do not use here.
  */
 
 import _ from 'lodash';
 
-import { Forms } from 'meteor/pwix:forms';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 
-import { ClientsRecords } from '/imports/common/collections/clients_records/index.js';
-
 import { AuthMethod } from '/imports/common/definitions/auth-method.def.js';
+import { ClientType } from '/imports/common/definitions/client-type.def.js';
 
 import './client_auth_method_panel.html';
 
@@ -32,13 +31,6 @@ Template.client_auth_method_panel.onCreated( function(){
     //console.debug( this );
 
     self.APP = {
-        fields: {
-            label: {
-                js: '.js-check'
-            }
-        },
-        // the Forms.Checker instance
-        checker: new ReactiveVar( null ),
         // the list of allowed auth methods definitions
         selectables: new ReactiveVar( [] ),
 
@@ -65,32 +57,24 @@ Template.client_auth_method_panel.onCreated( function(){
         });
         self.APP.selectables.set( selectables );
     });
-});
 
-Template.client_auth_method_panel.onRendered( function(){
-    const self = this;
-
-    // initialize the Checker for this panel as soon as we get the parent Checker
-    /*
+    // available auth method depends of the client type
+    // make sure the new client type is compatible with the current auth method
     self.autorun(() => {
-        const parentChecker = Template.currentData().checker?.get();
-        const checker = self.APP.checker.get();
-        if( parentChecker && !checker ){
-            const enabled = Template.currentData().enableChecks !== false;
-            self.APP.checker.set( new Forms.Checker( self, {
-                name: 'client_auth_method_panel',
-                parent: parentChecker,
-                panel: new Forms.Panel( self.APP.fields, ClientsRecords.fieldSet.get()),
-                data: {
-                    entity: Template.currentData().entity,
-                    index: Template.currentData().index
-                },
-                setForm: Template.currentData().entity.get().DYN.records[Template.currentData().index].get(),
-                enabled: enabled
-            }));
+        const recordRv = Template.currentData().entity.get().DYN.records[Template.currentData().index];
+        let record = recordRv.get();
+        const clientType = record.client_type;
+        if( clientType ){
+            typeDef = ClientType.byId( clientType );
+            if( typeDef ){
+                const authMethod = record.token_endpoint_auth_method;
+                if( authMethod && !ClientType.defaultAuthMethods( typeDef ).includes( authMethod )){
+                    delete record.token_endpoint_auth_method;
+                    recordRv.set( record );
+                }
+            }
         }
     });
-    */
 });
 
 Template.client_auth_method_panel.helpers({
@@ -124,7 +108,7 @@ Template.client_auth_method_panel.helpers({
         return Template.instance().APP.isSelected( it ) ? 'selected' : '';
     },
 
-    // items list: a list of allowed auth methods identifiers
+    // items list: a list of allowed auth methods definitions
     itemsList(){
         return Template.instance().APP.selectables.get();
     }
@@ -133,22 +117,14 @@ Template.client_auth_method_panel.helpers({
 Template.client_auth_method_panel.events({
     // ask for clear the panel
     'iz-clear-panel .c-client-auth-method-panel'( event, instance ){
-        instance.APP.checker.get().clear();
-    },
-    // ask for enabling the checker (when this panel is used inside of an assistant)
-    'iz-enable-checks .c-client-auth-method-panel'( event, instance, enabled ){
-        instance.APP.checker.get().enabled( enabled );
-        if( enabled ){
-            instance.APP.checker.get().check({ update: false });
-        }
     },
     // auth method selection
     'click .by-item'( event, instance ){
         const id = instance.$( event.currentTarget ).data( 'item-id' );
-        const entity = this.entity.get();
-        const index = this.index;
-        const record = entity.DYN.records[index].get();
+        const recordRv = this.entity.get().DYN.records[this.index];
+        const record = recordRv.get();
         record.token_endpoint_auth_method = id;
+        recordRv.set( record );
         // advertize the eventual caller (e.g. the client_new_assistant) of the new auth method
         instance.$( '.c-client-auth-method-panel' ).trigger( 'iz-auth-method', { auth_method: id });
     }

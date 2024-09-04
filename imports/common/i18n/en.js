@@ -322,7 +322,7 @@ Meteor.APP.i18n = {
                         +'<b>This grant flow is deprecated in favor of Authorization code flow.</b>',
                     implicit_label: 'Implicit grant',
                     jwt_bearer_description: 'JSON Web Token (JWT) Profile for OAuth 2.0 Client Authentication and Authorization Grants.',
-                    jwt_bearer_label: 'JWT Bearer token',
+                    jwt_bearer_label: 'Bearer JWT as an authorization grant',
                     jwt_profile_description: 'JSON Web Token (JWT) Profile for OAuth 2.0 Access Tokens.',
                     jwt_profile_label: 'JWT Profile token',
                     password_description: 'This grant type should only be used when there is a high degree of trust between the resource owner and the client.',

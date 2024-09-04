@@ -25,7 +25,7 @@ Template.client_new_assistant_jwt.onRendered( function(){
             const method = dataDict.get( 'token_endpoint_auth_method' );
             const origin = dataDict.get( 'jwtOrigin' );
             const source = dataDict.get( 'jwtSource' );
-            dataDict.set( 'next', method !== 'private_jwt' || ( origin && origin.length && source && source.length ));
+            dataDict.set( 'next', method !== 'private_key_jwt' || ( origin && origin.length && source && source.length ));
         }
     });
 });

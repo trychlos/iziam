@@ -39,6 +39,9 @@ export class PkceProvider extends mix( izProvider ).with( IGrantType ){
                 'rfc7636',
                 'pkce'
             ],
+            igranttype: [
+                'pkce'
+            ],
             irequires: [
                 'oauth2'
             ],

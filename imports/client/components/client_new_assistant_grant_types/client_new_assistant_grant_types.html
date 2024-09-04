@@ -1,0 +1,15 @@
+<template name="client_new_assistant_grant_types">
+    <div class="c-client-new-assistant-grant-types">
+
+        {{> client_new_assistant_current }}
+
+        <div class="content">
+            <div class="text">
+                {{{ i18n key="clients.new_assistant.grant_type_text" }}}
+            </div>
+
+            {{> client_grant_types_panel (parmsGrantTypePanel) }}
+        </div>
+
+    </div>
+</template>

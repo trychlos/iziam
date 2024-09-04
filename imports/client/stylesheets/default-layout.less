@@ -208,7 +208,7 @@ body {
     display: flex;
     min-height:35em;
     .by-item {
-        margin: 0.5em 0.5em 0 0.5em;
+        margin-top: 0.25em;
         padding: 0.5em;
         //white-space: nowrap;
         border: 1px solid transparent;
@@ -219,6 +219,7 @@ body {
     .by-item.selected {
         border: 1px solid gray;
         border-radius: 0.5em;
+        border-color: lightgray;
     }
     .chooser {
         margin-left: 1em;
@@ -258,8 +259,7 @@ body {
         }
     }
     .c-client-new-assistant-grant-type .by-item {
-        padding: 0.5em 2em;
-        min-width: 18em;
+        //margin-top: 0;
     }
 }
 .c-client-new-assistant > .Assistant {

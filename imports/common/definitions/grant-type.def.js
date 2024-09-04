@@ -105,12 +105,14 @@ export const GrantType = {
         },
         {
             // The JWT Bearer Token Grant Type defined in OAuth JWT Bearer Token Profiles [RFC7523]
+            //  using JWT as Authorization Grants
             id: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
             label: 'definitions.grant_type.jwt_bearer_label',
             description: 'definitions.grant_type.jwt_bearer_description',
             image: '/images/grant-type.svg',
             nature: 'format'
         },
+        /*
         {
             // JSON Web Token (JWT) Profile for OAuth 2.0 Access Tokens [RFC9068]
             id: 'jwt_profile',
@@ -119,6 +121,7 @@ export const GrantType = {
             image: '/images/grant-type.svg',
             nature: 'format'
         },
+        */
         /*
         {
             // The SAML 2.0 Bearer Assertion Grant defined in OAuth SAML 2 Bearer Token Profiles [RFC7522] - not implemented

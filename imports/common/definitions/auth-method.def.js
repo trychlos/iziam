@@ -10,8 +10,8 @@
  *  - https://developer.okta.com/docs/guides/build-self-signed-jwt/js/main/ Build a JWT for Client Authentication
  *  - https://backstage.forgerock.com/docs/am/7/oauth2-guide/client-auth-jwt.html Authenticating Clients Using JWT Profiles
  *
- * When registering a client, one must specify if the client has credentials, and how they are built. Below the available options.
- * Note that OAuth companion site prevents against providing a secret to a public client.
+ * When registering a confidential client, one must specify how the client authenticate against the token endpoint. Below the available options.
+ * Public clients do not authenticate themselves.
  */
 
 import _ from 'lodash';
@@ -53,8 +53,8 @@ export const AuthMethod = {
             description: 'definitions.auth_method.post_desc'
         },
         {
-            // Private Key JWT Client Authentication (aka 'private_key_jwt')
-            id: 'private_jwt',
+            // Private Key JWT Client Authentication
+            id: 'private_key_jwt',
             short: 'definitions.auth_method.private_jwt_short',
             label: 'definitions.auth_method.private_jwt_label',
             description: 'definitions.auth_method.private_jwt_desc',
@@ -62,8 +62,8 @@ export const AuthMethod = {
             needsSecret: false
         },
         {
-            // Shared secret JWT Client Authentication (aka 'client_secret_jwt')
-            id: 'secret_jwt',
+            // Shared secret JWT Client Authentication
+            id: 'client_secret_jwt',
             short: 'definitions.auth_method.secret_jwt_short',
             label: 'definitions.auth_method.secret_jwt_label',
             description: 'definitions.auth_method.secret_jwt_desc',

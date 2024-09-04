@@ -61,8 +61,8 @@ export const ClientProfile = {
                 'none',
                 'secret_basic',
                 'secret_post',
-                'private_jwt',
-                'secret_jwt'
+                'private_key_jwt',
+                'client_secret_jwt'
             ],
             grant_type: 'authorization_code'
         }

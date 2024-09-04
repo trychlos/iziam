@@ -1,0 +1,23 @@
+<template name="client_grant_types_panel">
+    <div class="c-client-grant-types-panel">
+
+        <div class="chooser">
+            {{#each nature in naturesList }}
+                <p class="nature-header ui-mt05 ui-fwbold">{{{ natureHeader nature }}}</p>
+                {{#each it in itemsList nature }}
+                    <div class="by-item {{ itSelected nature it }}" data-item-id="{{ it }}">
+                        <div class="form-check">
+                            <input class="form-check-input ui-mr025 js-check" id="{{ it }}" type="{{ itInputType nature it }}" name="nature-{{ nature }}" {{ itChecked nature it }} />
+                            <label class="form-check-label" for="{{ it }}">{{ itLabel nature it }}</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input ui-hidden" type="{{ itInputType nature it }}" name="nature-{{ nature }}" />
+                            <label class="form-check-label" for="{{ it }}">{{{ itDescription nature it }}}</label>
+                        </div>
+                    </div>
+                {{/each}}
+            {{/each}}
+        </div>
+
+    </div>
+</template>

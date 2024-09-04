@@ -57,6 +57,23 @@ Template.client_new_assistant_auth_method.onRendered( function(){
         self.$( '.c-client-new-assistant-auth-method' ).trigger( 'assistant-do-enable-tab', { name: 'auth',  enabled: Providers.hasFeature( selected, 'oauth2' ) });
     });
 
+    // default to select the first proposed auth method
+    //  also set the entity/record as this pane embeds a standard edition panel
+    self.autorun(() => {
+        const dataDict = Template.currentData().parentAPP.assistantStatus;
+        if( dataDict.get( 'activePane' ) === 'auth' ){
+            const authMethod = dataDict.get( 'token_endpoint_auth_method' ) || null;
+            if( !authMethod ){
+                const defValue = self.APP.selectables.get()[0];
+                dataDict.set( 'token_endpoint_auth_method', defValue );
+                const recordRv = Template.currentData().parentAPP.entity.get().DYN.records[0];
+                let record = recordRv.get();
+                record.token_endpoint_auth_method = defValue;
+                recordRv.set( record );
+            }
+        }
+    });
+
     // tracks the selection to enable/disable the Next button when the pane is active
     // an auth method must be set
     self.autorun(() => {
@@ -87,7 +104,6 @@ Template.client_new_assistant_auth_method.helpers({
             entity: this.parentAPP.entity,
             index: 0,
             checker: this.parentAPP.assistantCheckerRv,
-            enableChecks: false,
             selectables: Template.instance().APP.selectables.get()
         };
     }

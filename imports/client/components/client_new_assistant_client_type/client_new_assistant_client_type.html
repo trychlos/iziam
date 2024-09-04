@@ -10,14 +10,14 @@
     
             <div class="chooser">
                 {{#each it in itemsList }}
-                    <div class="by-item" data-item-id="{{ itId it }}">
+                    <div class="by-item {{ itSelected it }}" data-item-id="{{ itId it }}">
                         <div class="form-check">
                             <input class="form-check-input js-check" name="clienttype" id="{{ itId it }}" type="radio" {{ itChecked it }} />
                             <em><label class="form-check-label" for="{{ itId it }}">{{ itLabel it }}</label></em>
                         </div>
                         <div class="form-check">
                             <input class="form-check-input ui-hidden" name="clienttype" type="radio" />
-                            <label class="form-check-label" for="{{ itId it }}">{{ itDescription it }}</label>
+                            <label class="form-check-label" for="{{ itId it }}">{{{ itDescription it }}}</label>
                         </div>
                     </div>
                 {{/each}}

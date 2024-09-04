@@ -16,7 +16,7 @@ import { RefreshProvider } from '/imports/common/providers/refresh-provider.clas
 
 Providers.register( new DeviceProvider());
 Providers.register( new JwtBearerProvider());
-Providers.register( new JwtProfileProvider());
+//Providers.register( new JwtProfileProvider());
 Providers.register( new OAuth2DynamicRegistrer());
 Providers.register( new OAuth20Provider());
 Providers.register( new OAuth21Provider());

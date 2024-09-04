@@ -57,6 +57,12 @@ Template.client_new_assistant_client_type.helpers({
         return ClientType.label( it );
     },
 
+    // whether this item is selected ?
+    itSelected( it ){
+        const id = ClientType.id( it );
+        return this.parentAPP.assistantStatus.get( 'client_type' ) === id ? 'selected' : '';
+    },
+
     // items list
     itemsList(){
         return ClientType.Knowns();
@@ -73,6 +79,7 @@ Template.client_new_assistant_client_type.events({
         instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'prev', enable: true });
     },
     // intercept the selection, updating the client type
+    // changing the client type implies clearing auth method and grant types
     'click .js-check'( event, instance ){
         const id = instance.$( event.currentTarget ).prop( 'id' );
         this.parentAPP.assistantStatus.set( 'client_type', id );
