@@ -12,12 +12,44 @@ import _ from 'lodash';
 
 import { pwixI18n } from 'meteor/pwix:i18n';
 
+import { ClientProfile } from '/imports/common/definitions/client-profile.def.js';
 import { ClientType } from '/imports/common/definitions/client-type.def.js';
 
 import './client_new_assistant_client_type.html';
 
+Template.client_new_assistant_client_type.onCreated( function(){
+    const self = this;
+
+    self.APP = {
+        // whether this item is currently selected ?
+        isSelected( it ){
+            const typeId = Template.currentData().parentAPP.assistantStatus.get( 'client_type' ) || null;
+            return typeId === ClientType.id( it );
+        }
+    };
+});
+
 Template.client_new_assistant_client_type.onRendered( function(){
     const self = this;
+
+    // set a default selection if the record doesn't have one
+    self.autorun(() => {
+        const dataDict = Template.currentData().parentAPP.assistantStatus;
+        if( dataDict.get( 'activePane' ) === 'client' ){
+            let client_type = dataDict.get( 'client_type' ) || null;
+            if( !client_type ){
+                const profile = dataDict.get( 'profile' ) || null;
+                if( profile ){
+                    const profileDef = ClientProfile.byId( profile );
+                    if( profileDef ){
+                        client_type = ClientProfile.defaultClientType( profileDef );
+                        Template.currentData().parentAPP.entity.get().DYN.records[0].get().client_type = client_type;
+                        Template.currentData().parentAPP.assistantStatus.set( 'client_type', client_type );
+                    }
+                }
+            }
+        }
+    });
 
     // tracks the selection to enable/disable the Next button when the pane is active
     //  must have a selection
@@ -38,8 +70,7 @@ Template.client_new_assistant_client_type.helpers({
 
     // whether this item is selected ?
     itChecked( it ){
-        const id = ClientType.id( it );
-        return this.parentAPP.assistantStatus.get( 'client_type' ) === id ? 'checked' : '';
+        return Template.instance().APP.isSelected( it ) ? 'checked' : '';
     },
 
     // description
@@ -59,8 +90,7 @@ Template.client_new_assistant_client_type.helpers({
 
     // whether this item is selected ?
     itSelected( it ){
-        const id = ClientType.id( it );
-        return this.parentAPP.assistantStatus.get( 'client_type' ) === id ? 'selected' : '';
+        return Template.instance().APP.isSelected( it ) ? 'selected' : '';
     },
 
     // items list
@@ -78,15 +108,10 @@ Template.client_new_assistant_client_type.events({
     'assistant-pane-shown .c-client-new-assistant-client-type'( event, instance, data ){
         instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'prev', enable: true });
     },
-    // intercept the selection, updating the client type
-    // changing the client type implies clearing auth method and grant types
-    'click .js-check'( event, instance ){
-        const id = instance.$( event.currentTarget ).prop( 'id' );
+    // client type selection non-reactively updates the record and set the assistantStatus ReactiveDict
+    'click .by-item'( event, instance ){
+        const id = instance.$( event.currentTarget ).data( 'item-id' );
+        this.parentAPP.entity.get().DYN.records[0].get().client_type = id;
         this.parentAPP.assistantStatus.set( 'client_type', id );
-    },
-    // on Next, non-reactively feed the record
-    'assistant-action-next .c-client-new-assistant-client-type'( event, instance ){
-        const record = this.parentAPP.entity.get().DYN.records[0].get();
-        record.client_type = this.parentAPP.assistantStatus.get( 'client_type' );
     }
 });

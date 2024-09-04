@@ -213,7 +213,7 @@ export const GrantType = {
     isValidSelection( selectables, array ){
         let valid = true;
         // examine each selectable nature to see if its constraints are fullfilled
-        Object.keys( selectables ).every(( nature ) => {
+        Object.keys( selectables || {} ).every(( nature ) => {
             // if mandatory, check that there is at least one - else, do not care
             if( GrantNature.isMandatory( selectables[nature].def )){
                 let hasOne = false;

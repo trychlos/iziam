@@ -7,11 +7,11 @@
                 {{#each it in itemsList nature }}
                     <div class="by-item {{ itSelected nature it }}" data-item-id="{{ it }}">
                         <div class="form-check">
-                            <input class="form-check-input ui-mr025 js-check" id="{{ it }}" type="{{ itInputType nature it }}" name="nature-{{ nature }}" {{ itChecked nature it }} />
+                            <input class="form-check-input ui-mr025" id="{{ it }}" type="{{ itInputType nature it }}" name="nature-{{ nature }}" {{ itChecked nature it }} {{ itDisabled nature it }} />
                             <label class="form-check-label" for="{{ it }}">{{ itLabel nature it }}</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input ui-hidden" type="{{ itInputType nature it }}" name="nature-{{ nature }}" />
+                            <input class="form-check-input ui-hidden" type="{{ itInputType nature it }}" name="nature-{{ nature }}" {{ itDisabled nature it }} />
                             <label class="form-check-label" for="{{ it }}">{{{ itDescription nature it }}}</label>
                         </div>
                     </div>

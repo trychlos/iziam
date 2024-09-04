@@ -44,23 +44,24 @@ Template.client_new_assistant_current.onCreated( function(){
 Template.client_new_assistant_current.helpers({
     // authentification method
     authText(){
-        const def = AuthMethod.byId( this.parentAPP.assistantStatus.get( 'token_endpoint_auth_method' ));
+        const authMethod = this.parentAPP.entity.get().DYN.records[0].get().token_endpoint_auth_method;
+        const def = authMethod ? AuthMethod.byId( authMethod ) : null;
         return def ? AuthMethod.label( def ) : '';
     },
 
     // client type
     clientText(){
-        return this.parentAPP.assistantStatus.get( 'client_type' );
+        return this.parentAPP.entity.get().DYN.records[0].get().client_type;
     },
 
     // registered contacts
     contactsText(){
-        return ( this.parentAPP.assistantStatus.get( 'contacts' ) || [] ).join( ', ' );
+        return ( this.parentAPP.entity.get().DYN.records[0].get().contacts || [] ).join( ', ' );
     },
 
     // grant types
     grantText(){
-        return GrantType.joinedLabels( this.parentAPP.assistantStatus.get( 'grant_types' ));
+        return GrantType.joinedLabels( this.parentAPP.entity.get().DYN.records[0].get().grant_types || [] );
     },
 
     // whether we want display the pane ?
@@ -86,23 +87,29 @@ Template.client_new_assistant_current.helpers({
 
     // client profile description
     profileDescription(){
-        const def = this.parentAPP.assistantStatus.get( 'profileDef' );
+        const id = this.parentAPP.entity.get().DYN.records[0].get().profile;
+        const def = id ? ClientProfile.byId( id ) : null;
         return def ? ClientProfile.description( def ) : '';
     },
 
     // suggested client type from client profile
     profileClientText(){
-        return ClientProfile.defaultClientType( this.parentAPP.assistantStatus.get( 'profileDef' ));
+        const id = this.parentAPP.entity.get().DYN.records[0].get().profile;
+        const def = id ? ClientProfile.byId( id ) : null;
+        return def ? ClientProfile.defaultClientType( def ) : '';
     },
 
     // needed features from client profile
     profileFeaturesText(){
-        return ClientProfile.defaultFeatures( this.parentAPP.assistantStatus.get( 'profileDef' )).join( ', ' );
+        const id = this.parentAPP.entity.get().DYN.records[0].get().profile;
+        const def = id ? ClientProfile.byId( id ) : null;
+        return def ? ClientProfile.defaultFeatures( def ).join( ', ' ) : '';
     },
 
     // client profile description
     profileText(){
-        const def = this.parentAPP.assistantStatus.get( 'profileDef' );
+        const id = this.parentAPP.entity.get().DYN.records[0].get().profile;
+        const def = id ? ClientProfile.byId( id ) : null;
         return def ? ClientProfile.label( def ) : '';
     },
 
@@ -125,8 +132,8 @@ Template.client_new_assistant_current.helpers({
 
     // selected providers - which may be none
     providersText(){
-        const selected = Clients.fn.selectedProviders( this.organization, Template.instance().APP.client );
-        return Object.keys( selected ).join( ', ' ) || pwixI18n.label( I18N, 'clients.new_assistant.summary_providers_none' );
+        const selected = this.parentAPP.entity.get().DYN.records[0].get().selectedProviders;
+        return selected.join( ', ' ) || pwixI18n.label( I18N, 'clients.new_assistant.summary_providers_none' );
     },
 
     // registered redirect URLs

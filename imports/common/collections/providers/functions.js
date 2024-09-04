@@ -8,6 +8,7 @@ const assert = require( 'assert' ).strict;
 import { izProvider } from '/imports/common/classes/iz-provider.class.js';
 
 import { IFeatured } from '/imports/common/interfaces/ifeatured.iface.js';
+import { IGrantType } from '/imports/common/interfaces/igranttype.iface.js';
 import { IIdent } from '/imports/common/interfaces/iident.iface.js';
 
 import { Providers } from './index.js';
@@ -53,7 +54,28 @@ Providers.byFeatures = function( feats ){
     let result = {};
     feats.forEach(( it ) => {
         // list the providers which provide the 'it' feature
-        const found = Providers.forFeature( it );
+        const sorted = Providers.forFeature( it );
+        const first = sorted[0];
+        result[first.identId()] = first;
+    });
+    return result;
+};
+
+/**
+ * @locus Anywhere
+ * @summary Compute and returns a list of providers which use the grant types
+ * @param {Array<String>} grants an array of grant types
+ * @returns {Object} the providers definitions as an object:
+ *  - indexed by provider identifier
+ *  - whose values are object with following keys:
+ *    > def: the izProvider instance
+ */
+Providers.byGrantTypes = function( grants ){
+    assert( _.isArray( grants ), 'expects grants be an array, got '+grants );
+    let result = {};
+    grants.forEach(( it ) => {
+        // list the providers which provide the 'it' feature
+        const sorted = Providers.forGrantType( it );
         const first = sorted[0];
         result[first.identId()] = first;
     });
@@ -106,7 +128,7 @@ Providers.filterDefaultSelectedNonUserSelectable = function( selected ){
  * @locus Anywhere
  * @summary Compute and returns a list of providers which provide the listed feature
  * @param {String} feat a feature identifier
- * @returns {Array<izProvider>} the providers which provide this feature, sorted in descending order
+ * @returns {Array<izProvider>} the providers which provide this feature, sorted in alpha descending order
  */
 Providers.forFeature = function( feat ){
     let found = [];
@@ -114,6 +136,26 @@ Providers.forFeature = function( feat ){
         if( p instanceof IFeatured ){
             const pFeatures = p.features();
             if( pFeatures.includes( feat )){
+                found.push( p );
+            }
+        }
+    });
+    const sorted = found.sort(( a, b ) => { return -1*( a.identId().localeCompare( b.identId(), { usage: 'search' })); });
+    return sorted;
+};
+
+/**
+ * @locus Anywhere
+ * @summary Compute and returns a list of providers which use the specified grant type
+ * @param {String} grant a grant type
+ * @returns {Array<izProvider>} the providers which use this grant type, sorted in alpha descending order
+ */
+Providers.forGrantType = function( grant ){
+    let found = [];
+    Providers.allProviders().forEach(( p ) => {
+        if( p instanceof IGrantType ){
+            const pGrants = p.grant_types();
+            if( pGrants.includes( grant )){
                 found.push( p );
             }
         }

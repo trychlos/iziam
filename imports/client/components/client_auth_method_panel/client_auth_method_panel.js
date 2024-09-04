@@ -121,10 +121,7 @@ Template.client_auth_method_panel.events({
     // auth method selection
     'click .by-item'( event, instance ){
         const id = instance.$( event.currentTarget ).data( 'item-id' );
-        const recordRv = this.entity.get().DYN.records[this.index];
-        const record = recordRv.get();
-        record.token_endpoint_auth_method = id;
-        recordRv.set( record );
+        this.entity.get().DYN.records[this.index].get().token_endpoint_auth_method = id;
         // advertize the eventual caller (e.g. the client_new_assistant) of the new auth method
         instance.$( '.c-client-auth-method-panel' ).trigger( 'iz-auth-method', { auth_method: id });
     }

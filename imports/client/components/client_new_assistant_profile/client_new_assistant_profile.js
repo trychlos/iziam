@@ -14,43 +14,30 @@ import { ClientProfile } from '/imports/common/definitions/client-profile.def.js
 
 import './client_new_assistant_profile.html';
 
+Template.client_new_assistant_profile.onCreated( function(){
+    const self = this;
+
+    self.APP = {
+        // whether this item is selected
+        isSelected( it ){
+            const profileId = Template.currentData().parentAPP.assistantStatus.get( 'profile' ) || null;
+            return profileId === ClientProfile.id( it );
+        }
+    };
+});
+
 Template.client_new_assistant_profile.onRendered( function(){
     const self = this;
 
     // tracks the selection to enable/disable the Next button when the pane is active
+    //  requires a selected profile
     self.autorun(() => {
         const dataDict = Template.currentData().parentAPP.assistantStatus;
         if( dataDict.get( 'activePane' ) === 'profile' ){
-            const profileDef = dataDict.get( 'profileDef' ) || null;
-            self.$( '.c-client-new-assistant-profile' ).trigger( 'assistant-do-action-set', { action: 'next', enable: ( profileDef !== null ) });
+            const profileId = dataDict.get( 'profile' ) || null;
+            self.$( '.c-client-new-assistant-profile' ).trigger( 'assistant-do-action-set', { action: 'next', enable: ( profileId !== null ) });
         }
     });
-
-    // tracks the selection for updating data and UI
-    self.autorun(() => {
-        const dataDict = Template.currentData().parentAPP.assistantStatus;
-        const profileDef = dataDict.get( 'profileDef' );
-        // setup the selection appearance
-        self.$( '.c-client-new-assistant-profile .by-item' ).removeClass( 'selected' );
-        if( profileDef ){
-            self.$( '.c-client-new-assistant-profile .by-item[data-item-id="'+ClientProfile.id( profileDef )+'"]' ).addClass( 'selected' );
-            // setup dependant default values - must be done here so that other panes can modified them
-            dataDict.set( 'profileFeatures', ClientProfile.defaultFeatures( profileDef ));
-            dataDict.set( 'client_type', ClientProfile.defaultClientType( profileDef ));
-            //dataDict.set( 'haveAllowedApis', ClientProfile.defaultHaveAllowedApis( def ));
-            //dataDict.set( 'haveEndpoints', ClientProfile.defaultHaveEndpoints( def ));
-            //dataDict.set( 'haveUsers', ClientProfile.defaultHaveUsers( def ));
-        }
-    });
-
-    // tracks the selection for updating data and UI (doesn't depend of the current pane as soon as profileId changes)
-    /*
-    self.autorun(() => {
-        const dataDict = Template.currentData().parentAPP.assistantStatus;
-        const haveEndpoints = Boolean( dataDict.get( 'haveEndpoints' ));
-        self.$( '.c-client-new-assistant-profile' ).trigger( 'assistant-do-enable-tab', { name: 'endpoints', enabled: haveEndpoints });
-    });
-    */
 });
 
 Template.client_new_assistant_profile.helpers({
@@ -79,6 +66,11 @@ Template.client_new_assistant_profile.helpers({
         return ClientProfile.label( it );
     },
 
+    // is this item selected ?
+    itSelected( it ){
+        return Template.instance().APP.isSelected( it ) ? 'selected' : '';
+    },
+
     // items list
     itemsList(){
         return ClientProfile.Knowns();
@@ -94,16 +86,10 @@ Template.client_new_assistant_profile.events({
     'assistant-pane-shown .c-client-new-assistant-profile'( event, instance, data ){
         instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'prev', enable: true });
     },
-    // profile selection
+    // profile selection non-reactively updates the record and set the assistantStatus ReactiveDict
     'click .by-item'( event, instance ){
-        const id = instance.$( event.currentTarget ).closest( '.by-item' ).data( 'item-id' );
-        const def = ClientProfile.byId( id );
-        this.parentAPP.assistantStatus.set( 'profileDef', def );
-    },
-    // on Next, non-reactively feed the record
-    'assistant-action-next .c-client-new-assistant-profile'( event, instance ){
-        const record = this.parentAPP.entity.get().DYN.records[0].get();
-        const profileDef = this.parentAPP.assistantStatus.get( 'profileDef' );
-        record.profile = profileDef ? ClientProfile.id( profileDef ) : null;
+        const id = instance.$( event.currentTarget ).data( 'item-id' );
+        this.parentAPP.entity.get().DYN.records[0].get().profile = id;
+        this.parentAPP.assistantStatus.set( 'profile', id );
     }
 });

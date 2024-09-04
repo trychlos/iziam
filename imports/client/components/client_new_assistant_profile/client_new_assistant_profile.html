@@ -9,7 +9,7 @@
 
         <div class="chooser">
             {{#each it in itemsList }}
-                <div class="by-item" data-item-id="{{ itId it }}">
+                <div class="by-item {{ itSelected it }}" data-item-id="{{ itId it }}">
                     <img src="{{ itImage it }}" />
                     <div class="label">{{ itLabel it }}</div>
                     <div class="description form-text">{{ itDescription it }}</div>

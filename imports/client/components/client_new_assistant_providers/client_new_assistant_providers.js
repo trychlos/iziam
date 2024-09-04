@@ -33,7 +33,7 @@ Template.client_new_assistant_providers.onCreated( function(){
         callingArgs: null
     };
 
-    // keep the current selection in the reactive datadict
+    // build the calling arguments for the providers_list component
     self.autorun(() => {
         const dataDict = Template.currentData().parentAPP.assistantStatus;
         const parentAPP = Template.currentData().parentAPP;
@@ -44,8 +44,6 @@ Template.client_new_assistant_providers.onCreated( function(){
             },
             parent: Template.currentData().organization
         };
-        const selected = Clients.fn.selectedProvidersGet( self.APP.callingArgs );
-        dataDict.set( 'selectedProviders', Object.keys( selected ));
     });
 });
 
@@ -60,9 +58,10 @@ Template.client_new_assistant_providers.onRendered( function(){
         const dataDict = Template.currentData().parentAPP.assistantStatus;
         if( dataDict.get( 'activePane' ) === 'providers' && !self.APP.firstShown ){
             self.APP.firstShown = true;
-            let selected = dataDict.get( 'selectedProviders' );
+            let selected = dataDict.get( 'selectedProviders' ) || [];
             if( !selected.length ){
-                const profileDef = dataDict.get( 'profileDef' );
+                const profileId = dataDict.get( 'profile' );
+                const profileDef = profileId ? ClientProfile.byId( profileId ) : null;
                 const clientType = dataDict.get( 'client_type' );
                 if( profileDef && clientType ){
                     let featuresHash = {};
@@ -79,6 +78,8 @@ Template.client_new_assistant_providers.onRendered( function(){
                     });
                 }
             }
+            // triggers an update of the record
+            self.$( '.c-client-new-assistant-providers' ).trigger( 'iz-providers', { providers: Clients.fn.selectedProvidersGet( self.APP.callingArgs ) });
         }
     });
 });
@@ -113,9 +114,13 @@ Template.client_new_assistant_providers.events({
         instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'prev', enable: true });
         instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'next', enable: true });
     },
-    // on Next, non-reactively feed the record
-    'assistant-action-next .c-client-new-assistant-providers'( event, instance ){
-        const record = this.parentAPP.entity.get().DYN.records[0].get();
-        record.selectedProviders = this.parentAPP.assistantStatus.get( 'selectedProviders' );
+    // keep be informed of the changes
+    'iz-providers .c-client-new-assistant-providers'( event, instance, data ){
+        // record is reactively updated so that other embedded components which depend of the selected providers can auto-update
+        // (e.g. grant_types)
+        let record = this.parentAPP.entity.get().DYN.records[0].get()
+        record.selectedProviders = Object.keys( data.providers );
+        this.parentAPP.entity.get().DYN.records[0].set( record );
+        this.parentAPP.assistantStatus.set( 'selectedProviders', Object.keys( data.providers ));
     }
 });

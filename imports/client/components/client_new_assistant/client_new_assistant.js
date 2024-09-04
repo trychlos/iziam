@@ -1,5 +1,12 @@
 /*
  * /imports/client/components/client_new_assistant/client_new_assistant.js
+ *
+ * Reactivity management.
+ * More or less each pane needs to be reactive about one or more elementary data.
+ * If we are just reactive about the record, then the reactive functions will be triggered each time we update any thing in the record.
+ * So we try to optimize the behavior as:
+ * - UI updates non-reactively update the record (because this is the Forms.Checker behavior)
+ * - embedded panel are expected to publish their changes to the assistant which keep track of the interesting things in the assistantStatus ReactiveDict.
  * 
  * Parms:
  * - organization: an { entity, record } object which provides the current Organiaztion at date
@@ -152,6 +159,11 @@ Template.client_new_assistant.onCreated( function(){
     // track the status of the assistant
     self.autorun(() => {
         console.debug( 'assistantStatus', self.APP.assistantStatus.all());
+    });
+
+    // track the content of the record
+    self.autorun(() => {
+        console.debug( 'clientRecord', self.APP.entity.get().DYN.records[0].get());
     });
 });
 

@@ -31,8 +31,9 @@ Template.client_new_assistant_auth_method.onCreated( function(){
     // set the selectables auth methods list
     // they depend of the client type, may be superseded by the client profile
     self.autorun(() => {
-        const clientType = Template.currentData().parentAPP.assistantStatus.get( 'client_type' );
-        const profileDef = Template.currentData().parentAPP.assistantStatus.get( 'profileDef' );
+        const clientType = Template.currentData().parentAPP.assistantStatus.get( 'client_type' ) || null;
+        const profileId = Template.currentData().parentAPP.assistantStatus.get( 'profile' ) || null;
+        const profileDef = profileId ? ClientProfile.byId( profileId ) : null;
         if( clientType && profileDef ){
             let selectables = ClientProfile.defaultAuthMethods( profileDef );
             if( !selectables ){
@@ -57,19 +58,22 @@ Template.client_new_assistant_auth_method.onRendered( function(){
         self.$( '.c-client-new-assistant-auth-method' ).trigger( 'assistant-do-enable-tab', { name: 'auth',  enabled: Providers.hasFeature( selected, 'oauth2' ) });
     });
 
-    // default to select the first proposed auth method
-    //  also set the entity/record as this pane embeds a standard edition panel
+    // try to have a default selection
     self.autorun(() => {
         const dataDict = Template.currentData().parentAPP.assistantStatus;
         if( dataDict.get( 'activePane' ) === 'auth' ){
-            const authMethod = dataDict.get( 'token_endpoint_auth_method' ) || null;
-            if( !authMethod ){
-                const defValue = self.APP.selectables.get()[0];
-                dataDict.set( 'token_endpoint_auth_method', defValue );
-                const recordRv = Template.currentData().parentAPP.entity.get().DYN.records[0];
-                let record = recordRv.get();
-                record.token_endpoint_auth_method = defValue;
-                recordRv.set( record );
+            const record = Template.currentData().parentAPP.entity.get().DYN.records[0].get();
+            const selectables = self.APP.selectables.get();
+            let authMethod = record.token_endpoint_auth_method || null;
+            if( authMethod && selectables.includes( authMethod )){
+                // just to be sure the two values are aligned
+                dataDict.set( 'token_endpoint_auth_method', authMethod );
+            } else {
+                const authMethod = selectables[0];
+                // reactively update the record so that the embedded panel auto-updates
+                record.token_endpoint_auth_method = authMethod;
+                Template.currentData().parentAPP.entity.get().DYN.records[0].set( record );
+                dataDict.set( 'token_endpoint_auth_method', authMethod );
             }
         }
     });

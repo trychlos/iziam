@@ -25,6 +25,16 @@ import '/imports/client/components/client_grant_types_panel/client_grant_types_p
 
 import './client_new_assistant_grant_types.html';
 
+Template.client_new_assistant_grant_types.onCreated( function(){
+    const self = this;
+
+    self.APP = {
+        // the selectables grant types
+        // computed by the embedded component, passed-in via iz-grant-types event
+        selectables: null
+    };
+});
+
 Template.client_new_assistant_grant_types.onRendered( function(){
     const self = this;
 
@@ -36,30 +46,15 @@ Template.client_new_assistant_grant_types.onRendered( function(){
         self.$( '.c-client-new-assistant-grant-types' ).trigger( 'assistant-do-enable-tab', { name: 'grant',  enabled: Providers.hasFeature( selected, 'oauth2' ) });
     });
 
-    // set at least default grant type for the access token if one is defined for this client profile
-    /*
-    self.autorun(() => {
-        const dataDict = Template.currentData().parentAPP.assistantStatus;
-        if( dataDict.get( 'activePane' ) === 'grant' ){
-            const grantTypes = dataDict.get( 'grant_types' ) || [];
-            console.debug( 'grantTypes', grantTypes );
-            if( !grantTypes.length ){
-                console.debug( 'selectables', self.APP.selectables.get());
-                dataDict.set( 'grant_types', [ Object.keys( self.APP.selectables.get().access.types )[0]] );
-            }
-        }
-    });
-
     // tracks the selection to enable/disable the Next button when the pane is active
     // the grant natures which have a mandatory nature must be set
     self.autorun(() => {
         const dataDict = Template.currentData().parentAPP.assistantStatus;
         if( dataDict.get( 'activePane' ) === 'grant' ){
             const array = dataDict.get( 'grant_types' ) || [];
-            self.$( '.c-client-new-assistant-grant-types' ).trigger( 'assistant-do-action-set', { action: 'next',  enable: GrantType.isValidSelection( self.APP.selectables.get(), array )});
+            self.$( '.c-client-new-assistant-grant-types' ).trigger( 'assistant-do-action-set', { action: 'next',  enable: GrantType.isValidSelection( self.APP.selectables, array )});
         }
     });
-    */
 });
 
 Template.client_new_assistant_grant_types.helpers({
@@ -89,10 +84,11 @@ Template.client_new_assistant_grant_types.events({
     'assistant-pane-shown .c-client-new-assistant-grant-types'( event, instance, data ){
         instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'prev', enable: true });
     },
-    // on Next, non-reactively feed the record
-    'assistant-action-next .c-client-new-assistant-grant-types'( event, instance ){
-        const record = this.parentAPP.entity.get().DYN.records[0].get();
-        const grant_types = this.parentAPP.assistantStatus.get( 'grant_types' ) || [];
-        record.grant_types = grant_types;
+    // be kept informed of the changes
+    'iz-grant-types .c-client-new-assistant-grant-types'( event, instance, data ){
+        this.parentAPP.assistantStatus.set( 'grant_types', data.grant_types );
+    },
+    'iz-selectables .c-client-new-assistant-grant-types'( event, instance, data ){
+        instance.APP.selectables = data.selectables;
     }
 });
