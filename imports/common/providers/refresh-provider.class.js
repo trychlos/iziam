@@ -38,12 +38,11 @@ export class RefreshProvider extends mix( izProvider ).with( IGrantType ){
             ifeatured: [
                 'refresh'
             ],
-            irequires: [
-                'oauth2'
-            ],
-            // OpenId accepts one of the two auth_code and also manages implicit and hybrid flows
             igranttype: [
                 'refresh_token'
+            ],
+            irequires: [
+                'oauth2'
             ]
         });
 

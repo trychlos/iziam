@@ -35,6 +35,9 @@ export class OAuth2DynamicRegistrer extends mix( izProvider ).with(){
             },
             ifeatured: [
                 'oauth2-dynamic-registration'
+            ],
+            irequires: [
+                'oauth2'
             ]
         });
 

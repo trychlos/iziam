@@ -45,11 +45,11 @@ export class DeviceProvider extends mix( izProvider ).with( IGrantType ){
                 'device_flow',
                 'device_code'
             ],
-            irequires: [
-                'oauth2'
-            ],
             igranttype: [
                 'urn:ietf:params:oauth:grant-type:device_code'
+            ],
+            irequires: [
+                'oauth2'
             ]
         });
 

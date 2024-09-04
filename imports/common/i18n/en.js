@@ -327,6 +327,8 @@ Meteor.APP.i18n = {
                     jwt_profile_label: 'JWT Profile token',
                     password_description: 'This grant type should only be used when there is a high degree of trust between the resource owner and the client.',
                     password_label: 'Resource owner password credentials grant',
+                    pkce_description: 'A standard way of mitigating the attacks against Authorization Code grant flow.',
+                    pkce_label: 'Proof Key of Code Exchange (RFC 7636)',
                     reftoken_description: 'Optional, may be exchanged for another access token when the first has expired.',
                     reftoken_label: 'Refresh token grant',
                     //saml_label: 'SAML 2.0 Bearer Assertion',

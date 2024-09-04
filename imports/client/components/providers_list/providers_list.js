@@ -29,7 +29,7 @@ Template.providers_list.onCreated( function(){
         tabular: null
     };
 
-    // get the data context and instanciate the client tabular instance
+    // get the data context and instanciate the tabular instance
     self.autorun(() => {
         if( !self.APP.tabular ){
             const dataContext = Template.currentData();

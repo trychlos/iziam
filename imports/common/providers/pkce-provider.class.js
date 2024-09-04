@@ -40,7 +40,7 @@ export class PkceProvider extends mix( izProvider ).with( IGrantType ){
                 'pkce'
             ],
             irequires: [
-                'authorization_code'
+                'oauth2'
             ],
         });
 

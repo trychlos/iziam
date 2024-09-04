@@ -127,8 +127,8 @@ export const GrantType = {
         }*/
        {
             id: 'pkce',
-            label: '',
-            description: '',
+            label: 'definitions.grant_type.pkce_label',
+            description: 'definitions.grant_type.pkce_description',
             image: '/images/grant-type.svg',
             nature: 'format'
        }

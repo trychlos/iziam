@@ -4,6 +4,9 @@
  * Manage the selectability of a provider:
  * - whether it defaults to be selected -> defaulting to false
  * - whether it is selectable by the user (i.e. may the user change the selection ?) -> defaulting to true
+ * 
+ * Please note that we only manage here the selectability at the client level:
+ *  i.e. when the organization manager defines the providers used by an app client (chosen among above available providers).
  */
 
 import _ from 'lodash';
@@ -66,10 +69,28 @@ export const ISelectable = DeclareMixin(( superclass ) => class extends supercla
             return false;
         }
         let selectable = true;
-        const features = Providers.featuresByIds( selected );
+        let features = Providers.featuresByIds( selected );
+        // the provider is selectable if all of its prerequisites are there
         if( this instanceof IRequires ){
             this.requires().every(( it ) => {
                 selectable &&= features.includes( it );
+                return selectable;
+            });
+        }
+        // the provider is not selectable (or rather not unselectable) if it is itself a prerequisite of another selected
+        if( selectable ){
+            features = this.features();
+            selected.every(( it ) => {
+                if( it !== this.identId()){
+                    const itProvider = Providers.byId( it );
+                    if( itProvider ){
+                        const itRequires = itProvider.requires();
+                        const intersection = features.filter( e => itRequires.includes( e ));
+                        if( intersection.length ){
+                            selectable = false;
+                        }
+                    }
+                }
                 return selectable;
             });
         }
@@ -78,7 +99,7 @@ export const ISelectable = DeclareMixin(( superclass ) => class extends supercla
 
     /**
      * Getter/Setter
-     * @param {Boolean} selectable whether the allowded user can choose himself to select or not the provider
+     * @param {Boolean} selectable whether the allowed user can choose himself to select or not the provider
      * @returns {Boolean} the current selectability status
      */
     userSelectable( selectable ){

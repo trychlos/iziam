@@ -5,7 +5,7 @@
  * - item: the provider object (not an instance)
  * - field: the Field.Def definition
  * +
- * - the providers_list data context (including withConstraints set in providers_list)
+ * - the providers_list data context (including 'withConstraints' set in providers_list)
  */
 
 import { Providers } from '/imports/common/collections/providers/index.js';

@@ -42,14 +42,16 @@ export class OAuth21Provider extends mix( izProvider ).with( IGrantType ){
             },
             ifeatured: [
                 'oauth2',
-                'oauth-2.1-draft-v11',
-                'authorization_code'
+                'oauth-2.1-draft-v11'
             ],
             // authorization grant types are defined by the draft
             igranttype: [
                 'authorization_code',
                 'client_credentials'
-            ]
+            ],
+            iselectable: {
+                defaultSelected: true
+            }
         });
 
         return this;

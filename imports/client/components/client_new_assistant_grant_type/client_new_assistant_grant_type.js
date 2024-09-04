@@ -83,25 +83,19 @@ Template.client_new_assistant_grant_type.helpers({
     // description
     itDescription( nature, it ){
         const selectables = Template.instance().APP.selectables.get();
-        return selectables[nature] ? GrantType.description( selectables[nature].types[it] ) : null;
+        return selectables[nature] && selectables[nature].types[it] ? GrantType.description( selectables[nature].types[it] ) : null;
     },
 
     // whether this input element is a checkbox or a radio button ?
     itInputType( nature, it ){
         const selectables = Template.instance().APP.selectables.get();
-        return selectables[nature] ? ( GrantNature.acceptSeveral( selectables[nature].def ) ? 'checkbox' : 'radio' ) : null;
+        return selectables[nature] && selectables[nature].types[it] ? ( GrantNature.acceptSeveral( selectables[nature].def ) ? 'checkbox' : 'radio' ) : null;
     },
 
     // label
     itLabel( nature, it ){
         const selectables = Template.instance().APP.selectables.get();
-        return selectables[nature] ? GrantType.label( selectables[nature].types[it] ) : '';
-    },
-
-    // whether this item is selected ?
-    itSelected( it ){
-        const id = GrantType.id( it );
-        return ( this.parentAPP.assistantStatus.get( 'grant_types' ) || [] ).includes( id ) ? 'selected' : null;
+        return selectables[nature] && selectables[nature].types[it] ? GrantType.label( selectables[nature].types[it] ) : '';
     },
 
     // selectable list for one grant nature
