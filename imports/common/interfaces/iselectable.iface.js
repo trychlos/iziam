@@ -1,7 +1,9 @@
 /*
  * /imports/common/interfaces/iselectable.iface.js
  *
- * Manage the selectability of a provider.
+ * Manage the selectability of a provider:
+ * - whether it defaults to be selected -> defaulting to false
+ * - whether it is selectable by the user (i.e. may the user change the selection ?) -> defaulting to true
  */
 
 import _ from 'lodash';
@@ -16,12 +18,6 @@ export const ISelectable = DeclareMixin(( superclass ) => class extends supercla
 
     #priv = null;
 
-    // whether the provider defaults to be selected
-    #defaultSelected = false;
-
-    // whether the user can modify the selection
-    #userSelectable = true;
-
     /**
      * @returns {ISelectable}
      */
@@ -32,12 +28,16 @@ export const ISelectable = DeclareMixin(( superclass ) => class extends supercla
             this.#priv = {
                 iselectable: o.iselectable
             };
-            if( Object.keys( this.#priv.iselectable ).includes( 'defaultSelected' )){
-                this.defaultSelected( this.#priv.iselectable.defaultSelected );
-            }
-            if( Object.keys( this.#priv.iselectable ).includes( 'userSelectable' )){
-                this.userSelectable( this.#priv.iselectable.userSelectable );
-            }
+        }
+
+        this.#priv = this.#priv || {};
+        this.#priv.iselectable = this.#priv.iselectable || {};
+
+        if( !Object.keys( this.#priv?.iselectable ).includes( 'defaultSelected' )){
+            this.defaultSelected( false );
+        }
+        if( !Object.keys( this.#priv?.iselectable ).includes( 'userSelectable' )){
+            this.userSelectable( true );
         }
 
         return this;
@@ -50,9 +50,9 @@ export const ISelectable = DeclareMixin(( superclass ) => class extends supercla
      */
     defaultSelected( selected ){
         if( selected === true || selected === false ){
-            this.#defaultSelected = selected
+            this.#priv.iselectable.defaultSelected = selected
         }
-        return this.#defaultSelected;
+        return this.#priv.iselectable.defaultSelected;
     }
 
     /**
@@ -83,8 +83,8 @@ export const ISelectable = DeclareMixin(( superclass ) => class extends supercla
      */
     userSelectable( selectable ){
         if( selectable === true || selectable === false ){
-            this.#userSelectable = selectable
+            this.#priv.iselectable.userSelectable = selectable
         }
-        return this.#userSelectable;
+        return this.#priv.iselectable.userSelectable;
     }
 });

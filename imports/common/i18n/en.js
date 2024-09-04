@@ -208,7 +208,7 @@ Meteor.APP.i18n = {
                 },
                 new_assistant: {
                     assistant_title: 'Defining a new client application',
-                    auth_method_nav: 'Authentification method',
+                    auth_method_nav: 'Authentication method',
                     auth_method_confidential_text: 'Confidential clients must authenticate against the Authorization Server token endpoint.<br />'
                         +'Please choose below your desired authentication method.',
                     auth_method_public_text: 'Confidential clients must authenticate against the Authorization Server token endpoint.<br />'
@@ -229,7 +229,7 @@ Meteor.APP.i18n = {
                     providers_nav: 'Providers',
                     redirects_nav: 'Redirect URLs',
                     redirects_text: 'The Authorization Server will restrict the grant flow redirections to one of below URLs.',
-                    summary_auth_label: 'Authentification method :',
+                    summary_auth_label: 'Authentication method :',
                     summary_client_label: 'Client type :',
                     summary_grant_label: 'Grant types :',
                     summary_legend: 'Summary',

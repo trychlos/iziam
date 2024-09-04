@@ -60,13 +60,6 @@ Template.client_new_assistant_client_type.helpers({
     // items list
     itemsList(){
         return ClientType.Knowns();
-    },
-
-    // parms for current choices
-    parmsCurrent(){
-        return {
-            parentAPP: this.parentAPP
-        };
     }
 });
 

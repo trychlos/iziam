@@ -125,6 +125,13 @@ export const GrantType = {
             id: 'urn:ietf:params:oauth:grant-type:saml2-bearer',
             label: 'definitions.grant_type.saml_label'
         }*/
+       {
+            id: 'pkce',
+            label: '',
+            description: '',
+            image: '/images/grant-type.svg',
+            nature: 'format'
+       }
     ],
 
     /**

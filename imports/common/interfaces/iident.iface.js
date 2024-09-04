@@ -29,9 +29,9 @@ export const IIdent = DeclareMixin(( superclass ) => class extends superclass {
 
         if( o && o.iident ){
             this.#priv = o.iident;
-            if( !this.#priv.id ){
-                throw new Error( 'identifier is not set' );
-            }
+        }
+        if( !this.#priv?.id ){
+            throw new Error( 'IIdent identifier is not set' );
         }
 
         return this;
@@ -41,27 +41,27 @@ export const IIdent = DeclareMixin(( superclass ) => class extends superclass {
      * @returns {String} the description
      */
     identDescription(){
-        return this.#priv.description;
+        return this.#priv?.description;
     }
 
     /**
      * @returns {String} the identifier
      */
     identId(){
-        return this.#priv.id;
+        return this.#priv?.id;
     }
 
     /**
      * @returns {String} the label
      */
     identLabel(){
-        return this.#priv.label || this.#priv.id;
+        return this.#priv?.label || this.#priv?.id;
     }
 
     /**
      * @returns {String} the origin
      */
     identOrigin(){
-        return this.#priv.origin;
+        return this.#priv?.origin;
     }
 });

@@ -32,13 +32,6 @@ Template.client_new_assistant_properties.helpers({
         return pwixI18n.label( I18N, arg.hash.key );
     },
 
-    // parms for current choices
-    parmsCurrent(){
-        return {
-            parentAPP: this.parentAPP
-        };
-    },
-
     // parms for re-use the client_edit properties panel
     parmsPropertiesPanel(){
         return {

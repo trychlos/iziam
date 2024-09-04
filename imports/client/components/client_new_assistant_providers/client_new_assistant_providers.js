@@ -89,13 +89,6 @@ Template.client_new_assistant_providers.helpers({
         return pwixI18n.label( I18N, arg.hash.key );
     },
 
-    // parms for current choices
-    parmsCurrent(){
-        return {
-            parentAPP: this.parentAPP
-        };
-    },
-
     // parms for re-use the client_edit providers panel
     parmsProvidersPanel(){
         return {

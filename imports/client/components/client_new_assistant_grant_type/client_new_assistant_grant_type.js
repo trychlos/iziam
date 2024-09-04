@@ -120,13 +120,6 @@ Template.client_new_assistant_grant_type.helpers({
     // list of available natures
     naturesList(){
         return Object.keys( Template.instance().APP.selectables.get());
-    },
-
-    // parms for current choices
-    parmsCurrent(){
-        return {
-            parentAPP: this.parentAPP
-        };
     }
 });
 

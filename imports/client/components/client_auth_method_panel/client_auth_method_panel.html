@@ -2,17 +2,18 @@
     <div class="c-client-auth-method-panel">
 
         <div class="chooser">
-            <div class="chooser-content">
-                {{#each it in itemsList }}
+            {{#each it in itemsList }}
+                <div class="by-item" data-item-id="{{ itId it }}">
                     <div class="form-check">
-                        <div class="by-item" data-item-id="{{ itId it }}">
-                            <input class="form-check-input js-check" id="{{ itId it }}" type="radio" name="auth-method" {{ itChecked it }} />
-                            <label class="form-label" for="{{ itId it }}">{{ itLabel it }}</label>
-                        </div>
-                        <p class="text3 ui-ml05">{{ itDescription it }}</p>
+                        <input class="form-check-input js-check" id="{{ itId it }}" type="radio" name="auth-method" {{ itChecked it }} />
+                        <em><label class="form-check-label" for="{{ itId it }}">{{ itLabel it }}</label></em>
                     </div>
-                {{/each}}
-            </div>
+                    <div class="form-check">
+                        <input class="form-check-input ui-hidden" type="radio" name="auth-method" />
+                        <label class="form-check-label" for="{{ itId it }}">{{ itDescription it }}</label>
+                    </div>
+                </div>
+            {{/each}}
         </div>
 
     </div>

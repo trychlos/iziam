@@ -82,13 +82,6 @@ Template.client_new_assistant_profile.helpers({
     // items list
     itemsList(){
         return ClientProfile.Knowns();
-    },
-
-    // parms for current choices
-    parmsCurrent(){
-        return {
-            parentAPP: this.parentAPP
-        };
     }
 });
 

@@ -90,13 +90,6 @@ Template.client_new_assistant_auth_method.helpers({
             enableChecks: false,
             selectables: Template.instance().APP.selectables.get()
         };
-    },
-
-    // parms for current choices
-    parmsCurrent(){
-        return {
-            parentAPP: this.parentAPP
-        };
     }
 });
 
@@ -111,6 +104,6 @@ Template.client_new_assistant_auth_method.events({
     },
     // the panel advertizes of its current selection
     'iz-auth-method .c-client-new-assistant-auth-method'( event, instance, data ){
-        this.parentAPP.assistantStatus.set( 'token_endpoint_auth_method', data.token_endpoint_auth_method );
+        this.parentAPP.assistantStatus.set( 'token_endpoint_auth_method', data.auth_method );
     }
 });

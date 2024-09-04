@@ -71,6 +71,7 @@ Template.client_auth_method_panel.onRendered( function(){
     const self = this;
 
     // initialize the Checker for this panel as soon as we get the parent Checker
+    /*
     self.autorun(() => {
         const parentChecker = Template.currentData().checker?.get();
         const checker = self.APP.checker.get();
@@ -89,6 +90,7 @@ Template.client_auth_method_panel.onRendered( function(){
             }));
         }
     });
+    */
 });
 
 Template.client_auth_method_panel.helpers({
@@ -148,6 +150,6 @@ Template.client_auth_method_panel.events({
         const record = entity.DYN.records[index].get();
         record.token_endpoint_auth_method = id;
         // advertize the eventual caller (e.g. the client_new_assistant) of the new auth method
-        instance.$( '.c-client-auth-method-panel' ).trigger( 'iz-auth-method', { token_endpoint_auth_method: id });
+        instance.$( '.c-client-auth-method-panel' ).trigger( 'iz-auth-method', { auth_method: id });
     }
 });

@@ -86,8 +86,7 @@ Providers.fieldSet = function( dc ){
                     ...dc,
                     item: rowData
                 }
-            },
-            dt_width: '100px'
+            }
         }
     ];
     const fieldset = new Field.Set( columns );

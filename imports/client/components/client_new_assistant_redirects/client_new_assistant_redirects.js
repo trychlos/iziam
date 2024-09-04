@@ -50,13 +50,6 @@ Template.client_new_assistant_redirects.helpers({
         return pwixI18n.label( I18N, arg.hash.key );
     },
 
-    // parms for current choices
-    parmsCurrent(){
-        return {
-            parentAPP: this.parentAPP
-        };
-    },
-
     // parms for Redirect URLs panel
     parmsRedirectsPanel(){
         return {

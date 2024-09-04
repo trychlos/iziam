@@ -4,7 +4,7 @@
  *  A sub-template which displays the current choices.
  *
  * Parms:
- * - parentAPP: the assistant APP whole object
+ * - same than all other panes
  */
 
 import _ from 'lodash';
@@ -125,7 +125,7 @@ Template.client_new_assistant_current.helpers({
 
     // selected providers - which may be none
     providersText(){
-        const selected = Clients.fn.selectedProviders( this.parentAPP.organization, Template.instance().APP.client );
+        const selected = Clients.fn.selectedProviders( this.organization, Template.instance().APP.client );
         return Object.keys( selected ).join( ', ' ) || pwixI18n.label( I18N, 'clients.new_assistant.summary_providers_none' );
     },
 
