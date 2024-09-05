@@ -23,8 +23,8 @@ Template.client_new_assistant_done.onCreated( function(){
 
     self.APP = {
         clientId: new ReactiveVar( null ),
-        clientSecret: new ReactiveVar( null ),
-        clientHash: new ReactiveVar( null ),
+        //clientSecret: new ReactiveVar( null ),
+        //clientHash: new ReactiveVar( null ),
         error: new ReactiveVar( null )
     };
 });
@@ -36,34 +36,28 @@ Template.client_new_assistant_done.onRendered( function(){
     self.autorun(() => {
         const dataContext = Template.currentData();
         const dataDict = dataContext.parentAPP.assistantStatus;
-        const natureDef = dataDict.get( 'profileDef' );
         if( dataDict.get( 'activePane' ) === 'done' ){
             console.debug( 'dataContext', dataContext );
-            const item = {
-                organization: dataContext.organization.get().entity,
-                name: dataDict.get( 'name' ),
-                //nature: dataDict.get( 'profileId' ),
-                type: ClientNature.defaultClientType( natureDef ),
-                registration: 'pre',
-                description: dataDict.get( 'description' ) || null,
-                grant_types: dataDict.get( 'grant_types' ),
-                token_endpoint_auth_method: dataDict.get( 'token_endpoint_auth_method' ),
-                contacts: dataDict.get( 'contacts' ),
-                endpoints: dataDict.get( 'endpoints' ),
-                software_id: dataDict.get( 'software_id' ) || null,
-                software_version: dataDict.get( 'software_version' ) || null,
-            };
             $( 'body' ).css( 'cursor', 'progress' );
-            Meteor.call( 'client.upsert', [ item ], ( err, res ) => {
-                if( err ){
+            Meteor.callAsync( 'client.upsert', dataContext.parentAPP.entity.get())
+                .then(( res ) => {
+                    console.debug( 'res', res );
+                    console.debug( 'entity', dataContext.parentAPP.entity.get());
+                    self.APP.clientId.set( res.entities.clientId );
+                    $( 'body' ).css( 'cursor', 'default' );
+                    dataDict.set( 'close', true );
+                })
+                .catch(( err ) => {
                     self.APP.error.set( err );
-                } else {
-                    self.APP.clientId.set( res.records[0].clientId );
-                }
-                $( 'body' ).css( 'cursor', 'default' );
-                dataDict.set( 'close', true );
-            });
+                    $( 'body' ).css( 'cursor', 'default' );
+                    dataDict.set( 'close', true );
+                });
         }
+    });
+
+    // track the error to the console
+    self.autorun(() => {
+        console.debug( 'error', self.APP.error.get());
     });
 });
 

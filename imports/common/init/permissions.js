@@ -26,25 +26,31 @@ Permissions.set({
     feat: {
         clients: {
             async delete( user, scope ){
-                return await Roles.userIsInRoles( user, 'SCOPED_CLIENT_DELETE', { scope: scope });
+                return await Roles.userIsInRoles( user, 'CLIENT_DELETE' ) ||
+                        await Roles.userIsInRoles( user, 'SCOPED_CLIENT_DELETE', { scope: scope });
             },
             fn :{
-                async getBy( user, scope ){
-                    return await Roles.userIsInRoles( user, 'SCOPED_CLIENTS_LIST', { scope: scope });
+                async get_by( user, scope ){
+                    return await Roles.userIsInRoles( user, 'CLIENTS_LIST' ) ||
+                            await Roles.userIsInRoles( user, 'SCOPED_CLIENTS_LIST', { scope: scope });
                 }
             },
             async new( user, scope ){
-                return await Roles.userIsInRoles( user, 'SCOPED_CLIENT_CREATE', { scope: scope });
+                return await Roles.userIsInRoles( user, 'CLIENT_CREATE' ) ||
+                        await Roles.userIsInRoles( user, 'SCOPED_CLIENT_CREATE', { scope: scope });
             },
             pub: {
                 async closests( user, scope ){
-                    return await Roles.userIsInRoles( user, 'SCOPED_CLIENTS_LIST', { scope: scope });
+                    return await Roles.userIsInRoles( user, 'CLIENTS_LIST' ) ||
+                            await Roles.userIsInRoles( user, 'SCOPED_CLIENTS_LIST', { scope: scope });
                 },
                 async list_all( user, scope ){
-                    return await Roles.userIsInRoles( user, 'SCOPED_CLIENTS_LIST', { scope: scope });
+                    return await Roles.userIsInRoles( user, 'CLIENTS_LIST' ) ||
+                            await Roles.userIsInRoles( user, 'SCOPED_CLIENTS_LIST', { scope: scope });
                 },
                 async tabular( user, scope ){
-                    return await Roles.userIsInRoles( user, 'SCOPED_CLIENTS_LIST', { scope: scope });
+                    return await Roles.userIsInRoles( user, 'CLIENTS_LIST' ) ||
+                            await Roles.userIsInRoles( user, 'SCOPED_CLIENTS_LIST', { scope: scope });
                 }
             }
         },

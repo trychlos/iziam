@@ -250,6 +250,9 @@ body {
         }
     }
     .c-client-new-assistant-done {
+        .error {
+            color: var( --bs-danger );
+        }
         .success {
             font-weight: bold;
             color: var( --bs-success );
@@ -257,9 +260,6 @@ body {
         .result {
             font-weight: bold;
         }
-    }
-    .c-client-new-assistant-grant-type .by-item {
-        //margin-top: 0;
     }
 }
 .c-client-new-assistant > .Assistant {
@@ -668,16 +668,6 @@ body {
             margin-left: 0.5em;
             color: gray;
             font-style: italic;
-        }
-    }
-    .c-error-msg {
-        padding-top: 0.5em;
-        font-style: italic;
-        .ERROR {
-            color: var( --bs-danger );
-        }
-        .WARNING {
-            color: #d7951a; //var( --bs-warning ); contrast is too small
         }
     }
     .c-group-edit {

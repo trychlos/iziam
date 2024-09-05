@@ -57,11 +57,11 @@ Meteor.methods({
     'client.updateByFields'( item, fields ){
         return Clients.s.updateByFields( item, fields, this.userId );
     },
+        */
 
     // insert/update an client in the database
-    //  itemsArray here is an array of item records
-    'client.upsert'( itemsArray ){
-        return Clients.s.upsert( itemsArray, this.userId );
+    //  entity is an object with a DYN.records array of ReactiveVar's
+    async 'client.upsert'( entity ){
+        return await Clients.s.upsert( entity, this.userId );
     }
-        */
 });

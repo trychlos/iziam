@@ -58,6 +58,23 @@ const roles = {
                     ]
                 },
                 {
+                    name: 'CLIENTS_MANAGER',
+                    children: [
+                        {
+                            name: 'CLIENT_CREATE'
+                        },
+                        {
+                            name: 'CLIENT_DELETE'
+                        },
+                        {
+                            name: 'CLIENT_EDIT'
+                        },
+                        {
+                            name: 'CLIENTS_LIST'
+                        }
+                    ]
+                },
+                {
                     name: 'EDITOR',
                 },
                 {

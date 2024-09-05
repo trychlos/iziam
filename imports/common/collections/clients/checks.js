@@ -327,7 +327,7 @@ Clients.checks = {
                 item.contacts.push({ id: opts.id });
                 index = 0;
             }
-            item.contacts[index].uri = value;
+            item.contacts[index].email = value;
         }
         return _validEmail( value, { prefix: 'clients.checks.contact', acceptUnset: false });
     },
@@ -357,7 +357,7 @@ Clients.checks = {
                     message: pwixI18n.label( I18N, 'clients.checks.label_exists' )
                 });
             };
-            return Meteor.isClient ? Meteor.callAsync( 'clients_records_getBy', { label: value }) : ClientsRecords.server.getBy({ label: value })
+            return ( Meteor.isClient ? Meteor.callAsync( 'clients_records_getBy', { label: value }) : ClientsRecords.server.getBy({ label: value }))
                 .then(( result ) => {
                     return fn( result );
                 });

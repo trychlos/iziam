@@ -5,16 +5,16 @@
 
         <div class="content">
             {{#if haveError }}
-                <p class="error">{{ error }}</p>
+                <p class="error">Error: {{{ error }}}</p>
             {{else}}
                 <div>
-                    <p class="success">{{ success }}</p>
-                    <p class="sub-success">{{ sub_success }}</p>
+                    <p class="success">{{{ success }}}</p>
+                    <p class="sub-success">{{{ sub_success }}}</p>
                 </div>
-                <table class="form-table">
+                <table class="form-table ui-mt1">
                     <tr>
-                        <td class="label"><label class="form-label">{{ i18n key="clients.panel.clientid_label" }}</label></td>
-                        <td class="ca-w100"><p class="result">{{ clientId }}</p></td>
+                        <td class="label"><label class="form-label">{{ i18n key="clients.new_assistant.clientid_label" }}</label></td>
+                        <td class="ui-w100"><p class="result">{{ clientId }}</p></td>
                     </tr>
                 </table>
             {{/if}}

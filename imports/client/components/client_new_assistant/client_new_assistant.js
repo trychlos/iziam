@@ -150,7 +150,7 @@ Template.client_new_assistant.onCreated( function(){
 
     // build a suitable new client entity
     self.APP.entity.set({
-        organization: Template.currentData().organization.entity,
+        organization: Template.currentData().organization.entity._id,
         DYN: {
             records: [
                 new ReactiveVar( {} )
@@ -161,6 +161,11 @@ Template.client_new_assistant.onCreated( function(){
     // track the status of the assistant
     self.autorun(() => {
         console.debug( 'assistantStatus', self.APP.assistantStatus.all());
+    });
+
+    // track the content of the entity
+    self.autorun(() => {
+        console.debug( 'clientEntity', self.APP.entity.get());
     });
 
     // track the content of the record
@@ -218,17 +223,17 @@ Template.client_new_assistant.helpers({
             onChange( prev, next ){
                 const pages = APP.pages();
                 if( pages[next].name === 'summary' ){
-                    self.$( '.Assistant' ).trigger( 'assistant-do-label-action', {
+                    self.$( '.Assistant' ).trigger( 'assistant-do-action-set', {
                         action: 'next',
                         html: pwixI18n.label( I18N, 'assistant.confirm_btn' ),
-                        title: pwixI18n.label( I18N, 'assistant.title_btn' )
+                        title: pwixI18n.label( I18N, 'assistant.confirm_title' )
                     });
                 }
                 if( pages[next].prev === 'summary' ){
-                    self.$( '.Assistant' ).trigger( 'assistant-do-label-action', {
+                    self.$( '.Assistant' ).trigger( 'assistant-do-action-set', {
                         action: 'next',
                         html: pwixI18n.label( I18N, 'assistant.next_btn' ),
-                        title: pwixI18n.label( I18N, 'assistant.next_btn' )
+                        title: pwixI18n.label( I18N, 'assistant.next_title' )
                     });
                 }
                 return true;

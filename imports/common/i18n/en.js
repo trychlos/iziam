@@ -21,6 +21,12 @@ Meteor.APP.i18n = {
                         +'Please connect and enjoy.'
                 },
             },
+            assistant: {
+                confirm_btn: 'Confirm',
+                confirm_title: 'Confirm your choices',
+                next_btn: 'Next',
+                next_title: 'Go to the next page'
+            },
             clients: {
                 checks: {
                     client_type_invalid: 'The client type is unknown or not valid',
@@ -225,6 +231,7 @@ Meteor.APP.i18n = {
                     client_nav: 'Client type',
                     client_text: 'The client type, in the sense of OAuth specifications, is automatically determined from your chosen client profile. '
                         +'You shouldn\'t need to change it, unless you are really sure of what you are doing, but just in case...',
+                    clientid_label: 'Your new client Id. :',
                     contacts_nav: 'Contacts',
                     contacts_text: 'You are allowed to defined here the contacts of the client to your organization.<br />'
                         +'These contacts may be displayed to end-users.',
@@ -232,7 +239,9 @@ Meteor.APP.i18n = {
                     grant_type_nav: 'Grant type',
                     grant_type_text: 'For each available grant nature, please choose below the grant type(s) you want for your client.',
                     introduction_nav: 'Introduction',
-                    introduction_text: 'This assistant will guide you through the process of defining a new client to your Authorization Server.',
+                    introduction_text: 'This assistant will guide you through the process of defining a new client to your Authorization Server.<br/><br />'
+                        +'Please be beware that, to make your life easier, this assistant will let you define a client which may be not fully operational. '
+                        +'Nonetheless, you always be able to update it later.',
                     profile_nav: 'Profile',
                     profile_text: 'Choose the application profile which corresponds best to your use case.<br />'
                         +'This will define many other parameters, but you still will be able to modify each of them at your convenience.<br />'
@@ -243,6 +252,8 @@ Meteor.APP.i18n = {
                     redirects_nav: 'Redirect URLs',
                     redirects_text: 'The authorization flow you have chosen implies to predefine at least one redirection URI.<br />'
                         +'The Authorization Server will restrict the grant flow redirections to one of below URIs.',
+                    success_label: 'Congratulations !<br />'
+                        +'Your new client has been successfully created.',
                     summary_auth_label: 'Authentication method :',
                     summary_client_label: 'Client type :',
                     summary_contacts_label: 'Contacts :',

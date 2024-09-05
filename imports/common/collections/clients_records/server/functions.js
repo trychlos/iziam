@@ -6,7 +6,6 @@ import _ from 'lodash';
 
 import { check } from 'meteor/check';
 import { Permissions } from 'meteor/pwix:permissions';
-import { Random } from 'meteor/random';
 
 import { ClientsRecords } from '../index.js';
 
@@ -24,7 +23,7 @@ ClientsRecords.server = {
             return null;
         }
         const res = await ClientsRecords.collection.find( selector ).fetchAsync();
-        //console.debug( 'records', selector, res );
+        //console.debug( 'records.getBy', selector, res );
         return res;
     },
 
@@ -47,97 +46,91 @@ ClientsRecords.server = {
         return res;
     },
 
-    // itemsArray is the array of all the validity records for the upserted entity
-    //  there is at least one item
-    // @returns {Object} with full result
-    // @throws {Error}
-    upsert( itemsArray, userId ){
-        //console.debug( 'Clients.s.upsert()', itemsArray );
-        // search for an entity
-        //  the Validity class takes care of cloning records, so if entity is not in the first, it is expected to be nowhere and this is considered as a new object
-        let entity = itemsArray[0].entity || null;
-        for( let i=1 ; i<itemsArray.length ; ++i ){
-            if(( entity && itemsArray[i].entity !== entity ) || ( !entity && itemsArray[i].entity )){
-                throw new Error( 'entity is not the same between all records' );
-            }
-        }
+    /*
+    * @summary Create/Update at once an entity and all its validity records
+    * @param {Object} entity
+    *  an object with a DYN.records array of validity records as ReactiveVar's
+    *  we have made sure that even a new entity has its identifier
+    *  (but records have not in this case at the moment)
+    * @param {String} userId
+    * @returns {Object} with following keys:
+    */
+    async upsert( entity, userId ){
+        check( entity, Object );
+        check( userId, String );
+        //if( !await TenantsManager.isAllowed( 'pwix.tenants_manager.records.fn.upsert', userId, entity )){
+        //    return null;
+        //}
+        //console.debug( 'Records.server.upsert()', entity );
         // get the original item records to be able to detect modifications
-        let group = null;
-        if( entity ){
-            group = Clients.find({ entity: entity }).fetch() || null;
-        } else {
-            entity = Random.id();
-        }
+        //  and build a hash of id -> record
+        const orig = await ClientsRecords.server.getBy({ entity: entity._id }, userId );
+        let origIds = {};
+        orig.map(( it ) => { origIds[it._id] = it; });
+        let leftIds = _.cloneDeep( origIds );
+        let updatableIds = {};
         // prepare the result
         let result = {
-            orig: _.cloneDeep( group ),
-            group: group,
-            entity: entity,
-            itemsArray: itemsArray,
-            written: [],
+            orig: orig,
             inserted: 0,
             updated: 0,
-            ignored: 0,
-            removed: 0
+            written: [],
+            unchanged: [],
+            removed: 0,
+            count: 0
         };
         // for each provided item, test against the original (if any)
-        for( let i=0 ; i<itemsArray.length ; ++i ){
-            let item = _.cloneDeep( itemsArray[i] );
-            const $unset = Meteor.APP.Helpers.removeUnsetValues( item );
-            let orig = null;
-            if( group ){
-                for( let j=0 ; j<group.length ; ++j ){
-                    if( group[j]._id === item._id ){
-                        orig = group.splice( j, 1 )[0];
-                        break;
-                    }
-                }
+        //  BAD HACK CAUTION: the client has sent (it is expected the client has...) DYN.records as an array of ReactiveVar's
+        //  but the class didn't survive the DDP transfert to the server - and so we get here the data members of the class without the functions
+        //  so the 'curValue' below
+        for( let i=0 ; i<entity.DYN.records.length ; ++i ){
+            let record = entity.DYN.records[i].curValue;
+            // remove from leftIds the found record
+            if( leftIds[record._id] ){
+                delete leftIds[record._id];
             }
-            //console.debug( 'i='+i, 'found orig', orig );
-            // if we have found an original record, then only update it if it has been modified
-            let writable = true;
-            if( orig ){
-                if( _.isEqual( item, orig )){
-                    writable = false;
-                }
+            // compare and see if the record is to be updated
+            if( _.isEqual( record, origIds[record._id] )){
+                result.unchanged.push( record );
             } else {
-                delete item._id;
+                updatableIds[record._id] = record;
             }
-            //console.debug( 'i='+i, 'writable='+writable );
-            if( writable ){
-                if( !group ){
-                    item.entity = entity;
-                    item.clientId = Meteor.APP.Helpers.newId();
-                }
-                //console.debug( 'upserting', item, 'unset', $unset );
-                const res = Clients.upsert({ _id: item._id }, { $set: item, $unset: $unset });
+        }
+        // for each updatable, then... upsert!
+        // as of 2024- 7-17 and matb33:collection-hooks v 2.0.0-rc.1 there is not yet any hook for async methods (though this work at creation)
+        let promises = [];
+        Object.keys( updatableIds ).forEach(( id ) => {
+            const record = updatableIds[id];
+            if( record._id ){
+                record.updatedBy = userId;
+                record.updatedAt = new Date();
+            }
+            record.entity = entity._id;
+            promises.push( ClientsRecords.collection.upsertAsync({ _id: record._id }, { $set: record }).then(( res ) => {
+                //console.debug( 'upsertAsync', record, 'res', res );
                 if( res.numberAffected > 0 ){
-                    if( item._id ){
+                    if( record._id ){
                         result.updated += 1;
                     } else if( res.insertedId ){
                         result.inserted += 1;
                     }
-                    result.written.push( item );
+                    result.written.push( record );
                 }
-            } else {
-                result.ignored += 1;
-            }
-        }
-        // when we have treated each edited item, we should 'usually' have spliced all original group
-        //  but some periods may leave: remove them
-        if( group ){
-            for( let i=0 ; i<group.length ; ++i ){
-                //console.debug( 'removing', group[i] );
-                const res = Clients.remove({ _id: group[i]._id });
+                return res;
+            }));
+        });
+        // and remove the left items (removed validity periods)
+        Object.keys( leftIds ).forEach(( id ) => {
+            promises.push( ClientsRecords.collection.removeAsync({ _id: id }).then(( res ) => {
                 result.removed += res || 0;
-            }
-        } else {
-            console.debug( 'group is left empty' );
-        }
-        // at last, returns actually written records
-        result.records = Clients.find({ entity: entity }).fetch();
-        //console.debug( result );
-        return result;
+                return res;
+            }));
+        });
+        return Promise.allSettled( promises ).then(( res ) => {
+            return ClientsRecords.collection.countDocuments({ entity: entity._id });
+        }).then(() => {
+            console.debug( 'ClientsRecords result', result );
+            return result;
+        });
     }
-        */
 };

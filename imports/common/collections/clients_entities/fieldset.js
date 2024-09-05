@@ -21,6 +21,12 @@ const _defaultFieldSet = function(){
             type: String,
             dt_title: pwixI18n.label( I18N, 'clients.list.organization_th' )
         },
+        // the client identifier
+        // mandatory
+        {
+            name: 'clientId',
+            type: String
+        },
         // common notes
         Notes.fieldDef(),
         // timestampable behaviour

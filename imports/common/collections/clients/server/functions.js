@@ -4,11 +4,27 @@
 
 import _ from 'lodash';
 
-import { Random } from 'meteor/random';
-
 import { Clients } from '../index.js';
 
+import { ClientsEntities} from '/imports/common/collections/clients_entities/index.js';
+import { ClientsRecords} from '/imports/common/collections/clients_records/index.js';
+
 Clients.s = {
+    /**
+     * @summary Make sure all the fields of the fieldset are set in the item, even if undefined
+     * @param {Object} item
+     * @returns {Object} item
+     */
+    addUndef( item ){
+        Clients.fieldSet.get().names().forEach(( it ) => {
+            if( !Object.keys( item ).includes( it )){
+                item[it] = undefined;
+            }
+        });
+        return item;
+    },
+
+    /*
     // return a client by its name
     byName( name ){
         return Clients.findOne({ name: name });
@@ -20,7 +36,9 @@ Clients.s = {
         //console.log( 'entOrganization.getBy', res );
         return res;
     },
+    */
 
+    /*
     // update (actually replace) the data provided via the FormChecker fields
     updateByFields( item, fields, userId ){
         let set = {};
@@ -32,97 +50,31 @@ Clients.s = {
         const res = Clients.update({ _id: item._id }, { $set: set });
         return res;
     },
+    */
 
-    // itemsArray is the array of all the validity records for the upserted entity
+    // entity is the client entity with a DYN.records array of ReactiveVar's
     //  there is at least one item
     // @returns {Object} with full result
     // @throws {Error}
-    upsert( itemsArray, userId ){
-        //console.debug( 'Clients.s.upsert()', itemsArray );
-        // search for an entity
-        //  the Validity class takes care of cloning records, so if entity is not in the first, it is expected to be nowhere and this is considered as a new object
-        let entity = itemsArray[0].entity || null;
-        for( let i=1 ; i<itemsArray.length ; ++i ){
-            if(( entity && itemsArray[i].entity !== entity ) || ( !entity && itemsArray[i].entity )){
-                throw new Error( 'entity is not the same between all records' );
-            }
+    async upsert( entity, userId ){
+        check( entity, Object );
+        check( userId, String );
+        //if( !await TenantsManager.isAllowed( 'pwix.tenants_manager.fn.upsert', userId, entity )){
+        //    return null;
+        //}
+        //console.debug( 'Clients.s.upsert()', entity );
+    
+        // upsert the entity
+        //  we get back not only a result but also the original entity
+        //  when new, 'entity' has been updated with newly inserted id
+        let entitiesRes = await ClientsEntities.server.upsert( entity, userId );
+    
+        // and asks the Records to do the rest
+        let recordsRes = await ClientsRecords.server.upsert( entity, userId );
+    
+        return {
+            entities: entitiesRes,
+            records: recordsRes
         }
-        // get the original item records to be able to detect modifications
-        let group = null;
-        if( entity ){
-            group = Clients.find({ entity: entity }).fetch() || null;
-        } else {
-            entity = Random.id();
-        }
-        // prepare the result
-        let result = {
-            orig: _.cloneDeep( group ),
-            group: group,
-            entity: entity,
-            itemsArray: itemsArray,
-            written: [],
-            inserted: 0,
-            updated: 0,
-            ignored: 0,
-            removed: 0
-        };
-        // for each provided item, test against the original (if any)
-        for( let i=0 ; i<itemsArray.length ; ++i ){
-            let item = _.cloneDeep( itemsArray[i] );
-            const $unset = Meteor.APP.Helpers.removeUnsetValues( item );
-            let orig = null;
-            if( group ){
-                for( let j=0 ; j<group.length ; ++j ){
-                    if( group[j]._id === item._id ){
-                        orig = group.splice( j, 1 )[0];
-                        break;
-                    }
-                }
-            }
-            //console.debug( 'i='+i, 'found orig', orig );
-            // if we have found an original record, then only update it if it has been modified
-            let writable = true;
-            if( orig ){
-                if( _.isEqual( item, orig )){
-                    writable = false;
-                }
-            } else {
-                delete item._id;
-            }
-            //console.debug( 'i='+i, 'writable='+writable );
-            if( writable ){
-                if( !group ){
-                    item.entity = entity;
-                    item.clientId = Meteor.APP.Helpers.newId();
-                }
-                //console.debug( 'upserting', item, 'unset', $unset );
-                const res = Clients.upsert({ _id: item._id }, { $set: item, $unset: $unset });
-                if( res.numberAffected > 0 ){
-                    if( item._id ){
-                        result.updated += 1;
-                    } else if( res.insertedId ){
-                        result.inserted += 1;
-                    }
-                    result.written.push( item );
-                }
-            } else {
-                result.ignored += 1;
-            }
-        }
-        // when we have treated each edited item, we should 'usually' have spliced all original group
-        //  but some periods may leave: remove them
-        if( group ){
-            for( let i=0 ; i<group.length ; ++i ){
-                //console.debug( 'removing', group[i] );
-                const res = Clients.remove({ _id: group[i]._id });
-                result.removed += res || 0;
-            }
-        } else {
-            console.debug( 'group is left empty' );
-        }
-        // at last, returns actually written records
-        result.records = Clients.find({ entity: entity }).fetch();
-        //console.debug( result );
-        return result;
     }
 };

@@ -11,9 +11,9 @@ import { ClientsRecords } from '/imports/common/collections/clients_records/inde
 import { Clients } from '../index.js';
 
 /*
- * returns a cursor of all tenants as a full tenants list, published here as a 'tenants_all' pseudo collection
- *  where each item is a tenant entity, and contains a DYN sub-object with:
- *  - managers: the list of ids of users which are allowed to managed this tenant using a scoped role
+ * returns a cursor of all clients as a full clients list, published here as a 'clients_all' pseudo collection
+ *  where each item is a client entity, and contains a DYN sub-object with:
+ *  - managers: the list of ids of users which are allowed to managed this client using a scoped role
  *  - records: the list of validity records for this entity
  *  - closest: the closest record
  */
@@ -63,16 +63,16 @@ Meteor.publish( Meteor.APP.C.pub.clientsAll.publish, async function(){
     const entitiesObserver = ClientsEntities.collection.find({}).observeAsync({
         added: async function( item ){
             //console.debug( 'adding entity', item._id );
-            self.added( Meteor.APP.C.pub.tenantsAll.collection, item._id, await f_entityTransform( item ));
+            self.added( Meteor.APP.C.pub.clientsAll.collection, item._id, await f_entityTransform( item ));
         },
         changed: async function( newItem, oldItem ){
             if( !initializing ){
-                self.changed( Meteor.APP.C.pub.tenantsAll.collection, newItem._id, await f_entityTransform( newItem ));
+                self.changed( Meteor.APP.C.pub.clientsAll.collection, newItem._id, await f_entityTransform( newItem ));
             }
         },
         removed: async function( oldItem ){
             //console.debug( 'removing entity', oldItem._id );
-            self.removed( Meteor.APP.C.pub.tenantsAll.collection, oldItem._id );
+            self.removed( Meteor.APP.C.pub.clientsAll.collection, oldItem._id );
         }
     });
 
@@ -81,10 +81,10 @@ Meteor.publish( Meteor.APP.C.pub.clientsAll.publish, async function(){
             ClientsEntities.collection.findOneAsync({ _id: item.entity }).then( async ( entity ) => {
                 if( entity ){
                     try {
-                        self.changed( Meteor.APP.C.pub.tenantsAll.collection, entity._id, await f_entityTransform( entity ));
+                        self.changed( Meteor.APP.C.pub.clientsAll.collection, entity._id, await f_entityTransform( entity ));
                     } catch( e ){
                         // on HMR, happens that Error: Could not find element with id wx8rdvSdJfP6fCDTy to change
-                        self.added( Meteor.APP.C.pub.tenantsAll.collection, entity._id, await f_entityTransform( entity ));
+                        self.added( Meteor.APP.C.pub.clientsAll.collection, entity._id, await f_entityTransform( entity ));
                         console.debug( e, 'ignored' );
                     }
                 } else {
@@ -96,18 +96,18 @@ Meteor.publish( Meteor.APP.C.pub.clientsAll.publish, async function(){
             if( !initializing ){
                 ClientsEntities.collection.findOneAsync({ _id: newItem.entity }).then( async ( entity ) => {
                     if( entity ){
-                        self.changed( Meteor.APP.C.pub.tenantsAll.collection, entity._id, await f_entityTransform( entity ));
+                        self.changed( Meteor.APP.C.pub.clientsAll.collection, entity._id, await f_entityTransform( entity ));
                     } else {
                         console.warn( 'changed: entity not found', newItem.entity );
                     }
                 });
             }
         },
-        // remind that records are deleted after entity when deleting a tenant
+        // remind that records are deleted after entity when deleting a client
         removed: async function( oldItem ){
             ClientsEntities.collection.findOneAsync({ _id: oldItem.entity }).then( async ( entity ) => {
                 if( entity ){
-                    self.changed( Meteor.APP.C.pub.tenantsAll.collection, oldItem.entity, await f_entityTransform( entity ));
+                    self.changed( Meteor.APP.C.pub.clientsAll.collection, oldItem.entity, await f_entityTransform( entity ));
                 }
             });
         }
@@ -205,7 +205,7 @@ Meteor.publish( Meteor.APP.C.pub.closests.publish, async function(){
  * A tabular requisite n° 2
  * For each id of the previous requisite, publishes the content line
  * @param {String} tableName
- * @param {Array} ids: all id's of the ClientsRecords collection - will be filtered by TenantsList component
+ * @param {Array} ids: all id's of the ClientsRecords collection - will be filtered by ClientsList component
  * @param {Object} fields the Mongo mmodifier which select the output fields
  * 
  *  [Arguments] {
@@ -251,8 +251,8 @@ Meteor.publish( 'clients_tabular', async function( tableName, ids, fields ){
     // for tabular display we have to provide:
     // - entity_notes
     // - a DYN object which contains:
-    //   > analyze: the result of the analyze, i.e. the list of fields which are different among this tenant records
-    //   > count: the count of records for this tenant
+    //   > analyze: the result of the analyze, i.e. the list of fields which are different among this client records
+    //   > count: the count of records for this client
     // - start end end effect dates are modified with the englobing period of the entity
     const f_transform = async function( item ){
         let promises = [];
@@ -268,7 +268,7 @@ Meteor.publish( 'clients_tabular', async function( tableName, ids, fields ){
             item.effectEnd = res.end;
         }));
         await Promise.allSettled( promises );
-        Tenants.server.addUndef( item );
+        Clients.s.addUndef( item );
         return item;
     };
 
