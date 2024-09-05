@@ -56,7 +56,9 @@ Template.client_new_assistant_current.helpers({
 
     // registered contacts
     contactsText(){
-        return ( this.parentAPP.entity.get().DYN.records[0].get().contacts || [] ).join( ', ' );
+        const contacts = this.parentAPP.entity.get().DYN.records[0].get().contacts || [];
+        const emails = contacts.length ? contacts.map(( it ) => { return it.email; }) : null;
+        return emails ? emails.join( ', ' ) : pwixI18n.label( I18N, 'clients.new_assistant.summary_contacts_none' );
     },
 
     // grant types
@@ -138,8 +140,8 @@ Template.client_new_assistant_current.helpers({
 
     // registered redirect URLs
     redirectsText(){
-        const redirect_uris = this.parentAPP.entity.get().DYN.records[0].get().redirect_uris;
-        const urls = redirect_uris.map(( it ) => { return it.url; });
-        return urls.join( ', ' );
+        const redirect_uris = this.parentAPP.entity.get().DYN.records[0].get().redirect_uris || [];
+        const urls = redirect_uris.length ? redirect_uris.map(( it ) => { return it.url; }) : null;
+        return urls ? urls.join( ', ' ) : pwixI18n.label( I18N, 'clients.new_assistant.summary_redirects_none' );
     }
 });

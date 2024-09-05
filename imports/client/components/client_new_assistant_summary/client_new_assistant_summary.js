@@ -7,7 +7,16 @@
 
 import _ from 'lodash';
 
+import { pwixI18n } from 'meteor/pwix:i18n';
+
 import './client_new_assistant_summary.html';
+
+Template.client_new_assistant_summary.helpers({
+    // internationalization
+    i18n( arg ){
+        return pwixI18n.label( I18N, arg.hash.key );
+    }
+});
 
 Template.client_new_assistant_summary.events({
     // enable/disable the action buttons

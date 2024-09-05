@@ -22,9 +22,9 @@ import { ReactiveVar } from 'meteor/reactive-var';
 
 import '/imports/client/components/client_new_assistant_auth_method/client_new_assistant_auth_method.js';
 import '/imports/client/components/client_new_assistant_client_type/client_new_assistant_client_type.js';
-//import '/imports/client/components/client_new_assistant_contacts/client_new_assistant_contacts.js';
+import '/imports/client/components/client_new_assistant_contacts/client_new_assistant_contacts.js';
 import '/imports/client/components/client_new_assistant_current/client_new_assistant_current.js';
-//import '/imports/client/components/client_new_assistant_done/client_new_assistant_done.js';
+import '/imports/client/components/client_new_assistant_done/client_new_assistant_done.js';
 import '/imports/client/components/client_new_assistant_redirects/client_new_assistant_redirects.js';
 import '/imports/client/components/client_new_assistant_grant_types/client_new_assistant_grant_types.js';
 //import '/imports/client/components/client_new_assistant_jwt/client_new_assistant_jwt.js';
@@ -32,7 +32,7 @@ import '/imports/client/components/client_new_assistant_introduction/client_new_
 import '/imports/client/components/client_new_assistant_profile/client_new_assistant_profile.js';
 import '/imports/client/components/client_new_assistant_properties/client_new_assistant_properties.js';
 import '/imports/client/components/client_new_assistant_providers/client_new_assistant_providers.js';
-//import '/imports/client/components/client_new_assistant_summary/client_new_assistant_summary.js';
+import '/imports/client/components/client_new_assistant_summary/client_new_assistant_summary.js';
 //import '/imports/client/components/jwt_private_select/jwt_private_select.js';
 
 import './client_new_assistant.html';
@@ -100,12 +100,14 @@ Template.client_new_assistant.onCreated( function(){
                     template: 'client_new_assistant_redirects',
                     label: pwixI18n.label( I18N, 'clients.new_assistant.redirects_nav' )
                 },
+                /*
                 {
                     name: 'jwt',
                     template: 'client_new_assistant_jwt',
                     label: pwixI18n.label( I18N, 'clients.new_assistant.jwt_nav' ),
                     enabled: false
                 },
+                */
                 {
                     name: 'contacts',
                     template: 'client_new_assistant_contacts',

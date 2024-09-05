@@ -1,80 +1,14 @@
 <template name="client_new_assistant_contacts">
     <div class="c-client-new-assistant-contacts">
 
-        {{> client_new_assistant_current (parmsCurrent) }}
+        {{> client_new_assistant_current }}
 
         <div class="content">
             <div class="text">
-                <!-- {{> app_serializer document="client-new-contacts" }} -->
+                {{{ i18n key="clients.new_assistant.contacts_text" }}}
             </div>
 
-            <div class="contacts">
-                <table class="form-table input-table">
-                    <tr>
-                        <td class="ca-w100">
-                            <div class="d-flex align-items-end ca-w100">
-                                <div class="label flex-grow-1">
-                                    <label for="endpoint-label" class="form-label ca-mb025">{{ i18n key="clients.panel.contact_label" }}</label>
-                                    <input id="endpoint-label" class="form-control ca-w100 js-label" type="text" placeholder="{{ i18n key="clients.panel.contact_ph" }}" title="{{ i18n key="clients.panel.contact_title" }}" />
-                                </div>
-                                <div class="ca-ml025"></div>
-                                <div class="btn-dialog-item-new">
-                                    <button class="btn btn-sm btn-outline-primary js-clear ca-mb0225 ca-ml025" title="{{ i18n key="clients.panel.clear_title" }}" {{ clearDisabled }}>
-                                        <span class="fa-solid fa-fw fa-eraser"></span>
-                                    </button>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="ca-vabottom">
-                            <div class="btn-dialog-item-new">
-                                <button class="btn btn-sm btn-outline-primary js-add ca-mb0225 ca-ml025" title="{{ i18n key="clients.panel.add_title" }}" {{ addDisabled }}>
-                                    <span class="fa-solid fa-fw fa-plus"></span>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-
-                <div class="ca-mt1"></div>
-        
-                <table class="js-table">
-                    <thead>
-                        <tr>
-                            <th data-jqwt-name="endpoint" class="jqwt-border jqwt-sortable ca-w100 ca-fwnormal">{{ i18n key="clients.panel.contact_th" }}</th>
-                            <th>
-                                <div class="mgr-buttons d-flex ca-transparent">
-                                    <button class="btn btn-sm">
-                                        <span class="fa-solid fa-fw fa-minus"></span>
-                                    </button>
-                                </div>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{#if haveItems }}
-                            {{#each it in itemsList }}
-                                <tr data-item-id="{{ itId it }}">
-                                    <td class=""><p>{{ itLabel it }}</p></td>
-                                    <td>
-                                        <div class="mgr-buttons d-flex">
-                                            <div>
-                                                <button class="btn btn-sm btn-outline-primary js-minus" title="{{ i18n key="clients.panel.remove_title" }}">
-                                                    <span class="fa-solid fa-fw fa-minus"></span>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            {{/each}}
-                        {{else}}
-                            <tr>
-                                <td><p class="ca-center ca-pt05 ca-pb05">{{ i18n key="clients.panel.none_text" }}</p></td>
-                                <td></td>
-                            </tr>
-                        {{/if}}
-                    </tbody>
-                </table>
-            </div>
+            {{> client_contacts_panel (parmsContactsPanel) }}
         </div>
 
     </div>

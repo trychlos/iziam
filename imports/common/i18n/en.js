@@ -25,6 +25,8 @@ Meteor.APP.i18n = {
                 checks: {
                     client_type_invalid: 'The client type is unknown or not valid',
                     client_type_unset: 'The client type is not set',
+                    contact_invalid: 'The contact email address is not valid',
+                    contact_unset: 'An email address should be provided',
                     home_host: 'The home URI wants a hostname',
                     home_https: 'The home URI wants only HTTPS scheme',
                     home_invalid: 'The home URI is not valid',
@@ -46,6 +48,12 @@ Meteor.APP.i18n = {
                     tos_host: 'The terms of service URI wants a hostname',
                     tos_https: 'The terms of service URI wants only HTTPS scheme',
                     tos_invalid: 'The terms of service URI is not valid'
+                },
+                contacts: {
+                    add_title: 'Add a new contact email address',
+                    contact_ph: 'me@example.com',
+                    contact_th: 'Email',
+                    remove_title: 'Remove this contact address'
                 },
                 delete: {
                     confirmation_text: 'You are about to delete the "%s" client.<br />Are you sure ?',
@@ -217,6 +225,9 @@ Meteor.APP.i18n = {
                     client_nav: 'Client type',
                     client_text: 'The client type, in the sense of OAuth specifications, is automatically determined from your chosen client profile. '
                         +'You shouldn\'t need to change it, unless you are really sure of what you are doing, but just in case...',
+                    contacts_nav: 'Contacts',
+                    contacts_text: 'You are allowed to defined here the contacts of the client to your organization.<br />'
+                        +'These contacts may be displayed to end-users.',
                     done_nav: 'Done',
                     grant_type_nav: 'Grant type',
                     grant_type_text: 'For each available grant nature, please choose below the grant type(s) you want for your client.',
@@ -230,9 +241,12 @@ Meteor.APP.i18n = {
                     properties_text: 'Define some properties specific to your client application.',
                     providers_nav: 'Providers',
                     redirects_nav: 'Redirect URLs',
-                    redirects_text: 'The Authorization Server will restrict the grant flow redirections to one of below URLs.',
+                    redirects_text: 'The authorization flow you have chosen implies to predefine at least one redirection URI.<br />'
+                        +'The Authorization Server will restrict the grant flow redirections to one of below URIs.',
                     summary_auth_label: 'Authentication method :',
                     summary_client_label: 'Client type :',
+                    summary_contacts_label: 'Contacts :',
+                    summary_contacts_none: 'None',
                     summary_grant_label: 'Grant types :',
                     summary_legend: 'Summary',
                     summary_name_label: 'Label :',
@@ -241,7 +255,9 @@ Meteor.APP.i18n = {
                     summary_profile_features_label: 'Required features :',
                     summary_profile_label: 'Profile :',
                     summary_providers_label: 'Providers :',
-                    summary_providers_none: 'none',
+                    summary_providers_none: 'None',
+                    summary_redirects_label: 'Redirection URIs :',
+                    summary_redirects_none: 'None',
                     summary_text: 'You have successfully completed this assistant, at least enough to actually create the new client.<br />'
                         +'The client will be created when you will click on the "Next" button.<br />'
                         +'The client identifier will be then displayed.',

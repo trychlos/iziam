@@ -165,7 +165,7 @@ const _defaultFieldSet = function(){
         {
             name: 'contacts.$.email',
             type: String,
-            //form_check: Clients.checks.redirect_uri
+            form_check: Clients.checks.contact_email
         },
         {
             name: 'contacts.$.id',

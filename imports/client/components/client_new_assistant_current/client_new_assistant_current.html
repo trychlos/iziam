@@ -56,25 +56,25 @@
                         {{#if havePane "auth" }}
                             <tr>
                                 <td class="label ui-vatop">{{ i18n key="clients.new_assistant.summary_auth_label" }}</td>
-                                <td><p class="text">{{ authText }}</p></td>
+                                <td><p class="text">{{{ authText }}}</p></td>
                             </tr>
                         {{/if}}
                         {{#if havePane "grant" }}
                             <tr>
                                 <td class="label ui-vatop">{{ i18n key="clients.new_assistant.summary_grant_label" }}</td>
-                                <td><p class="text">{{ grantText }}</p></td>
+                                <td><p class="text">{{{ grantText }}}</p></td>
                             </tr>
                         {{/if}}
                         {{#if havePane "redirects" }}
                             <tr>
                                 <td class="label ui-vatop">{{ i18n key="clients.new_assistant.summary_redirects_label" }}</td>
-                                <td><p class="text">{{ redirectsText }}</p></td>
+                                <td><p class="text">{{{ redirectsText }}}</p></td>
                             </tr>
                         {{/if}}
                         {{#if havePane "contacts" }}
                             <tr>
                                 <td class="label ui-vatop">{{ i18n key="clients.new_assistant.summary_contacts_label" }}</td>
-                                <td><p class="text">{{ contactsText }}</p></td>
+                                <td><p class="text">{{{ contactsText }}}</p></td>
                             </tr>
                         {{/if}}
                     </table>

@@ -1,0 +1,23 @@
+<template name="client_contacts_panel">
+    <div class="c-client-contacts-panel">
+
+        <table class="form-table subtable">
+            <thead>
+                <tr>
+                    <th class="ui-w100">{{ i18n key="clients.contacts.contact_th" }}</th>
+                    <th>
+                        <button class="btn btn-sm btn-outline-primary js-plus" title="{{ i18n key="clients.contacts.add_title" }}">
+                            <span class="fa-solid fa-fw fa-plus"></span>
+                        </button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each it in itemsList }}
+                    {{> client_contact_row (parmsContactRow it) }}
+                {{/each}}
+            </tbody>
+        </table>
+
+    </div>
+</template>

@@ -1,13 +1,13 @@
 /*
- * /imports/client/components/client_redirect_row/client_redirect_row.js
+ * /imports/client/components/client_contact_row/client_contact_row.js
  *
- * Manage a redirect URL, maybe empty but have at least an id.
+ * Manage a contact email address, maybe empty but have at least an id.
  *
  * Parms:
  * - entity: the currently edited entity as a ReactiveVar
  * - index: the index of the edited record
  * - checker: a ReactiveVar which holds the parent Checker
- * - it: the redirect item to be managed here
+ * - it: the contact item to be managed here
  */
 
 import _ from 'lodash';
@@ -17,9 +17,9 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 
 import { ClientsRecords } from '/imports/common/collections/clients_records/index.js';
 
-import './client_redirect_row.html';
+import './client_contact_row.html';
 
-Template.client_redirect_row.onCreated( function(){
+Template.client_contact_row.onCreated( function(){
     const self = this;
 
     self.APP = {
@@ -32,7 +32,7 @@ Template.client_redirect_row.onCreated( function(){
         removeById( id ){
             const recordRv = Template.currentData().entity.get().DYN.records[Template.currentData().index];
             let item = recordRv.get();
-            let rows = item.redirect_uris || [];
+            let rows = item.contacts || [];
             let found = -1;
             for( let i=0 ; i<rows.length ; ++i ){
                 if( rows[i].id === id ){
@@ -46,7 +46,7 @@ Template.client_redirect_row.onCreated( function(){
                 self.APP.checker.get().removeMe();
             } else {
                 console.warn( id, 'not found', item );
-                const trs = $( '.c-client-redirects-panel tr.c-client-redirect-row' );
+                const trs = $( '.c-client-contacts-panel tr.c-client-contact-row' );
                 $.each( trs, function( index, object ){
                     console.debug( index, $( object ).data( 'item-id' ));
                 });
@@ -57,7 +57,7 @@ Template.client_redirect_row.onCreated( function(){
     // whether this row is the last of the array ?
     self.autorun(() => {
         const myId = Template.currentData().it.id;
-        const rows = Template.currentData().entity.get().DYN.records[Template.currentData().index].get().redirect_uris || [];
+        const rows = Template.currentData().entity.get().DYN.records[Template.currentData().index].get().contacts || [];
         let found = -1;
         for( let i=0 ; i<rows.length ; ++i ){
             if( rows[i].id === myId ){
@@ -71,7 +71,7 @@ Template.client_redirect_row.onCreated( function(){
     });
 });
 
-Template.client_redirect_row.onRendered( function(){
+Template.client_contact_row.onRendered( function(){
     const self = this;
 
     // initialize the Checker for this panel as soon as we get the parent Checker
@@ -82,8 +82,8 @@ Template.client_redirect_row.onRendered( function(){
             self.APP.checker.set( new Forms.Checker( self, {
                 parent: parentChecker,
                 panel: new Forms.Panel({
-                    'redirect_uris.$.uri': {
-                        js: '.js-url',
+                    'contacts.$.email': {
+                        js: '.js-contact',
                         formFrom( $node ){
                             return $node.val();
                         },
@@ -103,26 +103,26 @@ Template.client_redirect_row.onRendered( function(){
     });
 });
 
-Template.client_redirect_row.helpers({
+Template.client_contact_row.helpers({
     // string translation
     i18n( arg ){
         return pwixI18n.label( I18N, arg.hash.key );
     },
 
     // note: weird things happen when inserting/deleting rows, unless we delete only last row
-    // but we accept to remove all redirect urls (which will disable the client by the fact)
+    // but we accept to remove all contact urls (which will disable the client by the fact)
     minusEnabled(){
         return Template.instance().APP.isLast.get() ? '' : 'disabled';
     }
 });
 
-Template.client_redirect_row.events({
-    'click .c-client-redirect-row .js-minus'( event, instance ){
+Template.client_contact_row.events({
+    'click .c-client-contact-row .js-minus'( event, instance ){
         const id = this.it.id;
         instance.APP.removeById( id );
     },
 });
 
-Template.client_redirect_row.onDestroyed( function(){
+Template.client_contact_row.onDestroyed( function(){
     //console.debug( 'onDestroyed', Template.currentData().it.id );
 });

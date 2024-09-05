@@ -16,8 +16,6 @@ import _ from 'lodash';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 
-import { ClientNature } from '/imports/common/definitions/client-nature.def.js';
-
 import './client_new_assistant_done.html';
 
 Template.client_new_assistant_done.onCreated( function(){

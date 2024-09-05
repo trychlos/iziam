@@ -1,0 +1,126 @@
+/*
+ * /imports/client/components/client_contacts_panel/client_contacts_panel.js
+ *
+ * Manage the contacts of the client.
+ *
+ * Parms:
+ * - entity: the currently edited entity as a ReactiveVar
+ * - index: the index of the edited record
+ * - checker: a ReactiveVar which holds the parent Checker
+ * - haveOne: whether to provide an empty row at initialization when there is not yet any contact url, defaulting to true
+ * - enableChecks: whether the checks should be enabled at startup, defaulting to true
+ */
+
+import _ from 'lodash';
+
+import { Forms } from 'meteor/pwix:forms';
+import { pwixI18n } from 'meteor/pwix:i18n';
+import { Random } from 'meteor/random';
+import { ReactiveVar } from 'meteor/reactive-var';
+
+import '/imports/client/components/client_contact_row/client_contact_row.js';
+
+import './client_contacts_panel.html';
+
+Template.client_contacts_panel.onCreated( function(){
+    const self = this;
+
+    self.APP = {
+        // current count of contact urls
+        count: new ReactiveVar( 0 ),
+        // the Form.Checker instance for this panel
+        checker: new ReactiveVar( null ),
+        // whether we already have added one empty row at startup
+        haveAddedOne: false,
+
+        // add an empty item to the contacts array
+        addOne( dataContext ){
+            const recordRv = dataContext.entity.get().DYN.records[dataContext.index];
+            const item = recordRv.get();
+            item.contacts = item.contacts || [];
+            item.contacts.push({
+                id: Random.id()
+            });
+            recordRv.set( item );
+            self.APP.haveAddedOne = true;
+        }
+    };
+
+    // keep the count of rows up to date
+    self.autorun(() => {
+        const entity = Template.currentData().entity.get();
+        const index = Template.currentData().index;
+        self.APP.count.set(( entity.DYN.records[index].get().contacts || [] ).length );
+    });
+});
+
+Template.client_contacts_panel.onRendered( function(){
+    const self = this;
+
+    // initialize the Checker for this panel as soon as we get the parent Checker
+    self.autorun(() => {
+        const parentChecker = Template.currentData().checker?.get();
+        const checker = self.APP.checker.get();
+        if( parentChecker && !checker ){
+            const enabled = Template.currentData().enableChecks !== false;
+            self.APP.checker.set( new Forms.Checker( self, {
+                name: 'client_contacts_panel',
+                parent: parentChecker,
+                enabled: enabled
+            }));
+        }
+    });
+
+    // advertize of the status of this checker to the (maybe) englobing assistant
+    self.autorun(() => {
+        const checker = self.APP.checker.get();
+        if( checker ){
+            const status = checker.iStatusableStatus();
+            self.$( '.c-client-contacts-panel' ).trigger( 'iz-status', { status: status });            
+        }
+    });
+
+    // if no contact yet, and not configured to not to, have an empty row
+    self.autorun(() => {
+        if( !self.APP.count.get()){
+            const haveOne = Template.currentData().haveOne !== false;
+            if( haveOne && !self.APP.haveAddedOne ){
+                self.APP.addOne( Template.currentData());
+            }
+        }
+    });
+});
+
+Template.client_contacts_panel.helpers({
+    // string translation
+    i18n( arg ){
+        return pwixI18n.label( I18N, arg.hash.key );
+    },
+
+    // contact urls list
+    itemsList(){
+        const count = Template.instance().APP.count.get();
+        return this.entity.get().DYN.records[this.index].get().contacts || [];
+    },
+
+    // passes the same data context, just replacing the parent checker by our own
+    parmsContactRow( it ){
+        const parms = { ...this };
+        parms.checker = Template.instance().APP.checker;
+        parms.it = it;
+        return parms;
+    }
+});
+
+Template.client_contacts_panel.events({
+    // ask for enabling the checker (when this panel is used inside of an assistant)
+    'iz-enable-checks .c-client-contacts-panel'( event, instance, enabled ){
+        instance.APP.checker.get().enabled( enabled );
+        if( enabled ){
+            instance.APP.checker.get().check({ update: false });
+        }
+    },
+    'click .c-client-contacts-panel .js-plus'( event, instance ){
+        instance.APP.addOne( this );
+    }
+});

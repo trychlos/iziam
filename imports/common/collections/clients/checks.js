@@ -5,6 +5,7 @@
 
 import _ from 'lodash';
 const assert = require( 'assert' ).strict; // up to nodejs v16.x
+import validator from 'email-validator';
 import validUrl from 'valid-url';
 
 import { pwixI18n } from 'meteor/pwix:i18n';
@@ -53,6 +54,36 @@ const _id2index = function( array, id ){
     }
     console.warn( 'id='+id+' not found' );
     return -1;
+};
+
+// check an email address
+// - value: the value to be checked
+// - opts: an optional options object with following keys
+//   > prefix: a prefix for the messages strings
+//   > acceptFragment: whether to accept fragment component, defaulting to true
+//   > acceptUnset: whether to accept unset URI, defaulting to true (if accepted, then no message is sent when it is empty)
+//   > acceptOthers: whether to accept other protocols, defaulting to true (defaulting to only accept https, when accepted also allows application-defined protocols)
+//     ex: "com.example.app:///auth" as a scheme defined for a native mobile app
+//   > wantHost: whether hostname is mandatory, defaulting to true (pathname only is accepted in not a special protocol)
+// returns a TypedMessage, or null if ok
+const _validEmail = function( value, opts ){
+    if( value ){
+        if( validator.validate( value )){
+            return null;
+        } else {
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, opts.prefix+'_invalid' )
+            });
+        }
+    } else if( opts.acceptUnset === false ){
+        return new TM.TypedMessage({
+            level: TM.MessageLevel.C.WARNING,
+            message: pwixI18n.label( I18N, opts.prefix+'_unset' )
+        });
+    } else {
+        return null;
+    }
 };
 
 // check an URL
@@ -285,6 +316,22 @@ Clients.checks = {
         return _validUrl( value, { prefix: 'clients.checks.home', acceptHttp: false });
     },
 
+    // contact_email, optional in the UI
+    async contact_email( value, data, opts ){
+        _assert_data_content( 'Clients.checks.contact_email()', data );
+        let item = data.entity.get().DYN.records[data.index].get();
+        const index = opts.id ? _id2index( item.contacts, opts.id ) : -1;
+        if( opts.update !== false ){
+            if( index < 0 ){
+                item.contacts = item.contacts || [];
+                item.contacts.push({ id: opts.id });
+                index = 0;
+            }
+            item.contacts[index].uri = value;
+        }
+        return _validEmail( value, { prefix: 'clients.checks.contact', acceptUnset: false });
+    },
+
     // the label must be set, and must identify the client entity
     // need to update the entity (or something) so that the new assistant is reactive
     async label( value, data, opts ){
@@ -376,7 +423,7 @@ Clients.checks = {
         }
         return _validUrl( value, { prefix: 'clients.checks.redirect', acceptUnset: false, acceptFragment: false });
     },
-    
+
     /*
     // the response types used on the token endpoint
     async responseTypes( value, data, coreApp={} ){

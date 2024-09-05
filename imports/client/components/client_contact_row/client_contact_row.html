@@ -1,0 +1,12 @@
+<template name="client_contact_row">
+
+    <tr class="c-client-contact-row" data-item-id="{{ this.it.id }}">
+        <td><input class="form-control js-contact" type="email" placeholder="{{ i18n key="clients.contacts.contact_ph" }}" /></td>
+        <td>
+            <button class="btn btn-sm btn-outline-primary js-minus" title="{{ i18n key="clients.contacts.remove_title" }}" {{ minusEnabled }} >
+                <span class="fa-solid fa-fw fa-minus"></span>
+            </button>
+        </td>
+    </tr>
+
+</template>
