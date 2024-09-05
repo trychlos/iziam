@@ -4,7 +4,7 @@
  * On the 'done' pane, we do the work and display the result.
  * Here:
  *  - the client identifier
- *  - the client secret if grant type has client credentials with shared secret or authentification method is jwt with shared secret
+ *  ((- the client secret if grant type has client credentials with shared secret or authentification method is jwt with shared secret))
  *
  * Parms:
  * - organization: a ReactiveVar which contains the current organization at date
@@ -23,9 +23,13 @@ Template.client_new_assistant_done.onCreated( function(){
 
     self.APP = {
         clientId: new ReactiveVar( null ),
-        //clientSecret: new ReactiveVar( null ),
-        //clientHash: new ReactiveVar( null ),
-        error: new ReactiveVar( null )
+        error: new ReactiveVar( null ),
+
+        // end of the creation
+        creationEnd(){
+            $( 'body' ).css( 'cursor', 'default' );
+            self.$( '.c-client-new-assistant-done' ).trigger( 'assistant-do-action-set', { action: 'next',  enable: true });
+        }
     };
 });
 
@@ -37,27 +41,25 @@ Template.client_new_assistant_done.onRendered( function(){
         const dataContext = Template.currentData();
         const dataDict = dataContext.parentAPP.assistantStatus;
         if( dataDict.get( 'activePane' ) === 'done' ){
-            console.debug( 'dataContext', dataContext );
+            //console.debug( 'dataContext', dataContext );
             $( 'body' ).css( 'cursor', 'progress' );
             Meteor.callAsync( 'client.upsert', dataContext.parentAPP.entity.get())
                 .then(( res ) => {
-                    console.debug( 'res', res );
-                    console.debug( 'entity', dataContext.parentAPP.entity.get());
+                    //console.debug( 'res', res );
+                    //console.debug( 'entity', dataContext.parentAPP.entity.get());
                     self.APP.clientId.set( res.entities.clientId );
-                    $( 'body' ).css( 'cursor', 'default' );
-                    dataDict.set( 'close', true );
+                    self.APP.creationEnd();
                 })
                 .catch(( err ) => {
                     self.APP.error.set( err );
-                    $( 'body' ).css( 'cursor', 'default' );
-                    dataDict.set( 'close', true );
+                    self.APP.creationEnd();
                 });
         }
     });
 
     // track the error to the console
     self.autorun(() => {
-        console.debug( 'error', self.APP.error.get());
+        //console.debug( 'error', self.APP.error.get());
     });
 });
 

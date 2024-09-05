@@ -244,6 +244,7 @@ Meteor.publish( 'clients_tabular', async function( tableName, ids, fields ){
     const self = this;
     const collectionName = ClientsRecords.collectionName;
     let initializing = true;
+    //console.debug( tableName, ids, fields );
 
     // for each entity, the record sent after transformation
     let entities = {};
@@ -253,7 +254,7 @@ Meteor.publish( 'clients_tabular', async function( tableName, ids, fields ){
     // - a DYN object which contains:
     //   > analyze: the result of the analyze, i.e. the list of fields which are different among this client records
     //   > count: the count of records for this client
-    // - start end end effect dates are modified with the englobing period of the entity
+    // - start and end effect dates are modified with the englobing period of the entity
     const f_transform = async function( item ){
         let promises = [];
         item.DYN = {};

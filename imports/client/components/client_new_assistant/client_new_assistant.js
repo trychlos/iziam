@@ -63,7 +63,8 @@ Template.client_new_assistant.onCreated( function(){
                 {
                     name: 'introduction',
                     template: 'client_new_assistant_introduction',
-                    label: pwixI18n.label( I18N, 'clients.new_assistant.introduction_nav' )
+                    label: pwixI18n.label( I18N, 'clients.new_assistant.introduction_nav' ),
+                    start: true
                 },
                 {
                     name: 'properties',
@@ -122,7 +123,7 @@ Template.client_new_assistant.onCreated( function(){
                     name: 'done',
                     template: 'client_new_assistant_done',
                     label: pwixI18n.label( I18N, 'clients.new_assistant.done_nav' ),
-                    done: true
+                    end: true
                 }
             ];
         },
