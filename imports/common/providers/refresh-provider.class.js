@@ -32,7 +32,7 @@ export class RefreshProvider extends mix( izProvider ).with( IGrantType ){
         super({
             iident: {
                 id: 'org.trychlos.iziam.provider.refresh.0',
-                label: 'izIAM RefreshToken Provider',
+                label: 'izIAM Refresh Token Provider',
                 origin: 'izIAM'
             },
             ifeatured: [

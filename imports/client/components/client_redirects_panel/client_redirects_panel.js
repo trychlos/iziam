@@ -2,7 +2,7 @@
  * /imports/client/components/client_redirects_panel/client_redirects_panel.js
  *
  * Manage the redirection URLs of the client.
- * There must be at least one for the client be operational, unless in the UI where we accept no redirect URL at all.
+ * Depending of the chosen authorization grant flow, there must be at least one for the client be operational, unless in the UI where we accept no redirect URL at all.
  *
  * Parms:
  * - entity: the currently edited entity as a ReactiveVar
@@ -14,9 +14,13 @@
 
 import _ from 'lodash';
 
+import { Forms } from 'meteor/pwix:forms';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { Random } from 'meteor/random';
 import { ReactiveVar } from 'meteor/reactive-var';
+import { TM } from 'meteor/pwix:typed-message';
+
+import { GrantType } from '/imports/common/definitions/grant-type.def.js';
 
 import '/imports/client/components/client_redirect_row/client_redirect_row.js';
 
@@ -26,12 +30,16 @@ Template.client_redirects_panel.onCreated( function(){
     const self = this;
 
     self.APP = {
+        // whether we want redirection uris
+        wantRedirects: new ReactiveVar( false ),
         // current count of redirect urls
         count: new ReactiveVar( 0 ),
         // the Form.Checker instance for this panel
         checker: new ReactiveVar( null ),
-        // whether we alrfeady have added one empty row at startup
+        // whether we already have added one empty row at startup
         haveAddedOne: false,
+        // whether we have warned about no redirect uri
+        warnedNoRedirect: false,
 
         // add an empty item to the redirect_uris array
         addOne( dataContext ){
@@ -45,6 +53,13 @@ Template.client_redirects_panel.onCreated( function(){
             self.APP.haveAddedOne = true;
         }
     };
+
+    // whether we want any redirection uris ?
+    self.autorun(() => {
+        const record = Template.currentData().entity.get().DYN.records[Template.currentData().index].get();
+        const grantTypes = record.grant_types || [];
+        self.APP.wantRedirects.set( GrantType.wantRedirects( grantTypes ));
+    });
 
     // keep the count of rows up to date
     self.autorun(() => {
@@ -87,10 +102,26 @@ Template.client_redirects_panel.onRendered( function(){
     });
 
     // if no redirect url yet, and not configured to not to, have an empty row
+    // if no more redirect url (and already added if asked for), send a warning
     self.autorun(() => {
-        const haveOne = Template.currentData().haveOne !== false;
-        if( haveOne && !self.APP.count.get() && !self.APP.haveAddedOne ){
-            self.APP.addOne( Template.currentData());
+        if( self.APP.count.get()){
+            self.APP.warnedNoRedirect = false;
+        } else {
+            const haveOne = Template.currentData().haveOne !== false;
+            if( haveOne && !self.APP.haveAddedOne ){
+                self.APP.addOne( Template.currentData());
+            } else if( !self.APP.warnedNoRedirect ){
+                //console.warn( 'warning about no redirect');
+                const checker = self.APP.checker.get();
+                if( checker ){
+                    checker.messagerPush( new TM.TypedMessage({
+                        level: TM.MessageLevel.C.WARNING,
+                        message: pwixI18n.label( I18N, 'clients.checks.redirect_needed' )
+                    }));
+                    //checker.messagerDump();
+                    self.APP.warnedNoRedirect = true;
+                }
+            }
         }
     });
 });

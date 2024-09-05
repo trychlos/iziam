@@ -41,6 +41,7 @@ Meteor.APP.i18n = {
                     redirect_host: 'Redirect URLs want a hostname',
                     redirect_http: 'Redirect URLs cannot use HTTP scheme for security reasons',
                     redirect_invalid: 'The redirect URL is not a valid URI',
+                    redirect_needed: 'The defined grant flow wants at least one redirection URI',
                     redirect_unset: 'The redirect URL is not set',
                     tos_host: 'The terms of service URI wants a hostname',
                     tos_https: 'The terms of service URI wants only HTTPS scheme',
@@ -216,6 +217,7 @@ Meteor.APP.i18n = {
                     client_nav: 'Client type',
                     client_text: 'The client type, in the sense of OAuth specifications, is automatically determined from your chosen client profile. '
                         +'You shouldn\'t need to change it, unless you are really sure of what you are doing, but just in case...',
+                    done_nav: 'Done',
                     grant_type_nav: 'Grant type',
                     grant_type_text: 'For each available grant nature, please choose below the grant type(s) you want for your client.',
                     introduction_nav: 'Introduction',
@@ -234,11 +236,15 @@ Meteor.APP.i18n = {
                     summary_grant_label: 'Grant types :',
                     summary_legend: 'Summary',
                     summary_name_label: 'Label :',
+                    summary_nav: 'Summary',
                     summary_profile_client_label: 'Suggested client type :',
                     summary_profile_features_label: 'Required features :',
                     summary_profile_label: 'Profile :',
                     summary_providers_label: 'Providers :',
-                    summary_providers_none: 'none'
+                    summary_providers_none: 'none',
+                    summary_text: 'You have successfully completed this assistant, at least enough to actually create the new client.<br />'
+                        +'The client will be created when you will click on the "Next" button.<br />'
+                        +'The client identifier will be then displayed.',
                 },
                 providers: {
                     list_preamble: 'Select here the providers among those allowed by your organization to satisfy the features needed by the client profile you have chosen.'

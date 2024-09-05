@@ -170,13 +170,15 @@ Template.client_grant_types_panel.helpers({
 
 Template.client_grant_types_panel.events({
     // grant type selection
-    // non reactively reset the full list of selected grant types in the record
+    // reactively reset the full list of selected grant types in the record to let the UI auto-update
     'click .by-item'( event, instance ){
         let selected = [];
         instance.$( '.chooser input:checked' ).each( function( index, item ){
             selected.push( $( this ).closest( '.by-item' ).data( 'item-id' ));
         });
-        this.entity.get().DYN.records[this.index].get().grant_types = selected;
+        let record = this.entity.get().DYN.records[this.index].get();
+        record.grant_types = selected;
+        this.entity.get().DYN.records[this.index].set( record );
         // advertize the eventual caller (e.g. the client_new_assistant) of the new auth method
         instance.$( '.c-client-grant-types-panel' ).trigger( 'iz-grant-types', { grant_types: selected });
     }

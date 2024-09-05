@@ -37,9 +37,7 @@ Template.client_auth_method_panel.onCreated( function(){
         // returns true if the definition is the current selection
         isSelected( def ){
             const id = AuthMethod.id( def );
-            const entity = Template.currentData().entity.get();
-            const index = Template.currentData().index;
-            const record = entity.DYN.records[index].get();
+            const record = Template.currentData().entity.get().DYN.records[Template.currentData().index].get();
             return record.token_endpoint_auth_method === id;
         }
     };
@@ -119,9 +117,12 @@ Template.client_auth_method_panel.events({
     'iz-clear-panel .c-client-auth-method-panel'( event, instance ){
     },
     // auth method selection
+    // reactively set the record to trigger UI updates
     'click .by-item'( event, instance ){
         const id = instance.$( event.currentTarget ).data( 'item-id' );
-        this.entity.get().DYN.records[this.index].get().token_endpoint_auth_method = id;
+        let record = this.entity.get().DYN.records[this.index].get()
+        record.token_endpoint_auth_method = id;
+        this.entity.get().DYN.records[this.index].set( record );
         // advertize the eventual caller (e.g. the client_new_assistant) of the new auth method
         instance.$( '.c-client-auth-method-panel' ).trigger( 'iz-auth-method', { auth_method: id });
     }

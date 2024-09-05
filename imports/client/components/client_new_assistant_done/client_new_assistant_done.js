@@ -112,12 +112,11 @@ Template.client_new_assistant_done.helpers({
 Template.client_new_assistant_done.events({
     // enable/disable the action buttons
     'assistant-pane-to-show .c-client-new-assistant-properties'( event, instance, data ){
-        console.debug( event.type, data );
-        this.parentAPP.assistantStatus.set( 'prev', false );
-        this.parentAPP.assistantStatus.set( 'next', false );
+        instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'prev', enable: false });
+        instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'next',  enable: false });
     },
     'assistant-pane-shown .c-client-new-assistant-properties'( event, instance, data ){
-        console.debug( event.type, data );
-        this.parentAPP.assistantStatus.set( 'prev', true );
+        instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'prev', enable: false });
+        instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'next',  enable: false });
     },
 });

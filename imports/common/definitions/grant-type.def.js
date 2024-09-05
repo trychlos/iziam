@@ -47,7 +47,8 @@ export const GrantType = {
             label: 'definitions.grant_type.authcode_label',
             description: 'definitions.grant_type.authcode_description',
             image: '/images/grant-type.svg',
-            nature: 'access'
+            nature: 'access',
+            haveRedirects: true
         },
         {
             // implicit grant - oauth 2.0 ONLY
@@ -56,7 +57,8 @@ export const GrantType = {
             label: 'definitions.grant_type.implicit_label',
             description: 'definitions.grant_type.implicit_description',
             image: '/images/grant-type.svg',
-            nature: 'access'
+            nature: 'access',
+            haveRedirects: true
         },
         {
             // client credentials
@@ -364,9 +366,27 @@ export const GrantType = {
 
     /**
      * @param {Object} def a GrantType definition as returned by GrantType.Knowns()
-     * @returns {String} the grant type type
+     * @returns {Boolean} whether this grant type makes use of redirection URIs, defaulting to false
      */
-    type( def ){
-        return def.type || null;
+    useRedirects( def ){
+        return def.haveRedirects === true;
+    },
+
+    /**
+     * @param {Array<String>} grantTypes a list of grant types
+     * @returns {Boolean} whether at least one grant type makes use of redirection URIs, defaulting to false
+     */
+    wantRedirects( grantTypes ){
+        let wantRedirects = false;
+        grantTypes.every(( it ) => {
+            const def = GrantType.byId( it );
+            if( def ){
+                if( GrantType.useRedirects( def )){
+                    wantRedirects = true;
+                }
+            }
+            return !wantRedirects;
+        });
+        return wantRedirects;
     },
 };

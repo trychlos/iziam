@@ -18,7 +18,6 @@ export const ClientProfile = {
             features: [
                 'oauth2'
             ],
-            //haveEndpoints: false,
             //haveUsers: false,
             grant_type: 'client_credentials'
         },
@@ -124,14 +123,6 @@ export const ClientProfile = {
      */
     defaultHaveAllowedApis( def ){
         return _.isBoolean( def.haveAllowedApis ) ? def.haveAllowedApis : true;
-    },
-
-    /**
-     * @param {Object} def a ClientProfile definition as returned by ClientProfile.Knowns()
-     * @returns {Boolean} whether this profile of client needs to set allowed callback URLs, defaulting to true
-     */
-    defaultHaveEndpoints( def ){
-        return _.isBoolean( def.haveEndpoints ) ? def.haveEndpoints : true;
     },
 
     /**

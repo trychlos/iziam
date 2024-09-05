@@ -81,7 +81,6 @@ const _validUrl = function( value, opts ){
         } else {
             try {
                 const url = new URL( value );
-                console.debug( 'url', url );
                 if( opts.acceptOthers === false && url.protocol !== 'https:' ){
                     return new TM.TypedMessage({
                         level: TM.MessageLevel.C.ERROR,

@@ -12,6 +12,9 @@ import _ from 'lodash';
 import { Forms } from 'meteor/pwix:forms';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
+import { TM } from 'meteor/pwix:typed-message';
+
+import { GrantType } from '/imports/common/definitions/grant-type.def.js';
 
 import '/imports/client/components/client_redirects_panel/client_redirects_panel.js';
 
@@ -32,10 +35,11 @@ Template.client_new_assistant_redirects.onRendered( function(){
     // this pane requires to have at least a grant type which implements a redirected grant flow
     self.autorun(() => {
         const dataDict = Template.currentData().parentAPP.assistantStatus;
-        self.$( '.c-client-new-assistant-redirects' ).trigger( 'assistant-do-enable-tab', { name: 'redirects',  enabled: false });
+        self.$( '.c-client-new-assistant-redirects' ).trigger( 'assistant-do-enable-tab', { name: 'redirects',  enabled: GrantType.wantRedirects( dataDict.get( 'grant_types' ) || [] ) });
     });
 
     // enable the Next button if the panel is valid
+    // If there is no redirect URL while one is needed, Next is still allowed but we send a warning message
     self.autorun(() => {
         const dataDict = Template.currentData().parentAPP.assistantStatus;
         if( dataDict.get( 'activePane' ) === 'redirects' ){

@@ -38,12 +38,11 @@ export class DeviceProvider extends mix( izProvider ).with( IGrantType ){
         super({
             iident: {
                 id: 'org.trychlos.iziam.provider.device.0',
-                label: 'izIAM Device Flow Provider',
+                label: 'izIAM Device Flow Provider (RFC 8628)',
                 origin: 'izIAM'
             },
             ifeatured: [
-                'device_flow',
-                'device_code'
+                'device-flow'
             ],
             igranttype: [
                 'urn:ietf:params:oauth:grant-type:device_code'

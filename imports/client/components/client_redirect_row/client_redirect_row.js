@@ -28,7 +28,7 @@ Template.client_redirect_row.onCreated( function(){
         // whether this row is the last of the array ?
         isLast: new ReactiveVar( false ),
 
-        // remove the item
+        // reactively remove the item
         removeById( id ){
             const recordRv = Template.currentData().entity.get().DYN.records[Template.currentData().index];
             let item = recordRv.get();
@@ -97,7 +97,6 @@ Template.client_redirect_row.onRendered( function(){
                     index: Template.currentData().index
                 },
                 id: Template.currentData().it.id,
-                checkStatusShow: Forms.C.CheckStatus.NONE,
                 setForm: Template.currentData().it
             }));
         }
@@ -127,9 +126,7 @@ Template.client_redirect_row.helpers({
 
 Template.client_redirect_row.events({
     'click .c-client-redirect-row .js-minus'( event, instance ){
-        //console.debug( 'click.js-minus', event );
         const id = this.it.id;
-        //console.debug( 'removing', id );
         instance.APP.removeById( id );
     },
 });
