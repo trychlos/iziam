@@ -95,7 +95,7 @@ Template.organization_clients_pane.events({
             ...this,
             mdBody: 'client_edit',
             mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
-            mdClasses: 'modal-xl',
+            mdClasses: 'modal-xxl',
             mdClassesContent: Meteor.APP.configure().classes,
             mdTitle: pwixI18n.label( I18N, 'edit.modal_title' ),
             item: Meteor.APP.list.byEntity( data.item._id )

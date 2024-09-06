@@ -66,7 +66,8 @@ Template.manager_organizations_tab.helpers({
         return {
             entityTabs: Template.instance().APP.entityTabs,
             recordTabs: Template.instance().APP.recordTabs,
-            shape: PlusButton.C.Shape.RECTANGLE
+            shape: PlusButton.C.Shape.RECTANGLE,
+            mdClasses: 'modal-xxl'
         }
     },
 
@@ -74,7 +75,8 @@ Template.manager_organizations_tab.helpers({
     parmsTenantsList(){
         return {
             entityTabs: Template.instance().APP.entityTabs,
-            recordTabs: Template.instance().APP.recordTabs
+            recordTabs: Template.instance().APP.recordTabs,
+            mdClasses: 'modal-xxl'
         }
     }
 });

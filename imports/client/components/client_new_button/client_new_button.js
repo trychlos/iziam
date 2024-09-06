@@ -57,7 +57,7 @@ Template.client_new_button.events({
             organization: organization,
             mdBody: 'client_new_assistant',
             mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
-            mdClasses: 'modal-xl',
+            mdClasses: 'modal-xxl',
             mdClassesContent: Meteor.APP.runContext.pageUIClasses().join( ' ' ),
             mdTitle: pwixI18n.label( I18N, 'clients.new.assistant_title' ),
             item: null
