@@ -100,7 +100,7 @@ export class Webargs {
     /**
      * @param {Object} api the object which describe the global or scoped API
      * @param {Object} opts an optional options object with following keys:
-     *  - record: the at date non null organization record, if and only if we are handling an organization-scoped request
+     *  - organization: the { entity, record } at date non null organization object, if and only if we are handling an organization-scoped request
      *  - url: the url to be searched as an API path, defaulting to req.url
      * NB: must terminate by calling end() to answer to the client
      */
@@ -113,10 +113,10 @@ export class Webargs {
                 if( url === it.path ){
                     hasPath = true;
                     if( it.fn ){
-                        it.fn( it, self, opts.record );
+                        it.fn( it, self, opts.organization );
                         self.end();
                     } else {
-                        self.error( 'url "'+this.#req.url+'" doesn\'t have any associated function' );
+                        self.error( 'the requested url "'+this.#req.url+'" doesn\'t have any associated function' );
                         self.status( 501 ); // not implemented
                         self.end();
                     }
@@ -124,12 +124,12 @@ export class Webargs {
                 return !hasPath;
             });
             if( !hasPath ){
-                self.error( 'url "'+this.#req.url+'" is not managed' );
+                self.error( 'the requested url "'+this.#req.url+'" is not managed' );
                 self.status( 501 ); // not implemented
                 self.end();
             }
         } else {
-            self.error( 'method "'+this.#req.method+'" not managed' );
+            self.error( 'the method "'+this.#req.method+'" is not managed' );
             self.status( 501 ); // not implemented
             self.end();
         }

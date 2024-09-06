@@ -19,6 +19,15 @@ import { Organizations } from './index.js';
 
 Organizations.fn = {
     /**
+     * @param {Organizations} organization as an { entity, record } object
+     * @returns {String} the full base URL for the organization, including issuer host name
+     */
+    fullBaseUrl( organization ){
+        const issuer = Meteor.settings.public[Meteor.APP.name].environment.issuer || null;
+        return issuer ? issuer + organization.record.baseUrl : null;
+    },
+
+    /**
      * @summary Compute and returns the list of selected providers for the entity/record organization
      *  Computed selected providers are:
      *  - providers explicitely selected by the organization manager to be allowed to the clients (read from the organization records)

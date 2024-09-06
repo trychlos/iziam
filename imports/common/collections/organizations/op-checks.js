@@ -12,11 +12,10 @@ import { Organizations } from './index.js';
 
 /**
  * @locus Anywhere
- * @summary Whether the organization, defined by its entity and all its records, is operational at date.
- * @param {Object} entity
- * @param {Array<Object>} records
- * @returns {}
+ * @summary Whether the organization, defined by its entity and the to-be-checked record, is operational.
+ * @param {Object} organization as an { entity, record } object
+ * @returns {Array<TypedMessage>} or null
  */
-Organizations.isOperational = async function( entity, records ){
-
+Organizations.isOperational = async function( organization ){
+    return null;
 };

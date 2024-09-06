@@ -22,27 +22,64 @@ const scoped = {
         {
             path: '/.well-known',
             fn: fn_wellKnown
-        },
-        // an example of a command
-        {
-            path: '/v1/ident',
-            fn: v1_ident
         }
     ]
 }
 
 // it: the globals object containing the path, the function...
 // args: the Webargs object
-// record: the at date organization record
-function fn_wellKnown( it, args, record ){
+// organization: the { entity, record } at date organization object
+function fn_wellKnown( it, args, organization ){
     args.answer({ result: 'OK' });
 }
 
-function v1_ident( it, args, record ){
-    args.answer({
-        id: Meteor.APP.name,
-        lastUpdate: Meteor.settings.public[Meteor.APP.name].version,
-        label: pwixI18n.label( I18N, 'app.label' )
+// make sure we address only one entity
+// returns true if ok
+// just be async for code consistency
+async function _checkDistinctEntities( args, fetched ){
+    let entities = {};
+    fetched.records.map( it => entities[it.entity] = true );
+    if( Object.keys( entities ).length !== 1 ){
+        args.error( '[CODE ERROR] the requested base URL "'+baseUrl+'" is handled by more than one organization' );
+        args.status( 500 ); // server error
+        args.end();
+        return Promise.resolve( false );
+    }
+    return Promise.resolve( true );
+}
+
+// returns the at date organization { entity, record } object if it exists, or null
+async function _getOrganizationAtDate( args, fetched ){
+    const atdate = Validity.atDateByRecords( fetched.records );
+    if( atdate ){
+        return Organizations.s.getBy({ _id: atdate.entity }).then(( fetched ) => {
+            if( fetched.entities.length !== 1 ){
+                args.error( '[CODE ERROR] requesting the organization entity returns '+fetched.entities.length+' document(s)' );
+                args.status( 500 ); // server error
+                args.end();
+                return null;
+            } else {
+                return { entity: fetched.entities[0], record: atdate };
+            }
+        });
+    } else {
+        args.error( 'the requested organization is not valid' );
+        args.status( 500 ); // server error
+        args.end();
+        return null;
+    }
+}
+
+// check that the { entity, record }  organization object is operational
+// returns this same organization if ok, null else
+async function _checkOperationalOrganization( args, organization ){
+    return Organizations.isOperational( organization ).then(( errors ) => {
+        if( errors ){
+            errors.map( tm => args.error( tm.iTypedMessageMessage()));
+            args.status( 500 ); // server error
+            args.end();
+        }
+        return errors ? null : organization;
     });
 }
 
@@ -58,29 +95,23 @@ async function handleScoped( req, res ){
             return false;
         }
         // in all other cases, this must be considered as handled
+        // if at least one record, make sure we address only one entity
         let args = new Webargs( req, res );
-        // if at least one record, count the distinct entities (should be only one else there is an error is the checks.baseUrl() function)
-        let entities = {};
-        fetched.records.map( it => entities[it.entity] = true );
-        if( Object.keys( entities ).length !== 1 ){
-            args.error( 'more than one entity handles the requested base URL "'+baseUrl+"'" );
-            args.status( 500 ); // server error
-            args.end();
-        } else {
-            const atdate = Validity.atDateByRecords( fetched.records );
-            if( !atdate ){
-                args.error( 'the requested organization is not valid' );
-                args.status( 500 ); // server error
-                args.end();
-            } else {
-                let url = req.url;
-                url = 
-                args.handle( scoped, {
-                    record: atdate,
-                    url: req.url.substr( baseUrl.length )
-                });
-            }
-        }
+        _checkDistinctEntities( args, fetched )
+            .then(( ok ) => {
+                return ok ? _getOrganizationAtDate( args, fetched ) : null;
+            })
+            .then(( organization ) => {
+                return organization ? _checkOperationalOrganization( args, organization ) : null;
+            })
+            .then(( organization ) => {
+                if( organization ){
+                    args.handle( scoped, {
+                        organization: organization,
+                        url: req.url.substr( baseUrl.length )
+                    });
+                }
+            });
         return true;
     });
 }
