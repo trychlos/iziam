@@ -15,6 +15,10 @@ TenantsManager.configure({
     entityFields: Organizations.entityFieldset(),
     recordFields: Organizations.recordFieldset(),
     //recordFields: null,
+    tenantButtons: Organizations.tabularButtons(),
+    //tenantButtons: null,
+    tenantFields: Organizations.tabularFieldset(),
+    //tenantFields: null,
     //verbosity: TenantsManager.C.Verbose.CONFIGURE
 });
 

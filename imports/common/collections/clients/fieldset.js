@@ -18,13 +18,13 @@ const _defaultFieldSet = function(){
         {
             name: 'label',
             schema: false,
-            dt_title: pwixI18n.label( I18N, 'clients.list.label_th' )
+            dt_title: pwixI18n.label( I18N, 'clients.tabular.label_th' )
         },
         // entity notes in tabular display
         {
             name: 'entity_notes',
             schema: false,
-            dt_title: pwixI18n.label( I18N, 'clients.list.entity_notes_th' ),
+            dt_title: pwixI18n.label( I18N, 'clients.tabular.entity_notes_th' ),
             dt_className: 'dt-center',
             dt_template: Meteor.isClient && Template.dt_entity_notes
         },
@@ -32,7 +32,7 @@ const _defaultFieldSet = function(){
         {
             name: 'client_type',
             schema: false,
-            dt_title: pwixI18n.label( I18N, 'clients.list.type_th' ),
+            dt_title: pwixI18n.label( I18N, 'clients.tabular.type_th' ),
         },
         Notes.fieldDef(),
         Validity.recordsFieldDef(),

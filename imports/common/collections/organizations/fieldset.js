@@ -15,7 +15,7 @@ Organizations.entityFieldset = function(){
 Organizations.recordFieldset = function(){
     return [
         {
-            //before: 'notes',
+            //added at the end
             fields: [
                 // the REST base URL to be used as the base path for all REST requests
                 // mandatory to enable the REST API, must be unique between all organizations

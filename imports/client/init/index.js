@@ -5,6 +5,10 @@
  *  All third-party imports go here.
  */
 
+// import here templates required to display fields in Tabular's
+import '/imports/client/components/client_operational_badge/client_operational_badge.js';
+import '/imports/client/components/organization_operational_badge/organization_operational_badge.js';
+
 import '/imports/common/init/index.js';
 
 //import './datepicker.js';

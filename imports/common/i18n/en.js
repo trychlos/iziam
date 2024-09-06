@@ -92,15 +92,6 @@ Meteor.APP.i18n = {
                     tos_ph: 'https://my.example.com/tos',
                     tos_title: 'The URI of a page which describes the terms of service of the client'
                 },
-                list: {
-                    delete_button_title: 'Delete the "%s" client',
-                    edit_button_title: 'Edit the "%s" client',
-                    info_button_title: 'Informations about the "%s" client',
-                    info_modal_title: 'Informations about the "%s" client',
-                    label_th: 'Label',
-                    organization_th: 'Organization',
-                    type_th: 'Type',
-                },
                 new: {
                     assistant_title: 'Defining a new client',
                     button_label: 'New client',
@@ -281,6 +272,16 @@ Meteor.APP.i18n = {
                     remove_title: 'Remove this redirect URL',
                     url_ph: 'https://myapp/redirect?q=a',
                     url_th: 'URL'
+                },
+                tabular: {
+                    delete_button_title: 'Delete the "%s" client',
+                    edit_button_title: 'Edit the "%s" client',
+                    entity_notes_th: 'Client notes',
+                    info_button_title: 'Informations about the "%s" client',
+                    info_modal_title: 'Informations about the "%s" client',
+                    label_th: 'Label',
+                    operational_title: 'Operational status of the client',
+                    type_th: 'Type',
                 }
             },
             definitions: {
@@ -435,6 +436,10 @@ Meteor.APP.i18n = {
                 providers: {
                     list_preamble: 'Select here, among all registered providers, those that your organization is willing to manage. '
                         +'Each client will then be able to choose the exact provider(s) it wants use.'
+                },
+                tabular: {
+                    baseurl_th: 'Base URL',
+                    operational_title: 'Operational status of the organization',
                 }
             },
             powered_by: {

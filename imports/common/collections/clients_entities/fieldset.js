@@ -18,8 +18,7 @@ const _defaultFieldSet = function(){
         // mandatory
         {
             name: 'organization',
-            type: String,
-            dt_title: pwixI18n.label( I18N, 'clients.list.organization_th' )
+            type: String
         },
         // the client identifier
         // mandatory

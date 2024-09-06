@@ -48,12 +48,19 @@ Tracker.autorun(() => {
         pub: 'clients_tabular',
         tabular: {
             // have a badge which displays the count of validity records if greater than 1
+            // have a badge which displays the operational status of the client
             async buttons( it ){
                 return [
                     {
                         where: Tabular.C.Where.BEFORE,
                         buttons: [
                             'dt_count_badge'
+                        ]
+                    },
+                    {
+                        where: Tabular.C.Where.AFTER,
+                        buttons: [
+                            'client_operational_badge'
                         ]
                     }
                 ];
@@ -63,7 +70,7 @@ Tracker.autorun(() => {
             },
             // display the organization label instead of the identifier in the button title
             async deleteButtonTitle( it ){
-                return pwixI18n.label( I18N, 'clients.list.delete_button_title', _record_label( it ));
+                return pwixI18n.label( I18N, 'clients.tabular.delete_button_title', _record_label( it ));
             },
             async deleteConfirmationText( it ){
                 return pwixI18n.label( I18N, 'clients.delete.confirmation_text', _record_label( it ));
@@ -72,19 +79,19 @@ Tracker.autorun(() => {
                 return pwixI18n.label( I18N, 'clients.delete.confirmation_title', _record_label( it ));
             },
             async editButtonTitle( it ){
-                return pwixI18n.label( I18N, 'clients.list.edit_button_title', _record_label( it ));
+                return pwixI18n.label( I18N, 'clients.tabular.edit_button_title', _record_label( it ));
             },
             async editItem( it ){
                 return await _entity( it );
             },
             async infoButtonTitle( it ){
-                return pwixI18n.label( I18N, 'clients.list.info_button_title', _record_label( it ));
+                return pwixI18n.label( I18N, 'clients.tabular.info_button_title', _record_label( it ));
             },
             async infoItem( it ){
                 return await _entity( it );
             },
             async infoModalTitle( it ){
-                return pwixI18n.label( I18N, 'clients.list.info_modal_title', _record_label( it ));
+                return pwixI18n.label( I18N, 'clients.tabular.info_modal_title', _record_label( it ));
             },
         },
         destroy: true,
