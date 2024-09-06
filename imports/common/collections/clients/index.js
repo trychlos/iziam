@@ -7,7 +7,8 @@
 
 export { Clients } from './collection.js';
 
-import './checks.js';
+import './fields-checks.js';
 import './fieldset.js';
 import './functions.js';
+import './op-checks.js';
 import './tabular.js';

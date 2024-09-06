@@ -28,8 +28,8 @@ const _meteorWorkAround = function( url, res ){
 }
 
 // when route='/doc/res', a path like /images/... is transformed by Meteor in /doc/images...
-// this is a known Meteor bug #12524
-WebApp.connectHandlers.use( function( req, res, next ){
+// this is a known Meteor bug #12524 (still opened as of 09/2024)
+WebApp.handlers.use( function( req, res, next ){
     //console.debug( req.url );
     if( !_meteorWorkAround( req.url, res )){
         next();

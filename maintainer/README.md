@@ -20,11 +20,19 @@ Organizations are managed as tenants with validities through `pwix:tenants-manag
 
 Each organization can define:
 
-    - applications which are the softwares which are able to authenticate their users with izIAM
+    - clients: applications which are the softwares which are able to authenticate their users with izIAM, or to authenticate themselves
+
+        - clients have validity periods
+
+        In order a client be operational, the current record, i.e. the record at date, must be itself operational AND the organization must be operational.
 
     - users which can authenticate with izIAM
 
     - permissions which say which user can authenticate against which application
+
+Organizations have validity periods.
+
+In order an organization be operational, the current record, i.e. the record at date, must be itself operational.
 
 ## Bibliography
 
@@ -49,7 +57,7 @@ Each organization can define:
 
 ### OpenID
 
-- [OpenID Connect Dynamic Client Registration](https://openid.net/specs/openid-connect-registration-1_0.html#ClientMetadata)
+- [OpenID Connect Dynamic Client Registration](https://openid.net/specs/openid-connect-registration-1_0.html)
 
 ### And also
 
@@ -94,6 +102,7 @@ OAuth defines four roles:
 
     - from: client
     - to: resource owner
+    - in order to: get an authorization grant
 
 - Authorization grant
 
@@ -103,10 +112,9 @@ OAuth defines four roles:
 
     - from: client
     - to: authorization server
+    - in order to: get an access token
 
     The OAuth core spec (RFC 6749) defines four grant types: Authorization Code, Implicit, Password, and Client Credentials.
-
-    PKCE (RFC 7636) provides a way to use the Authorization Code flow without a client secret.
 
     OAuth 2.0 for Native Apps (RFC 8252) recommends that native apps use the Authorization Code flow **with** the PKCE extension.
 
@@ -126,9 +134,12 @@ OAuth defines four roles:
 
     - from: client
     - to: resource server
+    - in order to: get a protected resource
 
 - Protected resource
 
     - from: resource server
     - to: client
     - in response to: Access token
+
+## Tests

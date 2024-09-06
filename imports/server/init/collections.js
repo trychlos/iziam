@@ -14,4 +14,4 @@ import '/imports/common/collections/organizations/server/index.js';
 import '/imports/common/collections/providers/server/index.js';
 //import '/imports/collections/resources/server/index.js';
 //import '/imports/collections/scopes/server/index.js';
-//import '/imports/collections/statistics/server/index.js';
+import '/imports/common/collections/statistics/server/index.js';

@@ -1,17 +1,22 @@
 /*
  * /imports/server/init/webapp-oauth.js
  *
- * Handle here OAuth REST requests.
+ * Handle here OAuth REST requests:
+ * - /v[xx] as non-scoped (global) REST requests against the application itself
+ * - [baseUrl] as scoped (organization-level) REST requests
+ * 
+ * Other requests are supposed to be UI requests, and are ignored here.
  *
  ***
  *** IMPORTANT NOTE: both at the globals level than at an organization-scoped level, REST URL's share the same namespace that UI routes.
  *** But, while UI routes and global REST URL's are hardcoded, organization-scoped URL's depend of the REST base URL of each organization.
- *** This is the rule of the ReservedWords common object to let the application check that each URL will stay unique.
+ *** This is the rule of the ReservedWords common object to let the application check that each URL will stay unique, and this is checked
+ *** when updating the baseUrl field of each organization record.
  ***
  * 
  * As we are a multi-tenants app, requests are adressed to /<base_path>/<documented_path>
  * e.g.
- *  GET https://trychlos.org/my_tenant/.well-known/ext-openid-configuration
+ *  GET https://trychlos.org/my_base_url/.well-known/ext-openid-configuration
  *
  * See:
  * - https://datatracker.ietf.org/doc/html/rfc6749
@@ -237,7 +242,7 @@ function _splitUrl( url, host ){
 }
 
 // this global handler see all application urls, including both the UI part and the REST part
-WebApp.connectHandlers.use(( req, res, next ) => {
+WebApp.handlers.use(( req, res, next ) => {
     const o = _splitUrl( req.url, req.headers.host );
     let args = {
         req: req,

@@ -1,5 +1,5 @@
 /*
- * /import/common/collections/organizations/checks.js
+ * /import/common/collections/organizations/fields-checks.js
  */
 
 import _ from 'lodash';

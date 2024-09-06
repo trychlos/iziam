@@ -5,6 +5,7 @@
  * 
  * Data context:
  * - item: the item as provided to the tabular display (i.e. a modified closest record)
+ *      with DYN { analyze, entity, records }
  * - table: the Tabular.Table instance
  */
 
@@ -23,7 +24,7 @@ Template.client_operational_badge.onCreated( function(){
 
     // update the status when something changes
     self.autorun(() => {
-        console.debug( 'currentData', Template.currentData());
+        //console.debug( 'currentData', Template.currentData());
     });
 });
 

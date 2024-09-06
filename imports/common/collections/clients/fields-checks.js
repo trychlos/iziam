@@ -1,5 +1,6 @@
 /*
- * /imports/collections/clients/clients-checks.js
+ * /imports/collections/clients/fields-checks.js
+ *
  * The clients registered with an organization.
  */
 
