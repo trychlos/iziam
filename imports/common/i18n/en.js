@@ -428,8 +428,16 @@ Meteor.APP.i18n = {
                     dynregistration_tab_title: 'Dynamic registration',
                     dynuser_label: 'Accept dynamic registration from allowed identified users',
                     dynuser_title: 'Whether an identified user can be allowed to perform dynamic registration of client applications',
-                    pkce_label: 'Wants all clients use PKCE [RFC7636]',
-                    pkce_title: 'Make a proof key for code exchange mandatory for all public and confidential clients',
+                    oauth21_description: 'The OAuth 2.1 Authorization Framework, currently implemented in its v.11 draft from may 2024, replaces and obsoletes '
+                        +'the OAuth 2.0 Authorization Framework (RFC 6749) and the Bearer Token Usage (RFC 6750). It notably implies PKCE for all client types, '
+                        +'and the usage of a JWT Bearer as an access token.',
+                    oauth21_label: 'Force the usage of OAuth 2.1 (draft v11 - may 2024)',
+                    oauth21_title: 'Fully disable the OAuth 2.0 Authorization Framework (RFC 6749)',
+                    pkce_description: 'The RFC 7636 "Proof Key for Code Exchange by OAuth Public Clients" proposes a way to mitigate authorization code interception attacks '
+                        +'to which public clients are exposed because they cannot securely authenticate. The extension utilizes a dynamically created cryptographically '
+                        +'random key unique for every authorization request.',
+                    pkce_label: 'Make mandatory the protection of the "authorization_code" grant type with PKCE for all public clients',
+                    pkce_title: 'Make a proof key for code exchange mandatory for all public clients using "authorization_code" grant type, conforming with RFC 7636',
                     providers_tab_title: 'Providers',
                     urls_tab_title: 'URL\'s'
                 },

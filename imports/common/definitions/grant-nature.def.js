@@ -15,7 +15,7 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 export const GrantNature = {
     C: [
         {
-            // oauth access token
+            // oauth authorization grant token
             id: 'access',
             label: 'definitions.grant_nature.access_label',
             mandatory: true

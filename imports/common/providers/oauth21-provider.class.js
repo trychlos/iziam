@@ -49,6 +49,9 @@ export class OAuth21Provider extends mix( izProvider ).with( IGrantType ){
                 'authorization_code',
                 'client_credentials'
             ],
+            irequires: [
+                'pkce'
+            ],
             iselectable: {
                 defaultSelected: true
             }

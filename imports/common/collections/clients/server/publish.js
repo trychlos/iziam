@@ -263,7 +263,7 @@ Meteor.publish( 'clients_tabular', async function( tableName, ids, fields ){
         // get all the records
         promises.push( ClientsRecords.collection.find({ entity: item.entity }).fetchAsync().then(( fetched ) => {
             item.DYN.analyze = Validity.analyzeByRecords( fetched );
-            item.DYN.count = fetched.length;
+            item.DYN.records = fetched;
             const res = Validity.englobingPeriodByRecords( fetched );
             item.effectStart = res.start;
             item.effectEnd = res.end;
@@ -280,6 +280,7 @@ Meteor.publish( 'clients_tabular', async function( tableName, ids, fields ){
         }
         if( entity ){
             item.entity_notes = entity.notes;
+            item.DYN.entity = entity;
         }
     };
 

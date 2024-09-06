@@ -162,6 +162,16 @@ Organizations.checks = {
         return null;
     },
 
+    // whether the organization forces the usage of OAth 2.1
+    async wantsOAuth21( value, data, opts ){
+        _assert_data_itemrv( 'Organizations.checks.wantsOAuth21()', data );
+        let item = data.entity.get().DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.wantsOAuth21 = Boolean( value );
+        }
+        return null;
+    },
+
     // whether the organization wants all clients use PKCE (rfc7636)
     async wantsPkce( value, data, opts ){
         _assert_data_itemrv( 'Organizations.checks.wantsPkce()', data );

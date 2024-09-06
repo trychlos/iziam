@@ -8,9 +8,24 @@
  * - table: the Tabular.Table instance
  */
 
+import { Forms } from 'meteor/pwix:forms';
 import { pwixI18n } from 'meteor/pwix:i18n';
+import { ReactiveVar } from 'meteor/reactive-var';
 
 import './client_operational_badge.html';
+
+Template.client_operational_badge.onCreated( function(){
+    const self = this;
+
+    self.APP = {
+        status: new ReactiveVar( Forms.CheckStatus.C.UNCOMPLETE )
+    };
+
+    // update the status when something changes
+    self.autorun(() => {
+        console.debug( 'currentData', Template.currentData());
+    });
+});
 
 Template.client_operational_badge.helpers({
     // string translation
@@ -18,11 +33,10 @@ Template.client_operational_badge.helpers({
         return pwixI18n.label( I18N, arg.hash.key );
     },
     // the status
-    status(){
-        return 'OK';
-    },
-    // make the badge transparent if count is just one
-    classes(){
-        return null;
+    parmsStatus(){
+        return {
+            statusRv: Template.instance().APP.status,
+            title: pwixI18n.label( I18N, 'clients.tabular.operational_title' )
+        };
     }
 });

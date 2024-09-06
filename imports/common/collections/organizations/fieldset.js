@@ -53,7 +53,7 @@ Organizations.recordFieldset = function(){
                     defaultValue: false,
                     form_check: Organizations.checks.dynamicRegistrationByPublic
                 },
-                // whether the organization allow dynamic registration by allowed identified users
+                // whether the organization allow dynamic registration by allowed authenticated users
                 {
                     name: 'dynamicRegistrationByUser',
                     type: Boolean,
@@ -61,7 +61,14 @@ Organizations.recordFieldset = function(){
                     form_check: Organizations.checks.dynamicRegistrationByUser
                 },
                 // -- configuration
-                // whether this organization wants all clients use PKCE (rfc7636)
+                // whether this organization forces the usage of OAuth 2.1
+                {
+                    name: 'wantsOAuth21',
+                    type: Boolean,
+                    defaultValue: true,
+                    form_check: Organizations.checks.wantsOAuth21
+                },
+                // whether this organization wants all public clients use PKCE (rfc7636)
                 {
                     name: 'wantsPkce',
                     type: Boolean,

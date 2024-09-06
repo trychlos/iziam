@@ -1,9 +1,7 @@
 <template name="organization_operational_badge">
-    <div class="c-organization-operational-badge">
+    <div class="c-organization-operational-badge d-flex align-items-center">
 
-        <div class="badge {{ classes }}" title="{{ i18n key="organizations.tabular.operational_title" }}">
-            {{{ status }}}
-        </div>
+        {{> FormsCheckStatusIndicator (parmsStatus) }}
     
     </div>
 </template>

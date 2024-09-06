@@ -48,7 +48,9 @@ export const GrantType = {
             description: 'definitions.grant_type.authcode_description',
             image: '/images/grant-type.svg',
             nature: 'access',
-            haveRedirects: true
+            haveRedirects: true,
+            useAuthorizationEndpoint: true,
+            useTokenEndpoint: true
         },
         {
             // implicit grant - oauth 2.0 ONLY
@@ -58,7 +60,8 @@ export const GrantType = {
             description: 'definitions.grant_type.implicit_description',
             image: '/images/grant-type.svg',
             nature: 'access',
-            haveRedirects: true
+            haveRedirects: true,
+            useAuthorizationEndpoint: true
         },
         {
             // client credentials
@@ -70,7 +73,8 @@ export const GrantType = {
             label: 'definitions.grant_type.client_label',
             description: 'definitions.grant_type.client_description',
             image: '/images/grant-type.svg',
-            nature: 'access'
+            nature: 'access',
+            useTokenEndpoint: true
         },
         {
             // device code [RFC8628]
@@ -95,7 +99,8 @@ export const GrantType = {
             label: 'definitions.grant_type.password_label',
             description: 'definitions.grant_type.password_description',
             image: '/images/grant-type.svg',
-            nature: 'access'
+            nature: 'access',
+            useTokenEndpoint: true
         },
         {
             // The refresh token grant type defined in OAuth 2.0, Section 6
