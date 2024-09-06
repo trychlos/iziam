@@ -21,6 +21,9 @@ Meteor.APP.i18n = {
                         +'Please connect and enjoy.'
                 },
             },
+            app: {
+                label: 'The Easy Identity and Access Manager'
+            },
             assistant: {
                 confirm_btn: 'Confirm',
                 confirm_title: 'Confirm your choices',
@@ -384,7 +387,7 @@ Meteor.APP.i18n = {
                     iziam: ''
                         +'<span class="iziam">'
                         +' <span class="name">izIAM</span>'
-                        +' <span class="label"> the Easy Identity Manager</span>'
+                        +' <span class="label"> the Easy Identity and Access Manager</span>'
                         +'</span>'
                 }
             },

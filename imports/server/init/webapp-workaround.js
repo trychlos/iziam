@@ -5,7 +5,7 @@
 import { WebApp } from 'meteor/webapp';
 
 // returns true if the url has been redirected (so it is no worth to try other redirectors)
-const _meteorWorkAround = function( url, res ){
+const meteorWorkAround = function( url, res ){
     const usedPath = [
         '/images/'
     ];
@@ -31,7 +31,7 @@ const _meteorWorkAround = function( url, res ){
 // this is a known Meteor bug #12524 (still opened as of 09/2024)
 WebApp.handlers.use( function( req, res, next ){
     //console.debug( req.url );
-    if( !_meteorWorkAround( req.url, res )){
+    if( !meteorWorkAround( req.url, res )){
         next();
     }
 });

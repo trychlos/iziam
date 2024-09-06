@@ -1,12 +1,13 @@
 /*
  * /imports/server/init/webapp-rest-global.js
  *
- * Handle here non-scoped (global) REST requests as "/v[xx]".
+ * Handle here global (non-scoped to an organization) REST requests as "/v[xx]".
  */
 
 import _ from 'lodash';
 const assert = require( 'assert' ).strict; // up to nodejs v16.x
 
+import { pwixI18n } from 'meteor/pwix:i18n';
 import { WebApp } from 'meteor/webapp';
 
 import { Webargs } from '/imports/server/classes/webargs.class.js';
@@ -18,27 +19,34 @@ const globals = {
         // entry point of the global REST API -> just list the available commands
         {
             path: '/v1',
-            fn: listCommands
+            fn: v1_listCommands
         },
-        // an example of a command
+        // get server identifier
         {
-            path: '/v1/cmd_a',
-            fn: execCmda
+            path: '/v1/ident',
+            fn: v1_ident
         }
     ]
 }
 
 // it: the globals object containing the path, the function...
 // args: the Webargs object
-function listCommands( it, args ){
-    args.answer([
-        'cmd_a'
-    ]);
+function v1_listCommands( it, args ){
+    let res = { result: [] };
+    globals.GET.forEach(( it ) => {
+        if( it.path !== '/v1' ){
+            res.result.push( it.path );
+        }
+    });
+    args.answer( res );
 }
 
-// it: the globals object containing the path, the function...
-// args: the Webargs object
-function execCmda( it, args ){
+function v1_ident( it, args ){
+    args.answer({
+        id: Meteor.APP.name,
+        lastUpdate: Meteor.settings.public[Meteor.APP.name].version,
+        label: pwixI18n.label( I18N, 'app.label' )
+    });
 }
 
 // Handle global requests, i.e. requests whose first level is not scoped to a particular organization
@@ -50,34 +58,9 @@ function handleGlobals( req, res ){
     let found = false;
     if( words[1].match( /^v[\d]+$/ )){
         found = true;
-        // the request matches a REST global request - try to handle it
+        // the request matches a REST global request - it must be considered as handled, try to answer it
         let args = new Webargs( req, res );
-        if( globals[req.method] ){
-            let hasPath = false;
-            globals[req.method].every(( it ) => {
-                if( req.url === it.path ){
-                    hasPath = true;
-                    if( it.fn ){
-                        it.fn( it, args );
-                        args.end();
-                    } else {
-                        args.error( 'url "'+req.url+'" doesn\'t have any associated function' );
-                        args.status( 501 ); // not implemented
-                        args.end();
-                    }
-                }
-                return !hasPath;
-            });
-            if( !hasPath ){
-                args.error( 'url "'+req.url+'" is not managed' );
-                args.status( 501 ); // not implemented
-                args.end();
-            }
-        } else {
-            args.error( 'method "'+req.method+'" not managed' );
-            args.status( 501 ); // not implemented
-            args.end();
-        }
+        args.handle( globals );
     }
     return found;
 }
