@@ -23,8 +23,66 @@ Organizations.fn = {
      * @returns {String} the full base URL for the organization, including issuer host name
      */
     fullBaseUrl( organization ){
-        const issuer = Meteor.settings.public[Meteor.APP.name].environment.issuer || null;
-        return issuer ? issuer + organization.record.baseUrl : null;
+        const issuer = Organizations.fn.issuer( organization );
+        return issuer && organization.record.baseUrl ? issuer + organization.record.baseUrl : null;
+    },
+
+    /**
+     * @param {Organizations} organization as an { entity, record } object
+     * @returns {String} the issuer for the organization
+     */
+    issuer( organization ){
+        return organization.record.issuer || Meteor.settings.public[Meteor.APP.name].environment.issuer || null;
+    },
+
+    /**
+     * @summary Returns the JWKS for the entity/record organization
+     *  This is needed for a reactive tabular display management
+     * @param {Object} o an argument object with following keys:
+     * - caller: an { entity, record } organization
+     * @returns {Object} the organization JWKS, at least an empty array
+     *  A reactive data source
+     */
+    _list_jwks: {
+        dep: new Tracker.Dependency()
+    },
+    jwksGet( o ){
+        Organizations.fn._list_jwks.dep.depend();
+        return o.caller.record.jwks || [];
+    },
+    jwksAdd( o, jwk ){
+        o.caller.record.jwks.push( jwk );
+        Organizations.fn._selected_providers.dep.changed();
+    },
+    jwksRemove( o, jwkId ){
+        o.caller.record.jwks = o.caller.record.jwks.filter( it => it.id !== jwkId );
+        Organizations.fn._list_jwks.dep.changed();
+    },
+
+    /**
+     * @param {Organizations} organization as an { entity, record } object
+     * @returns {Object} the public metadata document as for [RFC 8414](https://datatracker.ietf.org/doc/html/rfc8414)
+     */
+    metadata( organization ){
+        let data = {
+            // always set because we have a default value in settings
+            issuer: Organizations.fn.issuer( organization )
+        };
+        const set = function( name, opts={} ){
+            let foo = organization.record[name];
+            if( foo ){
+                if( opts.url === true ){
+                    foo = Organizations.fn.fullBaseUrl( organization )+foo;
+                }
+                data[name] = foo;
+            }
+        };
+        let foo = organization.record.authorization_endpoint;
+        set( 'authorization_endpoint', { url: true });
+        set( 'token_endpoint', { url: true });
+        set( 'registration_endpoint', { url: true });
+        set( 'jwks_uri', { url: true });
+        return data;
     },
 
     /**

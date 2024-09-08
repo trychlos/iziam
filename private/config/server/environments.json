@@ -46,7 +46,7 @@
                         }
                     }
                 },
-                "issuer": "http://localhost:3003"
+                "issuer": "https://localhost:3003"
             },
             "staging-name": {
                 "type": "staging",

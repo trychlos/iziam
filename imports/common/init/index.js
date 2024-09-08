@@ -49,6 +49,7 @@ import './roles.js';
 import './startup.js';
 import './startup-app-admin.js';
 import './tabbed.js';
+import './tables.js';
 import './tabular.js';
 import './tenants-manager.js';
 import './tolert.js';

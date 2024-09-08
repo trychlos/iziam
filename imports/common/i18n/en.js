@@ -370,6 +370,11 @@ Meteor.APP.i18n = {
                     reftoken_label: 'Refresh token grant',
                     //saml_label: 'SAML 2.0 Bearer Assertion',
                     select_text: 'The grant types the client can use at the token endpoint'
+                },
+                jwk_use: {
+                    sig_label: 'Signature',
+                    enc_label: 'Encryption',
+                    select_text: 'Select the JWK usage'
                 }
             },
             header: {
@@ -387,9 +392,30 @@ Meteor.APP.i18n = {
                     iziam: ''
                         +'<span class="iziam">'
                         +' <span class="name">izIAM</span>'
-                        +' <span class="label"> the Easy Identity and Access Manager</span>'
+                        +' <span class="label">the Easy Identity and Access Manager</span>'
                         +'</span>'
                 }
+            },
+            jwks: {
+                edit: {
+                    label_label: 'Label :',
+                    label_ph: 'My label',
+                    label_title: 'A descriptive label which describes usage or validity or perimeter of your key',
+                    new_button_label: 'New JWK',
+                    new_button_title: 'Define a new JSON Web Key',
+                    new_dialog_title: 'Define a new JSON Web Key',
+                    properties_tab_title: 'Properties',
+                    use_label: 'Usage :',
+                    use_title: 'The usage of this JSON Web Key'
+                },
+                list: {
+                    add_title: 'Add a new JSON Web Key to your set',
+                    created_at_th: 'Created at',
+                    created_by_th: 'Created by',
+                    label_th: 'Label',
+                    preamble: '',
+                    use_th: 'Usage'
+                },
             },
             manager: {
                 accounts: {
@@ -405,23 +431,42 @@ Meteor.APP.i18n = {
             },
             organizations: {
                 checks: {
+                    authorization_absolute: 'The authorization endpoint must be provided as an absolute path',
+                    authorization_unset: 'The authorization endpoint is not set',
                     baseurl_exists: 'The candidate REST Base URL is already used by another organization',
                     baseurl_onelevel: 'The REST Base URL must have a single level path',
                     baseurl_reserved: 'The candidate REST Base URL is a reserved path',
                     baseurl_short: 'The REST Base URL is too short',
-                    baseurl_starts: 'The REST Base URL must be an absolute path (must start with \'/\')'
+                    baseurl_starts: 'The REST Base URL must be an absolute path (must start with \'/\')',
+                    issuer_hostname: 'The issuer hostname is malformed',
+                    issuer_https: 'The issuer must use a HTTPS schema',
+                    issuer_unset: 'The issuer is not set though should have at least a settings value',
+                    jwk_use_invalid: 'JWK usage "%s" is not valid',
+                    jwk_use_unset: 'JWK usage is not set',
+                    jwks_absolute: 'The JWKS document URI must be provided as an absolute path',
+                    registration_absolute: 'The registration endpoint must be provided as an absolute path',
+                    token_absolute: 'The token endpoint must be provided as an absolute path',
+                    token_unset: 'The token endpoint is not set'
                 },
                 clients: {
                     list_preamble: 'The list of clients defined by and for the organization.<br />'
                         +'Capabilities of the clients depend of their type and of the chozen authorization grant flow.',
                 },
                 edit: {
-                    baseurl_label: 'REST Base URL : ',
+                    authorization_example: 'Authorization Server URL: &laquo; %s &raquo;',
+                    authorization_label: 'Authorization endpoint :',
+                    authorization_ph: '/authorization',
+                    authorization_title: 'The endpoint path used to build the Authorization Server URL, to which the clients must address their authorization grant requests.',
+                    baseurl_label: 'REST Base URL :',
                     baseurl_ph: '/base',
                     baseurl_title: 'The first level of all REST URL\'s managed by and available to this organization. This is mandatory to have access to the Authorization Server REST API.',
                     clients_tab_title: 'Clients',
                     config_preamble: 'Set here some configuration parameters common to all clients.',
                     config_tab_title: 'Configuration',
+                    dynamic_example: 'Dynamic registration URL: &laquo; %s &raquo;',
+                    dynamic_label: 'Dynamic registration endpoint :',
+                    dynamic_ph: '/dynamic',
+                    dynamic_title: 'The endpoint path used to build the Dynamic Registration Endpoint URL, to which the authorized clients must address their dynamic registration requests.',
                     dynconfidential_label: 'Accept dynamic registration from confidential client applications',
                     dynconfidential_title: 'Whether a confidential client can be configured to allow dynamic registration of other client applications',
                     dynpublic_label: 'Accept dynamic registration from public client applications',
@@ -431,6 +476,14 @@ Meteor.APP.i18n = {
                     dynregistration_tab_title: 'Dynamic registration',
                     dynuser_label: 'Accept dynamic registration from allowed identified users',
                     dynuser_title: 'Whether an identified user can be allowed to perform dynamic registration of client applications',
+                    issuer_example: 'When applied to the server metadata discovery URL: &laquo; %s &raquo;',
+                    issuer_label: 'Issuer :',
+                    issuer_ph: 'https://iam.example.com',
+                    issuer_title: 'The way this IAM identifies itself, which is a settings value. An organization may want have its own specific value, as soon as it is conscious of DNS prerequisites.',
+                    jwks_example: 'JWKS page URL: &laquo; %s &raquo;',
+                    jwks_label: 'JWKS page path :',
+                    jwks_ph: '/jwks',
+                    jwks_title: 'The URL of the authorization server\'s JWK Set document. The referenced document contains the signing key(s) the client uses to validate signatures from the authorization server.',
                     oauth21_description: 'The OAuth 2.1 Authorization Framework, currently implemented in its v.11 draft from may 2024, replaces and obsoletes '
                         +'the OAuth 2.0 Authorization Framework (RFC 6749) and the Bearer Token Usage (RFC 6750). It notably implies PKCE for all client types, '
                         +'and the usage of a JWT Bearer as an access token.',
@@ -442,7 +495,18 @@ Meteor.APP.i18n = {
                     pkce_label: 'Make mandatory the protection of the "authorization_code" grant type with PKCE for all public clients',
                     pkce_title: 'Make a proof key for code exchange mandatory for all public clients using "authorization_code" grant type, conforming with RFC 7636',
                     providers_tab_title: 'Providers',
+                    token_example: 'Token Server URL: &laquo; %s &raquo;',
+                    token_label: 'Token endpoint :',
+                    token_ph: '/token',
+                    token_title: 'The endpoint path used to build the Access Token Server URL, to which the clients must address their authorization grants in order to get their access tokens.',
                     urls_tab_title: 'URL\'s'
+                },
+                jwks: {
+                    preamble: 'If your organization wants exhibit a JSON Web Keys Set document, then manage it here.<br />'
+                        +'The referenced document contains the signing key(s) the clients will use to validate signatures from the authorization server, and may '
+                        +'also contain the server\'s encryption key or keys, which are used by clients to encrypt requests to the server.<br />'
+                        +'So, both signing and encryption keys can be made available to your clients.',
+                    tab_title: 'Keys Set'
                 },
                 providers: {
                     list_preamble: 'Select here, among all registered providers, those that your organization is willing to manage. '

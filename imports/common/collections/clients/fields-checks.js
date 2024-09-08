@@ -321,7 +321,7 @@ Clients.checks = {
     async contact_email( value, data, opts ){
         _assert_data_content( 'Clients.checks.contact_email()', data );
         let item = data.entity.get().DYN.records[data.index].get();
-        const index = opts.id ? _id2index( item.contacts, opts.id ) : -1;
+        let index = opts.id ? _id2index( item.contacts, opts.id ) : -1;
         if( opts.update !== false ){
             if( index < 0 ){
                 item.contacts = item.contacts || [];
@@ -413,7 +413,7 @@ Clients.checks = {
     async redirect_uri( value, data, opts ){
         _assert_data_content( 'Clients.checks.redirect_uri()', data );
         let item = data.entity.get().DYN.records[data.index].get();
-        const index = opts.id ? _id2index( item.redirect_uris, opts.id ) : -1;
+        let index = opts.id ? _id2index( item.redirect_uris, opts.id ) : -1;
         if( opts.update !== false ){
             if( index < 0 ){
                 item.redirect_uris = item.redirect_uris || [];

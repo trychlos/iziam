@@ -1,0 +1,16 @@
+<template name="organization_jwks_pane">
+    <div class="c-organization-jwks-pane">
+
+        <div class="content">
+            <div class="d-flex">
+                <div class="text">
+                    {{{ i18n key="organizations.jwks.preamble" }}}
+                </div>
+                {{> jwk_new_button }}
+            </div>
+
+            {{> jwks_list (parmsJwksList) }}
+        </div>
+
+    </div>
+</template>

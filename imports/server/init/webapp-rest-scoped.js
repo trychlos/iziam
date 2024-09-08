@@ -2,12 +2,15 @@
  * /imports/server/init/webapp-rest-scoped.js
  *
  * Handle here organization-scoped (non global) REST requests as "<baseUrl>/xxxx".
+ *
+ * Test with:
+ *  curl --no-progress-meter --verbose http://localhost:3003/mmm/.well-known/oauth-authorization-server | jq
+ *  curl --no-progress-meter --verbose --header 'X-izDate-Key: 1234' 'http://localhost:3000/api/v2/date?timezone=Europe/Paris&format=%y%m%d' | jq
  */
 
 import _ from 'lodash';
 const assert = require( 'assert' ).strict; // up to nodejs v16.x
 
-import { pwixI18n } from 'meteor/pwix:i18n';
 import { Validity } from 'meteor/pwix:validity';
 import { WebApp } from 'meteor/webapp';
 
@@ -20,7 +23,7 @@ const scoped = {
     GET: [
         // entry point of the global REST API -> just list the available commands
         {
-            path: '/.well-known',
+            path: Meteor.APP.C.oauthMetadataPath,
             fn: fn_wellKnown
         }
     ]
@@ -30,7 +33,7 @@ const scoped = {
 // args: the Webargs object
 // organization: the { entity, record } at date organization object
 function fn_wellKnown( it, args, organization ){
-    args.answer({ result: 'OK' });
+    args.answer( Organizations.fn.metadata( organization ));
 }
 
 // make sure we address only one entity
@@ -76,6 +79,7 @@ async function _checkOperationalOrganization( args, organization ){
     return Organizations.isOperational( organization ).then(( errors ) => {
         if( errors ){
             errors.map( tm => args.error( tm.iTypedMessageMessage()));
+            args.error( 'Organization is not valid' );
             args.status( 500 ); // server error
             args.end();
         }

@@ -11,7 +11,6 @@ import '/imports/common/collections/clients/server/index.js';
 //import '/imports/collections/identities/server/index.js';
 //import '/imports/collections/memberships/server/index.js';
 import '/imports/common/collections/organizations/server/index.js';
-import '/imports/common/collections/providers/server/index.js';
 //import '/imports/collections/resources/server/index.js';
 //import '/imports/collections/scopes/server/index.js';
 import '/imports/common/collections/statistics/server/index.js';

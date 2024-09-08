@@ -54,6 +54,14 @@ Permissions.set({
                 }
             }
         },
+        organizations: {
+            async edit( user, scope ){
+                return await Roles.userIsInRoles( user, 'TENANT_EDIT' );
+            },
+            async new( user, scope ){
+                return await Roles.userIsInRoles( user, 'TENANT_CREATE' );
+            }
+        },
         providers: {
             async list( user ){
                 return await Roles.userIsInRoles( user, Meteor.APP.C.appAdmin );

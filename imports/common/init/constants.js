@@ -29,7 +29,10 @@ Meteor.APP.C = {
             collection: 'clients_closests_collection',
             publish: 'clients_closests_pub'
         }
-    }
+    },
+
+    // the server metadata discovery OAuth URL path
+    oauthMetadataPath: '/.well-known/oauth-authorization-server'
 }
 
 I18N = 'izIAM.Internationalization';

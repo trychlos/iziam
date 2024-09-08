@@ -1,0 +1,14 @@
+<template name="jwk_use_select">
+    <div class="c-jwk-use-select">
+
+        <select class="form-select js-jwk-use" {{ isDisabled }}>
+            {{#unless hasCurrent }}
+                <option value="" selected disabled>{{ i18n key="definitions.jwk_use.select_text" }}</option>
+            {{/unless}}
+            {{#each it in itemsList }}
+                <option value="{{ itId it }}" {{ itSelected it }}>{{ itLabel it }}</option>
+            {{/each}}
+        </select>
+
+    </div>
+</template>

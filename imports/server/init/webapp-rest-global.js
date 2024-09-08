@@ -2,6 +2,10 @@
  * /imports/server/init/webapp-rest-global.js
  *
  * Handle here global (non-scoped to an organization) REST requests as "/v[xx]".
+ *
+ * Test with:
+ *  curl --no-progress-meter --verbose http://localhost:3003/v1 | jq
+ *  curl --no-progress-meter --verbose http://localhost:3003/v1/ident | jq
  */
 
 import _ from 'lodash';

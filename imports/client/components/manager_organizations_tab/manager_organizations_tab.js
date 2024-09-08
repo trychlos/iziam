@@ -4,11 +4,13 @@
  * Organizations management.
  */
 
+import { PlusButton } from 'meteor/pwix:plus-button';
 import { pwixI18n } from 'meteor/pwix:i18n';
 
 import '/imports/client/components/organization_clients_pane/organization_clients_pane.js';
 import '/imports/client/components/organization_config_pane/organization_config_pane.js';
 import '/imports/client/components/organization_dynregistration_pane/organization_dynregistration_pane.js';
+import '/imports/client/components/organization_jwks_pane/organization_jwks_pane.js';
 import '/imports/client/components/organization_providers_pane/organization_providers_pane.js';
 import '/imports/client/components/organization_urls_pane/organization_urls_pane.js';
 
@@ -50,6 +52,12 @@ Template.manager_organizations_tab.onCreated( function(){
                 paneid: 'app_organization_dynregistrations_pane',
                 navLabel: pwixI18n.label( I18N, 'organizations.edit.dynregistration_tab_title' ),
                 paneTemplate: 'organization_dynregistration_pane'
+            },
+            {
+                tabid: 'app_organization_jwks_tab',
+                paneid: 'app_organization_jwks_pane',
+                navLabel: pwixI18n.label( I18N, 'organizations.jwks.tab_title' ),
+                paneTemplate: 'organization_jwks_pane'
             }
         ]
     };

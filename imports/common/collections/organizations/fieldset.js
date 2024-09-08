@@ -18,7 +18,7 @@ Organizations.recordFieldset = function(){
             //added at the end
             fields: [
                 // the REST base URL to be used as the base path for all REST requests
-                // mandatory to enable the REST API, must be unique between all organizations
+                // mandatory to enable the REST API, must be unique between all organizations, e.g. /abcd
                 {
                     name: 'baseUrl',
                     type: String,
@@ -77,38 +77,47 @@ Organizations.recordFieldset = function(){
                 },
                 // -- Authorization Server Metadata
                 // https://datatracker.ietf.org/doc/html/rfc8414#section-2
-                /*
-                // The authorization server's issuer identifier
+                // The authorization server's issuer identifier if we want override the settings value
                 {
                     name: 'issuer',
                     type: String,
                     optional: true,
-                    form_type: Forms.FieldType.C.MANDATORY
+                    form_check: Organizations.checks.issuer,
+                    form_type: Forms.FieldType.C.OPTIONAL
                 },
-                // URL of the authorization server's authorization endpoint
+                // URL of the authorization server's authorization endpoint (mandatory)
                 {
                     name: 'authorization_endpoint',
                     type: String,
-                    optional: true
+                    optional: true,
+                    form_check: Organizations.checks.authorization_endpoint,
+                    form_type: Forms.FieldType.C.OPTIONAL
                 },
-                // URL of the authorization server's token endpoint
+                // URL of the authorization server's token endpoint (mandatory)
                 {
                     name: 'token_endpoint',
                     type: String,
-                    optional: true
+                    optional: true,
+                    form_check: Organizations.checks.token_endpoint,
+                    form_type: Forms.FieldType.C.OPTIONAL
                 },
                 // URL of the authorization server's JWK Set [JWK] document
                 {
                     name: 'jwks_uri',
                     type: String,
-                    optional: true
+                    optional: true,
+                    form_check: Organizations.checks.jwks_uri,
+                    form_type: Forms.FieldType.C.OPTIONAL
                 },
                 // URL of the authorization server's OAuth 2.0 Dynamic Client Registration endpoint
                 {
                     name: 'registration_endpoint',
                     type: String,
-                    optional: true
+                    optional: true,
+                    form_check: Organizations.checks.registration_endpoint,
+                    form_type: Forms.FieldType.C.OPTIONAL
                 },
+                /*
                 // array containing a list of the OAuth 2.0 [RFC6749] "scope" values that this authorization server supports
                 //  Authorization Server Metadata defines that as a JSON array
                 {
@@ -120,6 +129,7 @@ Organizations.recordFieldset = function(){
                     name: 'scopes_supported.$',
                     type: String
                 },
+                */
                 // array containing a list of the OAuth 2.0 "response_type" values that this authorization server supports
                 //  Authorization Server Metadata defines that as a JSON array
                 {
@@ -271,8 +281,82 @@ Organizations.recordFieldset = function(){
                     name: 'signed_metadata',
                     type: String,
                     optional: true
-                }
-                */
+                },
+                // -- the JSON Web Key Set
+                // several JWK can be in this set to let the organization manage their renewals
+                {
+                    name: 'jwks',
+                    type: Array,
+                    optional: true
+                },
+                {
+                    name: 'jwks.$',
+                    type: Object
+                },
+                // key identifier (kid)
+                {
+                    name: 'jwks.$.id',
+                    type: String
+                },
+                {
+                    name: 'jwks.$.label',
+                    type: String,
+                    optional: true,
+                    form_check: Organizations.checks.jwk_label,
+                    form_type: Forms.FieldType.C.OPTIONAL
+                },
+                // the specific cryptographic algorithm used with the key
+                {
+                    name: 'jwks.$.alg',
+                    type: String
+                },
+                // the usage chosen at creation
+                {
+                    name: 'jwks.$.use',
+                    type: String,
+                    optional: true,
+                    form_check: Organizations.checks.jwk_use,
+                    form_type: Forms.FieldType.C.MANDATORY
+                },
+                // the target operations
+                {
+                    name: 'jwks.$.opes',
+                    type: Array,
+                    optional: true
+                },
+                {
+                    name: 'jwks.$.opes.$',
+                    type: String
+                },
+                // pkcs8 export
+                {
+                    name: 'jwks.$.privateKey',
+                    type: String
+                },
+                // spki export
+                {
+                    name: 'jwks.$.publicKey',
+                    type: String
+                },
+                {
+                    name: 'jwks.$.privateJwk',
+                    type: Object,
+                    blackbox: true
+                },
+                // publicJwk includes 'kty' (the family of cryptographic algorithms used with the key) field
+                {
+                    name: 'jwks.$.publicJwk',
+                    type: Object,
+                    blackbox: true
+                },
+                {
+                    name: 'jwks.$.createdAt',
+                    type: Date
+                },
+                {
+                    name: 'jwks.$.createdBy',
+                    type: String
+                },
             ]
         }
     ];

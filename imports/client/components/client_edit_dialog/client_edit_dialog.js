@@ -60,7 +60,7 @@ import './client_edit_dialog.html';
 Template.client_edit_dialog.onCreated( function(){
     const self = this;
 
-    self.TM = {
+    self.APP = {
         // the global Checker for this modal
         checker: new ReactiveVar( null ),
         // the global Message zone for this modal
@@ -75,7 +75,7 @@ Template.client_edit_dialog.onCreated( function(){
 
     // keep the initial 'new' state
     self.autorun(() => {
-        self.TM.isNew.set( _.isNil( Template.currentData().item ));
+        self.APP.isNew.set( _.isNil( Template.currentData().item ));
     });
 
     // setup the item to be edited
@@ -88,7 +88,7 @@ Template.client_edit_dialog.onCreated( function(){
             records.push( new ReactiveVar( it ));
         });
         dup.DYN.records = records;
-        self.TM.item.set( dup );
+        self.APP.item.set( dup );
     });
 });
 
@@ -97,12 +97,12 @@ Template.client_edit_dialog.onRendered( function(){
 
     // whether we are running inside of a Modal
     self.autorun(() => {
-        self.TM.isModal.set( self.$( '.client_edit_dialog' ).closest( '.modal-dialog' ).length > 0 );
+        self.APP.isModal.set( self.$( '.client_edit_dialog' ).closest( '.modal-dialog' ).length > 0 );
     });
 
-    // set the modal target+title
+    // set the modal target
     self.autorun(() => {
-        if( self.TM.isModal.get()){
+        if( self.APP.isModal.get()){
             Modal.set({
                 target: self.$( '.client_edit_dialog' )
             });
@@ -111,10 +111,10 @@ Template.client_edit_dialog.onRendered( function(){
 
     // allocate a Checker for this (topmost parent) template
     self.autorun(() => {
-        self.TM.checker.set( new Forms.Checker( self, {
-            messager: self.TM.messager,
+        self.APP.checker.set( new Forms.Checker( self, {
+            messager: self.APP.messager,
             okFn( valid ){
-                if( self.TM.isModal ){
+                if( self.APP.isModal.get()){
                     Modal.set({ buttons: { id: Modal.C.Button.OK, enabled: valid }});
                 }
             }
@@ -130,25 +130,25 @@ Template.client_edit_dialog.helpers({
 
     // do we run inside of a modal ?
     isModal(){
-        return Template.instance().TM.isModal.get();
+        return Template.instance().APP.isModal.get();
     },
 
     // whether we want create a new entity ?
     isNew(){
-        return Template.instance().TM.isNew.get();
+        return Template.instance().APP.isNew.get();
     },
 
     // parms to FormsMessager
     parmsMessager(){
         return {
             ...this,
-            messager: Template.instance().TM.messager
+            messager: Template.instance().APP.messager
         };
     },
 
     // parms to entity_properties_pane component
     parmsTabbed(){
-        TM = Template.instance().TM;
+        TM = Template.instance().APP;
         const paneData = {
             ...this,
             item: TM.item,
@@ -211,7 +211,7 @@ Template.client_edit_dialog.events({
     // submit
     'iz-submit .client_edit_dialog'( event, instance ){
         //console.debug( event, instance );
-        const item = instance.TM.item.get();
+        const item = instance.APP.item.get();
         const label = Validity.closest( item ).record.label || '';
         //console.debug( 'item', item );
         Meteor.callAsync( 'pwix_tenants_manager_tenants_upsert', item )
@@ -220,8 +220,8 @@ Template.client_edit_dialog.events({
                 return Meteor.callAsync( 'pwix_tenants_manager_tenants_set_managers', item )
             })
             .then(() => {
-                Tolert.success( pwixI18n.label( I18N, instance.TM.isNew.get() ? 'edit.new_success' : 'edit.edit_success', label ));
-                if( instance.TM.isModal.get()){
+                Tolert.success( pwixI18n.label( I18N, instance.APP.isNew.get() ? 'edit.new_success' : 'edit.edit_success', label ));
+                if( instance.APP.isModal.get()){
                     Modal.close();
                 } else {
                     instance.$( '.c-record-properties-pane' ).trigger( 'iz-clear-panel' );

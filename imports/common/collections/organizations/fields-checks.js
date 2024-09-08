@@ -8,6 +8,8 @@ const assert = require( 'assert' ).strict;
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { TM } from 'meteor/pwix:typed-message';
 
+import { JwkUse } from '/imports/common/definitions/jwk-use.def.js';
+
 import { Organizations } from './index.js';
 
 // fields check
@@ -79,16 +81,48 @@ const _id2index = function( array, id ){
 }
 
 Organizations.checks = {
+    // authorization endpoint
+    // must be provided as an absolute path
+    async authorization_endpoint( value, data, opts ){
+        //console.debug( 'checks.authorization_endpoint' );
+        _assert_data_itemrv( 'Organizations.checks.authorization_endpoint()', data );
+        let entity = data.entity.get();
+        let item = entity.DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.authorization_endpoint = value;
+            data.entity.set( entity );
+        }
+        if( value ){
+            if( value.substr( 0, 1 ) !== '/' ){
+                return new TM.TypedMessage({
+                    level: TM.MessageLevel.C.ERROR,
+                    message: pwixI18n.label( I18N, 'organizations.checks.authorization_absolute' )
+                });
+            }
+        // value is optional in the UI, but must be set for the organization be operational
+        } else if( opts.mustHave ){
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'organizations.checks.authorization_unset' )
+            });
+        }
+        return null;
+    },
+
     // the REST Base URL
+    // must be provided as an absolute path
     async baseUrl( value, data, opts ){
+        //console.debug( 'checks.baseUrl' );
         _assert_data_itemrv( 'Organizations.checks.baseUrl()', data );
-        let item = data.entity.get().DYN.records[data.index].get();
+        let entity = data.entity.get();
+        let item = entity.DYN.records[data.index].get();
         if( opts.update !== false ){
             item.baseUrl = value;
+            data.entity.set( entity );
         }
         return Promise.resolve( null )
             .then(() => {
-                return _check_url( value, { mandatory: false, prefix: 'baseurl' });
+                return _check_url( value, { mandatory: ( opts.mustHave === true ), prefix: 'baseurl' });
             })
             .then(( err ) => {
                 if( err ){
@@ -158,6 +192,162 @@ Organizations.checks = {
         let item = data.entity.get().DYN.records[data.index].get();
         if( opts.update !== false ){
             item.dynamicRegistrationByUser = Boolean( value );
+        }
+        return null;
+    },
+
+    // the issuer this organization may wants identify itself
+    async issuer( value, data, opts ){
+        //console.debug( 'checks.issuer_endpoint' );
+        _assert_data_itemrv( 'Organizations.checks.issuer()', data );
+        let entity = data.entity.get();
+        let item = entity.DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.issuer = value;
+            data.entity.set( entity );
+        }
+        if( value ){
+            const url = new URL( value );
+            if( url.protocol !== 'https' ){
+                return new TM.TypedMessage({
+                    level: TM.MessageLevel.C.ERROR,
+                    message: pwixI18n.label( I18N, 'organizations.checks.issuer_https' )
+                });
+            } else {
+                const words = url.hostname.split( '.' );
+                if( words.length < 2){
+                    return new TM.TypedMessage({
+                        level: TM.MessageLevel.C.ERROR,
+                        message: pwixI18n.label( I18N, 'organizations.checks.issuer_hostname' )
+                    });
+                }
+            }
+        // value is optional in the UI, but must be set for the organization be operational
+        } else if( opts.mustHave ){
+            const issuer = Organizations.fn.issuer({ entity: entity, record: item });
+            if( !issuer ){
+                return new TM.TypedMessage({
+                    level: TM.MessageLevel.C.ERROR,
+                    message: pwixI18n.label( I18N, 'organizations.checks.issuer_unset' )
+                });
+            }
+        }
+        return null;
+    },
+
+    // JWK label
+    async jwk_label( value, data, opts ){
+        _assert_data_itemrv( 'Organizations.checks.jwk_label()', data );
+        let entity = data.entity.get();
+        let item = entity.DYN.records[data.index].get();
+        let index = opts.id ? _id2index( item.jwks, opts.id ) : -1;
+        if( opts.update !== false ){
+            if( index < 0 ){
+                item.jwks = item.jwks || [];
+                item.jwks.push({ id: opts.id });
+                index = 0;
+            }
+            item.jwks[index].label = value;
+            data.entity.set( entity );
+        }
+        return null;
+    },
+
+    // JWK usage
+    async jwk_use( value, data, opts ){
+        _assert_data_itemrv( 'Organizations.checks.jwk_use()', data );
+        let entity = data.entity.get();
+        let item = entity.DYN.records[data.index].get();
+        let index = opts.id ? _id2index( item.jwks, opts.id ) : -1;
+        if( opts.update !== false ){
+            if( index < 0 ){
+                item.jwks = item.jwks || [];
+                item.jwks.push({ id: opts.id });
+                index = 0;
+            }
+            item.jwks[index].use = value;
+            data.entity.set( entity );
+        }
+        if( value ){
+            const def = JwkUse.byId( value );
+            return def ? null : new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'organizations.checks.jwk_use_invalid', value )
+            });
+        } else {
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'organizations.checks.jwk_use_unset' )
+            });
+        }
+    },
+
+    // JWKS document
+    // must be provided as an absolute path
+    async jwks_uri( value, data, opts ){
+        _assert_data_itemrv( 'Organizations.checks.jwks_uri()', data );
+        let entity = data.entity.get();
+        let item = entity.DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.jwks_uri = value;
+            data.entity.set( entity );
+        }
+        if( value ){
+            if( value.substr( 0, 1 ) !== '/' ){ 
+                return new TM.TypedMessage({
+                    level: TM.MessageLevel.C.ERROR,
+                    message: pwixI18n.label( I18N, 'organizations.checks.jwks_absolute' )
+                });
+            }
+        }
+        return null;
+    },
+
+    // dynamic registration endpoint
+    // must be provided as an absolute path
+    async registration_endpoint( value, data, opts ){
+        _assert_data_itemrv( 'Organizations.checks.registration_endpoint()', data );
+        let entity = data.entity.get();
+        let item = entity.DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.registration_endpoint = value;
+            data.entity.set( entity );
+        }
+        if( value ){
+            if( value.substr( 0, 1 ) !== '/' ){ 
+                return new TM.TypedMessage({
+                    level: TM.MessageLevel.C.ERROR,
+                    message: pwixI18n.label( I18N, 'organizations.checks.registration_absolute' )
+                });
+            }
+        }
+        return null;
+    },
+
+    // token endpoint
+    // must be provided as an absolute path
+    async token_endpoint( value, data, opts ){
+        //console.debug( 'checks.token_endpoint' );
+        _assert_data_itemrv( 'Organizations.checks.token_endpoint()', data );
+        let entity = data.entity.get();
+        let item = entity.DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.token_endpoint = value;
+            data.entity.set( entity );
+        }
+        if( value ){
+            if( value.substr( 0, 1 ) !== '/' ){ 
+                return new TM.TypedMessage({
+                    level: TM.MessageLevel.C.ERROR,
+                    message: pwixI18n.label( I18N, 'organizations.checks.token_absolute' )
+                });
+            }
+        // value is optional in the UI, but must be set for the organization be operational
+        } else if( opts.mustHave ){
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'organizations.checks.token_unset' )
+            });
         }
         return null;
     },
