@@ -305,11 +305,6 @@ Organizations.recordFieldset = function(){
                     form_check: Organizations.checks.jwk_label,
                     form_type: Forms.FieldType.C.OPTIONAL
                 },
-                // the specific cryptographic algorithm used with the key
-                {
-                    name: 'jwks.$.alg',
-                    type: String
-                },
                 // the usage chosen at creation
                 {
                     name: 'jwks.$.use',
@@ -317,6 +312,26 @@ Organizations.recordFieldset = function(){
                     optional: true,
                     form_check: Organizations.checks.jwk_use,
                     form_type: Forms.FieldType.C.MANDATORY
+                },
+                // the key type identifies the cryptographic algorithm family used with the key
+                {
+                    name: 'jwks.$.kty',
+                    type: String,
+                    optional: true,
+                    form_check: Organizations.checks.jwk_kty,
+                    form_type: Forms.FieldType.C.MANDATORY
+                },
+                // the parameters to be used with the chosen key type
+                {
+                    name: 'jwks.$.kty_parms',
+                    type: Object,
+                    optional: true,
+                    blackbox: true
+                },
+                // the specific cryptographic algorithm used with the key
+                {
+                    name: 'jwks.$.alg',
+                    type: String
                 },
                 // the target operations
                 {

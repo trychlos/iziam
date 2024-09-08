@@ -16,6 +16,14 @@
                     </div>
                 </td>
             </tr>
+            <tr>
+                <td class="ui-w20 label"><label class="form-label" for="jwk-kty">{{ i18n key="jwks.edit.kty_label" }}</label></td>
+                <td class="ui-w100" title="{{ i18n key="jwks.edit.kty_title" }}">
+                    <div class="ui-mt025 ui-w100 js-kty">
+                        {{> jwk_kty_select (parmsJwkKtySelect) }}
+                    </div>
+                </td>
+            </tr>
         </table>
     
     </div>

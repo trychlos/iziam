@@ -14,9 +14,9 @@ import _ from 'lodash';
 
 import { Forms } from 'meteor/pwix:forms';
 import { pwixI18n } from 'meteor/pwix:i18n';
-import { Random } from 'meteor/random';
 import { TenantsManager } from 'meteor/pwix:tenants-manager';
 
+import '/imports/client/components/jwk_kty_select/jwk_kty_select.js';
 import '/imports/client/components/jwk_use_select/jwk_use_select.js';
 
 import './jwk_properties_pane.html';
@@ -27,9 +27,7 @@ Template.jwk_properties_pane.onCreated( function(){
 
     self.APP = {
         // the Form.Checker instance for this panel
-        checker: new ReactiveVar( null ),
-        // the global Message zone for this modal
-        messager: new Forms.Messager(),
+        checker: new ReactiveVar( null )
     };
 });
 
@@ -51,6 +49,10 @@ Template.jwk_properties_pane.onRendered( function(){
                     'jwks.$.use': {
                         js: '.js-use',
                         inputSelector: '.js-use select.js-jwk-use'
+                    },
+                    'jwks.$.kty': {
+                        js: '.js-kty',
+                        inputSelector: '.js-kty select.js-jwk-kty'
                     }
                 }, TenantsManager.Records.fieldSet.get()),
                 data: {
@@ -70,10 +72,19 @@ Template.jwk_properties_pane.helpers({
         return pwixI18n.label( I18N, arg.hash.key );
     },
 
+    // parms for key type (crypto family) selection
+    parmsJwkKtySelect(){
+        return {
+            ...this,
+            selected: this.item.kty || null
+        };
+    },
+
     // parms for use selection
     parmsJwkUseSelect(){
         return {
-            ...this
+            ...this,
+            selected: this.item.use || null
         };
     }
 });

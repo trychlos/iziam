@@ -371,6 +371,27 @@ Meteor.APP.i18n = {
                     //saml_label: 'SAML 2.0 Bearer Assertion',
                     select_text: 'The grant types the client can use at the token endpoint'
                 },
+                jwa_alg: {
+                    es256_label: 'ECDSA using P-256 and SHA-256',
+                    es384_label: 'ECDSA using P-384 and SHA-384',
+                    es512_label: 'ECDSA using P-521 and SHA-512',
+                    hs256_label: 'HMAC using SHA-256',
+                    hs384_label: 'HMAC using SHA-384',
+                    hs512_label: 'HMAC using SHA-512',
+                    ps256_label: 'RSASSA-PSS using SHA-256 and MGF1 with SHA-256',
+                    ps384_label: 'RSASSA-PSS using SHA-384 and MGF1 with SHA-384',
+                    ps512_label: 'RSASSA-PSS using SHA-512 and MGF1 with SHA-512',
+                    rs256_label: 'RSASSA-PKCS1-v1_5 using SHA-256',
+                    rs384_label: 'RSASSA-PKCS1-v1_5 using SHA-384',
+                    rs512_label: 'RSASSA-PKCS1-v1_5 using SHA-512',
+                    select_text: 'Select your JSON Web Algorithm (JWA)'
+                },
+                jwk_kty: {
+                    ec_label: 'Elliptic Curve (asymmetric)',
+                    oct_label: 'Octets Sequence (symmetric)',
+                    rsa_label: 'RSA (asymmetric)',
+                    select_text: 'Select the JWK crypto family'
+                },
                 jwk_use: {
                     sig_label: 'Signature',
                     enc_label: 'Encryption',
@@ -398,6 +419,8 @@ Meteor.APP.i18n = {
             },
             jwks: {
                 edit: {
+                    kty_label: 'Cryptographic Family :',
+                    kty_title: 'This identifies the cryptographic algorithm family used with the key',
                     label_label: 'Label :',
                     label_ph: 'My label',
                     label_title: 'A descriptive label which describes usage or validity or perimeter of your key',
@@ -441,6 +464,8 @@ Meteor.APP.i18n = {
                     issuer_hostname: 'The issuer hostname is malformed',
                     issuer_https: 'The issuer must use a HTTPS schema',
                     issuer_unset: 'The issuer is not set though should have at least a settings value',
+                    jwk_kty_invalid: 'JWK type "%s" is not valid',
+                    jwk_kty_unset: 'JWK type is not set',
                     jwk_use_invalid: 'JWK usage "%s" is not valid',
                     jwk_use_unset: 'JWK usage is not set',
                     jwks_absolute: 'The JWKS document URI must be provided as an absolute path',

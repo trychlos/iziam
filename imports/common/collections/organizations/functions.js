@@ -66,7 +66,7 @@ Organizations.fn = {
     metadata( organization ){
         let data = {
             // always set because we have a default value in settings
-            issuer: Organizations.fn.issuer( organization )
+            issuer: Organizations.fn.fullBaseUrl( organization )
         };
         const set = function( name, opts={} ){
             let foo = organization.record[name];

@@ -8,6 +8,7 @@ const assert = require( 'assert' ).strict;
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { TM } from 'meteor/pwix:typed-message';
 
+import { JwkKty } from '/imports/common/definitions/jwk-kty.def.js';
 import { JwkUse } from '/imports/common/definitions/jwk-use.def.js';
 
 import { Organizations } from './index.js';
@@ -233,6 +234,35 @@ Organizations.checks = {
             }
         }
         return null;
+    },
+
+    // JWK key type (crypto alg family)
+    async jwk_kty( value, data, opts ){
+        _assert_data_itemrv( 'Organizations.checks.jwk_kty()', data );
+        let entity = data.entity.get();
+        let item = entity.DYN.records[data.index].get();
+        let index = opts.id ? _id2index( item.jwks, opts.id ) : -1;
+        if( opts.update !== false ){
+            if( index < 0 ){
+                item.jwks = item.jwks || [];
+                item.jwks.push({ id: opts.id });
+                index = 0;
+            }
+            item.jwks[index].kty = value;
+            data.entity.set( entity );
+        }
+        if( value ){
+            const def = JwkKty.byId( value );
+            return def ? null : new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'organizations.checks.jwk_kty_invalid', value )
+            });
+        } else {
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'organizations.checks.jwk_kty_unset' )
+            });
+        }
     },
 
     // JWK label
