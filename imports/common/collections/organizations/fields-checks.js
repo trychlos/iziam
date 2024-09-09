@@ -8,6 +8,7 @@ const assert = require( 'assert' ).strict;
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { TM } from 'meteor/pwix:typed-message';
 
+import { JwaAlg } from '/imports/common/definitions/jwa-alg.def.js';
 import { JwkKty } from '/imports/common/definitions/jwk-kty.def.js';
 import { JwkUse } from '/imports/common/definitions/jwk-use.def.js';
 
@@ -23,7 +24,7 @@ import { Organizations } from './index.js';
 // returns a TypedMessage, or an array of TypedMessage, or null
 
 // entity is a ReactiveVar which contains the edited entity document and its validity records
-const _assert_data_itemrv = function( caller, data ){
+const _assert_data_entityrv = function( caller, data ){
     assert.ok( data, caller+' data is required' );
     assert.ok( data.entity && data.entity instanceof ReactiveVar, caller+' data.entity is expected to be set as a ReactiveVar, got '+data.entity );
     const entity = data.entity.get();
@@ -34,6 +35,12 @@ const _assert_data_itemrv = function( caller, data ){
     });
     // this index because we are managing valdiity periods here
     assert.ok( _.isNumber( data.index ) && data.index >= 0, caller+' data.index is expected to be a positive or zero integer, got '+data.index );
+}
+
+// item is a ReactiveVar which contains the edited document object (inside of an array)
+const _assert_data_itemrv = function( caller, data ){
+    assert.ok( data, caller+' data is required' );
+    assert.ok( data.item && data.item instanceof ReactiveVar, caller+' data.item is expected to be set as a ReactiveVar, got '+data.item );
 }
 
 // check a server url
@@ -86,7 +93,7 @@ Organizations.checks = {
     // must be provided as an absolute path
     async authorization_endpoint( value, data, opts ){
         //console.debug( 'checks.authorization_endpoint' );
-        _assert_data_itemrv( 'Organizations.checks.authorization_endpoint()', data );
+        _assert_data_entityrv( 'Organizations.checks.authorization_endpoint()', data );
         let entity = data.entity.get();
         let item = entity.DYN.records[data.index].get();
         if( opts.update !== false ){
@@ -114,7 +121,7 @@ Organizations.checks = {
     // must be provided as an absolute path
     async baseUrl( value, data, opts ){
         //console.debug( 'checks.baseUrl' );
-        _assert_data_itemrv( 'Organizations.checks.baseUrl()', data );
+        _assert_data_entityrv( 'Organizations.checks.baseUrl()', data );
         let entity = data.entity.get();
         let item = entity.DYN.records[data.index].get();
         if( opts.update !== false ){
@@ -169,7 +176,7 @@ Organizations.checks = {
 
     // whether the organization allow dynamic registration by confidential clients
     async dynamicRegistrationByConfidential( value, data, opts ){
-        _assert_data_itemrv( 'Organizations.checks.dynamicRegistrationByConfidential()', data );
+        _assert_data_entityrv( 'Organizations.checks.dynamicRegistrationByConfidential()', data );
         let item = data.entity.get().DYN.records[data.index].get();
         if( opts.update !== false ){
             item.dynamicRegistrationByConfidential = Boolean( value );
@@ -179,7 +186,7 @@ Organizations.checks = {
 
     // whether the organization allow dynamic registration by public clients
     async dynamicRegistrationByPublic( value, data, opts ){
-        _assert_data_itemrv( 'Organizations.checks.dynamicRegistrationByPublic()', data );
+        _assert_data_entityrv( 'Organizations.checks.dynamicRegistrationByPublic()', data );
         let item = data.entity.get().DYN.records[data.index].get();
         if( opts.update !== false ){
             item.dynamicRegistrationByPublic = Boolean( value );
@@ -189,7 +196,7 @@ Organizations.checks = {
 
     // whether the organization allow dynamic registration by identified allowed users
     async dynamicRegistrationByUser( value, data, opts ){
-        _assert_data_itemrv( 'Organizations.checks.dynamicRegistrationByUser()', data );
+        _assert_data_entityrv( 'Organizations.checks.dynamicRegistrationByUser()', data );
         let item = data.entity.get().DYN.records[data.index].get();
         if( opts.update !== false ){
             item.dynamicRegistrationByUser = Boolean( value );
@@ -200,7 +207,7 @@ Organizations.checks = {
     // the issuer this organization may wants identify itself
     async issuer( value, data, opts ){
         //console.debug( 'checks.issuer_endpoint' );
-        _assert_data_itemrv( 'Organizations.checks.issuer()', data );
+        _assert_data_entityrv( 'Organizations.checks.issuer()', data );
         let entity = data.entity.get();
         let item = entity.DYN.records[data.index].get();
         if( opts.update !== false ){
@@ -236,20 +243,48 @@ Organizations.checks = {
         return null;
     },
 
+    // JWK algorithm
+    // NB: this is an item edited inside of an array - so the data is different
+    async jwk_alg( value, data, opts ){
+        _assert_data_itemrv( 'Organizations.checks.jwk_alg()', data );
+        let item = data.item.get();
+        console.debug( 'jwk_alg value', value, 'item', item );
+        if( opts.update !== false ){
+            item.alg = value;
+            data.item.set( item );
+        }
+        if( value ){
+            const def = JwaAlg.byId( value );
+            return def ? null : new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'organizations.checks.jwk_alg_invalid', value )
+            });
+        } else {
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'organizations.checks.jwk_alg_unset' )
+            });
+        }
+    },
+
+    // JWK Key ID
+    async jwk_kid( value, data, opts ){
+        _assert_data_itemrv( 'Organizations.checks.jwk_kid()', data );
+        let item = data.item.get();
+        if( opts.update !== false ){
+            item.kid = value;
+            data.item.set( item );
+        }
+        return null;
+    },
+
     // JWK key type (crypto alg family)
     async jwk_kty( value, data, opts ){
         _assert_data_itemrv( 'Organizations.checks.jwk_kty()', data );
-        let entity = data.entity.get();
-        let item = entity.DYN.records[data.index].get();
-        let index = opts.id ? _id2index( item.jwks, opts.id ) : -1;
+        let item = data.item.get();
         if( opts.update !== false ){
-            if( index < 0 ){
-                item.jwks = item.jwks || [];
-                item.jwks.push({ id: opts.id });
-                index = 0;
-            }
-            item.jwks[index].kty = value;
-            data.entity.set( entity );
+            item.kty = value;
+            data.item.set( item );
         }
         if( value ){
             const def = JwkKty.byId( value );
@@ -268,17 +303,10 @@ Organizations.checks = {
     // JWK label
     async jwk_label( value, data, opts ){
         _assert_data_itemrv( 'Organizations.checks.jwk_label()', data );
-        let entity = data.entity.get();
-        let item = entity.DYN.records[data.index].get();
-        let index = opts.id ? _id2index( item.jwks, opts.id ) : -1;
+        let item = data.item.get();
         if( opts.update !== false ){
-            if( index < 0 ){
-                item.jwks = item.jwks || [];
-                item.jwks.push({ id: opts.id });
-                index = 0;
-            }
-            item.jwks[index].label = value;
-            data.entity.set( entity );
+            item.label = value;
+            data.item.set( item );
         }
         return null;
     },
@@ -286,17 +314,10 @@ Organizations.checks = {
     // JWK usage
     async jwk_use( value, data, opts ){
         _assert_data_itemrv( 'Organizations.checks.jwk_use()', data );
-        let entity = data.entity.get();
-        let item = entity.DYN.records[data.index].get();
-        let index = opts.id ? _id2index( item.jwks, opts.id ) : -1;
+        let item = data.item.get();
         if( opts.update !== false ){
-            if( index < 0 ){
-                item.jwks = item.jwks || [];
-                item.jwks.push({ id: opts.id });
-                index = 0;
-            }
-            item.jwks[index].use = value;
-            data.entity.set( entity );
+            item.use = value;
+            data.item.set( item );
         }
         if( value ){
             const def = JwkUse.byId( value );
@@ -315,7 +336,7 @@ Organizations.checks = {
     // JWKS document
     // must be provided as an absolute path
     async jwks_uri( value, data, opts ){
-        _assert_data_itemrv( 'Organizations.checks.jwks_uri()', data );
+        _assert_data_entityrv( 'Organizations.checks.jwks_uri()', data );
         let entity = data.entity.get();
         let item = entity.DYN.records[data.index].get();
         if( opts.update !== false ){
@@ -336,7 +357,7 @@ Organizations.checks = {
     // dynamic registration endpoint
     // must be provided as an absolute path
     async registration_endpoint( value, data, opts ){
-        _assert_data_itemrv( 'Organizations.checks.registration_endpoint()', data );
+        _assert_data_entityrv( 'Organizations.checks.registration_endpoint()', data );
         let entity = data.entity.get();
         let item = entity.DYN.records[data.index].get();
         if( opts.update !== false ){
@@ -358,7 +379,7 @@ Organizations.checks = {
     // must be provided as an absolute path
     async token_endpoint( value, data, opts ){
         //console.debug( 'checks.token_endpoint' );
-        _assert_data_itemrv( 'Organizations.checks.token_endpoint()', data );
+        _assert_data_entityrv( 'Organizations.checks.token_endpoint()', data );
         let entity = data.entity.get();
         let item = entity.DYN.records[data.index].get();
         if( opts.update !== false ){
@@ -384,7 +405,7 @@ Organizations.checks = {
 
     // whether the organization forces the usage of OAth 2.1
     async wantsOAuth21( value, data, opts ){
-        _assert_data_itemrv( 'Organizations.checks.wantsOAuth21()', data );
+        _assert_data_entityrv( 'Organizations.checks.wantsOAuth21()', data );
         let item = data.entity.get().DYN.records[data.index].get();
         if( opts.update !== false ){
             item.wantsOAuth21 = Boolean( value );
@@ -394,7 +415,7 @@ Organizations.checks = {
 
     // whether the organization wants all clients use PKCE (rfc7636)
     async wantsPkce( value, data, opts ){
-        _assert_data_itemrv( 'Organizations.checks.wantsPkce()', data );
+        _assert_data_entityrv( 'Organizations.checks.wantsPkce()', data );
         let item = data.entity.get().DYN.records[data.index].get();
         if( opts.update !== false ){
             item.wantsPkce = Boolean( value );

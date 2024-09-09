@@ -32,7 +32,7 @@ Template.jwk_use_select.helpers({
 
     // whether the component should be disabled
     isDisabled(){
-        return this.disabled ? 'disabled' : '';
+        return this.disabled === true ? 'disabled' : '';
     },
 
     // return the item identifier

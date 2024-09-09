@@ -2,7 +2,9 @@
  * pwix:tenants-manager/src/client/components/organization_jwks_pane/organization_jwks_pane.js
  *
  * Parms:
- * - see README
+ * - entity: a ReactiveVar which contains the Organization, with its DYN.records array of ReactiveVar's
+ * - index: the index of the current edited organization record
+ * - checker: a ReactiveVar which contains the parent checker
  */
 
 import { pwixI18n } from 'meteor/pwix:i18n';
@@ -32,6 +34,11 @@ Template.organization_jwks_pane.onCreated( function(){
             entity: entity,
             record: entity.DYN.records[dataContext.index].get()
         });
+    });
+
+    // track the entity/record content
+    self.autorun(() => {
+        //console.debug( Template.currentData().entity.get().DYN.records[Template.currentData().index].get());
     });
 });
 

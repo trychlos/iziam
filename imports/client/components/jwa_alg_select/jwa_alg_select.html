@@ -1,0 +1,14 @@
+<template name="jwa_alg_select">
+    <div class="c-jwa-alg-select">
+
+        <select class="form-select js-jwa-alg" {{ isDisabled }}>
+            {{#unless hasCurrent }}
+                <option value="" selected disabled>{{ i18n key="definitions.jwa_alg.select_text" }}</option>
+            {{/unless}}
+            {{#each it in itemsList }}
+                <option value="{{ itId it }}" {{ itSelected it }}>{{ itLabel it }}</option>
+            {{/each}}
+        </select>
+
+    </div>
+</template>

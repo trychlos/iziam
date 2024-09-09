@@ -372,6 +372,16 @@ Meteor.APP.i18n = {
                     select_text: 'The grant types the client can use at the token endpoint'
                 },
                 jwa_alg: {
+                    a128cbc_hs256_label: 'AES_128_CBC_HMAC_SHA_256 authenticated encryption algorithm',
+                    a192cbc_hs384_label: 'AES_192_CBC_HMAC_SHA_384 authenticated encryption algorithm',
+                    a256cbc_hs512_label: 'AES_256_CBC_HMAC_SHA_512 authenticated encryption algorithm',
+                    a128gcm_label: 'AES GCM using 128-bit key',
+                    a192gcm_label: 'AES GCM using 192-bit key',
+                    a256gcm_label: 'AES GCM using 256-bit key',
+                    ecdh_128kw_label: 'ECDH-ES using Concat KDF and CEK wrapped with 128 bits AES Key Wrap',
+                    ecdh_192kw_label: 'ECDH-ES using Concat KDF and CEK wrapped with 192 bits AES Key Wrap',
+                    ecdh_256kw_label: 'ECDH-ES using Concat KDF and CEK wrapped with 256 bits AES Key Wrap',
+                    ecdh_es_label: 'Elliptic Curve Diffie-Hellman Ephemeral Static',
                     es256_label: 'ECDSA using P-256 and SHA-256',
                     es384_label: 'ECDSA using P-384 and SHA-384',
                     es512_label: 'ECDSA using P-521 and SHA-512',
@@ -384,7 +394,11 @@ Meteor.APP.i18n = {
                     rs256_label: 'RSASSA-PKCS1-v1_5 using SHA-256',
                     rs384_label: 'RSASSA-PKCS1-v1_5 using SHA-384',
                     rs512_label: 'RSASSA-PKCS1-v1_5 using SHA-512',
-                    select_text: 'Select your JSON Web Algorithm (JWA)'
+                    rsa_oaep_label: 'RSAES OAEP using default parameters',
+                    rsa_oaep256_label: 'RSAES OAEP using SHA-256 and MGF1 with SHA-256',
+                    rsa_oaep384_label: 'RSAES OAEP using SHA-384 and MGF1 with SHA-384',
+                    rsa_oaep512_label: 'RSAES OAEP using SHA-512 and MGF1 with SHA-512',
+                    select_text: 'Select the JSON Web Algorithm (JWA)'
                 },
                 jwk_kty: {
                     ec_label: 'Elliptic Curve (asymmetric)',
@@ -395,7 +409,7 @@ Meteor.APP.i18n = {
                 jwk_use: {
                     sig_label: 'Signature',
                     enc_label: 'Encryption',
-                    select_text: 'Select the JWK usage'
+                    select_text: 'Select your JWK usage'
                 }
             },
             header: {
@@ -419,15 +433,26 @@ Meteor.APP.i18n = {
             },
             jwks: {
                 edit: {
+                    alg_label: 'Algorithm :',
+                    alg_title: 'The algorithm to be chosen to sign or encrypt the key',
+                    generate_text: 'Generate',
+                    generate_title: 'Generate the private/public keys pair  ',
+                    kid_label: 'Key Identifier :',
+                    kid_ph: 'Key-Id',
+                    kid_title: 'The "kid" (key ID) parameter is used to match a specific key. This is used, for instance, to choose among a set of keys within a JWK Set '
+                        +'during key rollover.  The structure of the "kid" value is unspecified.',
                     kty_label: 'Cryptographic Family :',
-                    kty_title: 'This identifies the cryptographic algorithm family used with the key',
+                    kty_title: 'This key type (kty) identifies the cryptographic algorithm family used with the key',
                     label_label: 'Label :',
                     label_ph: 'My label',
                     label_title: 'A descriptive label which describes usage or validity or perimeter of your key',
                     new_button_label: 'New JWK',
                     new_button_title: 'Define a new JSON Web Key',
                     new_dialog_title: 'Define a new JSON Web Key',
+                    private_tab_title: 'Asymmetric private key',
                     properties_tab_title: 'Properties',
+                    public_tab_title: 'Asymmetric public key',
+                    secret_tab_title: 'Symmetric secret',
                     use_label: 'Usage :',
                     use_title: 'The usage of this JSON Web Key'
                 },
@@ -464,6 +489,8 @@ Meteor.APP.i18n = {
                     issuer_hostname: 'The issuer hostname is malformed',
                     issuer_https: 'The issuer must use a HTTPS schema',
                     issuer_unset: 'The issuer is not set though should have at least a settings value',
+                    jwk_alg_invalid: 'JWK algorithm "%s" is not valid',
+                    jwk_alg_unset: 'JWK algorithm is not set',
                     jwk_kty_invalid: 'JWK type "%s" is not valid',
                     jwk_kty_unset: 'JWK type is not set',
                     jwk_use_invalid: 'JWK usage "%s" is not valid',
@@ -501,7 +528,7 @@ Meteor.APP.i18n = {
                     dynregistration_tab_title: 'Dynamic registration',
                     dynuser_label: 'Accept dynamic registration from allowed identified users',
                     dynuser_title: 'Whether an identified user can be allowed to perform dynamic registration of client applications',
-                    issuer_example: 'When applied to the server metadata discovery URL: &laquo; %s &raquo;',
+                    issuer_example: 'When applied to the OAuth server metadata discovery URL: &laquo; %s &raquo;',
                     issuer_label: 'Issuer :',
                     issuer_ph: 'https://iam.example.com',
                     issuer_title: 'The way this IAM identifies itself, which is a settings value. An organization may want have its own specific value, as soon as it is conscious of DNS prerequisites.',

@@ -9,7 +9,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="ui-w20 label"><label class="form-label" for="jwk-use">{{ i18n key="jwks.edit.use_label" }}</label></td>
+                <td class="ui-w20 label"><label class="form-label">{{ i18n key="jwks.edit.use_label" }}</label></td>
                 <td class="ui-w100" title="{{ i18n key="jwks.edit.use_title" }}">
                     <div class="ui-mt025 ui-w100 js-use">
                         {{> jwk_use_select (parmsJwkUseSelect) }}
@@ -17,11 +17,34 @@
                 </td>
             </tr>
             <tr>
-                <td class="ui-w20 label"><label class="form-label" for="jwk-kty">{{ i18n key="jwks.edit.kty_label" }}</label></td>
+                <td class="ui-w20 label"><label class="form-label">{{ i18n key="jwks.edit.kty_label" }}</label></td>
                 <td class="ui-w100" title="{{ i18n key="jwks.edit.kty_title" }}">
                     <div class="ui-mt025 ui-w100 js-kty">
                         {{> jwk_kty_select (parmsJwkKtySelect) }}
                     </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="ui-w20 label"><label class="form-label">{{ i18n key="jwks.edit.alg_label" }}</label></td>
+                <td class="ui-w100" title="{{ i18n key="jwks.edit.alg_title" }}">
+                    <div class="ui-mt025 ui-w100 js-alg">
+                        {{> jwa_alg_select (parmsJwaAlgSelect) }}
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="ui-w20 label"><label class="form-label" for="jwk-kid">{{ i18n key="jwks.edit.kid_label" }}</label></td>
+                <td class="ui-w100" title="{{ i18n key="jwks.edit.kid_title" }}">
+                    <div class="ui-mt025 ui-w100 js-kid">
+                        <input class="form-control flex-grow-1" type="text" id="jwk-kid" placeholder="{{ i18n key="jwks.edit.kid_ph" }}" title="{{ i18n key="jwks.edit.kid_title" }}" />
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="ui-center">
+                    <button class="btn {{ btnClass }} ui-mt1 js-generate" type="button" title="{{ i18n key="jwks.edit.generate_title" }}" {{ btnDisabled }}>
+                        {{ i18n key="jwks.edit.generate_text" }}
+                    </button>
                 </td>
             </tr>
         </table>

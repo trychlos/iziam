@@ -11,21 +11,89 @@ const assert = require( 'assert' ).strict;
 
 import { pwixI18n } from 'meteor/pwix:i18n';
 
+import { JwaAlg } from '/imports/common/definitions/jwa-alg.def.js';
+
 export const JwkKty = {
     C: [
         {
             id: 'EC',
-            label: 'definitions.jwk_kty.ec_label'
+            label: 'definitions.jwk_kty.ec_label',
+            alg: {
+                'enc': [
+                    'ECDH-ES',
+                    'ECDH-ES+A128KW',
+                    'ECDH-ES+A192KW',
+                    'ECDH-ES+A256KW'
+                ],
+                'sig':  [
+                    'ES256',
+                    'ES384',
+                    'ES512',
+                    'EdDSA'
+                ]
+            }
         },
         {
             id: 'RSA',
-            label: 'definitions.jwk_kty.rsa_label'
+            label: 'definitions.jwk_kty.rsa_label',
+            alg: {
+                'enc': [
+                    'RSA-OAEP',
+                    'RSA-OAEP-256',
+                    'RSA-OAEP-384',
+                    'RSA-OAEP-512'
+                ],
+                'sig': [
+                    'RS256',
+                    'RS384',
+                    'RS512',
+                    'PS256',
+                    'PS384',
+                    'PS512'
+                ]
+            }
         },
         {
             id: 'oct',
-            label: 'definitions.jwk_kty.oct_label'
+            label: 'definitions.jwk_kty.oct_label',
+            alg: {
+                'enc': [
+                    'A128GCM',
+                    'A192GCM',
+                    'A256GCM',
+                    'A128CBC-HS256',
+                    'A192CBC-HS384',
+                    'A256CBC-HS512'
+                ],
+                'sig': [
+                    'HS256',
+                    'HS384',
+                    'HS512'
+                ]
+            }
         }
     ],
+
+    /**
+     * @param {Object} def a JwkKty definition as returned by JwkKty.Knowns()
+     * @param {String} use the JWK use identifier
+     * @returns {Array<String>} the list of known algorithms to be used in this situation, or null if use is not known
+     */
+    availableAlgorithms( def, use ){
+        let algs = def.alg[use] || null;
+        if( algs ){
+            let array = algs;
+            algs = array.length ? [] : null;
+            array.forEach(( id ) => {
+                const def = JwaAlg.byId( id );
+                if( def && JwaAlg.isAvailable( def )){
+                    algs.push( id );
+                }
+            })
+        }
+        // a non-empty array or null
+        return algs;
+    },
 
     /**
      * @param {String} id an algorithm identifier
