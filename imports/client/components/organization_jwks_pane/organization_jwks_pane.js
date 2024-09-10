@@ -9,7 +9,7 @@
 
 import { pwixI18n } from 'meteor/pwix:i18n';
 
-import { Organizations } from '/imports/common/collections/organizations/index.js';
+import { Jwks } from '/imports/common/tables/jwks/index.js';
 
 import '/imports/client/components/jwk_edit_dialog/jwk_edit_dialog.js';
 import '/imports/client/components/jwk_new_button/jwk_new_button.js';
@@ -52,9 +52,9 @@ Template.organization_jwks_pane.helpers({
     // see the jwks_list component for a description of the expected data context
     parmsJwksList(){
         let parms = {
-            listGetFn: Organizations.fn.jwksGet,
-            listAddFn: Organizations.fn.jwksAdd,
-            listRemoveFn: Organizations.fn.jwksRemove,
+            listGetFn: Jwks.fn.get,
+            listAddFn: Jwks.fn.add,
+            listRemoveFn: Jwks.fn.remove,
             args: {
                 caller: Template.instance().APP.organization.get(),
                 parent: null,

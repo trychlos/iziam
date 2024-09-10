@@ -458,8 +458,14 @@ Meteor.APP.i18n = {
                 },
                 list: {
                     add_title: 'Add a new JSON Web Key to your set',
+                    alg_th: 'Algorithm',
                     created_at_th: 'Created at',
                     created_by_th: 'Created by',
+                    delete_confirm_text: 'Your are about to delete the "%s" key.<br />Are you sure ?',
+                    delete_confirm_title: 'Delete the "%s" key',
+                    delete_title: 'Delete the "%s" key',
+                    edit_title: 'Edit the "%s" key',
+                    kid_th: 'Key Id',
                     label_th: 'Label',
                     preamble: '',
                     use_th: 'Usage'

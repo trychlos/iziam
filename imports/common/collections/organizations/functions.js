@@ -36,30 +36,6 @@ Organizations.fn = {
     },
 
     /**
-     * @summary Returns the JWKS for the entity/record organization
-     *  This is needed for a reactive tabular display management
-     * @param {Object} o an argument object with following keys:
-     * - caller: an { entity, record } organization
-     * @returns {Object} the organization JWKS, at least an empty array
-     *  A reactive data source
-     */
-    _list_jwks: {
-        dep: new Tracker.Dependency()
-    },
-    jwksGet( o ){
-        Organizations.fn._list_jwks.dep.depend();
-        return o.caller.record.jwks || [];
-    },
-    jwksAdd( o, jwk ){
-        o.caller.record.jwks.push( jwk );
-        Organizations.fn._selected_providers.dep.changed();
-    },
-    jwksRemove( o, jwkId ){
-        o.caller.record.jwks = o.caller.record.jwks.filter( it => it.id !== jwkId );
-        Organizations.fn._list_jwks.dep.changed();
-    },
-
-    /**
      * @param {Organizations} organization as an { entity, record } object
      * @returns {Object} the public metadata document as for [RFC 8414](https://datatracker.ietf.org/doc/html/rfc8414)
      */

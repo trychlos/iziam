@@ -166,13 +166,13 @@ Template.jwk_edit_dialog.events({
     },
 
     // submit
+    // reactively update the record
     'iz-submit .c-jwk-edit-dialog'( event, instance ){
         const recordRv = this.entity.get().DYN.records[this.index];
         let record = recordRv.get();
         record.jwks = record.jwks || [];
         record.jwks.push( instance.APP.item.get());
         recordRv.set( record );
-        //console.debug( 'record', record );
         Modal.close();
     }
 });
