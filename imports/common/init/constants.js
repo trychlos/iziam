@@ -21,13 +21,13 @@ Meteor.APP.C = {
 
     // some publication which have a special target collection
     pub: {
-        clientsAll: {
-            collection: 'clients_all_collection',
-            publish: 'clients_all_pub'
+        clientsTabularOne: {
+            collection: 'clients_tabular_one_collection',
+            publish: 'clients_tabular_one_pub'
         },
-        closests: {
-            collection: 'clients_closests_collection',
-            publish: 'clients_closests_pub'
+        clientsTabularTwo: {
+            collection: 'clients_tabular_two_collection',
+            publish: 'clients_tabular_two_pub'
         }
     },
 

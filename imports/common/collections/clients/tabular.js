@@ -45,7 +45,7 @@ Tracker.autorun(() => {
         name: 'Clients',
         collection: ClientsRecords.collection,
         columns: Clients.fieldSet.get().toTabular(),
-        pub: 'clients_tabular',
+        pub: 'clientsTabularLast',
         tabular: {
             // have a badge which displays the count of validity records if greater than 1
             // have a badge which displays the operational status of the client

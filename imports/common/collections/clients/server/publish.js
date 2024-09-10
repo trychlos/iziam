@@ -11,198 +11,111 @@ import { ClientsRecords } from '/imports/common/collections/clients_records/inde
 import { Clients } from '../index.js';
 
 /*
- * returns a cursor of all clients as a full clients list, published here as a 'clients_all' pseudo collection
- *  where each item is a client entity, and contains a DYN sub-object with:
- *  - managers: the list of ids of users which are allowed to managed this client using a scoped role
- *  - records: the list of validity records for this entity
- *  - closest: the closest record
+ * This publishes a list of the client entities identifiers for the given organization
+ * A tabular requisite n° 1
  */
-Meteor.publish( Meteor.APP.C.pub.clientsAll.publish, async function(){
-    if( !await Permissions.isAllowed( 'feat.clients.pub.list_all', this.userId )){
+Meteor.publish( Meteor.APP.C.pub.clientsTabularOne.publish, async function( organizationId ){
+    if( !await Permissions.isAllowed( 'feat.clients.pub.tabular', this.userId, organizationId )){
         this.ready();
         return false;
     }
+    if( !organizationId ){
+        this.ready();
+        return [];
+    }
+    //console.debug( 'clientsTabularOne: organization', organizationId );
     const self = this;
     let initializing = true;
-
-    // find ORG_SCOPED_MANAGER allowed users, and add to each entity the list of its records
-    const f_entityTransform = async function( item ){
-        item.DYN = {
-            managers: [],
-            records: [],
-            closest: null
-        };
-        let promises = [];
-        promises.push( Meteor.roleAssignment.find({ 'role._id': 'ORG_SCOPED_MANAGER', scope: item._id }).fetchAsync().then(( fetched ) => {
-            fetched.forEach(( it ) => {
-                Meteor.users.findOneAsync({ _id: it.user._id }).then(( user ) => {
-                    if( user ){
-                        item.DYN.managers.push( user );
-                    } else {
-                        console.warn( 'user not found, but allowed by an assigned scoped role', it.user._id );
-                    }
-                });
-            });
-            return true;
-        }));
-        promises.push( ClientsRecords.collection.find({ entity: item._id }).fetchAsync().then(( fetched ) => {
-            item.DYN.records = fetched;
-            item.DYN.closest = Validity.closestByRecords( fetched ).record;
-            return true;
-        }));
-        return Promise.allSettled( promises ).then(() => {
-            // make sure that each defined field appears in the returned item
-            // happens that clearing notes on server side does not publish the field 'notes' and seems that the previously 'notes' on the client is kept
-            // while publishing 'notes' as undefined rightly override (and erase) the previous notes on the client
-            ClientsEntities.server.addUndef( item );
-            //console.debug( 'list_all', item );
-            return item;
-        });
-    };
-
-    const entitiesObserver = ClientsEntities.collection.find({}).observeAsync({
-        added: async function( item ){
-            //console.debug( 'adding entity', item._id );
-            self.added( Meteor.APP.C.pub.clientsAll.collection, item._id, await f_entityTransform( item ));
+    const observer = ClientsEntities.collection.find({ organization: organizationId }).observeAsync({
+        added: function( item ){
+            self.added( Meteor.APP.C.pub.clientsTabularOne.collection, item._id );
         },
-        changed: async function( newItem, oldItem ){
-            if( !initializing ){
-                self.changed( Meteor.APP.C.pub.clientsAll.collection, newItem._id, await f_entityTransform( newItem ));
-            }
-        },
-        removed: async function( oldItem ){
-            //console.debug( 'removing entity', oldItem._id );
-            self.removed( Meteor.APP.C.pub.clientsAll.collection, oldItem._id );
+        removed: function( item ){
+            self.removed( Meteor.APP.C.pub.clientsTabularOne.collection, item._id );
         }
     });
-
-    const recordsObserver = ClientsRecords.collection.find({}).observeAsync({
-        added: async function( item ){
-            ClientsEntities.collection.findOneAsync({ _id: item.entity }).then( async ( entity ) => {
-                if( entity ){
-                    try {
-                        self.changed( Meteor.APP.C.pub.clientsAll.collection, entity._id, await f_entityTransform( entity ));
-                    } catch( e ){
-                        // on HMR, happens that Error: Could not find element with id wx8rdvSdJfP6fCDTy to change
-                        self.added( Meteor.APP.C.pub.clientsAll.collection, entity._id, await f_entityTransform( entity ));
-                        console.debug( e, 'ignored' );
-                    }
-                } else {
-                    console.warn( 'added: entity not found', item.entity );
-                }
-            });
-        },
-        changed: async function( newItem, oldItem ){
-            if( !initializing ){
-                ClientsEntities.collection.findOneAsync({ _id: newItem.entity }).then( async ( entity ) => {
-                    if( entity ){
-                        self.changed( Meteor.APP.C.pub.clientsAll.collection, entity._id, await f_entityTransform( entity ));
-                    } else {
-                        console.warn( 'changed: entity not found', newItem.entity );
-                    }
-                });
-            }
-        },
-        // remind that records are deleted after entity when deleting a client
-        removed: async function( oldItem ){
-            ClientsEntities.collection.findOneAsync({ _id: oldItem.entity }).then( async ( entity ) => {
-                if( entity ){
-                    self.changed( Meteor.APP.C.pub.clientsAll.collection, oldItem.entity, await f_entityTransform( entity ));
-                }
-            });
-        }
-    });
-
     initializing = false;
-
     self.onStop( function(){
-        entitiesObserver.then(( handle ) => { handle.stop(); });
-        recordsObserver.then(( handle ) => { handle.stop(); });
+        observer.then(( handle ) => { handle.stop(); });
     });
-
     self.ready();
 });
 
 /*
- * This publishes a list of the closest record ids for all entities
- * A tabular requisite n° 1
- * Publishes the list of ids to be displayed as a list of { closest_id } objects
+ * This publishes a list of the closest record ids for the specified entity identifiers, as a list of { closest_id } objects
+ * A tabular requisite n° 2
  */
-Meteor.publish( Meteor.APP.C.pub.closests.publish, async function(){
-    if( !await Permissions.isAllowed( 'feat.clients.pub.closests', this.userId )){
+Meteor.publish( Meteor.APP.C.pub.clientsTabularTwo.publish, async function( organizationId, entityIdArray ){
+    if( !await Permissions.isAllowed( 'feat.clients.pub.tabular', this.userId, organizationId )){
         this.ready();
         return false;
     }
-
+    if( !organizationId ){
+        this.ready();
+        return [];
+    }
     const self = this;
     let initializing = true;
+    // transform the array of objects { _id } to an array of ids
+    const entityIds = [];
+    entityIdArray.map(( it ) => { entityIds.push( it._id )});
+    //console.debug( 'clientsTabularTwo: organization', organizationId, 'entityIdArray', entityIdArray, 'entityIds', entityIds );
 
     // map the entities to their closest record and maintain that
     //  index is entity_id, value is closest_id
     let entities = {};
 
-    // an entity is removed
-    const f_entityRemoved = async function( item ){
-        const closest_id = entities[item._id];
-        if( closest_id ){
-            delete entities[item._id];
-            self.removed( Meteor.APP.C.pub.closests.collection, closest_id );
-        }
-    };
-
     // records are changed, added or removed for a given entity: have to recompute the closest
     const f_closestChanged = async function( entity_id ){
         ClientsRecords.collection.find({ entity: entity_id }).fetchAsync().then(( fetched ) => {
-            const closest = Validity.closestByRecords( fetched ).record;
-            const prev_closest = entities[entity_id];
-            if( prev_closest ){
-                if( closest._id !== prev_closest ){
-                    self.removed( Meteor.APP.C.pub.closests.collection, prev_closest );
-                    entities[entity_id] = closest._id;
-                    self.added( Meteor.APP.C.pub.closests.collection, closest._id );
+            console.debug( 'fetched', fetched );
+            if( fetched && fetched.length ){
+                const closest = Validity.closestByRecords( fetched ).record;
+                if( closest ){
+                    const prev_closest = entities[entity_id];
+                    if( prev_closest ){
+                        if( closest._id !== prev_closest ){
+                            self.removed( Meteor.APP.C.pub.clientsTabularTwo.collection, prev_closest );
+                            entities[entity_id] = closest._id;
+                            self.added( Meteor.APP.C.pub.clientsTabularTwo.collection, closest._id );
+                        }
+                    } else {
+                        entities[entity_id] = closest._id;
+                        self.added( Meteor.APP.C.pub.clientsTabularTwo.collection, closest._id );
+                    }
+                } else {
+                    console.warn( 'unable to compute a closest for', fetched );
                 }
-            } else if( closest ){
-                entities[entity_id] = closest._id;
-                self.added( Meteor.APP.C.pub.closests.collection, closest._id );
+            } else {
+                console.warn( 'unable to find any record for entity', entity_id );
             }
         });
     };
 
-    // observe the entities to maintain a list of existing entities and react to their changes
-    const entitiesObserver = ClientsEntities.collection.find({}).observeAsync({
-        removed: async function( oldItem ){
-            f_entityRemoved( oldItem );
-        }
-    });
-
-    // observe the records to maintain a list of existing records per entity and react to their changes
-    const recordsObserver = ClientsRecords.collection.find({}).observeAsync({
-        added: async function( item ){
+    const observer = ClientsRecords.collection.find({ entity: { $in: entityIds }}).observeAsync({
+        added: function( item ){
             f_closestChanged( item.entity );
         },
-        changed: async function( newItem, oldItem ){
+        changed: function( newItem, oldItem ){
             if( !initializing ){
                 f_closestChanged( newItem.entity );
             }
         },
-        removed: async function( oldItem ){
+        removed: function( oldItem ){
             f_closestChanged( oldItem.entity );
         }
     });
 
     initializing = false;
-
     self.onStop( function(){
-        entitiesObserver.then(( handle ) => { handle.stop(); });
-        recordsObserver.then(( handle ) => { handle.stop(); });
+        observer.then(( handle ) => { handle.stop(); });
     });
-
     self.ready();
 });
 
 /*
  * the publication for the tabular display
- * A tabular requisite n° 2
+ * A tabular requisite n° 3
  * For each id of the previous requisite, publishes the content line
  * @param {String} tableName
  * @param {Array} ids: all id's of the ClientsRecords collection - will be filtered by ClientsList component
@@ -235,12 +148,14 @@ Meteor.publish( Meteor.APP.C.pub.closests.publish, async function(){
  *    }
  *  }
  */
-Meteor.publish( 'clients_tabular', async function( tableName, ids, fields ){
+Meteor.publish( 'clientsTabularLast', async function( tableName, ids, fields ){
+    // because this permission is scoped, cannot be checked here
+    /*
     if( !await Permissions.isAllowed( 'feat.clients.pub.tabular', this.userId )){
         this.ready();
         return false;
     }
-
+        */
     const self = this;
     const collectionName = ClientsRecords.collectionName;
     let initializing = true;

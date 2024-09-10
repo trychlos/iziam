@@ -4,7 +4,7 @@
  * Display the clients.
  *
  * Parms:
- * - item: a ReactiveVar which contains the Organization
+ * - item: a ReactiveVar which contains the Organization as an entity with its DYN.records array
  * - checker: a ReactiveVar which contains the parent Forms.Checker
  * - entityTabs
  * - recordTabs
@@ -12,6 +12,7 @@
 
 import { Permissions } from 'meteor/pwix:permissions';
 import { pwixI18n } from 'meteor/pwix:i18n';
+import { ReactiveVar } from 'meteor/reactive-var';
 import { Tolert } from 'meteor/pwix:tolert';
 
 import '../client_new_button/client_new_button.js';
@@ -23,15 +24,31 @@ Template.organization_clients_pane.onCreated( function(){
     //console.debug( this );
 
     self.APP = {
-        closests: new ReactiveVar( [] ),
-        handle: self.subscribe( Meteor.APP.C.pub.closests.publish )
+        handleOne: self.subscribe( Meteor.APP.C.pub.clientsTabularOne.publish, Template.currentData().item.get()._id || null ),
+        resultOne: new ReactiveVar( [] ),
+        handleTwo: null,
+        closests: new ReactiveVar( [] )
     };
+
+    // get the result of the first one
+    self.autorun(() => {
+        if( self.APP.handleOne.ready()){
+            Meteor.APP.Collections.get( Meteor.APP.C.pub.clientsTabularOne.collection ).find().fetchAsync().then(( fetched ) => {
+                self.APP.resultOne.set( fetched );
+            });
+        }
+    });
+
+    // subscribe to the second publication with this result
+    self.autorun(() => {
+        self.APP.handleTwo = self.subscribe( Meteor.APP.C.pub.clientsTabularTwo.publish, Template.currentData().item.get()._id || null, self.APP.resultOne.get());
+    });
 
     // subscribe to the ad-hoc publication to get the list of closest ids
     self.autorun(() => {
-        if( self.APP.handle.ready()){
+        if( self.APP.handleTwo.ready()){
             let closests = [];
-            Meteor.APP.Collections.get( Meteor.APP.C.pub.closests.collection ).find().fetchAsync().then(( fetched ) => {
+            Meteor.APP.Collections.get( Meteor.APP.C.pub.clientsTabularTwo.collection ).find().fetchAsync().then(( fetched ) => {
                 fetched.forEach(( it ) => {
                     closests.push( it._id );
                 });
@@ -44,7 +61,7 @@ Template.organization_clients_pane.onCreated( function(){
 Template.organization_clients_pane.helpers({
     // whether the current user has the permission to see the list of clients for the current organization
     canList(){
-        const res = Permissions.isAllowed( 'feat.clients.pub.list_all', this.item.get()._id );
+        const res = Permissions.isAllowed( 'feat.clients.pub.tabular', this.item.get()._id );
         //console.debug( 'res', res );
         return res;
     },
