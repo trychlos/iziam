@@ -1,12 +1,14 @@
 /*
  * /imports/client/components/jwk_properties_pane/jwk_properties_pane.js
  *
- * Manage a contact email address, maybe empty but have at least an id.
+ * Manage a JWK, maybe empty but have at least an id.
+ * When editing, doesn't let the main characteristics of the key (use, kty, alg) be modified
  *
  * Parms:
  * - organization: an { entity, record } organization object
  * - checker: a ReactiveVar which holds the parent Checker
  * - item: a ReactiveVar which contains the JWK item to be edited here
+ * - isNew: a ReactiveVar which contains a boolean 'isNew' flag
  */
 
 import _ from 'lodash';
@@ -102,6 +104,8 @@ Template.jwk_properties_pane.onRendered( function(){
     const self = this;
 
     // initialize the Checker for this panel as soon as we get the parent Checker
+    // NB: cannotuse Forms.FormField defaults as the schema name addresses the full Organization record
+    //  while this panel only addresses a single JWK
     self.autorun(() => {
         const parentChecker = Template.currentData().checker.get();
         const checker = self.APP.checker.get();
@@ -111,19 +115,34 @@ Template.jwk_properties_pane.onRendered( function(){
                 parent: parentChecker,
                 panel: new Forms.Panel({
                     'jwks.$.label': {
-                        js: '.js-label'
+                        js: '.js-label',
+                        formTo( $node, item ){
+                            $node.val( item.label );
+                        }
                     },
                     'jwks.$.use': {
-                        js: '.js-use'
+                        js: '.js-use',
+                        formTo( $node, item ){
+                            $node.val( item.use );
+                        }
                     },
                     'jwks.$.kty': {
-                        js: '.js-kty'
+                        js: '.js-kty',
+                        formTo( $node, item ){
+                            $node.val( item.kty );
+                        }
                     },
                     'jwks.$.alg': {
-                        js: '.js-alg'
+                        js: '.js-alg',
+                        formTo( $node, item ){
+                            $node.val( item.alg );
+                        }
                     },
                     'jwks.$.kid': {
-                        js: '.js-kid'
+                        js: '.js-kid',
+                        formTo( $node, item ){
+                            $node.val( item.kid );
+                        }
                     }
                 }, TenantsManager.Records.fieldSet.get()),
                 data: {
@@ -147,6 +166,13 @@ Template.jwk_properties_pane.helpers({
         return this.item.get().alg ? '' : 'disabled';
     },
 
+    // haveGenerate
+    // - do not display the button when editing an existing JWK (nothing to generate)
+    // - on new JWK, the button is disabled until having all required data (i.e. an alg)
+    haveGenerate(){
+        return this.isNew.get();
+    },
+
     // string translation
     i18n( arg ){
         return pwixI18n.label( I18N, arg.hash.key );
@@ -161,7 +187,7 @@ Template.jwk_properties_pane.helpers({
             ...this,
             list: ktyDef && useId ? JwaAlg.byIds( JwkKty.availableAlgorithms( ktyDef, useId )) : null,
             selected: this.item.get().alg || null,
-            disabled: !( ktyId && useId )
+            disabled: !( ktyId && useId && this.isNew.get())
         };
     },
 
@@ -169,7 +195,8 @@ Template.jwk_properties_pane.helpers({
     parmsJwkKtySelect(){
         return {
             ...this,
-            selected: this.item.get().kty || null
+            selected: this.item.get().kty || null,
+            disabled: !this.isNew.get()
         };
     },
 
@@ -177,7 +204,8 @@ Template.jwk_properties_pane.helpers({
     parmsJwkUseSelect(){
         return {
             ...this,
-            selected: this.item.get().use || null
+            selected: this.item.get().use || null,
+            disabled: !this.isNew.get()
         };
     }
 });

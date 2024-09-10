@@ -7,7 +7,6 @@ import strftime from 'strftime';
 import { Field } from 'meteor/pwix:field';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { Tabular } from 'meteor/pwix:tabular';
-import { Tracker } from 'meteor/tracker';
 
 import { JwaAlg } from '/imports/common/definitions/jwa-alg.def.js';
 import { JwkUse } from '/imports/common/definitions/jwk-use.def.js';
@@ -27,7 +26,7 @@ Jwks.dataSet = function( dc ){
         let o = it;
         dataset.push( o );
     });
-    console.debug( 'dataset', dataset.length, dataset );
+    //console.debug( 'dataset', dataset.length, dataset );
     return dataset;
 };
 
@@ -124,6 +123,7 @@ Jwks.tabular = function( dc ){
             async editButtonTitle( it ){
                 return pwixI18n.label( I18N, 'jwks.list.edit_title', it.label || it.id );
             },
+            dataContext: dc
         },
         destroy: true,
         order: {

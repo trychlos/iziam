@@ -4,7 +4,8 @@
  * Select a JSON Web Key key type, which identifies the cryptographic algorith family to be used with this key.
  * 
  * Parms:
- * - selected: the currently selected algorithm
+ * - selected: the currently selected key type (aka crypto family)
+ * - disabled: whether this component should be disabled, defaulting to false
  * 
  * Events:
  * - jwk-kty-selected: the new selected algorithm
@@ -27,6 +28,11 @@ Template.jwk_kty_select.helpers({
     // string translation
     i18n( arg ){
         return pwixI18n.label( I18N, arg.hash.key );
+    },
+
+    // whether the component should be disabled
+    isDisabled(){
+        return this.disabled === true ? 'disabled' : '';
     },
 
     // return the item identifier

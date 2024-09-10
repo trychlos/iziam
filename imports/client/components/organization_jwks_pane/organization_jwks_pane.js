@@ -38,7 +38,7 @@ Template.organization_jwks_pane.onCreated( function(){
 
     // track the entity/record content
     self.autorun(() => {
-        //console.debug( Template.currentData().entity.get().DYN.records[Template.currentData().index].get());
+        console.debug( Template.currentData().entity.get().DYN.records[Template.currentData().index].get());
     });
 });
 
@@ -52,12 +52,13 @@ Template.organization_jwks_pane.helpers({
     // see the jwks_list component for a description of the expected data context
     parmsJwksList(){
         let parms = {
+            ...this,
             listGetFn: Jwks.fn.get,
             listAddFn: Jwks.fn.add,
             listRemoveFn: Jwks.fn.remove,
             args: {
                 caller: Template.instance().APP.organization.get(),
-                parent: null,
+                parent: null
             }
         };
         return parms;

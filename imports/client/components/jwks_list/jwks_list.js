@@ -17,6 +17,8 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 
 import { Jwks } from '/imports/common/tables/jwks/index.js';
 
+import '/imports/client/components/jwk_edit_dialog/jwk_edit_dialog.js';
+import '/imports/client/components/jwk_view_button/jwk_view_button.js';
 import '/imports/client/components/user_preferred_async/user_preferred_async.js';
 
 import './jwks_list.html';
@@ -38,8 +40,7 @@ Template.jwks_list.onRendered( function(){
 
     // reactively redraw the table
     self.autorun(() => {
-        self.$( '.TabularExt table.dataTable' ).DataTable().clear();
-        self.$( '.TabularExt table.dataTable' ).DataTable().rows.add( Jwks.dataSet( Template.currentData())).draw();
+        self.$( '.TabularExt table.dataTable' ).DataTable().clear().rows.add( Jwks.dataSet( Template.currentData())).draw();
     });
 });
 
@@ -53,30 +54,20 @@ Template.jwks_list.helpers({
 Template.jwks_list.events({
     // delete a key
     'tabular-delete-event .c-jwks-list'( event, instance, data ){
-        //instance.$( '.TabularExt table.dataTable' ).DataTable().clear();
         this.listRemoveFn( this.args, data.item.id );
-        //instance.$( '.TabularExt table.dataTable' ).DataTable().rows.add( Jwks.dataSet( this )).draw();
         return false; // doesn't propagate
     },
 
     // edit a key
     'tabular-edit-event .c-jwks-list'( event, instance, data ){
-        /*
-        let label = null;
-        const self = this;
-        AccountsTools.preferredLabel( data.item )
-            .then(( res ) => {
-                Modal.run({
-                    ...self,
-                    mdBody: 'AccountEditPanel',
-                    mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
-                    mdClasses: 'modal-lg',
-                    mdClassesContent: AccountsManager.configure().classes + ' ' + instance.AM.amInstance.get().classes(),
-                    mdTitle: pwixI18n.label( I18N, 'edit.modal_title', res.label ),
-                    item: instance.AM.amInstance.get().byId( data.item._id )
-                });
-            });
-            */
-        return false;
+        Modal.run({
+            ...data.table.arg( 'dataContext'),
+            mdBody: 'jwk_edit_dialog',
+            mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
+            mdClasses: 'modal-lg',
+            mdClassesContent: Meteor.APP.runContext.pageUIClasses().join( ' ' ),
+            mdTitle: pwixI18n.label( I18N, 'jwks.edit.edit_dialog_title', data.item.label || data.item.id ),
+            item: data.item
+        });
     }
 });

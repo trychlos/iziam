@@ -248,7 +248,7 @@ Organizations.checks = {
     async jwk_alg( value, data, opts ){
         _assert_data_itemrv( 'Organizations.checks.jwk_alg()', data );
         let item = data.item.get();
-        console.debug( 'jwk_alg value', value, 'item', item );
+        //console.debug( 'jwk_alg value', value, 'item', item );
         if( opts.update !== false ){
             item.alg = value;
             data.item.set( item );

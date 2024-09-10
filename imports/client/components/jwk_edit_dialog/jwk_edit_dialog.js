@@ -2,6 +2,8 @@
  * /imports/client/components/jwk_edit_dialog/jwk_edit_dialog.js
  *
  * Manage a JSON Web Key, maybe empty but have at least an id.
+ * A JWK cannot be edited: once created (an published), it can only be deleted (or revoked).
+ * The item edition only displays the JWK, cannot edit it.
  *
  * Parms:
  * - entity: a ReactiveVar which contains the Organization, with its DYN.records array of ReactiveVar's
@@ -34,7 +36,9 @@ Template.jwk_edit_dialog.onCreated( function(){
         // the edited item as a copy of the provided, or a new one
         item: new ReactiveVar( null ),
         // whether we are running inside of a Modal
-        isModal: new ReactiveVar( false )
+        isModal: new ReactiveVar( false ),
+        // whether we are creating a new JWK
+        isNew: new ReactiveVar( false )
     };
 
     // get the edited item
@@ -43,6 +47,7 @@ Template.jwk_edit_dialog.onCreated( function(){
         const dcItem = Template.currentData().item;
         let item = dcItem ? _.cloneDeep( dcItem ) : { id: Random.id() };
         self.APP.item.set( item );
+        self.APP.isNew.set( dcItem === null );
     });
 
     // track the item content
@@ -113,7 +118,8 @@ Template.jwk_edit_dialog.helpers({
         const paneData = {
             organization: { entity: this.entity.get(), record: this.entity.get().DYN.records[this.index].get() },
             item: APP.item,
-            checker: APP.checker
+            checker: APP.checker,
+            isNew: APP.isNew
         };
         let tabs = [
             {
@@ -131,7 +137,6 @@ Template.jwk_edit_dialog.helpers({
                 paneTemplate: 'jwk_secret_pane',
                 paneData: paneData
             },
-            /*
             {
                 tabid: 'jwk_private_tab',
                 paneid: 'jwk_private_pane',
@@ -146,7 +151,6 @@ Template.jwk_edit_dialog.helpers({
                 paneTemplate: 'jwk_public_pane',
                 paneData: paneData
             }
-                */
         ];
         return {
             name: 'jwk_edit_dialog',
@@ -171,7 +175,19 @@ Template.jwk_edit_dialog.events({
         const recordRv = this.entity.get().DYN.records[this.index];
         let record = recordRv.get();
         record.jwks = record.jwks || [];
-        record.jwks.push( instance.APP.item.get());
+        let found = false;
+        const jwk = instance.APP.item.get();
+        //console.debug( 'jwk', jwk );
+        for( let i=0 ; i<record.jwks.length ; ++i ){
+            if( record.jwks[i].id === jwk.id ){
+                record.jwks[i] = jwk;
+                found = true;
+                break;
+            }
+        }
+        if( !found ){
+            record.jwks.push( jwk );
+        }
         recordRv.set( record );
         Modal.close();
     }

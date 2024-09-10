@@ -1,7 +1,7 @@
 <template name="jwk_kty_select">
     <div class="c-jwk-kty-select">
 
-        <select class="form-select js-jwk-kty">
+        <select class="form-select js-jwk-kty" {{ isDisabled }}>
             {{#unless hasCurrent }}
                 <option value="" selected disabled>{{ i18n key="definitions.jwk_kty.select_text" }}</option>
             {{/unless}}

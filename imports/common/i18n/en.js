@@ -435,6 +435,7 @@ Meteor.APP.i18n = {
                 edit: {
                     alg_label: 'Algorithm :',
                     alg_title: 'The algorithm to be chosen to sign or encrypt the key',
+                    edit_dialog_title: 'Edit the "%s" JSON Web Key',
                     generate_text: 'Generate',
                     generate_title: 'Generate the private/public keys pair  ',
                     kid_label: 'Key Identifier :',
@@ -454,7 +455,9 @@ Meteor.APP.i18n = {
                     public_tab_title: 'Asymmetric public key',
                     secret_tab_title: 'Symmetric secret',
                     use_label: 'Usage :',
-                    use_title: 'The usage of this JSON Web Key'
+                    use_title: 'The usage of this JSON Web Key',
+                    view_button_title: 'View the "%s" JSON Web Key',
+                    view_dialog_title: 'View the "%s" JSON Web Key'
                 },
                 list: {
                     add_title: 'Add a new JSON Web Key to your set',
@@ -464,7 +467,7 @@ Meteor.APP.i18n = {
                     delete_confirm_text: 'Your are about to delete the "%s" key.<br />Are you sure ?',
                     delete_confirm_title: 'Delete the "%s" key',
                     delete_title: 'Delete the "%s" key',
-                    edit_title: 'Edit the "%s" key',
+                    edit_title: 'Edit the "%s" key content',
                     kid_th: 'Key Id',
                     label_th: 'Label',
                     preamble: '',

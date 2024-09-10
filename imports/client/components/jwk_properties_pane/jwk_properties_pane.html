@@ -42,9 +42,11 @@
             </tr>
             <tr>
                 <td colspan="2" class="ui-center">
-                    <button class="btn {{ btnClass }} ui-mt1 js-generate" type="button" title="{{ i18n key="jwks.edit.generate_title" }}" {{ btnDisabled }}>
-                        {{ i18n key="jwks.edit.generate_text" }}
-                    </button>
+                    {{#if haveGenerate }}
+                        <button class="btn {{ btnClass }} ui-mt1 js-generate" type="button" title="{{ i18n key="jwks.edit.generate_title" }}" {{ btnDisabled }}>
+                            {{ i18n key="jwks.edit.generate_text" }}
+                        </button>
+                    {{/if}}
                 </td>
             </tr>
         </table>
