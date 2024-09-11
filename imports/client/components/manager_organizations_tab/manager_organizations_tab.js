@@ -22,40 +22,34 @@ Template.manager_organizations_tab.onCreated( function(){
     self.APP = {
         entityTabs: [
             {
-                tabid: 'app_organization_clients_tab',
-                paneid: 'app_organization_clients_pane',
+                name: 'organization_clients_tab',
                 navLabel: pwixI18n.label( I18N, 'organizations.edit.clients_tab_title' ),
                 paneTemplate: 'organization_clients_pane'
             },
         ],
         recordTabs: [
             {
-                tabid: 'app_organization_urls_tab',
-                paneid: 'app_organization_urls_pane',
+                name: 'organization_urls_tab',
                 navLabel: pwixI18n.label( I18N, 'organizations.edit.urls_tab_title' ),
                 paneTemplate: 'organization_urls_pane'
             },
             {
-                tabid: 'app_organization_providers_tab',
-                paneid: 'app_organization_providers_pane',
+                name: 'organization_providers_tab',
                 navLabel: pwixI18n.label( I18N, 'organizations.edit.providers_tab_title' ),
                 paneTemplate: 'organization_providers_pane'
             },
             {
-                tabid: 'app_organization_config_tab',
-                paneid: 'app_organization_config_pane',
+                name: 'organization_config_tab',
                 navLabel: pwixI18n.label( I18N, 'organizations.edit.config_tab_title' ),
                 paneTemplate: 'organization_config_pane'
             },
             {
-                tabid: 'app_organization_dynregistration_tab',
-                paneid: 'app_organization_dynregistrations_pane',
+                name: 'organization_dynregistration_tab',
                 navLabel: pwixI18n.label( I18N, 'organizations.edit.dynregistration_tab_title' ),
                 paneTemplate: 'organization_dynregistration_pane'
             },
             {
-                tabid: 'app_organization_jwks_tab',
-                paneid: 'app_organization_jwks_pane',
+                name: 'organization_jwks_tab',
                 navLabel: pwixI18n.label( I18N, 'organizations.jwks.tab_title' ),
                 paneTemplate: 'organization_jwks_pane'
             }

@@ -68,7 +68,6 @@ Meteor.publish( Meteor.APP.C.pub.clientsTabularTwo.publish, async function( orga
     // records are changed, added or removed for a given entity: have to recompute the closest
     const f_closestChanged = async function( entity_id ){
         ClientsRecords.collection.find({ entity: entity_id }).fetchAsync().then(( fetched ) => {
-            console.debug( 'fetched', fetched );
             if( fetched && fetched.length ){
                 const closest = Validity.closestByRecords( fetched ).record;
                 if( closest ){

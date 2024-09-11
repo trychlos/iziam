@@ -255,6 +255,7 @@ Template.client_new_assistant.events({
     // get informed of the assistant checker instanciation
     //  this is a child of this checker, and will be the parent of panes checkers
     'assistant-checker .c-client-new-assistant'( event, instance, data ){
+        //console.debug( event.type, data );
         instance.APP.assistantCheckerRv = data.checker;
     },
     // track the currently shown pane
