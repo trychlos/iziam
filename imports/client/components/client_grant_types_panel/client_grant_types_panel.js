@@ -22,7 +22,7 @@ import _ from 'lodash';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 
-import { Providers } from '/imports/common/collections/providers/index.js';
+import { Providers } from '/imports/common/tables/providers/index.js';
 
 import { GrantNature } from '/imports/common/definitions/grant-nature.def.js';
 import { GrantType } from '/imports/common/definitions/grant-type.def.js';

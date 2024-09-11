@@ -12,7 +12,7 @@ import _ from 'lodash';
 
 import { pwixI18n } from 'meteor/pwix:i18n';
 
-import { Providers } from '/imports/common/collections/providers/index.js';
+import { Providers } from '/imports/common/tables/providers/index.js';
 
 import { ClientProfile } from '/imports/common/definitions/client-profile.def.js';
 import { ClientType } from '/imports/common/definitions/client-type.def.js';

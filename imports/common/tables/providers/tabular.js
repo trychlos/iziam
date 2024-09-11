@@ -1,10 +1,10 @@
 /*
- * /import/common/collections/providers/fieldset.js
+ * /import/common/tables/providers/collection.js
  */
 
 import { Field } from 'meteor/pwix:field';
 import { pwixI18n } from 'meteor/pwix:i18n';
-import { ReactiveVar } from 'meteor/reactive-var';
+import { Tabular } from 'meteor/pwix:tabular';
 
 import { IIdent } from '/imports/common/interfaces/iident.iface.js';
 import { IFeatured } from '/imports/common/interfaces/ifeatured.iface.js';
@@ -91,4 +91,32 @@ Providers.fieldSet = function( dc ){
     ];
     const fieldset = new Field.Set( columns );
     return fieldset;
+};
+
+/**
+ * @locus Anywhere
+ * @summary Instanciates the Tabular.Table display to let an organization see and select the available providers
+ *  This must be run in common code
+ * @param {Object} dc the data context of the providers_list component
+ * @returns {Tabular.Table} the list of providers which implement this type, which may be empty
+ */
+Providers.tabular = function( dc ){
+    return new Tabular.Table({
+        name: 'Providers',
+        collection: null,
+        data: Providers.dataSet( dc ),
+        columns: Providers.fieldSet( dc ).toTabular(),
+        serverSide: false,
+        ajax: null,
+        tabular: {
+            withEditButton: false,
+            withDeleteButton: false,
+            withInfoButton: false
+        },
+        destroy: true,
+        order: {
+            name: 'id',
+            dir: 'asc'
+        },
+    });
 };

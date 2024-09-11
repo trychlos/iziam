@@ -13,7 +13,7 @@ import { IFeatured } from '/imports/common/interfaces/ifeatured.iface.js';
 import { IIdent } from '/imports/common/interfaces/iident.iface.js';
 import { IRequires } from '/imports/common/interfaces/irequires.iface.js';
 
-import { Providers } from '/imports/common/collections/providers/index.js';
+import { Providers } from '/imports/common/tables/providers/index.js';
 
 import { Organizations } from './index.js';
 

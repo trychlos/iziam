@@ -33,7 +33,7 @@ const assert = require( 'assert' ).strict;
 
 import { pwixI18n } from 'meteor/pwix:i18n';
 
-import { Providers } from '/imports/common/collections/providers/index.js';
+import { Providers } from '/imports/common/tables/providers/index.js';
 
 import { GrantNature } from '/imports/common/definitions/grant-nature.def.js';
 

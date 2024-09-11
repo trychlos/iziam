@@ -15,7 +15,7 @@ import { IIdent } from '/imports/common/interfaces/iident.iface.js';
 import { IRequires } from '/imports/common/interfaces/irequires.iface.js';
 
 import { Organizations } from '/imports/common/collections/organizations/index.js';
-import { Providers } from '/imports/common/collections/providers/index.js';
+import { Providers } from '/imports/common/tables/providers/index.js';
 
 import { Clients } from './index.js';
 

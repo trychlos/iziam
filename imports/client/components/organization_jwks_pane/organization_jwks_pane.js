@@ -38,7 +38,7 @@ Template.organization_jwks_pane.onCreated( function(){
 
     // track the entity/record content
     self.autorun(() => {
-        console.debug( Template.currentData().entity.get().DYN.records[Template.currentData().index].get());
+        //console.debug( Template.currentData().entity.get().DYN.records[Template.currentData().index].get());
     });
 });
 

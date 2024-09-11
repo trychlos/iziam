@@ -14,7 +14,7 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 
 import { Clients } from '/imports/common/collections/clients/index.js';
 import { Organizations } from '/imports/common/collections/organizations/index.js';
-import { Providers } from '/imports/common/collections/providers/index.js';
+import { Providers } from '/imports/common/tables/providers/index.js';
 
 import { ClientProfile } from '/imports/common/definitions/client-profile.def.js';
 

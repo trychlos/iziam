@@ -14,7 +14,7 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 
 import { Organizations } from '/imports/common/collections/organizations/index.js';
-import { Providers } from '/imports/common/collections/providers/index.js';
+import { Providers } from '/imports/common/tables/providers/index.js';
 
 import '/imports/client/components/providers_list/providers_list.js';
 

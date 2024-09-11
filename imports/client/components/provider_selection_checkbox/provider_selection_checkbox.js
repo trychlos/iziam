@@ -8,7 +8,7 @@
  * - the providers_list data context (including 'withConstraints' set in providers_list)
  */
 
-import { Providers } from '/imports/common/collections/providers/index.js';
+import { Providers } from '/imports/common/tables/providers/index.js';
 
 import './provider_selection_checkbox.html';
 

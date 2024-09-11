@@ -2,7 +2,7 @@
  * /imports/common/init/providers.js
  */
 
-import { Providers } from '/imports/common/collections/providers/index.js';
+import { Providers } from '/imports/common/tables/providers/index.js';
 
 import { DeviceProvider } from '/imports/common/providers/device-provider.class.js';
 import { JwtBearerProvider } from '/imports/common/providers/jwt-bearer-provider.class.js';
