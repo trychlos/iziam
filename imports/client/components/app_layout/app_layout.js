@@ -35,12 +35,12 @@ import './app_layout.html';
 Template.app_layout.helpers({
     // write the name of the theme of the page as a class name
     colorTheme(){
-        return Meteor.APP.runContext.ipageablePage()?.get( 'colorTheme' ) || Meteor.APP.defaults.colorTheme;
+        return Meteor.APP.runContext.ipageablePage()?.get( 'colorTheme' ) || Meteor.APP.C.colorTheme;
     },
 
     // write the name of the theme of the page as a class name
     layoutTheme(){
-        return Meteor.APP.runContext.ipageablePage()?.get( 'layoutTheme' ) || Meteor.APP.defaults.layoutTheme;
+        return Meteor.APP.runContext.ipageablePage()?.get( 'layoutTheme' ) || Meteor.APP.C.layoutTheme;
     }
 });
 

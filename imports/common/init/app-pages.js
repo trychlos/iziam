@@ -9,7 +9,7 @@ import { Roles } from 'meteor/pwix:roles';
 AppPages.configure({
     allowFn: Permissions.isAllowed,
     //allowFn: null,
-    classes: [ Meteor.APP.defaults.layoutTheme, Meteor.APP.defaults.colorTheme ],
+    classes: [ Meteor.APP.C.layoutTheme, Meteor.APP.C.colorTheme ],
     //classes: [ 't-page' ],
     //menuIcon: 'fa-chevron-right',
     //verbosity: 65535

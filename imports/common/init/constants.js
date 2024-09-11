@@ -19,6 +19,11 @@ Meteor.APP.C = {
         'fr'
     ],
 
+    // display
+    colorTheme: 't-default-color',
+    layoutTheme: 't-default-layout',
+    useBootstrapValidationClasses: true,
+
     // some publication which have a special target collection
     pub: {
         clientsTabularOne: {
@@ -32,7 +37,14 @@ Meteor.APP.C = {
     },
 
     // the server metadata discovery OAuth URL path
-    oauthMetadataPath: '/.well-known/oauth-authorization-server'
+    oauthMetadataPath: '/.well-known/oauth-authorization-server',
+
+    // when generating a client secret, the size of this secret
+    //clientSecretDefSize: 64,
+
+    // OpenID
+    // the minimal length of tokens (when the spec allows to choose it)
+    //tokenMinLength: 32,
 }
 
 I18N = 'izIAM.Internationalization';

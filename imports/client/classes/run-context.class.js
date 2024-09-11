@@ -48,8 +48,8 @@ export class RunContext extends CoreApp.RunContext {
      */
     pageUIClasses(){
         const page = this.ipageablePage();
-        const colorTheme = page ? page.get( 'colorTheme' ) || Meteor.APP.defaults.colorTheme : Meteor.APP.defaults.colorTheme;
-        const layoutTheme = page ? page.get( 'layoutTheme' ) || Meteor.APP.defaults.layoutTheme : Meteor.APP.defaults.layoutTheme;
+        const colorTheme = page ? page.get( 'colorTheme' ) || Meteor.APP.C.colorTheme : Meteor.APP.C.colorTheme;
+        const layoutTheme = page ? page.get( 'layoutTheme' ) || Meteor.APP.C.layoutTheme : Meteor.APP.C.layoutTheme;
         let classesArray = [];
         classesArray.push( colorTheme );
         classesArray.push( layoutTheme );

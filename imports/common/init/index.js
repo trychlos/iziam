@@ -12,7 +12,6 @@ if( false ){
 
 import './app.js';
 import './constants.js';
-import './defaults.js';
 import './i18n.js';
 import './permissions.js';
 //
