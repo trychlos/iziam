@@ -120,7 +120,6 @@ Template.jwk_properties_pane.onRendered( function(){
                             $node.val( item.label );
                         }
                     },
-                    /*
                     'jwks.$.use': {
                         js: '.js-use',
                         formTo( $node, item ){
@@ -139,7 +138,6 @@ Template.jwk_properties_pane.onRendered( function(){
                             $node.val( item.alg );
                         }
                     },
-                    */
                     'jwks.$.kid': {
                         js: '.js-kid',
                         formTo( $node, item ){

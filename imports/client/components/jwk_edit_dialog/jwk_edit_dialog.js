@@ -16,7 +16,9 @@ import _ from 'lodash';
 import { Forms } from 'meteor/pwix:forms';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { Random } from 'meteor/random';
+import { Tabbed } from 'meteor/pwix:tabbed';
 
+import '/imports/client/components/jwk_keyspair_pane/jwk_keyspair_pane.js';
 import '/imports/client/components/jwk_private_pane/jwk_private_pane.js';
 import '/imports/client/components/jwk_properties_pane/jwk_properties_pane.js';
 import '/imports/client/components/jwk_public_pane/jwk_public_pane.js';
@@ -38,7 +40,9 @@ Template.jwk_edit_dialog.onCreated( function(){
         // whether we are running inside of a Modal
         isModal: new ReactiveVar( false ),
         // whether we are creating a new JWK
-        isNew: new ReactiveVar( false )
+        isNew: new ReactiveVar( false ),
+        // the Tabbed instance
+        tabbed: new ReactiveVar( null )
     };
 
     // get the edited item
@@ -53,6 +57,38 @@ Template.jwk_edit_dialog.onCreated( function(){
     // track the item content
     self.autorun(() => {
         //console.debug( 'item', self.APP.item.get());
+    });
+
+    // instanciates a named Tabbed
+    self.autorun(() => {
+        self.APP.tabbed.set( new Tabbed.Instance( self, new ReactiveVar({
+            name: 'jwk_edit_dialog',
+            dataContext: {
+                organization: { entity: Template.currentData().entity.get(), record: Template.currentData().entity.get().DYN.records[Template.currentData().index].get() },
+                item: self.APP.item,
+                checker: self.APP.checker,
+                isNew: self.APP.isNew
+            },
+            tabs: [
+                {
+                    name: 'jwk_properties_tab',
+                    navLabel: pwixI18n.label( I18N, 'jwks.edit.properties_tab_title' ),
+                    paneTemplate: 'jwk_properties_pane'
+                },
+                {
+                    name: 'jwk_secret_tab',
+                    navLabel: pwixI18n.label( I18N, 'jwks.edit.secret_tab_title' ),
+                    paneTemplate: 'jwk_secret_pane',
+                    enabled: false
+                },
+                {
+                    name: 'jwk_keyspair_tab',
+                    navLabel: pwixI18n.label( I18N, 'jwks.edit.keyspair_tab_title' ),
+                    paneTemplate: 'jwk_keyspair_pane',
+                    enabled: false
+                }
+            ]
+        })));
     });
 });
 
@@ -73,30 +109,16 @@ Template.jwk_edit_dialog.onRendered( function(){
         }
     });
 
-    // initialize the Checker for this panel as soon as we get the parent Checker
-    self.autorun(() => {
-        const checker = self.APP.checker.get();
-        if( !checker ){
-            self.APP.checker.set( new Forms.Checker( self, {
-                messager: self.APP.messager,
-                okFn( valid ){
-                    console.debug( 'okFn', valid );
-                    if( self.APP.isModal ){
-                        Modal.set({ buttons: { id: Modal.C.Button.OK, enabled: valid }});
-                    }
-                }
-            }));
+    // initialize the Checker for this panel as soon as possible
+    // doesn't need any autorun here
+    self.APP.checker.set( new Forms.Checker( self, {
+        messager: self.APP.messager,
+        okFn( valid ){
+            if( self.APP.isModal ){
+                Modal.set({ buttons: { id: Modal.C.Button.OK, enabled: valid }});
+            }
         }
-    });
-
-    // track this checker status and validity
-    self.autorun(() => {
-        const checker = self.APP.checker.get();
-        if( checker ){
-            //checker.explain();
-            //console.debug( 'parentChecker', checker.iCheckableId(), checker.iStatusableStatus(), checker.iStatusableValidity());
-        }
-    });
+    }));
 });
 
 Template.jwk_edit_dialog.helpers({
@@ -109,52 +131,6 @@ Template.jwk_edit_dialog.helpers({
     parmsMessager(){
         return {
             messager: Template.instance().APP.messager
-        };
-    },
-
-    // parms for the the Tabbed dialog
-    parmsTabbed(){
-        APP = Template.instance().APP;
-        const paneData = {
-            organization: { entity: this.entity.get(), record: this.entity.get().DYN.records[this.index].get() },
-            item: APP.item,
-            checker: APP.checker,
-            isNew: APP.isNew
-        };
-        let tabs = [
-            {
-                tabid: 'jwk_properties_tab',
-                paneid: 'jwk_properties_pane',
-                navLabel: pwixI18n.label( I18N, 'jwks.edit.properties_tab_title' ),
-                paneTemplate: 'jwk_properties_pane',
-                paneData: paneData
-            },
-            {
-                tabName: 'secret',
-                tabid: 'jwk_secret_tab',
-                paneid: 'jwk_secret_pane',
-                navLabel: pwixI18n.label( I18N, 'jwks.edit.secret_tab_title' ),
-                paneTemplate: 'jwk_secret_pane',
-                paneData: paneData
-            },
-            {
-                tabid: 'jwk_private_tab',
-                paneid: 'jwk_private_pane',
-                navLabel: pwixI18n.label( I18N, 'jwks.edit.private_tab_title' ),
-                paneTemplate: 'jwk_private_pane',
-                paneData: paneData
-            },
-            {
-                tabid: 'jwk_public_tab',
-                paneid: 'jwk_public_pane',
-                navLabel: pwixI18n.label( I18N, 'jwks.edit.public_tab_title' ),
-                paneTemplate: 'jwk_public_pane',
-                paneData: paneData
-            }
-        ];
-        return {
-            name: 'jwk_edit_dialog',
-            tabs: tabs
         };
     }
 });

@@ -275,10 +275,13 @@ Organizations.checks = {
             item.kid = value;
             data.item.set( item );
         }
+        return null;
+        /*
         return value ? null : new TM.TypedMessage({
             level: TM.MessageLevel.C.ERROR,
             message: 'Label error'
         });
+        */
     },
 
     // JWK key type (crypto alg family)
@@ -311,10 +314,13 @@ Organizations.checks = {
             item.label = value;
             data.item.set( item );
         }
+        return null;
+        /*
         return value ? null : new TM.TypedMessage({
             level: TM.MessageLevel.C.ERROR,
             message: 'Label error'
         });
+        */
     },
 
     // JWK usage

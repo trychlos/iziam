@@ -303,7 +303,7 @@ Organizations.recordFieldset = function(){
                     type: String,
                     optional: true,
                     form_check: Organizations.checks.jwk_label,
-                    form_type: Forms.FieldType.C.MANDATORY
+                    form_type: Forms.FieldType.C.OPTIONAL
                 },
                 // the usage chosen at creation
                 {
@@ -338,7 +338,7 @@ Organizations.recordFieldset = function(){
                     type: String,
                     optional: true,
                     form_check: Organizations.checks.jwk_kid,
-                    form_type: Forms.FieldType.C.MANDATORY
+                    form_type: Forms.FieldType.C.OPTIONAL
                 },
                 // the symmetric secret
                 {
