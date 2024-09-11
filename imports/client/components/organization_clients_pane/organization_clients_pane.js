@@ -15,6 +15,7 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { Tolert } from 'meteor/pwix:tolert';
 
+import '../client_edit_dialog/client_edit_dialog.js';
 import '../client_new_button/client_new_button.js';
 
 import './organization_clients_pane.html';
@@ -27,7 +28,21 @@ Template.organization_clients_pane.onCreated( function(){
         handleOne: self.subscribe( Meteor.APP.C.pub.clientsTabularOne.publish, Template.currentData().item.get()._id || null ),
         resultOne: new ReactiveVar( [] ),
         handleTwo: null,
-        closests: new ReactiveVar( [] )
+        closests: new ReactiveVar( [] ),
+        handleAll: null,
+        clientsAll: new ReactiveVar( [] ),
+
+        // returns the asked entity
+        byEntity( entity ){
+            let found = null;
+            self.APP.clientsAll.get().every(( it ) => {
+                if( it.get()._id === entity ){
+                    found = it;
+                }
+                return !found;
+            });
+            return found;
+        }
     };
 
     // get the result of the first one
@@ -39,12 +54,13 @@ Template.organization_clients_pane.onCreated( function(){
         }
     });
 
-    // subscribe to the second publication with this result
+    // subscribe to the two other publications with this result
     self.autorun(() => {
         self.APP.handleTwo = self.subscribe( Meteor.APP.C.pub.clientsTabularTwo.publish, Template.currentData().item.get()._id || null, self.APP.resultOne.get());
+        self.APP.handleAll = self.subscribe( Meteor.APP.C.pub.clientsAll.publish, Template.currentData().item.get()._id || null, self.APP.resultOne.get());
     });
 
-    // subscribe to the ad-hoc publication to get the list of closest ids
+    // subscribe to the tabular publication to get the list of closest ids
     self.autorun(() => {
         if( self.APP.handleTwo.ready()){
             let closests = [];
@@ -53,6 +69,25 @@ Template.organization_clients_pane.onCreated( function(){
                     closests.push( it._id );
                 });
                 self.APP.closests.set( closests );
+            });
+        }
+    });
+
+    // subscribe to the clientsAll publication to get the full list of clients
+    self.autorun(() => {
+        if( self.APP.handleAll.ready()){
+            let items = [];
+            Meteor.APP.Collections.get( Meteor.APP.C.pub.clientsAll.collection ).find().fetchAsync().then(( fetched ) => {
+                fetched.forEach(( it ) => {
+                    // it is a entity with DYN managers, records and closest
+                    let records = [];
+                    it.DYN.records.forEach(( rec ) => {
+                        records.push( new ReactiveVar( rec ));
+                    });
+                    it.DYN.records = records;
+                    items.push( new ReactiveVar( it ));
+                });
+                self.APP.clientsAll.set( items );
             });
         }
     });
@@ -107,17 +142,16 @@ Template.organization_clients_pane.events({
     // edit a client
     //  the buttons from tabular provide the entity document
     'tabular-edit-event .c-organization-clients-pane'( event, instance, data ){
-        /*
+        const item = instance.APP.byEntity( data.item._id ).get();
         Modal.run({
             ...this,
-            mdBody: 'client_edit',
+            mdBody: 'client_edit_dialog',
             mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
             mdClasses: 'modal-xxl',
-            mdClassesContent: Meteor.APP.configure().classes,
-            mdTitle: pwixI18n.label( I18N, 'edit.modal_title' ),
-            item: Meteor.APP.list.byEntity( data.item._id )
+            mdClassesContent: Meteor.APP.runContext.pageUIClasses().join( ' ' ),
+            mdTitle: pwixI18n.label( I18N, 'clients.edit.modal_title', item.DYN.closest.label ),
+            item: item
         });
-        */
         return false;
     }
 });

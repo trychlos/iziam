@@ -10,7 +10,7 @@
  * - index: the index of the edited record
  * - checker: the Forms.Checker which manages the parent component
  *
- * Because client_record_tabbed, which hosts tenants properties as tabs, is itself hosted inside of ValidityTabbed component with one tab per validity period,
+ * Because client_record_tabbed, which hosts client properties as tabs, is itself hosted inside of ValidityTabbed component with one tab per validity period,
  *  we identify each validity period through the tab identifier allocated by the ValidityTabbed (which happens to be the Tabbed parent of this client_record_tabbed).
  * Note too that Validity is able to (is actually built to do that) modify the validity periods. This implies that this client_record_tabbed may be changed,
  * or even dynamically removed. But due to Blaze latencies and asynchronicities, we may receive here updates for a to-be-destroyed view. So care of that.
@@ -28,9 +28,9 @@ import './client_record_tabbed.html';
 
 Template.client_record_tabbed.onCreated( function(){
     const self = this;
-    //console.debug( this, Template.currentData());
+    //console.debug( this );
 
-    self.TM = {
+    self.APP = {
         fields: {
             effectStart: {
                 js: '.js-start input',
@@ -51,7 +51,7 @@ Template.client_record_tabbed.onCreated( function(){
     self.autorun(() => {
         const dataContext = Template.currentData();
         if( dataContext.index < dataContext.entity.get().DYN.records.length ){
-            const notes = Records.fieldSet.get().byName( 'notes' );
+            const notes = ClientsRecords.fieldSet.get().byName( 'notes' );
             const paneData = {
                 entity: dataContext.entity,
                 index: dataContext.index,
@@ -59,37 +59,26 @@ Template.client_record_tabbed.onCreated( function(){
             };
             let tabs = [
                 {
-                    navLabel: pwixI18n.label( I18N, 'records.panel.properties_tab' ),
-                    paneTemplate: 'record_properties_pane',
+                    navLabel: pwixI18n.label( I18N, 'clients.edit.properties_tab_title' ),
+                    paneTemplate: 'client_properties_panel',
                     paneData: paneData
-                }
-            ];
-            if( dataContext.recordTabs ){
-                if( _.isArray( dataContext.recordTabs ) && dataContext.recordTabs.length ){
-                    dataContext.recordTabs.forEach(( tab ) => {
-                        tab.paneData = paneData;
-                        tabs.push( tab );
-                    });
-                } else {
-                    console.warn( 'expect tabs be an array, got', dataContext.recordTabs );
-                }
-            }
-            tabs.push(
+                },
                 {
-                    navLabel: pwixI18n.label( I18N, 'panel.notes_tab' ),
+                    name: 'record_notes_tab',
+                    navLabel: pwixI18n.label( I18N, 'clients.edit.record_notes_tab_title' ),
                     paneTemplate: 'NotesEdit',
                     paneData: {
                         item: dataContext.entity.get().DYN.records[dataContext.index].get(),
                         field: notes
                     }
                 }
-            );
-            self.TM.parmsRecord.set({
+            ];
+            self.APP.parmsRecord.set({
                 name: 'client_record_tabbed',
                 tabs: tabs
             });
         } else {
-            self.TM.parmsRecord.set( null );
+            self.APP.parmsRecord.set( null );
         }
     });
 
@@ -101,9 +90,9 @@ Template.client_record_tabbed.onCreated( function(){
                 startDate: dataContext.entity.get().DYN.records[dataContext.index].get().effectStart,
                 endDate: dataContext.entity.get().DYN.records[dataContext.index].get().effectEnd
             };
-            self.TM.parmsValidity.set( parms );
+            self.APP.parmsValidity.set( parms );
         } else {
-            self.TM.parmsValidity.set( null );
+            self.APP.parmsValidity.set( null );
         }
     });
 });
@@ -116,11 +105,11 @@ Template.client_record_tabbed.onRendered( function(){
         const dataContext = Template.currentData();
         if( dataContext.index < dataContext.entity.get().DYN.records.length ){
             const parentChecker = dataContext.checker.get();
-            const checker = self.TM.checker.get();
+            const checker = self.APP.checker.get();
             if( parentChecker && !checker ){
-                self.TM.checker.set( new Forms.Checker( self, {
+                self.APP.checker.set( new Forms.Checker( self, {
                     parent: parentChecker,
-                    panel: new Forms.Panel( self.TM.fields, Records.fieldSet.get()),
+                    panel: new Forms.Panel( self.APP.fields, Records.fieldSet.get()),
                     data: {
                         entity: dataContext.entity,
                         index: dataContext.index
@@ -128,7 +117,7 @@ Template.client_record_tabbed.onRendered( function(){
                 }));
             }
         } else {
-            self.TM.checker.set( null );
+            self.APP.checker.set( null );
         }
     });
 });
@@ -136,11 +125,11 @@ Template.client_record_tabbed.onRendered( function(){
 Template.client_record_tabbed.helpers({
     // data context for the record tabbed panes
     parmsRecord(){
-        return Template.instance().TM.parmsRecord.get();
+        return Template.instance().APP.parmsRecord.get();
     },
 
     // data context for ValidityFieldset
     parmsValidity(){
-        return Template.instance().TM.parmsValidity.get();
+        return Template.instance().APP.parmsValidity.get();
     }
 });

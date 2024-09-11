@@ -47,18 +47,21 @@ import { Forms } from 'meteor/pwix:forms';
 import { Modal } from 'meteor/pwix:modal';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
+import { Tabbed } from 'meteor/pwix:tabbed';
 import { Tolert } from 'meteor/pwix:tolert';
 import { Validity } from 'meteor/pwix:validity';
 
-// not used at the moment as we do not want manage any data at the entity level (estimating that notes is more than enough)
-import '/imports/client/client_entity_validities_pane/client_entity_validities_pane.js';
-import '/imports/client/client_properties_panel/client_rproperties_panel.js';
-import '/imports/client/client_record_tabbed/client_record_tabbed.js';
+import { ClientsEntities } from '/imports/common/collections/clients_entities/index.js';
+
+import '/imports/client/components/client_entity_validities_pane/client_entity_validities_pane.js';
+import '/imports/client/components/client_properties_panel/client_properties_panel.js';
+import '/imports/client/components/client_record_tabbed/client_record_tabbed.js';
 
 import './client_edit_dialog.html';
 
 Template.client_edit_dialog.onCreated( function(){
     const self = this;
+    //console.debug( this );
 
     self.APP = {
         // the global Checker for this modal
@@ -70,7 +73,9 @@ Template.client_edit_dialog.onCreated( function(){
         // the item to be edited (a deep copy of the original)
         item: new ReactiveVar( null ),
         // whether we are running inside of a Modal
-        isModal: new ReactiveVar( false )
+        isModal: new ReactiveVar( false ),
+        // the entity tabbed
+        tabbed: null
     };
 
     // keep the initial 'new' state
@@ -89,6 +94,40 @@ Template.client_edit_dialog.onCreated( function(){
         });
         dup.DYN.records = records;
         self.APP.item.set( dup );
+    });
+
+    // instanciates the Tabbed.Instance
+    self.autorun(() => {
+        const paneData = {
+            ...Template.currentData(),
+            entity: self.APP.item,
+            checker: self.APP.checker
+        };
+        const notesField = ClientsEntities.fieldSet.get().byName( 'notes' );
+        self.APP.tabbed = new Tabbed.Instance( self, new ReactiveVar({
+            name: 'client_edit_dialog',
+            tabs: [
+                {
+                    name: 'client_entity_validities_tab',
+                    navLabel: pwixI18n.label( I18N, 'clients.edit.entity_validities_tab_title' ),
+                    paneTemplate: 'client_entity_validities_pane',
+                    paneData: {
+                        ...paneData,
+                        template: 'client_record_tabbed',
+                    },
+                    withValidities: true
+                },
+                {
+                    name: 'client_entity_notes_tab',
+                    navLabel: pwixI18n.label( I18N, 'clients.edit.entity_notes_tab_title' ),
+                    paneTemplate: 'NotesEdit',
+                    paneData: {
+                        ...paneData,
+                        field: notesField
+                    }
+                }
+            ]
+        }));
     });
 });
 
@@ -123,77 +162,11 @@ Template.client_edit_dialog.onRendered( function(){
 });
 
 Template.client_edit_dialog.helpers({
-    // text translation
-    i18n( arg ){
-        return pwixI18n.label( I18N, arg.hash.key );
-    },
-
-    // do we run inside of a modal ?
-    isModal(){
-        return Template.instance().APP.isModal.get();
-    },
-
-    // whether we want create a new entity ?
-    isNew(){
-        return Template.instance().APP.isNew.get();
-    },
-
     // parms to FormsMessager
     parmsMessager(){
         return {
             ...this,
             messager: Template.instance().APP.messager
-        };
-    },
-
-    // parms to entity_properties_pane component
-    parmsTabbed(){
-        TM = Template.instance().APP;
-        const paneData = {
-            ...this,
-            item: TM.item,
-            checker: TM.checker
-        };
-        const notesField = Entities.fieldSet.get().byName( 'notes' );
-        let tabs = [
-            {
-                tabid: 'entity_validities_tab',
-                paneid: 'entity_validities_pane',
-                navLabel: pwixI18n.label( I18N, 'tabs.entity_validities_title' ),
-                paneTemplate: 'entity_validities_pane',
-                paneData: {
-                    ...this,
-                    entity: TM.item,
-                    checker: TM.checker,
-                    template: 'record_tabbed',
-                    withValidities: TenantsManager.configure().withValidities
-                }
-            }
-        ];
-        if( this.entityTabs ){
-            if( _.isArray( this.entityTabs ) && this.entityTabs.length ){
-                this.entityTabs.forEach(( tab ) => {
-                    tab.paneData = paneData;
-                    tabs.push( tab );
-                });
-            } else {
-                console.warn( 'expect tabs be an array, got', this.entityTabs );
-            }
-        }
-        tabs.push(
-            {
-                tabid: 'entity_notes_tab',
-                paneid: 'entity_notes_pane',
-                navLabel: pwixI18n.label( I18N, 'tabs.entity_notes_title' ),
-                paneTemplate: 'NotesEdit',
-                paneData: {
-                    ...paneData,
-                    field: notesField
-                }
-            }
-        );
-        return {
-            tabs: tabs
         };
     }
 });

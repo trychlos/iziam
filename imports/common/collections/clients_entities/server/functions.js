@@ -9,6 +9,20 @@ import { v4 as uuidv4 } from 'uuid';
 import { ClientsEntities } from '../index.js';
 
 ClientsEntities.server = {
+    /**
+     * @summary Make sure all the fields of the fieldset are set in the item, even if undefined
+     * @param {Object} item
+     * @returns {Object} item
+     */
+    addUndef( item ){
+        ClientsEntities.fieldSet.get().names().forEach(( it ) => {
+            if( !Object.keys( item ).includes( it )){
+                item[it] = undefined;
+            }
+        });
+        return item;
+    },
+
     /*
     * @param {Object} selector
     * @param {String} userId

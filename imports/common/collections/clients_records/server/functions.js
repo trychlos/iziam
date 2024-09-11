@@ -10,6 +10,20 @@ import { Permissions } from 'meteor/pwix:permissions';
 import { ClientsRecords } from '../index.js';
 
 ClientsRecords.server = {
+    /**
+     * @summary Make sure all the fields of the fieldset are set in the item, even if undefined
+     * @param {Object} item
+     * @returns {Object} item
+     */
+    addUndef( item ){
+        ClientsRecords.fieldSet.get().names().forEach(( it ) => {
+            if( !Object.keys( item ).includes( it )){
+                item[it] = undefined;
+            }
+        });
+        return item;
+    },
+
     /*
     * @param {Object} selector
     * @param {String} userId

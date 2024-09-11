@@ -4,7 +4,7 @@
  * Manages a ValidityTabbed tabbed pane, where each pane is a validity period.
  *
  * Parms:
- * - item: a ReactiveVar which holds the tenant entity to edit
+ * - item: a ReactiveVar which holds the client entity to edit
  * - checker: the parent Checker
  */
 
@@ -18,8 +18,9 @@ import './client_entity_validities_pane.html';
 
 Template.client_entity_validities_pane.onCreated( function(){
     const self = this;
+    //console.debug( this );
 
-    self.TM = {
+    self.APP = {
         // the Checker instance
         checker: new ReactiveVar( null )
     };
@@ -31,9 +32,9 @@ Template.client_entity_validities_pane.onRendered( function(){
     // initialize the Checker for this panel as soon as we get the parent Checker
     self.autorun(() => {
         const parentChecker = Template.currentData().checker?.get();
-        const checker = self.TM.checker.get();
+        const checker = self.APP.checker.get();
         if( parentChecker && !checker ){
-            self.TM.checker.set( new Forms.Checker( self, {
+            self.APP.checker.set( new Forms.Checker( self, {
                 parent: parentChecker,
                 data: {
                     item: Template.currentData().item
@@ -48,48 +49,7 @@ Template.client_entity_validities_pane.helpers({
     parmsValidities(){
         return {
             ...this,
-            checker: Template.instance().TM.checker
+            checker: Template.instance().APP.checker
         };
-    }
-});
-
-Template.client_entity_validities_pane.events({
-    // edit the managers
-    'click .js-edit-managers'( event, instance ){
-        const self = this;
-        Modal.run({
-            mdBody: 'accounts_select',
-            mdButtons: [{ id: Modal.C.Button.NEW, classes: 'btn-outline-primary me-auto' }, Modal.C.Button.CANCEL, { id: Modal.C.Button.OK, type: 'submit' }],
-            mdClasses: 'modal-lg',
-            mdClassesContent: Meteor.TM.Pages.current.page().get( 'theme' ),
-            mdTitle: pwixI18n.label( I18N, 'organizations.properties.managers_modal' ),
-            selected: self.item.get().DYN.managers || [],
-            update( selected ){
-                // get the item updated
-                self.item.get().DYN.managers = selected;
-                // get the form updated
-                instance.TM.form.get().setField( 'managers', self.item.get());
-                // advertize parents
-                instance.$( '.c-organization-properties-pane' ).trigger( 'panel-data', {
-                    emitter: 'managers',
-                    id: self.vtpid,
-                    ok: true,
-                    data: selected
-                });
-            }
-        });
-    },
-
-    // input checks
-    'input .c-organization-properties-pane'( event, instance ){
-        const dataContext = this;
-        if( !Object.keys( event.originalEvent ).includes( 'FormChecker' ) || event.originalEvent['FormChecker'].handled !== true ){
-            instance.TM.form.get().inputHandler( event ).then(( valid ) => { instance.TM.sendPanelData( dataContext, valid ); });
-        }
-    },
-
-    // ask for clear the panel
-    'iz-clear-panel .c-organization-properties-pane'( event, instance ){
-        instance.TM.form.get().clear();
     }
 });
