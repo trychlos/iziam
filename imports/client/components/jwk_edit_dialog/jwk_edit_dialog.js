@@ -18,10 +18,14 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 import { Random } from 'meteor/random';
 import { Tabbed } from 'meteor/pwix:tabbed';
 
+import { Jwks } from '/imports/common/tables/jwks/index.js';
+
 import '/imports/client/components/jwk_keyspair_pane/jwk_keyspair_pane.js';
-import '/imports/client/components/jwk_private_pane/jwk_private_pane.js';
+import '/imports/client/components/jwk_private_jwk_pane/jwk_private_jwk_pane.js';
+import '/imports/client/components/jwk_private_pkcs8_pane/jwk_private_pkcs8_pane.js';
 import '/imports/client/components/jwk_properties_pane/jwk_properties_pane.js';
-import '/imports/client/components/jwk_public_pane/jwk_public_pane.js';
+import '/imports/client/components/jwk_public_jwk_pane/jwk_public_jwk_pane.js';
+import '/imports/client/components/jwk_public_spki_pane/jwk_public_spki_pane.js';
 import '/imports/client/components/jwk_secret_pane/jwk_secret_pane.js';
 
 import './jwk_edit_dialog.html';
@@ -119,6 +123,16 @@ Template.jwk_edit_dialog.onRendered( function(){
             }
         }
     }));
+
+    // track the JSON Web Key to enable the respective tabs
+    self.autorun(() => {
+        const item = self.APP.item.get();
+        const tabbed = self.APP.tabbed.get();
+        if( tabbed ){
+            tabbed.set( 'tab.jwk_secret_tab.enabled', item.createdAt && item.secret );
+            tabbed.set( 'tab.jwk_keyspair_tab.enabled', item.createdAt && item.pair );
+        }
+    });
 });
 
 Template.jwk_edit_dialog.helpers({
@@ -153,18 +167,28 @@ Template.jwk_edit_dialog.events({
         record.jwks = record.jwks || [];
         let found = false;
         const jwk = instance.APP.item.get();
-        //console.debug( 'jwk', jwk );
-        for( let i=0 ; i<record.jwks.length ; ++i ){
-            if( record.jwks[i].id === jwk.id ){
-                record.jwks[i] = jwk;
-                found = true;
-                break;
-            }
-        }
-        if( !found ){
-            record.jwks.push( jwk );
-        }
-        recordRv.set( record );
-        Modal.close();
+        // if the secret/keys pair have not been generated yet, do it now
+        // have to manage promises to handle async function in this event handler
+        Promise.resolve( true )
+            .then(() => {
+                return jwk.createdAt ? jwk : Jwks.fn.generateKeys( jwk );
+            })
+            .then(() => {
+                //console.debug( 'jwk', jwk );
+                for( let i=0 ; i<record.jwks.length ; ++i ){
+                    if( record.jwks[i].id === jwk.id ){
+                        record.jwks[i] = jwk;
+                        found = true;
+                        break;
+                    }
+                }
+                if( !found ){
+                    record.jwks.push( jwk );
+                }
+            })
+            .then(() => {
+                recordRv.set( record );
+                Modal.close();
+            });
     }
 });

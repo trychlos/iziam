@@ -38,7 +38,8 @@ Organizations.isOperational = async function( organization ){
     promises.push( fnCheck( 'authorization_endpoint', organization.record.authorization_endpoint ));
     promises.push( fnCheck( 'token_endpoint', organization.record.token_endpoint ));
     // registration_endpoint: not required
-    // jwks_uri: not required
+    promises.push( fnCheck( 'jwks_uri', organization.record.jwks_uri ));
+
     await Promise.allSettled( promises );
     //console.debug( 'errors', errors );
     return errors.length ? errors : null;

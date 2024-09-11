@@ -1,5 +1,5 @@
 /*
- * /imports/client/components/jwk_private_pane/jwk_private_pane.js
+ * /imports/client/components/jwk_public_spki_pane/jwk_public_spki_pane.js
  *
  * Display the symmetric secret object
  *
@@ -11,6 +11,10 @@
 
 import _ from 'lodash';
 
-import { pwixI18n } from 'meteor/pwix:i18n';
+import './jwk_public_spki_pane.html';
 
-import './jwk_private_pane.html';
+Template.jwk_public_spki_pane.helpers({
+    treeified(){
+        return this.item.get().pair.public.spki;
+    }
+});

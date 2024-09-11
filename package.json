@@ -34,6 +34,7 @@
     "printf": "^0.6.1",
     "redis": "^4.6.14",
     "strftime": "^0.10.2",
+    "treeify": "^1.1.0",
     "uuid": "^9.0.1",
     "valid-url": "^1.0.9",
     "zxcvbn": "^4.4.2"

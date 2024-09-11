@@ -1,5 +1,5 @@
 /*
- * /imports/client/components/jwk_secret_pane/jwk_secret_pane.js
+ * /imports/client/components/jwk_private_jwk_pane/jwk_private_jwk_pane.js
  *
  * Display the symmetric secret object
  *
@@ -12,10 +12,10 @@
 import _ from 'lodash';
 import treeify from 'treeify';
 
-import './jwk_secret_pane.html';
+import './jwk_private_jwk_pane.html';
 
-Template.jwk_secret_pane.helpers({
+Template.jwk_private_jwk_pane.helpers({
     treeified(){
-        return treeify.asTree( this.item.get().secret, true, true );
+        return treeify.asTree( this.item.get().pair.private.jwk, true, true );
     }
 });

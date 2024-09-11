@@ -12,7 +12,6 @@
  */
 
 import _ from 'lodash';
-import * as jose from 'jose';
 
 import { Forms } from 'meteor/pwix:forms';
 import { pwixI18n } from 'meteor/pwix:i18n';
@@ -20,6 +19,8 @@ import { TenantsManager } from 'meteor/pwix:tenants-manager';
 
 import { JwaAlg } from '/imports/common/definitions/jwa-alg.def.js';
 import { JwkKty } from '/imports/common/definitions/jwk-kty.def.js';
+
+import { Jwks } from '/imports/common/tables/jwks/index.js';
 
 import '/imports/client/components/jwa_alg_select/jwa_alg_select.js';
 import '/imports/client/components/jwk_kty_select/jwk_kty_select.js';
@@ -37,55 +38,11 @@ Template.jwk_properties_pane.onCreated( function(){
 
         // generate the JWK
         //  reactively update the item
-        generate( itemRv ){
+        async generate( itemRv ){
             let item = itemRv.get();
-            const def = JwaAlg.byId( item.alg );
-            if( def ){
-                if( JwaAlg.isSymmetric( def )){
-                    item.symmetric = true;
-                    jose.generateSecret( item.alg, { extractable: true }).then( async ( res ) => {
-                        //console.debug( 'res', res );
-                        item.secret = {
-                            key: { algorithm: res.algorithm },
-                            jwk: await jose.exportJWK( res ),
-                            key_opes: res.usages
-                        };
-                        if( item.kid ){
-                            item.secret.jwk.kid = item.kid;
-                        }
-                        item.createdAt = new Date();
-                        item.createdBy = Meteor.userId();
-                        itemRv.set( item );
-                    });
-                } else {
-                    item.symmetric = false;
-                    jose.generateKeyPair( item.alg, { extractable: true }).then( async ( res ) => {
-                        //console.debug( 'res', res );
-                        item.pair = {
-                            key: { algorithm: res.privateKey.algorithm },
-                            private: {
-                                jwk: await jose.exportJWK( res.privateKey ),
-                                pkcs8: await jose.exportPKCS8( res.privateKey ),
-                                key_opes: res.privateKey.usages
-                            },
-                            public: {
-                                jwk: await jose.exportJWK( res.publicKey ),
-                                spki: await jose.exportSPKI( res.publicKey ),
-                                key_opes: res.publicKey.usages
-                            }
-                        };
-                        if( item.kid ){
-                            item.pair.private.jwk.kid = item.kid;
-                            item.pair.public.jwk.kid = item.kid;
-                        }
-                        item.createdAt = new Date();
-                        item.createdBy = Meteor.userId();
-                        itemRv.set( item );
-                    });
-                }
-            } else {
-                console.warn( 'unknwon algorith', item.alg );
-            }
+            item = await Jwks.fn.generateKeys( item );
+            console.debug( 'item.createdAt', item.createdAt );
+            itemRv.set( item );
         },
 
         // reset the chosen algorithm when usage or crypto family change

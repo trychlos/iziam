@@ -43,9 +43,12 @@
             <tr>
                 <td colspan="2" class="ui-center">
                     {{#if haveGenerate }}
-                        <button class="btn {{ btnClass }} ui-mt1 js-generate" type="button" title="{{ i18n key="jwks.edit.generate_title" }}" {{ btnDisabled }}>
-                            {{ i18n key="jwks.edit.generate_text" }}
+                        <button class="btn {{ btnClass }} ui-mt1 js-generate" type="button" title="{{ i18n key="jwks.edit.generate_button_title" }}" {{ btnDisabled }}>
+                            {{ i18n key="jwks.edit.generate_button_text" }}
                         </button>
+                        <div class="generate {{ btnDisabled }} ui-mt05">
+                            {{{ i18n key="jwks.edit.generate_below_text" }}}
+                        </div>
                     {{/if}}
                 </td>
             </tr>

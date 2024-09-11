@@ -29,16 +29,27 @@ Template.jwk_keyspair_pane.onCreated( function(){
     self.autorun(() => {
         self.APP.tabbed.set( new Tabbed.Instance( self, new ReactiveVar({
             name: 'jwk_keyspair_pane',
+            dataContext: Template.currentData(),
             tabs: [
                 {
-                    name: 'jwk_private_pane',
-                    navLabel: pwixI18n.label( I18N, 'jwks.edit.private_tab_title' ),
-                    paneTemplate: 'jwk_private_pane'
+                    name: 'jwk_private_jwk_tab',
+                    navLabel: pwixI18n.label( I18N, 'jwks.edit.private_jwk_tab_title' ),
+                    paneTemplate: 'jwk_private_jwk_pane'
                 },
                 {
-                    name: 'jwk_public_pane',
-                    navLabel: pwixI18n.label( I18N, 'jwks.edit.public_tab_title' ),
-                    paneTemplate: 'jwk_public_pane'
+                    name: 'jwk_private_pkcs8_tab',
+                    navLabel: pwixI18n.label( I18N, 'jwks.edit.private_pkcs8_tab_title' ),
+                    paneTemplate: 'jwk_private_pkcs8_pane'
+                },
+                {
+                    name: 'jwk_public_jwk_tab',
+                    navLabel: pwixI18n.label( I18N, 'jwks.edit.public_jwk_tab_title' ),
+                    paneTemplate: 'jwk_public_jwk_pane'
+                },
+                {
+                    name: 'jwk_public_spki_tab',
+                    navLabel: pwixI18n.label( I18N, 'jwks.edit.public_spki_tab_title' ),
+                    paneTemplate: 'jwk_public_spki_pane'
                 }
             ]
         })));

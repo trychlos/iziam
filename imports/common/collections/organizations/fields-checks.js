@@ -276,12 +276,6 @@ Organizations.checks = {
             data.item.set( item );
         }
         return null;
-        /*
-        return value ? null : new TM.TypedMessage({
-            level: TM.MessageLevel.C.ERROR,
-            message: 'Label error'
-        });
-        */
     },
 
     // JWK key type (crypto alg family)
@@ -315,12 +309,6 @@ Organizations.checks = {
             data.item.set( item );
         }
         return null;
-        /*
-        return value ? null : new TM.TypedMessage({
-            level: TM.MessageLevel.C.ERROR,
-            message: 'Label error'
-        });
-        */
     },
 
     // JWK usage
@@ -361,7 +349,17 @@ Organizations.checks = {
                     level: TM.MessageLevel.C.ERROR,
                     message: pwixI18n.label( I18N, 'organizations.checks.jwks_absolute' )
                 });
+            } else if( !item.jwks || !item.jwks.length ){
+                return new TM.TypedMessage({
+                    level: TM.MessageLevel.C.WARNING,
+                    message: pwixI18n.label( I18N, 'organizations.checks.jwks_uri_wo_jwk' )
+                });
             }
+        } else if( item.jwks && item.jwks.length ){
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.WARNING,
+                message: pwixI18n.label( I18N, 'organizations.checks.jwks_no_but_jwk' )
+            });
         }
         return null;
     },
