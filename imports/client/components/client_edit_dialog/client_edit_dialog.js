@@ -54,8 +54,10 @@ import { Validity } from 'meteor/pwix:validity';
 import { ClientsEntities } from '/imports/common/collections/clients_entities/index.js';
 
 import '/imports/client/components/client_entity_validities_pane/client_entity_validities_pane.js';
+import '/imports/client/components/client_profile_select/client_profile_select.js';
 import '/imports/client/components/client_properties_panel/client_properties_panel.js';
 import '/imports/client/components/client_record_tabbed/client_record_tabbed.js';
+import '/imports/client/components/client_type_select/client_type_select.js';
 
 import './client_edit_dialog.html';
 
@@ -136,14 +138,14 @@ Template.client_edit_dialog.onRendered( function(){
 
     // whether we are running inside of a Modal
     self.autorun(() => {
-        self.APP.isModal.set( self.$( '.client_edit_dialog' ).closest( '.modal-dialog' ).length > 0 );
+        self.APP.isModal.set( self.$( '.c-client-edit-dialog' ).closest( '.modal-dialog' ).length > 0 );
     });
 
     // set the modal target
     self.autorun(() => {
         if( self.APP.isModal.get()){
             Modal.set({
-                target: self.$( '.client_edit_dialog' )
+                target: self.$( '.c-client-edit-dialog' )
             });
         }
     });
@@ -174,7 +176,7 @@ Template.client_edit_dialog.helpers({
 Template.client_edit_dialog.events({
     // submit
     //  event triggered in case of a modal
-    'md-click .client_edit_dialog'( event, instance, data ){
+    'md-click .c-client-edit-dialog'( event, instance, data ){
         //console.debug( event, data );
         if( data.button.id === Modal.C.Button.OK ){
             instance.$( event.currentTarget ).trigger( 'iz-submit' );
@@ -182,28 +184,24 @@ Template.client_edit_dialog.events({
     },
 
     // submit
-    'iz-submit .client_edit_dialog'( event, instance ){
+    'iz-submit .c-client-edit-dialog'( event, instance ){
         //console.debug( event, instance );
         const item = instance.APP.item.get();
         const label = Validity.closest( item ).record.label || '';
         //console.debug( 'item', item );
-        Meteor.callAsync( 'pwix_tenants_manager_tenants_upsert', item )
-            .then(( res ) => {
-                //console.debug( 'res', res );
-                return Meteor.callAsync( 'pwix_tenants_manager_tenants_set_managers', item )
-            })
+        Meteor.callAsync( 'client.upsert', item )
             .then(() => {
-                Tolert.success( pwixI18n.label( I18N, instance.APP.isNew.get() ? 'edit.new_success' : 'edit.edit_success', label ));
+                Tolert.success( pwixI18n.label( I18N, instance.APP.isNew.get() ? 'clients.edit.new_success' : 'clients.edit.edit_success', label ));
                 if( instance.APP.isModal.get()){
                     Modal.close();
                 } else {
-                    instance.$( '.c-record-properties-pane' ).trigger( 'iz-clear-panel' );
+                    instance.$( '.c-client-properties-panel' ).trigger( 'iz-clear-panel' );
                     instance.$( 'NotesEdit' ).trigger( 'iz-clear-panel' );
                 }
             })
             .catch(( e ) => {
                 console.error( e );
-                Tolert.error( pwixI18n.label( I18N, 'edit.error' ));
+                Tolert.error( pwixI18n.label( I18N, 'clients.edit.error' ));
             });
     }
 });

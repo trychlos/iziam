@@ -36,7 +36,7 @@ Template.organization_clients_pane.onCreated( function(){
         byEntity( entity ){
             let found = null;
             self.APP.clientsAll.get().every(( it ) => {
-                if( it.get()._id === entity ){
+                if( it._id === entity ){
                     found = it;
                 }
                 return !found;
@@ -78,16 +78,7 @@ Template.organization_clients_pane.onCreated( function(){
         if( self.APP.handleAll.ready()){
             let items = [];
             Meteor.APP.Collections.get( Meteor.APP.C.pub.clientsAll.collection ).find().fetchAsync().then(( fetched ) => {
-                fetched.forEach(( it ) => {
-                    // it is a entity with DYN managers, records and closest
-                    let records = [];
-                    it.DYN.records.forEach(( rec ) => {
-                        records.push( new ReactiveVar( rec ));
-                    });
-                    it.DYN.records = records;
-                    items.push( new ReactiveVar( it ));
-                });
-                self.APP.clientsAll.set( items );
+                self.APP.clientsAll.set( fetched );
             });
         }
     });
@@ -142,7 +133,7 @@ Template.organization_clients_pane.events({
     // edit a client
     //  the buttons from tabular provide the entity document
     'tabular-edit-event .c-organization-clients-pane'( event, instance, data ){
-        const item = instance.APP.byEntity( data.item._id ).get();
+        const item = instance.APP.byEntity( data.item._id );
         Modal.run({
             ...this,
             mdBody: 'client_edit_dialog',

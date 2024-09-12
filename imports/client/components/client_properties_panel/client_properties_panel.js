@@ -12,6 +12,8 @@
  * - index: the index of the edited record
  * - checker: the Forms.Checker which manages the parent component as a ReactiveVar
  * - enableChecks: whether the checks should be enabled at startup, defaulting to true
+ * - withProfile: whether we want a profile selection (only in edit_dialog, not in new_assistant), defaulting to false
+ * - withType: whether we want a type selection (only in edit_dialog, not in new_assistant), defaulting to false
  */
 
 import _ from 'lodash';
@@ -26,7 +28,7 @@ import './client_properties_panel.html';
 
 Template.client_properties_panel.onCreated( function(){
     const self = this;
-    console.debug( this );
+    //console.debug( this );
 
     self.APP = {
         fields: {
@@ -58,6 +60,18 @@ Template.client_properties_panel.onCreated( function(){
         // the Forms.Checker instance
         checker: new ReactiveVar( null )
     };
+
+    // update the Panel fields for edit_dialog
+    self.autorun(() => {
+        if( Template.currentData().withProfile === true ){
+            self.APP.fields.profile = { js: '.js-profile' };
+        }
+    });
+    self.autorun(() => {
+        if( Template.currentData().withType === true ){
+            self.APP.fields.client_type = { js: '.js-type' };
+        }
+    });
 });
 
 Template.client_properties_panel.onRendered( function(){
@@ -88,6 +102,30 @@ Template.client_properties_panel.helpers({
     // string translation
     i18n( arg ){
         return pwixI18n.label( I18N, arg.hash.key );
+    },
+
+    // parms for profile select
+    parmsProfileSelect(){
+        return {
+            selected: this.entity.get().DYN.records[this.index].get().profile
+        };
+    },
+
+    // parms for type select
+    parmsTypeSelect(){
+        return {
+            selected: this.entity.get().DYN.records[this.index].get().client_type
+        };
+    },
+
+    // whether we want a profile selection here (only in edit_dialog, not in new_assistant)
+    withProfile(){
+        return this.withProfile === true;
+    },
+
+    // whether we want a type selection here (only in edit_dialog, not in new_assistant)
+    withType(){
+        return this.withType === true;
     }
 });
 

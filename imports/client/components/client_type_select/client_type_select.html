@@ -1,0 +1,14 @@
+<template name="client_type_select">
+    <div class="c-client-type-select">
+
+        <select class="form-select">
+            {{#unless hasCurrent }}
+                <option value="" selected disabled>{{ i18n key="definitions.client_type.select_text" }}</option>
+            {{/unless}}
+            {{#each it in itemsList }}
+                <option value="{{ itId it }}" {{ itSelected it }}>{{ itLabel it }}</option>
+            {{/each}}
+        </select>
+
+    </div>
+</template>

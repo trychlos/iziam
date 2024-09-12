@@ -61,7 +61,11 @@ Template.client_record_tabbed.onCreated( function(){
                 {
                     navLabel: pwixI18n.label( I18N, 'clients.edit.properties_tab_title' ),
                     paneTemplate: 'client_properties_panel',
-                    paneData: paneData
+                    paneData: {
+                        ...paneData,
+                        withProfile: true,
+                        withType: true   
+                    }
                 },
                 {
                     name: 'record_notes_tab',
@@ -109,7 +113,7 @@ Template.client_record_tabbed.onRendered( function(){
             if( parentChecker && !checker ){
                 self.APP.checker.set( new Forms.Checker( self, {
                     parent: parentChecker,
-                    panel: new Forms.Panel( self.APP.fields, Records.fieldSet.get()),
+                    panel: new Forms.Panel( self.APP.fields, ClientsRecords.fieldSet.get()),
                     data: {
                         entity: dataContext.entity,
                         index: dataContext.index

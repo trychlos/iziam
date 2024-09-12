@@ -1,0 +1,14 @@
+<template name="client_profile_select">
+    <div class="c-client-profile-select">
+
+        <select class="form-select">
+            {{#unless hasCurrent }}
+                <option value="" selected disabled>{{ i18n key="definitions.client_profile.select_text" }}</option>
+            {{/unless}}
+            {{#each it in itemsList }}
+                <option value="{{ itId it }}" {{ itSelected it }}>{{ itLabel it }}</option>
+            {{/each}}
+        </select>
+
+    </div>
+</template>

@@ -50,6 +50,26 @@
                     <input class="form-control ui-w50 js-softver" type="text" id="client-panel-softver" placeholder="{{ i18n key="clients.edit.softver_ph" }}" title="{{ i18n key="clients.edit.softver_title" }}" />
                 </td>
             </tr>
+            {{#if withProfile }}
+                <tr>
+                    <td class="label"><label class="form-label">{{ i18n key="clients.edit.profile_label" }}</label></td>
+                    <td>
+                        <div class="ui-mt025 ui-w50 js-profile">
+                            {{> client_profile_select (parmsProfileSelect) }}
+                        </div>
+                    </td>
+                </tr>
+            {{/if}}
+            {{#if withType }}
+                <tr>
+                    <td class="label"><label class="form-label">{{ i18n key="clients.edit.type_label" }}</label></td>
+                    <td>
+                        <div class="ui-mt025 ui-w50 js-type">
+                            {{> client_type_select (parmsTypeSelect) }}
+                        </div>
+                    </td>
+                </tr>
+            {{/if}}
         </table>
 
     </div>

@@ -72,8 +72,10 @@ Meteor.APP.i18n = {
                     description_label: 'Description :',
                     description_ph: 'The client description',
                     description_title: 'A not too long description (which are not notes)',
+                    edit_success: 'The client "%s" has been successfully updated',
                     entity_notes_tab_title: 'Common notes',
                     entity_validities_tab_title: 'By validity period(s)',
+                    error: 'Unfortunately, an error has been detected./ Please retry later',
                     home_label: 'Home page URI :',
                     home_ph: 'https://my.example.com/',
                     home_title: 'The URI of a web site',
@@ -84,9 +86,11 @@ Meteor.APP.i18n = {
                     logo_ph: 'https://my.example.com/logo.png',
                     logo_title: 'The URI of a logo displayable to an end-user',
                     modal_title: 'Edit the "%s" client',
+                    new_success: 'The client "%s" has been successfully created',
                     privacy_label: 'Privacy policy page URI :',
                     privacy_ph: 'https://my.example.com/privacy',
                     privacy_title: 'The URI of a page which describes the privacy policy of the client',
+                    profile_label: 'Profile :',
                     properties_tab_title: 'Properties',
                     providers_tab_title: 'Providers',
                     record_notes_tab_title: 'Notes',
@@ -98,7 +102,8 @@ Meteor.APP.i18n = {
                     softver_title: 'The client software version which distinguish it from other registered clients',
                     tos_label: 'Terms of Service page URI :',
                     tos_ph: 'https://my.example.com/tos',
-                    tos_title: 'The URI of a page which describes the terms of service of the client'
+                    tos_title: 'The URI of a page which describes the terms of service of the client',
+                    type_label: 'Type :'
                 },
                 new: {
                     assistant_title: 'Defining a new client',
