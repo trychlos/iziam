@@ -12,10 +12,12 @@ import _ from 'lodash';
 
 import { pwixI18n } from 'meteor/pwix:i18n';
 
-import { Providers } from '/imports/common/tables/providers/index.js';
+import { Clients } from '/imports/common/collections/clients/index.js';
 
 import { ClientProfile } from '/imports/common/definitions/client-profile.def.js';
 import { ClientType } from '/imports/common/definitions/client-type.def.js';
+
+import { Providers } from '/imports/common/tables/providers/index.js';
 
 import '/imports/client/components/client_auth_method_panel/client_auth_method_panel.js';
 
@@ -53,9 +55,11 @@ Template.client_new_assistant_auth_method.onRendered( function(){
     // tracks the selected providers to enable/disable this pane
     // this "auth method" pane requires to have a provider for oauth2 feature
     self.autorun(() => {
-        const dataDict = Template.currentData().parentAPP.assistantStatus;
-        const selected = dataDict.get( 'selectedProviders' ) || [];
-        self.$( '.c-client-new-assistant-auth-method' ).trigger( 'assistant-do-enable-tab', { name: 'auth',  enabled: Providers.hasFeature( selected, 'oauth2' ) });
+        if( Clients.fn.hasSelectedProviders()){
+            const dataDict = Template.currentData().parentAPP.assistantStatus;
+            const selected = dataDict.get( 'selectedProviders' ) || [];
+            self.$( '.c-client-new-assistant-auth-method' ).trigger( 'assistant-do-enable-tab', { name: 'auth',  enabled: Providers.hasFeature( selected, 'oauth2' ) });
+        }
     });
 
     // try to have a default selection

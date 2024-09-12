@@ -2,9 +2,8 @@
  * /imports/common/definitions/grant-nature.def.js
  *
  * This qualifies the GrantNature:
- * - either as an access token
+ * - either as an access token 
  * - or a refresh token
- * - or something else
  */
 
 import _ from 'lodash';
@@ -18,28 +17,16 @@ export const GrantNature = {
             // oauth authorization grant token
             id: 'access',
             label: 'definitions.grant_nature.access_label',
-            mandatory: true
+            mandatory: true,
+            ui: 'radio'
         },
         {
             // oauth refresh token
             id: 'refresh',
-            label: 'definitions.grant_nature.refresh_label'
-        },
-        {
-            // a format token (e.g. JWT)
-            id: 'format',
-            label: 'definitions.grant_nature.format_label',
-            several: true
+            label: 'definitions.grant_nature.refresh_label',
+            ui: 'checkbox'
         }
     ],
-
-    /**
-     * @param {Object} def a GrantNature definition as returned by GrantNature.Knowns()
-     * @returns {Boolean} whether we can have several grant types of this nature
-     */
-    acceptSeveral( def ){
-        return def.several === true;
-    },
 
     /**
      * @param {String} id a grant nature identifier
@@ -53,6 +40,9 @@ export const GrantNature = {
             }
             return found === null;
         });
+        if( !found ){
+            console.warn( 'grant nature not found', id );
+        }
         return found;
     },
 
@@ -85,5 +75,13 @@ export const GrantNature = {
      */
     label( def ){
         return pwixI18n.label( I18N, def.label );
+    },
+
+    /**
+     * @param {Object} def a GrantNature definition as returned by GrantNature.Knowns()
+     * @returns {String} the label to be attached to the grant nature
+     */
+    uiType( def ){
+        return def.ui;
     }
 };

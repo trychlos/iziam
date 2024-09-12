@@ -57,6 +57,15 @@ Clients.fn = {
     },
 
     /**
+     * @summary As of 2024-09-12, the client no more chooses its providers
+     *  Instead it is up to the authorization server to find the ad-hoc provider giving the desired grant_type
+     *  This design decision is hard-coded here so that all UI code is still there, though inactive
+     */
+    hasSelectedProviders(){
+        return false;
+    },
+
+    /**
      * @summary Compute and returns the list of selected providers for the entity/record client
      *  Computed selected providers are:
      *  - providers explictely selected by the organization manager for each client (read from the clients_records collection)

@@ -10,9 +10,9 @@ import { izProvider } from '/imports/common/classes/iz-provider.class.js';
 
 import { Organizations } from '/imports/common/collections/organizations/index.js';
 
-import { IGrantType } from '/imports/common/interfaces/igranttype.iface.js';
+import { ITokenExtension } from '/imports/common/interfaces/itokenextension.iface.js';
 
-export class PkceProvider extends mix( izProvider ).with( IGrantType ){
+export class PkceProvider extends mix( izProvider ).with( ITokenExtension ){
 
     // static data
 
@@ -39,7 +39,7 @@ export class PkceProvider extends mix( izProvider ).with( IGrantType ){
                 'rfc7636',
                 'pkce'
             ],
-            igranttype: [
+            itokenextension: [
                 'pkce'
             ]
         });

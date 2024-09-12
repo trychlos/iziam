@@ -12,7 +12,6 @@
  * - entity: the currently edited client entity as a ReactiveVar
  * - index: the index of the edited record
  * - checker: the Forms.Checker which manages the parent component as a ReactiveVar
- * - selectables: the (optional) list of selectables auth methods
  * 
  * Forms.Checker doesn't manage well radio buttons: do not use here.
  */
@@ -22,10 +21,12 @@ import _ from 'lodash';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 
-import { Providers } from '/imports/common/tables/providers/index.js';
+import { Organizations } from '/imports/common/collections/organizations/index.js';
 
 import { GrantNature } from '/imports/common/definitions/grant-nature.def.js';
 import { GrantType } from '/imports/common/definitions/grant-type.def.js';
+
+import { Providers } from '/imports/common/tables/providers/index.js';
 
 import './client_grant_types_panel.html';
 
@@ -33,32 +34,40 @@ Template.client_grant_types_panel.onCreated( function(){
     const self = this;
 
     self.APP = {
+        organizationProviders: new ReactiveVar( {} ),
         selectables: new ReactiveVar( {} ),
 
         // whether we have a radio button or a checkbox
-        isRadio( nature, it ){
+        isRadio( dataContext, nature, it ){
             const selectables = self.APP.selectables.get();
-            return selectables[nature] && selectables[nature].types[it] && !GrantNature.acceptSeveral( selectables[nature].def );
+            return selectables[nature] && selectables[nature].types[it] && GrantNature.uiType( selectables[nature].def ) === 'radio';
         },
 
         // whether this item is selected
-        isSelected( nature, it ){
+        isSelected( dataContext, nature, it ){
             const selected = ( Template.currentData().entity.get().DYN.records[Template.currentData().index].get().grant_types || [] ).includes( it );
-            //console.debug( it, selected );
             return selected;
         }
     };
+
+    // get the available organization providers
+    self.autorun(() => {
+        self.APP.organizationProviders.set( Organizations.fn.selectedProviders( Template.currentData().organization ));
+    });
+
+    // get the selectable grant types
+    self.autorun(() => {
+        self.APP.selectables.set( GrantType.Selectables( Object.keys( self.APP.organizationProviders.get())));
+    });
 });
 
 Template.client_grant_types_panel.onRendered( function(){
     const self = this;
     //console.debug( this );
 
-    // set the selectables list
+    // advertize of the selectables list
     self.autorun(() => {
-        const selectables = GrantType.Selectables( Template.currentData().entity.get().DYN.records[Template.currentData().index].get().selectedProviders );
-        self.APP.selectables.set( selectables );
-        self.$( '.c-client-grant-types-panel' ).trigger( 'iz-selectables', { selectables: selectables });
+        self.$( '.c-client-grant-types-panel' ).trigger( 'iz-selectables', { selectables: self.APP.selectables.get() });
     });
 
     // try to setup a suitable default value for each grant nature
@@ -66,7 +75,7 @@ Template.client_grant_types_panel.onRendered( function(){
         let record = Template.currentData().entity.get().DYN.records[Template.currentData().index].get();
         let changed = false;
         let grantTypes = record.grant_types || [];
-        const selectedProviders = record.selectedProviders || [];
+        const selectedProviders = Object.keys( self.APP.organizationProviders.get());
         const selectables = self.APP.selectables.get();
         Object.keys( selectables ).forEach(( it ) => {
             const natureDef = GrantNature.byId( it );
@@ -96,8 +105,6 @@ Template.client_grant_types_panel.onRendered( function(){
                         });
                     })
                 }
-            } else {
-                console.warn( 'grant nature not found', it );
             }
         });
         // reactively update if needed
@@ -117,7 +124,7 @@ Template.client_grant_types_panel.helpers({
 
     // whether this item is selected ?
     itChecked( nature, it ){
-        return Template.instance().APP.isSelected( nature, it ) ? 'checked' : '';
+        return Template.instance().APP.isSelected( this, nature, it ) ? 'checked' : '';
     },
 
     // description
@@ -133,7 +140,7 @@ Template.client_grant_types_panel.helpers({
 
     // whether this input element is a checkbox or a radio button ?
     itInputType( nature, it ){
-        return Template.instance().APP.isRadio( nature, it ) ? 'radio' : 'checkbox';
+        return Template.instance().APP.isRadio( this, nature, it ) ? 'radio' : 'checkbox';
     },
 
     // label
@@ -145,8 +152,7 @@ Template.client_grant_types_panel.helpers({
     // whether this item is selected ?
     // only emphasize this selection for radio buttons
     itSelected( nature, it ){
-        //console.debug( nature, it, Template.instance().APP.isRadio( nature, it ) && Template.instance().APP.isSelected( nature, it ));
-        return Template.instance().APP.isRadio( nature, it ) && Template.instance().APP.isSelected( nature, it ) ? 'selected' : '';
+        return Template.instance().APP.isRadio( this, nature, it ) && Template.instance().APP.isSelected( this, nature, it ) ? 'selected' : '';
     },
 
     // selectable list for one grant nature

@@ -37,11 +37,4 @@ export const IRequires = DeclareMixin(( superclass ) => class extends superclass
     requires(){
         return this.#priv?.requires || [];
     }
-
-    /**
-     * @returns {Array<String>} the list of the required features
-     */
-    requires(){
-        return this.#priv?.requires || [];
-    }
 });

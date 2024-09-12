@@ -31,12 +31,14 @@ Providers.allProviders = function(){
 Providers.byId = function( id ){
     let found = null;
     Providers.allProviders().every(( p ) => {
-        //console.debug( 'searched', id, 'examining', p, 'id', p.identId());
         if( p instanceof IIdent && p.identId() === id ){
             found = p;
         }
         return found === null;
     });
+    if( !found ){
+        console.warn( 'unable to get a provider instance for', id );
+    }
     return found;
 };
 

@@ -19,14 +19,6 @@ import '/imports/client/components/client_redirects_panel/client_redirects_panel
 
 import './client_new_assistant_redirects.html';
 
-Template.client_new_assistant_redirects.onCreated( function(){
-    const self = this;
-
-    self.APP = {
-        valid: new ReactiveVar( false )
-    };
-});
-
 Template.client_new_assistant_redirects.onRendered( function(){
     const self = this;
 
@@ -35,15 +27,6 @@ Template.client_new_assistant_redirects.onRendered( function(){
     self.autorun(() => {
         const dataDict = Template.currentData().parentAPP.assistantStatus;
         self.$( '.c-client-new-assistant-redirects' ).trigger( 'assistant-do-enable-tab', { name: 'redirects',  enabled: GrantType.wantRedirects( dataDict.get( 'grant_types' ) || [] ) });
-    });
-
-    // enable the Next button if the panel is valid
-    // If there is no redirect URL while one is needed, Next is still allowed but we send a warning message
-    self.autorun(() => {
-        const dataDict = Template.currentData().parentAPP.assistantStatus;
-        if( dataDict.get( 'activePane' ) === 'redirects' ){
-            self.$( '.c-client-new-assistant-redirects' ).trigger( 'assistant-do-action-set', { action: 'next',  enable: self.APP.valid.get() });
-        }
     });
 });
 
@@ -76,8 +59,10 @@ Template.client_new_assistant_redirects.events({
         instance.$( '.c-client-redirects-panel' ).trigger( 'iz-enable-checks', true );
     },
     // an event sent by client_redirects_panel to advertize of its status
-    'iz-status .c-client-new-assistant-redirects'( event, instance, data ){
-        //console.debug( 'iz-status', data );
-        instance.APP.valid.set( data.status === Forms.CheckStatus.C.VALID || data.status === Forms.CheckStatus.C.NONE );
+    'iz-checker .c-client-new-assistant-redirects'( event, instance, data ){
+        if( this.parentAPP.assistantStatus.get( 'activePane' ) === 'redirects' ){
+            console.debug( data );
+            instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'next', enable: data.validity });
+        }
     }
 });

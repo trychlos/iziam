@@ -33,11 +33,11 @@ const assert = require( 'assert' ).strict;
 
 import { pwixI18n } from 'meteor/pwix:i18n';
 
-import { Providers } from '/imports/common/tables/providers/index.js';
-
 import { GrantNature } from '/imports/common/definitions/grant-nature.def.js';
 
 import { IGrantType } from '/imports/common/interfaces/igranttype.iface.js';
+
+import { Providers } from '/imports/common/tables/providers/index.js';
 
 export const GrantType = {
     C: [
@@ -61,7 +61,8 @@ export const GrantType = {
             image: '/images/grant-type.svg',
             nature: 'access',
             haveRedirects: true,
-            useAuthorizationEndpoint: true
+            useAuthorizationEndpoint: true,
+            deprecated: true
         },
         {
             // client credentials
@@ -100,7 +101,8 @@ export const GrantType = {
             description: 'definitions.grant_type.password_description',
             image: '/images/grant-type.svg',
             nature: 'access',
-            useTokenEndpoint: true
+            useTokenEndpoint: true,
+            deprecated: true
         },
         {
             // The refresh token grant type defined in OAuth 2.0, Section 6
@@ -109,39 +111,7 @@ export const GrantType = {
             description: 'definitions.grant_type.reftoken_description',
             image: '/images/grant-type.svg',
             nature: 'refresh'
-        },
-        {
-            // The JWT Bearer Token Grant Type defined in OAuth JWT Bearer Token Profiles [RFC7523]
-            //  using JWT as Authorization Grants
-            id: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-            label: 'definitions.grant_type.jwt_bearer_label',
-            description: 'definitions.grant_type.jwt_bearer_description',
-            image: '/images/grant-type.svg',
-            nature: 'format'
-        },
-        /*
-        {
-            // JSON Web Token (JWT) Profile for OAuth 2.0 Access Tokens [RFC9068]
-            id: 'jwt_profile',
-            label: 'definitions.grant_type.jwt_profile_label',
-            description: 'definitions.grant_type.jwt_profile_description',
-            image: '/images/grant-type.svg',
-            nature: 'format'
-        },
-        */
-        /*
-        {
-            // The SAML 2.0 Bearer Assertion Grant defined in OAuth SAML 2 Bearer Token Profiles [RFC7522] - not implemented
-            id: 'urn:ietf:params:oauth:grant-type:saml2-bearer',
-            label: 'definitions.grant_type.saml_label'
-        }*/
-       {
-            id: 'pkce',
-            label: 'definitions.grant_type.pkce_label',
-            description: 'definitions.grant_type.pkce_description',
-            image: '/images/grant-type.svg',
-            nature: 'format'
-       }
+        }
     ],
 
     /**
@@ -203,6 +173,14 @@ export const GrantType = {
      */
     image( def ){
         return def.image;
+    },
+
+    /**
+     * @param {Object} def a GrantType definition as returned by GrantType.Knowns()
+     * @returns {Boolean} whether this grant type is deprecated, defaulting to false
+     */
+    isDeprecated( def ){
+        return def.deprecated === true;
     },
 
     /**
@@ -333,8 +311,6 @@ export const GrantType = {
                     provider: provider,
                     grants: grants
                 };
-            } else {
-                console.warn( 'unable to get a provider instance for', it );
             }
         });
         //console.debug( 'hash', hash );

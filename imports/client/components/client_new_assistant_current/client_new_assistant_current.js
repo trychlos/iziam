@@ -13,12 +13,8 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 
 import { AuthMethod } from '/imports/common/definitions/auth-method.def.js';
 import { ClientProfile } from '/imports/common/definitions/client-profile.def.js';
-import { ClientType } from '/imports/common/definitions/client-type.def.js';
 import { GrantType } from '/imports/common/definitions/grant-type.def.js';
-
-import { ClientsEntities } from '/imports/common/collections/clients_entities/index.js';
-import { ClientsRecords } from '/imports/common/collections/clients_records/index.js';
-import { Clients } from '/imports/common/collections/clients/index.js';
+import { TokenExtension } from '/imports/common/definitions/token-extension.def.js';
 
 import './client_new_assistant_current.html';
 
@@ -59,6 +55,11 @@ Template.client_new_assistant_current.helpers({
         const contacts = this.parentAPP.entity.get().DYN.records[0].get().contacts || [];
         const emails = contacts.length ? contacts.map(( it ) => { return it.email; }) : null;
         return emails ? emails.join( ', ' ) : pwixI18n.label( I18N, 'clients.new_assistant.summary_contacts_none' );
+    },
+
+    // token extensions
+    formatersText(){
+        return TokenExtension.joinedLabels( this.parentAPP.entity.get().DYN.records[0].get().token_extensions || [] );
     },
 
     // grant types

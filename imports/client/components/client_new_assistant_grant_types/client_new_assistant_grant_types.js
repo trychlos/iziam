@@ -17,9 +17,11 @@ import _ from 'lodash';
 
 import { pwixI18n } from 'meteor/pwix:i18n';
 
-import { Providers } from '/imports/common/tables/providers/index.js';
+import { Clients } from '/imports/common/collections/clients/index.js';
 
 import { GrantType } from '/imports/common/definitions/grant-type.def.js';
+
+import { Providers } from '/imports/common/tables/providers/index.js';
 
 import '/imports/client/components/client_grant_types_panel/client_grant_types_panel.js';
 
@@ -41,9 +43,11 @@ Template.client_new_assistant_grant_types.onRendered( function(){
     // tracks the selected providers to enable/disable this pane
     // this "grant types" pane requires to have a provider for oauth2 feature
     self.autorun(() => {
-        const dataDict = Template.currentData().parentAPP.assistantStatus;
-        const selected = dataDict.get( 'selectedProviders' ) || [];
-        self.$( '.c-client-new-assistant-grant-types' ).trigger( 'assistant-do-enable-tab', { name: 'grant',  enabled: Providers.hasFeature( selected, 'oauth2' ) });
+        if( Clients.fn.hasSelectedProviders()){
+            const dataDict = Template.currentData().parentAPP.assistantStatus;
+            const selected = dataDict.get( 'selectedProviders' ) || [];
+            self.$( '.c-client-new-assistant-grant-types' ).trigger( 'assistant-do-enable-tab', { name: 'grant',  enabled: Providers.hasFeature( selected, 'oauth2' ) });
+        }
     });
 
     // tracks the selection to enable/disable the Next button when the pane is active
@@ -64,7 +68,7 @@ Template.client_new_assistant_grant_types.helpers({
     },
 
     // parms for grant types panel
-    parmsGrantTypePanel(){
+    parmsGrantType(){
         return {
             ...this,
             entity: this.parentAPP.entity,

@@ -56,6 +56,9 @@ const _defaultFieldSet = function(){
         },
         // --
         // list of selected providers
+        // pwi 2024-09-12 the client no more select its providers; instead, it chooses its grant type, and it is
+        //  up to the authorization server to find the ad-hoc provider
+        //  see Clients.fn.hasSelectedProviders() function to hard code this design decision
         {
             name: 'selectedProviders',
             type: Array,
@@ -104,7 +107,17 @@ const _defaultFieldSet = function(){
         },
         {
             name: 'grant_types.$',
-            type: String,
+            type: String
+        },
+        // optional token extensions
+        {
+            name: 'token_extensions',
+            type: Array,
+            optional: true
+        },
+        {
+            name: 'token_extensions.$',
+            type: String
         },
         /*
         // the OAuth 2.0 response type strings that the client can use against authorization endpoint

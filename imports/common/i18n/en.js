@@ -262,6 +262,7 @@ Meteor.APP.i18n = {
                     summary_client_label: 'Client type :',
                     summary_contacts_label: 'Contacts :',
                     summary_contacts_none: 'None',
+                    summary_formaters_label: 'Token extensions :',
                     summary_grant_label: 'Grant types :',
                     summary_legend: 'Summary',
                     summary_name_label: 'Label :',
@@ -276,6 +277,8 @@ Meteor.APP.i18n = {
                     summary_text: 'You have successfully completed this assistant, at least enough to actually create the new client.<br />'
                         +'The client will be created when you will click on the "Next" button.<br />'
                         +'The client identifier will be then displayed.',
+                    token_extensions_nav: 'Token extensions',
+                    token_extensions_text: 'Choose optional tokens extensions, as a specific format or a security add-on.'
                 },
                 providers: {
                     list_preamble: 'Select here the providers among those allowed by your organization to satisfy the features needed by the client profile you have chosen.'
@@ -351,7 +354,6 @@ Meteor.APP.i18n = {
                 },
                 grant_nature: {
                     access_label: 'Access token',
-                    format_label: 'Token formater',
                     refresh_label: 'Refresh token',
                 },
                 grant_type: {
@@ -368,18 +370,12 @@ Meteor.APP.i18n = {
                     implicit_description: 'The client application receives the access token immediately after the user gives their consent. '
                         +'<b>This grant flow is deprecated in favor of Authorization code flow.</b>',
                     implicit_label: 'Implicit grant',
-                    jwt_bearer_description: 'JSON Web Token (JWT) Profile for OAuth 2.0 Client Authentication and Authorization Grants.',
-                    jwt_bearer_label: 'Bearer JWT as an authorization grant',
-                    jwt_profile_description: 'JSON Web Token (JWT) Profile for OAuth 2.0 Access Tokens.',
-                    jwt_profile_label: 'JWT Profile token',
-                    password_description: 'This grant type should only be used when there is a high degree of trust between the resource owner and the client.',
+                    password_description: 'This grant type should only be used when there is a high degree of trust between the resource owner and the client. '
+                        +'<b>This grant flow is deprecated in favor of Authorization code flow.</b>',
                     password_label: 'Resource owner password credentials grant',
-                    pkce_description: 'A standard way of mitigating the attacks against Authorization Code grant flow.',
-                    pkce_label: 'Proof Key of Code Exchange (RFC 7636)',
-                    reftoken_description: 'Optional, may be exchanged for another access token when the first has expired.',
+                    reftoken_description: 'Optional, may be exchanged for another access token when this later has expired.',
                     reftoken_label: 'Refresh token grant',
-                    //saml_label: 'SAML 2.0 Bearer Assertion',
-                    select_text: 'The grant types the client can use at the token endpoint'
+                    select_text: 'Select the grant type your client will use at the token endpoint'
                 },
                 jwa_alg: {
                     a128cbc_hs256_label: 'AES_128_CBC_HMAC_SHA_256 authenticated encryption algorithm',
@@ -420,6 +416,17 @@ Meteor.APP.i18n = {
                     sig_label: 'Signature',
                     enc_label: 'Encryption',
                     select_text: 'Select your JWK usage'
+                },
+                token_extension: {
+                    jwt_bearer_description: 'JSON Web Token (JWT) Profile for OAuth 2.0 Client Authentication and Authorization Grants.',
+                    jwt_bearer_label: 'Bearer JWT as an authorization grant',
+                    jwt_profile_description: 'JSON Web Token (JWT) Profile for OAuth 2.0 Access Tokens.',
+                    jwt_profile_label: 'JWT Profile token',
+                    none: 'None',
+                    pkce_description: 'A standard way of mitigating the attacks against Authorization Code grant flow.',
+                    pkce_label: 'Proof Key of Code Exchange (RFC 7636)',
+                    //saml_label: 'SAML 2.0 Bearer Assertion',
+                    select_text: 'Select optional token extensions'
                 }
             },
             header: {

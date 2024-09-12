@@ -10,9 +10,9 @@ import mix from '@vestergaard-company/js-mixin';
 
 import { izProvider } from '/imports/common/classes/iz-provider.class.js';
 
-import { IGrantType } from '/imports/common/interfaces/igranttype.iface.js';
+import { ITokenExtension } from '/imports/common/interfaces/itokenextension.iface.js';
 
-export class JwtBearerProvider extends mix( izProvider ).with( IGrantType ){
+export class JwtBearerProvider extends mix( izProvider ).with( ITokenExtension ){
 
     // static data
 
@@ -38,7 +38,7 @@ export class JwtBearerProvider extends mix( izProvider ).with( IGrantType ){
             ifeatured: [
                 'jwt-bearer'
             ],
-            igranttype: [
+            itokenextension: [
                 'urn:ietf:params:oauth:grant-type:jwt-bearer'
             ],
             irequires: [

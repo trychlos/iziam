@@ -97,7 +97,9 @@ Template.client_redirects_panel.onRendered( function(){
         const checker = self.APP.checker.get();
         if( checker ){
             const status = checker.iStatusableStatus();
-            self.$( '.c-client-redirects-panel' ).trigger( 'iz-status', { status: status });            
+            const validity = checker.iStatusableValidity();
+            console.debug( status, validity );
+            self.$( '.c-client-redirects-panel' ).trigger( 'iz-checker', { status: status, validity: validity });            
         }
     });
 

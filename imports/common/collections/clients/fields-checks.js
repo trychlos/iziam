@@ -141,7 +141,7 @@ const _validUrl = function( value, opts ){
         }
     } else if( opts.acceptUnset === false ){
         return new TM.TypedMessage({
-            level: TM.MessageLevel.C.WARNING,
+            level: TM.MessageLevel.C.ERROR,
             message: pwixI18n.label( I18N, opts.prefix+'_unset' )
         });
     } else {
@@ -422,7 +422,9 @@ Clients.checks = {
             }
             item.redirect_uris[index].uri = value;
         }
-        return _validUrl( value, { prefix: 'clients.checks.redirect', acceptUnset: false, acceptFragment: false });
+        const res = _validUrl( value, { prefix: 'clients.checks.redirect', acceptUnset: false, acceptFragment: false });
+        console.debug( res );
+        return res;
     },
 
     /*

@@ -33,9 +33,11 @@ import '/imports/client/components/client_new_assistant_profile/client_new_assis
 import '/imports/client/components/client_new_assistant_properties/client_new_assistant_properties.js';
 import '/imports/client/components/client_new_assistant_providers/client_new_assistant_providers.js';
 import '/imports/client/components/client_new_assistant_summary/client_new_assistant_summary.js';
+import '/imports/client/components/client_new_assistant_token_extensions/client_new_assistant_token_extensions.js';
 //import '/imports/client/components/jwt_private_select/jwt_private_select.js';
 
 import './client_new_assistant.html';
+import { Clients } from '../../../common/collections/clients';
 
 Template.client_new_assistant.onCreated( function(){
     const self = this;
@@ -59,7 +61,7 @@ Template.client_new_assistant.onCreated( function(){
 
         // returns the list of pages
         pages(){
-            return [
+            let pages = [
                 {
                     name: 'introduction',
                     template: 'client_new_assistant_introduction',
@@ -80,12 +82,17 @@ Template.client_new_assistant.onCreated( function(){
                     name: 'client',
                     template: 'client_new_assistant_client_type',
                     label: pwixI18n.label( I18N, 'clients.new_assistant.client_nav' )
-                },
-                {
+                }
+            ];
+            // false as of 2024-09-12
+            if( Clients.fn.hasSelectedProviders()){
+                pages.push({
                     name: 'providers',
                     template: 'client_new_assistant_providers',
                     label: pwixI18n.label( I18N, 'clients.new_assistant.providers_nav' )
-                },
+                });
+            }
+            pages = pages.concat([
                 {
                     name: 'auth',
                     template: 'client_new_assistant_auth_method',
@@ -95,6 +102,11 @@ Template.client_new_assistant.onCreated( function(){
                     name: 'grant',
                     template: 'client_new_assistant_grant_types',
                     label: pwixI18n.label( I18N, 'clients.new_assistant.grant_type_nav' )
+                },
+                {
+                    name: 'formaters',
+                    template: 'client_new_assistant_token_extensions',
+                    label: pwixI18n.label( I18N, 'clients.new_assistant.token_extensions_nav' )
                 },
                 {
                     name: 'redirects',
@@ -125,7 +137,8 @@ Template.client_new_assistant.onCreated( function(){
                     label: pwixI18n.label( I18N, 'clients.new_assistant.done_nav' ),
                     end: true
                 }
-            ];
+            ]);
+            return pages;
         },
 
         // return the array of the previous pages

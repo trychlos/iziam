@@ -23,23 +23,6 @@
                                     <p class="text">{{ profileText }}</p>
                                 </td>
                             </tr>
-                            <!--
-                            <tr>
-                                <td></td>
-                                <td>
-                                    <table class="ui-w100">
-                                        <tr>
-                                            <td class="label">{{ i18n key="clients.new_assistant.summary_profile_client_label" }}</td>
-                                            <td class="ui-w100"><p class="text">{{ profileClientText }}</p></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="label">{{ i18n key="clients.new_assistant.summary_profile_features_label" }}</td>
-                                            <td><p class="text">{{ profileFeaturesText }}</p></td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-                            -->
                         {{/if}}
                         {{#if havePane "client" }}
                             <tr>
@@ -63,6 +46,12 @@
                             <tr>
                                 <td class="label ui-vatop">{{ i18n key="clients.new_assistant.summary_grant_label" }}</td>
                                 <td><p class="text">{{{ grantText }}}</p></td>
+                            </tr>
+                        {{/if}}
+                        {{#if havePane "formaters" }}
+                            <tr>
+                                <td class="label ui-vatop">{{ i18n key="clients.new_assistant.summary_formaters_label" }}</td>
+                                <td><p class="text">{{{ formatersText }}}</p></td>
                             </tr>
                         {{/if}}
                         {{#if havePane "redirects" }}

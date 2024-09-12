@@ -18,7 +18,7 @@ export const IGrantType = DeclareMixin(( superclass ) => class extends superclas
     /**
      * @param {Object} o an object with following keys:
      *  - irequires: an array of the exposed feature identifiers
-     * @returns {IRequires}
+     * @returns {IGrantType}
      */
     constructor( o ){
         super( ...arguments );
