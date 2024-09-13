@@ -69,6 +69,7 @@ Meteor.APP.i18n = {
                     confirmation_title: 'Deleting a client'
                 },
                 edit: {
+                    auth_method_tab_title: 'Auth method',
                     description_label: 'Description :',
                     description_ph: 'The client description',
                     description_title: 'A not too long description (which are not notes)',

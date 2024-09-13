@@ -9,7 +9,7 @@
  * - embedded panel are expected to publish their changes to the assistant which keep track of the interesting things in the assistantStatus ReactiveDict.
  * 
  * Parms:
- * - organization: an { entity, record } object which provides the current Organiaztion at date
+ * - organization: an { entity, record } object which provides the current closest Organization
  * - item: null
  */
 

@@ -14,45 +14,11 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 
 import { Clients } from '/imports/common/collections/clients/index.js';
 
-import { ClientProfile } from '/imports/common/definitions/client-profile.def.js';
-import { ClientType } from '/imports/common/definitions/client-type.def.js';
-
 import { Providers } from '/imports/common/tables/providers/index.js';
 
 import '/imports/client/components/client_auth_method_panel/client_auth_method_panel.js';
 
 import './client_new_assistant_auth_method.html';
-
-Template.client_new_assistant_auth_method.onCreated( function(){
-    const self = this;
-
-    self.APP = {
-        selectables: new ReactiveVar( [] )
-    };
-
-    // set the selectables auth methods list
-    // they depend of the client type, may be superseded by the client profile
-    self.autorun(() => {
-        const clientType = Template.currentData().parentAPP.assistantStatus.get( 'client_type' ) || null;
-        const profileId = Template.currentData().parentAPP.assistantStatus.get( 'profile' ) || null;
-        const profileDef = profileId ? ClientProfile.byId( profileId ) : null;
-        if( clientType && profileDef ){
-            let selectables = ClientProfile.defaultAuthMethods( profileDef );
-            if( !selectables ){
-                typeDef = ClientType.byId( clientType );
-                if( typeDef ){
-                    selectables = ClientType.defaultAuthMethods( typeDef );
-                }
-            }
-            self.APP.selectables.set( selectables );
-        }
-    });
-
-    // track the selectables
-    self.autorun(() => {
-        //console.debug( 'selectables', self.APP.selectables.get());
-    });
-});
 
 Template.client_new_assistant_auth_method.onRendered( function(){
     const self = this;
@@ -87,28 +53,6 @@ Template.client_new_assistant_auth_method.onRendered( function(){
 });
 
 Template.client_new_assistant_auth_method.helpers({
-    // the context text depends of the current client_type
-    // if the chosen profile is 'Generic' then display the two texts
-    content_text(){
-        const clientProfile = this.parentAPP.assistantStatus.get( 'profile' );
-        const clientType = this.parentAPP.assistantStatus.get( 'client_type' );
-        let text = '';
-        if( clientProfile === 'generic' ){
-            text = pwixI18n.label( I18N, 'clients.new_assistant.auth_method_confidential_text' )
-                +'<br />'
-                +pwixI18n.label( I18N, 'clients.new_assistant.auth_method_public_text' );
-
-        } else if( clientType === 'confidential' ){
-            text = pwixI18n.label( I18N, 'clients.new_assistant.auth_method_confidential_text' );
-
-        } else if( clientType === 'public' ){
-            text = pwixI18n.label( I18N, 'clients.new_assistant.auth_method_public_text' );
-        }
-        text += '<br />'
-            +pwixI18n.label( I18N, 'clients.new_assistant.auth_method_choose_text' );
-        return text;
-    },
-
     // internationalization
     i18n( arg ){
         return pwixI18n.label( I18N, arg.hash.key );
@@ -120,8 +64,7 @@ Template.client_new_assistant_auth_method.helpers({
             ...this,
             entity: this.parentAPP.entity,
             index: 0,
-            checker: this.parentAPP.assistantCheckerRv,
-            selectables: Template.instance().APP.selectables.get()
+            checker: this.parentAPP.assistantCheckerRv
         };
     }
 });

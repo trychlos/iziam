@@ -22,6 +22,15 @@ Template.client_new_assistant_profile.onCreated( function(){
         isSelected( it ){
             const profileId = Template.currentData().parentAPP.assistantStatus.get( 'profile' ) || null;
             return profileId === ClientProfile.id( it );
+        },
+
+        // reactively update the record and the datadict
+        setRecord( dataContext, profile ){
+            const recordRv = dataContext.parentAPP.entity.get().DYN.records[0];
+            let record = recordRv.get();
+            record.profile = profile;
+            recordRv.set( record );
+            dataContext.parentAPP.assistantStatus.set( 'profile', profile );
         }
     };
 });
@@ -89,7 +98,6 @@ Template.client_new_assistant_profile.events({
     // profile selection non-reactively updates the record and set the assistantStatus ReactiveDict
     'click .by-item'( event, instance ){
         const id = instance.$( event.currentTarget ).data( 'item-id' );
-        this.parentAPP.entity.get().DYN.records[0].get().profile = id;
-        this.parentAPP.assistantStatus.set( 'profile', id );
+        instance.APP.setRecord( this, id );
     }
 });

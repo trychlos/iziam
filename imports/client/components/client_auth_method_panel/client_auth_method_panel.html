@@ -1,6 +1,10 @@
 <template name="client_auth_method_panel">
     <div class="c-client-auth-method-panel">
 
+        <div class="text">
+            {{{ content_text }}}
+        </div>
+
         <div class="chooser">
             {{#each it in itemsList }}
                 <div class="by-item {{ itSelected it }}" data-item-id="{{ itId it }}">

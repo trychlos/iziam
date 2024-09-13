@@ -11,7 +11,6 @@
  * - entity: the currently edited client entity as a ReactiveVar
  * - index: the index of the edited record
  * - checker: the Forms.Checker which manages the parent component as a ReactiveVar
- * - selectables: the list of selectables auth method identifiers
  * 
  * Forms.Checker doesn't manage well radio buttons: do not use here.
  */
@@ -22,6 +21,7 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 
 import { AuthMethod } from '/imports/common/definitions/auth-method.def.js';
+import { ClientProfile } from '/imports/common/definitions/client-profile.def.js';
 import { ClientType } from '/imports/common/definitions/client-type.def.js';
 
 import './client_auth_method_panel.html';
@@ -35,23 +35,38 @@ Template.client_auth_method_panel.onCreated( function(){
         selectables: new ReactiveVar( [] ),
 
         // returns true if the definition is the current selection
-        isSelected( def ){
+        isSelected( dataContext, def ){
             const id = AuthMethod.id( def );
-            const record = Template.currentData().entity.get().DYN.records[Template.currentData().index].get();
+            const record = dataContext.entity.get().DYN.records[dataContext.index].get();
             return record.token_endpoint_auth_method === id;
         }
     };
 
-    // build the list of auth methods definitions from the provided list of allowed identifiers
+    // build the selectables auth methods list
+    // they depend of the client type, may be superseded by the client profile
     self.autorun(() => {
-        let selectables = [];
-        Template.currentData().selectables.forEach(( it ) => {
-            const def = AuthMethod.byId( it );
-            if( def ){
-                selectables.push( def );
+        const record = Template.currentData().entity.get().DYN.records[Template.currentData().index].get();
+        const clientType = record.client_type || null;
+        const profileId = record.profile || null;
+        const profileDef = profileId ? ClientProfile.byId( profileId ) : null;
+        let selectableDefs = [];
+        if( clientType && profileDef ){
+            let selectableIds = ClientProfile.defaultAuthMethods( profileDef );
+            if( !selectableIds || !selectableIds.length ){
+                typeDef = ClientType.byId( clientType );
+                if( typeDef ){
+                    selectableIds = ClientType.defaultAuthMethods( typeDef );
+                }
             }
-        });
-        self.APP.selectables.set( selectables );
+            selectableIds = selectableIds || [];
+            selectableIds.forEach(( it ) => {
+                const def = AuthMethod.byId( it );
+                if( def ){
+                    selectableDefs.push( def );
+                }
+            });
+        }
+        self.APP.selectables.set( selectableDefs );
     });
 
     // available auth method depends of the client type
@@ -75,6 +90,28 @@ Template.client_auth_method_panel.onCreated( function(){
 });
 
 Template.client_auth_method_panel.helpers({
+    // the context text depends of the current client_type
+    // if the chosen profile is 'Generic' then display the two texts
+    content_text(){
+        const clientProfile = this.entity.get().DYN.records[this.index].get().profile;
+        const clientType = this.entity.get().DYN.records[this.index].get().client_type;
+        let text = '';
+        if( clientProfile === 'generic' ){
+            text = pwixI18n.label( I18N, 'clients.new_assistant.auth_method_confidential_text' )
+                +'<br />'
+                +pwixI18n.label( I18N, 'clients.new_assistant.auth_method_public_text' );
+
+        } else if( clientType === 'confidential' ){
+            text = pwixI18n.label( I18N, 'clients.new_assistant.auth_method_confidential_text' );
+
+        } else if( clientType === 'public' ){
+            text = pwixI18n.label( I18N, 'clients.new_assistant.auth_method_public_text' );
+        }
+        text += '<br />'
+            +pwixI18n.label( I18N, 'clients.new_assistant.auth_method_choose_text' );
+        return text;
+    },
+
     // string translation
     i18n( arg ){
         return pwixI18n.label( I18N, arg.hash.key );
@@ -82,7 +119,7 @@ Template.client_auth_method_panel.helpers({
 
     // whether this item is selected ?
     itChecked( it ){
-        return Template.instance().APP.isSelected( it ) ? 'checked' : '';
+        return Template.instance().APP.isSelected( this, it ) ? 'checked' : '';
     },
 
     // description
@@ -102,7 +139,7 @@ Template.client_auth_method_panel.helpers({
 
     // whether this item is selected ?
     itSelected( it ){
-        return Template.instance().APP.isSelected( it ) ? 'selected' : '';
+        return Template.instance().APP.isSelected( this, it ) ? 'selected' : '';
     },
 
     // items list: a list of allowed auth methods definitions

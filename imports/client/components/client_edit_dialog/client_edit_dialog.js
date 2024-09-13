@@ -36,6 +36,7 @@
  *  This template hierarchy can run inside of a plain page or of a modal; this is up to the caller, and dynamically identified here.
  *
  * Parms:
+ * - organization: an { entity, record } object which provides the current closest Organization
  * - item: the to-be-edited entity item, null when new
  *      including DYN.managers and DYN.records arrays
  *      this item will be left unchanged until panel submission
@@ -53,6 +54,7 @@ import { Validity } from 'meteor/pwix:validity';
 
 import { ClientsEntities } from '/imports/common/collections/clients_entities/index.js';
 
+import '/imports/client/components/client_auth_method_panel/client_auth_method_panel.js';
 import '/imports/client/components/client_entity_validities_pane/client_entity_validities_pane.js';
 import '/imports/client/components/client_profile_select/client_profile_select.js';
 import '/imports/client/components/client_properties_panel/client_properties_panel.js';
@@ -63,7 +65,7 @@ import './client_edit_dialog.html';
 
 Template.client_edit_dialog.onCreated( function(){
     const self = this;
-    //console.debug( this );
+    console.debug( this );
 
     self.APP = {
         // the global Checker for this modal

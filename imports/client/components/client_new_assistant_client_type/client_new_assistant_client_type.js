@@ -25,6 +25,15 @@ Template.client_new_assistant_client_type.onCreated( function(){
         isSelected( it ){
             const typeId = Template.currentData().parentAPP.assistantStatus.get( 'client_type' ) || null;
             return typeId === ClientType.id( it );
+        },
+
+        // reactively update the record and the datadict
+        setRecord( dataContext, type ){
+            const recordRv = dataContext.parentAPP.entity.get().DYN.records[0];
+            let record = recordRv.get();
+            record.client_type = type;
+            recordRv.set( record );
+            dataContext.parentAPP.assistantStatus.set( 'client_type', type );
         }
     };
 });
@@ -43,8 +52,7 @@ Template.client_new_assistant_client_type.onRendered( function(){
                     const profileDef = ClientProfile.byId( profile );
                     if( profileDef ){
                         client_type = ClientProfile.defaultClientType( profileDef );
-                        Template.currentData().parentAPP.entity.get().DYN.records[0].get().client_type = client_type;
-                        Template.currentData().parentAPP.assistantStatus.set( 'client_type', client_type );
+                        self.APP.setRecord( Template.currentData(), client_type );
                     }
                 }
             }
@@ -111,7 +119,6 @@ Template.client_new_assistant_client_type.events({
     // client type selection non-reactively updates the record and set the assistantStatus ReactiveDict
     'click .by-item'( event, instance ){
         const id = instance.$( event.currentTarget ).data( 'item-id' );
-        this.parentAPP.entity.get().DYN.records[0].get().client_type = id;
-        this.parentAPP.assistantStatus.set( 'client_type', id );
+        instance.APP.setRecord( this, id );
     }
 });

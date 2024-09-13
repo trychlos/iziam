@@ -68,6 +68,11 @@ Template.client_record_tabbed.onCreated( function(){
                     }
                 },
                 {
+                    navLabel: pwixI18n.label( I18N, 'clients.edit.auth_method_tab_title' ),
+                    paneTemplate: 'client_auth_method_panel',
+                    paneData: paneData
+                },
+                {
                     name: 'record_notes_tab',
                     navLabel: pwixI18n.label( I18N, 'clients.edit.record_notes_tab_title' ),
                     paneTemplate: 'NotesEdit',

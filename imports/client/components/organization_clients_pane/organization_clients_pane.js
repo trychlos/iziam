@@ -134,6 +134,10 @@ Template.organization_clients_pane.events({
     //  the buttons from tabular provide the entity document
     'tabular-edit-event .c-organization-clients-pane'( event, instance, data ){
         const item = instance.APP.byEntity( data.item._id );
+        const organization = {
+            entity: this.item.get(),
+            record: this.item.get().DYN.closest
+        };
         Modal.run({
             ...this,
             mdBody: 'client_edit_dialog',
@@ -141,7 +145,8 @@ Template.organization_clients_pane.events({
             mdClasses: 'modal-xxl',
             mdClassesContent: Meteor.APP.runContext.pageUIClasses().join( ' ' ),
             mdTitle: pwixI18n.label( I18N, 'clients.edit.modal_title', item.DYN.closest.label ),
-            item: item
+            item: item,
+            organization: organization
         });
         return false;
     }
