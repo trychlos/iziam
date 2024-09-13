@@ -76,7 +76,8 @@ Template.client_contacts_panel.onRendered( function(){
         const checker = self.APP.checker.get();
         if( checker ){
             const status = checker.iStatusableStatus();
-            self.$( '.c-client-contacts-panel' ).trigger( 'iz-status', { status: status });            
+            const validity = checker.iStatusableValidity();
+            self.$( '.c-client-contacts-panel' ).trigger( 'iz-checker', { status: status, validity: validity });
         }
     });
 

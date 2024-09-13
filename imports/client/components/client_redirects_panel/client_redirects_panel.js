@@ -98,8 +98,7 @@ Template.client_redirects_panel.onRendered( function(){
         if( checker ){
             const status = checker.iStatusableStatus();
             const validity = checker.iStatusableValidity();
-            console.debug( status, validity );
-            self.$( '.c-client-redirects-panel' ).trigger( 'iz-checker', { status: status, validity: validity });            
+            self.$( '.c-client-redirects-panel' ).trigger( 'iz-checker', { status: status, validity: validity });
         }
     });
 
@@ -120,7 +119,6 @@ Template.client_redirects_panel.onRendered( function(){
                         level: TM.MessageLevel.C.WARNING,
                         message: pwixI18n.label( I18N, 'clients.checks.redirect_needed' )
                     }));
-                    //checker.messagerDump();
                     self.APP.warnedNoRedirect = true;
                 }
             }

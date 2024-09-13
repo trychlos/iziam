@@ -35,7 +35,7 @@ Meteor.APP.i18n = {
                     client_type_invalid: 'The client type is unknown or not valid',
                     client_type_unset: 'The client type is not set',
                     contact_invalid: 'The contact email address is not valid',
-                    contact_unset: 'An email address should be provided',
+                    contact_unset: 'An email address must be provided',
                     home_host: 'The home URI wants a hostname',
                     home_https: 'The home URI wants only HTTPS scheme',
                     home_invalid: 'The home URI is not valid',
@@ -228,10 +228,9 @@ Meteor.APP.i18n = {
                 new_assistant: {
                     assistant_title: 'Defining a new client application',
                     auth_method_nav: 'Authentication method',
-                    auth_method_confidential_text: 'Confidential clients must authenticate against the Authorization Server token endpoint.<br />'
-                        +'Please choose below your desired authentication method.',
-                    auth_method_public_text: 'Confidential clients must authenticate against the Authorization Server token endpoint.<br />'
-                        +'Please choose below your desired authentication method.',
+                    auth_method_choose_text: 'Please choose below your desired authentication method.',
+                    auth_method_confidential_text: 'Confidential clients must authenticate against the Authorization Server token endpoint.',
+                    auth_method_public_text: 'Public clients are not expected to be able to authenticate.',
                     client_nav: 'Client type',
                     client_text: 'The client type, in the sense of OAuth specifications, is automatically determined from your chosen client profile. '
                         +'You shouldn\'t need to change it, unless you are really sure of what you are doing, but just in case...',

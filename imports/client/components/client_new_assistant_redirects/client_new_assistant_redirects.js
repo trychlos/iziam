@@ -61,7 +61,6 @@ Template.client_new_assistant_redirects.events({
     // an event sent by client_redirects_panel to advertize of its status
     'iz-checker .c-client-new-assistant-redirects'( event, instance, data ){
         if( this.parentAPP.assistantStatus.get( 'activePane' ) === 'redirects' ){
-            console.debug( data );
             instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'next', enable: data.validity });
         }
     }

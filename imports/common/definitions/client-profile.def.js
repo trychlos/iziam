@@ -79,6 +79,9 @@ export const ClientProfile = {
             }
             return found === null;
         });
+        if( !found ){
+            console.warn( 'client profile not found', id );
+        }
         return found;
     },
 

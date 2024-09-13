@@ -79,12 +79,11 @@ const _validEmail = function( value, opts ){
         }
     } else if( opts.acceptUnset === false ){
         return new TM.TypedMessage({
-            level: TM.MessageLevel.C.WARNING,
+            level: TM.MessageLevel.C.ERROR,
             message: pwixI18n.label( I18N, opts.prefix+'_unset' )
         });
-    } else {
-        return null;
     }
+    return null;
 };
 
 // check an URL
@@ -144,9 +143,8 @@ const _validUrl = function( value, opts ){
             level: TM.MessageLevel.C.ERROR,
             message: pwixI18n.label( I18N, opts.prefix+'_unset' )
         });
-    } else {
-        return null;
     }
+    return null;
 };
 
 // check( item) is used to check a full item, typically when creating/updating an item via the REST API
@@ -249,6 +247,31 @@ Clients.checks = {
         }
     },
 
+    async client_uri( value, data, opts ){
+        _assert_data_content( 'Clients.checks.client_uri()', data );
+        let item = data.entity.get().DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.client_uri = value;
+        }
+        return _validUrl( value, { prefix: 'clients.checks.home', acceptHttp: false });
+    },
+
+    // contact_email, optional in the UI
+    async contact_email( value, data, opts ){
+        _assert_data_content( 'Clients.checks.contact_email()', data );
+        let item = data.entity.get().DYN.records[data.index].get();
+        let index = opts.id ? _id2index( item.contacts, opts.id ) : -1;
+        if( opts.update !== false ){
+            if( index < 0 ){
+                item.contacts = item.contacts || [];
+                item.contacts.push({ id: opts.id });
+                index = 0;
+            }
+            item.contacts[index].email = value;
+        }
+        return _validEmail( value, { prefix: 'clients.checks.contact', acceptUnset: false });
+    },
+
     async description( value, data, opts ){
         _assert_data_content( 'Clients.checks.description()', data );
         let item = data.entity.get().DYN.records[data.index].get();
@@ -307,31 +330,6 @@ Clients.checks = {
             });
     },
     */
-
-    async client_uri( value, data, opts ){
-        _assert_data_content( 'Clients.checks.client_uri()', data );
-        let item = data.entity.get().DYN.records[data.index].get();
-        if( opts.update !== false ){
-            item.client_uri = value;
-        }
-        return _validUrl( value, { prefix: 'clients.checks.home', acceptHttp: false });
-    },
-
-    // contact_email, optional in the UI
-    async contact_email( value, data, opts ){
-        _assert_data_content( 'Clients.checks.contact_email()', data );
-        let item = data.entity.get().DYN.records[data.index].get();
-        let index = opts.id ? _id2index( item.contacts, opts.id ) : -1;
-        if( opts.update !== false ){
-            if( index < 0 ){
-                item.contacts = item.contacts || [];
-                item.contacts.push({ id: opts.id });
-                index = 0;
-            }
-            item.contacts[index].email = value;
-        }
-        return _validEmail( value, { prefix: 'clients.checks.contact', acceptUnset: false });
-    },
 
     // the label must be set, and must identify the client entity
     // need to update the entity (or something) so that the new assistant is reactive
@@ -422,9 +420,7 @@ Clients.checks = {
             }
             item.redirect_uris[index].uri = value;
         }
-        const res = _validUrl( value, { prefix: 'clients.checks.redirect', acceptUnset: false, acceptFragment: false });
-        console.debug( res );
-        return res;
+        return _validUrl( value, { prefix: 'clients.checks.redirect', acceptUnset: false, acceptFragment: false });
     },
 
     /*

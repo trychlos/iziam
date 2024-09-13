@@ -70,8 +70,9 @@ Template.client_new_assistant_contacts.events({
         instance.$( '.c-client-contacts-panel' ).trigger( 'iz-enable-checks', true );
     },
     // an event sent by client_contacts_panel to advertize of its status
-    'iz-status .c-client-new-assistant-contacts'( event, instance, data ){
-        //console.debug( 'iz-status', data );
-        instance.APP.valid.set( data.status === Forms.CheckStatus.C.VALID || data.status === Forms.CheckStatus.C.NONE );
+    'iz-checker .c-client-new-assistant-contacts'( event, instance, data ){
+        if( this.parentAPP.assistantStatus.get( 'activePane' ) === 'contacts' ){
+            instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'next', enable: data.validity });
+        }
     }
 });

@@ -126,6 +126,9 @@ export const GrantType = {
             }
             return found === null;
         });
+        if( !found ){
+            console.warn( 'grant type not found', id );
+        }
         return found;
     },
 

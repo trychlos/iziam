@@ -36,6 +36,9 @@ export const JwkUse = {
             }
             return found === null;
         });
+        if( !found ){
+            console.warn( 'JWK use not found', id );
+        }
         return found;
     },
 

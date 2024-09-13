@@ -107,6 +107,9 @@ export const JwkKty = {
             }
             return found === null;
         });
+        if( !found ){
+            console.warn( 'JWK type not found', id );
+        }
         return found;
     },
 

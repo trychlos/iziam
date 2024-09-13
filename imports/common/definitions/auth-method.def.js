@@ -83,6 +83,9 @@ export const AuthMethod = {
             }
             return found === null;
         });
+        if( !found ){
+            console.warn( 'auth method not found', id );
+        }
         return found;
     },
 

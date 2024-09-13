@@ -56,6 +56,9 @@ export const ClientType = {
             }
             return found === null;
         });
+        if( !found ){
+            console.warn( 'client type not found', id );
+        }
         return found;
     },
 

@@ -139,6 +139,9 @@ export const JwaAlg = {
             }
             return found === null;
         });
+        if( !found ){
+            console.warn( 'JWK algorithm not found', id );
+        }
         return found;
     },
 

@@ -11,7 +11,7 @@
  * - entity: the currently edited client entity as a ReactiveVar
  * - index: the index of the edited record
  * - checker: the Forms.Checker which manages the parent component as a ReactiveVar
- * - selectables: the list of selectables auth methods
+ * - selectables: the list of selectables auth method identifiers
  * 
  * Forms.Checker doesn't manage well radio buttons: do not use here.
  */
@@ -49,15 +49,13 @@ Template.client_auth_method_panel.onCreated( function(){
             const def = AuthMethod.byId( it );
             if( def ){
                 selectables.push( def );
-            } else {
-                console.warn( 'auth method not found', it );
             }
         });
         self.APP.selectables.set( selectables );
     });
 
     // available auth method depends of the client type
-    // make sure the new client type is compatible with the current auth method
+    // make sure these two are compatible
     self.autorun(() => {
         const recordRv = Template.currentData().entity.get().DYN.records[Template.currentData().index];
         let record = recordRv.get();
@@ -66,8 +64,9 @@ Template.client_auth_method_panel.onCreated( function(){
             typeDef = ClientType.byId( clientType );
             if( typeDef ){
                 const authMethod = record.token_endpoint_auth_method;
-                if( authMethod && !ClientType.defaultAuthMethods( typeDef ).includes( authMethod )){
-                    delete record.token_endpoint_auth_method;
+                const defaultMethods = ClientType.defaultAuthMethods( typeDef );
+                if( !authMethod || !defaultMethods.includes( authMethod )){
+                    record.token_endpoint_auth_method = defaultMethods[0];
                     recordRv.set( record );
                 }
             }

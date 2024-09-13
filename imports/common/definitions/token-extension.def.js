@@ -56,6 +56,9 @@ export const TokenExtension = {
             }
             return found === null;
         });
+        if( !found ){
+            console.warn( 'token extension not found', id );
+        }
         return found;
     },
 

@@ -47,38 +47,31 @@ Template.client_new_assistant_auth_method.onCreated( function(){
             self.APP.selectables.set( selectables );
         }
     });
+
+    // track the selectables
+    self.autorun(() => {
+        //console.debug( 'selectables', self.APP.selectables.get());
+    });
 });
 
 Template.client_new_assistant_auth_method.onRendered( function(){
     const self = this;
+    const dataDict = Template.currentData().parentAPP.assistantStatus;
 
     // tracks the selected providers to enable/disable this pane
     // this "auth method" pane requires to have a provider for oauth2 feature
     self.autorun(() => {
         if( Clients.fn.hasSelectedProviders()){
-            const dataDict = Template.currentData().parentAPP.assistantStatus;
             const selected = dataDict.get( 'selectedProviders' ) || [];
             self.$( '.c-client-new-assistant-auth-method' ).trigger( 'assistant-do-enable-tab', { name: 'auth',  enabled: Providers.hasFeature( selected, 'oauth2' ) });
         }
     });
 
-    // try to have a default selection
+    // copy the selection to datadict
+    const recordRv = Template.currentData().parentAPP.entity.get().DYN.records[0];
     self.autorun(() => {
-        const dataDict = Template.currentData().parentAPP.assistantStatus;
         if( dataDict.get( 'activePane' ) === 'auth' ){
-            const record = Template.currentData().parentAPP.entity.get().DYN.records[0].get();
-            const selectables = self.APP.selectables.get();
-            let authMethod = record.token_endpoint_auth_method || null;
-            if( authMethod && selectables.includes( authMethod )){
-                // just to be sure the two values are aligned
-                dataDict.set( 'token_endpoint_auth_method', authMethod );
-            } else {
-                const authMethod = selectables[0];
-                // reactively update the record so that the embedded panel auto-updates
-                record.token_endpoint_auth_method = authMethod;
-                Template.currentData().parentAPP.entity.get().DYN.records[0].set( record );
-                dataDict.set( 'token_endpoint_auth_method', authMethod );
-            }
+            dataDict.set( 'token_endpoint_auth_method', recordRv.get().token_endpoint_auth_method );
         }
     });
 
@@ -95,9 +88,25 @@ Template.client_new_assistant_auth_method.onRendered( function(){
 
 Template.client_new_assistant_auth_method.helpers({
     // the context text depends of the current client_type
+    // if the chosen profile is 'Generic' then display the two texts
     content_text(){
+        const clientProfile = this.parentAPP.assistantStatus.get( 'profile' );
         const clientType = this.parentAPP.assistantStatus.get( 'client_type' );
-        return pwixI18n.label( I18N, clientType === 'confidential' ? 'clients.new_assistant.auth_method_confidential_text' : 'clients.new_assistant.auth_method_public_text' );
+        let text = '';
+        if( clientProfile === 'generic' ){
+            text = pwixI18n.label( I18N, 'clients.new_assistant.auth_method_confidential_text' )
+                +'<br />'
+                +pwixI18n.label( I18N, 'clients.new_assistant.auth_method_public_text' );
+
+        } else if( clientType === 'confidential' ){
+            text = pwixI18n.label( I18N, 'clients.new_assistant.auth_method_confidential_text' );
+
+        } else if( clientType === 'public' ){
+            text = pwixI18n.label( I18N, 'clients.new_assistant.auth_method_public_text' );
+        }
+        text += '<br />'
+            +pwixI18n.label( I18N, 'clients.new_assistant.auth_method_choose_text' );
+        return text;
     },
 
     // internationalization
