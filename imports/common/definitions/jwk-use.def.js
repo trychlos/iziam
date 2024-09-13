@@ -24,6 +24,9 @@ export const JwkUse = {
         }
     ],
 
+    // only warn once when byId() doesn't find the item
+    warnedById: {},
+
     /**
      * @param {String} id a usage identifier
      * @returns {Object} the usage definition, or null
@@ -36,8 +39,9 @@ export const JwkUse = {
             }
             return found === null;
         });
-        if( !found ){
+        if( !found && !JwkUse.warnedById[id] ){
             console.warn( 'JWK use not found', id );
+            JwkUse.warnedById[id] = true;
         }
         return found;
     },

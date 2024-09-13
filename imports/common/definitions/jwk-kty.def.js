@@ -74,6 +74,9 @@ export const JwkKty = {
         }
     ],
 
+    // only warn once when byId() doesn't find the item
+    warnedById: {},
+
     /**
      * @param {Object} def a JwkKty definition as returned by JwkKty.Knowns()
      * @param {String} use the JWK use identifier
@@ -107,8 +110,9 @@ export const JwkKty = {
             }
             return found === null;
         });
-        if( !found ){
+        if( !found && !JwkKty.warnedById[id] ){
             console.warn( 'JWK type not found', id );
+            JwkKty.warnedById[id] = true;
         }
         return found;
     },

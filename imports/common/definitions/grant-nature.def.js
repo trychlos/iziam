@@ -28,6 +28,9 @@ export const GrantNature = {
         }
     ],
 
+    // only warn once when byId() doesn't find the item
+    warnedById: {},
+
     /**
      * @param {String} id a grant nature identifier
      * @returns {Object} the grant nature definition, or null
@@ -40,8 +43,9 @@ export const GrantNature = {
             }
             return found === null;
         });
-        if( !found ){
+        if( !found && !GrantNature.warnedById[id] ){
             console.warn( 'grant nature not found', id );
+            GrantNature.warnedById[id] = true;
         }
         return found;
     },

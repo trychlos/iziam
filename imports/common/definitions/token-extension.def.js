@@ -44,6 +44,9 @@ export const TokenExtension = {
        }
     ],
 
+    // only warn once when byId() doesn't find the item
+    warnedById: {},
+
     /**
      * @param {String} id a grant type identifier
      * @returns {Object} the grant type definition, or null
@@ -56,8 +59,9 @@ export const TokenExtension = {
             }
             return found === null;
         });
-        if( !found ){
+        if( !found && !TokenExtension.warnedById[id] ){
             console.warn( 'token extension not found', id );
+            TokenExtension.warnedById[id] = true;
         }
         return found;
     },

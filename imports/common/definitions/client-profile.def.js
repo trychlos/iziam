@@ -67,6 +67,9 @@ export const ClientProfile = {
         }
     ],
 
+    // only warn once when byId() doesn't find the item
+    warnedById: {},
+
     /**
      * @param {String} id a client profile identifier
      * @returns {Object} the client profile definition, or null
@@ -79,8 +82,9 @@ export const ClientProfile = {
             }
             return found === null;
         });
-        if( !found ){
+        if( !found && !ClientProfile.warnedById[id] ){
             console.warn( 'client profile not found', id );
+            ClientProfile.warnedById[id] = true;
         }
         return found;
     },

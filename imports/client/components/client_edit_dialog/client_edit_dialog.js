@@ -65,7 +65,7 @@ import './client_edit_dialog.html';
 
 Template.client_edit_dialog.onCreated( function(){
     const self = this;
-    console.debug( this );
+    //console.debug( this );
 
     self.APP = {
         // the global Checker for this modal

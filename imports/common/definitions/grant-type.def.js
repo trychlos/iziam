@@ -114,6 +114,9 @@ export const GrantType = {
         }
     ],
 
+    // only warn once when byId() doesn't find the item
+    warnedById: {},
+
     /**
      * @param {String} id a grant type identifier
      * @returns {Object} the grant type definition, or null
@@ -126,8 +129,9 @@ export const GrantType = {
             }
             return found === null;
         });
-        if( !found ){
+        if( !found && !GrantType.warnedById[id] ){
             console.warn( 'grant type not found', id );
+            GrantType.warnedById[id] = true;
         }
         return found;
     },

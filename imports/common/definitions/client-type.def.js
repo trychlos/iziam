@@ -44,6 +44,9 @@ export const ClientType = {
         }
     ],
 
+    // only warn once when byId() doesn't find the item
+    warnedById: {},
+
     /**
      * @param {String} id a client type identifier
      * @returns {Object} the client type definition, or null
@@ -56,8 +59,9 @@ export const ClientType = {
             }
             return found === null;
         });
-        if( !found ){
+        if( !found && !ClientType.warnedById[id] ){
             console.warn( 'client type not found', id );
+            ClientType.warnedById[id] = true;
         }
         return found;
     },

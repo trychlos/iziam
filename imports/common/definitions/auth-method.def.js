@@ -71,6 +71,9 @@ export const AuthMethod = {
         }
     ],
 
+    // only warn once when byId() doesn't find the item
+    warnedById: {},
+
     /**
      * @param {String} id a client type identifier
      * @returns {Object} the client credentials type definition, or null
@@ -83,8 +86,9 @@ export const AuthMethod = {
             }
             return found === null;
         });
-        if( !found ){
+        if( !found && !AuthMethod.warnedById[id] ){
             console.warn( 'auth method not found', id );
+            AuthMethod.warnedById[id] = true;
         }
         return found;
     },

@@ -127,6 +127,9 @@ export const JwaAlg = {
         }
     ],
 
+    // only warn once when byId() doesn't find the item
+    warnedById: {},
+
     /**
      * @param {String} id an algorithm identifier
      * @returns {Object} the JwaAlg definition, or null
@@ -139,8 +142,9 @@ export const JwaAlg = {
             }
             return found === null;
         });
-        if( !found ){
+        if( !found && !JwaAlg.warnedById[id] ){
             console.warn( 'JWK algorithm not found', id );
+            JwaAlg.warnedById[id] = true;
         }
         return found;
     },
