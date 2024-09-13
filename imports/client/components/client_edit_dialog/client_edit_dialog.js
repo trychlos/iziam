@@ -108,7 +108,7 @@ Template.client_edit_dialog.onCreated( function(){
             checker: self.APP.checker
         };
         const notesField = ClientsEntities.fieldSet.get().byName( 'notes' );
-        self.APP.tabbed = new Tabbed.Instance( self, new ReactiveVar({
+        self.APP.tabbed = new Tabbed.Instance( self, {
             name: 'client_edit_dialog',
             tabs: [
                 {
@@ -131,7 +131,7 @@ Template.client_edit_dialog.onCreated( function(){
                     }
                 }
             ]
-        }));
+        });
     });
 });
 

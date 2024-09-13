@@ -83,6 +83,7 @@ Template.client_properties_panel.onRendered( function(){
         const checker = self.APP.checker.get();
         if( parentChecker && !checker ){
             const enabled = Template.currentData().enableChecks !== false;
+            const record = Template.currentData().entity.get().DYN.records[Template.currentData().index].get();
             self.APP.checker.set( new Forms.Checker( self, {
                 name: 'client_properties_panel',
                 parent: parentChecker,
@@ -91,7 +92,7 @@ Template.client_properties_panel.onRendered( function(){
                     entity: Template.currentData().entity,
                     index: Template.currentData().index
                 },
-                setForm: Template.currentData().entity.get().DYN.records[Template.currentData().index].get(),
+                setForm: record,
                 enabled: enabled
             }));
         }
@@ -142,7 +143,7 @@ Template.client_properties_panel.helpers({
 Template.client_properties_panel.events({
     // ask for clear the panel
     'iz-clear-panel .c-client-properties-panel'( event, instance ){
-        instance.APP.checker.get().clear();
+        instance.APP.checker.get().clearPanel();
     },
     // ask for enabling the checker (when this panel is used inside of an assistant)
     'iz-enable-checks .c-client-properties-panel'( event, instance, enabled ){

@@ -65,7 +65,7 @@ Template.jwk_edit_dialog.onCreated( function(){
 
     // instanciates a named Tabbed
     self.autorun(() => {
-        self.APP.tabbed.set( new Tabbed.Instance( self, new ReactiveVar({
+        self.APP.tabbed.set( new Tabbed.Instance( self, {
             name: 'jwk_edit_dialog',
             dataContext: {
                 organization: { entity: Template.currentData().entity.get(), record: Template.currentData().entity.get().DYN.records[Template.currentData().index].get() },
@@ -92,7 +92,7 @@ Template.jwk_edit_dialog.onCreated( function(){
                     enabled: false
                 }
             ]
-        })));
+        }));
     });
 });
 

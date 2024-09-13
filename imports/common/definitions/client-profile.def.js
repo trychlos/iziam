@@ -22,7 +22,7 @@ export const ClientProfile = {
             grant_type: 'client_credentials'
         },
         {
-            id: 'public',
+            id: 'user',
             label: 'definitions.client_profile.public_label',
             description: 'definitions.client_profile.public_description',
             image: '/images/profile-public.svg',
@@ -35,7 +35,7 @@ export const ClientProfile = {
             grant_type: 'authorization_code'
         },
         {
-            id: 'confidential',
+            id: 'trusted',
             label: 'definitions.client_profile.confidential_label',
             description: 'definitions.client_profile.confidential_description',
             image: '/images/profile-confidential.svg',

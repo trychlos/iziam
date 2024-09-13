@@ -27,7 +27,7 @@ Template.jwk_keyspair_pane.onCreated( function(){
 
     // instanciates the Tabbed component
     self.autorun(() => {
-        self.APP.tabbed.set( new Tabbed.Instance( self, new ReactiveVar({
+        self.APP.tabbed.set( new Tabbed.Instance( self, {
             name: 'jwk_keyspair_pane',
             dataContext: Template.currentData(),
             tabs: [
@@ -52,6 +52,6 @@ Template.jwk_keyspair_pane.onCreated( function(){
                     paneTemplate: 'jwk_public_spki_pane'
                 }
             ]
-        })));
+        }));
     });
 });

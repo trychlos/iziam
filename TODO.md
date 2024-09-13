@@ -15,9 +15,6 @@
 |    8 | 2023- 9- 6 | feat: manage authentification providers |
 |    9 | 2023- 9- 6 | feat: manage authorization providers |
 |   17 | 2023-11-30 | have user settings |
-|   21 | 2023-12-16 | Review the roles per account edition, replacing the not suitable prEdit relatively to scopes |
-|   23 | 2023-12-16 | organizations/clients management shoud be derived from a 'validity-oriented' collection package class |
-|   25 | 2023-12-19 | different panes (e.g. clients management) are not reactive between them, but should |
 |   26 | 2023-12-20 | oidc-provider NOTICE: default ttl.ClientCredentials function called, you SHOULD change it in order to define the expiration for ClientCredentials artifacts |
 |   27 | 2024- 1- 4 | have an option to restart the OIDC server (reload the updated clients) |
 |   28 | 2024- 1- 4 | have optional introspection endpoint and only enable instospection if this endpoint is set |
@@ -36,6 +33,7 @@
 |   47 | 2024- 1- 5 | Build oidc adapter |
 |   49 | 2024- 1- 6 | on all methods/publications on server-side, have to re-check the user permissions vs his roles |
 |      | 2024- 1-10 | see also #60 to throw our own exceptions |
+|      | 2024- 9-13 | architecture is done with pwix:permissions - Have to distinguish client/user-capable callable code to the code stricyly usable by our server |
 |   54 | 2024- 1- 7 | in group_edit modal, replace two tabs groups_panel and identities_panel with a tab members_panel with two subtabs groups and identities |
 |   55 | 2024- 1- 8 | Identities.name should have an extension which includes the preferred email address (to distinguish homonymous) |
 |   56 | 2024- 1- 8 | membership.hierarchy: have a right-click context menu with new/insert group/identity |
@@ -44,44 +42,26 @@
 |      | 2024- 6-24 | what is the added value or the use case ? |
 |   61 | 2024- 1-10 | identities: add titre, titre post-nominal |
 |   64 | 2024- 1-10 | display the picture in organizations list, identities list |
-|   65 | 2024- 1-11 | oauth_jwks_pane: have a button to display the JWK |
 |   66 | 2024- 1-11 | auth server: have a button to display the .well-known/openid-configuration |
-|   68 | 2024- 1-11 | in organization_page the vertical line should be the same color than the header iziam logo (rather than orange)  |
-|   70 | 2024- 1-11 | review the categories of the components: x-component vs. x-tab vs. x-pane s. x-panel and so on |
 |   72 | 2024- 1-12 | use image_includer component in the identity properties |
 |   77 | 2024- 1-12 | multiple-select: review the select box size to align with standard bootstrap select boxes |
-|   78 | 2024- 1-12 | oauth_jwks_pane: review the buttons size and alignment (better visible with zoom=200%) |
-|      |            | most probably other panes are also concerned |
 |   79 | 2024- 1-12 | obsolete Meteor.APP.ExtOpenID.upsert_helper() server function |
 |   80 | 2024- 1-12 | organization_check: a JWK is only needed if a client requires a JWT auth method - and this client will just cannot be connect|
 |      |            | not a reason to not have a REST API |
 |      | 2024- 1-18 | not at all: if the client wants authentify with a JWT, it will provide its own public key or will share a secret with the server |
 |      |            | organizations have JWKS for being able to handle customers requests to receive JWT |
 |   81 | 2024- 1-12 | providers_tab: display available resources and scopes when isAdmin |
-|   84 | 2024- 1-12 | rename 'organizations-jwks-1' document to 'oauth-jwks-1', updating accordingly oauth_jwks_pane.html |
 |   85 | 2024- 1-13 | jwks_pane: ask for user confirmation when removing an item and also when validating the dialog |
 |   86 | 2024- 1-13 | keygrip_secret: ask for user confirmation when removing an item and also when validating the dialog |
-|   87 | 2024- 1-13 | seems that acUserLogin used when creating a new local account doesn't check for existing email address ? |
 |   89 | 2024- 1-14 | have a tool to identify unused strings from i18n/en.js |
-|   94 | 2024- 1-17 | assistant panes should be able to use FormChecker but the form of arguments is very different (with a DataDict) - have to find a common form |
-|      | 2024- 1-18 | an item RV seems the most adapted |
-|   95 | 2024- 1-17 | seems that having content documents inside of panels only for some sentences be a false good idea - or not ?? |
 |   96 | 2024- 1-17 | client_new_assistant: implement JWT authentification per private key |
 |   97 | 2024- 1-17 | client_new_assistant: implement JWT authentification per shared secret |
-|   98 | 2024- 1-18 | organization_edit: the overflow_x bottom bar is always shown but shouln't |
-|      | 2024- 1-18 | resource_edit idem |
-|      | 2024- 1-19 | but not client_edit |
 |   99 | 2024- 1-18 | organization_edit / edit managers: the list of accounts doesnt show and so no available selection |
-|  102 | 2024- 1-18 | client_contacts and client_endpoints: review the HTML to have the same than in client_new_assistant (a top row to add and the list below) |
 |  105 | 2024- 1-18 | client_new_assistant: have client shared secret when needed one the done page |
 |  106 | 2024- 1-18 | client_new_assistant: have scopes |
-|  107 | 2024- 1-19 | in .def.js definitions, .C should be reserved to constants - rename as .K for Knowns() |
-|  108 | 2024- 1-20 | set notes be a collection behavior (item timestampable) |
 |  109 | 2024- 1-20 | set removeUnsetValues be a collection behavior (item timestampable) |
-|  110 | 2024- 1-20 | client_edit: when erasing a notes, dmbs write is ok (notes is removed) but reactive reload is not (note is still here) |
-|  111 | 2024- 1-20 | account_edit should have an account_tabbed |
 |  112 | 2024- 6-24 | customize the new account mail to verify the address |
-|  112 |  |  |
+|  114 |  |  |
 
 ---
 ## Done
@@ -123,11 +103,17 @@
 |      | 2023-12-16 | fixed |
 |   20 | 2023-12-16 | Organization.Properties modal menu item for an organization manager should only be displayed when there is a current scope |
 |      | 2024- 1-14 | obsolete |
+|   21 | 2023-12-16 | Review the roles per account edition, replacing the not suitable prEdit relatively to scopes |
+|      | 2024- 9-13 | obsoleted by new scope management |
 |   22 | 2023-12-16 | local accounts management shoud be packaged |
 |      | 2024- 6-24 | in work with pwix:accounts-manager |
+|   23 | 2023-12-16 | organizations/clients management shoud be derived from a 'validity-oriented' collection package class |
+|      | 2024- 9-13 | done |
 |   24 | 2023-12-19 | obsolete field_check_indicator and field_type_indicator components |
 |      | 2024- 1- 8 | field_check_indicator is removed |
 |      | 2024- 1- 8 | field_type_indicator is removed |
+|   25 | 2023-12-19 | different panes (e.g. clients management) are not reactive between them, but should |
+|      | 2024- 9-14 | dohne with pwix:tabbed |
 |   29 | 2024- 1- 4 | have a client option to authorize to issue a refresh_token when asked scope has offline_access |
 |      | 2024- 1-18 | this is the role of the refresh token grant type |
 |   30 | 2024- 1- 4 | FormChecker error when updating client grant types (multiple select) |
@@ -161,10 +147,16 @@
 |      | 2024- 1-12 | done |
 |   63 | 2024- 1-10 | have a picture component to be used both in organization and identities |
 |      | 2024- 1-12 | done |
+|   65 | 2024- 1-11 | oauth_jwks_pane: have a button to display the JWK |
+|      | 2024- 9-13 | done |
 |   67 | 2024- 1-11 | organization_properties_pane should be on two columns |
 |      | 2024- 1-12 | cancelled: one column, more panes, and a dialog per big theme |
+|   68 | 2024- 1-11 | in organization_page the vertical line should be the same color than the header iziam logo (rather than orange)  |
+|      | 2024- 9-13 | obsoleted by new UI |
 |   69 | 2024- 1-11 | move back the oauth_jwks_pane to authserver configuration (and rename that!) because it is too large for the dialog |
 |      | 2024- 1-12 | done - will have a jwks dialog, callable from organization edit |
+|   70 | 2024- 1-11 | review the categories of the components: x-component vs. x-tab vs. x-pane s. x-panel and so on |
+|      | 2024- 9-13 | obsoleted in new UI |
 |   71 | 2024- 1-11 | obsolete tabbed_template in profit of coreTabbedTemplate |
 |      | 2024- 1-16 | note that events have been renamed to tabbed-do-xxx, tabbed-pane-xxx and also the data field names to tabbedId and tabbedName.. |
 |      | 2024- 1-19 | done |
@@ -176,11 +168,18 @@
 |      | 2024- 1-13 | done |
 |   76 | 2024- 1-12 | display properties for the current validity (current org record) from organization summary pane |
 |      | 2024- 1-13 | done |
+|   78 | 2024- 1-12 | oauth_jwks_pane: review the buttons size and alignment (better visible with zoom=200%) |
+|      |            | most probably other panes are also concerned |
+|   78 | 2024- 9-13 | obsoleted in new UI |
 |   82 | 2024- 1-12 | resource_props_panel should be renamed resource_properties_panel |
 |      | 2024- 1-19 | done |
 |   83 | 2024- 1-12 | clients_management_tabbed should be renamed clients_tabbed (or renamed accordingly identities_tabbed, authorizations__tabbed, resources_tabbed) |
 |      | 2024- 1-18 | all of these should definitively be renamed xxx_manager_tabbed |
 |      | 2024- 1-19 | all of these is definitively renamed xxx_management_tabbed - so done anyway |
+|   84 | 2024- 1-12 | rename 'organizations-jwks-1' document to 'oauth-jwks-1', updating accordingly oauth_jwks_pane.html |
+|      | 2024- 9-13 | obsoleted as new UI doesn't use documents |
+|   87 | 2024- 1-13 | seems that acUserLogin used when creating a new local account doesn't check for existing email address ? |
+|      | 2024- 9-13 | has been fixed in accounts-ui |
 |   88 | 2024- 1-14 | app-scope is not a good name. Maybe validity context or running context ? -> OrganizationContext ? |
 |      | 2024- 1-19 | done as OrganizationContext |
 |   90 | 2024- 1-14 | replace IIDGenerator and ISecretGenerator interfaces with a Generator object with two functions |
@@ -198,15 +197,37 @@
 |      |            | so closing |
 |   93 | 2024- 1-15 | rename 'client-chooser-introduction' document to 'client-new-introduction', updating accordingly client_new_assistant_introduction.html |
 |      | 2024- 1-18 | done |
+|   94 | 2024- 1-17 | assistant panes should be able to use FormChecker but the form of arguments is very different (with a DataDict) - have to find a common form |
+|      | 2024- 1-18 | an item RV seems the most adapted |
+|      | 2024- 9-13 | obsoleted with new pwix:forms |
+|   95 | 2024- 1-17 | seems that having content documents inside of panels only for some sentences be a false good idea - or not ?? |
+|      | 2024- 9-13 | obsoleted in new UI |
+|   98 | 2024- 1-18 | organization_edit: the overflow_x bottom bar is always shown but shouln't |
+|      | 2024- 1-18 | resource_edit idem |
+|      | 2024- 1-19 | but not client_edit |
+|      | 2024- 9-13 | bug is no more present in new UI with pwix:tabbed |
 |  100 | 2024- 1-18 | resource_edit: idem than #98 |
 |      | 2024- 1-19 | closed as a duplicate of #98 |
 |  101 | 2024- 1-18 | client_edit: add software_id, software_version, clientId |
 |      | 2024- 1-19 | done |
+|  102 | 2024- 1-18 | client_contacts and client_endpoints: review the HTML to have the same than in client_new_assistant (a top row to add and the list below) |
+|      | 2024- 9-13 | done |
 |  103 | 2024- 1-18 | remove clients_registration, clients_credentials and clients_checks from clients manager |
 |      | 2024- 1-19 | done |
 |  104 | 2024- 1-18 | clients_checks use rather editedrv, while we have seen with organization that itemrv is more useable |
 |      |            | so update client_edit to rather used itemRV, editedRV being only required when checking effect dates |
 |      | 2024- 1-19 | done in all client_edit tabs and in client-checks |
+|  107 | 2024- 1-19 | in .def.js definitions, .C should be reserved to constants - rename as .K for Knowns() |
+|      | 2024- 9-13 | cancelled: keep C |
+|  108 | 2024- 1-20 | set notes be a collection behavior (item timestampable) |
+|      | 2024- 9-13 | obsoleted by pwix:notes |
+|  110 | 2024- 1-20 | client_edit: when erasing a notes, dmbs write is ok (notes is removed) but reactive reload is not (note is still here) |
+|      | 2024- 9-13 | to be re-checked on all collections |
+|      | 2024- 9-13 | done - OK |
+|  111 | 2024- 1-20 | account_edit should have an account_tabbed |
+|      | 2024- 9-13 | done in pwix:accounts-manager |
+|  113 | 2024- 9-13 | client_new_assistant keept the data of the previous run when re-run |
+|      | 2024- 9-13 | fixed |
 
 ---
 P. Wieser

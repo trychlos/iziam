@@ -21,6 +21,7 @@ Template.client_new_assistant_properties.helpers({
 
     // parms for re-use the client_edit properties panel
     parmsPropertiesPanel(){
+        //console.debug( this.parentAPP.entity.get().DYN.records[0].get());
         return {
             ...this,
             entity: this.parentAPP.entity,

@@ -41,7 +41,7 @@ import { Clients } from '../../../common/collections/clients';
 
 Template.client_new_assistant.onCreated( function(){
     const self = this;
-    //console.debug( this );
+    //console.debug( 'onCreated', this );
 
     self.APP = {
         // the global Checker for this modal
@@ -160,6 +160,7 @@ Template.client_new_assistant.onCreated( function(){
     };
 
     // wait for assistant initialized itself
+    self.APP.assistantStatus.clear();
     self.APP.assistantStatus.set( 'activated', false );
 
     // build a suitable new client entity
@@ -206,20 +207,21 @@ Template.client_new_assistant.onRendered( function(){
     });
 
     // allocate a Checker for this (topmost parent) template
-    self.autorun(() => {
-        self.APP.checker.set( new Forms.Checker( self, {
-            name: 'client_new_assistant',
-            okFn( valid ){
-                self.$( '.Assistant' ).trigger( 'assistant-do-action-set', { action: 'next', enabled: valid });
-            }
-        }));
-    });
+    self.APP.checker.set( new Forms.Checker( self, {
+        name: 'client_new_assistant',
+        okFn( valid ){
+            self.$( '.Assistant' ).trigger( 'assistant-do-action-set', { action: 'next', enabled: valid });
+        }
+    }));
 
     // make sure at startup that cancel/prev/next buttons are shown (though last two are disabled at startup)
     self.$( '.Assistant' ).trigger( 'assistant-do-action-set', { action: 'cancel', show: true, enable: true });
     self.$( '.Assistant' ).trigger( 'assistant-do-action-set', { action: 'prev', show: true, enable: false });
     self.$( '.Assistant' ).trigger( 'assistant-do-action-set', { action: 'next', show: true, enable: false });
     self.$( '.Assistant' ).trigger( 'assistant-do-action-set', { action: 'close', show: false, enable: false });
+
+    // and clear the panels to prevent re-use of data of a previous session
+    self.APP.checker.get().clearPanel({ propagateDown: true });
 });
 
 Template.client_new_assistant.helpers({
