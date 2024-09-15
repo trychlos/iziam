@@ -46,7 +46,10 @@
                         }
                     }
                 },
-                "issuer": "https://localhost:3003"
+                "issuer": "https://localhost:3003",
+                "private": {
+                    "toto": "un"
+                }
             },
             "staging-name": {
                 "type": "staging",
@@ -63,10 +66,10 @@
                 "comments": [
                     "The production environment."
                 ],
-                "sender": "izIAM ppAdmin <noreply@pwi-consulting.fr",
-                "contact": "pierre@wpwi-consulting.fr",
-                "title": "AppTemplateProd",
-                "issuer": "https://trychlos.org"
+                "sender": "izIAM AppAdmin <noreply@pwi-consulting.fr",
+                "contact": "pierre@pwi-consulting.fr",
+                "title": "izIAM Production",
+                "issuer": "https://iziam.trychlos.org"
             }
         }
     }

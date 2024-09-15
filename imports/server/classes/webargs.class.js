@@ -110,7 +110,7 @@ export class Webargs {
         if( api[this.#req.method] ){
             let hasPath = false;
             api[this.#req.method].every(( it ) => {
-                if( url === it.path ){
+                if( url === it.path || it.path === '*' ){
                     hasPath = true;
                     if( it.fn ){
                         it.fn( it, self, opts.organization );

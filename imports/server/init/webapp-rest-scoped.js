@@ -21,10 +21,15 @@ import { Webargs } from '/imports/server/classes/webargs.class.js';
 // organization-scoped REST API
 const scoped = {
     GET: [
-        // entry point of the global REST API -> just list the available commands
+        // oauth well-known metadata
         {
             path: Meteor.APP.C.oauthMetadataPath,
             fn: fn_wellKnown
+        },
+        // at the end, try organization-configured endpoints
+        {
+            path: '*',
+            fn: fn_findPath
         }
     ]
 }
@@ -34,6 +39,10 @@ const scoped = {
 // organization: the { entity, record } at date organization object
 function fn_wellKnown( it, args, organization ){
     args.answer( Organizations.fn.metadata( organization ));
+}
+
+function fn_findPath( it, args, organization ){
+    //args.answer( Organizations.fn.metadata( organization ));
 }
 
 // make sure we address only one entity

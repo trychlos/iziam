@@ -2,11 +2,14 @@
  * /imports/common/init/env-settings.js
  */
 
-import { CoreApp } from 'meteor/pwix:core-app';
+import { EnvSettings } from 'meteor/pwix:env-settings';
 
 EnvSettings.configure({
-    //verbosity: EnvSettings.C.Verbose.READY
-    onReady(){
-        CoreApp.onEnvSettingsReady();
-    }
+    //reconfigurePackages: true,
+    sourcePath: Meteor.APP.name + '.environments',
+    //sourcePath: 'environments',
+    targetPath: Meteor.APP.name + '.environment',
+    //targetPath: 'environment',
+    verbosity: EnvSettings.C.Verbose.CONFIGURE | EnvSettings.C.Verbose.READY | EnvSettings.C.Verbose.RECONFIGURE
+    //verbosity: EnvSettings.C.Verbose.CONFIGURE
 });
