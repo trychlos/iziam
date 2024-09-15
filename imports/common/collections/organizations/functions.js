@@ -19,6 +19,69 @@ import { Organizations } from './index.js';
 
 Organizations.fn = {
     /**
+     * @summary Returns a list of the organization selected providers which match a specified type
+     * @param {Organizations} organization as an { entity, record } object
+     * @param {Object} type the instance type to be filtered
+     * @returns {Object} the selected providers as a hash whose keys are the provider IIdent identifier and the value:
+     * - provider: the izProvider instance
+     * - features: an array of the provided IFeatured's
+     */
+    byType( organization, type ){
+        let filtered = {};
+        const providers = Organizations.fn.selectedProviders( organization );
+        for( let ident in providers ){
+            if( providers[ident].provider instanceof type ){
+                filtered[ident] = providers[ident];
+            }
+        }
+        return filtered;
+    },
+
+    /**
+     * @summary Returns a list of the organization selected providers which match a specified type, sorted by their prerequisites and their versions
+     *  which means than we will have, for example openid 1.0 -> oauth 2.1 -> oauth 2.0
+     *  so the first is the preferred (because the more advanced) and the last is the less preferred (because the oldest)
+     * @param {Organizations} organization as an { entity, record } object
+     * @param {Object} type the instance type to be filtered
+     * @returns {Array<izProvider>} the filtered/sorted providers
+     */
+    byTypeSorted( organization, type ){
+        const filtered = Organizations.fn.byType( organization, type );
+        // compare two providers by their id
+        const cmpFn = function( a, b ){
+            let res = 0;
+            //console.debug( a, b );
+            // have them the same requires ?
+            // if yes, compte their ident by string
+            if( _.isEqual( filtered[a].requires, filtered[b].requires )){
+                //console.debug( 'localeCompare' );
+                res = a.localeCompare( b );
+            } else {
+                // are a.requires satisfied by b.features ?
+                // only relevant if one satisfies all the requisites of the other
+                const unsatisfied_a = filtered[a].requires.filter( value  => !filtered[b].features.includes( value ));
+                //console.debug( 'unsatisfied_a', unsatisfied_a );
+                res = unsatisfied_a.length ? res : +1;
+                if( res === 0 ){
+                    // are b.requires satisfied by a.features ?
+                    const unsatisfied_b = filtered[b].requires.filter( value  => !filtered[a].features.includes( value ));
+                    //console.debug( 'unsatisfied_b', unsatisfied_b );
+                    res = unsatisfied_b.length ? -1 : res;
+                }
+                if( res === 0 ){
+                    res = a.localeCompare( b );
+                }                
+            }
+            //console.debug( 'res', res );
+            return -1 * res;
+        };
+        const sorted = Object.keys( filtered ).toSorted( cmpFn );
+        let result = [];
+        sorted.map( it => result.push( filtered[it].provider ));
+        return result;
+    },
+
+    /**
      * @param {Organizations} organization as an { entity, record } object
      * @returns {String} the full base URL for the organization, including issuer host name
      */
@@ -71,7 +134,8 @@ Organizations.fn = {
      * - record
      * @returns {Object} the selected providers as a hash whose keys are the provider IIdent identifier and the value:
      * - provider: the izProvider instance
-     * - features: an array of the provided IFeatured's
+     * - features: an array of the (sorted) provider IFeatured's
+     * - requires: an array of the (sorted) provider IRequires's
      */
     selectedProviders( organization ){
         //console.debug( 'organization', organization );
@@ -81,15 +145,15 @@ Organizations.fn = {
         // build a hash by id with provider and features
         //  features are not recorded in the collection as they can change from a version to another
         let result = {};
-        let allFeatures = [];
         selectedIds.forEach(( id ) => {
             const p = Providers.byId( id );
             // can be null if the provider is no more part of the code
             if( p ){
                 result[id] = { provider: p };
                 const features = p instanceof IFeatured ? p.features() : [];
-                result[id].features = features;
-                allFeatures = allFeatures.concat( features );
+                result[id].features = features.toSorted();
+                const requires = p instanceof IRequires ? p.requires() : [];
+                result[id].requires = requires.toSorted();
             } else {
                 console.log( 'provider not found', id );
             }

@@ -46,10 +46,7 @@
                         }
                     }
                 },
-                "issuer": "https://localhost:3003",
-                "private": {
-                    "toto": "un"
-                }
+                "issuer": "https://localhost:3003"
             },
             "staging-name": {
                 "type": "staging",

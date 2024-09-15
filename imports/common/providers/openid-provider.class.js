@@ -10,9 +10,12 @@ import mix from '@vestergaard-company/js-mixin';
 
 import { izProvider } from '/imports/common/classes/iz-provider.class.js';
 
-import { IGrantType } from '/imports/common/interfaces/igranttype.iface.js';
+import { Organizations } from '/imports/common/collections/organizations/index.js';
 
-export class OpenIDProvider extends mix( izProvider ).with( IGrantType ){
+import { IGrantType } from '/imports/common/interfaces/igranttype.iface.js';
+import { IRequestable } from '/imports/common/interfaces/irequestable.iface.js';
+
+export class OpenIDProvider extends mix( izProvider ).with( IGrantType, IRequestable ){
 
     // static data
 
@@ -41,6 +44,19 @@ export class OpenIDProvider extends mix( izProvider ).with( IGrantType ){
             ],
             igranttype: [
                 'hybrid'
+            ],
+            irequestable: [
+                {
+                    method: 'GET',
+                    path: Meteor.APP.C.openidMetadataPath,
+                    fn( url, args, organization ){
+                        args.answer( Organizations.fn.metadata( organization ))
+                    }
+                },
+                {
+                    path: '*',
+                    fn: null
+                }
             ],
             irequires: [
                 'oauth2'

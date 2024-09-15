@@ -16,25 +16,15 @@ import { WebApp } from 'meteor/webapp';
 
 import { Organizations } from '/imports/common/collections/organizations/index.js';
 
+import { IRequestable } from '/imports/common/interfaces/irequestable.iface.js';
+
 import { Webargs } from '/imports/server/classes/webargs.class.js';
 
 // organization-scoped REST API
 const scoped = {
     GET: [
-        // oauth well-known metadata
-        {
-            path: Meteor.APP.C.oauthMetadataPath,
-            fn: fn_wellKnown
-        },
-        {
-            path: Meteor.APP.C.openidMetadataPath,
-            fn: fn_wellKnown
-        },
-        // at the end, try organization-configured endpoints
-        {
-            path: '*',
-            fn: fn_findPath
-        }
+        // fixed paths which do not depend of any provider: none
+        // at the end, try organization-configured endpoints: handled by each IRequestable provider
     ]
 }
 
@@ -123,9 +113,12 @@ async function handleScoped( req, res ){
             })
             .then(( organization ) => {
                 if( organization ){
+                    const providers = Organizations.fn.byTypeSorted( organization, IRequestable );
+                    //console.debug( providers );
                     args.handle( scoped, {
                         organization: organization,
-                        url: req.url.substr( baseUrl.length )
+                        url: req.url.substring( baseUrl.length ),
+                        providers: providers
                     });
                 }
             });

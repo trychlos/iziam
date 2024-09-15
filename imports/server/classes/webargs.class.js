@@ -102,6 +102,7 @@ export class Webargs {
      * @param {Object} opts an optional options object with following keys:
      *  - organization: the { entity, record } at date non null organization object, if and only if we are handling an organization-scoped request
      *  - url: the url to be searched as an API path, defaulting to req.url
+     *  - providers: a sorted list of providers which may be able to deal with this request
      * NB: must terminate by calling end() to answer to the client
      */
     handle( api, opts ){
@@ -123,6 +124,11 @@ export class Webargs {
                 }
                 return !hasPath;
             });
+            if( !hasPath && opts.providers ){
+                for( let i=0 ; i<opts.providers.length && !hasPath ; ++i ){
+                    hasPath = opts.providers[i].request( url, self, opts.organization );
+                }
+            }
             if( !hasPath ){
                 self.error( 'the requested url "'+this.#req.url+'" is not managed' );
                 self.status( 501 ); // not implemented
@@ -133,6 +139,14 @@ export class Webargs {
             self.status( 501 ); // not implemented
             self.end();
         }
+    }
+
+    /**
+     * Getter
+     * @returns {String} the HTTP method
+     */
+    method(){
+        return this.#req.method;
     }
 
     /**

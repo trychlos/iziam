@@ -227,7 +227,7 @@ Organizations.checks = {
             // requires https protocol unless host is localhost and environment is development
             if( url.protocol !== 'https:' ){
                 const allowed = [ 'localhost', '127.0.0.1', '::1' ];
-                console.debug( 'url', url );
+                //console.debug( 'url', url );
                 if( url.protocol === 'http:' && allowed.includes( url.hostname ) && Meteor.settings.public[Meteor.APP.name].environment.type === 'development' ){
                     // fine
                 } else {
