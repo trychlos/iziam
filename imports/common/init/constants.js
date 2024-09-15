@@ -42,6 +42,8 @@ Meteor.APP.C = {
 
     // the server metadata discovery OAuth URL path
     oauthMetadataPath: '/.well-known/oauth-authorization-server',
+    // the server metadata discovery OAuth URL path
+    openidMetadataPath: '/.well-known/openid-configuration',
 
     // when generating a client secret, the size of this secret
     //clientSecretDefSize: 64,

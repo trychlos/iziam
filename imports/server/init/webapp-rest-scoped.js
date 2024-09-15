@@ -26,6 +26,10 @@ const scoped = {
             path: Meteor.APP.C.oauthMetadataPath,
             fn: fn_wellKnown
         },
+        {
+            path: Meteor.APP.C.openidMetadataPath,
+            fn: fn_wellKnown
+        },
         // at the end, try organization-configured endpoints
         {
             path: '*',

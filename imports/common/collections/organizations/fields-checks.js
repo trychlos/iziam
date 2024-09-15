@@ -215,12 +215,28 @@ Organizations.checks = {
             data.entity.set( entity );
         }
         if( value ){
-            const url = new URL( value );
-            if( url.protocol !== 'https' ){
+            let url = null;
+            try {
+                url = new URL( value );
+            } catch( e ){
                 return new TM.TypedMessage({
                     level: TM.MessageLevel.C.ERROR,
-                    message: pwixI18n.label( I18N, 'organizations.checks.issuer_https' )
+                    message: pwixI18n.label( I18N, 'organizations.checks.issuer_invalid' )
                 });
+            }
+            // requires https protocol unless host is localhost and environment is development
+            if( url.protocol !== 'https:' ){
+                const allowed = [ 'localhost', '127.0.0.1', '::1' ];
+                console.debug( 'url', url );
+                if( url.protocol === 'http:' && allowed.includes( url.hostname ) && Meteor.settings.public[Meteor.APP.name].environment.type === 'development' ){
+                    // fine
+                } else {
+                    return new TM.TypedMessage({
+                        level: TM.MessageLevel.C.ERROR,
+                        message: pwixI18n.label( I18N, 'organizations.checks.issuer_https' )
+                    });
+                }
+            // check for a valid hostname
             } else {
                 const words = url.hostname.split( '.' );
                 if( words.length < 2){

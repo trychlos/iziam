@@ -4,6 +4,8 @@
  *  Manage here the events of the menu button and of the menu header
  */
 
+import { AccountsUI } from 'meteor/pwix:accounts-ui';
+import { pwixI18n } from 'meteor/pwix:i18n';
 import { UILayout } from 'meteor/pwix:ui-layout';
 
 import '/imports/client/components/app_menu_button/app_menu_button.js';
@@ -38,7 +40,7 @@ Template.app_header.helpers({
     //  this template is no more displayed in small screens
     parmsUserLogin(){
         return {
-            name: 'izerm:app-header:user-login',
+            name: 'iziam:app-header:user-login',
             initialDisplay: AccountsUI.C.Display.DROPDOWNBUTTON,
             loggedItemsAfter: Meteor.APP.AccountsUI.loggedItemsAfter(),
             mdClassesContent: Meteor.APP.runContext.pageUIClasses().join( ' ' ),

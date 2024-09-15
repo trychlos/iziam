@@ -34,7 +34,10 @@ export class RunContext extends CoreApp.RunContext {
         // get the application title from settings per environment
         Tracker.autorun(() => {
             if( EnvSettings.ready()){
-                self.title( Meteor.settings.public[Meteor.APP.name].environment.title || '' );
+                const settings = EnvSettings.environmentSettings();
+                if( settings ){
+                    self.title( settings.title || '' );
+                }
             }
         });
 

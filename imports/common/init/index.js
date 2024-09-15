@@ -57,6 +57,3 @@ import './validity.js';
 // followings import a collection, so all must have been defined before them
 //import './ext-oauth-functions.js';
 //import './ext-openid-functions.js';
-//import './reserved-words.js';
-
-//import '../../openmct/MCT.js';

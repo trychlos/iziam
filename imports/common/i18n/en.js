@@ -519,6 +519,7 @@ Meteor.APP.i18n = {
                     baseurl_starts: 'The REST Base URL must be an absolute path (must start with \'/\')',
                     issuer_hostname: 'The issuer hostname is malformed',
                     issuer_https: 'The issuer must use a HTTPS schema',
+                    issuer_invalid: 'The issuer URL is not valid',
                     issuer_unset: 'The issuer is not set though should have at least a settings value',
                     jwk_alg_invalid: 'JWK algorithm "%s" is not valid',
                     jwk_alg_unset: 'JWK algorithm is not set',
