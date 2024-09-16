@@ -1,8 +1,9 @@
 <template name="keygrip_edit_dialog">
     <div class="c-keygrip-edit-dialog">
 
-        {{> coreTabbedTemplate (parmsTabbed) }}
-        {{> coreErrorMsg (parmsErrorMsg) }}
+        {{> Tabbed name="keygrip_edit_dialog" }}
+
+        {{> FormsMessager (parmsMessager) }}
 
     </div>
 </template>

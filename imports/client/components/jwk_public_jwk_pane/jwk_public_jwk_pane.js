@@ -16,6 +16,7 @@ import './jwk_public_jwk_pane.html';
 
 Template.jwk_public_jwk_pane.helpers({
     treeified(){
-        return treeify.asTree( this.item.get().pair.public.jwk, true, true );
+        const item = this.item.get();
+        return item.pair ? treeify.asTree( item.pair.public.jwk, true, true ) : null;
     }
 });

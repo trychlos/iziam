@@ -5,76 +5,32 @@
 import _ from 'lodash';
 const assert = require( 'assert' ).strict;
 import * as jose from 'jose';
-
-import { JwaAlg } from '/imports/common/definitions/jwa-alg.def.js';
+import { createHash, randomBytes } from 'crypto';
 
 import { KeygripSecrets } from './index.js';
 
 KeygripSecrets.fn = {
     /**
-     * @summary Generate the symmetric secret / asymmetric keys pair when creating a new JWK
-     * @param {Object<JWK>} item the just defined JWK item
-     * @returns {Object<JWK>} this same item
+     * @summary Generate the a secret and a hash for a keygrip
+     * @param {Object<Keygrip>} item the current keygrip item
+     * @returns {Object} a { secret, hash } object
      */
-    async generateKeys( item ){
-        const def = JwaAlg.byId( item.alg );
-        let promises = [];
-        if( def ){
-            if( JwaAlg.isSymmetric( def )){
-                item.symmetric = true;
-                promises.push( jose.generateSecret( item.alg, { extractable: true }).then( async ( res ) => {
-                    //console.debug( 'res', res );
-                    item.secret = {
-                        key: { algorithm: res.algorithm },
-                        jwk: await jose.exportJWK( res ),
-                        key_opes: res.usages
-                    };
-                    if( item.kid ){
-                        item.secret.jwk.kid = item.kid;
-                    }
-                    item.createdAt = new Date();
-                    item.createdBy = Meteor.userId();
-                    return item;
-                }));
-            } else {
-                item.symmetric = false;
-                promises.push( jose.generateKeyPair( item.alg, { extractable: true }).then( async ( res ) => {
-                    //console.debug( 'res', res );
-                    item.pair = {
-                        key: { algorithm: res.privateKey.algorithm },
-                        private: {
-                            jwk: await jose.exportJWK( res.privateKey ),
-                            pkcs8: await jose.exportPKCS8( res.privateKey ),
-                            key_opes: res.privateKey.usages
-                        },
-                        public: {
-                            jwk: await jose.exportJWK( res.publicKey ),
-                            spki: await jose.exportSPKI( res.publicKey ),
-                            key_opes: res.publicKey.usages
-                        }
-                    };
-                    if( item.kid ){
-                        item.pair.private.jwk.kid = item.kid;
-                        item.pair.public.jwk.kid = item.kid;
-                    }
-                    item.createdAt = new Date();
-                    item.createdBy = Meteor.userId();
-                    return item;
-                }));
-            }
-        } else {
-            console.warn( 'unknwon algorith', item.alg );
-        }
-        await Promise.allSettled( promises );
-        return item;
+    generateSecret( item ){
+        const secret = randomBytes( item.size ).toString( 'base64' );
+        const hash = createHash( item.alg ).update( secret ).digest( item.encoding );
+        //console.debug( 'returning', secret, hash );
+        return {
+            secret: secret,
+            hash: hash
+        };
     },
 
     /**
-     * @summary Returns the JWKS for the entity/record organization
+     * @summary Returns the Keygrip list for the entity/record organization
      *  This is needed for a reactive tabular display management
      * @param {Object} o an argument object with following keys:
-     * - caller: an { entity, record } organization
-     * @returns {Object} the organization JWKS, at least an empty array
+     * - caller: an keygrip item
+     * @returns {Object} the keygrip keylist, at least an empty array
      *  A reactive data source
      */
     _list: {
@@ -82,14 +38,14 @@ KeygripSecrets.fn = {
     },
     get( o ){
         KeygripSecrets.fn._list.dep.depend();
-        return o.caller.record.keygrip_secrets || [];
+        return o.caller.keylist || [];
     },
-    add( o, jwk ){
-        o.caller.record.keygrip_secrets.push( jwk );
+    add( o, key ){
+        o.caller.keylist.push( key );
         KeygripSecrets.fn._selected_providers.dep.changed();
     },
-    remove( o, jwkId ){
-        o.caller.record.keygrip_secrets = o.caller.record.keygrip_secrets.filter( it => it.id !== jwkId );
+    remove( o, keyId ){
+        o.caller.keylist = o.caller.keylist.filter( it => it.id !== keyId );
         KeygripSecrets.fn._list.dep.changed();
     }
 };

@@ -11,6 +11,8 @@ import { TM } from 'meteor/pwix:typed-message';
 import { JwaAlg } from '/imports/common/definitions/jwa-alg.def.js';
 import { JwkKty } from '/imports/common/definitions/jwk-kty.def.js';
 import { JwkUse } from '/imports/common/definitions/jwk-use.def.js';
+import { HmacAlg } from '/imports/common/definitions/hmac-alg.def.js';
+import { HmacEncoding } from '/imports/common/definitions/hmac-encoding.def.js';
 
 import { Organizations } from './index.js';
 
@@ -378,6 +380,128 @@ Organizations.checks = {
             });
         }
         return null;
+    },
+
+    // keygrip algorithm
+    async keygrip_alg( value, data, opts ){
+        _assert_data_itemrv( 'Organizations.checks.keygrip_alg()', data );
+        let item = data.item.get();
+        if( opts.update !== false ){
+            item.alg = value;
+            data.item.set( item );
+        }
+        if( value ){
+            const def = HmacAlg.byId( value );
+            return def ? null : new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'organizations.checks.keygrip_alg_invalid', value )
+            });
+        } else {
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'organizations.checks.keygrip_alg_unset' )
+            });
+        }
+    },
+
+    // keygrip encoding
+    async keygrip_encoding( value, data, opts ){
+        _assert_data_itemrv( 'Organizations.checks.keygrip_encoding()', data );
+        let item = data.item.get();
+        if( opts.update !== false ){
+            item.encoding = value;
+            data.item.set( item );
+        }
+        if( value ){
+            const def = HmacEncoding.byId( value );
+            return def ? null : new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'organizations.checks.keygrip_encoding_invalid', value )
+            });
+        } else {
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'organizations.checks.keygrip_encoding_unset' )
+            });
+        }
+    },
+
+    // keygrip label
+    async keygrip_label( value, data, opts ){
+        _assert_data_itemrv( 'Organizations.checks.keygrip_label()', data );
+        let item = data.item.get();
+        if( opts.update !== false ){
+            item.label = value;
+            data.item.set( item );
+        }
+        return null;
+    },
+
+    // keygrip secret optional expiration date
+    async keygrip_secret_expireAt( value, data, opts ){
+        _assert_data_itemrv( 'Organizations.checks.keygrip_secret_expireAt()', data );
+        let item = data.item.get();
+        if( opts.update !== false ){
+            item.expireAt = value ? new Date( value ) : null;
+            data.item.set( item );
+        }
+        return null;
+    },
+
+    // keygrip secret hash
+    async keygrip_secret_hash( value, data, opts ){
+        _assert_data_itemrv( 'Organizations.checks.keygrip_secret_hash()', data );
+        let item = data.item.get();
+        if( opts.update !== false ){
+            item.hash = value;
+            data.item.set( item );
+        }
+        return null;
+    },
+
+    // keygrip secret label
+    async keygrip_secret_label( value, data, opts ){
+        _assert_data_itemrv( 'Organizations.checks.keygrip_secret_label()', data );
+        let item = data.item.get();
+        if( opts.update !== false ){
+            item.label = value;
+            data.item.set( item );
+        }
+        return null;
+    },
+
+    // keygrip secret
+    async keygrip_secret_secret( value, data, opts ){
+        _assert_data_itemrv( 'Organizations.checks.keygrip_secret_secret()', data );
+        let item = data.item.get();
+        if( opts.update !== false ){
+            item.secret = value;
+            data.item.set( item );
+        }
+        return null;
+    },
+
+    // keygrip secret size
+    async keygrip_size( value, data, opts ){
+        _assert_data_itemrv( 'Organizations.checks.keygrip_size()', data );
+        let item = data.item.get();
+        value = Number( value );
+        if( opts.update !== false ){
+            item.size = value;
+            data.item.set( item );
+        }
+        if( value && Number.isInteger( value ) && value > 0 ){
+            return null;
+        } else if( value ){
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'organizations.checks.keygrip_size_invalid' )
+            });
+        }
+        return new TM.TypedMessage({
+            level: TM.MessageLevel.C.ERROR,
+            message: pwixI18n.label( I18N, 'organizations.checks.keygrip_size_unset' )
+        });
     },
 
     // dynamic registration endpoint

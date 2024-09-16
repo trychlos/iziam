@@ -51,13 +51,14 @@ KeygripSecrets.fieldSet = function( dc ){
             dt_type: 'string',
             dt_title: pwixI18n.label( I18N, 'keygrips.list.expire_at_th' ),
             dt_render( data, type, rowData ){
-                return strftime( '%Y-%m-%d %H:%M:%S', rowData.expireAt );
+                return rowData.expireAt ? strftime( '%Y-%m-%d', rowData.expireAt ) : null;
             }
         },
         {
             name: 'createdAt',
             dt_type: 'string',
             dt_title: pwixI18n.label( I18N, 'keygrips.list.created_at_th' ),
+            dt_className: 'ui-nowrap',
             dt_render( data, type, rowData ){
                 return strftime( '%Y-%m-%d %H:%M:%S', rowData.createdAt );
             }
@@ -95,16 +96,16 @@ KeygripSecrets.tabular = function( dc ){
         tabular: {
             withInfoButton: false,
             async deleteButtonTitle( it ){
-                return pwixI18n.label( I18N, 'keygrips.list.delete_title', it.label || it.id );
+                return pwixI18n.label( I18N, 'keygrips.list.secret_delete_title', it.label || it.id );
             },
             async deleteConfirmationText( it ){
-                return pwixI18n.label( I18N, 'keygrips.list.delete_confirm_text', it.label || it.id );
+                return pwixI18n.label( I18N, 'keygrips.list.secret_delete_confirm_text', it.label || it.id );
             },
             async deleteConfirmationTitle( it ){
-                return pwixI18n.label( I18N, 'keygrips.list.delete_confirm_title', it.label || it.id );
+                return pwixI18n.label( I18N, 'keygrips.list.secret_delete_confirm_title', it.label || it.id );
             },
             async editButtonTitle( it ){
-                return pwixI18n.label( I18N, 'keygrips.list.edit_title', it.label || it.id );
+                return pwixI18n.label( I18N, 'keygrips.list.secret_edit_title', it.label || it.id );
             },
             dataContext: dc
         },

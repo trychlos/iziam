@@ -13,7 +13,7 @@ import { Keygrips } from '/imports/common/tables/keygrips/index.js';
 
 import '/imports/client/components/keygrip_edit_dialog/keygrip_edit_dialog.js';
 import '/imports/client/components/keygrip_new_button/keygrip_new_button.js';
-import '/imports/client/components/keygrips_panel/keygrips_panel.js';
+import '/imports/client/components/keygrips_list/keygrips_list.js';
 
 import './organization_keygrips_pane.html';
 

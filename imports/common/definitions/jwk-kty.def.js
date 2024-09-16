@@ -29,7 +29,7 @@ export const JwkKty = {
                     'ES256',
                     'ES384',
                     'ES512',
-                    'EdDSA'
+                    //'EdDSA' not defined in JwaAlg
                 ]
             }
         },

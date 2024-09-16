@@ -1,12 +1,12 @@
 /*
- * /imports/client/components/keygrip_edit_dialog/keygrip_edit_dialog.js
+ * /imports/client/components/keygrip_secret_edit_dialog/keygrip_secret_edit_dialog.js
  *
- * A modal dialog which let the user edit cookies keygrip properties.
+ * A modal dialog which let the user creates a new keygrip secret.
  * 
  * Parms:
  * - entity: a ReactiveVar which contains the Organization, with its DYN.records array of ReactiveVar's
  * - index: the index of the current edited organization record
- * - item: the Keygrip item to be edited here, may be null
+ * - item: the Keygrip secret item to be edited here, may be null
  */
 
 import _ from 'lodash';
@@ -16,11 +16,11 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 import { Random } from 'meteor/random';
 import { Tabbed } from 'meteor/pwix:tabbed';
 
-import '/imports/client/components/keygrip_properties_pane/keygrip_properties_pane.js';
+import '/imports/client/components/keygrip_secret_properties_pane/keygrip_secret_properties_pane.js';
 
-import './keygrip_edit_dialog.html';
+import './keygrip_secret_edit_dialog.html';
 
-Template.keygrip_edit_dialog.onCreated( function(){
+Template.keygrip_secret_edit_dialog.onCreated( function(){
     const self = this;
     //console.debug( this );
 
@@ -36,9 +36,7 @@ Template.keygrip_edit_dialog.onCreated( function(){
         // whether we are creating a new JWK
         isNew: new ReactiveVar( false ),
         // the Tabbed instance
-        tabbed: new ReactiveVar( null ),
-        // a count of this keygrip secrets
-        count: new ReactiveVar( 0 )
+        tabbed: new ReactiveVar( null )
     };
 
     // get the edited item
@@ -58,45 +56,39 @@ Template.keygrip_edit_dialog.onCreated( function(){
     // instanciates a named Tabbed
     self.autorun(() => {
         self.APP.tabbed.set( new Tabbed.Instance( self, {
-            name: 'keygrip_edit_dialog',
+            name: 'keygrip_secret_edit_dialog',
             dataContext: {
-                entity: Template.currentData().entity,
-                index: Template.currentData().index,
                 organization: { entity: Template.currentData().entity.get(), record: Template.currentData().entity.get().DYN.records[Template.currentData().index].get() },
                 item: self.APP.item,
                 checker: self.APP.checker,
-                isNew: self.APP.isNew
+                isNew: self.APP.isNew,
+                keygripRv: Template.currentData().keygripRv
             },
             tabs: [
                 {
-                    name: 'keygrip_properties_pane',
-                    navLabel: pwixI18n.label( I18N, 'keygrips.edit.properties_tab_title' ),
-                    paneTemplate: 'keygrip_properties_pane'
+                    name: 'keygrip_secret_properties_pane',
+                    navLabel: pwixI18n.label( I18N, 'keygrips.edit.secret_properties_tab_title' ),
+                    paneTemplate: 'keygrip_secret_properties_pane'
                 }
             ]
         }));
     });
-
-    // track the count of keygrip secrets
-    self.autorun(() => {
-        self.APP.count.set((( self.APP.item.get().keylist ) || [] ).length );
-    });
 });
 
-Template.keygrip_edit_dialog.onRendered( function(){
+Template.keygrip_secret_edit_dialog.onRendered( function(){
     const self = this;
     //console.debug( self );
 
     // whether we are running inside of a Modal
     self.autorun(() => {
-        self.APP.isModal.set( self.$( '.c-keygrip-edit-dialog' ).closest( '.modal-dialog' ).length > 0 );
+        self.APP.isModal.set( self.$( '.c-keygrip-secret-edit-dialog' ).closest( '.modal-dialog' ).length > 0 );
     });
 
     // set the modal target
     self.autorun(() => {
         if( self.APP.isModal.get()){
             Modal.set({
-                target: self.$( '.c-keygrip-edit-dialog' )
+                target: self.$( '.c-keygrip-secret-edit-dialog' )
             });
         }
     });
@@ -107,13 +99,13 @@ Template.keygrip_edit_dialog.onRendered( function(){
         messager: self.APP.messager,
         okFn( valid ){
             if( self.APP.isModal ){
-                Modal.set({ buttons: { id: Modal.C.Button.OK, enabled: valid && self.APP.count.get() > 0 }});
+                Modal.set({ buttons: { id: Modal.C.Button.OK, enabled: valid }});
             }
         }
     }));
 });
 
-Template.keygrip_edit_dialog.helpers({
+Template.keygrip_secret_edit_dialog.helpers({
     // string translation
     i18n( arg ){
         return pwixI18n.label( I18N, arg.hash.key );
@@ -127,10 +119,10 @@ Template.keygrip_edit_dialog.helpers({
     }
 });
 
-Template.keygrip_edit_dialog.events({
+Template.keygrip_secret_edit_dialog.events({
     // submit
     //  event triggered in case of a modal
-    'md-click .c-keygrip-edit-dialog'( event, instance, data ){
+    'md-click .c-keygrip-secret-edit-dialog'( event, instance, data ){
         //console.debug( event, data );
         if( data.button.id === Modal.C.Button.OK ){
             instance.$( event.currentTarget ).trigger( 'iz-submit' );
@@ -138,23 +130,26 @@ Template.keygrip_edit_dialog.events({
     },
 
     // submit
-    // reactively update the record
-    'iz-submit .c-keygrip-edit-dialog'( event, instance ){
-        const recordRv = this.entity.get().DYN.records[this.index];
+    // reactively update the keygrip item
+    'iz-submit .c-keygrip-secret-edit-dialog'( event, instance ){
+        const recordRv = this.keygripRv;
         let record = recordRv.get();
-        record.keygrips = record.keygrips || [];
+        record.keylist = record.keylist || [];
         let found = false;
         const item = instance.APP.item.get();
+        //console.debug( 'item', item );
         // update or push
-        for( let i=0 ; i<record.keygrips.length ; ++i ){
-            if( record.keygrips[i].id === item.id ){
-                record.keygrips[i] = item;
+        for( let i=0 ; i<record.keylist.length ; ++i ){
+            if( record.keylist[i].id === item.id ){
+                record.keylist[i] = item;
                 found = true;
                 break;
             }
         }
         if( !found ){
-            record.keygrips.push( item );
+            item.createdAt = new Date();
+            item.createdBy = Meteor.userId();
+            record.keylist.push( item );
         }
         recordRv.set( record );
         Modal.close();

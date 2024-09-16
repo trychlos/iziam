@@ -1,0 +1,55 @@
+<template name="keygrip_properties_pane">
+    <div class="c-keygrip-properties-pane">
+
+        <table class="form-table ui-w100">
+            <tr>
+                <td class="label"><label class="form-label" for="keygrip-label">{{ i18n key="keygrips.edit.label_label" }}</label></td>
+                <td title="{{ i18n key="keygrips.edit.label_title" }}">
+                    <div class="ui-w67 js-label">
+                        <input class="form-control" type="text" id="keygrip-label" placeholder="{{ i18n key="keygrips.edit.label_ph" }}" />
+                    </div>
+                </td>
+                <td class="ui-w10 ui-vatop" rowspan="4">
+                    {{> keygrip_secret_new_button }}
+                </td>
+            </tr>
+            <tr>
+                <td class="label"><label class="form-label" for="keygrip-label">{{ i18n key="keygrips.edit.alg_label" }}</label></td>
+                <td title="{{ i18n key="keygrips.edit.alg_title" }}">
+                    <div class="ui-mt025 ui-w67 js-alg">
+                        {{> hmac_alg_select (parmsHmacAlgSelect) }}
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="label"><label class="form-label">{{ i18n key="keygrips.edit.encoding_label" }}</label></td>
+                <td title="{{ i18n key="keygrips.edit.encoding_title" }}">
+                    <div class="ui-mt025 ui-w67 js-encoding">
+                        {{> hmac_encoding_select (parmsHmacEncodingSelect) }}
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="label"><label class="form-label" for="keygrip-size">{{ i18n key="keygrips.edit.size_label" }}</label></td>
+                <td title="{{ i18n key="keygrips.edit.size_title" }}">
+                    <div class="ui-mt025 ui-w67 js-size">
+                        <input class="form-control" type="number" id="keygrip-size" {{ disabledSize }} />
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="label ui-vatop">
+                    <div class="ui-mt05">
+                        <label class="form-label">{{ i18n key="keygrips.edit.secrets_label" }}</label>
+                    </div>
+                </td>
+                <td class="ui-w100" colspan="2" title="{{ i18n key="keygrips.edit.secrets_title" }}">
+                    <div class="ui-mt05 ui-w100 js-secrets">
+                        {{> keygrip_secrets_list (parmsKeygripSecretsList) }}
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+</template>

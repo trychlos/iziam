@@ -15,6 +15,7 @@ import './jwk_public_spki_pane.html';
 
 Template.jwk_public_spki_pane.helpers({
     treeified(){
-        return this.item.get().pair.public.spki;
+        const item = this.item.get();
+        return item.pair ? item.pair.public.spki : null;
     }
 });

@@ -15,6 +15,7 @@ import './jwk_private_pkcs8_pane.html';
 
 Template.jwk_private_pkcs8_pane.helpers({
     treeified(){
-        return this.item.get().pair.private.pkcs8;
+        const item = this.item.get();
+        return item.pair ? item.pair.private.pkcs8 : null;
     }
 });

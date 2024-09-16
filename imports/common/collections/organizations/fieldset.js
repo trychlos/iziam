@@ -5,6 +5,7 @@
  */
 
 import { Forms } from 'meteor/pwix:forms';
+import SimpleSchema from 'meteor/aldeed:simple-schema';
 
 import { Organizations } from './index.js';
 
@@ -475,17 +476,31 @@ Organizations.recordFieldset = function(){
                 },
                 {
                     name: 'keygrips.$.label',
-                    type: String
+                    type: String,
+                    optional: true,
+                    form_check: Organizations.checks.keygrip_label,
+                    form_type: Forms.FieldType.C.OPTIONAL
                 },
                 // hmac alg
                 {
                     name: 'keygrips.$.alg',
-                    type: String
+                    type: String,
+                    form_check: Organizations.checks.keygrip_alg,
+                    form_type: Forms.FieldType.C.MANDATORY
                 },
                 // encoding
                 {
                     name: 'keygrips.$.encoding',
-                    type: String
+                    type: String,
+                    form_check: Organizations.checks.keygrip_encoding,
+                    form_type: Forms.FieldType.C.MANDATORY
+                },
+                // the size of the generated secret
+                {
+                    name: 'keygrips.$.size',
+                    type: SimpleSchema.Integer,
+                    form_check: Organizations.checks.keygrip_size,
+                    form_type: Forms.FieldType.C.MANDATORY
                 },
                 // and the list of secrets
                 {
@@ -503,24 +518,34 @@ Organizations.recordFieldset = function(){
                 {
                     name: 'keygrips.$.keylist.$.label',
                     type: String,
-                    optional: true
+                    optional: true,
+                    form_check: Organizations.checks.keygrip_secret_label,
+                    form_type: Forms.FieldType.C.OPTIONAL
                 },
                 // the secret key as a base64 string
                 //  secret and hash are generated at same time
                 {
                     name: 'keygrips.$.keylist.$.secret',
-                    type: String
+                    type: String,
+                    form_check: Organizations.checks.keygrip_secret_secret,
+                    form_type: Forms.FieldType.C.NONE,
+                    form_status: false
                 },
                 // the SHA-256 hex hash of the secret key
                 {
                     name: 'keygrips.$.keylist.$.hash',
-                    type: String
+                    type: String,
+                    form_check: Organizations.checks.keygrip_secret_hash,
+                    form_type: Forms.FieldType.C.NONE,
+                    form_status: false
                 },
                 // expiration date
                 {
                     name: 'keygrips.$.keylist.$.expireAt',
                     type: Date,
-                    optional: true
+                    optional: true,
+                    form_check: Organizations.checks.keygrip_secret_expireAt,
+                    form_type: Forms.FieldType.C.OPTIONAL
                 },
                 // creation timestamp
                 {

@@ -16,6 +16,7 @@ import './jwk_secret_pane.html';
 
 Template.jwk_secret_pane.helpers({
     treeified(){
-        return treeify.asTree( this.item.get().secret, true, true );
+        const item = this.item.get();
+        return item.secret ? treeify.asTree( item.secret, true, true ) : null;
     }
 });

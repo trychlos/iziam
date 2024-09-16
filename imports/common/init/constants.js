@@ -45,8 +45,10 @@ Meteor.APP.C = {
     // the server metadata discovery OAuth URL path
     openidMetadataPath: '/.well-known/openid-configuration',
 
-    // when generating a client secret, the size of this secret
-    //clientSecretDefSize: 64,
+    // when generating a secret, the default size of this secret
+    keygripDefAlg: 'SHA512',
+    keygripDefEncoding: 'hex',
+    keygripDefSize: 64,
 
     // OpenID
     // the minimal length of tokens (when the spec allows to choose it)
