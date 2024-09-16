@@ -25,6 +25,7 @@ export class RequestServer {
 
     // instanciation time
     #requestable = null;
+    #organization = null;
 
     // runtime
     #authServer = null;
@@ -38,17 +39,19 @@ export class RequestServer {
     /**
      * Constructor
      * @param {IRequestable} provider the IRequestable provider
+     * @param {Object} organization an { entity, record } organization object
      * @param {Object} opts an optional options object with following keys:
      *  - auth: the AuthServer to instanciate
      *  - identity: the IdentityServer to instanciate
      *  - resource: the ResourceServer to instanciate
      * @returns {RequestServer}
      */
-    constructor( provider, opts={} ){
+    constructor( provider, organization, opts={} ){
         assert( provider && provider instanceof IRequestable, 'expects a IRequestable instance, got '+provider );
 
         // keep instanciation arguments
         this.#requestable = provider;
+        this.#organization = organization;
 
         // instanciates other servers
         this.#authServer = opts.auth ? new opts.auth( this ) : new AuthServer( this );
@@ -65,5 +68,13 @@ export class RequestServer {
      */
     async handle( args, organization ){
         args.end();
+    }
+
+    /**
+     * Getter
+     * @returns {Object} the organization
+     */
+    organization(){
+        return this.#organization;
     }
 }

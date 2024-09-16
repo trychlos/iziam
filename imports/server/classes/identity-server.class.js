@@ -2,22 +2,25 @@
  * /imports/server/classes/identity-server.class.js
  *
  * A class which provides Identity Server features.
+ * 
+ * An IdentityServer is instanciated once for each organization.
  */
 
 import _ from 'lodash';
 const assert = require( 'assert' ).strict; // up to nodejs v16.x
+import mix from '@vestergaard-company/js-mixin';
 
-import { RequestServer } from '/imports/server/classes/request-server.class.js';
+import { izObject } from '/imports/common/classes/iz-object.class.js';
 
-export class IdentityServer {
+import { IRequested } from '/imports/server/interfaces/irequested.iface.js';
+
+export class IdentityServer extends mix( izObject ).with( IRequested ){
 
     // static data
 
     // static methods
 
     // private data
-
-    #handleServer = null;
 
     // private methods
 
@@ -29,8 +32,7 @@ export class IdentityServer {
      * @returns {IdentityServer}
      */
     constructor( server ){
-        assert( server && server instanceof RequestServer, 'expects a RequestServer instance, got '+server );
-        this.#handleServer = server;
+        super( ...arguments );
         return this;
     }
 }
