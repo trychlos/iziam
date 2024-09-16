@@ -18,7 +18,6 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 import { Jwks } from '/imports/common/tables/jwks/index.js';
 
 import '/imports/client/components/jwk_edit_dialog/jwk_edit_dialog.js';
-import '/imports/client/components/jwk_view_button/jwk_view_button.js';
 import '/imports/client/components/user_preferred_async/user_preferred_async.js';
 
 import './jwks_list.html';

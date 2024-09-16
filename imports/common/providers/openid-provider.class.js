@@ -15,8 +15,8 @@ import { Organizations } from '/imports/common/collections/organizations/index.j
 import { IGrantType } from '/imports/common/interfaces/igranttype.iface.js';
 import { IRequestable } from '/imports/common/interfaces/irequestable.iface.js';
 
-import { RequestServer } from '/imports/server/classes/request-server.class.js';
-import { OIDAuthServer } from '/imports/server/classes/oid-auth-server.class.js';
+//import { RequestServer } from '/imports/server/classes/request-server.class.js';
+//import { OIDAuthServer } from '/imports/server/classes/oid-auth-server.class.js';
 
 export class OpenIDProvider extends mix( izProvider ).with( IGrantType, IRequestable ){
 
@@ -32,12 +32,14 @@ export class OpenIDProvider extends mix( izProvider ).with( IGrantType, IRequest
     // to handle it, and whatever be the client, we have to pass through the OpenID web handler provided by [OIDC provider](https://github.com/panva/node-oidc-provider)
     // once done, other handlers have no chance to be able to handle it
     static async handleAsterRequest( it, args, organization ){
+        /*
         let server = OpenIDProvider.RequestServersByEntity[organization.entity._id];
         if( !server ){
             server = new RequestServer( OpenIDProvider.Singleton, organization, { auth: OIDAuthServer });
             OpenIDProvider.RequestServersByEntity[organization.entity._id] = server;
         }
         await server.handle( args, organization );
+        */
         return true;
     }
 

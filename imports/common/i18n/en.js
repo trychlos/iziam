@@ -377,6 +377,41 @@ Meteor.APP.i18n = {
                     reftoken_label: 'Refresh token grant',
                     select_text: 'Select the grant type your client will use at the token endpoint'
                 },
+                hmac_alg: {
+                    blake2b512_label: 'Blake2b 512',
+                    blake2s256_label: 'Blake2s 256',
+                    md5sha1_label: 'MD5-SHA1',
+                    rmd160_label: 'RMD160',
+                    shake256_label: 'SHAKE-256',
+                    sha2224_label: 'SHA2-224',
+                    sha2256_label: 'SHA2-256',
+                    sha2256192_label: 'SHA2-256/192',
+                    sha2384_label: 'SHA2-384',
+                    sha2512_label: 'SHA2-512',
+                    sha2512224_label: 'SHA2-512/224',
+                    sha2512256_label: 'SHA2-512/256',
+                    sha3224_label: 'SHA3-224',
+                    sha3256_label: 'SHA3-256',
+                    sha3384_label: 'SHA3-384',
+                    sha3512_label: 'SHA3-512',
+                    shake128_label: 'SHAKE-128',
+                    sm3_label: 'SM3',
+                    ssl3md5_label: 'SSL3-MD5',
+                    ssl3sha1_label: 'SSL3-SHA1',
+                    select_text: 'Select an HMAC algorithm'
+                },
+                hmac_encoding: {
+                    utf8_label: 'UTF-8',
+                    utf16le_label: 'UTF-16 LE',
+                    latin1_label: 'Latin1 (aka ISO-8859-1)',
+                    base64_label: 'Base64',
+                    base64url_label: 'Base64-URL (RFC4648)',
+                    hex_label: 'Hexadecimal',
+                    ascii_label: 'Ascii (legacy)',
+                    binary_label: 'Binary (legacy)',
+                    ucs2_label: 'UCS-2 (legacy)',
+                    select_text: 'Select an encoding method'
+                },
                 jwa_alg: {
                     a128cbc_hs256_label: 'AES_128_CBC_HMAC_SHA_256 authenticated encryption algorithm',
                     a192cbc_hs384_label: 'AES_192_CBC_HMAC_SHA_384 authenticated encryption algorithm',
@@ -486,7 +521,7 @@ Meteor.APP.i18n = {
                     alg_th: 'Algorithm',
                     created_at_th: 'Created at',
                     created_by_th: 'Created by',
-                    delete_confirm_text: 'Your are about to delete the "%s" key.<br />Are you sure ?',
+                    delete_confirm_text: 'You are about to delete the "%s" key.<br />Are you sure ?',
                     delete_confirm_title: 'Delete the "%s" key',
                     delete_title: 'Delete the "%s" key',
                     edit_title: 'Edit the "%s" key content',
@@ -494,7 +529,38 @@ Meteor.APP.i18n = {
                     label_th: 'Label',
                     preamble: '',
                     use_th: 'Usage'
+                }
+            },
+            keygrips: {
+                edit: {
+                    alg_label: 'Algorithm :',
+                    alg_title: 'The algorithm to be chosen to sign or validate the cookies',
+                    encoding_label: 'Encoding :',
+                    encoding_title: 'How to encode the resulting hash ?',
+                    new_button_label: 'New Keygrip',
+                    new_button_title: 'Define a new Keygrip set',
+                    new_dialog_title: 'Define a new Keygrip set',
+                    secrets_label: 'Secrets :',
+                    secrets_title: 'The secrets used to sign and verify the sent cookies',
+                    view_button_title: 'View the "%s" secret',
+                    view_dialog_title: 'View the "%s" secret'
                 },
+                list: {
+                    add_title: 'Add a new secret to your list',
+                    alg_th: 'Algorithm',
+                    created_at_th: 'Created at',
+                    created_by_th: 'Created by',
+                    encoding_th: 'Encoding',
+                    expire_at_th: 'Expire at',
+                    keygrip_delete_confirm_text: 'You are about to delete the "%s" whole keygrip.<br />Are you sure ?',
+                    keygrip_delete_confirm_title: 'Delete the "%s" keygrip',
+                    keygrip_delete_title: 'Delete the "%s" keygrip',
+                    keygrip_edit_title: 'Edit the "%s" keygrip',
+                    label_th: 'Label',
+                    last_created_th: 'Last created',
+                    last_expiration_th: 'Last expiration',
+                    preamble: ''
+                }
             },
             manager: {
                 accounts: {
@@ -592,8 +658,16 @@ Meteor.APP.i18n = {
                         +'The referenced document contains the signing key(s) the clients will use to validate signatures from the authorization server, and may '
                         +'also contain the server\'s encryption key or keys, which are used by clients to encrypt requests to the server.<br />'
                         +'So, both signing and encryption keys can be made available to your clients.',
-                    tab_title: 'Keys Set'
+                    tab_title: 'JSON Web Keys Set'
                 },
+                keygrips: {
+                    preamble: 'Cookies keys are a critical way to detect and ignore tampered cookies. '
+                        +'Keys are signed and verified with keygrips, through a rotating credential system, in which new server keys can be added and old ones removed regularly, '
+                        +'without invalidating client credentials.<br />'
+                        +'As a keygrip is characterized by its algorithm, encoding and list of secrets, we manage here a set of keygrips to let you change your algorithm '
+                        +'and/or your encoding at your convenience.',
+                    tab_title: 'Keygrips'
+                    },
                 providers: {
                     list_preamble: 'Select here, among all registered providers, those that your organization is willing to manage. '
                         +'Each client will then be able to choose the exact provider(s) it wants use.'

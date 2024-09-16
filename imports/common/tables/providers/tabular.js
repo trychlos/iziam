@@ -1,5 +1,5 @@
 /*
- * /import/common/tables/providers/collection.js
+ * /import/common/tables/providers/tabular.js
  */
 
 import { Field } from 'meteor/pwix:field';

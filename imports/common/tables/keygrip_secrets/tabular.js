@@ -1,5 +1,5 @@
 /*
- * /import/common/tables/jwks/tabular.js
+ * /import/common/tables/keygrip_secrets/tabular.js
  */
 
 import strftime from 'strftime';
@@ -8,21 +8,21 @@ import { Field } from 'meteor/pwix:field';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { Tabular } from 'meteor/pwix:tabular';
 
-import { JwaAlg } from '/imports/common/definitions/jwa-alg.def.js';
-import { JwkUse } from '/imports/common/definitions/jwk-use.def.js';
+import { HmacAlg } from '/imports/common/definitions/hmac-alg.def.js';
+import { HmacEncoding } from '/imports/common/definitions/hmac-encoding.def.js';
 
-import { Jwks } from './index.js';
+import { KeygripSecrets } from './index.js';
 
 /**
  * @locus Anywhere
- * @param {Object} dc the data context of the jwks_list component
+ * @param {Object} dc the data context of the keygrips_list component
  * @returns {Array} the fieldset columns array
  *  A reactive data source
  */
-Jwks.dataSet = function( dc ){
+KeygripSecrets.dataSet = function( dc ){
     let dataset = [];
-    const jwks = dc.listGetFn( dc.args );
-    jwks.forEach(( it ) => {
+    const keygrips = dc.listGetFn( dc.args );
+    keygrips.forEach(( it ) => {
         let o = it;
         dataset.push( o );
     });
@@ -35,7 +35,7 @@ Jwks.dataSet = function( dc ){
  * @param {Object} dc the data context of the providers_list component
  * @returns 
  */
-Jwks.fieldSet = function( dc ){
+KeygripSecrets.fieldSet = function( dc ){
     let columns = [
         {
             name: 'id',
@@ -44,37 +44,20 @@ Jwks.fieldSet = function( dc ){
         {
             name: 'label',
             dt_type: 'string',
-            dt_title: pwixI18n.label( I18N, 'jwks.list.label_th' )
+            dt_title: pwixI18n.label( I18N, 'keygrips.list.label_th' )
         },
         {
-            name: 'use',
+            name: 'expireAt',
             dt_type: 'string',
-            dt_title: pwixI18n.label( I18N, 'jwks.list.use_th' ),
+            dt_title: pwixI18n.label( I18N, 'keygrips.list.expire_at_th' ),
             dt_render( data, type, rowData ){
-                return type === 'display' ? JwkUse.label( JwkUse.byId( rowData.use )) : rowData.use;
-            }
-        },
-        {
-            name: 'kid',
-            dt_type: 'string',
-            dt_title: pwixI18n.label( I18N, 'jwks.list.kid_th' ),
-            dt_render( data, type, rowData ){
-                return rowData.kid || '';
-            }
-        },
-        {
-            name: 'alg',
-            dt_type: 'string',
-            dt_className: 'ui-nowrap',
-            dt_title: pwixI18n.label( I18N, 'jwks.list.alg_th' ),
-            dt_render( data, type, rowData ){
-                return type === 'display' ? JwaAlg.label( JwaAlg.byId( rowData.alg )) : rowData.alg;
+                return strftime( '%Y-%m-%d %H:%M:%S', rowData.expireAt );
             }
         },
         {
             name: 'createdAt',
             dt_type: 'string',
-            dt_title: pwixI18n.label( I18N, 'jwks.list.created_at_th' ),
+            dt_title: pwixI18n.label( I18N, 'keygrips.list.created_at_th' ),
             dt_render( data, type, rowData ){
                 return strftime( '%Y-%m-%d %H:%M:%S', rowData.createdAt );
             }
@@ -82,7 +65,7 @@ Jwks.fieldSet = function( dc ){
         {
             name: 'createdBy',
             dt_type: 'string',
-            dt_title: pwixI18n.label( I18N, 'jwks.list.created_by_th' ),
+            dt_title: pwixI18n.label( I18N, 'keygrips.list.created_by_th' ),
             dt_template: Meteor.isClient && Template.user_preferred_async,
             dt_templateContext( rowData ){
                 return {
@@ -101,27 +84,27 @@ Jwks.fieldSet = function( dc ){
  *  This must be run in common code
  * @param {Object} dc the data context of the providers_list component
  */
-Jwks.tabular = function( dc ){
+KeygripSecrets.tabular = function( dc ){
     new Tabular.Table({
-        name: 'Jwks',
+        name: 'KeygripSecrets',
         collection: null,
-        data: Jwks.dataSet( dc ),
-        columns: Jwks.fieldSet( dc ).toTabular(),
+        data: KeygripSecrets.dataSet( dc ),
+        columns: KeygripSecrets.fieldSet( dc ).toTabular(),
         serverSide: false,
         ajax: null,
         tabular: {
             withInfoButton: false,
             async deleteButtonTitle( it ){
-                return pwixI18n.label( I18N, 'jwks.list.delete_title', it.label || it.id );
+                return pwixI18n.label( I18N, 'keygrips.list.delete_title', it.label || it.id );
             },
             async deleteConfirmationText( it ){
-                return pwixI18n.label( I18N, 'jwks.list.delete_confirm_text', it.label || it.id );
+                return pwixI18n.label( I18N, 'keygrips.list.delete_confirm_text', it.label || it.id );
             },
             async deleteConfirmationTitle( it ){
-                return pwixI18n.label( I18N, 'jwks.list.delete_confirm_title', it.label || it.id );
+                return pwixI18n.label( I18N, 'keygrips.list.delete_confirm_title', it.label || it.id );
             },
             async editButtonTitle( it ){
-                return pwixI18n.label( I18N, 'jwks.list.edit_title', it.label || it.id );
+                return pwixI18n.label( I18N, 'keygrips.list.edit_title', it.label || it.id );
             },
             dataContext: dc
         },
