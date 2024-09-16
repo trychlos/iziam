@@ -59,7 +59,7 @@ async function fn_asterPath( url, args, organization, provider ){
         server = new RequestServer( provider, organization, await provider.requestOptions());
         entityServers[provider.identId()] = server;
     }
-    args.end();
+    server.handle( url, args );
 }
 
 // make sure we address only one entity

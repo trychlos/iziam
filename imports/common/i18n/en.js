@@ -629,7 +629,9 @@ Meteor.APP.i18n = {
                     keygrip_size_unset: 'The keygrip secret size is not set',
                     registration_absolute: 'The registration endpoint must be provided as an absolute path',
                     token_absolute: 'The token endpoint must be provided as an absolute path',
-                    token_unset: 'The token endpoint is not set'
+                    token_unset: 'The token endpoint is not set',
+                    userinfo_absolute: 'The userinfo endpoint must be provided as an absolute path',
+                    userinfo_unset: 'The userinfo endpoint is not set'
                 },
                 clients: {
                     list_preamble: 'The list of clients defined by and for the organization.<br />'
@@ -682,7 +684,11 @@ Meteor.APP.i18n = {
                     token_label: 'Token endpoint :',
                     token_ph: '/token',
                     token_title: 'The endpoint path used to build the Access Token Server URL, to which the clients must address their authorization grants in order to get their access tokens.',
-                    urls_tab_title: 'URL\'s'
+                    urls_tab_title: 'URL\'s',
+                    userinfo_example: 'User informations URL: &laquo; %s &raquo;',
+                    userinfo_label: 'Userinfo endpoint :',
+                    userinfo_ph: '/userinfo',
+                    userinfo_title: 'The endpoint path used to build the Userinfo URL, to which you can get informations about a user.',
                 },
                 jwks: {
                     preamble: 'If your organization wants exhibit a JSON Web Keys Set document, then manage it here.<br />'

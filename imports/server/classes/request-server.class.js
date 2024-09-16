@@ -65,18 +65,19 @@ export class RequestServer {
         this.#identityServer = opts.identity ? new RequestServer.classes[opts.identity]( this ) : new IdentityServer( this );
         this.#resourceServer = opts.resource ? new RequestServer.classes[opts.resource]( this ) : new ResourceServer( this );
 
-        console.debug( 'arguments', arguments );
-        console.debug( 'this', this );
+        //console.debug( 'arguments', arguments );
+        //console.debug( 'this', this );
 
         return this;
     }
 
     /**
      * @summary Handle a request
+     * @param {String} url
      * @param {WebArgs} args
-     * @param {Object} organization an { entity, record } organization object
      */
-    async handle( args, organization ){
+    async handle( url, args ){
+        args.answer({ ok: true });
         args.end();
     }
 

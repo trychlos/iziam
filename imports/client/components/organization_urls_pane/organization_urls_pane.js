@@ -36,6 +36,9 @@ Template.organization_urls_pane.onCreated( function(){
             },
             jwks_uri: {
                 js: '.js-jwks'
+            },
+            userinfo_endpoint: {
+                js: '.js-userinfo'
             }
         },
         // the Checker instance
@@ -110,5 +113,10 @@ Template.organization_urls_pane.helpers({
     token_example(){
         const endpoint = Template.instance().APP.organization.get().record.token_endpoint;
         return endpoint ? pwixI18n.label( I18N, 'organizations.edit.token_example', Template.instance().APP.baseUrl.get() + endpoint ) : '&nbsp;';
+    },
+    // the full userinfo endpoint url
+    userinfo_example(){
+        const endpoint = Template.instance().APP.organization.get().record.userinfo_endpoint;
+        return endpoint ? pwixI18n.label( I18N, 'organizations.edit.userinfo_example', Template.instance().APP.baseUrl.get() + endpoint ) : '&nbsp;';
     }
 });

@@ -555,7 +555,15 @@ Organizations.recordFieldset = function(){
                 {
                     name: 'keygrips.$.keylist.$.createdBy',
                     type: String
-                }
+                },
+                // OpenID: userinfo
+                {
+                    name: 'userinfo_endpoint',
+                    type: String,
+                    optional: true,
+                    form_check: Organizations.checks.userinfo_endpoint,
+                    form_type: Forms.FieldType.C.OPTIONAL
+                },
             ]
         }
     ];

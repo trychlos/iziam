@@ -118,9 +118,10 @@ Organizations.fn = {
         };
         let foo = organization.record.authorization_endpoint;
         set( 'authorization_endpoint', { url: true });
-        set( 'token_endpoint', { url: true });
-        set( 'registration_endpoint', { url: true });
         set( 'jwks_uri', { url: true });
+        set( 'registration_endpoint', { url: true });
+        set( 'token_endpoint', { url: true });
+        set( 'userinfo_endpoint', { url: true });
         return data;
     },
 

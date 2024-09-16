@@ -33,12 +33,13 @@ Organizations.isOperational = async function( organization ){
     }
     // check if the organizations has all its mandatory datas
     let promises = [];
-    promises.push( fnCheck( 'issuer', organization.record.issuer ));
-    promises.push( fnCheck( 'baseUrl', organization.record.baseUrl ));
     promises.push( fnCheck( 'authorization_endpoint', organization.record.authorization_endpoint ));
-    promises.push( fnCheck( 'token_endpoint', organization.record.token_endpoint ));
-    // registration_endpoint: not required
+    promises.push( fnCheck( 'baseUrl', organization.record.baseUrl ));
+    promises.push( fnCheck( 'issuer', organization.record.issuer ));
     promises.push( fnCheck( 'jwks_uri', organization.record.jwks_uri ));
+    // registration_endpoint: not required
+    promises.push( fnCheck( 'token_endpoint', organization.record.token_endpoint ));
+    promises.push( fnCheck( 'userinfo_endpoint', organization.record.userinfo_endpoint ));
 
     await Promise.allSettled( promises );
     //console.debug( 'errors', errors );
