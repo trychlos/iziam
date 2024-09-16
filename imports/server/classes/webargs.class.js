@@ -4,6 +4,8 @@
  * A class to handle requests arguments and their results.
  */
 
+import { izProvider } from '/imports/common/classes/iz-provider.class.js';
+
 import { Statistics } from '/imports/common/collections/statistics/index.js';
 
 export class Webargs {
@@ -103,37 +105,47 @@ export class Webargs {
      *  - organization: the { entity, record } at date non null organization object, if and only if we are handling an organization-scoped request
      *  - url: the url to be searched as an API path, defaulting to req.url
      *  - providers: a sorted list of providers which may be able to deal with this request
+     *  - asterCb: an async callback which targets the aster path, and run server-side
      * NB: must terminate by calling end() to answer to the client
+     * @returns {izProvider} a provider willing to handle and answer, or null
      */
     async handle( api, opts ){
         const self = this;
         const url = opts.url || this.#req.url;
-        let hasPath = false;
+        let handled = false;
+        let provider = null;
+        // rather targeting global API
         if( api[this.#req.method] ){
-            api[this.#req.method].every(( it ) => {
+            for( let i=0 ; i<api[this.#req.method].length && !handled ; ++i ){
+                const it = api[this.#req.method][i];
                 if( url === it.path || it.path === '*' ){
-                    hasPath = true;
+                    handled = true;
                     if( it.fn ){
-                        it.fn( it, self, opts.organization );
+                        await it.fn( it, self, opts.organization );
                     } else {
                         self.error( 'the requested url "'+this.#req.url+'" doesn\'t have any associated function' );
                         self.status( 501 ); // not implemented
                         self.end();
                     }
                 }
-                return !hasPath;
-            });
-        }
-        if( !hasPath && opts.providers ){
-            for( let i=0 ; i<opts.providers.length && !hasPath ; ++i ){
-                hasPath = await opts.providers[i].request( url, self, opts.organization );
             }
         }
-        if( !hasPath ){
+        // rather targeting scoped API
+        //  first try fixed paths, only then aster
+        if( !handled && opts.providers ){
+            for( let i=0 ; i<opts.providers.length && !handled ; ++i ){
+                handled = await opts.providers[i].request( url, self, opts.organization );
+            }
+            for( let i=0 ; i<opts.providers.length && !handled ; ++i ){
+                handled = await opts.providers[i].request( url, self, opts.organization, opts.asterCb );
+            }
+        }
+        if( !handled ){
             self.error( 'the requested url "'+this.#req.url+'" is not managed' );
             self.status( 501 ); // not implemented
             self.end();
         }
+        return provider;
     }
 
     /**

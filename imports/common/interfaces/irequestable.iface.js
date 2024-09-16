@@ -38,27 +38,44 @@ export const IRequestable = DeclareMixin(( superclass ) => class extends supercl
     }
 
     /**
+     * @locus Server
+     * @returns {Object} the options needed to instanciate a RequestServer
+     */
+    async requestOptions(){
+        return {};
+    }
+
+    /**
      * @param {String} url
      * @param {WebArgs} args
      * @param {Object} organization an { entity, record } organization object
+     * @param {Function} asterCb a callback function which is called with these three first arguments plus the provider, and targets the aster path
      * @returns {Boolean} whether we have handled the requested url
      */
-    async request( url, args, organization ){
+    async request( url, args, organization, asterCb ){
         //console.debug( this.identId(), url );
         let found = false;
-        this.#priv.irequestable.every(( it ) => {
-            if( it.method === args.method() && ( it.path === url || it.path === '*' )){
-                found = true;
-                if( it.fn ){
-                    it.fn( it, args, organization );
-                } else {
-                    args.error( 'the requested url "'+url+'" doesn\'t have any associated function' );
-                    args.status( 501 ); // not implemented
-                    args.end();
+        for( let i=0 ; i<this.#priv.irequestable.length && !found ; ++i ){
+            const it = this.#priv.irequestable[i];
+            if( it.method === args.method()){
+                if( it.path === url ){
+                    found = true;
+                    console.debug( 'found', url );
+                    if( it.fn ){
+                        await it.fn( it, args, organization );
+                    } else {
+                        args.error( 'the requested url "'+url+'" doesn\'t have any associated function' );
+                        args.status( 501 ); // not implemented
+                        args.end();
+                    }
+                } else if( it.path === '*' && asterCb ){
+                    found = true;
+                    console.debug( 'calling asterCb' );
+                    assert( typeof asterCb === 'function', 'expects asterCb be a function, got '+asterCb );
+                    await asterCb( url, args, organization, this );
                 }
             }
-            return !found;
-        });
+        }
         return found;
     }
 });

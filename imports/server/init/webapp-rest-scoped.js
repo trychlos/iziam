@@ -18,7 +18,10 @@ import { Organizations } from '/imports/common/collections/organizations/index.j
 
 import { IRequestable } from '/imports/common/interfaces/irequestable.iface.js';
 
+import { RequestServer } from '/imports/server/classes/request-server.class.js';
 import { Webargs } from '/imports/server/classes/webargs.class.js';
+
+let requestServersByEntities = {};
 
 // organization-scoped REST API
 const scoped = {
@@ -43,6 +46,20 @@ async function fn_findPath( it, args, organization ){
     //args.answer( Organizations.fn.metadata( organization ));
     //args.end();
     //return true;
+}
+
+async function fn_asterPath( url, args, organization, provider ){
+    let entityServers = requestServersByEntities[organization.entity._id];
+    if( !entityServers ){
+        requestServersByEntities[organization.entity._id] = {};
+        entityServers = requestServersByEntities[organization.entity._id];
+    }
+    let server = entityServers[provider.identId()];
+    if( !server ){
+        server = new RequestServer( provider, organization, await provider.requestOptions());
+        entityServers[provider.identId()] = server;
+    }
+    args.end();
 }
 
 // make sure we address only one entity
@@ -103,7 +120,7 @@ async function handleScoped( req, res ){
     assert( !words[0], 'expects an absolute pathname, got '+req.url );
     const baseUrl = '/'+words[1];
     return Organizations.s.getBy({ baseUrl: baseUrl }).then(( fetched ) => {
-        // if no organization has this base url, then do not handled
+        // if no organization has this base url, then do not handle
         if( fetched.records.length === 0 ){
             return false;
         }
@@ -121,12 +138,14 @@ async function handleScoped( req, res ){
                 if( organization ){
                     const providers = Organizations.fn.byTypeSorted( organization, IRequestable );
                     //console.debug( providers );
-                    args.handle( scoped, {
+                    return args.handle( scoped, {
                         organization: organization,
                         url: req.url.substring( baseUrl.length ),
-                        providers: providers
+                        providers: providers,
+                        asterCb: fn_asterPath
                     });
                 }
+                return null;
             });
         return true;
     });

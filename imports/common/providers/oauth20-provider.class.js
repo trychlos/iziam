@@ -21,13 +21,6 @@ export class OAuth20Provider extends mix( izProvider ).with( IGrantType, IReques
 
     // static methods
 
-    static async handleAsterRequest( it, args, organization ){
-        args.error( 'OAuth20Provider cannot handle the requested url "'+args.url()+'" (and no other will have any chance)' );
-        args.status( 501 ); // not implemented
-        args.end();
-        return true;
-    }
-
     // private data
 
     // private methods
@@ -61,10 +54,7 @@ export class OAuth20Provider extends mix( izProvider ).with( IGrantType, IReques
                 },
                 {
                     method: 'GET',
-                    path: '*',
-                    async fn( url, args, organization ){
-                        return OAuth20Provider.handleAsterRequest( url, args, organization );
-                    }
+                    path: '*'
                 }
             ],
             // authorization grant types are defined by the spec

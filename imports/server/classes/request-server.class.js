@@ -13,11 +13,18 @@ import { IRequestable } from '/imports/common/interfaces/irequestable.iface.js';
 
 import { AuthServer } from '/imports/server/classes/auth-server.class.js';
 import { IdentityServer } from '/imports/server/classes/identity-server.class.js';
+import { OIDAuthServer } from '/imports/server/classes/oid-auth-server.class.js';
 import { ResourceServer } from '/imports/server/classes/resource-server.class.js';
 
 export class RequestServer {
 
     // static data
+    static classes = {
+        AuthServer,
+        IdentityServer,
+        OIDAuthServer,
+        ResourceServer
+    };
 
     // static methods
 
@@ -54,9 +61,12 @@ export class RequestServer {
         this.#organization = organization;
 
         // instanciates other servers
-        this.#authServer = opts.auth ? new opts.auth( this ) : new AuthServer( this );
-        this.#identityServer = opts.identity ? new opts.identity( this ) : new IdentityServer( this );
-        this.#resourceServer = opts.resource ? new opts.resource( this ) : new ResourceServer( this );
+        this.#authServer = opts.auth ? new RequestServer.classes[opts.auth]( this ) : new AuthServer( this );
+        this.#identityServer = opts.identity ? new RequestServer.classes[opts.identity]( this ) : new IdentityServer( this );
+        this.#resourceServer = opts.resource ? new RequestServer.classes[opts.resource]( this ) : new ResourceServer( this );
+
+        console.debug( 'arguments', arguments );
+        console.debug( 'this', this );
 
         return this;
     }
