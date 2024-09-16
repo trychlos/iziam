@@ -105,17 +105,16 @@ export class Webargs {
      *  - providers: a sorted list of providers which may be able to deal with this request
      * NB: must terminate by calling end() to answer to the client
      */
-    handle( api, opts ){
+    async handle( api, opts ){
         const self = this;
         const url = opts.url || this.#req.url;
+        let hasPath = false;
         if( api[this.#req.method] ){
-            let hasPath = false;
             api[this.#req.method].every(( it ) => {
                 if( url === it.path || it.path === '*' ){
                     hasPath = true;
                     if( it.fn ){
                         it.fn( it, self, opts.organization );
-                        self.end();
                     } else {
                         self.error( 'the requested url "'+this.#req.url+'" doesn\'t have any associated function' );
                         self.status( 501 ); // not implemented
@@ -124,18 +123,14 @@ export class Webargs {
                 }
                 return !hasPath;
             });
-            if( !hasPath && opts.providers ){
-                for( let i=0 ; i<opts.providers.length && !hasPath ; ++i ){
-                    hasPath = opts.providers[i].request( url, self, opts.organization );
-                }
+        }
+        if( !hasPath && opts.providers ){
+            for( let i=0 ; i<opts.providers.length && !hasPath ; ++i ){
+                hasPath = await opts.providers[i].request( url, self, opts.organization );
             }
-            if( !hasPath ){
-                self.error( 'the requested url "'+this.#req.url+'" is not managed' );
-                self.status( 501 ); // not implemented
-                self.end();
-            }
-        } else {
-            self.error( 'the method "'+this.#req.method+'" is not managed' );
+        }
+        if( !hasPath ){
+            self.error( 'the requested url "'+this.#req.url+'" is not managed' );
             self.status( 501 ); // not implemented
             self.end();
         }
@@ -175,5 +170,13 @@ export class Webargs {
      */
     status( status ){
         this.#res.statusCode = status;
+    }
+
+    /**
+     * Getter
+     * @returns {String} url
+     */
+    url(){
+        return this.#req.url;
     }
 }

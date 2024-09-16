@@ -33,9 +33,11 @@ const globals = {
     ]
 }
 
-// it: the globals object containing the path, the function...
-// args: the Webargs object
-function v1_listCommands( it, args ){
+// @async
+// @param {Object} it the 'globals' object item containing the path and the function...
+// @param {WebArgs} args
+// @returns {Boolean} whether we have ended the request,
+async function v1_listCommands( it, args ){
     let res = { result: [] };
     globals.GET.forEach(( it ) => {
         if( it.path !== '/v1' ){
@@ -43,20 +45,24 @@ function v1_listCommands( it, args ){
         }
     });
     args.answer( res );
+    args.end();
+    return true;
 }
 
-function v1_ident( it, args ){
+async function v1_ident( it, args ){
     args.answer({
         id: Meteor.APP.name,
         lastUpdate: Meteor.settings.public[Meteor.APP.name].version,
         label: pwixI18n.label( I18N, 'app.label' )
     });
+    args.end();
+    return true;
 }
 
 // Handle global requests, i.e. requests whose first level is not scoped to a particular organization
 //  they should still have a recognizable first level as /vnn
 //  return true|false whether we have (at least tried to) handled this request
-function handleGlobals( req, res ){
+async function handleGlobals( req, res ){
     const words = req.url.split( '/' );
     assert( !words[0], 'expects an absolute pathname, got '+req.url );
     let found = false;
@@ -71,7 +77,9 @@ function handleGlobals( req, res ){
 
 // this global handler see all application urls, including both the UI part and the REST part
 WebApp.handlers.use(( req, res, next ) => {
-    if( !handleGlobals( req, res )){
-        next();
-    }
+    handleGlobals( req, res ).then(( handled ) => {
+        if( !handled ){
+            next();
+        }
+    });
 });

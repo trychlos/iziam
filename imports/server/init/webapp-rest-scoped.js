@@ -28,15 +28,21 @@ const scoped = {
     ]
 }
 
-// it: the globals object containing the path, the function...
-// args: the Webargs object
-// organization: the { entity, record } at date organization object
-function fn_wellKnown( it, args, organization ){
+// @async
+// @param {Object} it the 'globals' object item containing the path and the function...
+// @param {WebArgs} args
+// @param {Object} organization the { entity, record } at date organization object
+// @returns {Boolean} whether we have ended the request,
+async function fn_wellKnown( it, args, organization ){
     args.answer( Organizations.fn.metadata( organization ));
+    args.end();
+    return true;
 }
 
-function fn_findPath( it, args, organization ){
+async function fn_findPath( it, args, organization ){
     //args.answer( Organizations.fn.metadata( organization ));
+    //args.end();
+    //return true;
 }
 
 // make sure we address only one entity

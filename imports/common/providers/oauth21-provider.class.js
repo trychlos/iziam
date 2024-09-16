@@ -26,6 +26,13 @@ export class OAuth21Provider extends mix( izProvider ).with( IGrantType, IReques
 
     // static methods
 
+    static async handleAsterRequest( it, args, organization ){
+        args.error( 'OAuth21Provider cannot handle the requested url "'+args.url()+'" (and no other will have any chance)' );
+        args.status( 501 ); // not implemented
+        args.end();
+        return true;
+    }
+
     // private data
 
     // private methods
@@ -57,12 +64,17 @@ export class OAuth21Provider extends mix( izProvider ).with( IGrantType, IReques
                     method: 'GET',
                     path: Meteor.APP.C.oauthMetadataPath,
                     fn( url, args, organization ){
-                        args.answer( Organizations.fn.metadata( organization ))
+                        args.answer( Organizations.fn.metadata( organization ));
+                        args.end();
+                        return true;
                     }
                 },
                 {
+                    method: 'GET',
                     path: '*',
-                    fn: null
+                    async fn( url, args, organization ){
+                        return OAuth21Provider.handleAsterRequest( url, args, organization );
+                    }
                 }
             ],
             irequires: [

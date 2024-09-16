@@ -147,3 +147,11 @@ OAuth defines four roles:
     - in response to: Access token
 
 ## Tests
+
+## Notes
+
+As of 2024-09-16, latest oidc-provider is 8.5.1
+ but transpilation aborts with message "Error: cannot find module 'got'".
+ While got is installed, any attempts to import it produces the same error.
+ Adding a 'main' key in got/package.json doesn't improve.
+ Have to get back to oidc-provider 7.14.3 (last 7.x version) to get a working installation.

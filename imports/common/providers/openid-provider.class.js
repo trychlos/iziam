@@ -15,11 +15,31 @@ import { Organizations } from '/imports/common/collections/organizations/index.j
 import { IGrantType } from '/imports/common/interfaces/igranttype.iface.js';
 import { IRequestable } from '/imports/common/interfaces/irequestable.iface.js';
 
+import { RequestServer } from '/imports/server/classes/request-server.class.js';
+import { OIDAuthServer } from '/imports/server/classes/oid-auth-server.class.js';
+
 export class OpenIDProvider extends mix( izProvider ).with( IGrantType, IRequestable ){
 
     // static data
 
+    // keep the instanciated handling servers in a hash indexed per entity
+    static RequestServersByEntity = {};
+    static Singleton = null;
+
     // static methods
+
+    // the organization has selected an OpenID provider
+    // to handle it, and whatever be the client, we have to pass through the OpenID web handler provided by [OIDC provider](https://github.com/panva/node-oidc-provider)
+    // once done, other handlers have no chance to be able to handle it
+    static async handleAsterRequest( it, args, organization ){
+        let server = OpenIDProvider.RequestServersByEntity[organization.entity._id];
+        if( !server ){
+            server = new RequestServer( OpenIDProvider.Singleton, { auth: OIDAuthServer });
+            OpenIDProvider.RequestServersByEntity[organization.entity._id] = server;
+        }
+        await server.handle( args, organization );
+        return true;
+    }
 
     // private data
 
@@ -49,13 +69,18 @@ export class OpenIDProvider extends mix( izProvider ).with( IGrantType, IRequest
                 {
                     method: 'GET',
                     path: Meteor.APP.C.openidMetadataPath,
-                    fn( url, args, organization ){
-                        args.answer( Organizations.fn.metadata( organization ))
+                    async fn( url, args, organization ){
+                        args.answer( Organizations.fn.metadata( organization ));
+                        args.end();
+                        return true;
                     }
                 },
                 {
+                    method: 'GET',
                     path: '*',
-                    fn: null
+                    async fn( url, args, organization ){
+                        return OpenIDProvider.handleAsterRequest( url, args, organization );
+                    }
                 }
             ],
             irequires: [
@@ -72,6 +97,7 @@ export class OpenIDProvider extends mix( izProvider ).with( IGrantType, IRequest
             */
         });
 
+        OpenIDProvider.Singleton = this;
         return this;
     }
 

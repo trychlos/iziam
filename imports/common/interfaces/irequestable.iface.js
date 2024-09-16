@@ -2,6 +2,13 @@
  * /imports/common/interfaces/irequestable.iface.js
  *
  * A IRequestable provider is a plugin which accepts URL requests and is able to answer them.
+ * 
+ * Each request to which we will answer is defined by an object with following keys:
+ * - path: the url to be answered to
+ * - fn: an async fn( url<String>, args<WebArgs>, organization<Object>): <Boolean>
+ * 
+ * A provider may define an '*' path, but the first executed will eat all others, i.e. only the first executed will have a chance
+ * to handle the provided url in its '*' function.
  */
 
 import _ from 'lodash';
@@ -36,15 +43,14 @@ export const IRequestable = DeclareMixin(( superclass ) => class extends supercl
      * @param {Object} organization an { entity, record } organization object
      * @returns {Boolean} whether we have handled the requested url
      */
-    request( url, args, organization ){
+    async request( url, args, organization ){
         //console.debug( this.identId(), url );
         let found = false;
         this.#priv.irequestable.every(( it ) => {
-            if( it.method === args.method() && it.path === url ){
+            if( it.method === args.method() && ( it.path === url || it.path === '*' )){
                 found = true;
                 if( it.fn ){
                     it.fn( it, args, organization );
-                    args.end();
                 } else {
                     args.error( 'the requested url "'+url+'" doesn\'t have any associated function' );
                     args.status( 501 ); // not implemented
