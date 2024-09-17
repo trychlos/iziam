@@ -21,6 +21,7 @@ import { IRequestable } from '/imports/common/interfaces/irequestable.iface.js';
 import { RequestServer } from '/imports/server/classes/request-server.class.js';
 import { Webargs } from '/imports/server/classes/webargs.class.js';
 
+// a map of the instanciated RequestServer's per organization entity and AuthServer provider id
 let requestServersByEntities = {};
 
 // organization-scoped REST API
@@ -58,6 +59,7 @@ async function fn_asterPath( url, args, organization, provider ){
     if( !server ){
         server = new RequestServer( provider, organization, await provider.requestOptions());
         entityServers[provider.identId()] = server;
+        await server.init();
     }
     server.handle( url, args );
 }

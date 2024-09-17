@@ -18,6 +18,7 @@ export class Webargs {
 
     #req = null;
     #res = null;
+    #next = null;
     #answer = null;
     #errors = [];
 
@@ -45,11 +46,13 @@ export class Webargs {
      *
      *
      * @param {Object} res the result object
+     * @param {Function} next the next function
      * @returns {Webargs} this instance
      */
-    constructor( req, res ){
+    constructor( req, res, next ){
         this.#req = req;
         this.#res = res;
+        this.#next = next;
         this.#res.statusCode = null;
         return this;
     }
@@ -157,6 +160,14 @@ export class Webargs {
     }
 
     /**
+     * Getter
+     * @returns {Function} the next function
+     */
+    next(){
+        return this.#next;
+    }
+
+    /**
      * @summary Record a statistic line
      */
     recordStat(){
@@ -175,6 +186,22 @@ export class Webargs {
             record.errors = this.#errors;
         }
         Statistics.s.record( record );
+    }
+
+    /**
+     * Getter
+     * @returns {Object} the request
+     */
+    req(){
+        return this.#req;
+    }
+
+    /**
+     * Getter
+     * @returns {Object} the result
+     */
+    res(){
+        return this.#res;
     }
 
     /**

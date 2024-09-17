@@ -18,6 +18,7 @@ import { Providers } from '/imports/common/tables/providers/index.js';
 import { Organizations } from './index.js';
 
 Organizations.fn = {
+
     /**
      * @summary Returns a list of the organization selected providers which match a specified type
      * @param {Organizations} organization as an { entity, record } object
@@ -83,6 +84,31 @@ Organizations.fn = {
 
     /**
      * @param {Organizations} organization as an { entity, record } object
+     * @returns {Object} the list of configured endpoints
+     */
+    endpoints( organization ){
+        let result = {};
+        const fullBaseUrl = Organizations.fn.fullBaseUrl( organization );
+        const set = function( name, opts={} ){
+            let foo = organization.record[opts.name] || organization.record[name];
+            if( foo ){
+                result[name] = fullBaseUrl+foo;
+            }
+        };
+        set( 'authorization_endpoint' );
+        set( 'introspection_endpoint' );
+        set( 'jwks_uri' );
+        set( 'op_policy_uri', { name: 'pdmpUrl' });
+        set( 'op_tos_uri', { name: 'gtuUrl' });
+        set( 'revocation_endpoint' );
+        set( 'registration_endpoint' );
+        set( 'token_endpoint' );
+        set( 'userinfo_endpoint' );
+        return result;
+    },
+
+    /**
+     * @param {Organizations} organization as an { entity, record } object
      * @returns {String} the full base URL for the organization, including issuer host name
      */
     fullBaseUrl( organization ){
@@ -110,18 +136,10 @@ Organizations.fn = {
         const set = function( name, opts={} ){
             let foo = organization.record[name];
             if( foo ){
-                if( opts.url === true ){
-                    foo = Organizations.fn.fullBaseUrl( organization )+foo;
-                }
                 data[name] = foo;
             }
         };
-        let foo = organization.record.authorization_endpoint;
-        set( 'authorization_endpoint', { url: true });
-        set( 'jwks_uri', { url: true });
-        set( 'registration_endpoint', { url: true });
-        set( 'token_endpoint', { url: true });
-        set( 'userinfo_endpoint', { url: true });
+        _.merge( data, Organizations.fn.endpoints( organization ));
         return data;
     },
 

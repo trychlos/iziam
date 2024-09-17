@@ -218,7 +218,9 @@ Organizations.recordFieldset = function(){
                 {
                     name: 'revocation_endpoint',
                     type: String,
-                    optional: true
+                    optional: true,
+                    form_check: Organizations.checks.revocation_endpoint,
+                    form_type: Forms.FieldType.C.OPTIONAL
                 },
                 // array containing a list of client authentication methods supported by this revocation endpoint
                 {
@@ -244,7 +246,9 @@ Organizations.recordFieldset = function(){
                 {
                     name: 'introspection_endpoint',
                     type: String,
-                    optional: true
+                    optional: true,
+                    form_check: Organizations.checks.introspection_endpoint,
+                    form_type: Forms.FieldType.C.OPTIONAL
                 },
                 // array containing a list of client authentication methods supported by this introspection endpoint
                 {

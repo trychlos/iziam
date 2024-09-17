@@ -33,6 +33,13 @@ export class AuthServer extends mix( izObject ).with( IRequested ){
      */
     constructor( server ){
         super( ...arguments );
+        console.debug( 'instanciating AuthServer' );
         return this;
+    }
+
+    /**
+     * @summary Make sure the server is initialized
+     */
+    async init(){
     }
 }

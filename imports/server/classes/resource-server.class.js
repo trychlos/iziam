@@ -33,6 +33,13 @@ export class ResourceServer extends mix( izObject ).with( IRequested ){
      */
     constructor( server ){
         super( ...arguments );
+        console.debug( 'instanciating ResourceServer' );
         return this;
+    }
+
+    /**
+     * @summary Make sure the server is initialized
+     */
+    async init(){
     }
 }

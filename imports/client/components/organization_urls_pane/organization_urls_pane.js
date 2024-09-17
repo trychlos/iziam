@@ -39,6 +39,12 @@ Template.organization_urls_pane.onCreated( function(){
             },
             userinfo_endpoint: {
                 js: '.js-userinfo'
+            },
+            revocation_endpoint: {
+                js: '.js-revocation'
+            },
+            introspection_endpoint: {
+                js: '.js-introspection'
             }
         },
         // the Checker instance
@@ -104,10 +110,20 @@ Template.organization_urls_pane.helpers({
     issuer_example(){
         return pwixI18n.label( I18N, 'organizations.edit.issuer_example', Template.instance().APP.baseUrl.get() + Meteor.APP.C.oauthMetadataPath );
     },
+    // the full introspection endpoint url
+    introspection_example(){
+        const endpoint = Template.instance().APP.organization.get().record.introspection_endpoint;
+        return endpoint ? pwixI18n.label( I18N, 'organizations.edit.introspection_example', Template.instance().APP.baseUrl.get() + endpoint ) : '&nbsp;';
+    },
     // the full jwks page url
     jwks_example(){
         const endpoint = Template.instance().APP.organization.get().record.jwks_uri;
         return endpoint ? pwixI18n.label( I18N, 'organizations.edit.jwks_example', Template.instance().APP.baseUrl.get() + endpoint ) : '&nbsp;';
+    },
+    // the full revocation endpoint url
+    revocation_example(){
+        const endpoint = Template.instance().APP.organization.get().record.revocation_endpoint;
+        return endpoint ? pwixI18n.label( I18N, 'organizations.edit.revocation_example', Template.instance().APP.baseUrl.get() + endpoint ) : '&nbsp;';
     },
     // the full token endpoint url
     token_example(){

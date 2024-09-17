@@ -11,6 +11,29 @@ import { JwaAlg } from '/imports/common/definitions/jwa-alg.def.js';
 import { Jwks } from './index.js';
 
 Jwks.fn = {
+
+    /**
+     * @summary extract the JSON Web Keys needed by the AuthServer
+     * @param {Object} organization an { entity, record } organization object
+     * @returns {Array<JWK>}
+     */
+    authKeys( organization ){
+        const result = { keys: [] };
+        ( organization.record.jwks || [] ).forEach(( jwk ) => {
+            let it = { ...jwk };
+            delete it.secret;
+            delete it.pair;
+            if( jwk.secret ){
+                _.merge( it, jwk.secret );
+            }
+            if( jwk.pair ){
+                _.merge( it, jwk.pair.private.jwk );
+            }
+            result.keys.push( it );
+        });
+        return result;
+    },
+
     /**
      * @summary Generate the symmetric secret / asymmetric keys pair when creating a new JWK
      * @param {Object<JWK>} item the just defined JWK item

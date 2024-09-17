@@ -33,6 +33,13 @@ export class IdentityServer extends mix( izObject ).with( IRequested ){
      */
     constructor( server ){
         super( ...arguments );
+        console.debug( 'instanciating IdentityServer' );
         return this;
+    }
+
+    /**
+     * @summary Make sure the server is initialized
+     */
+    async init(){
     }
 }

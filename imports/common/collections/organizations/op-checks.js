@@ -35,9 +35,11 @@ Organizations.isOperational = async function( organization ){
     let promises = [];
     promises.push( fnCheck( 'authorization_endpoint', organization.record.authorization_endpoint ));
     promises.push( fnCheck( 'baseUrl', organization.record.baseUrl ));
+    promises.push( fnCheck( 'introspection_endpoint', organization.record.introspection_endpoint ));
     promises.push( fnCheck( 'issuer', organization.record.issuer ));
     promises.push( fnCheck( 'jwks_uri', organization.record.jwks_uri ));
-    // registration_endpoint: not required
+    promises.push( fnCheck( 'registration_endpoint', organization.record.registration_endpoint ));
+    promises.push( fnCheck( 'revocation_endpoint', organization.record.revocation_endpoint ));
     promises.push( fnCheck( 'token_endpoint', organization.record.token_endpoint ));
     promises.push( fnCheck( 'userinfo_endpoint', organization.record.userinfo_endpoint ));
 

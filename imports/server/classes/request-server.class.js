@@ -55,6 +55,7 @@ export class RequestServer {
      */
     constructor( provider, organization, opts={} ){
         assert( provider && provider instanceof IRequestable, 'expects a IRequestable instance, got '+provider );
+        console.debug( 'instanciating RequestServer', provider.identId(), organization.entity._id );
 
         // keep instanciation arguments
         this.#requestable = provider;
@@ -75,10 +76,24 @@ export class RequestServer {
      * @summary Handle a request
      * @param {String} url
      * @param {WebArgs} args
+     *  This is called from IRequestable.request() to handle aster path when the provider have one.
+     *  There is no expected returned value, but should answer() and must end().
      */
     async handle( url, args ){
-        args.answer({ ok: true });
-        args.end();
+        //args.answer({ ok: true });
+        //args.end();
+        this.#authServer.handle( url, args );
+    }
+
+    /**
+     * @summary Make sure the server is initialized
+     */
+    async init(){
+        let promises = [];
+        promises.push( this.#authServer.init());
+        promises.push( this.#identityServer.init());
+        promises.push( this.#resourceServer.init());
+        await Promise.allSettled( promises );
     }
 
     /**
@@ -87,5 +102,13 @@ export class RequestServer {
      */
     organization(){
         return this.#organization;
+    }
+
+    /**
+     * Getter
+     * @returns {izProvider} the requestable provider which have accepted to handle the request
+     */
+    requestable(){
+        return this.#requestable;
     }
 }
