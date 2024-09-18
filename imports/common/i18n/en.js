@@ -40,8 +40,10 @@ Meteor.APP.i18n = {
                     application_type_invalid: 'The application type is unknown or not valid',
                     client_type_invalid: 'The client type is unknown or not valid',
                     client_type_unset: 'The client type is not set',
+                    clientid_unset: 'The client identifier is not set',
                     contact_invalid: 'The contact email address is not valid',
                     contact_unset: 'An email address must be provided',
+                    enabled_invalid: 'The enabled status is invalid',
                     home_host: 'The home URI wants a hostname',
                     home_https: 'The home URI wants only HTTPS scheme',
                     home_invalid: 'The home URI is not valid',
@@ -82,6 +84,7 @@ Meteor.APP.i18n = {
                     description_ph: 'The client description',
                     description_title: 'A not too long description (which are not notes)',
                     edit_success: 'The client "%s" has been successfully updated',
+                    enabled_label: 'Client is enabled',
                     entity_notes_tab_title: 'Common notes',
                     entity_validities_tab_title: 'By validity period(s)',
                     error: 'Unfortunately, an error has been detected./ Please retry later',
@@ -302,10 +305,11 @@ Meteor.APP.i18n = {
                 },
                 tabular: {
                     application_type_th: 'Application type',
-                    authorization_flow_th: 'Authorization flow',
+                    authorization_flow_th: 'Grant flow',
                     client_type_th: 'Client type',
                     delete_button_title: 'Delete the "%s" client',
                     edit_button_title: 'Edit the "%s" client',
+                    enabled_th: 'Enabled',
                     entity_notes_th: 'Client notes',
                     info_button_title: 'Informations about the "%s" client',
                     info_modal_title: 'Informations about the "%s" client',
@@ -496,6 +500,10 @@ Meteor.APP.i18n = {
                     pkce_label: 'Proof Key of Code Exchange (RFC 7636)',
                     //saml_label: 'SAML 2.0 Bearer Assertion',
                     select_text: 'Select optional token extensions'
+                },
+                yesno: {
+                    no: 'No',
+                    yes: 'Yes'
                 }
             },
             header: {

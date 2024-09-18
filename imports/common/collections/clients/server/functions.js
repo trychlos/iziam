@@ -28,7 +28,7 @@ Clients.s = {
 
     // return a client by its oauth client_id
     // returns a { entity, record } client object valid at date, or null
-    async byClientId( clientId ){
+    async byClientIdAtDate( clientId ){
         let result = null;
         const entities = await ClientsEntities.collection.find({ clientId: clientId }).fetchAsync();
         if( entities.length === 1 ){

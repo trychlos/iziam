@@ -63,9 +63,10 @@ Template.client_record_tabbed.onCreated( function(){
                     paneTemplate: 'client_properties_panel',
                     paneData: {
                         ...paneData,
+                        withApplicationType: true,
+                        withEnabled: true,
                         withProfile: true,
-                        withClientType: true,
-                        withApplicationType: true
+                        withClientType: true
                     }
                 },
                 {

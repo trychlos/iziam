@@ -12,6 +12,7 @@
  * - index: the index of the edited record
  * - checker: the Forms.Checker which manages the parent component as a ReactiveVar
  * - enableChecks: whether the checks should be enabled at startup, defaulting to true
+ * - withEnabled: whether we want an enabled checkbox, defaulting to false
  * - withProfile: whether we want a profile selection (only in edit_dialog, not in new_assistant), defaulting to false
  * - withClientType: whether we want a client type selection (only in edit_dialog, not in new_assistant), defaulting to false
  * - withApplicationType: whether we want an application type selection (only in edit_dialog, not in new_assistant), defaulting to false
@@ -64,6 +65,16 @@ Template.client_properties_panel.onCreated( function(){
 
     // update the Panel fields for edit_dialog
     self.autorun(() => {
+        if( Template.currentData().withApplicationType === true ){
+            self.APP.fields.application_type = { js: '.js-application-type' };
+        }
+    });
+    self.autorun(() => {
+        if( Template.currentData().withEnabled === true ){
+            self.APP.fields.enabled = { js: '.js-enabled' };
+        }
+    });
+    self.autorun(() => {
         if( Template.currentData().withProfile === true ){
             self.APP.fields.profile = { js: '.js-profile' };
         }
@@ -71,11 +82,6 @@ Template.client_properties_panel.onCreated( function(){
     self.autorun(() => {
         if( Template.currentData().withClientType === true ){
             self.APP.fields.client_type = { js: '.js-client-type' };
-        }
-    });
-    self.autorun(() => {
-        if( Template.currentData().withApplicationType === true ){
-            self.APP.fields.application_type = { js: '.js-application-type' };
         }
     });
 });
@@ -116,6 +122,16 @@ Template.client_properties_panel.onRendered( function(){
 });
 
 Template.client_properties_panel.helpers({
+    // whether the client is enabled ?
+    enabledChecked(){
+        return this.entity.get().DYN.records[this.index].get().enabled ? 'checked' : '';
+    },
+
+    // whether enabling the client is disabled ?
+    enabledDisabled(){
+        return '';
+    },
+
     // string translation
     i18n( arg ){
         return pwixI18n.label( I18N, arg.hash.key );
@@ -142,12 +158,22 @@ Template.client_properties_panel.helpers({
         };
     },
 
+    // whether we want an application type selection here (only in edit_dialog, not in new_assistant)
+    withApplicationType(){
+        return this.withApplicationType === true;
+    },
+
+    // whether we want an enabled checkbox (only in edit_dialog, not in new_assistant)
+    withEnabled(){
+        return this.withEnabled === true;
+    },
+
     // whether we want a profile selection here (only in edit_dialog, not in new_assistant)
     withProfile(){
         return this.withProfile === true;
     },
 
-    // whether we want a type selection here (only in edit_dialog, not in new_assistant)
+    // whether we want a client type selection here (only in edit_dialog, not in new_assistant)
     withClientType(){
         return this.withClientType === true;
     }

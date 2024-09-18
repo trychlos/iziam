@@ -32,9 +32,9 @@ export class OIDAuthServer extends AuthServer {
      * @returns {Object} a client suitable for use by openid auth server, or null
      */
     static async byClientId( clientId ){
-        const client = await Clients.s.byClientId( clientId );
+        const client = await Clients.s.byClientIdAtDate( clientId );
         let result = null;
-        if( client ){
+        if( client && client.enabled ){
             result = {
                 client_id: client.entity.clientId,
                 grant_types: client.record.grant_types,
@@ -193,25 +193,10 @@ export class OIDAuthServer extends AuthServer {
         return oidc;
     }
 
-    // builds the modal used to render an error
+    // builds the HTML code used to render an error
     async _renderError( ctx, out, error ){
         ctx.type = 'html';
-        ctx.body = new HtmlError( out, error ).out();
-        /*
-        ctx.body = `<!DOCTYPE html>
-          <html>
-          <head>
-            <title>oops! something went wrong</title>
-            <style>/ css and html classes omitted for brevity, see lib/helpers/defaults.js /</style>
-          </head>
-          <body>
-            <div>
-              <h1>oops! something went wrong</h1>
-              ${Object.entries(out).map(([key, value]) => `<pre><strong>${key}</strong>: ${htmlSafe(value)}</pre>`).join('')}
-            </div>
-          </body>
-          </html>`;
-          */
+        ctx.body = new HtmlError( out, error ).render();
     }
 
     // public data

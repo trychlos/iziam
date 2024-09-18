@@ -11,8 +11,6 @@ import SimpleSchema from 'meteor/aldeed:simple-schema';
 import { Tracker } from 'meteor/tracker';
 import { Validity } from 'meteor/pwix:validity';
 
-import { Clients } from '/imports/common/collections/clients/index.js';
-
 import { ClientsRecords } from './index.js';
 
 const _defaultFieldSet = function(){
@@ -23,7 +21,7 @@ const _defaultFieldSet = function(){
         {
             name: 'label',
             type: String,
-            form_check: Clients.checks.label,
+            form_check: ClientsRecords.checks.label,
             form_type: Forms.FieldType.C.MANDATORY,
             help_tooltip: pwixI18n.label( I18N, 'clients.metadata.client_name' )
         },
@@ -32,8 +30,16 @@ const _defaultFieldSet = function(){
             name: 'description',
             type: String,
             optional: true,
-            form_check: Clients.checks.description,
+            form_check: ClientsRecords.checks.description,
             form_type: Forms.FieldType.C.OPTIONAL
+        },
+        // whether the client is enabled ?
+        {
+            name: 'enabled',
+            type: Boolean,
+            defaultValue: true,
+            form_check: ClientsRecords.checks.enabled,
+            form_type: Forms.FieldType.C.NONE
         },
         // -- profile
         // the client chosen profile from ClientProfile which helps to determine other parameters
@@ -41,7 +47,7 @@ const _defaultFieldSet = function(){
             name: 'profile',
             type: String,
             optional: true,
-            form_check: Clients.checks.profile,
+            form_check: ClientsRecords.checks.profile,
             form_type: Forms.FieldType.C.OPTIONAL
         },
         // the client type in the OAuth 2 sense (https://datatracker.ietf.org/doc/html/rfc6749#section-2)
@@ -50,7 +56,7 @@ const _defaultFieldSet = function(){
             name: 'client_type',
             type: String,
             optional: true,
-            form_check: Clients.checks.client_type,
+            form_check: ClientsRecords.checks.client_type,
             form_type: Forms.FieldType.C.MANDATORY,
             help_tooltip: pwixI18n.label( I18N, 'clients.metadata.client_type' )
         },
@@ -85,7 +91,7 @@ const _defaultFieldSet = function(){
         {
             name: 'redirect_uris.$.uri',
             type: String,
-            form_check: Clients.checks.redirect_uri
+            form_check: ClientsRecords.checks.redirect_uri
         },
         {
             name: 'redirect_uris.$.id',
@@ -96,6 +102,8 @@ const _defaultFieldSet = function(){
             name: 'token_endpoint_auth_method',
             type: String,
             optional: true,
+            form_check: ClientsRecords.checks.token_endpoint_auth_method,
+            form_type: Forms.FieldType.C.OPTIONAL,
             help_tooltip: pwixI18n.label( I18N, 'clients.metadata.token_endpoint_auth_method' )
         },
         // selected grant types that the client can use against token endpoint
@@ -137,7 +145,7 @@ const _defaultFieldSet = function(){
             name: 'client_uri',
             type: String,
             optional: true,
-            form_check: Clients.checks.client_uri,
+            form_check: ClientsRecords.checks.client_uri,
             form_type: Forms.FieldType.C.OPTIONAL,
             help_tooltip: pwixI18n.label( I18N, 'clients.metadata.client_uri' )
         },
@@ -146,7 +154,7 @@ const _defaultFieldSet = function(){
             name: 'logo_uri',
             type: String,
             optional: true,
-            form_check: Clients.checks.logo_uri,
+            form_check: ClientsRecords.checks.logo_uri,
             form_type: Forms.FieldType.C.OPTIONAL,
             help_tooltip: pwixI18n.label( I18N, 'clients.metadata.logo_uri' )
         },
@@ -178,7 +186,7 @@ const _defaultFieldSet = function(){
         {
             name: 'contacts.$.email',
             type: String,
-            form_check: Clients.checks.contact_email
+            form_check: ClientsRecords.checks.contact_email
         },
         {
             name: 'contacts.$.id',
@@ -189,7 +197,7 @@ const _defaultFieldSet = function(){
             name: 'tos_uri',
             type: String,
             optional: true,
-            form_check: Clients.checks.tos_uri,
+            form_check: ClientsRecords.checks.tos_uri,
             form_type: Forms.FieldType.C.OPTIONAL,
             help_tooltip: pwixI18n.label( I18N, 'clients.metadata.tos_uri' )
         },
@@ -198,7 +206,7 @@ const _defaultFieldSet = function(){
             name: 'policy_uri',
             type: String,
             optional: true,
-            form_check: Clients.checks.policy_uri,
+            form_check: ClientsRecords.checks.policy_uri,
             form_type: Forms.FieldType.C.OPTIONAL,
             help_tooltip: pwixI18n.label( I18N, 'clients.metadata.policy_uri' )
         },
@@ -209,7 +217,7 @@ const _defaultFieldSet = function(){
             name: 'jwks_uri',
             type: String,
             optional: true,
-            //form_check: Clients.checks.policy_uri,
+            //form_check: ClientsRecords.checks.policy_uri,
             form_type: Forms.FieldType.C.OPTIONAL,
             help_tooltip: pwixI18n.label( I18N, 'clients.metadata.jwks_uri' )
         },
@@ -219,7 +227,7 @@ const _defaultFieldSet = function(){
             name: 'jwks',
             type: String,
             optional: true,
-            //form_check: Clients.checks.policy_uri,
+            //form_check: ClientsRecords.checks.policy_uri,
             form_type: Forms.FieldType.C.OPTIONAL,
             help_tooltip: pwixI18n.label( I18N, 'clients.metadata.jwks' )
         },
@@ -229,7 +237,7 @@ const _defaultFieldSet = function(){
             name: 'software_id',
             type: String,
             optional: true,
-            form_check: Clients.checks.software_id,
+            form_check: ClientsRecords.checks.software_id,
             form_type: Forms.FieldType.C.OPTIONAL,
             help_tooltip: pwixI18n.label( I18N, 'clients.metadata.software_id' )
         },
@@ -238,7 +246,7 @@ const _defaultFieldSet = function(){
             name: 'software_version',
             type: String,
             optional: true,
-            form_check: Clients.checks.software_version,
+            form_check: ClientsRecords.checks.software_version,
             form_type: Forms.FieldType.C.OPTIONAL,
             help_tooltip: pwixI18n.label( I18N, 'clients.metadata.software_version' )
         },
@@ -249,7 +257,7 @@ const _defaultFieldSet = function(){
             name: 'application_type',
             type: String,
             optional: true,
-            form_check: Clients.checks.application_type,
+            form_check: ClientsRecords.checks.application_type,
             form_type: Forms.FieldType.C.OPTIONAL,
             help_tooltip: pwixI18n.label( I18N, 'clients.metadata.application_type' )
         },

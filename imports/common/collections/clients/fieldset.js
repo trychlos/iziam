@@ -10,6 +10,8 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 import { Tracker } from 'meteor/tracker';
 import { Validity } from 'meteor/pwix:validity';
 
+import { YesNo } from '/imports/common/definitions/yesno.def.js';
+
 import { Clients } from './index.js';
 
 const _defaultFieldSet = function(){
@@ -19,6 +21,16 @@ const _defaultFieldSet = function(){
             name: 'label',
             schema: false,
             dt_title: pwixI18n.label( I18N, 'clients.tabular.label_th' )
+        },
+        // whether the client is invalid
+        {
+            name: 'enabled',
+            schema: false,
+            dt_title: pwixI18n.label( I18N, 'clients.tabular.enabled_th' ),
+            dt_className: 'dt-center',
+            dt_render( data, type, rowData ){
+                return YesNo.label( rowData.enabled, { default: true });
+            }
         },
         // entity notes in tabular display
         {
@@ -44,6 +56,7 @@ const _defaultFieldSet = function(){
         {
             name: 'authorization_flow',
             schema: false,
+            dt_className: 'ui-nowrap',
             dt_title: pwixI18n.label( I18N, 'clients.tabular.authorization_flow_th' ),
         },
         Notes.fieldDef(),

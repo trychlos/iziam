@@ -86,19 +86,18 @@ export class HtmlError extends izObject {
         this.#out = out;
         this.#error = error;
 
-        this.#html = '<!DOCTYPE html>'
-            +'<html>';
-        this.#html += this._renderHead( out, error );
-        this.#html += this._renderBody( out, error );
-        this.#html += '</html>';
-
         return this;
     }
 
     /**
      * @returns {String} the HTML output
      */
-    out(){
+    render(){
+        this.#html = '<!DOCTYPE html>'
+            +'<html>';
+        this.#html += this._renderHead( out, error );
+        this.#html += this._renderBody( out, error );
+        this.#html += '</html>';
         return this.#html;
     }
 }

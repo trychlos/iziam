@@ -24,7 +24,8 @@ const _defaultFieldSet = function(){
         // mandatory
         {
             name: 'clientId',
-            type: String
+            type: String,
+            form_check: ClientsEntities.checks.clientId,
         },
         // common notes
         Notes.fieldDef(),
