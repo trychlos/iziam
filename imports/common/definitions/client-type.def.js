@@ -22,8 +22,8 @@ export const ClientType = {
             description: 'definitions.client_type.confidential_description',
             //preferred_auth: AuthRFC.C.OAUTH
             auth_methods: [
-                'secret_basic',
-                'secret_post',
+                'client_secret_basic',
+                'client_secret_post',
                 'private_key_jwt',
                 'client_secret_jwt'
             ],

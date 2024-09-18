@@ -1,5 +1,5 @@
 /*
- * /imports/common/classes/auth-method.def.js
+ * /imports/common/definitions/auth-method.def.js
  *
  * See:
  *  - https://connect2id.com/products/server/docs/guides/oauth-client-authentication#supported-methods
@@ -37,7 +37,7 @@ export const AuthMethod = {
             //  the length of the secret is defined by the organization
             //  stored hash is SHA-256
             //  the client must use Basic authentification
-            id: 'secret_basic',
+            id: 'client_secret_basic',
             short: 'definitions.auth_method.shared_short',
             label: 'definitions.auth_method.shared_label',
             description: 'definitions.auth_method.shared_desc'
@@ -47,7 +47,7 @@ export const AuthMethod = {
             //  the length of the secret is defined by the organization
             //  stored hash is SHA-256
             //  the client must use POST authentification
-            id: 'secret_post',
+            id: 'client_secret_post',
             short: 'definitions.auth_method.post_short',
             label: 'definitions.auth_method.post_label',
             description: 'definitions.auth_method.post_desc'
@@ -58,7 +58,6 @@ export const AuthMethod = {
             short: 'definitions.auth_method.private_jwt_short',
             label: 'definitions.auth_method.private_jwt_label',
             description: 'definitions.auth_method.private_jwt_desc',
-            assertionType: 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
             needsSecret: false
         },
         {
@@ -66,8 +65,7 @@ export const AuthMethod = {
             id: 'client_secret_jwt',
             short: 'definitions.auth_method.secret_jwt_short',
             label: 'definitions.auth_method.secret_jwt_label',
-            description: 'definitions.auth_method.secret_jwt_desc',
-            //assertionType: 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer'
+            description: 'definitions.auth_method.secret_jwt_desc'
         }
     ],
 

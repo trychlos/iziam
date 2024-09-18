@@ -62,7 +62,7 @@ Organizations.recordFieldset = function(){
                     form_check: Organizations.checks.dynamicRegistrationByUser
                 },
                 // -- configuration
-                // whether this organization forces the usage of OAuth 2.1
+                // whether this organization forces the usage of OAuth 2.1 for new clients
                 {
                     name: 'wantsOAuth21',
                     type: Boolean,
@@ -173,7 +173,7 @@ Organizations.recordFieldset = function(){
                     name: 'token_endpoint_auth_methods_supported.$',
                     type: String
                 },
-                // array containing a list of the JWS signing algorithms ("alg" values) supported by the token endpoint
+                // array containing a list of the JSON Web Signature (JWS) signing algorithms ("alg" values) supported by the token endpoint
                 {
                     name: 'token_endpoint_auth_signing_alg_values_supported',
                     type: Array,
@@ -200,26 +200,20 @@ Organizations.recordFieldset = function(){
                     name: 'ui_locales_supported.$',
                     type: String
                 },
-                // URL that the authorization server provides to the person registering the client to read about the authorization
-                // server's requirements on how the client can use the data provided by the authorization server
-                {
-                    name: 'op_policy_uri',
-                    type: String,
-                    optional: true
-                },
-                // URL that the authorization server provides to the person registering the client to read about the authorization
-                // server's terms of service
-                {
-                    name: 'op_tos_uri',
-                    type: String,
-                    optional: true
-                },
                 // URL of the authorization server's OAuth 2.0 revocation endpoint
                 {
                     name: 'revocation_endpoint',
                     type: String,
                     optional: true,
                     form_check: Organizations.checks.revocation_endpoint,
+                    form_type: Forms.FieldType.C.OPTIONAL
+                },
+                // URL of the authorization server's OAuth 2.0 end_session endpoint
+                {
+                    name: 'end_session_endpoint',
+                    type: String,
+                    optional: true,
+                    form_check: Organizations.checks.end_session_endpoint,
                     form_type: Forms.FieldType.C.OPTIONAL
                 },
                 // array containing a list of client authentication methods supported by this revocation endpoint
@@ -268,6 +262,18 @@ Organizations.recordFieldset = function(){
                 },
                 {
                     name: 'introspection_endpoint_auth_signing_alg_values_supported.$',
+                    type: String
+                },
+                // array containing a list of the signing algorithms ("alg" values) supported by request_object_signing (?)
+                // found as an issuer metadata in openid-client doc
+                // https://github.com/panva/node-openid-client/blob/main/docs/README.md#new-issuermetadata
+                {
+                    name: 'request_object_signing_alg_values_supported',
+                    type: Array,
+                    optional: true
+                },
+                {
+                    name: 'request_object_signing_alg_values_supported.$',
                     type: String
                 },
                 // array containing a list of Proof Key for Code Exchange (PKCE) [RFC7636] code challenge methods supported by this

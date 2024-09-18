@@ -40,6 +40,9 @@ Template.organization_urls_pane.onCreated( function(){
             userinfo_endpoint: {
                 js: '.js-userinfo'
             },
+            end_session_endpoint: {
+                js: '.js-endsession'
+            },
             revocation_endpoint: {
                 js: '.js-revocation'
             },
@@ -100,6 +103,11 @@ Template.organization_urls_pane.helpers({
     dynamic_example(){
         const endpoint = Template.instance().APP.organization.get().record.registration_endpoint;
         return endpoint ? pwixI18n.label( I18N, 'organizations.edit.dynamic_example', Template.instance().APP.baseUrl.get() + endpoint ) : '&nbsp;';
+    },
+    // the full dynamic end session endpoint url
+    endsession_example(){
+        const endpoint = Template.instance().APP.organization.get().record.end_session_endpoint;
+        return endpoint ? pwixI18n.label( I18N, 'organizations.edit.endsession_example', Template.instance().APP.baseUrl.get() + endpoint ) : '&nbsp;';
     },
     // string translation
     i18n( arg ){

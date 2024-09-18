@@ -60,9 +60,9 @@ export class OAuth20Provider extends mix( izProvider ).with( IGrantType, IReques
             // authorization grant types are defined by the spec
             igranttype: [
                 'authorization_code',
+                'client_credentials',
                 'implicit',
-                'password_credentials',
-                'client_credentials'
+                'password'
             ]
         });
 

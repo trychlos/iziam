@@ -79,7 +79,7 @@ Template.client_edit_dialog.onCreated( function(){
         // whether we are running inside of a Modal
         isModal: new ReactiveVar( false ),
         // the entity tabbed
-        tabbed: null
+        tabbed: new Tabbed.Instance( self, { name: 'client_edit_dialog' })
     };
 
     // keep the initial 'new' state
@@ -108,8 +108,7 @@ Template.client_edit_dialog.onCreated( function(){
             checker: self.APP.checker
         };
         const notesField = ClientsEntities.fieldSet.get().byName( 'notes' );
-        self.APP.tabbed = new Tabbed.Instance( self, {
-            name: 'client_edit_dialog',
+        self.APP.tabbed.setDataContext({
             tabs: [
                 {
                     name: 'client_entity_validities_tab',

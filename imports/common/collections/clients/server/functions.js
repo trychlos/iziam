@@ -4,6 +4,8 @@
 
 import _ from 'lodash';
 
+import { Validity } from 'meteor/pwix:validity';
+
 import { Clients } from '../index.js';
 
 import { ClientsEntities} from '/imports/common/collections/clients_entities/index.js';
@@ -24,19 +26,22 @@ Clients.s = {
         return item;
     },
 
-    /*
-    // return a client by its name
-    byName( name ){
-        return Clients.findOne({ name: name });
+    // return a client by its oauth client_id
+    // returns a { entity, record } client object valid at date, or null
+    async byClientId( clientId ){
+        let result = null;
+        const entities = await ClientsEntities.collection.find({ clientId: clientId }).fetchAsync();
+        if( entities.length === 1 ){
+            const records = await ClientsRecords.collection.find({ entity: entities[0]._id }).fetchAsync();
+            if( records.length > 0 ){
+                const atdate = Validity.atDateByRecords( records );
+                if( atdate ){
+                    result = { entity: entities[0], record: atdate };
+                }
+            }
+        }
+        return result;
     },
-
-    // returns the queried items
-    getBy( query ){
-        let res = Clients.find( query ).fetch();
-        //console.log( 'entOrganization.getBy', res );
-        return res;
-    },
-    */
 
     /*
     // update (actually replace) the data provided via the FormChecker fields

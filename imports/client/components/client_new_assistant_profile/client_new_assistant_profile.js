@@ -38,6 +38,17 @@ Template.client_new_assistant_profile.onCreated( function(){
 Template.client_new_assistant_profile.onRendered( function(){
     const self = this;
 
+    // setup a default value to 'generic'
+    self.autorun(() => {
+        const dataDict = Template.currentData().parentAPP.assistantStatus;
+        if( dataDict.get( 'activePane' ) === 'profile' ){
+            const profile = Template.currentData().parentAPP.entity.get().DYN.records[0].get().profile;
+            if( !profile ){
+                self.APP.setRecord( Template.currentData(), 'generic' );
+            }
+        }
+    });
+
     // tracks the selection to enable/disable the Next button when the pane is active
     //  requires a selected profile
     self.autorun(() => {
@@ -95,7 +106,7 @@ Template.client_new_assistant_profile.events({
     'assistant-pane-shown .c-client-new-assistant-profile'( event, instance, data ){
         instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'prev', enable: true });
     },
-    // profile selection non-reactively updates the record and set the assistantStatus ReactiveDict
+    // profile selection reactively updates the record and set the assistantStatus ReactiveDict
     'click .by-item'( event, instance ){
         const id = instance.$( event.currentTarget ).data( 'item-id' );
         instance.APP.setRecord( this, id );

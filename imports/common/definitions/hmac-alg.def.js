@@ -1,5 +1,5 @@
 /*
- * /imports/common/classes/hmac-alg.def.js
+ * /imports/common/definitions/hmac-alg.def.js
  *
  * HMAC (hash-based message authentication code) Algorithm
  * 

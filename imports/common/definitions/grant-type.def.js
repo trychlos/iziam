@@ -26,6 +26,9 @@
  *  Implicit Grant Flow and Resource Owner Password Grant Flow are deprecated, should not be used any more, is not implemented here.
  *  Though Implicit Grant Flow is said deprecated, OpenID Connect RFC says that OpenID Provider must implement it. It is kept as a reference,
  *  though disabling it for new clients.
+ * 
+ * The relation between authorization grant flow (aka grant_type) and the allowed response_type's is defined by OpenID
+ * see https://openid.net/specs/openid-connect-registration-1_0.html#ClientMetadata
  */
 
 import _ from 'lodash';
@@ -50,19 +53,13 @@ export const GrantType = {
             nature: 'access',
             haveRedirects: true,
             useAuthorizationEndpoint: true,
-            useTokenEndpoint: true
-        },
-        {
-            // implicit grant - oauth 2.0 ONLY
-            // deprecated
-            id: 'implicit',
-            label: 'definitions.grant_type.implicit_label',
-            description: 'definitions.grant_type.implicit_description',
-            image: '/images/grant-type.svg',
-            nature: 'access',
-            haveRedirects: true,
-            useAuthorizationEndpoint: true,
-            deprecated: true
+            useTokenEndpoint: true,
+            response_types: [
+                'code',
+                'code id_token',
+                'code id_token token',
+                'code token'
+            ]
         },
         {
             // client credentials
@@ -78,14 +75,6 @@ export const GrantType = {
             useTokenEndpoint: true
         },
         {
-            // device code [RFC8628]
-            id: 'urn:ietf:params:oauth:grant-type:device_code',
-            label: 'definitions.grant_type.device_label',
-            description: 'definitions.grant_type.device_description',
-            image: '/images/grant-type.svg',
-            nature: 'access'
-        },
-        {
             // hybrid authorization flow for OpenID Connect
             id: 'hybrid',
             label: 'definitions.grant_type.hybrid_label',
@@ -94,9 +83,28 @@ export const GrantType = {
             nature: 'access'
         },
         {
+            // implicit grant - oauth 2.0 ONLY
+            // deprecated as of OAuth 2.1
+            id: 'implicit',
+            label: 'definitions.grant_type.implicit_label',
+            description: 'definitions.grant_type.implicit_description',
+            image: '/images/grant-type.svg',
+            nature: 'access',
+            haveRedirects: true,
+            useAuthorizationEndpoint: true,
+            deprecated: true,
+            response_types: [
+                'code id_token',
+                'code id_token token',
+                'code token',
+                'id_token',
+                'id_token token'
+            ]
+        },
+        {
             // resource owner password credentials
-            // deprecated
-            id: 'password_credentials',
+            // deprecated as of OAuth 2.1
+            id: 'password',
             label: 'definitions.grant_type.password_label',
             description: 'definitions.grant_type.password_description',
             image: '/images/grant-type.svg',
@@ -111,6 +119,14 @@ export const GrantType = {
             description: 'definitions.grant_type.reftoken_description',
             image: '/images/grant-type.svg',
             nature: 'refresh'
+        },
+        {
+            // device code [RFC8628]
+            id: 'urn:ietf:params:oauth:grant-type:device_code',
+            label: 'definitions.grant_type.device_label',
+            description: 'definitions.grant_type.device_description',
+            image: '/images/grant-type.svg',
+            nature: 'access'
         }
     ],
 
@@ -275,6 +291,14 @@ export const GrantType = {
      */
     nature( def ){
         return def.nature;
+    },
+
+    /**
+     * @param {Object} def a GrantType definition as returned by GrantType.Knowns()
+     * @returns {Array<String>} the expected response_types allowed in this authorization grant flow, defaulting to null
+     */
+    responseTypes( def ){
+        return def.response_types || null;
     },
 
     /**

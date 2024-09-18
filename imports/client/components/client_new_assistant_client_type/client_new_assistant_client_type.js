@@ -116,7 +116,7 @@ Template.client_new_assistant_client_type.events({
     'assistant-pane-shown .c-client-new-assistant-client-type'( event, instance, data ){
         instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'prev', enable: true });
     },
-    // client type selection non-reactively updates the record and set the assistantStatus ReactiveDict
+    // client type selection reactively updates the record and set the assistantStatus ReactiveDict
     'click .by-item'( event, instance ){
         const id = instance.$( event.currentTarget ).data( 'item-id' );
         instance.APP.setRecord( this, id );

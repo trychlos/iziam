@@ -38,6 +38,11 @@ Template.client_new_assistant_current.onCreated( function(){
 });
 
 Template.client_new_assistant_current.helpers({
+    // application type
+    applicationText(){
+        return this.parentAPP.entity.get().DYN.records[0].get().application_type;
+    },
+
     // authentification method
     authText(){
         const authMethod = this.parentAPP.entity.get().DYN.records[0].get().token_endpoint_auth_method;

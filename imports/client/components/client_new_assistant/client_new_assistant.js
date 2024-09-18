@@ -20,6 +20,7 @@ import { Modal } from 'meteor/pwix:modal';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 
+import '/imports/client/components/client_new_assistant_application_type/client_new_assistant_application_type.js';
 import '/imports/client/components/client_new_assistant_auth_method/client_new_assistant_auth_method.js';
 import '/imports/client/components/client_new_assistant_client_type/client_new_assistant_client_type.js';
 import '/imports/client/components/client_new_assistant_contacts/client_new_assistant_contacts.js';
@@ -82,6 +83,11 @@ Template.client_new_assistant.onCreated( function(){
                     name: 'client',
                     template: 'client_new_assistant_client_type',
                     label: pwixI18n.label( I18N, 'clients.new_assistant.client_nav' )
+                },
+                {
+                    name: 'application',
+                    template: 'client_new_assistant_application_type',
+                    label: pwixI18n.label( I18N, 'clients.new_assistant.application_nav' )
                 }
             ];
             // false as of 2024-09-12
@@ -94,14 +100,14 @@ Template.client_new_assistant.onCreated( function(){
             }
             pages = pages.concat([
                 {
-                    name: 'auth',
-                    template: 'client_new_assistant_auth_method',
-                    label: pwixI18n.label( I18N, 'clients.new_assistant.auth_method_nav' )
-                },
-                {
                     name: 'grant',
                     template: 'client_new_assistant_grant_types',
                     label: pwixI18n.label( I18N, 'clients.new_assistant.grant_type_nav' )
+                },
+                {
+                    name: 'auth',
+                    template: 'client_new_assistant_auth_method',
+                    label: pwixI18n.label( I18N, 'clients.new_assistant.auth_method_nav' )
                 },
                 {
                     name: 'formaters',

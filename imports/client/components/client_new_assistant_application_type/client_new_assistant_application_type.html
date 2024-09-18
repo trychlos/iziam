@@ -1,0 +1,28 @@
+<template name="client_new_assistant_application_type">
+    <div class="c-client-new-assistant-application-type">
+
+        {{> client_new_assistant_current }}
+
+        <div class="content">
+            <div class="text">
+                {{{ i18n key="clients.new_assistant.application_text" }}}
+            </div>
+    
+            <div class="chooser">
+                {{#each it in itemsList }}
+                    <div class="by-item {{ itSelected it }}" data-item-id="{{ itId it }}">
+                        <div class="form-check">
+                            <input class="form-check-input" name="applicationtype" id="{{ itId it }}" type="radio" {{ itChecked it }} />
+                            <em><label class="form-check-label" for="{{ itId it }}">{{ itLabel it }}</label></em>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input ui-hidden" name="applicationtype" type="radio" />
+                            <label class="form-check-label" for="{{ itId it }}">{{{ itDescription it }}}</label>
+                        </div>
+                    </div>
+                {{/each}}
+            </div>
+        </div>
+
+    </div>
+</template>

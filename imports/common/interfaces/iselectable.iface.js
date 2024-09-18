@@ -6,7 +6,14 @@
  * - whether it is selectable by the user (i.e. may the user change the selection ?) -> defaulting to true
  * 
  * Please note that we only manage here the selectability at the client level:
- *  i.e. when the organization manager defines the providers used by an app client (chosen among above available providers).
+ *  i.e. when the organization manager defines the providers used by an app client (chosen among above available providers)
+ *  which is obsoleted at the moment: the client doesn't choose the providers, but only the authorization grant flow it will use.
+ *  This is up to the Authorization Server to choose the ad-hoc provider amongo those selected at the organization level.
+ * 
+ * A provider is only selectable by the user when all its prerequisites are already selected.
+ * A provider may become unselectable because:
+ * - either one of its prerequisite is not satisfied
+ * - or because another selected provider provides the same features
  */
 
 import _ from 'lodash';

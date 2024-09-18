@@ -13,7 +13,8 @@
  * - checker: the Forms.Checker which manages the parent component as a ReactiveVar
  * - enableChecks: whether the checks should be enabled at startup, defaulting to true
  * - withProfile: whether we want a profile selection (only in edit_dialog, not in new_assistant), defaulting to false
- * - withType: whether we want a type selection (only in edit_dialog, not in new_assistant), defaulting to false
+ * - withClientType: whether we want a client type selection (only in edit_dialog, not in new_assistant), defaulting to false
+ * - withApplicationType: whether we want an application type selection (only in edit_dialog, not in new_assistant), defaulting to false
  */
 
 import _ from 'lodash';
@@ -68,8 +69,13 @@ Template.client_properties_panel.onCreated( function(){
         }
     });
     self.autorun(() => {
-        if( Template.currentData().withType === true ){
-            self.APP.fields.client_type = { js: '.js-type' };
+        if( Template.currentData().withClientType === true ){
+            self.APP.fields.client_type = { js: '.js-client-type' };
+        }
+    });
+    self.autorun(() => {
+        if( Template.currentData().withApplicationType === true ){
+            self.APP.fields.application_type = { js: '.js-application-type' };
         }
     });
 });
@@ -115,17 +121,24 @@ Template.client_properties_panel.helpers({
         return pwixI18n.label( I18N, arg.hash.key );
     },
 
+    // parms for application type select
+    parmsApplicationTypeSelect(){
+        return {
+            selected: this.entity.get().DYN.records[this.index].get().application_type
+        };
+    },
+
+    // parms for client type select
+    parmsClientTypeSelect(){
+        return {
+            selected: this.entity.get().DYN.records[this.index].get().client_type
+        };
+    },
+
     // parms for profile select
     parmsProfileSelect(){
         return {
             selected: this.entity.get().DYN.records[this.index].get().profile
-        };
-    },
-
-    // parms for type select
-    parmsTypeSelect(){
-        return {
-            selected: this.entity.get().DYN.records[this.index].get().client_type
         };
     },
 
@@ -135,8 +148,8 @@ Template.client_properties_panel.helpers({
     },
 
     // whether we want a type selection here (only in edit_dialog, not in new_assistant)
-    withType(){
-        return this.withType === true;
+    withClientType(){
+        return this.withClientType === true;
     }
 });
 

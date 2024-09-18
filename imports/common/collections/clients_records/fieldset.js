@@ -242,7 +242,6 @@ const _defaultFieldSet = function(){
             form_type: Forms.FieldType.C.OPTIONAL,
             help_tooltip: pwixI18n.label( I18N, 'clients.metadata.software_version' )
         },
-        /*
         // -- OpenID Connect Dynamic Client Registration
         // https://openid.net/specs/openid-connect-registration-1_0.html#ClientMetadata
         // kind of the application, native or web
@@ -250,8 +249,11 @@ const _defaultFieldSet = function(){
             name: 'application_type',
             type: String,
             optional: true,
+            form_check: Clients.checks.application_type,
+            form_type: Forms.FieldType.C.OPTIONAL,
             help_tooltip: pwixI18n.label( I18N, 'clients.metadata.application_type' )
         },
+        /*
         // to be used in calculating Pseudonymous Identifiers
         {
             name: 'sector_identifier_uri',

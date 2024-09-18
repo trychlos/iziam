@@ -30,22 +30,28 @@
                                 <td><p class="text">{{{ clientText }}}</p></td>
                             </tr>
                         {{/if}}
+                        {{#if havePane "application" }}
+                            <tr>
+                                <td class="label ui-vatop">{{ i18n key="clients.new_assistant.summary_application_label" }}</td>
+                                <td><p class="text">{{{ applicationText }}}</p></td>
+                            </tr>
+                        {{/if}}
                         {{#if havePane "providers" }}
                             <tr>
                                 <td class="label ui-vatop">{{ i18n key="clients.new_assistant.summary_providers_label" }}</td>
                                 <td><p class="text">{{{ providersText }}}</p></td>
                             </tr>
                         {{/if}}
-                        {{#if havePane "auth" }}
-                            <tr>
-                                <td class="label ui-vatop">{{ i18n key="clients.new_assistant.summary_auth_label" }}</td>
-                                <td><p class="text">{{{ authText }}}</p></td>
-                            </tr>
-                        {{/if}}
                         {{#if havePane "grant" }}
                             <tr>
                                 <td class="label ui-vatop">{{ i18n key="clients.new_assistant.summary_grant_label" }}</td>
                                 <td><p class="text">{{{ grantText }}}</p></td>
+                            </tr>
+                        {{/if}}
+                        {{#if havePane "auth" }}
+                            <tr>
+                                <td class="label ui-vatop">{{ i18n key="clients.new_assistant.summary_auth_label" }}</td>
+                                <td><p class="text">{{{ authText }}}</p></td>
                             </tr>
                         {{/if}}
                         {{#if havePane "formaters" }}

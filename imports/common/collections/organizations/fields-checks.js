@@ -206,6 +206,28 @@ Organizations.checks = {
         return null;
     },
 
+    // end session endpoint
+    // must be provided as an absolute path
+    async end_session_endpoint( value, data, opts ){
+        //console.debug( 'checks.token_endpoint' );
+        _assert_data_entityrv( 'Organizations.checks.end_session_endpoint()', data );
+        let entity = data.entity.get();
+        let item = entity.DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.end_session_endpoint = value;
+            data.entity.set( entity );
+        }
+        if( value ){
+            if( value.substr( 0, 1 ) !== '/' ){ 
+                return new TM.TypedMessage({
+                    level: TM.MessageLevel.C.ERROR,
+                    message: pwixI18n.label( I18N, 'organizations.checks.end_session_absolute' )
+                });
+            }
+        }
+        return null;
+    },
+
     // introspection endpoint
     // must be provided as an absolute path
     async introspection_endpoint( value, data, opts ){

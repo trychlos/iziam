@@ -10,12 +10,14 @@ import Provider from 'oidc-provider';
 
 import { WebApp } from 'meteor/webapp';
 
+import { Clients } from '/imports/common/collections/clients/index.js';
 import { Organizations } from '/imports/common/collections/organizations/index.js';
 
 import { Jwks } from '/imports/common/tables/jwks/index.js';
 import { Keygrips } from '/imports/common/tables/keygrips/index.js';
 
 import { AuthServer } from '/imports/server/classes/auth-server.class.js';
+import { HtmlError } from '/imports/server/classes/html-error.class.js';
 import { OIDMongoAdapter } from '/imports/server/classes/oid-mongo-adapter.class.js';
 
 export class OIDAuthServer extends AuthServer {
@@ -23,6 +25,28 @@ export class OIDAuthServer extends AuthServer {
     // static data
 
     // static methods
+
+    /**
+     * @summary Convert a { entity, record } client object into a format suitable for use by OpenID Auth Server
+     * @param {String} clientId the client identifier
+     * @returns {Object} a client suitable for use by openid auth server, or null
+     */
+    static async byClientId( clientId ){
+        const client = await Clients.s.byClientId( clientId );
+        let result = null;
+        if( client ){
+            result = {
+                client_id: client.entity.clientId,
+                grant_types: client.record.grant_types,
+                token_endpoint_auth_method: client.record.token_endpoint_auth_method
+            };
+            if( client.record.redirect_uris && client.record.redirect_uris.length > 0 ){
+                result.redirect_uris = [];
+                client.record.redirect_uris.map( it => result.redirect_uris.push( it.uri ));
+            }
+        }
+        return result;
+    }
 
     // private data
 
@@ -71,8 +95,10 @@ export class OIDAuthServer extends AuthServer {
             conf.features.introspection = true;
         }
         // have a Mongo adapter for storing issued tokens, codes, user sessions, dynamically registered clients, etc.
-        await OIDMongoAdapter.connect( 'oid_adapter' );
+        await OIDMongoAdapter.connect( 'oid_adapter_' );
         conf.adapter = OIDMongoAdapter;
+        // error rendering
+        conf.renderError = this._renderError;
         return conf;
     }
 
@@ -150,8 +176,8 @@ export class OIDAuthServer extends AuthServer {
              * `userinfo`
              */
             //console.log( 'post middleware', ctx );
-            // as of oidc-provider 7.14.3, there is no ctx.oidc
-            console.log( 'post middleware', ctx.method, ctx.oidc.route );
+            // as of oidc-provider 7.14.3, there is no ctx.oidc when the route is wrong
+            console.log( 'post middleware', ctx.method, ctx.oidc?.route );
         });
     }
 
@@ -165,6 +191,27 @@ export class OIDAuthServer extends AuthServer {
         console.debug( 'setup', setup );
         const oidc = new Provider( issuer, setup );
         return oidc;
+    }
+
+    // builds the modal used to render an error
+    async _renderError( ctx, out, error ){
+        ctx.type = 'html';
+        ctx.body = new HtmlError( out, error ).out();
+        /*
+        ctx.body = `<!DOCTYPE html>
+          <html>
+          <head>
+            <title>oops! something went wrong</title>
+            <style>/ css and html classes omitted for brevity, see lib/helpers/defaults.js /</style>
+          </head>
+          <body>
+            <div>
+              <h1>oops! something went wrong</h1>
+              ${Object.entries(out).map(([key, value]) => `<pre><strong>${key}</strong>: ${htmlSafe(value)}</pre>`).join('')}
+            </div>
+          </body>
+          </html>`;
+          */
     }
 
     // public data
@@ -188,13 +235,7 @@ export class OIDAuthServer extends AuthServer {
      *  There is no expected returned value, but should answer() and must end().
      */
     async handle( url, args ){
-        console.debug( 'requiring oidc' );
-
         this.#oidc.callback()( args.req(), args.res(), args.next());
-
-        //const organization = this.iRequestServer().organization();
-        //console.debug( 'baseUrl', organization.record.baseUrl );
-        //WebApp.connectHandlers.use( organization.record.baseUrl, this.#oidc.callback());
     }
 
     /**
@@ -204,19 +245,13 @@ export class OIDAuthServer extends AuthServer {
      */
     async init(){
         await this._newOIDCProvider().then(( oidc ) => {
-            console.debug( 'installing oidc' );
             this.#oidc = oidc;
             // install middlewares
             return this._installMiddlewares();
         })
         .then(() => {
-            console.debug( 'middlewares installed' );
-
             // from https://github.com/panva/node-oidc-provider/blob/main/example/express.js
-            // app.use( provider.callback());
-
             const organization = this.iRequestServer().organization();
-            console.debug( 'baseUrl', organization.record.baseUrl );
             WebApp.handlers.use( organization.record.baseUrl, oidc.callback());
         });
     }

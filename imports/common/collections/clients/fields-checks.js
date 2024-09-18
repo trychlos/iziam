@@ -12,6 +12,7 @@ import validUrl from 'valid-url';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { TM } from 'meteor/pwix:typed-message';
 
+import { ApplicationType } from '/imports/common/definitions/application-type.def.js';
 //import { AuthMethod } from '/imports/common/definitions/auth-method.def.js';
 import { ClientProfile } from '/imports/common/definitions/client-profile.def.js';
 import { ClientType } from '/imports/common/definitions/client-type.def.js';
@@ -225,6 +226,23 @@ Clients.checks = {
             });
     },
     */
+
+    // application type: optional, must exist
+    async application_type( value, data, opts ){
+        _assert_data_content( 'Clients.checks.application_type()', data );
+        let item = data.entity.get().DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.application_type = value;
+        }
+        if( value ){
+            const def = ApplicationType.byId( value );
+            return def ? null : new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'clients.checks.application_type_invalid' )
+            });
+        }
+        return null;
+    },
 
     // client type: mandatory, must exist
     async client_type( value, data, opts ){

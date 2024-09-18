@@ -30,8 +30,14 @@ Meteor.APP.i18n = {
                 next_btn: 'Next',
                 next_title: 'Go to the next page'
             },
+            auth: {
+                error: {
+                    title: 'Oops! Something went wrong'
+                }
+            },
             clients: {
                 checks: {
+                    application_type_invalid: 'The application type is unknown or not valid',
                     client_type_invalid: 'The client type is unknown or not valid',
                     client_type_unset: 'The client type is not set',
                     contact_invalid: 'The contact email address is not valid',
@@ -69,7 +75,9 @@ Meteor.APP.i18n = {
                     confirmation_title: 'Deleting a client'
                 },
                 edit: {
+                    application_type_label: 'Application type :',
                     auth_method_tab_title: 'Auth method',
+                    client_type_label: 'Client type :',
                     description_label: 'Description :',
                     description_ph: 'The client description',
                     description_title: 'A not too long description (which are not notes)',
@@ -103,8 +111,7 @@ Meteor.APP.i18n = {
                     softver_title: 'The client software version which distinguish it from other registered clients',
                     tos_label: 'Terms of Service page URI :',
                     tos_ph: 'https://my.example.com/tos',
-                    tos_title: 'The URI of a page which describes the terms of service of the client',
-                    type_label: 'Type :'
+                    tos_title: 'The URI of a page which describes the terms of service of the client'
                 },
                 new: {
                     assistant_title: 'Defining a new client',
@@ -227,6 +234,9 @@ Meteor.APP.i18n = {
                         +'The value of this field MUST point to a valid web page.</p>'
                 },
                 new_assistant: {
+                    application_nav: 'Application type',
+                    application_text: 'The application type is an optional parameter defined in the OpenID Connect 1.0 specification.<br />'
+                        +'At the moment, it is only used as a hint when checking the allowed redirect URIs.',
                     assistant_title: 'Defining a new client application',
                     auth_method_nav: 'Authentication method',
                     auth_method_choose_text: 'Please choose below your desired authentication method.',
@@ -240,8 +250,8 @@ Meteor.APP.i18n = {
                     contacts_text: 'You are allowed to defined here the contacts of the client to your organization.<br />'
                         +'These contacts may be displayed to end-users.',
                     done_nav: 'Done',
-                    grant_type_nav: 'Grant type',
-                    grant_type_text: 'For each available grant nature, please choose below the grant type(s) you want for your client.',
+                    grant_type_nav: 'Authorization Grant Flow',
+                    grant_type_text: 'For each available grant nature, please choose below the authorization grant flow your client will use, and so the corresponding grant type.',
                     introduction_nav: 'Introduction',
                     introduction_text: 'This assistant will guide you through the process of defining a new client to your Authorization Server.<br/><br />'
                         +'Please be beware that, to make your life easier, this assistant will let you define a client which may be not fully operational. '
@@ -258,6 +268,7 @@ Meteor.APP.i18n = {
                         +'The Authorization Server will restrict the grant flow redirections to one of below URIs.',
                     success_label: 'Congratulations !<br />'
                         +'Your new client has been successfully created.',
+                    summary_application_label: 'Application type :',
                     summary_auth_label: 'Authentication method :',
                     summary_client_label: 'Client type :',
                     summary_contacts_label: 'Contacts :',
@@ -301,6 +312,14 @@ Meteor.APP.i18n = {
                 }
             },
             definitions: {
+                application_type: {
+                    native_description: 'Native clients can only register redirect URIs using a custom or a http loopback scheme. '
+                        +'This is most often only possible on mobile applications.',
+                    native_label: 'A native application',
+                    web_description: 'Web clients can only register redirect URIs using the https non-loopback scheme. '
+                        +'This is the most common case, and the OpenID Connect 1.0 default.',
+                    web_label: 'A web client, e.g. a Single Page Application'
+                },
                 auth_method: {
                     private_jwt_desc: 'Uses a client-generated JSON Web Token (JWT) signed with a RSA or ECDSA algorithm to confirm the client\'s identity.',
                     private_jwt_label: 'Private Key JWT Client Authentication',
@@ -308,7 +327,7 @@ Meteor.APP.i18n = {
                     secret_jwt_desc: 'Uses a client-generated JSON Web Token (JWT) signed with a HMAC SHA algorithm to confirm the client\'s identity.',
                     secret_jwt_label: 'Shared Secret JWT Client Authentication',
                     secret_jwt_short: 'JWT by shared secret',
-                    none_desc: 'No secret at all',
+                    none_desc: 'No authentication against the token endpoint',
                     none_label: 'None',
                     none_short: 'None',
                     select_text: 'Select the client authentication method',
@@ -608,6 +627,7 @@ Meteor.APP.i18n = {
                     baseurl_reserved: 'The candidate REST Base URL is a reserved path',
                     baseurl_short: 'The REST Base URL is too short',
                     baseurl_starts: 'The REST Base URL must be an absolute path (must start with \'/\')',
+                    end_session_absolute: 'The introspection endpoint must be provided as an absolute path',
                     introspection_absolute: 'The introspection endpoint must be provided as an absolute path',
                     issuer_hostname: 'The issuer hostname is malformed',
                     issuer_https: 'The issuer must use a HTTPS schema',
@@ -663,6 +683,10 @@ Meteor.APP.i18n = {
                     dynregistration_tab_title: 'Dynamic registration',
                     dynuser_label: 'Accept dynamic registration from allowed identified users',
                     dynuser_title: 'Whether an identified user can be allowed to perform dynamic registration of client applications',
+                    endsession_example: 'End session URL: &laquo; %s &raquo;',
+                    endsession_label: 'End session endpoint :',
+                    endsession_ph: '/logout',
+                    endsession_title: 'The endpoint path used to end a client session and/or to logout a connected user.',
                     introspection_example: 'Introspection endpoint URL: &laquo; %s &raquo;',
                     introspection_label: 'Introspection endpoint :',
                     introspection_ph: '/introspection',

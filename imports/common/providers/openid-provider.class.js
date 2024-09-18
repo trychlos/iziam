@@ -55,7 +55,9 @@ export class OpenIDProvider extends mix( izProvider ).with( IGrantType, IRequest
                 'openid-connect-1.0'
             ],
             igranttype: [
-                'hybrid'
+                'authorization_code',
+                'hybrid',
+                'implicit'
             ],
             irequestable: [
                 {

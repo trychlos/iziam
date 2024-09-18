@@ -1,5 +1,5 @@
 /*
- * /imports/common/classes/hmac-encoding.def.js
+ * /imports/common/definitions/hmac-encoding.def.js
  *
  * HMAC (hash-based message authentication code) Encoding
  * 

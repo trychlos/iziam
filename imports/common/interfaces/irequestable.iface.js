@@ -73,7 +73,6 @@ export const IRequestable = DeclareMixin(( superclass ) => class extends supercl
                     //console.debug( 'calling asterCb' );
                     assert( typeof asterCb === 'function', 'expects asterCb be a function, got '+asterCb );
                     await asterCb( url, args, organization, this );
-                    console.debug( 'returning from asterCb' );
                 }
             }
         }

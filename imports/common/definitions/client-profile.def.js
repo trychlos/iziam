@@ -58,8 +58,8 @@ export const ClientProfile = {
             //haveAllowedApis: false,
             auth_methods: [
                 'none',
-                'secret_basic',
-                'secret_post',
+                'client_secret_basic',
+                'client_secret_post',
                 'private_key_jwt',
                 'client_secret_jwt'
             ],

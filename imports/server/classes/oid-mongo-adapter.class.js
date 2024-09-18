@@ -12,6 +12,8 @@ const assert = require( 'assert' ).strict; // up to nodejs v16.x
 
 import { izObject } from '/imports/common/classes/iz-object.class.js';
 
+import { OIDAuthServer } from '/imports/server/classes/oid-auth-server.class.js';
+
 let DB;
 
 const grantable = new Set([
@@ -68,11 +70,11 @@ export class OIDMongoAdapter extends izObject {
     /**
      * Constructor
      * @param {String} name
-     * @returns {OIDAuthServer}
+     * @returns {OIDMongoAdapter}
      */
     constructor( name ){
         super( ...arguments );
-        console.debug( 'instanciating OIDMongoAdapter' );
+        console.debug( 'instanciating OIDMongoAdapter', name );
 
         this.name = _.snakeCase( name );
 
@@ -86,60 +88,79 @@ export class OIDMongoAdapter extends izObject {
     // NOTE: the payload for Session model may contain client_id as keys, make sure you do not use
     //   dots (".") in your client_id value charset.
     async upsert( _id, payload, expiresIn ){
+        console.debug( 'upsert', arguments );
         let expiresAt;
-
         if( expiresIn ){
           expiresAt = new Date( Date.now() + ( expiresIn * 1000 ));
         }
-    
-        await this.coll().updateOne(
+        await this.coll().updateAsync(
             { _id },
             { $set: { payload, ...(expiresAt ? { expiresAt } : undefined) } },
             { upsert: true },
         );
     }
 
+    // this method is called with the client_id
+    // extends it to search also in our clients collection
     async find( _id ){
         console.debug( 'find', arguments );
-        const result = await this.coll().find(
+        //const result = await this.coll().find(
+        //    { _id },
+        //    { payload: 1 },
+        //).limit(1).next();
+        let result = await this.coll().findOneAsync(
             { _id },
             { payload: 1 },
-        ).limit(1).next();
-    
+        );
+        if( !result ){
+            result = await OIDAuthServer.byClientId( _id );
+        }
         if( !result ) return undefined;
         return result.payload;
     }
 
     async findByUserCode( userCode ){
-        const result = await this.coll().find(
+        console.debug( 'findByUserCode', arguments );
+        //const result = await this.coll().find(
+        //    { 'payload.userCode': userCode },
+        //    { payload: 1 },
+        //).limit(1).next();
+        const result = await this.coll().findOneAsync(
             { 'payload.userCode': userCode },
             { payload: 1 },
-        ).limit(1).next();
+        );
     
         if( !result ) return undefined;
         return result.payload;
     }
 
     async findByUid( uid ){
-        const result = await this.coll().find(
+        console.debug( 'findByUid', arguments );
+        //const result = await this.coll().find(
+        //    { 'payload.uid': uid },
+        //    { payload: 1 },
+        //).limit(1).next();
+        const result = await this.coll().findOneAsync(
             { 'payload.uid': uid },
             { payload: 1 },
-        ).limit(1).next();
-    
+        );
         if( !result ) return undefined;
         return result.payload;
     }
 
     async destroy( _id ){
-        await this.coll().deleteOne({ _id });
+        console.debug( 'destroy', arguments );
+        await this.coll().removeAsync({ _id });
     }
 
     async revokeByGrantId( grantId ){
-        await this.coll().deleteMany({ 'payload.grantId': grantId });
+        console.debug( 'revokeByGrantId', arguments );
+        await this.coll().removeAsync({ 'payload.grantId': grantId });
     }
 
     async consume( _id ){
-        await this.coll().findOneAndUpdate(
+        console.debug( 'consume', arguments );
+        await this.coll().upsertAsync(
             { _id },
             { $set: { 'payload.consumed': Math.floor(Date.now() / 1000) } },
         );
@@ -150,14 +171,26 @@ export class OIDMongoAdapter extends izObject {
     }
 
     static coll( name ){
-        return DB.collection( name );
+        //return DB.collection( name );
+        DB.collections = DB.collections || {};
+        if( !DB.collections[name] ){
+            DB.collections[name] = new Mongo.Collection( DB.prefix+name );
+        }
+        return DB.collections[name];
     }
 
     // This is not part of the required or supported API, all initialization should happen before
     // you pass the adapter to `new Provider`
-    static async connect( collectionName ){
+    static async connect0( collectionName ){
         //const connection = await MongoClient.connect(process.env.MONGODB_URI);
         //DB = connection.db(connection.s.options.dbName);
         DB = new Mongo.Collection( collectionName );
+        console.debug( 'DB', DB );
+        console.debug( 'DB.collection', DB.collection );
+    }
+    static async connect( prefix ){
+        //const connection = await MongoClient.connect(process.env.MONGODB_URI);
+        //DB = connection.db(connection.s.options.dbName);
+        DB = { prefix: prefix };
     }
 }
