@@ -301,14 +301,16 @@ Meteor.APP.i18n = {
                     url_th: 'URL'
                 },
                 tabular: {
+                    application_type_th: 'Application type',
+                    authorization_flow_th: 'Authorization flow',
+                    client_type_th: 'Client type',
                     delete_button_title: 'Delete the "%s" client',
                     edit_button_title: 'Edit the "%s" client',
                     entity_notes_th: 'Client notes',
                     info_button_title: 'Informations about the "%s" client',
                     info_modal_title: 'Informations about the "%s" client',
                     label_th: 'Label',
-                    operational_title: 'Operational status of the client',
-                    type_th: 'Type',
+                    operational_title: 'Operational status of the client'
                 }
             },
             definitions: {
@@ -316,9 +318,19 @@ Meteor.APP.i18n = {
                     native_description: 'Native clients can only register redirect URIs using a custom or a http loopback scheme. '
                         +'This is most often only possible on mobile applications.',
                     native_label: 'A native application',
+                    select_text: 'Select the application type',
                     web_description: 'Web clients can only register redirect URIs using the https non-loopback scheme. '
                         +'This is the most common case, and the OpenID Connect 1.0 default.',
                     web_label: 'A web client, e.g. a Single Page Application'
+                },
+                auth_flow: {
+                    auth_label: 'Authorization code',
+                    client_label: 'Client credentials',
+                    device_label: 'Device code',
+                    hybrid_label: 'Hybrid flow',
+                    implicit_label: 'Implicit flow',
+                    password_label: 'Resource owner password',
+                    select_text: 'Select the authentication flow your client will use'
                 },
                 auth_method: {
                     private_jwt_desc: 'Uses a client-generated JSON Web Token (JWT) signed with a RSA or ECDSA algorithm to confirm the client\'s identity.',

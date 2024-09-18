@@ -8,6 +8,8 @@ import { Validity } from 'meteor/pwix:validity';
 import { ClientsEntities } from '/imports/common/collections/clients_entities/index.js';
 import { ClientsRecords } from '/imports/common/collections/clients_records/index.js';
 
+import { AuthFlow } from '/imports/common/definitions/auth-flow.def.js';
+
 import { Clients } from '../index.js';
 
 /*
@@ -288,6 +290,7 @@ Meteor.publish( 'clientsTabularLast', async function( tableName, ids, fields ){
     // - a DYN object which contains:
     //   > analyze: the result of the analyze, i.e. the list of fields which are different among this client records
     //   > count: the count of records for this client
+    // - authorization flow is computed from the defined grant types
     // - start and end effect dates are modified with the englobing period of the entity
     const f_transform = async function( item ){
         let promises = [];
@@ -298,6 +301,7 @@ Meteor.publish( 'clientsTabularLast', async function( tableName, ids, fields ){
         promises.push( ClientsRecords.collection.find({ entity: item.entity }).fetchAsync().then(( fetched ) => {
             item.DYN.analyze = Validity.analyzeByRecords( fetched );
             item.DYN.records = fetched;
+            item.authorization_flow = AuthFlow.labelFromGrantTypes( item.grant_types );
             const res = Validity.englobingPeriodByRecords( fetched );
             item.effectStart = res.start;
             item.effectEnd = res.end;
@@ -337,7 +341,6 @@ Meteor.publish( 'clientsTabularLast', async function( tableName, ids, fields ){
             if( !initializing ){
                 const transformed = await f_transform( newItem );
                 entities[newItem.entity] = transformed;
-                console.debug( 'transformed', transformed );
                 self.changed( collectionName, newItem._id, transformed );
             }
         },

@@ -109,9 +109,6 @@ Tracker.autorun(() => {
                     $( cells[columns[it].index] ).addClass( 'dt-different' );   
                 }
             });
-            // display the englobing period as start and end effect dates
-            data.effectStart = data.DYN.start;
-            data.effectEnd = data.DYN.end;
         }
     });
 });

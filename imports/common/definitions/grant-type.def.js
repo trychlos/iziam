@@ -29,6 +29,8 @@
  * 
  * The relation between authorization grant flow (aka grant_type) and the allowed response_type's is defined by OpenID
  * see https://openid.net/specs/openid-connect-registration-1_0.html#ClientMetadata
+ * 
+ * NOTE: we consider there is a one-to-one relation between the defined Authorization Grant Flows and the below grant types with an 'access' nature.
  */
 
 import _ from 'lodash';
@@ -49,6 +51,7 @@ export const GrantType = {
             id: 'authorization_code',
             label: 'definitions.grant_type.authcode_label',
             description: 'definitions.grant_type.authcode_description',
+            auth_flow: 'authorization_code',
             image: '/images/grant-type.svg',
             nature: 'access',
             haveRedirects: true,
@@ -70,6 +73,7 @@ export const GrantType = {
             id: 'client_credentials',
             label: 'definitions.grant_type.client_label',
             description: 'definitions.grant_type.client_description',
+            auth_flow: 'client_credentials',
             image: '/images/grant-type.svg',
             nature: 'access',
             useTokenEndpoint: true
@@ -79,6 +83,7 @@ export const GrantType = {
             id: 'hybrid',
             label: 'definitions.grant_type.hybrid_label',
             description: 'definitions.grant_type.hybrid_description',
+            auth_flow: 'hybrid',
             image: '/images/grant-type.svg',
             nature: 'access'
         },
@@ -88,6 +93,7 @@ export const GrantType = {
             id: 'implicit',
             label: 'definitions.grant_type.implicit_label',
             description: 'definitions.grant_type.implicit_description',
+            auth_flow: 'implicit',
             image: '/images/grant-type.svg',
             nature: 'access',
             haveRedirects: true,
@@ -107,6 +113,7 @@ export const GrantType = {
             id: 'password',
             label: 'definitions.grant_type.password_label',
             description: 'definitions.grant_type.password_description',
+            auth_flow: 'password',
             image: '/images/grant-type.svg',
             nature: 'access',
             useTokenEndpoint: true,
@@ -125,6 +132,7 @@ export const GrantType = {
             id: 'urn:ietf:params:oauth:grant-type:device_code',
             label: 'definitions.grant_type.device_label',
             description: 'definitions.grant_type.device_description',
+            auth_flow: 'device_code',
             image: '/images/grant-type.svg',
             nature: 'access'
         }
@@ -132,6 +140,14 @@ export const GrantType = {
 
     // only warn once when byId() doesn't find the item
     warnedById: {},
+
+    /**
+     * @param {Object} def a GrantType definition as returned by GrantType.Knowns()
+     * @returns {String} the auth_flow identifier
+     */
+    authFlow( def ){
+        return def.auth_flow || null;
+    },
 
     /**
      * @param {String} id a grant type identifier
@@ -400,5 +416,5 @@ export const GrantType = {
             return !wantRedirects;
         });
         return wantRedirects;
-    },
+    }
 };

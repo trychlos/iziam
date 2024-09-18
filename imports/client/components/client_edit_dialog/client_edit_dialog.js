@@ -54,6 +54,7 @@ import { Validity } from 'meteor/pwix:validity';
 
 import { ClientsEntities } from '/imports/common/collections/clients_entities/index.js';
 
+import '/imports/client/components/client_application_type_select/client_application_type_select.js';
 import '/imports/client/components/client_auth_method_panel/client_auth_method_panel.js';
 import '/imports/client/components/client_entity_validities_pane/client_entity_validities_pane.js';
 import '/imports/client/components/client_profile_select/client_profile_select.js';

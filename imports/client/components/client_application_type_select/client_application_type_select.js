@@ -1,5 +1,5 @@
 /*
- * /imports/client/components/application_type_select/application_type_select.js
+ * /imports/client/components/client_application_type_select/client_application_type_select.js
  *
  * Select an application type (an OpenID optional parameter).
  * 
@@ -8,7 +8,7 @@
  * - disabled: whether this component should be disabled, defaulting to false
  * 
  * Events:
- * - application-type-selected: the new selected type
+ * - client-application-type-selected: the new selected type
  */
 
 import _ from 'lodash';
@@ -17,9 +17,9 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 
 import { ApplicationType } from '/imports/common/definitions/application-type.def.js';
 
-import './application_type_select.html';
+import './client_application_type_select.html';
 
-Template.application_type_select.helpers({
+Template.client_application_type_select.helpers({
     // whether we have a currently selected item ?
     hasCurrent(){
         return !_.isNil( this.selected );
@@ -56,13 +56,13 @@ Template.application_type_select.helpers({
     }
 });
 
-Template.application_type_select.events({
-    'change .c-application-type-select'( event, instance ){
-        instance.$( '.c-application-type-select' ).trigger( 'application-type-selected', { selected: instance.$(  '.c-application-type-select select option:selected' ).val() });
+Template.client_application_type_select.events({
+    'change .c-client-application-type-select'( event, instance ){
+        instance.$( '.c-client-application-type-select' ).trigger( 'client-application-type-selected', { selected: instance.$(  '.c-client-application-type-select select option:selected' ).val() });
     },
 
     // we are asked to clear the selection
-    'iz-clear .c-application-type-select'( event, instance ){
-        instance.$( '.c-application-type-select select' ).prop( 'selectedIndex', 0 );
+    'iz-clear .c-client-application-type-select'( event, instance ){
+        instance.$( '.c-client-application-type-select select' ).prop( 'selectedIndex', 0 );
     }
 });

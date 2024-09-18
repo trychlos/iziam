@@ -83,7 +83,7 @@ export const GrantNature = {
 
     /**
      * @param {Object} def a GrantNature definition as returned by GrantNature.Knowns()
-     * @returns {String} the label to be attached to the grant nature
+     * @returns {String} the UI input type to be used
      */
     uiType( def ){
         return def.ui;

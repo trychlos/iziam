@@ -32,7 +32,19 @@ const _defaultFieldSet = function(){
         {
             name: 'client_type',
             schema: false,
-            dt_title: pwixI18n.label( I18N, 'clients.tabular.type_th' ),
+            dt_title: pwixI18n.label( I18N, 'clients.tabular.client_type_th' ),
+        },
+        // application type
+        {
+            name: 'application_type',
+            schema: false,
+            dt_title: pwixI18n.label( I18N, 'clients.tabular.application_type_th' ),
+        },
+        // authorization flow
+        {
+            name: 'authorization_flow',
+            schema: false,
+            dt_title: pwixI18n.label( I18N, 'clients.tabular.authorization_flow_th' ),
         },
         Notes.fieldDef(),
         Validity.recordsFieldDef(),
