@@ -5,7 +5,7 @@
  * When editing, doesn't let the main characteristics of the key (use, kty, alg) be modified
  *
  * Parms:
- * - organization: an { entity, record } organization object
+ * - container: an { entity, record } organization/client object
  * - checker: a ReactiveVar which holds the parent Checker
  * - item: a ReactiveVar which contains the JWK item to be edited here
  * - isNew: a ReactiveVar which contains a boolean 'isNew' flag
@@ -55,6 +55,11 @@ Template.jwk_properties_pane.onCreated( function(){
             }
         }
     };
+
+    // track the item content
+    self.autorun(() => {
+        console.debug( 'item', Template.currentData().item.get());
+    });
 });
 
 Template.jwk_properties_pane.onRendered( function(){
@@ -109,7 +114,7 @@ Template.jwk_properties_pane.onRendered( function(){
                     }
                 }, TenantsManager.Records.fieldSet.get()),
                 data: {
-                    organization: Template.currentData().organization,
+                    container: Template.currentData().container,
                     item: itemRv
                 },
                 setForm: itemRv.get()
@@ -154,6 +159,7 @@ Template.jwk_properties_pane.helpers({
         const ktyId = this.item.get().kty;
         const ktyDef = ktyId ? JwkKty.byId( ktyId ) : null;
         const useId = this.item.get().use;
+        console.debug( 'kty', ktyId, 'ktyDef', ktyDef, 'use', useId );
         return {
             ...this,
             list: ktyDef && useId ? JwaAlg.byIds( JwkKty.availableAlgorithms( ktyDef, useId )) : null,

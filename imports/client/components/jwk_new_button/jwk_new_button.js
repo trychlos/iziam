@@ -1,12 +1,13 @@
 /*
  * /imports/client/components/jwk_new_button/jwk_new_button.js
  *
- * Let the organization manager define a new JSON Web Key.
+ * Let the organization/client manager define a new JSON Web Key.
  *
  * Parms:
  * - entity: a ReactiveVar which contains the Organization, with its DYN.records array of ReactiveVar's
- * - index: the index of the current edited organization record
+ * - index: the index of the current edited organization/client record
  * - checker: a ReactiveVar which contains the parent Forms.Checker
+ * - isOrganization: whether the JWK is to be created into an organization, defaulting to true
  * - plus all plusButton parameters will be passed through
  */
 
@@ -31,9 +32,10 @@ Template.jwk_new_button.onCreated( function(){
     };
 
     // check the creation permission
-    // any organization manager can create a new json web key
+    // any organization/client manager can create a new json web key
     self.autorun( async () => {
-        self.APP.canCreate.set( await Permissions.isAllowed( 'feat.organizations.edit', Meteor.userId()));
+        const permission = Template.currentData().isOrganization === false ? 'feat.clients.edit' : 'feat.organizations.edit';
+        self.APP.canCreate.set( await Permissions.isAllowed( permission, Template.currentData().entity.get()._id, Meteor.userId()));
     });
 
     // track the creation permission
@@ -54,7 +56,8 @@ Template.jwk_new_button.helpers({
             ...this,
             label: pwixI18n.label( I18N, 'jwks.edit.new_button_label' ),
             title: pwixI18n.label( I18N, 'jwks.edit.new_button_title' ),
-            shape: PlusButton.C.Shape.RECTANGLE
+            shape: PlusButton.C.Shape.RECTANGLE,
+            enabled: Template.instance().canCreate
         }
     }
 });

@@ -4,7 +4,7 @@
  * Display the symmetric secret object
  *
  * Parms:
- * - organization: an { entity, record } organization object
+ * - container: an { entity, record } organization/client object
  * - checker: a ReactiveVar which holds the parent Checker
  * - item: a ReactiveVar which contains the JWK item to be edited here
  */

@@ -59,7 +59,7 @@ Template.jwk_edit_dialog.onCreated( function(){
 
     // track the item content
     self.autorun(() => {
-        //console.debug( 'item', self.APP.item.get());
+        console.debug( 'item', self.APP.item.get());
     });
 
     // instanciates a named Tabbed
@@ -67,7 +67,7 @@ Template.jwk_edit_dialog.onCreated( function(){
         const item = self.APP.item.get();
         self.APP.tabbed.setDataContext({
             dataContext: {
-                organization: { entity: Template.currentData().entity.get(), record: Template.currentData().entity.get().DYN.records[Template.currentData().index].get() },
+                container: { entity: Template.currentData().entity.get(), record: Template.currentData().entity.get().DYN.records[Template.currentData().index].get() },
                 item: self.APP.item,
                 checker: self.APP.checker,
                 isNew: self.APP.isNew

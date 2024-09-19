@@ -526,6 +526,14 @@ Meteor.APP.i18n = {
                 }
             },
             jwks: {
+                checks: {
+                    jwk_alg_invalid: 'JWK algorithm "%s" is not valid',
+                    jwk_alg_unset: 'JWK algorithm is not set',
+                    jwk_kty_invalid: 'JWK type "%s" is not valid',
+                    jwk_kty_unset: 'JWK type is not set',
+                    jwk_use_invalid: 'JWK usage "%s" is not valid',
+                    jwk_use_unset: 'JWK usage is not set',
+                },
                 edit: {
                     alg_label: 'Algorithm :',
                     alg_title: 'The algorithm to be chosen to sign or encrypt the key',
@@ -657,12 +665,6 @@ Meteor.APP.i18n = {
                     issuer_https: 'The issuer must use a HTTPS schema',
                     issuer_invalid: 'The issuer URL is not valid',
                     issuer_unset: 'The issuer is not set though should have at least a settings value',
-                    jwk_alg_invalid: 'JWK algorithm "%s" is not valid',
-                    jwk_alg_unset: 'JWK algorithm is not set',
-                    jwk_kty_invalid: 'JWK type "%s" is not valid',
-                    jwk_kty_unset: 'JWK type is not set',
-                    jwk_use_invalid: 'JWK usage "%s" is not valid',
-                    jwk_use_unset: 'JWK usage is not set',
                     jwks_absolute: 'The JWKS document URI must be provided as an absolute path',
                     jwks_no_but_jwk: 'No JWKS URI is yet defined while at least one JWK exists',
                     jwks_uri_wo_jwk: 'A JWKS URI is specified, but no JWK is defined (yet ?)',

@@ -29,6 +29,10 @@ Permissions.set({
                 return await Roles.userIsInRoles( user, 'CLIENT_DELETE' ) ||
                         await Roles.userIsInRoles( user, 'SCOPED_CLIENT_DELETE', { scope: scope });
             },
+            async edit( user, scope ){
+                return await Roles.userIsInRoles( user, 'CLIENT_EDIT' ) ||
+                        await Roles.userIsInRoles( user, 'SCOPED_CLIENT_EDIT', { scope: scope });
+            },
             fn :{
                 async get_by( user, scope ){
                     return await Roles.userIsInRoles( user, 'CLIENTS_LIST' ) ||
@@ -52,7 +56,8 @@ Permissions.set({
         },
         organizations: {
             async edit( user, scope ){
-                return await Roles.userIsInRoles( user, 'TENANT_EDIT' );
+                return await Roles.userIsInRoles( user, 'TENANT_EDIT' ) ||
+                        await Roles.userIsInRoles( user, 'SCOPED_TENANT_EDIT', { scope: scope });
             },
             async new( user, scope ){
                 return await Roles.userIsInRoles( user, 'TENANT_CREATE' );

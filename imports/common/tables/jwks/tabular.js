@@ -35,7 +35,7 @@ Jwks.dataSet = function( dc ){
  * @param {Object} dc the data context of the providers_list component
  * @returns 
  */
-Jwks.fieldSet = function( dc ){
+Jwks.tabularFieldSet = function( dc ){
     let columns = [
         {
             name: 'id',
@@ -114,7 +114,7 @@ Jwks.tabular = function( dc ){
         name: 'Jwks',
         collection: null,
         data: Jwks.dataSet( dc ),
-        columns: Jwks.fieldSet( dc ).toTabular(),
+        columns: Jwks.tabularFieldSet( dc ).toTabular(),
         serverSide: false,
         ajax: null,
         tabular: {
