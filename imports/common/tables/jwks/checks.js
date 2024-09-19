@@ -70,13 +70,11 @@ Jwks.checks = {
 
     // JWK key type (crypto alg family)
     async jwk_kty( value, data, opts ){
-        console.debug( 'jwk_kty', arguments );
         _assert_data_itemrv( 'Jwks.checks.jwk_kty()', data );
         let item = data.item.get();
         if( opts.update !== false ){
             item.kty = value;
             data.item.set( item );
-            console.debug( 'set item', data.item.get());
         }
         if( value ){
             const def = JwkKty.byId( value );
@@ -105,7 +103,6 @@ Jwks.checks = {
 
     // JWK usage
     async jwk_use( value, data, opts ){
-        console.debug( 'jwk_use', arguments );
         _assert_data_itemrv( 'Jwks.checks.jwk_use()', data );
         let item = data.item.get();
         if( opts.update !== false ){

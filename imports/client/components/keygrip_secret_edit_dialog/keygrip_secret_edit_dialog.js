@@ -57,7 +57,7 @@ Template.keygrip_secret_edit_dialog.onCreated( function(){
     self.autorun(() => {
         self.APP.tabbed.setDataContext({ 
             dataContext: {
-                organization: { entity: Template.currentData().entity.get(), record: Template.currentData().entity.get().DYN.records[Template.currentData().index].get() },
+                container: { entity: Template.currentData().entity.get(), record: Template.currentData().entity.get().DYN.records[Template.currentData().index].get() },
                 item: self.APP.item,
                 checker: self.APP.checker,
                 isNew: self.APP.isNew,

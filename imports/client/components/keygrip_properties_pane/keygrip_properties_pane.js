@@ -4,7 +4,7 @@
  * Manage a keygrip, maybe empty but have at least an id.
  *
  * Parms:
- * - organization: an { entity, record } organization object
+ * - container: an { entity, record } organization object
  * - checker: a ReactiveVar which holds the parent Checker
  * - item: a ReactiveVar which contains the keygrip item to be edited here
  * - isNew: a ReactiveVar which contains a boolean 'isNew' flag
@@ -104,7 +104,7 @@ Template.keygrip_properties_pane.onRendered( function(){
                     }
                 }, TenantsManager.Records.fieldSet.get()),
                 data: {
-                    organization: Template.currentData().organization,
+                    container: Template.currentData().container,
                     item: itemRv
                 },
                 setForm: itemRv.get()

@@ -532,7 +532,7 @@ Meteor.APP.i18n = {
                     jwk_kty_invalid: 'JWK type "%s" is not valid',
                     jwk_kty_unset: 'JWK type is not set',
                     jwk_use_invalid: 'JWK usage "%s" is not valid',
-                    jwk_use_unset: 'JWK usage is not set',
+                    jwk_use_unset: 'JWK usage is not set'
                 },
                 edit: {
                     alg_label: 'Algorithm :',
@@ -584,6 +584,14 @@ Meteor.APP.i18n = {
                 }
             },
             keygrips: {
+                checks: {
+                    keygrip_alg_invalid: 'The keygrip algorithm is invalid',
+                    keygrip_alg_unset: 'The keygrip algorithm is not set',
+                    keygrip_encoding_invalid: 'The keygrip encoding is invalid',
+                    keygrip_encoding_unset: 'The keygrip encoding is not set',
+                    keygrip_size_invalid: 'The keygrip secret size is invalid (must be a positive integer)',
+                    keygrip_size_unset: 'The keygrip secret size is not set'
+                },
                 edit: {
                     alg_label: 'Algorithm :',
                     alg_title: 'The algorithm to be chosen to sign or validate the cookies',
@@ -668,12 +676,6 @@ Meteor.APP.i18n = {
                     jwks_absolute: 'The JWKS document URI must be provided as an absolute path',
                     jwks_no_but_jwk: 'No JWKS URI is yet defined while at least one JWK exists',
                     jwks_uri_wo_jwk: 'A JWKS URI is specified, but no JWK is defined (yet ?)',
-                    keygrip_alg_invalid: 'The keygrip algorithm is invalid',
-                    keygrip_alg_unset: 'The keygrip algorithm is not set',
-                    keygrip_encoding_invalid: 'The keygrip encoding is invalid',
-                    keygrip_encoding_unset: 'The keygrip encoding is not set',
-                    keygrip_size_invalid: 'The keygrip secret size is invalid (must be a positive integer)',
-                    keygrip_size_unset: 'The keygrip secret size is not set',
                     registration_absolute: 'The registration endpoint must be provided as an absolute path',
                     revocation_absolute: 'The revocation endpoint must be provided as an absolute path',
                     token_absolute: 'The token endpoint must be provided as an absolute path',

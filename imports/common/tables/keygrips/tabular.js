@@ -47,7 +47,7 @@ Keygrips.dataSet = function( dc ){
  * @param {Object} dc the data context of the providers_list component
  * @returns 
  */
-Keygrips.fieldSet = function( dc ){
+Keygrips.tabularFieldSet = function( dc ){
     let columns = [
         {
             name: 'id',
@@ -109,7 +109,7 @@ Keygrips.tabular = function( dc ){
         name: 'Keygrips',
         collection: null,
         data: Keygrips.dataSet( dc ),
-        columns: Keygrips.fieldSet( dc ).toTabular(),
+        columns: Keygrips.tabularFieldSet( dc ).toTabular(),
         serverSide: false,
         ajax: null,
         tabular: {

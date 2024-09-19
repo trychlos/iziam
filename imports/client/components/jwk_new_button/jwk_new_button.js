@@ -35,7 +35,7 @@ Template.jwk_new_button.onCreated( function(){
     // any organization/client manager can create a new json web key
     self.autorun( async () => {
         const permission = Template.currentData().isOrganization === false ? 'feat.clients.edit' : 'feat.organizations.edit';
-        self.APP.canCreate.set( await Permissions.isAllowed( permission, Template.currentData().entity.get()._id, Meteor.userId()));
+        self.APP.canCreate.set( await Permissions.isAllowed( permission, Meteor.userId(), Template.currentData().entity.get()._id ));
     });
 
     // track the creation permission
@@ -57,7 +57,7 @@ Template.jwk_new_button.helpers({
             label: pwixI18n.label( I18N, 'jwks.edit.new_button_label' ),
             title: pwixI18n.label( I18N, 'jwks.edit.new_button_title' ),
             shape: PlusButton.C.Shape.RECTANGLE,
-            enabled: Template.instance().canCreate
+            enabled: Template.instance().APP.canCreate
         }
     }
 });

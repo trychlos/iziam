@@ -8,5 +8,7 @@
 
 export { Keygrips } from './object.js';
 
+import './checks.js';
+import './fieldset.js';
 import './functions.js';
 import './tabular.js';

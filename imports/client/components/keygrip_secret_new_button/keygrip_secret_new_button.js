@@ -35,7 +35,7 @@ Template.keygrip_secret_new_button.onCreated( function(){
     // check the creation permission
     // any organization manager can create a new keygrip
     self.autorun( async () => {
-        self.APP.canCreate.set( await Permissions.isAllowed( 'feat.organizations.edit', Meteor.userId()));
+        self.APP.canCreate.set( await Permissions.isAllowed( 'feat.organizations.edit', Meteor.userId(), Template.currentData().entity.get()._id ));
     });
 
     // track the creation permission
@@ -63,7 +63,8 @@ Template.keygrip_secret_new_button.helpers({
             enabled: Template.instance().APP.enabled,
             label: pwixI18n.label( I18N, 'keygrips.edit.secret_new_button_label' ),
             title: pwixI18n.label( I18N, 'keygrips.edit.secret_new_button_title' ),
-            shape: PlusButton.C.Shape.RECTANGLE
+            shape: PlusButton.C.Shape.RECTANGLE,
+            enabled: Template.instance().APP.canCreate
         }
     }
 });

@@ -14,7 +14,7 @@ import { Jwks } from './index.js';
  */
 Jwks.recordFieldDef = function(){
     let columns = [
-        // -- the JSON Web Key Set
+        // -- a JSON Web Key Set
         // several JWK can be in this set to let the organization/client manage their renewals
         {
             name: 'jwks',

@@ -4,8 +4,8 @@
         <table class="form-table ui-w100">
             <tr>
                 <td class="label"><label class="form-label" for="keygrip-label">{{ i18n key="keygrips.edit.label_label" }}</label></td>
-                <td title="{{ i18n key="keygrips.edit.label_title" }}">
-                    <div class="ui-w67 js-label">
+                <td>
+                    <div class="ui-w67 js-label" title="{{ i18n key="keygrips.edit.label_title" }}">
                         <input class="form-control" type="text" id="keygrip-label" placeholder="{{ i18n key="keygrips.edit.label_ph" }}" />
                     </div>
                 </td>
@@ -15,24 +15,24 @@
             </tr>
             <tr>
                 <td class="label"><label class="form-label" for="keygrip-label">{{ i18n key="keygrips.edit.alg_label" }}</label></td>
-                <td title="{{ i18n key="keygrips.edit.alg_title" }}">
-                    <div class="ui-mt025 ui-w67 js-alg">
+                <td>
+                    <div class="ui-mt025 ui-w67 js-alg" title="{{ i18n key="keygrips.edit.alg_title" }}">
                         {{> hmac_alg_select (parmsHmacAlgSelect) }}
                     </div>
                 </td>
             </tr>
             <tr>
                 <td class="label"><label class="form-label">{{ i18n key="keygrips.edit.encoding_label" }}</label></td>
-                <td title="{{ i18n key="keygrips.edit.encoding_title" }}">
-                    <div class="ui-mt025 ui-w67 js-encoding">
+                <td>
+                    <div class="ui-mt025 ui-w67 js-encoding" title="{{ i18n key="keygrips.edit.encoding_title" }}">
                         {{> hmac_encoding_select (parmsHmacEncodingSelect) }}
                     </div>
                 </td>
             </tr>
             <tr>
                 <td class="label"><label class="form-label" for="keygrip-size">{{ i18n key="keygrips.edit.size_label" }}</label></td>
-                <td title="{{ i18n key="keygrips.edit.size_title" }}">
-                    <div class="ui-mt025 ui-w67 js-size">
+                <td>
+                    <div class="ui-mt025 ui-w67 js-size" title="{{ i18n key="keygrips.edit.size_title" }}">
                         <input class="form-control" type="number" id="keygrip-size" {{ disabledSize }} />
                     </div>
                 </td>
@@ -43,8 +43,8 @@
                         <label class="form-label">{{ i18n key="keygrips.edit.secrets_label" }}</label>
                     </div>
                 </td>
-                <td class="ui-w100" colspan="2" title="{{ i18n key="keygrips.edit.secrets_title" }}">
-                    <div class="ui-mt05 ui-w100 js-secrets">
+                <td class="ui-w100" colspan="2">
+                    <div class="ui-mt05 ui-w100 js-secrets" title="{{ i18n key="keygrips.edit.secrets_title" }}">
                         {{> keygrip_secrets_list (parmsKeygripSecretsList) }}
                     </div>
                 </td>

@@ -61,7 +61,7 @@ Template.keygrip_edit_dialog.onCreated( function(){
             dataContext: {
                 entity: Template.currentData().entity,
                 index: Template.currentData().index,
-                organization: { entity: Template.currentData().entity.get(), record: Template.currentData().entity.get().DYN.records[Template.currentData().index].get() },
+                container: { entity: Template.currentData().entity.get(), record: Template.currentData().entity.get().DYN.records[Template.currentData().index].get() },
                 item: self.APP.item,
                 checker: self.APP.checker,
                 isNew: self.APP.isNew
