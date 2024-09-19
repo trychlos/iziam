@@ -2,12 +2,10 @@
  * /imports/client/components/jwk_edit_dialog/jwk_edit_dialog.js
  *
  * Manage a JSON Web Key, maybe empty but have at least an id.
- * A JWK cannot be edited: once created (an published), it can only be deleted (or revoked).
- * The item edition only displays the JWK, cannot edit it.
  *
  * Parms:
- * - entity: a ReactiveVar which contains the Organization, with its DYN.records array of ReactiveVar's
- * - index: the index of the current edited organization record
+ * - entity: a ReactiveVar which contains the Organization/Client, with its DYN.records array of ReactiveVar's
+ * - index: the index of the current edited organization/client record
  * - item: the JWK item to be edited here
  */
 
@@ -40,17 +38,18 @@ Template.jwk_edit_dialog.onCreated( function(){
         // the global Message zone for this modal
         messager: new Forms.Messager(),
         // the edited item as a copy of the provided, or a new one
-        item: new ReactiveVar( null ),
+        item: new ReactiveVar( null, _.isEqual ),
+        prevItem: null,
         // whether we are running inside of a Modal
         isModal: new ReactiveVar( false ),
         // whether we are creating a new JWK
         isNew: new ReactiveVar( false ),
         // the Tabbed instance
-        tabbed: new ReactiveVar( null )
+        tabbed: new Tabbed.Instance( self, { name: 'jwk_edit_dialog' })
     };
 
     // get the edited item
-    // it will go into the currently edited organization record only if the user validates this dialog box
+    // it will go into the currently edited organization/client record only if the user validates this dialog box
     self.autorun(() => {
         const dcItem = Template.currentData().item;
         let item = dcItem ? _.cloneDeep( dcItem ) : { id: Random.id() };
@@ -65,8 +64,8 @@ Template.jwk_edit_dialog.onCreated( function(){
 
     // instanciates a named Tabbed
     self.autorun(() => {
-        self.APP.tabbed.set( new Tabbed.Instance( self, {
-            name: 'jwk_edit_dialog',
+        const item = self.APP.item.get();
+        self.APP.tabbed.setDataContext({
             dataContext: {
                 organization: { entity: Template.currentData().entity.get(), record: Template.currentData().entity.get().DYN.records[Template.currentData().index].get() },
                 item: self.APP.item,
@@ -83,16 +82,16 @@ Template.jwk_edit_dialog.onCreated( function(){
                     name: 'jwk_secret_tab',
                     navLabel: pwixI18n.label( I18N, 'jwks.edit.secret_tab_title' ),
                     paneTemplate: 'jwk_secret_pane',
-                    enabled: false
+                    enabled: Boolean( item.createdAt && item.secret )
                 },
                 {
                     name: 'jwk_keyspair_tab',
                     navLabel: pwixI18n.label( I18N, 'jwks.edit.keyspair_tab_title' ),
                     paneTemplate: 'jwk_keyspair_pane',
-                    enabled: false
+                    enabled: Boolean( item.createdAt && item.pair )
                 }
             ]
-        }));
+        });
     });
 });
 
@@ -123,16 +122,6 @@ Template.jwk_edit_dialog.onRendered( function(){
             }
         }
     }));
-
-    // track the JSON Web Key to enable the respective tabs
-    self.autorun(() => {
-        const item = self.APP.item.get();
-        const tabbed = self.APP.tabbed.get();
-        if( tabbed ){
-            tabbed.set( 'tab.jwk_secret_tab.enabled', item.createdAt && item.secret );
-            tabbed.set( 'tab.jwk_keyspair_tab.enabled', item.createdAt && item.pair );
-        }
-    });
 });
 
 Template.jwk_edit_dialog.helpers({

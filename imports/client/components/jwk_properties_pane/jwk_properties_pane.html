@@ -41,6 +41,14 @@
                 </td>
             </tr>
             <tr>
+                <td class="ui-w20 label"><label class="form-label" for="jwk-expire">{{ i18n key="jwks.edit.expire_label" }}</label></td>
+                <td class="ui-w100" title="{{ i18n key="jwks.edit.expire_title" }}">
+                    <div class="ui-w50 ui-mt025 js-expire">
+                        {{> DateInput (parmsDate) }}
+                    </div>
+                </td>
+            </tr>
+            <tr>
                 <td colspan="2" class="ui-center">
                     {{#if haveGenerate }}
                         <button class="btn {{ btnClass }} ui-mt1 js-generate" type="button" title="{{ i18n key="jwks.edit.generate_button_title" }}" {{ btnDisabled }}>

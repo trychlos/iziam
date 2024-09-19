@@ -329,6 +329,18 @@ Organizations.checks = {
         }
     },
 
+    // JWK optional expiration date
+    async jwk_expireAt( value, data, opts ){
+        console.debug( arguments );
+        _assert_data_itemrv( 'Organizations.checks.jwk_expireAt()', data );
+        let item = data.item.get();
+        if( opts.update !== false ){
+            item.expireAt = value ? new Date( value ) : null;
+            data.item.set( item );
+        }
+        return null;
+    },
+
     // JWK Key ID
     async jwk_kid( value, data, opts ){
         _assert_data_itemrv( 'Organizations.checks.jwk_kid()', data );

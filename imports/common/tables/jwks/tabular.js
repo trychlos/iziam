@@ -72,6 +72,14 @@ Jwks.fieldSet = function( dc ){
             }
         },
         {
+            name: 'expireAt',
+            dt_type: 'string',
+            dt_title: pwixI18n.label( I18N, 'jwks.list.expire_at_th' ),
+            dt_render( data, type, rowData ){
+                return rowData.expireAt ? strftime( '%Y-%m-%d', rowData.expireAt ) : null;
+            }
+        },
+        {
             name: 'createdAt',
             dt_type: 'string',
             dt_title: pwixI18n.label( I18N, 'jwks.list.created_at_th' ),

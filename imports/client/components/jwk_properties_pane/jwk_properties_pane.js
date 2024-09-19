@@ -100,6 +100,12 @@ Template.jwk_properties_pane.onRendered( function(){
                         formTo( $node, item ){
                             $node.val( item.kid );
                         }
+                    },
+                    'jwks.$.expireAt': {
+                        js: '.js-expire',
+                        formTo( $node, item ){
+                            $node.val( item.expireAt );
+                        }
                     }
                 }, TenantsManager.Records.fieldSet.get()),
                 data: {
@@ -133,6 +139,14 @@ Template.jwk_properties_pane.helpers({
     // string translation
     i18n( arg ){
         return pwixI18n.label( I18N, arg.hash.key );
+    },
+
+    // parms for the DateInput
+    parmsDate(){
+        return {
+            placeholder: pwixI18n.label( I18N, 'jwks.edit.expire_ph' ),
+            withHelp: true
+        };
     },
 
     // parms for algorithm selection

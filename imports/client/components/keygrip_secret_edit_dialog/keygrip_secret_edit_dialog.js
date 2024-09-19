@@ -36,7 +36,7 @@ Template.keygrip_secret_edit_dialog.onCreated( function(){
         // whether we are creating a new JWK
         isNew: new ReactiveVar( false ),
         // the Tabbed instance
-        tabbed: new ReactiveVar( null )
+        tabbed: new Tabbed.Instance( self, { name: 'keygrip_secret_edit_dialog' })
     };
 
     // get the edited item
@@ -55,8 +55,7 @@ Template.keygrip_secret_edit_dialog.onCreated( function(){
 
     // instanciates a named Tabbed
     self.autorun(() => {
-        self.APP.tabbed.set( new Tabbed.Instance( self, {
-            name: 'keygrip_secret_edit_dialog',
+        self.APP.tabbed.setDataContext({ 
             dataContext: {
                 organization: { entity: Template.currentData().entity.get(), record: Template.currentData().entity.get().DYN.records[Template.currentData().index].get() },
                 item: self.APP.item,
@@ -71,7 +70,7 @@ Template.keygrip_secret_edit_dialog.onCreated( function(){
                     paneTemplate: 'keygrip_secret_properties_pane'
                 }
             ]
-        }));
+        });
     });
 });
 

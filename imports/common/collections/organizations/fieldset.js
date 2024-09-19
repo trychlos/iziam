@@ -351,6 +351,14 @@ Organizations.recordFieldset = function(){
                     form_check: Organizations.checks.jwk_kid,
                     form_type: Forms.FieldType.C.OPTIONAL
                 },
+                // an optional expiration date
+                {
+                    name: 'jwks.$.expireAt',
+                    type: Date,
+                    optional: true,
+                    form_check: Organizations.checks.jwk_expireAt,
+                    form_type: Forms.FieldType.C.OPTIONAL
+                },
                 // the symmetric secret
                 {
                     name: 'jwks.$.secret',

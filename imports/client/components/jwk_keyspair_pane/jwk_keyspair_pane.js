@@ -12,7 +12,6 @@
 import _ from 'lodash';
 
 import { pwixI18n } from 'meteor/pwix:i18n';
-import { ReactiveVar } from 'meteor/reactive-var';
 import { Tabbed } from 'meteor/pwix:tabbed';
 
 import './jwk_keyspair_pane.html';
@@ -22,13 +21,12 @@ Template.jwk_keyspair_pane.onCreated( function(){
 
     self.APP = {
         // the Tabbed instance
-        tabbed: new ReactiveVar( null )
+        tabbed: new Tabbed.Instance( self, { name: 'jwk_keyspair_pane' })
     };
 
     // instanciates the Tabbed component
     self.autorun(() => {
-        self.APP.tabbed.set( new Tabbed.Instance( self, {
-            name: 'jwk_keyspair_pane',
+        self.APP.tabbed.setDataContext({
             dataContext: Template.currentData(),
             tabs: [
                 {
@@ -52,6 +50,6 @@ Template.jwk_keyspair_pane.onCreated( function(){
                     paneTemplate: 'jwk_public_spki_pane'
                 }
             ]
-        }));
+        });
     });
 });

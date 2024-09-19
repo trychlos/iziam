@@ -36,7 +36,7 @@ Template.keygrip_edit_dialog.onCreated( function(){
         // whether we are creating a new JWK
         isNew: new ReactiveVar( false ),
         // the Tabbed instance
-        tabbed: new ReactiveVar( null ),
+        tabbed: new Tabbed.Instance( self, { name: 'keygrip_edit_dialog' }),
         // a count of this keygrip secrets
         count: new ReactiveVar( 0 )
     };
@@ -57,8 +57,7 @@ Template.keygrip_edit_dialog.onCreated( function(){
 
     // instanciates a named Tabbed
     self.autorun(() => {
-        self.APP.tabbed.set( new Tabbed.Instance( self, {
-            name: 'keygrip_edit_dialog',
+        self.APP.tabbed.setDataContext({ 
             dataContext: {
                 entity: Template.currentData().entity,
                 index: Template.currentData().index,
@@ -74,7 +73,7 @@ Template.keygrip_edit_dialog.onCreated( function(){
                     paneTemplate: 'keygrip_properties_pane'
                 }
             ]
-        }));
+        });
     });
 
     // track the count of keygrip secrets
