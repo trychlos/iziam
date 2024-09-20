@@ -11,6 +11,9 @@ import SimpleSchema from 'meteor/aldeed:simple-schema';
 import { Tracker } from 'meteor/tracker';
 import { Validity } from 'meteor/pwix:validity';
 
+import { ClientSecrets } from '/imports/common/tables/client_secrets/index.js';
+import { Jwks } from '/imports/common/tables/jwks/index.js';
+
 import { ClientsRecords } from './index.js';
 
 const _defaultFieldSet = function(){
@@ -210,9 +213,11 @@ const _defaultFieldSet = function(){
             form_type: Forms.FieldType.C.OPTIONAL,
             help_tooltip: pwixI18n.label( I18N, 'clients.metadata.policy_uri' )
         },
-        /*
         // JWKS document uri - the document which contains the client's public keys
+        // if jwks_uri is set, then we use this value
+        //  else we publish the jwks array if it exists
         //  exclusive from jwks
+        /*
         {
             name: 'jwks_uri',
             type: String,
@@ -221,17 +226,10 @@ const _defaultFieldSet = function(){
             form_type: Forms.FieldType.C.OPTIONAL,
             help_tooltip: pwixI18n.label( I18N, 'clients.metadata.jwks_uri' )
         },
+        */
         // JWKS JSON object which contains the client's public keys
         //  exclusive from jwks_uri
-        {
-            name: 'jwks',
-            type: String,
-            optional: true,
-            //form_check: ClientsRecords.checks.policy_uri,
-            form_type: Forms.FieldType.C.OPTIONAL,
-            help_tooltip: pwixI18n.label( I18N, 'clients.metadata.jwks' )
-        },
-        */
+        Jwks.recordFieldDef(),
         // an identifier string of a software client (profile 'm-to-m') - in other words, how the client identifies itself
         {
             name: 'software_id',
@@ -392,6 +390,8 @@ const _defaultFieldSet = function(){
             type: String
         },
         */
+        // client secrets
+        ClientSecrets.recordFieldDef(),
         // --
         Notes.fieldDef(),
         Validity.recordsFieldDef(),

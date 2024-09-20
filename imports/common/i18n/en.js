@@ -282,6 +282,7 @@ Meteor.APP.i18n = {
                     properties_text: 'Define some properties specific to your client application.',
                     providers_nav: 'Providers',
                     redirects_nav: 'Redirect URLs',
+                    secrets_nav: 'Secrets',
                     success_label: 'Congratulations !<br />'
                         +'Your new client has been successfully created.',
                     summary_application_label: 'Application type :',
@@ -316,6 +317,58 @@ Meteor.APP.i18n = {
                     remove_title: 'Remove this redirect URL',
                     url_ph: 'https://myapp/redirect?q=a',
                     url_th: 'URL'
+                },
+                secrets: {
+                    checks: {
+                        secret_alg_invalid: 'The secret algorithm is invalid',
+                        secret_alg_unset: 'The secret algorithm is not set',
+                        secret_encoding_invalid: 'The secret encoding is invalid',
+                        secret_encoding_unset: 'The secret encoding is not set',
+                        secret_size_invalid: 'The secret size is invalid (must be a positive integer)',
+                        secret_size_mini: 'The secret size must be greater than %s',
+                        secret_size_unset: 'The secret size is not set'
+                    },
+                    edit: {
+                        alg_label: 'Algorithm :',
+                        alg_title: 'The algorithm to be chosen to generate the hash',
+                        binary_label: 'The chosen encoding produces binary output, thus preventing the hash to be displayed.',
+                        edit_dialog_title: 'Editing the "%s" secret',
+                        encoding_label: 'Encoding :',
+                        encoding_title: 'How to encode the resulting hash ?',
+                        expire_label: 'Expire at :',
+                        expire_ph: 'yyyy-mm-dd',
+                        expire_title: 'An optional date of the secret expiration',
+                        hash_label: 'Hash :',
+                        hash_title: 'The generated hash',
+                        label_label: 'Label :',
+                        label_title: 'An optional label to this secret',
+                        label_ph: 'My label',
+                        new_button_label: 'New secret',
+                        new_button_title: 'Define a new secret',
+                        new_dialog_title: 'Define a new secret',
+                        preamble: 'Unless it uses the Implicit flow or is a public client without any authentication mechanism, your client will '
+                            +'need to authenticate against the token endpoint.<br />'
+                            +'Manage your set or secrets here.',
+                        properties_tab_title: 'Properties',
+                        size_label: 'Secret size :',
+                        size_title: 'The size of the generated secret'
+                    },
+                    list: {
+                        add_title: 'Add a new secret to your list',
+                        alg_th: 'Algorithm',
+                        created_at_th: 'Created at',
+                        created_by_th: 'Created by',
+                        delete_confirm_text: 'You are about to delete the "%s" secret.<br />Are you sure ?',
+                        delete_confirm_title: 'Delete the "%s" secret',
+                        delete_title: 'Delete the "%s" secret',
+                        edit_title: 'Edit the "%s" secret',
+                        encoding_th: 'Encoding',
+                        expire_at_th: 'Expire at',
+                        label_th: 'Label',
+                        last_created_th: 'Last created',
+                        last_expiration_th: 'Last expiration',
+                        preamble: 'See below the defined client secrets.'
+                    }
                 },
                 tabular: {
                     application_type_th: 'Application type',
@@ -613,7 +666,7 @@ Meteor.APP.i18n = {
                     alg_label: 'Algorithm :',
                     alg_title: 'The algorithm to be chosen to sign or validate the cookies',
                     binary_label: 'The chosen encoding produces binary output, thus preventing the hash to be displayed.',
-                    edit_doialog_title: 'Editing the "%s" keygrip',
+                    edit_dialog_title: 'Editing the "%s" keygrip',
                     encoding_label: 'Encoding :',
                     encoding_title: 'How to encode the resulting hash ?',
                     expire_label: 'Expire at :',

@@ -34,6 +34,7 @@ import '/imports/client/components/client_new_assistant_introduction/client_new_
 import '/imports/client/components/client_new_assistant_profile/client_new_assistant_profile.js';
 import '/imports/client/components/client_new_assistant_properties/client_new_assistant_properties.js';
 import '/imports/client/components/client_new_assistant_providers/client_new_assistant_providers.js';
+import '/imports/client/components/client_new_assistant_secrets/client_new_assistant_secrets.js';
 import '/imports/client/components/client_new_assistant_summary/client_new_assistant_summary.js';
 import '/imports/client/components/client_new_assistant_token_extensions/client_new_assistant_token_extensions.js';
 //import '/imports/client/components/jwt_private_select/jwt_private_select.js';
@@ -67,6 +68,11 @@ Template.client_new_assistant.onCreated( function(){
                     template: 'client_new_assistant_introduction',
                     label: pwixI18n.label( I18N, 'clients.new_assistant.introduction_nav' ),
                     start: true
+                },
+                {
+                    name: 'secrets',
+                    template: 'client_new_assistant_secrets',
+                    label: pwixI18n.label( I18N, 'clients.new_assistant.secrets_nav' )
                 },
                 {
                     name: 'properties',

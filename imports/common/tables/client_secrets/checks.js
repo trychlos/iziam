@@ -1,5 +1,5 @@
 /*
- * /import/common/tables/keygripschecks.js
+ * /import/common/tables/client_secrets/checks.js
  */
 
 import _ from 'lodash';
@@ -11,7 +11,7 @@ import { TM } from 'meteor/pwix:typed-message';
 import { HmacAlg } from '/imports/common/definitions/hmac-alg.def.js';
 import { HmacEncoding } from '/imports/common/definitions/hmac-encoding.def.js';
 
-import { Keygrips } from './index.js';
+import { ClientSecrets } from './index.js';
 
 // fields check
 //  - value: mandatory, the value to be tested
@@ -28,11 +28,11 @@ const _assert_data_itemrv = function( caller, data ){
     assert.ok( data.item && data.item instanceof ReactiveVar, caller+' data.item is expected to be set as a ReactiveVar, got '+data.item );
 }
 
-Keygrips.checks = {
+ClientSecrets.checks = {
 
-    // keygrip algorithm
-    async keygrip_alg( value, data, opts ){
-        _assert_data_itemrv( 'Keygrips.checks.keygrip_alg()', data );
+    // secret algorithm
+    async secret_alg( value, data, opts ){
+        _assert_data_itemrv( 'ClientSecrets.checks.secret_alg()', data );
         let item = data.item.get();
         if( opts.update !== false ){
             item.alg = value;
@@ -42,19 +42,19 @@ Keygrips.checks = {
             const def = HmacAlg.byId( value );
             return def ? null : new TM.TypedMessage({
                 level: TM.MessageLevel.C.ERROR,
-                message: pwixI18n.label( I18N, 'keygrips.checks.keygrip_alg_invalid', value )
+                message: pwixI18n.label( I18N, 'clients.secrets.checks.secret_alg_invalid', value )
             });
         } else {
             return new TM.TypedMessage({
                 level: TM.MessageLevel.C.ERROR,
-                message: pwixI18n.label( I18N, 'keygrips.checks.keygrip_alg_unset' )
+                message: pwixI18n.label( I18N, 'clients.secrets.checks.secret_alg_unset' )
             });
         }
     },
 
-    // keygrip encoding
-    async keygrip_encoding( value, data, opts ){
-        _assert_data_itemrv( 'Keygrips.checks.keygrip_encoding()', data );
+    // secret encoding
+    async secret_encoding( value, data, opts ){
+        _assert_data_itemrv( 'ClientSecrets.checks.secret_encoding()', data );
         let item = data.item.get();
         if( opts.update !== false ){
             item.encoding = value;
@@ -64,19 +64,19 @@ Keygrips.checks = {
             const def = HmacEncoding.byId( value );
             return def ? null : new TM.TypedMessage({
                 level: TM.MessageLevel.C.ERROR,
-                message: pwixI18n.label( I18N, 'keygrips.checks.keygrip_encoding_invalid', value )
+                message: pwixI18n.label( I18N, 'clients.secrets.checks.secret_encoding_invalid', value )
             });
         } else {
             return new TM.TypedMessage({
                 level: TM.MessageLevel.C.ERROR,
-                message: pwixI18n.label( I18N, 'keygrips.checks.keygrip_encoding_unset' )
+                message: pwixI18n.label( I18N, 'clients.secrets.checks.secret_encoding_unset' )
             });
         }
     },
 
-    // keygrip label
-    async keygrip_label( value, data, opts ){
-        _assert_data_itemrv( 'Keygrips.checks.keygrip_label()', data );
+    // secret label
+    async secret_label( value, data, opts ){
+        _assert_data_itemrv( 'ClientSecrets.checks.secret_label()', data );
         let item = data.item.get();
         if( opts.update !== false ){
             item.label = value;
@@ -85,9 +85,9 @@ Keygrips.checks = {
         return null;
     },
 
-    // keygrip secret optional expiration date
-    async keygrip_secret_expireAt( value, data, opts ){
-        _assert_data_itemrv( 'Keygrips.checks.keygrip_secret_expireAt()', data );
+    // secret optional expiration date
+    async secret_secret_expireAt( value, data, opts ){
+        _assert_data_itemrv( 'ClientSecrets.checks.secret_secret_expireAt()', data );
         let item = data.item.get();
         if( opts.update !== false ){
             item.expireAt = value ? new Date( value ) : null;
@@ -96,9 +96,9 @@ Keygrips.checks = {
         return null;
     },
 
-    // keygrip secret hash
-    async keygrip_secret_hash( value, data, opts ){
-        _assert_data_itemrv( 'Keygrips.checks.keygrip_secret_hash()', data );
+    // secret hash
+    async secret_secret_hash( value, data, opts ){
+        _assert_data_itemrv( 'ClientSecrets.checks.secret_secret_hash()', data );
         let item = data.item.get();
         if( opts.update !== false ){
             item.hash = value;
@@ -107,31 +107,20 @@ Keygrips.checks = {
         return null;
     },
 
-    // keygrip secret label
-    async keygrip_secret_label( value, data, opts ){
-        _assert_data_itemrv( 'Keygrips.checks.keygrip_secret_label()', data );
+    // clear secret
+    async secret_clear( value, data, opts ){
+        _assert_data_itemrv( 'ClientSecrets.checks.secret_clear()', data );
         let item = data.item.get();
         if( opts.update !== false ){
-            item.label = value;
+            item.clear = value;
             data.item.set( item );
         }
         return null;
     },
 
-    // keygrip secret
-    async keygrip_secret_secret( value, data, opts ){
-        _assert_data_itemrv( 'Keygrips.checks.keygrip_secret_secret()', data );
-        let item = data.item.get();
-        if( opts.update !== false ){
-            item.secret = value;
-            data.item.set( item );
-        }
-        return null;
-    },
-
-    // keygrip secret size
-    async keygrip_size( value, data, opts ){
-        _assert_data_itemrv( 'Keygrips.checks.keygrip_size()', data );
+    // secret size
+    async secret_size( value, data, opts ){
+        _assert_data_itemrv( 'ClientSecrets.checks.secret_size()', data );
         let item = data.item.get();
         value = Number( value );
         if( opts.update !== false ){
@@ -139,19 +128,19 @@ Keygrips.checks = {
             data.item.set( item );
         }
         if( value && Number.isInteger( value ) && value > 0 ){
-            return value > Meteor.APP.C.keygripMinSize ? null : new TM.TypedMessage({
+            return value > Meteor.APP.C.secretMinSize ? null : new TM.TypedMessage({
                 level: TM.MessageLevel.C.ERROR,
-                message: pwixI18n.label( I18N, 'keygrips.checks.keygrip_size_mini', Meteor.APP.C.keygripMinSize )
+                message: pwixI18n.label( I18N, 'clients.secrets.checks.secret_size_mini', Meteor.APP.C.secretMinSize )
             });
         } else if( value ){
             return new TM.TypedMessage({
                 level: TM.MessageLevel.C.ERROR,
-                message: pwixI18n.label( I18N, 'keygrips.checks.keygrip_size_invalid' )
+                message: pwixI18n.label( I18N, 'clients.secrets.checks.secret_size_invalid' )
             });
         }
         return new TM.TypedMessage({
             level: TM.MessageLevel.C.ERROR,
-            message: pwixI18n.label( I18N, 'keygrips.checks.keygrip_size_unset' )
+            message: pwixI18n.label( I18N, 'clients.secrets.checks.secret_size_unset' )
         });
     }
 };

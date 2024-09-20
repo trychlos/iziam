@@ -52,10 +52,10 @@ Meteor.APP.C = {
     keygripMinSize: 32,
 
     // when generating a client secret, the used defaults
-    clientDefAlg: 'SHA512',
-    clientDefEncoding: 'hex',
-    clientDefSize: 64,
-    clientMinSize: 32,
+    secretDefAlg: 'SHA512',
+    secretDefEncoding: 'hex',
+    secretDefSize: 64,
+    secretMinSize: 32,
 
     // OpenID
     // the minimal length of tokens (when the spec allows to choose it)
