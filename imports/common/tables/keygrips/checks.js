@@ -139,7 +139,10 @@ Keygrips.checks = {
             data.item.set( item );
         }
         if( value && Number.isInteger( value ) && value > 0 ){
-            return null;
+            return value >= keygripMinSize ? null : new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'keygrips.checks.keygrip_size_mini', keygripMinSize )
+            });
         } else if( value ){
             return new TM.TypedMessage({
                 level: TM.MessageLevel.C.ERROR,

@@ -606,6 +606,7 @@ Meteor.APP.i18n = {
                     keygrip_encoding_invalid: 'The keygrip encoding is invalid',
                     keygrip_encoding_unset: 'The keygrip encoding is not set',
                     keygrip_size_invalid: 'The keygrip secret size is invalid (must be a positive integer)',
+                    keygrip_size_mini: 'The keygrip secret size must be greater than %s',
                     keygrip_size_unset: 'The keygrip secret size is not set'
                 },
                 edit: {
