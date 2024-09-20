@@ -73,7 +73,6 @@ Template.client_new_assistant_grant_types.helpers({
             ...this,
             entity: this.parentAPP.entity,
             index: 0,
-            checker: this.parentAPP.assistantCheckerRv,
             enableChecks: false
         }
     }

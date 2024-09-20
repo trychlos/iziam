@@ -278,10 +278,9 @@ export const GrantType = {
      */
     joinedLabels( array ){
         let res = [];
-        ( array || [] ).every(( it ) => {
+        ( array || [] ).forEach(( it ) => {
             const def = this.byId( it );
             def && res.push( this.label( def ));
-            return true;
         });
         return res.join( ', ' );
     },

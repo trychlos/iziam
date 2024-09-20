@@ -19,9 +19,6 @@ Template.organization_config_pane.onCreated( function(){
 
     self.APP = {
         fields: {
-            wantsOAuth21: {
-                js: '.js-oauth21'
-            },
             wantsPkce: {
                 js: '.js-pkce'
             }
@@ -35,9 +32,6 @@ Template.organization_config_pane.onCreated( function(){
         const dataContext = Template.currentData();
         const entity = dataContext.entity.get();
         let record = entity.DYN.records[dataContext.index].get();
-        if( !Object.keys( record ).includes( 'wantsOAuth21' )){
-            record.wantsOAuth21 = true;
-        }
         if( !Object.keys( record ).includes( 'wantsPkce' )){
             record.wantsPkce = true;
         }

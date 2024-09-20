@@ -55,7 +55,7 @@ Template.keygrip_secret_edit_dialog.onCreated( function(){
 
     // instanciates a named Tabbed
     self.autorun(() => {
-        self.APP.tabbed.setDataContext({ 
+        self.APP.tabbed.setTabbedParms({ 
             dataContext: {
                 container: { entity: Template.currentData().entity.get(), record: Template.currentData().entity.get().DYN.records[Template.currentData().index].get() },
                 item: self.APP.item,
@@ -80,7 +80,7 @@ Template.keygrip_secret_edit_dialog.onRendered( function(){
 
     // whether we are running inside of a Modal
     self.autorun(() => {
-        self.APP.isModal.set( self.$( '.c-keygrip-secret-edit-dialog' ).closest( '.modal-dialog' ).length > 0 );
+        self.APP.isModal.set( self.$( '.c-keygrip-secret-edit-dialog' ).parent().hasClass( 'modal-body' ));
     });
 
     // set the modal target
@@ -97,7 +97,7 @@ Template.keygrip_secret_edit_dialog.onRendered( function(){
     self.APP.checker.set( new Forms.Checker( self, {
         messager: self.APP.messager,
         okFn( valid ){
-            if( self.APP.isModal ){
+            if( self.APP.isModal.get()){
                 Modal.set({ buttons: { id: Modal.C.Button.OK, enabled: valid }});
             }
         }

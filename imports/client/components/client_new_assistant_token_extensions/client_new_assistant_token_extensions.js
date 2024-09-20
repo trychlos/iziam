@@ -17,12 +17,6 @@ import _ from 'lodash';
 
 import { pwixI18n } from 'meteor/pwix:i18n';
 
-import { Clients } from '/imports/common/collections/clients/index.js';
-
-import { GrantType } from '/imports/common/definitions/grant-type.def.js';
-
-import { Providers } from '/imports/common/tables/providers/index.js';
-
 import '/imports/client/components/client_token_extensions_panel/client_token_extensions_panel.js';
 
 import './client_new_assistant_token_extensions.html';
@@ -49,7 +43,6 @@ Template.client_new_assistant_token_extensions.helpers({
             ...this,
             entity: this.parentAPP.entity,
             index: 0,
-            checker: this.parentAPP.assistantCheckerRv,
             enableChecks: false
         }
     }

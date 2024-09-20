@@ -259,6 +259,7 @@ Meteor.APP.i18n = {
                     introduction_text: 'This assistant will guide you through the process of defining a new client to your Authorization Server.<br/><br />'
                         +'Please be beware that, to make your life easier, this assistant will let you define a client which may be not fully operational. '
                         +'Nonetheless, you always be able to update it later.',
+                    jwks_nav: 'JWK Signature and Encryption',
                     profile_nav: 'Profile',
                     profile_text: 'Choose the application profile which corresponds best to your use case.<br />'
                         +'This will define many other parameters, but you still will be able to modify each of them at your convenience.<br />'
@@ -278,6 +279,7 @@ Meteor.APP.i18n = {
                     summary_contacts_none: 'None',
                     summary_formaters_label: 'Token extensions :',
                     summary_grant_label: 'Grant types :',
+                    summary_jwks_label: 'JSON Web Keys :',
                     summary_legend: 'Summary',
                     summary_name_label: 'Label :',
                     summary_nav: 'Summary',
@@ -288,8 +290,8 @@ Meteor.APP.i18n = {
                     summary_providers_none: 'None',
                     summary_redirects_label: 'Redirection URIs :',
                     summary_redirects_none: 'None',
-                    summary_text: 'You have successfully completed this assistant, at least enough to actually create the new client.<br />'
-                        +'The client will be created when you will click on the "Next" button.<br />'
+                    summary_text: 'You have successfully completed this assistant, at least enough to actually create a new client.<br />'
+                        +'The client will be created when you will click on the "Next" button below.<br />'
                         +'The client identifier will be then displayed.',
                     token_extensions_nav: 'Token extensions',
                     token_extensions_text: 'Choose optional tokens extensions, as a specific format or a security add-on.'
@@ -727,11 +729,6 @@ Meteor.APP.i18n = {
                     jwks_label: 'JWKS page path :',
                     jwks_ph: '/jwks',
                     jwks_title: 'The URL of the authorization server\'s JWK Set document. The referenced document contains the signing key(s) the client uses to validate signatures from the authorization server.',
-                    oauth21_description: 'The OAuth 2.1 Authorization Framework, currently implemented in its v.11 draft from may 2024, replaces and obsoletes '
-                        +'the OAuth 2.0 Authorization Framework (RFC 6749) and the Bearer Token Usage (RFC 6750). It notably implies PKCE for all client types, '
-                        +'and the usage of a JWT Bearer as an access token.',
-                    oauth21_label: 'Force the usage of OAuth 2.1 (draft v11 - may 2024)',
-                    oauth21_title: 'Fully disable the OAuth 2.0 Authorization Framework (RFC 6749)',
                     pkce_description: 'The RFC 7636 "Proof Key for Code Exchange by OAuth Public Clients" proposes a way to mitigate authorization code interception attacks '
                         +'to which public clients are exposed because they cannot securely authenticate. The extension utilizes a dynamically created cryptographically '
                         +'random key unique for every authorization request.',

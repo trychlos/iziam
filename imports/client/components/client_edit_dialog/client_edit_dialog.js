@@ -109,7 +109,7 @@ Template.client_edit_dialog.onCreated( function(){
             checker: self.APP.checker
         };
         const notesField = ClientsEntities.fieldSet.get().byName( 'notes' );
-        self.APP.tabbed.setDataContext({
+        self.APP.tabbed.setTabbedParms({
             tabs: [
                 {
                     name: 'client_entity_validities_tab',
@@ -140,7 +140,7 @@ Template.client_edit_dialog.onRendered( function(){
 
     // whether we are running inside of a Modal
     self.autorun(() => {
-        self.APP.isModal.set( self.$( '.c-client-edit-dialog' ).closest( '.modal-dialog' ).length > 0 );
+        self.APP.isModal.set( self.$( '.c-client-edit-dialog' ).parent().hasClass( 'modal-body' ));
     });
 
     // set the modal target

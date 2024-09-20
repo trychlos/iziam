@@ -65,13 +65,6 @@ Organizations.recordFieldset = function(){
                     form_check: Organizations.checks.dynamicRegistrationByUser
                 },
                 // -- configuration
-                // whether this organization forces the usage of OAuth 2.1 for new clients
-                {
-                    name: 'wantsOAuth21',
-                    type: Boolean,
-                    defaultValue: true,
-                    form_check: Organizations.checks.wantsOAuth21
-                },
                 // whether this organization wants all public clients use PKCE (rfc7636)
                 {
                     name: 'wantsPkce',

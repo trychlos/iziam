@@ -16,6 +16,8 @@ import { ClientProfile } from '/imports/common/definitions/client-profile.def.js
 import { GrantType } from '/imports/common/definitions/grant-type.def.js';
 import { TokenExtension } from '/imports/common/definitions/token-extension.def.js';
 
+import { Jwks } from '/imports/common/tables/jwks/index.js';
+
 import './client_new_assistant_current.html';
 
 Template.client_new_assistant_current.onCreated( function(){
@@ -91,6 +93,11 @@ Template.client_new_assistant_current.helpers({
     // internationalization
     i18n( arg ){
         return pwixI18n.label( I18N, arg.hash.key );
+    },
+
+    // json web key set
+    jwksText(){
+        return Jwks.joinedLabels( this.parentAPP.entity.get().DYN.records[0].get().jwks || [] );
     },
 
     // client profile description

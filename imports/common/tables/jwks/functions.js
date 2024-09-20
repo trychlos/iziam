@@ -93,6 +93,19 @@ Jwks.fn = {
     },
 
     /**
+     * @param {Array} array a JWKS (json web key set)
+     * @returns {String} the concatenation of the labels of the existing jwks
+     *  Each JWK is advertised as kid|label|id + use + kty
+     */
+    joinedLabels( array ){
+        let res = [];
+        ( array || [] ).forEach(( it ) => {
+            res.push(( it.kid || it.label || it.id ) + '-' + it.use + '-' + it.kty );
+        });
+        return res.join( ', ' );
+    },
+
+    /**
      * @summary Returns the JWKS for the entity/record organization
      *  This is needed for a reactive tabular display management
      * @param {Object} o an argument object with following keys:

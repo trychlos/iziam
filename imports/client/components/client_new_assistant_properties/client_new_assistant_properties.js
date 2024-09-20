@@ -21,12 +21,10 @@ Template.client_new_assistant_properties.helpers({
 
     // parms for re-use the client_edit properties panel
     parmsPropertiesPanel(){
-        //console.debug( this.parentAPP.entity.get().DYN.records[0].get());
         return {
             ...this,
             entity: this.parentAPP.entity,
             index: 0,
-            checker: this.parentAPP.assistantCheckerRv,
             enableChecks: false
         };
     }
@@ -42,7 +40,7 @@ Template.client_new_assistant_properties.events({
         instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'prev', enable: true });
         instance.$( '.c-client-properties-panel' ).trigger( 'iz-enable-checks', true );
     },
-    //get the status of the panel checker
+    // get the status of the panel checker
     'iz-checker .c-client-new-assistant-properties'( event, instance, data ){
         if( this.parentAPP.assistantStatus.get( 'activePane' ) === 'properties' ){
             instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'next', enable: data.validity });

@@ -26,7 +26,7 @@ Template.jwk_keyspair_pane.onCreated( function(){
 
     // instanciates the Tabbed component
     self.autorun(() => {
-        self.APP.tabbed.setDataContext({
+        self.APP.tabbed.setTabbedParms({
             dataContext: Template.currentData(),
             tabs: [
                 {
@@ -49,7 +49,8 @@ Template.jwk_keyspair_pane.onCreated( function(){
                     navLabel: pwixI18n.label( I18N, 'jwks.edit.public_spki_tab_title' ),
                     paneTemplate: 'jwk_public_spki_pane'
                 }
-            ]
+            ],
+            activateLastTab: false
         });
     });
 });

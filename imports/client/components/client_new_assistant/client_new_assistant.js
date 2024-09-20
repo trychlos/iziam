@@ -28,6 +28,7 @@ import '/imports/client/components/client_new_assistant_current/client_new_assis
 import '/imports/client/components/client_new_assistant_done/client_new_assistant_done.js';
 import '/imports/client/components/client_new_assistant_redirects/client_new_assistant_redirects.js';
 import '/imports/client/components/client_new_assistant_grant_types/client_new_assistant_grant_types.js';
+import '/imports/client/components/client_new_assistant_jwks/client_new_assistant_jwks.js';
 //import '/imports/client/components/client_new_assistant_jwt/client_new_assistant_jwt.js';
 import '/imports/client/components/client_new_assistant_introduction/client_new_assistant_introduction.js';
 import '/imports/client/components/client_new_assistant_profile/client_new_assistant_profile.js';
@@ -42,7 +43,7 @@ import { Clients } from '../../../common/collections/clients';
 
 Template.client_new_assistant.onCreated( function(){
     const self = this;
-    //console.debug( 'onCreated', this );
+    //console.debug( this );
 
     self.APP = {
         // the global Checker for this modal
@@ -53,8 +54,6 @@ Template.client_new_assistant.onCreated( function(){
         entity: new ReactiveVar( null ),
         // whether we are running inside of a Modal
         isModal: new ReactiveVar( false ),
-        // the Assistant checker ReactiveVar, which will be the parent of the panes checkers
-        assistantCheckerRv: null,
         // the Assistant PCK object
         assistantPck: null,
         // a data dictionary to manage the assistant status (activation and actions)
@@ -118,6 +117,11 @@ Template.client_new_assistant.onCreated( function(){
                     name: 'redirects',
                     template: 'client_new_assistant_redirects',
                     label: pwixI18n.label( I18N, 'clients.new_assistant.redirects_nav' )
+                },
+                {
+                    name: 'jwks',
+                    template: 'client_new_assistant_jwks',
+                    label: pwixI18n.label( I18N, 'clients.new_assistant.jwks_nav' )
                 },
                 /*
                 {
@@ -200,7 +204,7 @@ Template.client_new_assistant.onRendered( function(){
 
     // whether we are running inside of a Modal
     self.autorun(() => {
-        self.APP.isModal.set( self.$( '.c-new-client-assistant' ).closest( '.modal-dialog' ).length > 0 );
+        self.APP.isModal.set( self.$( '.c-new-client-assistant' ).parent().hasClass( 'modal-body' ));
     });
 
     // set the modal title
@@ -213,18 +217,14 @@ Template.client_new_assistant.onRendered( function(){
     });
 
     // allocate a Checker for this (topmost parent) template
-    self.APP.checker.set( new Forms.Checker( self, {
-        name: 'client_new_assistant',
-        okFn( valid ){
-            self.$( '.Assistant' ).trigger( 'assistant-do-action-set', { action: 'next', enabled: valid });
-        }
-    }));
-
-    // make sure at startup that cancel/prev/next buttons are shown (though last two are disabled at startup)
-    self.$( '.Assistant' ).trigger( 'assistant-do-action-set', { action: 'cancel', show: true, enable: true });
-    self.$( '.Assistant' ).trigger( 'assistant-do-action-set', { action: 'prev', show: true, enable: false });
-    self.$( '.Assistant' ).trigger( 'assistant-do-action-set', { action: 'next', show: true, enable: false });
-    self.$( '.Assistant' ).trigger( 'assistant-do-action-set', { action: 'close', show: false, enable: false });
+    self.autorun(() => {
+        self.APP.checker.set( new Forms.Checker( self, {
+            name: 'client_new_assistant',
+            okFn( valid ){
+                //self.$( '.Assistant' ).trigger( 'assistant-do-action-set', { action: 'next', enabled: valid });
+            }
+        }));
+    });
 
     // and clear the panels to prevent re-use of data of a previous session
     self.APP.checker.get().clearPanel({ propagateDown: true });
@@ -239,10 +239,10 @@ Template.client_new_assistant.helpers({
             checker: APP.checker,
             parentAPP: APP,
             name: APP.myName,
-            pages(){
+            assistantPages(){
                 return APP.pages()
             },
-            onChange( prev, next ){
+            assistantOnChange( prev, next ){
                 const pages = APP.pages();
                 if( pages[next].name === 'summary' ){
                     self.$( '.Assistant' ).trigger( 'assistant-do-action-set', {
@@ -260,7 +260,8 @@ Template.client_new_assistant.helpers({
                 }
                 return true;
             },
-            confirmOnClose: true
+            assistantConfirmOnClose: true,
+            assistantWithParentChecker: true
         }
     }
 });
@@ -272,12 +273,6 @@ Template.client_new_assistant.events({
             instance.APP.assistantStatus.set( 'activated', true );
             instance.APP.assistantPck = data.pck;
         }
-    },
-    // get informed of the assistant checker instanciation
-    //  this is a child of this checker, and will be the parent of panes checkers
-    'assistant-checker .c-client-new-assistant'( event, instance, data ){
-        //console.debug( event.type, data );
-        instance.APP.assistantCheckerRv = data.checker;
     },
     // track the currently shown pane
     'assistant-pane-to-hide .c-client-new-assistant'( event, instance, data ){

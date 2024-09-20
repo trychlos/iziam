@@ -1,0 +1,15 @@
+<template name="client_new_assistant_jwks">
+    <div class="c-client-new-assistant-jwks">
+
+        {{> client_new_assistant_current }}
+
+        <div class="content">
+            <div class="text">
+                {{{ i18n key="clients.new_assistant.jwks_text" }}}
+            </div>
+
+            {{> jwk_edit_dialog (parmsJwkDialog) }}
+        </div>
+
+    </div>
+</template>

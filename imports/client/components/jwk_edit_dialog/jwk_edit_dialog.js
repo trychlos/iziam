@@ -7,13 +7,17 @@
  * - entity: a ReactiveVar which contains the Organization/Client, with its DYN.records array of ReactiveVar's
  * - index: the index of the current edited organization/client record
  * - item: the JWK item to be edited here
+ * - checker: a ReactiveVar which contains the Forms.Checker which manages the parent component
+ * - enableChecks: whether the checks should be enabled at startup, defaulting to true
  */
 
 import _ from 'lodash';
 
 import { Forms } from 'meteor/pwix:forms';
+import { Modal } from 'meteor/pwix:modal';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { Random } from 'meteor/random';
+import { ReactiveVar } from 'meteor/reactive-var';
 import { Tabbed } from 'meteor/pwix:tabbed';
 
 import { Jwks } from '/imports/common/tables/jwks/index.js';
@@ -38,8 +42,7 @@ Template.jwk_edit_dialog.onCreated( function(){
         // the global Message zone for this modal
         messager: new Forms.Messager(),
         // the edited item as a copy of the provided, or a new one
-        item: new ReactiveVar( null, _.isEqual ),
-        prevItem: null,
+        item: new ReactiveVar( null ),
         // whether we are running inside of a Modal
         isModal: new ReactiveVar( false ),
         // whether we are creating a new JWK
@@ -57,15 +60,10 @@ Template.jwk_edit_dialog.onCreated( function(){
         self.APP.isNew.set( dcItem === null );
     });
 
-    // track the item content
-    self.autorun(() => {
-        console.debug( 'item', self.APP.item.get());
-    });
-
     // instanciates a named Tabbed
     self.autorun(() => {
         const item = self.APP.item.get();
-        self.APP.tabbed.setDataContext({
+        self.APP.tabbed.setTabbedParms({
             dataContext: {
                 container: { entity: Template.currentData().entity.get(), record: Template.currentData().entity.get().DYN.records[Template.currentData().index].get() },
                 item: self.APP.item,
@@ -90,8 +88,14 @@ Template.jwk_edit_dialog.onCreated( function(){
                     paneTemplate: 'jwk_keyspair_pane',
                     enabled: Boolean( item.createdAt && item.pair )
                 }
-            ]
+            ],
+            name: 'jwk_edit_dialog'
         });
+    });
+
+    // track the item content
+    self.autorun(() => {
+        console.debug( 'item', self.APP.item.get());
     });
 });
 
@@ -100,7 +104,7 @@ Template.jwk_edit_dialog.onRendered( function(){
 
     // whether we are running inside of a Modal
     self.autorun(() => {
-        self.APP.isModal.set( self.$( '.c-jwk-edit-dialog' ).closest( '.modal-dialog' ).length > 0 );
+        self.APP.isModal.set( self.$( '.c-jwk-edit-dialog' ).parent().hasClass( 'modal-body' ));
     });
 
     // set the modal target
@@ -113,21 +117,34 @@ Template.jwk_edit_dialog.onRendered( function(){
     });
 
     // initialize the Checker for this panel as soon as possible
-    // doesn't need any autorun here
-    self.APP.checker.set( new Forms.Checker( self, {
-        messager: self.APP.messager,
-        okFn( valid ){
-            if( self.APP.isModal ){
-                Modal.set({ buttons: { id: Modal.C.Button.OK, enabled: valid }});
+    self.autorun(() => {
+        if( !self.APP.checker.get()){
+            let parms = {
+                okFn( valid ){
+                    if( self.APP.isModal.get()){
+                        Modal.set({ buttons: { id: Modal.C.Button.OK, enabled: valid }});
+                    }
+                    self.$( '.c-jwk-edit-dialog' ).trigger( 'iz-checker', { validity: valid });
+                }
+            };
+            if( self.APP.isModal.get()){
+                parms.messager = self.APP.messager;
             }
+            parms.enabled = Template.currentData().enableChecks !== false;
+            self.APP.checker.set( new Forms.Checker( self, parms ));
         }
-    }));
+    });
 });
 
 Template.jwk_edit_dialog.helpers({
     // string translation
     i18n( arg ){
         return pwixI18n.label( I18N, arg.hash.key );
+    },
+
+    // whether we run inside of a modal ?
+    isModal(){
+        return Template.instance().APP.isModal.get();
     },
 
     // parms for the Forms.Messager
