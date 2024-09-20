@@ -1,5 +1,5 @@
 /*
- * /imports/collections/clients/collection.js
+ * /imports/common/collections/clients/collection.js
  *
  * The clients registered with an organization.
  */

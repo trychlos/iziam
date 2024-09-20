@@ -95,7 +95,7 @@ Template.jwk_edit_dialog.onCreated( function(){
 
     // track the item content
     self.autorun(() => {
-        console.debug( 'item', self.APP.item.get());
+        //console.debug( 'item', self.APP.item.get());
     });
 });
 

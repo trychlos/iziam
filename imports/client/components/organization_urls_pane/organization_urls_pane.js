@@ -1,5 +1,5 @@
 /*
- * pwix:tenants-manager/src/client/components/organization_urls_pane/organization_urls_pane.js
+ * /imports/client/components/organization_urls_pane/organization_urls_pane.js
  *
  * Parms:
  * - see README

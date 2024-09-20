@@ -55,7 +55,8 @@ Template.client_record_tabbed.onCreated( function(){
             const paneData = {
                 entity: dataContext.entity,
                 index: dataContext.index,
-                checker: dataContext.checker
+                checker: dataContext.checker,
+                organization: dataContext.organization
             };
             let tabs = [
                 {
@@ -70,8 +71,33 @@ Template.client_record_tabbed.onCreated( function(){
                     }
                 },
                 {
+                    navLabel: pwixI18n.label( I18N, 'clients.edit.auth_flow_tab_title' ),
+                    paneTemplate: 'client_grant_types_panel',
+                    paneData: paneData
+                },
+                {
                     navLabel: pwixI18n.label( I18N, 'clients.edit.auth_method_tab_title' ),
                     paneTemplate: 'client_auth_method_panel',
+                    paneData: paneData
+                },
+                {
+                    navLabel: pwixI18n.label( I18N, 'clients.edit.config_tab_title' ),
+                    paneTemplate: 'client_config_panel',
+                    paneData: paneData
+                },
+                {
+                    navLabel: pwixI18n.label( I18N, 'clients.edit.redirects_tab_title' ),
+                    paneTemplate: 'client_redirects_panel',
+                    paneData: paneData
+                },
+                {
+                    navLabel: pwixI18n.label( I18N, 'clients.edit.jwks_tab_title' ),
+                    paneTemplate: 'client_jwks_panel',
+                    paneData: paneData
+                },
+                {
+                    navLabel: pwixI18n.label( I18N, 'clients.edit.contacts_tab_title' ),
+                    paneTemplate: 'client_contacts_panel',
                     paneData: paneData
                 },
                 {

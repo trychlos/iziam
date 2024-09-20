@@ -41,7 +41,6 @@ Template.jwk_properties_pane.onCreated( function(){
         async generate( itemRv ){
             let item = itemRv.get();
             item = await Jwks.fn.generateKeys( item );
-            console.debug( 'item.createdAt', item.createdAt );
             itemRv.set( item );
         },
 

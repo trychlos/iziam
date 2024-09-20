@@ -1,5 +1,5 @@
 /*
- * /imports/collections/statistics/functions.js
+ * /imports/common/collections/statistics/functions.js
  *
  * Statistics from the REST API.
  */

@@ -32,6 +32,7 @@ import './client_grant_types_panel.html';
 
 Template.client_grant_types_panel.onCreated( function(){
     const self = this;
+    //console.debug( this );
 
     self.APP = {
         organizationProviders: new ReactiveVar( {} ),

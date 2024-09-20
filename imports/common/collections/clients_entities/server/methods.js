@@ -1,5 +1,5 @@
 /*
- * /imports/collections/clients_entities/server/methods.js
+ * /imports/common/collections/clients_entities/server/methods.js
  */
 
 import { ClientsEntities } from '../index.js';

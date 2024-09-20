@@ -1,5 +1,5 @@
 /*
- * /imports/collections/clients_entities/collection.js
+ * /imports/common/collections/clients_entities/collection.js
  */
 
 import { Mongo } from 'meteor/mongo';

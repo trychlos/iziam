@@ -1,5 +1,5 @@
 /*
- * /imports/collections/clients/server/methods.js
+ * /imports/common/collections/clients/server/methods.js
  */
 
 import { Clients } from '../index.js';

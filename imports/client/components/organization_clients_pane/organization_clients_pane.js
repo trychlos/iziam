@@ -97,16 +97,6 @@ Template.organization_clients_pane.helpers({
         return pwixI18n.label( I18N, arg.hash.key );
     },
 
-    // client new button parameters
-    parmsNew(){
-        return {
-            ...this,
-            label: pwixI18n.label( I18N, 'clients.new.button_label' ),
-            shape: PlusButton.C.Shape.RECTANGLE,
-            title: pwixI18n.label( I18N, 'clients.new.button_title' )
-        }
-    },
-
     // a display selector
     selector(){
         const selector = { _id: {}};
@@ -133,13 +123,16 @@ Template.organization_clients_pane.events({
     // edit a client
     //  the buttons from tabular provide the entity document
     'tabular-edit-event .c-organization-clients-pane'( event, instance, data ){
-        const item = instance.APP.byEntity( data.item._id );
+        let dc = this;
+        delete dc.entityTabs;
+        delete dc.recordTabs
         const organization = {
             entity: this.item.get(),
             record: this.item.get().DYN.closest
         };
+        const item = instance.APP.byEntity( data.item._id );
         Modal.run({
-            ...this,
+            ...dc,
             mdBody: 'client_edit_dialog',
             mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
             mdClasses: 'modal-xxl',

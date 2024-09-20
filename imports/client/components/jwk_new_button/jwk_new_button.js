@@ -4,7 +4,7 @@
  * Let the organization/client manager define a new JSON Web Key.
  *
  * Parms:
- * - entity: a ReactiveVar which contains the Organization, with its DYN.records array of ReactiveVar's
+ * - entity: a ReactiveVar which contains the Organization/Client, with its DYN.records array of ReactiveVar's
  * - index: the index of the current edited organization/client record
  * - checker: a ReactiveVar which contains the parent Forms.Checker
  * - isOrganization: whether the JWK is to be created into an organization, defaulting to true
@@ -33,9 +33,18 @@ Template.jwk_new_button.onCreated( function(){
 
     // check the creation permission
     // any organization/client manager can create a new json web key
+    // To create a new JWK, we also check that all existing have a KID
     self.autorun( async () => {
+        const entity = Template.currentData().entity.get();
+        let found = false;
+        ( entity.DYN.records[Template.currentData().index].get().jwks || [] ).every(( it ) => {
+            if( !it.kid ){
+                found = true;
+            }
+            return !found;
+        });
         const permission = Template.currentData().isOrganization === false ? 'feat.clients.edit' : 'feat.organizations.edit';
-        self.APP.canCreate.set( await Permissions.isAllowed( permission, Meteor.userId(), Template.currentData().entity.get()._id ));
+        self.APP.canCreate.set( !found && await Permissions.isAllowed( permission, Meteor.userId(), entity._id ));
     });
 
     // track the creation permission

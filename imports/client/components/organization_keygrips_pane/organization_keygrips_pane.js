@@ -1,5 +1,5 @@
 /*
- * pwix:tenants-manager/src/client/components/organization_keygrips_pane/organization_keygrips_pane.js
+ * /imports/client/components/organization_keygrips_pane/organization_keygrips_pane.js
  *
  * Parms:
  * - entity: a ReactiveVar which contains the Organization, with its DYN.records array of ReactiveVar's

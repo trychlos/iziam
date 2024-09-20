@@ -1,5 +1,5 @@
 /*
- * /imports/collections/statistics/server/deny.js
+ * /imports/common/collections/statistics/server/deny.js
  *
  * Statistics from the REST API.
  */

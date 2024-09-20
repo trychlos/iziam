@@ -58,12 +58,33 @@ Jwks.checks = {
     },
 
     // JWK Key ID
+    // kid is mandatory on every JWK as soon as there are more than one
+    // and must be unique
     async jwk_kid( value, data, opts ){
         _assert_data_itemrv( 'Jwks.checks.jwk_kid()', data );
         let item = data.item.get();
         if( opts.update !== false ){
             item.kid = value;
             data.item.set( item );
+        }
+        const jwks = data.container.record.jwks;
+        if( value ){
+            let found = false;
+            jwks.every(( it ) => {
+                if( it.kid === value && it.id !== item.id ){
+                    found = true;
+                }
+                return !found;
+            });
+            return found ? new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'jwks.checks.jwk_kid_exists' )
+            }) : null;
+        } else {
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.WARNING,
+                message: pwixI18n.label( I18N, 'jwks.checks.jwk_kid_unset' )
+            });
         }
         return null;
     },

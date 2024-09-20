@@ -1,5 +1,5 @@
 /*
- * /imports/client/components/organization_jwks_pane/organization_jwks_pane.js
+ * /imports/client/components/client_jwks_panel/client_jwks_panel.js
  *
  * Parms:
  * - entity: a ReactiveVar which contains the Organization, with its DYN.records array of ReactiveVar's
@@ -8,6 +8,7 @@
  */
 
 import { pwixI18n } from 'meteor/pwix:i18n';
+import { ReactiveVar } from 'meteor/reactive-var';
 
 import { Jwks } from '/imports/common/tables/jwks/index.js';
 
@@ -15,34 +16,25 @@ import '/imports/client/components/jwk_edit_dialog/jwk_edit_dialog.js';
 import '/imports/client/components/jwk_new_button/jwk_new_button.js';
 import '/imports/client/components/jwks_list/jwks_list.js';
 
-import './organization_jwks_pane.html';
+import './client_jwks_panel.html';
 
-Template.organization_jwks_pane.onCreated( function(){
+Template.client_jwks_panel.onCreated( function(){
     const self = this;
     //console.debug( this );
 
     self.APP = {
-        // an object { entity, record }
-        organization: new ReactiveVar( null )
+        client: new ReactiveVar({ entity: null, record: null })
     };
 
-    // get the data context and instanciate the organization tabular instance
     self.autorun(() => {
-        const dataContext = Template.currentData();
-        const entity = dataContext.entity.get();
-        self.APP.organization.set({
-            entity: entity,
-            record: entity.DYN.records[dataContext.index].get()
-        });
-    });
-
-    // track the entity/record content
-    self.autorun(() => {
-        //console.debug( Template.currentData().entity.get().DYN.records[Template.currentData().index].get());
+        let entity = { ...Template.currentData().entity.get() };
+        delete entity.DYN;
+        const record = Template.currentData().entity.get().DYN.records[0].get();
+        self.APP.client.set({ entity: entity, record: record });
     });
 });
 
-Template.organization_jwks_pane.helpers({
+Template.client_jwks_panel.helpers({
     // string translation
     i18n( arg ){
         return pwixI18n.label( I18N, arg.hash.key );
@@ -57,8 +49,8 @@ Template.organization_jwks_pane.helpers({
             listAddFn: Jwks.fn.add,
             listRemoveFn: Jwks.fn.remove,
             args: {
-                caller: Template.instance().APP.organization.get(),
-                parent: null
+                caller: Template.instance().APP.client.get(),
+                parent: this.organization
             }
         };
         return parms;

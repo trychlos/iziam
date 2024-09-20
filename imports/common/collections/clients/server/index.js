@@ -1,5 +1,5 @@
 /*
- * /imports/collections/clients/server/index.js
+ * /imports/common/collections/clients/server/index.js
  */
 
 import './functions.js';

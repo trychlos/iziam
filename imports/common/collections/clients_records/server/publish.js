@@ -1,5 +1,5 @@
 /*
- * /imports/collections/clients_records/server/publish.js
+ * /imports/common/collections/clients_records/server/publish.js
  */
 
 import { ClientsRecords } from '../index.js';

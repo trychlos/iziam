@@ -1,5 +1,5 @@
 /*
- * /imports/collections/statistics/fieldset.js
+ * /imports/common/collections/statistics/fieldset.js
  *
  * Statistics from the REST API.
  */

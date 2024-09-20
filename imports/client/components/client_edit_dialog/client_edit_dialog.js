@@ -56,10 +56,15 @@ import { ClientsEntities } from '/imports/common/collections/clients_entities/in
 
 import '/imports/client/components/client_application_type_select/client_application_type_select.js';
 import '/imports/client/components/client_auth_method_panel/client_auth_method_panel.js';
+import '/imports/client/components/client_config_panel/client_config_panel.js';
+import '/imports/client/components/client_contacts_panel/client_contacts_panel.js';
 import '/imports/client/components/client_entity_validities_pane/client_entity_validities_pane.js';
+import '/imports/client/components/client_grant_types_panel/client_grant_types_panel.js';
+import '/imports/client/components/client_jwks_panel/client_jwks_panel.js';
 import '/imports/client/components/client_profile_select/client_profile_select.js';
 import '/imports/client/components/client_properties_panel/client_properties_panel.js';
 import '/imports/client/components/client_record_tabbed/client_record_tabbed.js';
+import '/imports/client/components/client_redirects_panel/client_redirects_panel.js';
 import '/imports/client/components/client_type_select/client_type_select.js';
 
 import './client_edit_dialog.html';

@@ -40,20 +40,28 @@ Template.client_new_button.onCreated( function(){
 });
 
 Template.client_new_button.helpers({
-    // whether the user is allowed to create a new tenant
-    canCreate(){
-        return Template.instance().APP.canCreate.get();
-    }
+    // client new button parameters
+    parmsPlusButton(){
+        return {
+            ...this,
+            label: pwixI18n.label( I18N, 'clients.new.button_label' ),
+            shape: PlusButton.C.Shape.RECTANGLE,
+            title: pwixI18n.label( I18N, 'clients.new.button_title' )
+        }
+    },
 });
 
 Template.client_new_button.events({
     'click .plusButton'( event, instance ){
+        let dc = this;
+        delete dc.entityTabs;
+        delete dc.recordTabs
         const organization = {
             entity: this.item.get(),
             record: this.item.get().DYN.closest
         };
         Modal.run({
-            ...this,
+            ...dc,
             organization: organization,
             mdBody: 'client_new_assistant',
             mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],

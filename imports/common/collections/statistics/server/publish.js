@@ -1,5 +1,5 @@
 /*
- * /imports/collections/statistics/server/publish.js
+ * /imports/common/collections/statistics/server/publish.js
  *
  * Statistics from the REST API.
  */

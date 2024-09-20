@@ -1,5 +1,5 @@
 /*
- * pwix:tenants-manager/src/client/components/organization_config_pane/organization_config_pane.js
+ * /imports/client/components/organization_config_pane/organization_config_pane.js
  *
  * Parms:
  * - checker: a ReactiveVar which contains the current Forms.Checker

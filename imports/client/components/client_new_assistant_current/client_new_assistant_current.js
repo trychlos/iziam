@@ -97,7 +97,7 @@ Template.client_new_assistant_current.helpers({
 
     // json web key set
     jwksText(){
-        return Jwks.joinedLabels( this.parentAPP.entity.get().DYN.records[0].get().jwks || [] );
+        return Jwks.fn.joinedLabels( this.parentAPP.entity.get().DYN.records[0].get().jwks || [] );
     },
 
     // client profile description

@@ -11,7 +11,7 @@ import _ from 'lodash';
 
 import { pwixI18n } from 'meteor/pwix:i18n';
 
-import '/imports/client/components/jwk_edit_dialog/jwk_edit_dialog.js';
+import '/imports/client/components/client_jwks_panel/client_jwks_panel.js';
 
 import './client_new_assistant_jwks.html';
 
@@ -21,15 +21,12 @@ Template.client_new_assistant_jwks.helpers({
         return pwixI18n.label( I18N, arg.hash.key );
     },
 
-    // parms for new JWK panel
-    parmsJwkDialog(){
-        console.debug( this );
+    // parms for the jwks edit panel
+    parmsJwksPanel(){
         return {
             ...this,
             entity: this.parentAPP.entity,
-            index: 0,
-            item: null,
-            enableChecks: false
+            index: 0
         };
     }
 });

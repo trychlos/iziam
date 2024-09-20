@@ -1,5 +1,5 @@
 /*
- * /imports/collections/clients_records/index.js
+ * /imports/common/collections/clients_records/index.js
  *
  * The clients records registered with an organization.
  */

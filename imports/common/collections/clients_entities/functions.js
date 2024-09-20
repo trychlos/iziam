@@ -1,5 +1,5 @@
 /*
- * /imports/collections/clients_entities/functions.js
+ * /imports/common/collections/clients_entities/functions.js
  *
  * The clients registered with an organization.
  */

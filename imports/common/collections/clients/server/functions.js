@@ -1,5 +1,5 @@
 /*
- * /imports/collections/clients/server/functions.js
+ * /imports/common/collections/clients/server/functions.js
  */
 
 import _ from 'lodash';

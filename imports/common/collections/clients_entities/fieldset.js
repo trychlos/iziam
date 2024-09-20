@@ -1,5 +1,5 @@
 /*
- * /imports/collections/clients_entities/fieldset.js
+ * /imports/common/collections/clients_entities/fieldset.js
  *
  * The clients registered with an organization.
  */

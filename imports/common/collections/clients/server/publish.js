@@ -1,5 +1,5 @@
 /*
- * /imports/collections/clients/server/publish.js
+ * /imports/common/collections/clients/server/publish.js
  */
 
 import { Permissions } from 'meteor/pwix:permissions';

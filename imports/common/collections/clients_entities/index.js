@@ -1,5 +1,5 @@
 /*
- * /imports/collections/clients_entities/index.js
+ * /imports/common/collections/clients_entities/index.js
  *
  * The clients entities registered with an organization.
  */

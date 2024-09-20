@@ -3,7 +3,7 @@
 
         <div class="title d-flex align-items-center justify-content-between">
             <p class="preamble">{{{ i18n key="organizations.clients.list_preamble" }}}</p>
-            {{> client_new_button (parmsNew) }}
+            {{> client_new_button }}
         </div>
 
         {{> tabular_ext table=TabularTables.Clients selector=selector class="table table-striped table-bordered table-condensed" }}

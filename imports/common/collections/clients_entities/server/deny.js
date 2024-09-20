@@ -1,5 +1,5 @@
 /*
- * /imports/collections/clients_entities/server/deny.js
+ * /imports/common/collections/clients_entities/server/deny.js
  */
 
 import { ClientsEntities } from '../index.js';

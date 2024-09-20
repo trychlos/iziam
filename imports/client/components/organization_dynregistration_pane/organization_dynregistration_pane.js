@@ -1,5 +1,5 @@
 /*
- * pwix:tenants-manager/src/client/components/organization_dynregistration_pane/organization_dynregistration_pane.js
+ * /imports/client/components/organization_dynregistration_pane/organization_dynregistration_pane.js
  *
  * Parms:
  * - see README

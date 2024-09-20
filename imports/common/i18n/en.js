@@ -78,8 +78,13 @@ Meteor.APP.i18n = {
                 },
                 edit: {
                     application_type_label: 'Application type :',
-                    auth_method_tab_title: 'Auth method',
+                    auth_flow_tab_title: 'Authorization flow',
+                    auth_method_tab_title: 'Authentication method',
                     client_type_label: 'Client type :',
+                    config_tab_title: 'Configuration',
+                    contacts_tab_title: 'Contacts',
+                    contacts_text: 'You are allowed to defined here the contacts of the client to your organization.<br />'
+                        +'These contacts may be displayed to end-users.',
                     description_label: 'Description :',
                     description_ph: 'The client description',
                     description_title: 'A not too long description (which are not notes)',
@@ -91,6 +96,7 @@ Meteor.APP.i18n = {
                     home_label: 'Home page URI :',
                     home_ph: 'https://my.example.com/',
                     home_title: 'The URI of a web site',
+                    jwks_tab_title: 'JSON Web Key Set',
                     label_label: 'Label :',
                     label_ph: 'My unique label',
                     label_title: 'The mandatory, unique, name of your client application',
@@ -106,6 +112,9 @@ Meteor.APP.i18n = {
                     properties_tab_title: 'Properties',
                     providers_tab_title: 'Providers',
                     record_notes_tab_title: 'Notes',
+                    redirects_tab_title: 'Redirect URLs',
+                    redirects_text: 'The authorization flow you have chosen implies to predefine at least one redirection URI.<br />'
+                        +'The Authorization Server will restrict the grant flow redirections to one of below URIs.',
                     softid_label: 'Software identifier :',
                     softid_ph: 'MySoftware',
                     softid_title: 'How the client software identifies itself',
@@ -115,6 +124,12 @@ Meteor.APP.i18n = {
                     tos_label: 'Terms of Service page URI :',
                     tos_ph: 'https://my.example.com/tos',
                     tos_title: 'The URI of a page which describes the terms of service of the client'
+                },
+                jwks: {
+                    preamble: 'If your client wants use a JSON Web Keys Set document, then manage it here.<br />'
+                        +'The referenced document contains the signing key(s) the client will use to sign its tokens, and may '
+                        +'also contain encryption keys.',
+                    tab_title: 'JSON Web Keys Set'
                 },
                 new: {
                     assistant_title: 'Defining a new client',
@@ -250,8 +265,6 @@ Meteor.APP.i18n = {
                         +'You shouldn\'t need to change it, unless you are really sure of what you are doing, but just in case...',
                     clientid_label: 'Your new client Id. :',
                     contacts_nav: 'Contacts',
-                    contacts_text: 'You are allowed to defined here the contacts of the client to your organization.<br />'
-                        +'These contacts may be displayed to end-users.',
                     done_nav: 'Done',
                     grant_type_nav: 'Authorization Grant Flow',
                     grant_type_text: 'For each available grant nature, please choose below the authorization grant flow your client will use, and so the corresponding grant type.',
@@ -260,6 +273,7 @@ Meteor.APP.i18n = {
                         +'Please be beware that, to make your life easier, this assistant will let you define a client which may be not fully operational. '
                         +'Nonetheless, you always be able to update it later.',
                     jwks_nav: 'JWK Signature and Encryption',
+                    jwks_text: 'Want sign and/or encrypt your JSON Web Tokens ? Define here the keys your client will need.',
                     profile_nav: 'Profile',
                     profile_text: 'Choose the application profile which corresponds best to your use case.<br />'
                         +'This will define many other parameters, but you still will be able to modify each of them at your convenience.<br />'
@@ -268,8 +282,6 @@ Meteor.APP.i18n = {
                     properties_text: 'Define some properties specific to your client application.',
                     providers_nav: 'Providers',
                     redirects_nav: 'Redirect URLs',
-                    redirects_text: 'The authorization flow you have chosen implies to predefine at least one redirection URI.<br />'
-                        +'The Authorization Server will restrict the grant flow redirections to one of below URIs.',
                     success_label: 'Congratulations !<br />'
                         +'Your new client has been successfully created.',
                     summary_application_label: 'Application type :',
@@ -531,6 +543,8 @@ Meteor.APP.i18n = {
                 checks: {
                     jwk_alg_invalid: 'JWK algorithm "%s" is not valid',
                     jwk_alg_unset: 'JWK algorithm is not set',
+                    jwk_kid_exists: 'The Key identifier already exists',
+                    jwk_kid_unset: 'The Key identifier is not set. This is only accepted as long as your set has a single key',
                     jwk_kty_invalid: 'JWK type "%s" is not valid',
                     jwk_kty_unset: 'JWK type is not set',
                     jwk_use_invalid: 'JWK usage "%s" is not valid',
@@ -728,7 +742,8 @@ Meteor.APP.i18n = {
                     jwks_example: 'JWKS page URL: &laquo; %s &raquo;',
                     jwks_label: 'JWKS page path :',
                     jwks_ph: '/jwks',
-                    jwks_title: 'The URL of the authorization server\'s JWK Set document. The referenced document contains the signing key(s) the client uses to validate signatures from the authorization server.',
+                    jwks_title: 'The URL of the authorization server\'s JWK Set document. '
+                        +'The referenced document contains the signing key(s) the client uses to validate signatures from the authorization server.',
                     pkce_description: 'The RFC 7636 "Proof Key for Code Exchange by OAuth Public Clients" proposes a way to mitigate authorization code interception attacks '
                         +'to which public clients are exposed because they cannot securely authenticate. The extension utilizes a dynamically created cryptographically '
                         +'random key unique for every authorization request.',

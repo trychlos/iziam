@@ -1,5 +1,5 @@
 /*
- * /imports/collections/clients_records/server/index.js
+ * /imports/common/collections/clients_records/server/index.js
  */
 
 import './deny.js';
