@@ -42,7 +42,9 @@ Template.keygrip_secret_properties_pane.onCreated( function(){
     // generate a new secret and its hash
     self.autorun(() => {
         const keygrip = Template.currentData().keygripRv.get();
-        self.APP.result.set( KeygripSecrets.fn.generateSecret( keygrip ));
+        KeygripSecrets.fn.generateSecret( keygrip ).then(( res ) => {
+            self.APP.result.set( res );
+        });
     });
 
     // update the item accordingly

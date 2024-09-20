@@ -4,8 +4,6 @@
 
 import _ from 'lodash';
 const assert = require( 'assert' ).strict;
-import * as jose from 'jose';
-import { createHash, randomBytes } from 'crypto';
 
 import { KeygripSecrets } from './index.js';
 
@@ -15,14 +13,8 @@ KeygripSecrets.fn = {
      * @param {Object<Keygrip>} item the current keygrip item
      * @returns {Object} a { secret, hash } object
      */
-    generateSecret( item ){
-        const secret = randomBytes( item.size ).toString( 'base64' );
-        const hash = createHash( item.alg ).update( secret ).digest( item.encoding );
-        //console.debug( 'returning', secret, hash );
-        return {
-            secret: secret,
-            hash: hash
-        };
+    async generateSecret( item ){
+        return Meteor.isClient ? await Meteor.callAsync( 'keygrip_generate_secret', item ) : await KeygripSecrets.s.generateSecret( item );
     },
 
     /**
