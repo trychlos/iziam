@@ -55,7 +55,7 @@ Template.jwk_new_button.onCreated( function(){
         if( found !== hasEmpty ){
             self.APP.emptyKid.set( found );
             //console.debug( 'emptyKid', found );
-            checker = self.APP.checker.get();
+            const checker = self.APP.checker.get();
             if( checker ){
                 if( found ){
                     checker.messagerPush( new TM.TypedMessage({
@@ -76,7 +76,7 @@ Template.jwk_new_button.onCreated( function(){
         const permitted = await Permissions.isAllowed( permission, Meteor.userId(), entity._id );
         self.APP.permitted.set( permitted );
         //console.debug( 'permitted', permitted );
-        checker = self.APP.checker.get();
+        const checker = self.APP.checker.get();
         if( checker ){
             if( permitted ){
                 checker.messagerClear();
@@ -100,8 +100,8 @@ Template.jwk_new_button.onRendered( function(){
 
     // instanciate a checker
     self.autorun(() => {
-        const parentChecker = Template.currentData().checker.get();
-        let checker = self.APP.checker.get();
+        const parentChecker = Template.currentData().checker?.get();
+        const checker = self.APP.checker.get();
         if( parentChecker && !checker ){
             self.APP.checker.set( new Forms.Checker( self, {
                 parent: parentChecker

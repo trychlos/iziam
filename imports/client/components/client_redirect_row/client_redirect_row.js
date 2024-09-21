@@ -76,7 +76,7 @@ Template.client_redirect_row.onRendered( function(){
 
     // initialize the Checker for this panel as soon as we get the parent Checker
     self.autorun(() => {
-        const parentChecker = Template.currentData().checker.get();
+        const parentChecker = Template.currentData().checker?.get();
         const checker = self.APP.checker.get();
         if( parentChecker && !checker ){
             self.APP.checker.set( new Forms.Checker( self, {
