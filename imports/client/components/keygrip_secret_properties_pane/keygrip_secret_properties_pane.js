@@ -60,8 +60,8 @@ Template.keygrip_secret_properties_pane.onRendered( function(){
     const self = this;
 
     // initialize the Checker for this panel as soon as we get the parent Checker
-    // NB: cannotuse Forms.FormField defaults as the schema name addresses the full Organization record
-    //  while this panel only addresses a single JWK
+    // NB: cannot use Forms.FormField defaults as the schema name addresses the full Organization record
+    //  while this panel only addresses a single keygrip item
     self.autorun(() => {
         const parentChecker = Template.currentData().checker.get();
         const checker = self.APP.checker.get();

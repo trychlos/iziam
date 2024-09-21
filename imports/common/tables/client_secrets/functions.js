@@ -14,7 +14,7 @@ ClientSecrets.fn = {
      * @returns {Object} a { secret, hash } object
      */
     async generateSecret( item ){
-        return Meteor.isClient ? await Meteor.callAsync( 'client_generate_secret', item ) : await KeygripSecrets.s.generateSecret( item );
+        return Meteor.isClient ? await Meteor.callAsync( 'client_generate_secret', item ) : await ClientSecrets.s.generateSecret( item );
     },
 
     /**

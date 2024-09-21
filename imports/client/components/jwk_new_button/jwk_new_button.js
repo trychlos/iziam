@@ -13,11 +13,13 @@
 
 import _ from 'lodash';
 
+import { Forms } from 'meteor/pwix:forms';
 import { Modal } from 'meteor/pwix:modal';
 import { Permissions } from 'meteor/pwix:permissions';
 import { PlusButton } from 'meteor/pwix:plus-button';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
+import { TM } from 'meteor/pwix:typed-message';
 
 import '../jwk_edit_dialog/jwk_edit_dialog.js';
 
@@ -28,14 +30,18 @@ Template.jwk_new_button.onCreated( function(){
     //console.debug( this );
 
     self.APP = {
-        canCreate: new ReactiveVar( false )
+        emptyKid: new ReactiveVar( false ),
+        permitted: new ReactiveVar( false ),
+        canCreate: new ReactiveVar( false ),
+        // a dedicated checker to be able to interact with parent Messager
+        checker: new ReactiveVar( null )
     };
 
-    // check the creation permission
-    // any organization/client manager can create a new json web key
-    // To create a new JWK, we also check that all existing have a KID
+    // To create a new JWK, we check that all already existing have a KID
+    //  as a KID becomes mandatory as soon as we have several JWKs
     self.autorun( async () => {
         const entity = Template.currentData().entity.get();
+        const hasEmpty = self.APP.emptyKid.get();
         let found = false;
         ( entity.DYN.records[Template.currentData().index].get().jwks || [] ).every(( it ) => {
             if( !it.kid ){
@@ -43,13 +49,67 @@ Template.jwk_new_button.onCreated( function(){
             }
             return !found;
         });
+        if( found !== hasEmpty ){
+            self.APP.emptyKid.set( found );
+            console.debug( 'emptyKid', found );
+            checker = self.APP.checker.get();
+            if( checker ){
+                if( found ){
+                    checker.messagerPush( new TM.TypedMessage({
+                        level: TM.MessageLevel.C.INFO,
+                        message: pwixI18n.label( I18N, 'jwks.checks.jwk_kid_empty' )
+                    }));
+                } else {
+                    checker.messagerClear();
+                }
+            }
+        }
+    });
+
+    // check the creation permission
+    self.autorun( async () => {
+        const entity = Template.currentData().entity.get();
         const permission = Template.currentData().isOrganization === false ? 'feat.clients.edit' : 'feat.organizations.edit';
-        self.APP.canCreate.set( !found && await Permissions.isAllowed( permission, Meteor.userId(), entity._id ));
+        const permitted = await Permissions.isAllowed( permission, Meteor.userId(), entity._id );
+        self.APP.permitted.set( permitted );
+        console.debug( 'permitted', permitted );
+        checker = self.APP.checker.get();
+        if( checker ){
+            if( permitted ){
+                checker.messagerClear();
+            } else {
+                checker.messagerPush( new TM.TypedMessage({
+                    level: TM.MessageLevel.C.INFO,
+                    message: pwixI18n.label( I18N, 'jwks.checks.jwk_not_permitted' )
+                }));
+            }
+        }
+    });
+
+    // last allow or not the creation
+    self.autorun( async () => {
+        self.APP.canCreate.set( !self.APP.emptyKid.get() && self.APP.permitted.get());
+        console.debug( 'set canCreate' );
     });
 
     // track the creation permission
     self.autorun( async () => {
         //console.debug( 'canCreate', self.APP.canCreate.get());
+    });
+});
+
+Template.jwk_new_button.onRendered( function(){
+    const self = this;
+
+    // instanciate a checker
+    self.autorun(() => {
+        const parentChecker = Template.currentData().checker.get();
+        let checker = self.APP.checker.get();
+        if( parentChecker && !checker ){
+            self.APP.checker.set( new Forms.Checker( self, {
+                parent: parentChecker
+            }));
+        }
     });
 });
 

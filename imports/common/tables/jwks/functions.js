@@ -5,17 +5,41 @@
 import _ from 'lodash';
 const assert = require( 'assert' ).strict;
 
+import { DateJs } from 'meteor/pwix:date';
+
 import { Jwks } from './index.js';
 
 Jwks.fn = {
     /**
-     * @summary extract the JSON Web Keys needed by the AuthServer
-     * @param {Object} organization an { entity, record } organization object
+     * @summary extract the active JSON Web Keys
+     * @param {Object} container an { entity, record } organization/client object
      * @returns {Array<JWK>}
      */
-    authKeys( organization ){
-        const result = { keys: [] };
-        ( organization.record.jwks || [] ).forEach(( jwk ) => {
+    activeKeys( container ){
+        let result = [];
+        ( container.record.jwks || [] ).forEach(( jwk ) => {
+            let active = true;
+            if( active && jwk.startingAt ){
+                active = Boolean( DateJs.compare( jwk.startingAt, Date.now()) <= 0 );
+            }
+            if( active && jwk.endingAt ){
+                active = Boolean( DateJs.compare( jwk.endingAt, Date.now()) >= 0 );
+            }
+            if( active ){
+                result.keys.push( it );
+            }
+        });
+        return result;
+    },
+
+    /**
+     * @summary extract the JSON Web Keys needed by the AuthServer to sign/encrypt the emitted JWT
+     * @param {Object} container an { entity, record } organization/client object
+     * @returns {Object} with a 'keys' array of JWK's containing only private parts
+     */
+    authKeys( container ){
+        let result = { keys: [] };
+        Jwks.fn.activeKeys().forEach(( jwk ) => {
             let it = { ...jwk };
             delete it.secret;
             delete it.pair;
@@ -54,11 +78,10 @@ Jwks.fn = {
     },
 
     /**
-     * @summary Returns the JWKS for the entity/record organization
+     * @summary Returns the JWKS for the entity/record organization/client
      *  This is needed for a reactive tabular display management
      * @param {Object} o an argument object with following keys:
-     * - caller: an { entity, record } organization
-     * @returns {Object} the organization JWKS, at least an empty array
+     * - caller: an { entity, record } organization/client
      *  A reactive data source
      */
     _list: {

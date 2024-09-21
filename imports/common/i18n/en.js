@@ -115,6 +115,7 @@ Meteor.APP.i18n = {
                     redirects_tab_title: 'Redirect URLs',
                     redirects_text: 'The authorization flow you have chosen implies to predefine at least one redirection URI.<br />'
                         +'The Authorization Server will restrict the grant flow redirections to one of below URIs.',
+                    secrets_tab_title: 'Secrets',
                     softid_label: 'Software identifier :',
                     softid_ph: 'MySoftware',
                     softid_title: 'How the client software identifies itself',
@@ -332,6 +333,8 @@ Meteor.APP.i18n = {
                         alg_label: 'Algorithm :',
                         alg_title: 'The algorithm to be chosen to generate the hash',
                         binary_label: 'The chosen encoding produces binary output, thus preventing the hash to be displayed.',
+                        clear_label: 'Clear secret :',
+                        clear_title: 'The base64-encoded clear secret',
                         edit_dialog_title: 'Editing the "%s" secret',
                         encoding_label: 'Encoding :',
                         encoding_title: 'How to encode the resulting hash ?',
@@ -340,6 +343,7 @@ Meteor.APP.i18n = {
                         expire_title: 'An optional date of the secret expiration',
                         hash_label: 'Hash :',
                         hash_title: 'The generated hash',
+                        hash_tab_title: 'Secret',
                         label_label: 'Label :',
                         label_title: 'An optional label to this secret',
                         label_ph: 'My label',
@@ -596,10 +600,14 @@ Meteor.APP.i18n = {
                 checks: {
                     jwk_alg_invalid: 'JWK algorithm "%s" is not valid',
                     jwk_alg_unset: 'JWK algorithm is not set',
+                    jwk_ending_before: 'Ending date must be equal or after starting date',
+                    jwk_kid_empty: 'An existing JSON Web Key without Key Identifier prevents from being able to create a new key',
                     jwk_kid_exists: 'The Key identifier already exists',
                     jwk_kid_unset: 'The Key identifier is not set. This is only accepted as long as your set has a single key',
                     jwk_kty_invalid: 'JWK type "%s" is not valid',
                     jwk_kty_unset: 'JWK type is not set',
+                    jwk_not_permitted: 'Creating a new JSON Web Key is not allowed. Please contact your administrator',
+                    jwk_starting_after: 'Starting date must be equal or before ending date',
                     jwk_use_invalid: 'JWK usage "%s" is not valid',
                     jwk_use_unset: 'JWK usage is not set'
                 },
@@ -607,9 +615,9 @@ Meteor.APP.i18n = {
                     alg_label: 'Algorithm :',
                     alg_title: 'The algorithm to be chosen to sign or encrypt the key',
                     edit_dialog_title: 'Edit the "%s" JSON Web Key',
-                    expire_label: 'Expire at :',
-                    expire_ph: 'yyyy-mm-dd',
-                    expire_title: 'An optional date of the JSON Web Key expiration',
+                    ending_label: 'Ending on :',
+                    ending_ph: 'yyyy-mm-dd',
+                    ending_title: 'An optional date of the JSON Web Key activation end',
                     generate_below_text: 'The desired key(s) may be generated just now by clicking on the above button.<br />'
                         +'It will anyway be generated at least when validating this dialog box.',
                     generate_button_text: 'Generate',
@@ -633,6 +641,9 @@ Meteor.APP.i18n = {
                     public_jwk_tab_title: 'Public JSON Web Key',
                     public_spki_tab_title: 'Public SPKI Export',
                     secret_tab_title: 'Symmetric secret',
+                    starting_label: 'Starting on :',
+                    starting_ph: 'yyyy-mm-dd',
+                    starting_title: 'An optional date of the JSON Web Key activation start',
                     use_label: 'Usage :',
                     use_title: 'The usage of this JSON Web Key'
                 },
@@ -645,10 +656,11 @@ Meteor.APP.i18n = {
                     delete_confirm_title: 'Delete the "%s" key',
                     delete_title: 'Delete the "%s" key',
                     edit_title: 'Edit the "%s" key content',
-                    expire_at_th: 'Expire at',
+                    ending_th: 'Ending on',
                     kid_th: 'Key Id',
                     label_th: 'Label',
                     preamble: '',
+                    starting_th: 'Starting on',
                     use_th: 'Usage'
                 }
             },
@@ -819,10 +831,10 @@ Meteor.APP.i18n = {
                     userinfo_title: 'The endpoint path used to build the Userinfo URL, to which you can get informations about a user.',
                 },
                 jwks: {
-                    preamble: 'If your organization wants exhibit a JSON Web Keys Set document, then manage it here.<br />'
-                        +'The referenced document contains the signing key(s) the clients will use to validate signatures from the authorization server, and may '
-                        +'also contain the server\'s encryption key or keys, which are used by clients to encrypt requests to the server.<br />'
-                        +'So, both signing and encryption keys can be made available to your clients.',
+                    preamble: 'The JSON Web Key Set (JWKS) is a set of keys containing the public keys used to sign and encrypt any JSON Web Token (JWT) '
+                        +'issued by the Authorization Server.<br />'
+                        +'Active JSON Web Key Set is exposed to your clients through the <code>JWKS page</code> document.<br />'
+                        +'Each JSON Web Key targets either signature or encryption role. Keys can be freely rotated using starting and ending dates.',
                     tab_title: 'JSON Web Keys Set'
                 },
                 keygrips: {

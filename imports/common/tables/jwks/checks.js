@@ -5,6 +5,7 @@
 import _ from 'lodash';
 const assert = require( 'assert' ).strict;
 
+import { DateJs } from 'meteor/pwix:date';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { TM } from 'meteor/pwix:typed-message';
@@ -47,12 +48,19 @@ Jwks.checks = {
     },
 
     // JWK optional expiration date
-    async jwk_expireAt( value, data, opts ){
-        _assert_data_itemrv( 'Jwks.checks.jwk_expireAt()', data );
+    //  must be equal or after the starting date
+    async jwk_endingAt( value, data, opts ){
+        _assert_data_itemrv( 'Jwks.checks.jwk_endingAt()', data );
         let item = data.item.get();
         if( opts.update !== false ){
-            item.expireAt = value ? new Date( value ) : null;
+            item.endingAt = value ? new Date( value ) : null;
             data.item.set( item );
+        }
+        if( value && item.startingAt ){
+            return DateJs.compare( item.startingAt, item.endingAt ) <= 0 ? null : new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'jwks.checks.jwk_ending_before' )
+            });
         }
         return null;
     },
@@ -67,7 +75,9 @@ Jwks.checks = {
             item.kid = value;
             data.item.set( item );
         }
-        const jwks = data.container.record.jwks;
+        // container is the current jwks (as displayed in the edit dialog of the organization/client)
+        //  which means that it may have not been saved yet
+        const jwks = data.container.record.jwks || [];
         if( value ){
             let found = false;
             jwks.every(( it ) => {
@@ -81,8 +91,9 @@ Jwks.checks = {
                 message: pwixI18n.label( I18N, 'jwks.checks.jwk_kid_exists' )
             }) : null;
         } else {
+            const level = jwks.length < 1 ? TM.MessageLevel.C.WARNING : TM.MessageLevel.C.ERROR;
             return new TM.TypedMessage({
-                level: TM.MessageLevel.C.WARNING,
+                level: level,
                 message: pwixI18n.label( I18N, 'jwks.checks.jwk_kid_unset' )
             });
         }
@@ -118,6 +129,24 @@ Jwks.checks = {
         if( opts.update !== false ){
             item.label = value;
             data.item.set( item );
+        }
+        return null;
+    },
+
+    // JWK optional starting date
+    //  must be equal or before the ending date
+    async jwk_startingAt( value, data, opts ){
+        _assert_data_itemrv( 'Jwks.checks.jwk_startingAt()', data );
+        let item = data.item.get();
+        if( opts.update !== false ){
+            item.startingAt = value ? new Date( value ) : null;
+            data.item.set( item );
+        }
+        if( value && item.endingAt ){
+            return DateJs.compare( item.startingAt, item.endingAt ) <= 0 ? null : new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'jwks.checks.jwk_starting_after' )
+            });
         }
         return null;
     },

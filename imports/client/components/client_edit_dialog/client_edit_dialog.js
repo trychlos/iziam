@@ -65,6 +65,7 @@ import '/imports/client/components/client_profile_select/client_profile_select.j
 import '/imports/client/components/client_properties_panel/client_properties_panel.js';
 import '/imports/client/components/client_record_tabbed/client_record_tabbed.js';
 import '/imports/client/components/client_redirects_panel/client_redirects_panel.js';
+import '/imports/client/components/client_secrets_panel/client_secrets_panel.js';
 import '/imports/client/components/client_type_select/client_type_select.js';
 
 import './client_edit_dialog.html';

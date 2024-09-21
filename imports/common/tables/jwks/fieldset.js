@@ -4,6 +4,7 @@
  * Used both by organization and client.
  */
 
+import { Field } from 'meteor/pwix:field';
 import { Forms } from 'meteor/pwix:forms';
 
 import { Jwks } from './index.js';
@@ -72,12 +73,20 @@ Jwks.recordFieldDef = function(){
             form_check: Jwks.checks.jwk_kid,
             form_type: Forms.FieldType.C.OPTIONAL
         },
-        // an optional expiration date
+        // an optional starting date date
         {
-            name: 'jwks.$.expireAt',
+            name: 'jwks.$.startingAt',
             type: Date,
             optional: true,
-            form_check: Jwks.checks.jwk_expireAt,
+            form_check: Jwks.checks.jwk_startingAt,
+            form_type: Forms.FieldType.C.OPTIONAL
+        },
+        // an optional ending date date
+        {
+            name: 'jwks.$.endingAt',
+            type: Date,
+            optional: true,
+            form_check: Jwks.checks.jwk_endingAt,
             form_type: Forms.FieldType.C.OPTIONAL
         },
         // the symmetric secret
@@ -182,6 +191,7 @@ Jwks.recordFieldDef = function(){
             type: String
         },
         // creation timestamp of this jwk
+        //  aka timestamp of the keys generation
         {
             name: 'jwks.$.createdAt',
             type: Date
@@ -192,4 +202,21 @@ Jwks.recordFieldDef = function(){
         }
     ];
     return columns;
+};
+
+/**
+ * @locus Anywhere
+ * @summary While we need the above field specification to improve the organization/client schemas,
+ *  we also need a Field.Set to feed to Forms.Panel.
+ *  So here
+ * @returns {Field.Set}
+ */
+
+Jwks._fieldset = null;
+
+Jwks.recordFieldSet = function(){
+    if( !Jwks._fieldset ){
+        Jwks._fieldset = new Field.Set( Jwks.recordFieldDef());
+    }
+    return Jwks._fieldset;
 };

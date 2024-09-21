@@ -96,6 +96,11 @@ Template.client_record_tabbed.onCreated( function(){
                     paneData: paneData
                 },
                 {
+                    navLabel: pwixI18n.label( I18N, 'clients.edit.secrets_tab_title' ),
+                    paneTemplate: 'client_secrets_panel',
+                    paneData: paneData
+                },
+                {
                     navLabel: pwixI18n.label( I18N, 'clients.edit.contacts_tab_title' ),
                     paneTemplate: 'client_contacts_panel',
                     paneData: paneData

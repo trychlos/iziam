@@ -120,7 +120,9 @@ Template.jwk_edit_dialog.onRendered( function(){
     self.autorun(() => {
         if( !self.APP.checker.get()){
             let parms = {
+                name: 'jwk_edit_dialog',
                 okFn( valid ){
+                    console.debug( 'valid', valid );
                     if( self.APP.isModal.get()){
                         Modal.set({ buttons: { id: Modal.C.Button.OK, enabled: valid }});
                     }
@@ -132,6 +134,15 @@ Template.jwk_edit_dialog.onRendered( function(){
             }
             parms.enabled = Template.currentData().enableChecks !== false;
             self.APP.checker.set( new Forms.Checker( self, parms ));
+            console.debug( 'instanciating checker', parms );
+        }
+    });
+
+    // track checker status
+    self.autorun(() => {
+        const checker = self.APP.checker.get();
+        if( checker ){
+            console.debug( 'checker', checker.status(), checker.validity());
         }
     });
 });
@@ -156,6 +167,7 @@ Template.jwk_edit_dialog.helpers({
 });
 
 Template.jwk_edit_dialog.events({
+    /*
     // submit
     //  event triggered in case of a modal
     'md-click .c-jwk-edit-dialog'( event, instance, data ){
@@ -167,34 +179,42 @@ Template.jwk_edit_dialog.events({
 
     // submit
     // reactively update the record
+    // the user may have already generated its keys - if not, we compute them here
     'iz-submit .c-jwk-edit-dialog'( event, instance ){
         const recordRv = this.entity.get().DYN.records[this.index];
         let record = recordRv.get();
         record.jwks = record.jwks || [];
         let found = false;
-        const jwk = instance.APP.item.get();
+        let jwk = instance.APP.item.get();
         // if the secret/keys pair have not been generated yet, do it now
-        // have to manage promises to handle async function in this event handler
         Promise.resolve( true )
             .then(() => {
                 return jwk.createdAt ? jwk : Jwks.fn.generateKeys( jwk );
             })
-            .then(() => {
-                //console.debug( 'jwk', jwk );
-                for( let i=0 ; i<record.jwks.length ; ++i ){
-                    if( record.jwks[i].id === jwk.id ){
-                        record.jwks[i] = jwk;
-                        found = true;
-                        break;
-                    }
-                }
-                if( !found ){
+            .then(( res ) => {
+                jwk = res;
+                if( instance.APP.isNew.get()){
                     record.jwks.push( jwk );
+                } else {
+                    for( let i=0 ; i<record.jwks.length ; ++i ){
+                        if( record.jwks[i].id === jwk.id ){
+                            record.jwks[i] = jwk;
+                            found = true;
+                            break;
+                        }
+                    }
+                    if( !found ){
+                        console.warn( 'unable to update the JWK', jwk );
+                    }
                 }
             })
             .then(() => {
+                console.debug( 'before recordRv.set, record.jwks', record.jwks );
                 recordRv.set( record );
+                console.debug( 'after recordRv.set' );
                 Modal.close();
+                console.debug( 'after Modal.close' );
             });
     }
+            */
 });

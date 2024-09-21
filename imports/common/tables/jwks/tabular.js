@@ -26,7 +26,7 @@ Jwks.dataSet = function( dc ){
         let o = it;
         dataset.push( o );
     });
-    //console.debug( 'dataset', dataset.length, dataset );
+    console.debug( 'dataset', dataset.length, dataset );
     return dataset;
 };
 
@@ -72,11 +72,19 @@ Jwks.tabularFieldSet = function( dc ){
             }
         },
         {
-            name: 'expireAt',
+            name: 'startingAt',
             dt_type: 'string',
-            dt_title: pwixI18n.label( I18N, 'jwks.list.expire_at_th' ),
+            dt_title: pwixI18n.label( I18N, 'jwks.list.starting_th' ),
             dt_render( data, type, rowData ){
-                return rowData.expireAt ? strftime( '%Y-%m-%d', rowData.expireAt ) : null;
+                return rowData.startingAt ? strftime( '%Y-%m-%d', rowData.startingAt ) : null;
+            }
+        },
+        {
+            name: 'endingAt',
+            dt_type: 'string',
+            dt_title: pwixI18n.label( I18N, 'jwks.list.ending_th' ),
+            dt_render( data, type, rowData ){
+                return rowData.endingAt ? strftime( '%Y-%m-%d', rowData.endingAt ) : null;
             }
         },
         {

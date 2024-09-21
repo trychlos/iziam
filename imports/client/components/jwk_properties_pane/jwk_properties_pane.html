@@ -41,10 +41,18 @@
                 </td>
             </tr>
             <tr>
-                <td class="ui-w20 label"><label class="form-label" for="jwk-expire">{{ i18n key="jwks.edit.expire_label" }}</label></td>
+                <td class="ui-w20 label"><label class="form-label" for="jwk-starting">{{ i18n key="jwks.edit.starting_label" }}</label></td>
                 <td class="ui-w100">
-                    <div class="ui-w50 ui-mt025 js-expire" title="{{ i18n key="jwks.edit.expire_title" }}">
-                        {{> DateInput (parmsDate) }}
+                    <div class="ui-w50 ui-mt025 js-starting" title="{{ i18n key="jwks.edit.starting_title" }}">
+                        {{> DateInput (parmsStartDate) }}
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="ui-w20 label"><label class="form-label" for="jwk-ending">{{ i18n key="jwks.edit.ending_label" }}</label></td>
+                <td class="ui-w100">
+                    <div class="ui-w50 ui-mt025 js-ending" title="{{ i18n key="jwks.edit.ending_title" }}">
+                        {{> DateInput (parmsEndDate) }}
                     </div>
                 </td>
             </tr>

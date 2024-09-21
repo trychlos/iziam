@@ -15,7 +15,6 @@ import _ from 'lodash';
 
 import { Forms } from 'meteor/pwix:forms';
 import { pwixI18n } from 'meteor/pwix:i18n';
-import { TenantsManager } from 'meteor/pwix:tenants-manager';
 
 import { JwaAlg } from '/imports/common/definitions/jwa-alg.def.js';
 import { JwkKty } from '/imports/common/definitions/jwk-kty.def.js';
@@ -35,6 +34,51 @@ Template.jwk_properties_pane.onCreated( function(){
     self.APP = {
         // the Form.Checker instance for this panel
         checker: new ReactiveVar( null ),
+        // the fields in this panel
+        fields: {
+            'jwks.$.label': {
+                js: '.js-label',
+                formTo( $node, item ){
+                    $node.val( item.label );
+                }
+            },
+            'jwks.$.use': {
+                js: '.js-use',
+                formTo( $node, item ){
+                    $node.val( item.use );
+                }
+            },
+            'jwks.$.kty': {
+                js: '.js-kty',
+                formTo( $node, item ){
+                    $node.val( item.kty );
+                }
+            },
+            'jwks.$.alg': {
+                js: '.js-alg',
+                formTo( $node, item ){
+                    $node.val( item.alg );
+                }
+            },
+            'jwks.$.kid': {
+                js: '.js-kid',
+                formTo( $node, item ){
+                    $node.val( item.kid );
+                }
+            },
+            'jwks.$.startingAt': {
+                js: '.js-starting',
+                formTo( $node, item ){
+                    $node.val( item.expireAt );
+                }
+            },
+            'jwks.$.endingAt': {
+                js: '.js-ending',
+                formTo( $node, item ){
+                    $node.val( item.expireAt );
+                }
+            }
+        },
 
         // generate the JWK
         //  reactively update the item
@@ -54,6 +98,13 @@ Template.jwk_properties_pane.onCreated( function(){
             }
         }
     };
+
+    // a kid becomes mandatory as soon as we have other JWK in the set
+    self.autorun(() => {
+        const jwks = Template.currentData().container.record.jwks || [];
+        self.APP.fields['jwks.$.kid'].form_type = jwks.length ? Forms.FieldType.C.MANDATORY : Forms.FieldType.C.OPTIONAL;
+        console.debug( 'setting form_type', self.APP.fields['jwks.$.kid'] );
+    });
 });
 
 Template.jwk_properties_pane.onRendered( function(){
@@ -66,53 +117,26 @@ Template.jwk_properties_pane.onRendered( function(){
         const parentChecker = Template.currentData().checker.get();
         const checker = self.APP.checker.get();
         if( parentChecker && !checker ){
+            console.debug( 'allowcating checked' );
             const itemRv = Template.currentData().item;
             self.APP.checker.set( new Forms.Checker( self, {
+                name: 'jwk_properties_pane',
                 parent: parentChecker,
-                panel: new Forms.Panel({
-                    'jwks.$.label': {
-                        js: '.js-label',
-                        formTo( $node, item ){
-                            $node.val( item.label );
-                        }
-                    },
-                    'jwks.$.use': {
-                        js: '.js-use',
-                        formTo( $node, item ){
-                            $node.val( item.use );
-                        }
-                    },
-                    'jwks.$.kty': {
-                        js: '.js-kty',
-                        formTo( $node, item ){
-                            $node.val( item.kty );
-                        }
-                    },
-                    'jwks.$.alg': {
-                        js: '.js-alg',
-                        formTo( $node, item ){
-                            $node.val( item.alg );
-                        }
-                    },
-                    'jwks.$.kid': {
-                        js: '.js-kid',
-                        formTo( $node, item ){
-                            $node.val( item.kid );
-                        }
-                    },
-                    'jwks.$.expireAt': {
-                        js: '.js-expire',
-                        formTo( $node, item ){
-                            $node.val( item.expireAt );
-                        }
-                    }
-                }, TenantsManager.Records.fieldSet.get()),
+                panel: new Forms.Panel( self.APP.fields, Jwks.recordFieldSet()),
                 data: {
                     container: Template.currentData().container,
                     item: itemRv
                 },
                 setForm: itemRv.get()
             }));
+        }
+    });
+
+    // track checker status
+    self.autorun(() => {
+        const checker = self.APP.checker.get();
+        if( checker ){
+            console.debug( 'checker', checker.status(), checker.validity());
         }
     });
 });
@@ -141,9 +165,9 @@ Template.jwk_properties_pane.helpers({
     },
 
     // parms for the DateInput
-    parmsDate(){
+    parmsEndDate(){
         return {
-            placeholder: pwixI18n.label( I18N, 'jwks.edit.expire_ph' ),
+            placeholder: pwixI18n.label( I18N, 'jwks.edit.ending_ph' ),
             withHelp: true
         };
     },
@@ -176,6 +200,14 @@ Template.jwk_properties_pane.helpers({
             ...this,
             selected: this.item.get().use || null,
             disabled: !this.isNew.get()
+        };
+    },
+
+    // parms for the DateInput
+    parmsStartDate(){
+        return {
+            placeholder: pwixI18n.label( I18N, 'jwks.edit.starting_ph' ),
+            withHelp: true
         };
     }
 });

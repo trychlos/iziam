@@ -17,6 +17,7 @@ import { Random } from 'meteor/random';
 import { Tabbed } from 'meteor/pwix:tabbed';
 
 import '/imports/client/components/client_secret_properties_pane/client_secret_properties_pane.js';
+import '/imports/client/components/client_secret_hash_pane/client_secret_hash_pane.js';
 
 import './client_secret_edit_dialog.html';
 
@@ -55,6 +56,19 @@ Template.client_secret_edit_dialog.onCreated( function(){
 
     // instanciates a named Tabbed
     self.autorun(() => {
+        let tabs = [
+            {
+                name: 'client_secret_properties_pane',
+                navLabel: pwixI18n.label( I18N, 'clients.secrets.edit.properties_tab_title' ),
+                paneTemplate: 'client_secret_properties_pane'
+            },
+            {
+                name: 'client_secret_hash_pane',
+                navLabel: pwixI18n.label( I18N, 'clients.secrets.edit.hash_tab_title' ),
+                paneTemplate: 'client_secret_hash_pane',
+                enabled: !self.APP.isNew.get()
+            }
+        ];
         self.APP.tabbed.setTabbedParms({ 
             dataContext: {
                 entity: Template.currentData().entity,
@@ -64,13 +78,7 @@ Template.client_secret_edit_dialog.onCreated( function(){
                 checker: self.APP.checker,
                 isNew: self.APP.isNew
             },
-            tabs: [
-                {
-                    name: 'client_secret_properties_pane',
-                    navLabel: pwixI18n.label( I18N, 'clients.secrets.edit.properties_tab_title' ),
-                    paneTemplate: 'client_secret_properties_pane'
-                }
-            ]
+            tabs: tabs
         });
     });
 });

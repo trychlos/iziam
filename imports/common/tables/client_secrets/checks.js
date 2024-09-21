@@ -52,6 +52,17 @@ ClientSecrets.checks = {
         }
     },
 
+    // clear secret
+    async secret_clear( value, data, opts ){
+        _assert_data_itemrv( 'ClientSecrets.checks.secret_clear()', data );
+        let item = data.item.get();
+        if( opts.update !== false ){
+            item.clear = value;
+            data.item.set( item );
+        }
+        return null;
+    },
+
     // secret encoding
     async secret_encoding( value, data, opts ){
         _assert_data_itemrv( 'ClientSecrets.checks.secret_encoding()', data );
@@ -74,20 +85,9 @@ ClientSecrets.checks = {
         }
     },
 
-    // secret label
-    async secret_label( value, data, opts ){
-        _assert_data_itemrv( 'ClientSecrets.checks.secret_label()', data );
-        let item = data.item.get();
-        if( opts.update !== false ){
-            item.label = value;
-            data.item.set( item );
-        }
-        return null;
-    },
-
     // secret optional expiration date
-    async secret_secret_expireAt( value, data, opts ){
-        _assert_data_itemrv( 'ClientSecrets.checks.secret_secret_expireAt()', data );
+    async secret_expireAt( value, data, opts ){
+        _assert_data_itemrv( 'ClientSecrets.checks.secret_expireAt()', data );
         let item = data.item.get();
         if( opts.update !== false ){
             item.expireAt = value ? new Date( value ) : null;
@@ -97,8 +97,8 @@ ClientSecrets.checks = {
     },
 
     // secret hash
-    async secret_secret_hash( value, data, opts ){
-        _assert_data_itemrv( 'ClientSecrets.checks.secret_secret_hash()', data );
+    async secret_hash( value, data, opts ){
+        _assert_data_itemrv( 'ClientSecrets.checks.secret_hash()', data );
         let item = data.item.get();
         if( opts.update !== false ){
             item.hash = value;
@@ -107,12 +107,12 @@ ClientSecrets.checks = {
         return null;
     },
 
-    // clear secret
-    async secret_clear( value, data, opts ){
-        _assert_data_itemrv( 'ClientSecrets.checks.secret_clear()', data );
+    // secret label
+    async secret_label( value, data, opts ){
+        _assert_data_itemrv( 'ClientSecrets.checks.secret_label()', data );
         let item = data.item.get();
         if( opts.update !== false ){
-            item.clear = value;
+            item.label = value;
             data.item.set( item );
         }
         return null;
