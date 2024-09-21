@@ -1,16 +1,18 @@
 <template name="client_jwks_panel">
     <div class="c-client-jwks-panel">
+        <div class="panel-content">
 
-        <div class="content">
-            <div class="d-flex">
-                <div class="text">
+            <div class="panel-header">
+                <div class="panel-preamble">
                     {{{ i18n key="clients.jwks.preamble" }}}
                 </div>
                 {{> jwk_new_button }}
             </div>
 
-            {{> jwks_list (parmsJwksList) }}
-        </div>
+            <div class="panel-body">
+                {{> jwks_list (parmsJwksList) }}
+            </div>
 
+        </div>
     </div>
 </template>

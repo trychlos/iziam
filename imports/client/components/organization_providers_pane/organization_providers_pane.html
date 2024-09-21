@@ -1,11 +1,17 @@
 <template name="organization_providers_pane">
-    <div class="c-organization-providers-pane">
+    <div class="x-tab c-organization-providers-pane">
+        <div class="panel-content">
 
-        <div class="preamble">
-            {{{ i18n key="organizations.providers.list_preamble" }}}
+            <div class="panel-header">
+                <div class="panel-preamble">
+                    {{{ i18n key="organizations.providers.preamble" }}}
+                </div>
+            </div>
+
+            <div class="panel-body">
+                {{> providers_list (parmsProvidersList) }}
+            </div>
+
         </div>
-
-        {{> providers_list (parmsProvidersList) }}
-
     </div>
 </template>

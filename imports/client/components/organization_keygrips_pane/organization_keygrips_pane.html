@@ -1,16 +1,18 @@
 <template name="organization_keygrips_pane">
-    <div class="c-organization-keygrips-pane">
+    <div class="x-tab c-organization-keygrips-pane">
+        <div class="panel-content">
 
-        <div class="content">
-            <div class="d-flex">
-                <div class="text">
+            <div class="panel-header">
+                <div class="panel-preamble">
                     {{{ i18n key="organizations.keygrips.preamble" }}}
                 </div>
                 {{> keygrip_new_button }}
             </div>
 
-            {{> keygrips_list (parmsKeygripsList) }}
-        </div>
+            <div class="panel-body">
+                {{> keygrips_list (parmsKeygripsList) }}
+            </div>
 
+        </div>
     </div>
 </template>

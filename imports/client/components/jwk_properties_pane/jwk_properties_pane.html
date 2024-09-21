@@ -1,62 +1,69 @@
 <template name="jwk_properties_pane">
-    <div class="c-jwk-properties-pane">
+    <div class="x-tab c-jwk-properties-pane">
+        <div class="panel-content">
 
-        <table class="form-table ui-w100">
-            <tr>
-                <td class="ui-w20 label"><label class="form-label" for="jwk-label">{{ i18n key="jwks.edit.label_label" }}</label></td>
-                <td class="ui-w100">
-                    <input class="form-control flex-grow-1 js-label" type="text" id="jwk-label" placeholder="{{ i18n key="jwks.edit.label_ph" }}" title="{{ i18n key="jwks.edit.label_title" }}" />
-                </td>
-            </tr>
-            <tr>
-                <td class="ui-w20 label"><label class="form-label">{{ i18n key="jwks.edit.use_label" }}</label></td>
-                <td class="ui-w100" title="{{ i18n key="jwks.edit.use_title" }}">
-                    <div class="ui-mt025 ui-w100 js-use">
-                        {{> jwk_use_select (parmsJwkUseSelect) }}
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td class="ui-w20 label"><label class="form-label">{{ i18n key="jwks.edit.kty_label" }}</label></td>
-                <td class="ui-w100" title="{{ i18n key="jwks.edit.kty_title" }}">
-                    <div class="ui-mt025 ui-w100 js-kty">
-                        {{> jwk_kty_select (parmsJwkKtySelect) }}
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td class="ui-w20 label"><label class="form-label">{{ i18n key="jwks.edit.alg_label" }}</label></td>
-                <td class="ui-w100" title="{{ i18n key="jwks.edit.alg_title" }}">
-                    <div class="ui-mt025 ui-w100 js-alg">
-                        {{> jwa_alg_select (parmsJwaAlgSelect) }}
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td class="ui-w20 label"><label class="form-label" for="jwk-kid">{{ i18n key="jwks.edit.kid_label" }}</label></td>
-                <td class="ui-w100" title="{{ i18n key="jwks.edit.kid_title" }}">
-                    <div class="ui-mt025 ui-w100 js-kid">
-                        <input class="form-control flex-grow-1" type="text" id="jwk-kid" placeholder="{{ i18n key="jwks.edit.kid_ph" }}" title="{{ i18n key="jwks.edit.kid_title" }}" />
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td class="ui-w20 label"><label class="form-label" for="jwk-starting">{{ i18n key="jwks.edit.starting_label" }}</label></td>
-                <td class="ui-w100">
-                    <div class="ui-w50 ui-mt025 js-starting" title="{{ i18n key="jwks.edit.starting_title" }}">
-                        {{> DateInput (parmsStartDate) }}
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td class="ui-w20 label"><label class="form-label" for="jwk-ending">{{ i18n key="jwks.edit.ending_label" }}</label></td>
-                <td class="ui-w100">
-                    <div class="ui-w50 ui-mt025 js-ending" title="{{ i18n key="jwks.edit.ending_title" }}">
-                        {{> DateInput (parmsEndDate) }}
-                    </div>
-                </td>
-            </tr>
-        </table>
+            <div class="panel-header">
+            </div>
 
+            <div class="panel-body">
+                <table class="form-table ui-w100">
+                    <tr>
+                        <td class="ui-w20 label"><label class="form-label" for="jwk-label">{{ i18n key="jwks.edit.label_label" }}</label></td>
+                        <td class="ui-w100">
+                            <input class="form-control flex-grow-1 js-label" type="text" id="jwk-label" placeholder="{{ i18n key="jwks.edit.label_ph" }}" title="{{ i18n key="jwks.edit.label_title" }}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="ui-w20 label"><label class="form-label">{{ i18n key="jwks.edit.use_label" }}</label></td>
+                        <td class="ui-w100" title="{{ i18n key="jwks.edit.use_title" }}">
+                            <div class="ui-mt025 ui-w100 js-use">
+                                {{> jwk_use_select (parmsJwkUseSelect) }}
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="ui-w20 label"><label class="form-label">{{ i18n key="jwks.edit.kty_label" }}</label></td>
+                        <td class="ui-w100" title="{{ i18n key="jwks.edit.kty_title" }}">
+                            <div class="ui-mt025 ui-w100 js-kty">
+                                {{> jwk_kty_select (parmsJwkKtySelect) }}
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="ui-w20 label"><label class="form-label">{{ i18n key="jwks.edit.alg_label" }}</label></td>
+                        <td class="ui-w100" title="{{ i18n key="jwks.edit.alg_title" }}">
+                            <div class="ui-mt025 ui-w100 js-alg">
+                                {{> jwa_alg_select (parmsJwaAlgSelect) }}
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="ui-w20 label"><label class="form-label" for="jwk-kid">{{ i18n key="jwks.edit.kid_label" }}</label></td>
+                        <td class="ui-w100" title="{{ i18n key="jwks.edit.kid_title" }}">
+                            <div class="ui-mt025 ui-w100 js-kid">
+                                <input class="form-control flex-grow-1" type="text" id="jwk-kid" placeholder="{{ i18n key="jwks.edit.kid_ph" }}" title="{{ i18n key="jwks.edit.kid_title" }}" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="ui-w20 label"><label class="form-label" for="jwk-starting">{{ i18n key="jwks.edit.starting_label" }}</label></td>
+                        <td class="ui-w100">
+                            <div class="ui-w50 ui-mt025 js-starting" title="{{ i18n key="jwks.edit.starting_title" }}">
+                                {{> DateInput (parmsStartDate) }}
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="ui-w20 label"><label class="form-label" for="jwk-ending">{{ i18n key="jwks.edit.ending_label" }}</label></td>
+                        <td class="ui-w100">
+                            <div class="ui-w50 ui-mt025 js-ending" title="{{ i18n key="jwks.edit.ending_title" }}">
+                                {{> DateInput (parmsEndDate) }}
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
     </div>
 </template>

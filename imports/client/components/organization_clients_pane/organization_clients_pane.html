@@ -1,12 +1,18 @@
 <template name="organization_clients_pane">
-    <div class="c-organization-clients-pane">
+    <div class="x-tab c-organization-clients-pane">
+        <div class="panel-content">
 
-        <div class="title d-flex align-items-center justify-content-between">
-            <p class="preamble">{{{ i18n key="organizations.clients.list_preamble" }}}</p>
-            {{> client_new_button }}
+            <div class="panel-header">
+                <div class="panel-preamble">
+                    {{{ i18n key="organizations.clients.list_preamble" }}}
+                </div>
+                {{> client_new_button }}
+            </div>
+
+            <div class="panel-body">
+                {{> clients_list }}
+            </div>
+
         </div>
-
-        {{> tabular_ext table=TabularTables.Clients selector=selector class="table table-striped table-bordered table-condensed" }}
-
     </div>
 </template>

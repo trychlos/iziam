@@ -1,27 +1,33 @@
 <template name="client_redirects_panel">
     <div class="c-client-redirects-panel">
+        <div class="panel-content">
 
-        <div class="text ui-mt05 ui-mb05">
-            {{{ i18n key="clients.edit.redirects_text" }}}
+            <div class="panel-header">
+                <div class="panel-preamble">
+                    {{{ i18n key="clients.edit.redirects_text" }}}
+                </div>
+            </div>
+
+            <div class="panel-body">
+                <table class="form-table subtable">
+                    <thead>
+                        <tr>
+                            <th class="ui-w100">{{ i18n key="clients.redirects.url_th" }}</th>
+                            <th>
+                                <button class="btn btn-sm btn-outline-primary js-plus" title="{{ i18n key="clients.redirects.add_title" }}">
+                                    <span class="fa-solid fa-fw fa-plus"></span>
+                                </button>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each it in itemsList }}
+                            {{> client_redirect_row (parmsRedirectRow it) }}
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+
         </div>
-
-        <table class="form-table subtable">
-            <thead>
-                <tr>
-                    <th class="ui-w100">{{ i18n key="clients.redirects.url_th" }}</th>
-                    <th>
-                        <button class="btn btn-sm btn-outline-primary js-plus" title="{{ i18n key="clients.redirects.add_title" }}">
-                            <span class="fa-solid fa-fw fa-plus"></span>
-                        </button>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                {{#each it in itemsList }}
-                    {{> client_redirect_row (parmsRedirectRow it) }}
-                {{/each}}
-            </tbody>
-        </table>
-
     </div>
 </template>

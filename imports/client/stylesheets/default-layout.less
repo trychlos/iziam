@@ -372,11 +372,23 @@ body {
 // most of our forms are layouted inside of tables
 .form-table {
     width: 100%;
-
     .form-subtext {
         margin: 0.25em 2em;
         font-style: italic;
     }
+}
+
+// most of the panels have a text preamble above
+.panel-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.panel-preamble {
+    margin: 1em 0;
+}
+.x-tab > .panel-content > .panel-header > .panel-preamble {
+    margin-top: 0;
 }
 
  /*

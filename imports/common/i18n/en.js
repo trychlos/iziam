@@ -661,7 +661,6 @@ Meteor.APP.i18n = {
                     ending_th: 'Ending on',
                     kid_th: 'Key Id',
                     label_th: 'Label',
-                    preamble: '',
                     starting_th: 'Starting on',
                     use_th: 'Usage'
                 }
@@ -723,7 +722,6 @@ Meteor.APP.i18n = {
                     label_th: 'Label',
                     last_created_th: 'Last created',
                     last_expiration_th: 'Last expiration',
-                    preamble: '',
                     secret_delete_title: 'Delete the "%s" keygrip key',
                     secret_delete_confirm_text: 'You are about to delete the "%s" key of this keygrip.<br />Are you sure ?',
                     secret_delete_confirm_title: 'Deleting the "%s" keygrip key',
@@ -848,8 +846,10 @@ Meteor.APP.i18n = {
                     tab_title: 'Keygrips'
                     },
                 providers: {
-                    list_preamble: 'Select here, among all registered providers, those that your organization is willing to manage. '
-                        +'Each client will then be able to choose the exact provider(s) it wants use.'
+                    preamble: 'Select here, among all registered providers, those that your organization is willing to manage. <br />'
+                        +'Selecting providers is the same as saying which protocol(s) and which feature(s) you want your Authorization Server exhibit, '
+                        +' or you want your clients take advantage of, or you want your clients be forced to use.<br />'
+                        +'Some are strongly needed, or even just required, while others may be freely chosen at your convenience.'
                 },
                 tabular: {
                     baseurl_th: 'Base URL',
@@ -865,8 +865,6 @@ Meteor.APP.i18n = {
                     ident_th: 'Identifier',
                     label_th: 'Label',
                     origin_th: 'Origin',
-                    preamble: 'Selecting providers is the same as saying which protocol(s) and which feature(s) you want use. '
-                        +'Some are strongly needed, or even just required, while others may be freely chosen at your convenience.',
                     selected_th: 'Selected'
                 }
             },

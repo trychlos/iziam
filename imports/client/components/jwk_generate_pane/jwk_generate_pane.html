@@ -1,18 +1,25 @@
 <template name="jwk_generate_pane">
-    <div class="c-jwk-generate-pane ui-h100">
+    <div class="x-tab c-jwk-generate-pane ui-h100">
+        <div class="panel-content">
 
-        <table class="form-table ui-w100 ui-h100">
-            <tr>
-                <td class="ui-center">
-                    <button class="btn {{ btnClass }} ui-mb1 js-generate" type="button" title="{{ i18n key="jwks.edit.generate_button_title" }}" {{ btnDisabled }}>
-                        {{ i18n key="jwks.edit.generate_button_text" }}
-                    </button>
-                    <div class="generate {{ btnDisabled }} ui-mt05">
-                        {{{ i18n key="jwks.edit.generate_below_text" }}}
-                    </div>
-                </td>
-            </tr>
-        </table>
+            <div class="panel-header">
+            </div>
 
+            <div class="panel-body">
+                <table class="form-table ui-w100 ui-h100">
+                    <tr>
+                        <td class="ui-center">
+                            <button class="btn {{ btnClass }} ui-mb1 js-generate" type="button" title="{{ i18n key="jwks.edit.generate_button_title" }}" {{ btnDisabled }}>
+                                {{ i18n key="jwks.edit.generate_button_text" }}
+                            </button>
+                            <div class="generate {{ btnDisabled }} ui-mt05">
+                                {{{ i18n key="jwks.edit.generate_below_text" }}}
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
     </div>
 </template>

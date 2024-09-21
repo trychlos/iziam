@@ -41,13 +41,6 @@ Template.client_secrets_list.onRendered( function(){
     });
 });
 
-Template.client_secrets_list.helpers({
-    // string translation
-    i18n( arg ){
-        return pwixI18n.label( I18N, arg.hash.key );
-    }
-});
-
 Template.client_secrets_list.events({
     // delete a key
     'tabular-delete-event .c-client-secrets-list'( event, instance, data ){

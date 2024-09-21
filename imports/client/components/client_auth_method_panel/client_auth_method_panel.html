@@ -1,23 +1,29 @@
 <template name="client_auth_method_panel">
     <div class="c-client-auth-method-panel">
+        <div clas="panel-content">
 
-        <div class="text">
-            {{{ content_text }}}
-        </div>
-
-        <div class="chooser">
-            {{#each it in itemsList }}
-                <div class="by-item {{ itSelected it }}" data-item-id="{{ itId it }}">
-                    <div class="form-check">
-                        <input class="form-check-input js-check" id="{{ itId it }}" type="radio" name="auth-method" {{ itChecked it }} />
-                        <em><label class="form-check-label" for="{{ itId it }}">{{ itLabel it }}</label></em>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input ui-hidden" type="radio" name="auth-method" />
-                        <label class="form-check-label" for="{{ itId it }}">{{{ itDescription it }}}</label>
-                    </div>
+            <div class="panel-header">
+                <div class="panel-preamble">
+                    {{{ content_text }}}
                 </div>
-            {{/each}}
+            </div>
+
+            <div class="panel-body">
+                <div class="chooser">
+                    {{#each it in itemsList }}
+                        <div class="by-item {{ itSelected it }}" data-item-id="{{ itId it }}">
+                            <div class="form-check">
+                                <input class="form-check-input js-check" id="{{ itId it }}" type="radio" name="auth-method" {{ itChecked it }} />
+                                <em><label class="form-check-label" for="{{ itId it }}">{{ itLabel it }}</label></em>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input ui-hidden" type="radio" name="auth-method" />
+                                <label class="form-check-label" for="{{ itId it }}">{{{ itDescription it }}}</label>
+                            </div>
+                        </div>
+                    {{/each}}
+                </div>
+            </div>
         </div>
 
     </div>

@@ -1,25 +1,30 @@
 <template name="organization_config_pane">
-    <div class="c-organization-config-pane">
+    <div class="x-tab c-organization-config-pane">
+        <div class="panel-content">
 
-        <div class="preamble">
-            {{{ i18n key="organizations.edit.config_preamble" }}}
+            <div class="panel-header">
+                <div class="panel-preamble">
+                    {{{ i18n key="organizations.edit.config_preamble" }}}
+                </div>    
+            </div>
+
+            <div class="panel-body">
+                <table class="form-table ui-w100">
+                    <tr>
+                        <td class="ui-w10"></td>
+                        <td class="ui-w100">
+                            <div class="form-check ui-mt05" title="{{ i18n key="organizations.edit.pkce_title" }}">
+                                <input class="form-check-input js-pkce" type="checkbox" id="pkce" />
+                                <label class="form-check-label" for="pkce">{{ i18n key="organizations.edit.pkce_label" }}</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input ui-hidden" type="checkbox"/>
+                                <label class="form-check-label" for="pkce">{{ i18n key="organizations.edit.pkce_description" }}</label>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
-
-        <table class="form-table ui-w100">
-            <tr>
-                <td class="ui-w10"></td>
-                <td class="ui-w100">
-                    <div class="form-check ui-mt05" title="{{ i18n key="organizations.edit.pkce_title" }}">
-                        <input class="form-check-input js-pkce" type="checkbox" id="pkce" />
-                        <label class="form-check-label" for="pkce">{{ i18n key="organizations.edit.pkce_label" }}</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input ui-hidden" type="checkbox"/>
-                        <label class="form-check-label" for="pkce">{{ i18n key="organizations.edit.pkce_description" }}</label>
-                    </div>
-                </td>
-            </tr>
-        </table>
-
     </div>
 </template>

@@ -1,20 +1,27 @@
 <template name="client_token_extensions_panel">
     <div class="c-client-token-extensions-panel">
+        <div class="panel-content">
 
-        <div class="chooser">
-            {{#each it in itemsList }}
-                <div class="by-item" data-item-id="{{ it }}">
-                    <div class="form-check">
-                        <input class="form-check-input ui-mr025" id="{{ it }}" type="checkbox" {{ itChecked it }} {{ itDisabled it }} />
-                        <label class="form-check-label" for="{{ it }}">{{ itLabel it }}</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input ui-hidden" type="checkbox" {{ itDisabled it }} />
-                        <label class="form-check-label" for="{{ it }}">{{{ itDescription it }}}</label>
-                    </div>
+            <div class="panel-header">
+            </div>
+
+            <div class="panel-body">
+                <div class="chooser">
+                    {{#each it in itemsList }}
+                        <div class="by-item" data-item-id="{{ it }}">
+                            <div class="form-check">
+                                <input class="form-check-input ui-mr025" id="{{ it }}" type="checkbox" {{ itChecked it }} {{ itDisabled it }} />
+                                <label class="form-check-label" for="{{ it }}">{{ itLabel it }}</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input ui-hidden" type="checkbox" {{ itDisabled it }} />
+                                <label class="form-check-label" for="{{ it }}">{{{ itDescription it }}}</label>
+                            </div>
+                        </div>
+                    {{/each}}
                 </div>
-            {{/each}}
-        </div>
+            </div>
 
+        </div>
     </div>
 </template>
