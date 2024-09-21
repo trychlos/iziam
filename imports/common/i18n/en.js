@@ -619,9 +619,11 @@ Meteor.APP.i18n = {
                     ending_ph: 'yyyy-mm-dd',
                     ending_title: 'An optional date of the JSON Web Key activation end',
                     generate_below_text: 'The desired key(s) may be generated just now by clicking on the above button.<br />'
-                        +'It will anyway be generated at least when validating this dialog box.',
+                        +'Or they will anyway be generated at least when validating this dialog box.',
                     generate_button_text: 'Generate',
                     generate_button_title: 'Generate the secret or private/public keys pair',
+                    generate_tab_title: 'Auto-generation',
+                    generated: 'Keys successfully generated',
                     keyspair_tab_title: 'Asymmetric keys pair',
                     kid_label: 'Key Identifier :',
                     kid_ph: 'Key-Id',

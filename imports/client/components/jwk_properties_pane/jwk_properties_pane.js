@@ -15,6 +15,7 @@ import _ from 'lodash';
 
 import { Forms } from 'meteor/pwix:forms';
 import { pwixI18n } from 'meteor/pwix:i18n';
+import { ReactiveVar } from 'meteor/reactive-var';
 
 import { JwaAlg } from '/imports/common/definitions/jwa-alg.def.js';
 import { JwkKty } from '/imports/common/definitions/jwk-kty.def.js';
@@ -80,14 +81,6 @@ Template.jwk_properties_pane.onCreated( function(){
             }
         },
 
-        // generate the JWK
-        //  reactively update the item
-        async generate( itemRv ){
-            let item = itemRv.get();
-            item = await Jwks.fn.generateKeys( item );
-            itemRv.set( item );
-        },
-
         // reset the chosen algorithm when usage or crypto family change
         resetAlg( item ){
             if( item.alg ){
@@ -103,7 +96,7 @@ Template.jwk_properties_pane.onCreated( function(){
     self.autorun(() => {
         const jwks = Template.currentData().container.record.jwks || [];
         self.APP.fields['jwks.$.kid'].form_type = jwks.length ? Forms.FieldType.C.MANDATORY : Forms.FieldType.C.OPTIONAL;
-        console.debug( 'setting form_type', self.APP.fields['jwks.$.kid'] );
+        //console.debug( 'setting form_type', self.APP.fields['jwks.$.kid'] );
     });
 });
 
@@ -111,13 +104,12 @@ Template.jwk_properties_pane.onRendered( function(){
     const self = this;
 
     // initialize the Checker for this panel as soon as we get the parent Checker
-    // NB: cannotuse Forms.FormField defaults as the schema name addresses the full Organization record
+    // NB: cannot use Forms.FormField defaults as the schema name addresses the full Organization record
     //  while this panel only addresses a single JWK
     self.autorun(() => {
         const parentChecker = Template.currentData().checker.get();
         const checker = self.APP.checker.get();
         if( parentChecker && !checker ){
-            console.debug( 'allowcating checked' );
             const itemRv = Template.currentData().item;
             self.APP.checker.set( new Forms.Checker( self, {
                 name: 'jwk_properties_pane',
@@ -131,34 +123,9 @@ Template.jwk_properties_pane.onRendered( function(){
             }));
         }
     });
-
-    // track checker status
-    self.autorun(() => {
-        const checker = self.APP.checker.get();
-        if( checker ){
-            console.debug( 'checker', checker.status(), checker.validity());
-        }
-    });
 });
 
 Template.jwk_properties_pane.helpers({
-    // have a color class which exhibit the enable status
-    btnClass(){
-        return this.item.get().alg ? 'btn-secondary' : 'btn-outline-secondary';
-    },
-
-    // whether the Generate button is disabled
-    btnDisabled(){
-        return this.item.get().alg ? '' : 'disabled';
-    },
-
-    // haveGenerate
-    // - do not display the button when editing an existing JWK (nothing to generate)
-    // - on new JWK, the button is disabled until having all required data (i.e. an alg)
-    haveGenerate(){
-        return this.isNew.get();
-    },
-
     // string translation
     i18n( arg ){
         return pwixI18n.label( I18N, arg.hash.key );
@@ -213,10 +180,12 @@ Template.jwk_properties_pane.helpers({
 });
 
 Template.jwk_properties_pane.events({
+    /*
     // generate the jwk
     'click .js-generate'( event, instance ){
         instance.APP.generate( this.item );
     },
+    */
     // reset the algorithm on any change on usage or crypto family
     'jwk-use-selected .c-jwk-properties-pane'( event, instance, data ){
         instance.APP.resetAlg( this.item.get());

@@ -312,18 +312,21 @@ body {
 }
 
 .c-jwk-edit-dialog {
-    .generate.disabled {
+    .disabled {
         color: gray;
         font-style: italic;
     }
 }
-.c-client-new-button .plusButton,
-.c-client-secret-new-button .plusButton,
-.c-jwk-new-button .plusButton,
-.c-keygrip-new-button .plusButton,
-.c-keygrip-secret-new-button .plusButton {
-    margin-left: 2em;
-    position: inherit;
+
+.c-client-new-button,
+.c-client-secret-new-button,
+.c-jwk-new-button,
+.c-keygrip-new-button,
+.c-keygrip-secret-new-button {
+    margin-left: 1em;
+    .PlusButton {
+        margin-top: 0;
+    }
 }
 
 /*

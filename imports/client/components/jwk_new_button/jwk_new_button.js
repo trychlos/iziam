@@ -30,8 +30,11 @@ Template.jwk_new_button.onCreated( function(){
     //console.debug( this );
 
     self.APP = {
+        // whether we have any empty key identifier ?
         emptyKid: new ReactiveVar( false ),
+        // whether the user is allowed to ?
         permitted: new ReactiveVar( false ),
+        // the boolean result of the previous conditions
         canCreate: new ReactiveVar( false ),
         // a dedicated checker to be able to interact with parent Messager
         checker: new ReactiveVar( null )
@@ -51,7 +54,7 @@ Template.jwk_new_button.onCreated( function(){
         });
         if( found !== hasEmpty ){
             self.APP.emptyKid.set( found );
-            console.debug( 'emptyKid', found );
+            //console.debug( 'emptyKid', found );
             checker = self.APP.checker.get();
             if( checker ){
                 if( found ){
@@ -72,7 +75,7 @@ Template.jwk_new_button.onCreated( function(){
         const permission = Template.currentData().isOrganization === false ? 'feat.clients.edit' : 'feat.organizations.edit';
         const permitted = await Permissions.isAllowed( permission, Meteor.userId(), entity._id );
         self.APP.permitted.set( permitted );
-        console.debug( 'permitted', permitted );
+        //console.debug( 'permitted', permitted );
         checker = self.APP.checker.get();
         if( checker ){
             if( permitted ){
@@ -89,12 +92,6 @@ Template.jwk_new_button.onCreated( function(){
     // last allow or not the creation
     self.autorun( async () => {
         self.APP.canCreate.set( !self.APP.emptyKid.get() && self.APP.permitted.get());
-        console.debug( 'set canCreate' );
-    });
-
-    // track the creation permission
-    self.autorun( async () => {
-        //console.debug( 'canCreate', self.APP.canCreate.get());
     });
 });
 
@@ -133,6 +130,7 @@ Template.jwk_new_button.helpers({
 
 Template.jwk_new_button.events({
     'click .plusButton'( event, instance ){
+        //console.debug( this );
         Modal.run({
             ...this,
             mdBody: 'jwk_edit_dialog',

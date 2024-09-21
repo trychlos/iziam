@@ -62,6 +62,7 @@ Template.keygrip_new_button.helpers({
 
 Template.keygrip_new_button.events({
     'click .plusButton'( event, instance ){
+        //console.debug( this );
         Modal.run({
             ...this,
             mdBody: 'keygrip_edit_dialog',

@@ -26,7 +26,7 @@ Jwks.dataSet = function( dc ){
         let o = it;
         dataset.push( o );
     });
-    console.debug( 'dataset', dataset.length, dataset );
+    //console.debug( 'dataset', dataset.length, dataset );
     return dataset;
 };
 

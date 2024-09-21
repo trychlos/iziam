@@ -1,14 +1,12 @@
 /*
  * /imports/client/components/jwk_edit_dialog/jwk_edit_dialog.js
  *
- * Manage a JSON Web Key, maybe empty but have at least an id.
- *
+ * A modal dialog which let the user edit jwk properties.
+ * 
  * Parms:
- * - entity: a ReactiveVar which contains the Organization/Client, with its DYN.records array of ReactiveVar's
- * - index: the index of the current edited organization/client record
- * - item: the JWK item to be edited here
- * - checker: a ReactiveVar which contains the Forms.Checker which manages the parent component
- * - enableChecks: whether the checks should be enabled at startup, defaulting to true
+ * - entity: a ReactiveVar which contains the Organization, with its DYN.records array of ReactiveVar's
+ * - index: the index of the current edited organization record
+ * - item: the JWK item to be edited here, may be null
  */
 
 import _ from 'lodash';
@@ -19,9 +17,11 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 import { Random } from 'meteor/random';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { Tabbed } from 'meteor/pwix:tabbed';
+import { Tolert } from 'meteor/pwix:tolert';
 
 import { Jwks } from '/imports/common/tables/jwks/index.js';
 
+import '/imports/client/components/jwk_generate_pane/jwk_generate_pane.js';
 import '/imports/client/components/jwk_keyspair_pane/jwk_keyspair_pane.js';
 import '/imports/client/components/jwk_private_jwk_pane/jwk_private_jwk_pane.js';
 import '/imports/client/components/jwk_private_pkcs8_pane/jwk_private_pkcs8_pane.js';
@@ -52,7 +52,7 @@ Template.jwk_edit_dialog.onCreated( function(){
     };
 
     // get the edited item
-    // it will go into the currently edited organization/client record only if the user validates this dialog box
+    // it will go into the currently edited organization record only if the user validates this dialog box
     self.autorun(() => {
         const dcItem = Template.currentData().item;
         let item = dcItem ? _.cloneDeep( dcItem ) : { id: Random.id() };
@@ -60,47 +60,63 @@ Template.jwk_edit_dialog.onCreated( function(){
         self.APP.isNew.set( dcItem === null );
     });
 
-    // instanciates a named Tabbed
-    self.autorun(() => {
-        const item = self.APP.item.get();
-        self.APP.tabbed.setTabbedParms({
-            dataContext: {
-                container: { entity: Template.currentData().entity.get(), record: Template.currentData().entity.get().DYN.records[Template.currentData().index].get() },
-                item: self.APP.item,
-                checker: self.APP.checker,
-                isNew: self.APP.isNew
-            },
-            tabs: [
-                {
-                    name: 'jwk_properties_tab',
-                    navLabel: pwixI18n.label( I18N, 'jwks.edit.properties_tab_title' ),
-                    paneTemplate: 'jwk_properties_pane'
-                },
-                {
-                    name: 'jwk_secret_tab',
-                    navLabel: pwixI18n.label( I18N, 'jwks.edit.secret_tab_title' ),
-                    paneTemplate: 'jwk_secret_pane',
-                    enabled: Boolean( item.createdAt && item.secret )
-                },
-                {
-                    name: 'jwk_keyspair_tab',
-                    navLabel: pwixI18n.label( I18N, 'jwks.edit.keyspair_tab_title' ),
-                    paneTemplate: 'jwk_keyspair_pane',
-                    enabled: Boolean( item.createdAt && item.pair )
-                }
-            ],
-            name: 'jwk_edit_dialog'
-        });
-    });
-
     // track the item content
     self.autorun(() => {
         //console.debug( 'item', self.APP.item.get());
     });
+
+    // initialize the named Tabbed
+    const item = self.APP.item.get();
+    self.APP.tabbed.setTabbedParms({ 
+        dataContext: {
+            entity: Template.currentData().entity,
+            index: Template.currentData().index,
+            container: { entity: Template.currentData().entity.get(), record: Template.currentData().entity.get().DYN.records[Template.currentData().index].get() },
+            item: self.APP.item,
+            checker: self.APP.checker,
+            isNew: self.APP.isNew
+        },
+        tabs: [
+            {
+                name: 'jwk_properties_tab',
+                navLabel: pwixI18n.label( I18N, 'jwks.edit.properties_tab_title' ),
+                paneTemplate: 'jwk_properties_pane'
+            },
+            {
+                name: 'jwk_generate_tab',
+                navLabel: pwixI18n.label( I18N, 'jwks.edit.generate_tab_title' ),
+                paneTemplate: 'jwk_generate_pane',
+                enabled: false
+            },
+            {
+                name: 'jwk_secret_tab',
+                navLabel: pwixI18n.label( I18N, 'jwks.edit.secret_tab_title' ),
+                paneTemplate: 'jwk_secret_pane',
+                enabled: false
+            },
+            {
+                name: 'jwk_keyspair_tab',
+                navLabel: pwixI18n.label( I18N, 'jwks.edit.keyspair_tab_title' ),
+                paneTemplate: 'jwk_keyspair_pane',
+                enabled: false
+            }
+        ]
+    });
+
+    // dynamically update the tabs activability
+    self.autorun(() => {
+        self.APP.tabbed.set( 'tab.jwk_generate_tab.shown', self.APP.isNew.get());
+    });
+    self.autorun(() => {
+        const item = self.APP.item.get();
+        self.APP.tabbed.set( 'tab.jwk_secret_tab.enabled', Boolean( item.createdAt && item.secret ));
+        self.APP.tabbed.set( 'tab.jwk_keyspair_tab.enabled', Boolean( item.createdAt && item.pair ));
+    })
 });
 
 Template.jwk_edit_dialog.onRendered( function(){
     const self = this;
+    //console.debug( self );
 
     // whether we are running inside of a Modal
     self.autorun(() => {
@@ -117,34 +133,16 @@ Template.jwk_edit_dialog.onRendered( function(){
     });
 
     // initialize the Checker for this panel as soon as possible
-    self.autorun(() => {
-        if( !self.APP.checker.get()){
-            let parms = {
-                name: 'jwk_edit_dialog',
-                okFn( valid ){
-                    console.debug( 'valid', valid );
-                    if( self.APP.isModal.get()){
-                        Modal.set({ buttons: { id: Modal.C.Button.OK, enabled: valid }});
-                    }
-                    self.$( '.c-jwk-edit-dialog' ).trigger( 'iz-checker', { validity: valid });
-                }
-            };
+    // no need for an autorun when we do not wait for a parent checker
+    self.APP.checker.set( new Forms.Checker( self, {
+        messager: self.APP.messager,
+        okFn( valid ){
             if( self.APP.isModal.get()){
-                parms.messager = self.APP.messager;
+                Modal.set({ buttons: { id: Modal.C.Button.OK, enabled: valid }});
             }
-            parms.enabled = Template.currentData().enableChecks !== false;
-            self.APP.checker.set( new Forms.Checker( self, parms ));
-            console.debug( 'instanciating checker', parms );
+            self.APP.tabbed.set( 'tab.jwk_generate_tab.enabled', valid );
         }
-    });
-
-    // track checker status
-    self.autorun(() => {
-        const checker = self.APP.checker.get();
-        if( checker ){
-            console.debug( 'checker', checker.status(), checker.validity());
-        }
-    });
+    }));
 });
 
 Template.jwk_edit_dialog.helpers({
@@ -167,7 +165,6 @@ Template.jwk_edit_dialog.helpers({
 });
 
 Template.jwk_edit_dialog.events({
-    /*
     // submit
     //  event triggered in case of a modal
     'md-click .c-jwk-edit-dialog'( event, instance, data ){
@@ -189,7 +186,14 @@ Template.jwk_edit_dialog.events({
         // if the secret/keys pair have not been generated yet, do it now
         Promise.resolve( true )
             .then(() => {
-                return jwk.createdAt ? jwk : Jwks.fn.generateKeys( jwk );
+                if( jwk.createdAt ){
+                    return jwk;
+                }
+                return Jwks.fn.generateKeys( jwk ).then(( res ) => {
+                    jwk = res;
+                    Tolert.success( pwixI18n.label( I18N, 'jwks.edit.generated' ));
+                    return jwk;
+                });
             })
             .then(( res ) => {
                 jwk = res;
@@ -209,12 +213,8 @@ Template.jwk_edit_dialog.events({
                 }
             })
             .then(() => {
-                console.debug( 'before recordRv.set, record.jwks', record.jwks );
                 recordRv.set( record );
-                console.debug( 'after recordRv.set' );
                 Modal.close();
-                console.debug( 'after Modal.close' );
             });
     }
-            */
 });
