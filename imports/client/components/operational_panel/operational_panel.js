@@ -27,7 +27,7 @@ Template.operational_panel.onCreated( function(){
         const entity = Template.currentData().entity;
         const organization = Template.currentData().organization;
         if( organization ){
-
+            // handle the client case
         } else {
             const org = Meteor.APP.Organizations.byEntity( entity );
             if( org ){

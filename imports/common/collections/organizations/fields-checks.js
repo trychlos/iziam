@@ -302,10 +302,6 @@ Organizations.checks = {
                 });
             }
         }
-        return new TM.TypedMessage({
-            level: TM.MessageLevel.C.WARNING,
-            message: pwixI18n.label( I18N, 'organizations.checks.issuer_warning' )
-        });
         return null;
     },
 

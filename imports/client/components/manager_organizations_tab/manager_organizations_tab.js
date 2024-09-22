@@ -32,7 +32,9 @@ Template.manager_organizations_tab.onCreated( function(){
                 name: 'organization_clients_tab',
                 navLabel: pwixI18n.label( I18N, 'organizations.edit.clients_tab_title' ),
                 enabled: false
-            },
+            }
+        ],
+        entityTabsAfterNew: [
             {
                 name: 'organization_status_tab',
                 navLabel: pwixI18n.label( I18N, 'organizations.edit.status_tab_title' ),
@@ -49,7 +51,9 @@ Template.manager_organizations_tab.onCreated( function(){
                 name: 'organization_clients_tab',
                 navLabel: pwixI18n.label( I18N, 'organizations.edit.clients_tab_title' ),
                 paneTemplate: 'organization_clients_pane'
-            },
+            }
+        ],
+        entityTabsAfterEdit: [
             {
                 name: 'organization_status_tab',
                 navLabel: pwixI18n.label( I18N, 'organizations.edit.status_tab_title' ),
@@ -102,6 +106,7 @@ Template.manager_organizations_tab.helpers({
     parmsNewTenant(){
         return {
             entityTabs: Template.instance().APP.entityTabsNew,
+            entityTabsAfter: Template.instance().APP.entityTabsAfterNew,
             recordTabs: Template.instance().APP.recordTabs,
             shape: PlusButton.C.Shape.RECTANGLE,
             mdClasses: 'modal-xxl'
@@ -112,6 +117,7 @@ Template.manager_organizations_tab.helpers({
     parmsTenantsList(){
         return {
             entityTabs: Template.instance().APP.entityTabsEdit,
+            entityTabsAfter: Template.instance().APP.entityTabsAfterEdit,
             recordTabs: Template.instance().APP.recordTabs,
             mdClasses: 'modal-xxl'
         }
