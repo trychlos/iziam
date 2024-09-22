@@ -54,7 +54,7 @@ Template.client_secret_edit_dialog.onCreated( function(){
         //console.debug( 'item', self.APP.item.get());
     });
 
-    // instanciates a named Tabbed
+    // initialize the Tabbed.Instance
     self.autorun(() => {
         let tabs = [
             {

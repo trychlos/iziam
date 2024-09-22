@@ -776,9 +776,12 @@ Meteor.APP.i18n = {
                     authorization_title: 'The endpoint path used to build the Authorization Server URL, to which the clients must address their authorization grant requests.',
                     baseurl_label: 'REST Base URL :',
                     baseurl_ph: '/base',
-                    baseurl_title: 'The first level of all REST URL\'s managed by and available to this organization. This is mandatory to have access to the Authorization Server REST API.',
+                    baseurl_title: 'The first level of all REST URL\'s managed by and available to this organization and its clients. '
+                        +'It is mandatory to have access to the Authorization Server REST API. '
+                        +'It must be unique.',
                     clients_tab_title: 'Clients',
-                    config_preamble: 'Set here some configuration parameters common to all clients.',
+                    config_preamble: 'Configure some common aspects of your OAuth organization.<br />'
+                        +'At least, a unique base URL is mandatory here.',
                     config_tab_title: 'Configuration',
                     dynamic_example: 'Dynamic registration URL: &laquo; %s &raquo;',
                     dynamic_label: 'Dynamic registration endpoint :',
@@ -833,8 +836,8 @@ Meteor.APP.i18n = {
                 jwks: {
                     preamble: 'The JSON Web Key Set (JWKS) is a set of keys containing the public keys used to sign and encrypt any JSON Web Token (JWT) '
                         +'issued by the Authorization Server.<br />'
-                        +'Active JSON Web Key Set is exposed to your clients through the <code>JWKS page</code> document.<br />'
-                        +'Each JSON Web Key targets either signature or encryption role. Keys can be freely rotated using starting and ending dates.',
+                        +'Each JSON Web Key targets either signature or encryption role. Keys can be easily rotated using starting and ending dates.'
+                        +'Active JSON Web Key Set is exposed to your clients through the <code>JWKS page</code> document.<br />',
                     tab_title: 'JSON Web Keys Set'
                 },
                 keygrips: {

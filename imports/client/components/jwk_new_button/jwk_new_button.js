@@ -54,18 +54,6 @@ Template.jwk_new_button.onCreated( function(){
         });
         if( found !== hasEmpty ){
             self.APP.emptyKid.set( found );
-            //console.debug( 'emptyKid', found );
-            const checker = self.APP.checker.get();
-            if( checker ){
-                if( found ){
-                    checker.messagerPush( new TM.TypedMessage({
-                        level: TM.MessageLevel.C.INFO,
-                        message: pwixI18n.label( I18N, 'jwks.checks.jwk_kid_empty' )
-                    }));
-                } else {
-                    checker.messagerClear();
-                }
-            }
         }
     });
 
@@ -76,11 +64,22 @@ Template.jwk_new_button.onCreated( function(){
         const permitted = await Permissions.isAllowed( permission, Meteor.userId(), entity._id );
         self.APP.permitted.set( permitted );
         //console.debug( 'permitted', permitted );
+    });
+
+    // push an error message to the current stack
+    self.autorun( async () => {
+        const hasEmpty = self.APP.emptyKid.get();
+        const permitted = self.APP.permitted.get();
         const checker = self.APP.checker.get();
         if( checker ){
-            if( permitted ){
-                checker.messagerClear();
-            } else {
+            checker.messagerClearMine();
+            if( hasEmpty ){
+                checker.messagerPush( new TM.TypedMessage({
+                    level: TM.MessageLevel.C.INFO,
+                    message: pwixI18n.label( I18N, 'jwks.checks.jwk_kid_empty' )
+                }));
+            }
+            if( !permitted ){
                 checker.messagerPush( new TM.TypedMessage({
                     level: TM.MessageLevel.C.INFO,
                     message: pwixI18n.label( I18N, 'jwks.checks.jwk_not_permitted' )
@@ -103,9 +102,11 @@ Template.jwk_new_button.onRendered( function(){
         const parentChecker = Template.currentData().checker?.get();
         const checker = self.APP.checker.get();
         if( parentChecker && !checker ){
+            /*
             self.APP.checker.set( new Forms.Checker( self, {
                 parent: parentChecker
             }));
+            */
         }
     });
 });

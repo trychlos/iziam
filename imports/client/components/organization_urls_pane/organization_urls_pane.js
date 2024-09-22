@@ -19,12 +19,6 @@ Template.organization_urls_pane.onCreated( function(){
 
     self.APP = {
         fields: {
-            issuer: {
-                js: '.js-issuer'
-            },
-            baseUrl: {
-                js: '.js-baseurl'
-            },
             authorization_endpoint: {
                 js: '.js-authorization'
             },
@@ -112,11 +106,6 @@ Template.organization_urls_pane.helpers({
     // string translation
     i18n( arg ){
         return pwixI18n.label( I18N, arg.hash.key );
-    },
-    // an example of the issuer value
-    // using the well-known server discovery url
-    issuer_example(){
-        return pwixI18n.label( I18N, 'organizations.edit.issuer_example', Template.instance().APP.baseUrl.get() + Meteor.APP.C.oauthMetadataPath );
     },
     // the full introspection endpoint url
     introspection_example(){

@@ -37,6 +37,11 @@ Template.manager_organizations_tab.onCreated( function(){
         ],
         recordTabs: [
             {
+                name: 'organization_config_tab',
+                navLabel: pwixI18n.label( I18N, 'organizations.edit.config_tab_title' ),
+                paneTemplate: 'organization_config_pane'
+            },
+            {
                 name: 'organization_urls_tab',
                 navLabel: pwixI18n.label( I18N, 'organizations.edit.urls_tab_title' ),
                 paneTemplate: 'organization_urls_pane'
@@ -45,11 +50,6 @@ Template.manager_organizations_tab.onCreated( function(){
                 name: 'organization_providers_tab',
                 navLabel: pwixI18n.label( I18N, 'organizations.edit.providers_tab_title' ),
                 paneTemplate: 'organization_providers_pane'
-            },
-            {
-                name: 'organization_config_tab',
-                navLabel: pwixI18n.label( I18N, 'organizations.edit.config_tab_title' ),
-                paneTemplate: 'organization_config_pane'
             },
             {
                 name: 'organization_dynregistration_tab',

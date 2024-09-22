@@ -53,9 +53,10 @@ Template.client_new_button.helpers({
 
 Template.client_new_button.events({
     'click .plusButton'( event, instance ){
-        let dc = this;
+        let dc = { ...this };
         delete dc.entityTabs;
-        delete dc.recordTabs
+        delete dc.recordTabs;
+        delete dc.checker;
         const organization = {
             entity: this.item.get(),
             record: this.item.get().DYN.closest

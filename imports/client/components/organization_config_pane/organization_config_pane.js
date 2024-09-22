@@ -12,6 +12,8 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { TenantsManager } from 'meteor/pwix:tenants-manager';
 
+import { Organizations } from '/imports/common/collections/organizations/index.js';
+
 import './organization_config_pane.html';
 
 Template.organization_config_pane.onCreated( function(){
@@ -19,13 +21,36 @@ Template.organization_config_pane.onCreated( function(){
 
     self.APP = {
         fields: {
+            baseUrl: {
+                js: '.js-baseurl'
+            },
+            issuer: {
+                js: '.js-issuer'
+            },
             wantsPkce: {
-                js: '.js-pkce'
+                js: '.js-pkce',
+                form_status: Forms.C.CheckStatus.TRANSPARENT
             }
         },
+        // the current { entity, record } organization object
+        organization: new ReactiveVar( null ),
+        // the full base url
+        baseUrl: new ReactiveVar( null ),
         // the Checker instance
         checker: new ReactiveVar( null )
     };
+
+    // maintain the current { entity, record } organization object
+    self.autorun(() => {
+        const entity = Template.currentData().entity.get();
+        const record = entity.DYN.records[Template.currentData().index].get();
+        self.APP.organization.set({ entity: entity, record: record });
+    });
+
+    // maintain the full issuer+baseUrl
+    self.autorun(() => {
+        self.APP.baseUrl.set( Organizations.fn.fullBaseUrl( self.APP.organization.get()));
+    });
 
     // setup some default values in the organization record (must be same than those defined in fieldset)
     self.autorun(() => {
@@ -54,8 +79,7 @@ Template.organization_config_pane.onRendered( function(){
                     entity: Template.currentData().entity,
                     index: Template.currentData().index
                 },
-                setForm: Template.currentData().entity.get().DYN.records[Template.currentData().index].get(),
-                checkStatusShow: Forms.C.CheckStatus.NONE
+                setForm: Template.currentData().entity.get().DYN.records[Template.currentData().index].get()
             }));
         }
     });
@@ -65,5 +89,10 @@ Template.organization_config_pane.helpers({
     // string translation
     i18n( arg ){
         return pwixI18n.label( I18N, arg.hash.key );
+    },
+    // an example of the issuer value
+    // using the well-known server discovery url
+    issuer_example(){
+        return pwixI18n.label( I18N, 'organizations.edit.issuer_example', Template.instance().APP.baseUrl.get() + Meteor.APP.C.oauthMetadataPath );
     }
 });

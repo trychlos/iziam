@@ -72,7 +72,7 @@ import './client_edit_dialog.html';
 
 Template.client_edit_dialog.onCreated( function(){
     const self = this;
-    //console.debug( this );
+    console.debug( this );
 
     self.APP = {
         // the global Checker for this modal
@@ -107,37 +107,35 @@ Template.client_edit_dialog.onCreated( function(){
         self.APP.item.set( dup );
     });
 
-    // instanciates the Tabbed.Instance
-    self.autorun(() => {
-        const paneData = {
-            ...Template.currentData(),
-            entity: self.APP.item,
-            checker: self.APP.checker
-        };
-        const notesField = ClientsEntities.fieldSet.get().byName( 'notes' );
-        self.APP.tabbed.setTabbedParms({
-            tabs: [
-                {
-                    name: 'client_entity_validities_tab',
-                    navLabel: pwixI18n.label( I18N, 'clients.edit.entity_validities_tab_title' ),
-                    paneTemplate: 'client_entity_validities_pane',
-                    paneData: {
-                        ...paneData,
-                        template: 'client_record_tabbed',
-                    },
-                    withValidities: true
+    // initialize the Tabbed.Instance
+    const paneData = {
+        ...Template.currentData(),
+        entity: self.APP.item,
+        checker: self.APP.checker
+    };
+    const notesField = ClientsEntities.fieldSet.get().byName( 'notes' );
+    self.APP.tabbed.setTabbedParms({
+        tabs: [
+            {
+                name: 'client_entity_validities_tab',
+                navLabel: pwixI18n.label( I18N, 'clients.edit.entity_validities_tab_title' ),
+                paneTemplate: 'client_entity_validities_pane',
+                paneData: {
+                    ...paneData,
+                    template: 'client_record_tabbed',
                 },
-                {
-                    name: 'client_entity_notes_tab',
-                    navLabel: pwixI18n.label( I18N, 'clients.edit.entity_notes_tab_title' ),
-                    paneTemplate: 'NotesEdit',
-                    paneData: {
-                        ...paneData,
-                        field: notesField
-                    }
+                withValidities: true
+            },
+            {
+                name: 'client_entity_notes_tab',
+                navLabel: pwixI18n.label( I18N, 'clients.edit.entity_notes_tab_title' ),
+                paneTemplate: 'NotesEdit',
+                paneData: {
+                    ...paneData,
+                    field: notesField
                 }
-            ]
-        });
+            }
+        ]
     });
 });
 
@@ -159,23 +157,20 @@ Template.client_edit_dialog.onRendered( function(){
     });
 
     // allocate a Checker for this (topmost parent) template
-    self.autorun(() => {
-        self.APP.checker.set( new Forms.Checker( self, {
-            messager: self.APP.messager,
-            okFn( valid ){
-                if( self.APP.isModal.get()){
-                    Modal.set({ buttons: { id: Modal.C.Button.OK, enabled: valid }});
-                }
+    self.APP.checker.set( new Forms.Checker( self, {
+        messager: self.APP.messager,
+        okFn( valid ){
+            if( self.APP.isModal.get()){
+                Modal.set({ buttons: { id: Modal.C.Button.OK, enabled: valid }});
             }
-        }));
-    });
+        }
+    }));
 });
 
 Template.client_edit_dialog.helpers({
     // parms to FormsMessager
     parmsMessager(){
         return {
-            ...this,
             messager: Template.instance().APP.messager
         };
     }

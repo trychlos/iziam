@@ -88,7 +88,10 @@ Template.client_record_tabbed.onCreated( function(){
                 {
                     navLabel: pwixI18n.label( I18N, 'clients.edit.redirects_tab_title' ),
                     paneTemplate: 'client_redirects_panel',
-                    paneData: paneData
+                    paneData: {
+                        ...paneData,
+                        haveOne: false
+                    }
                 },
                 {
                     navLabel: pwixI18n.label( I18N, 'clients.edit.jwks_tab_title' ),
@@ -103,7 +106,10 @@ Template.client_record_tabbed.onCreated( function(){
                 {
                     navLabel: pwixI18n.label( I18N, 'clients.edit.contacts_tab_title' ),
                     paneTemplate: 'client_contacts_panel',
-                    paneData: paneData
+                    paneData: {
+                        ...paneData,
+                        haveOne: false
+                    }
                 },
                 {
                     name: 'record_notes_tab',

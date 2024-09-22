@@ -13,17 +13,6 @@
                             <input class="form-control flex-grow-1 js-label" type="text" id="client-panel-label" placeholder="{{ i18n key="clients.edit.label_ph" }}" title="{{ i18n key="clients.edit.label_title" }}" />
                         </td>
                     </tr>
-                    {{#if withEnabled }}
-                        <tr>
-                            <td class="label"></td>
-                            <td>
-                                <div class="form-check ui-mt05 ui-mb05 ui-w50 js-enabled">
-                                    <input class="form-check-input ui-mr025" id="client-enabled" type="checkbox" {{ enabledChecked }} {{ enabledDisabled }} />
-                                    <label class="form-check-label" for="client-enabled">{{ i18n key="clients.edit.enabled_label" }}</label>
-                                </div>
-                            </td>
-                        </tr>
-                    {{/if}}
                     <tr>
                         <td class="label"><label class="form-label" for="client-panel-description">{{ i18n key="clients.edit.description_label" }}</label></td>
                         <td>
@@ -92,6 +81,17 @@
                             <td>
                                 <div class="ui-mt025 ui-w50 js-application-type">
                                     {{> client_application_type_select (parmsApplicationTypeSelect) }}
+                                </div>
+                            </td>
+                        </tr>
+                    {{/if}}
+                    {{#if withEnabled }}
+                        <tr>
+                            <td class="label"></td>
+                            <td>
+                                <div class="form-check ui-mt05 ui-mb05 ui-w50 js-enabled">
+                                    <input class="form-check-input ui-mr025" id="client-enabled" type="checkbox" {{ enabledChecked }} {{ enabledDisabled }} />
+                                    <label class="form-check-label" for="client-enabled">{{ i18n key="clients.edit.enabled_label" }}</label>
                                 </div>
                             </td>
                         </tr>

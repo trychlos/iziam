@@ -28,7 +28,7 @@ Organizations.recordFieldset = function(){
                     type: String,
                     optional: true,
                     form_check: Organizations.checks.baseUrl,
-                    form_type: Forms.FieldType.C.OPTIONAL
+                    form_type: Forms.FieldType.C.MANDATORY
                 },
                 // -- providers
                 // list of selected providers
@@ -70,7 +70,8 @@ Organizations.recordFieldset = function(){
                     name: 'wantsPkce',
                     type: Boolean,
                     defaultValue: true,
-                    form_check: Organizations.checks.wantsPkce
+                    form_check: Organizations.checks.wantsPkce,
+                    form_type: Forms.FieldType.C.NONE
                 },
                 // -- Authorization Server Metadata
                 // https://datatracker.ietf.org/doc/html/rfc8414#section-2
