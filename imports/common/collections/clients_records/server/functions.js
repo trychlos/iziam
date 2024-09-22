@@ -120,6 +120,8 @@ ClientsRecords.server = {
                 record.updatedAt = new Date();
             }
             record.entity = entity._id;
+            // debug the record content
+            //ClientsRecords.collection.upsertAsync({ _id: record._id }, { $set: record });
             promises.push( ClientsRecords.collection.upsertAsync({ _id: record._id }, { $set: record }).then(( res ) => {
                 //console.debug( 'upsertAsync', record, 'res', res );
                 if( res.numberAffected > 0 ){

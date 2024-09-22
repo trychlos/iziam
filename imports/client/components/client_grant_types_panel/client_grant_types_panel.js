@@ -12,6 +12,7 @@
  * - entity: the currently edited client entity as a ReactiveVar
  * - index: the index of the edited record
  * - checker: the Forms.Checker which manages the parent component as a ReactiveVar
+ * - enableChecks: whether the checks should be enabled at startup, defaulting to true
  * 
  * Forms.Checker doesn't manage well radio buttons: do not use here.
  */
@@ -21,6 +22,7 @@ import _ from 'lodash';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 
+import { ClientsRecords } from '/imports/common/collections/clients_records/index.js';
 import { Organizations } from '/imports/common/collections/organizations/index.js';
 
 import { GrantNature } from '/imports/common/definitions/grant-nature.def.js';
@@ -37,6 +39,7 @@ Template.client_grant_types_panel.onCreated( function(){
     self.APP = {
         organizationProviders: new ReactiveVar( {} ),
         selectables: new ReactiveVar( {} ),
+        checker: new ReactiveVar( null ),
 
         // whether we have a radio button or a checkbox
         isRadio( dataContext, nature, it ){
@@ -115,6 +118,18 @@ Template.client_grant_types_panel.onRendered( function(){
             self.$( '.c-client-grant-types-panel' ).trigger( 'iz-grant-types', { grant_types: grantTypes });
         }
     });
+
+    // initialize the Checker for this panel as soon as we get the parent Checker
+    self.autorun(() => {
+        const parentChecker = Template.currentData().checker?.get();
+        const checker = self.APP.checker.get();
+        if( parentChecker && !checker ){
+            self.APP.checker.set( new Forms.Checker( self, {
+                parent: parentChecker,
+                enabled: Template.currentData().enableChecks !== false
+            }));
+        }
+    });
 });
 
 Template.client_grant_types_panel.helpers({
@@ -176,6 +191,13 @@ Template.client_grant_types_panel.helpers({
 });
 
 Template.client_grant_types_panel.events({
+    // ask for enabling the checker (when this panel is used inside of an assistant)
+    'iz-enable-checks .c-client-grant-types-panel'( event, instance, enabled ){
+        instance.APP.checker.get().enabled( enabled );
+        if( enabled ){
+            instance.APP.checker.get().check({ update: false });
+        }
+    },
     // grant type selection
     // reactively reset the full list of selected grant types in the record to let the UI auto-update
     'click .by-item'( event, instance ){
@@ -183,10 +205,19 @@ Template.client_grant_types_panel.events({
         instance.$( '.chooser input:checked' ).each( function( index, item ){
             selected.push( $( this ).closest( '.by-item' ).data( 'item-id' ));
         });
-        let record = this.entity.get().DYN.records[this.index].get();
-        record.grant_types = selected;
-        this.entity.get().DYN.records[this.index].set( record );
-        // advertize the eventual caller (e.g. the client_new_assistant) of the new auth method
+        // check and maybe sent an error message
+        // the async check function returns null or an array of TypedMessage's
+        const checker = instance.APP.checker.get();
+        if( checker ){
+            ClientsRecords.checks.grant_types( selected, { entity: this.entity, index: this.index, selectables: instance.APP.selectables.get() }).then(( res ) => {
+                if( res ){
+                    checker.messagerPush( res );
+                } else {
+                    checker.messagerClearMine();
+                }
+            });
+        }
+        // last, advertize the eventual caller (e.g. the client_new_assistant) of the new auth flow
         instance.$( '.c-client-grant-types-panel' ).trigger( 'iz-grant-types', { grant_types: selected });
     }
 });

@@ -86,6 +86,7 @@ Template.client_new_assistant_grant_types.events({
     },
     'assistant-pane-shown .c-client-new-assistant-grant-types'( event, instance, data ){
         instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'prev', enable: true });
+        instance.$( '.c-client-grant-types-panel' ).trigger( 'iz-enable-checks', true );
     },
     // be kept informed of the changes
     'iz-grant-types .c-client-new-assistant-grant-types'( event, instance, data ){

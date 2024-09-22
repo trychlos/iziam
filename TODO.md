@@ -38,20 +38,12 @@
 |   55 | 2024- 1- 8 | Identities.name should have an extension which includes the preferred email address (to distinguish homonymous) |
 |   56 | 2024- 1- 8 | membership.hierarchy: have a right-click context menu with new/insert group/identity |
 |   59 | 2024- 1- 9 | resources, scopes and claims should not be identified by their label, but with an identifier (for example a random id) |
-|   60 | 2024- 1-10 | have a Error-derived class to throw our own exceptions |
-|      | 2024- 6-24 | what is the added value or the use case ? |
 |   61 | 2024- 1-10 | identities: add titre, titre post-nominal |
 |   64 | 2024- 1-10 | display the picture in organizations list, identities list |
 |   66 | 2024- 1-11 | auth server: have a button to display the .well-known/openid-configuration |
 |   72 | 2024- 1-12 | use image_includer component in the identity properties |
 |   77 | 2024- 1-12 | multiple-select: review the select box size to align with standard bootstrap select boxes |
-|   79 | 2024- 1-12 | obsolete Meteor.APP.ExtOpenID.upsert_helper() server function |
-|   80 | 2024- 1-12 | organization_check: a JWK is only needed if a client requires a JWT auth method - and this client will just cannot be connect|
-|      |            | not a reason to not have a REST API |
-|      | 2024- 1-18 | not at all: if the client wants authentify with a JWT, it will provide its own public key or will share a secret with the server |
-|      |            | organizations have JWKS for being able to handle customers requests to receive JWT |
 |   81 | 2024- 1-12 | providers_tab: display available resources and scopes when isAdmin |
-|   85 | 2024- 1-13 | jwks_pane: ask for user confirmation when removing an item and also when validating the dialog |
 |   86 | 2024- 1-13 | keygrip_secret: ask for user confirmation when removing an item and also when validating the dialog |
 |   89 | 2024- 1-14 | have a tool to identify unused strings from i18n/en.js |
 |   96 | 2024- 1-17 | client_new_assistant: implement JWT authentification per private key |
@@ -61,7 +53,8 @@
 |  106 | 2024- 1-18 | client_new_assistant: have scopes |
 |  109 | 2024- 1-20 | set removeUnsetValues be a collection behavior (item timestampable) |
 |  112 | 2024- 6-24 | customize the new account mail to verify the address |
-|  114 |  |  |
+|  115 | 2024- 9-22 | move Jwks.fn.generateKeys() to server-side, using a method to address it from the client |
+|  116 |  |  |
 
 ---
 ## Done
@@ -143,6 +136,9 @@
 |      | 2024- 1- 8 | closed as duplicate of #8 |
 |   57 | 2024- 1- 8 | review the select components naming: singular when select is single, plural when select is (resp. can be) multiple |
 |      | 2024- 1-19 | done |
+|   60 | 2024- 1-10 | have a Error-derived class to throw our own exceptions |
+|      | 2024- 6-24 | what is the added value or the use case ? |
+|      | 2024- 9-22 | none: cancelled |
 |   62 | 2024- 1-10 | organization: add suport email, support url, home url |
 |      | 2024- 1-12 | done |
 |   63 | 2024- 1-10 | have a picture component to be used both in organization and identities |
@@ -171,6 +167,13 @@
 |   78 | 2024- 1-12 | oauth_jwks_pane: review the buttons size and alignment (better visible with zoom=200%) |
 |      |            | most probably other panes are also concerned |
 |   78 | 2024- 9-13 | obsoleted in new UI |
+|   79 | 2024- 1-12 | obsolete Meteor.APP.ExtOpenID.upsert_helper() server function |
+|      | 2024- 9-22 | no more relevant in new architecture |
+|   80 | 2024- 1-12 | organization_check: a JWK is only needed if a client requires a JWT auth method - and this client will just cannot be connect|
+|      |            | not a reason to not have a REST API |
+|      | 2024- 1-18 | not at all: if the client wants authentify with a JWT, it will provide its own public key or will share a secret with the server |
+|      |            | organizations have JWKS for being able to handle customers requests to receive JWT |
+|      | 2024- 9-22 | done: both clients and organizations have their own jwks |
 |   82 | 2024- 1-12 | resource_props_panel should be renamed resource_properties_panel |
 |      | 2024- 1-19 | done |
 |   83 | 2024- 1-12 | clients_management_tabbed should be renamed clients_tabbed (or renamed accordingly identities_tabbed, authorizations__tabbed, resources_tabbed) |
@@ -178,6 +181,8 @@
 |      | 2024- 1-19 | all of these is definitively renamed xxx_management_tabbed - so done anyway |
 |   84 | 2024- 1-12 | rename 'organizations-jwks-1' document to 'oauth-jwks-1', updating accordingly oauth_jwks_pane.html |
 |      | 2024- 9-13 | obsoleted as new UI doesn't use documents |
+|   85 | 2024- 1-13 | jwks_pane: ask for user confirmation when removing an item and also when validating the dialog |
+|      | 2024- 9-22 | done in new architecture |
 |   87 | 2024- 1-13 | seems that acUserLogin used when creating a new local account doesn't check for existing email address ? |
 |      | 2024- 9-13 | has been fixed in accounts-ui |
 |   88 | 2024- 1-14 | app-scope is not a good name. Maybe validity context or running context ? -> OrganizationContext ? |
@@ -228,6 +233,8 @@
 |      | 2024- 9-13 | done in pwix:accounts-manager |
 |  113 | 2024- 9-13 | client_new_assistant keept the data of the previous run when re-run |
 |      | 2024- 9-13 | fixed |
+|  114 | 2024- 9-22 | weird bug jwk_new_button on checker instanciation - see comment in code |
+|      | 2024- 9-22 | not reproductible after some changes :( |
 
 ---
 P. Wieser

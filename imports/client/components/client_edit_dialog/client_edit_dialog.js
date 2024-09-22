@@ -72,7 +72,7 @@ import './client_edit_dialog.html';
 
 Template.client_edit_dialog.onCreated( function(){
     const self = this;
-    console.debug( this );
+    //console.debug( this );
 
     self.APP = {
         // the global Checker for this modal
@@ -191,7 +191,7 @@ Template.client_edit_dialog.events({
         //console.debug( event, instance );
         const item = instance.APP.item.get();
         const label = Validity.closest( item ).record.label || '';
-        //console.debug( 'item', item );
+        console.debug( 'item', item );
         Meteor.callAsync( 'client.upsert', item )
             .then(() => {
                 Tolert.success( pwixI18n.label( I18N, instance.APP.isNew.get() ? 'clients.edit.new_success' : 'clients.edit.edit_success', label ));

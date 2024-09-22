@@ -15,11 +15,11 @@ import _ from 'lodash';
 
 import { Forms } from 'meteor/pwix:forms';
 import { Modal } from 'meteor/pwix:modal';
-import { Permissions } from 'meteor/pwix:permissions';
 import { PlusButton } from 'meteor/pwix:plus-button';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
-import { TM } from 'meteor/pwix:typed-message';
+
+import { Jwks } from '/imports/common/tables/jwks/index.js';
 
 import '../jwk_edit_dialog/jwk_edit_dialog.js';
 
@@ -30,67 +30,31 @@ Template.jwk_new_button.onCreated( function(){
     //console.debug( this );
 
     self.APP = {
-        // whether we have any empty key identifier ?
-        emptyKid: new ReactiveVar( false ),
-        // whether the user is allowed to ?
-        permitted: new ReactiveVar( false ),
-        // the boolean result of the previous conditions
         canCreate: new ReactiveVar( false ),
         // a dedicated checker to be able to interact with parent Messager
         checker: new ReactiveVar( null )
     };
 
-    // To create a new JWK, we check that all already existing have a KID
-    //  as a KID becomes mandatory as soon as we have several JWKs
-    self.autorun( async () => {
-        const entity = Template.currentData().entity.get();
-        const hasEmpty = self.APP.emptyKid.get();
-        let found = false;
-        ( entity.DYN.records[Template.currentData().index].get().jwks || [] ).every(( it ) => {
-            if( !it.kid ){
-                found = true;
-            }
-            return !found;
-        });
-        if( found !== hasEmpty ){
-            self.APP.emptyKid.set( found );
-        }
-    });
-
-    // check the creation permission
-    self.autorun( async () => {
-        const entity = Template.currentData().entity.get();
-        const permission = Template.currentData().isOrganization === false ? 'feat.clients.edit' : 'feat.organizations.edit';
-        const permitted = await Permissions.isAllowed( permission, Meteor.userId(), entity._id );
-        self.APP.permitted.set( permitted );
-        //console.debug( 'permitted', permitted );
-    });
-
-    // push an error message to the current stack
-    self.autorun( async () => {
-        const hasEmpty = self.APP.emptyKid.get();
-        const permitted = self.APP.permitted.get();
-        const checker = self.APP.checker.get();
-        if( checker ){
-            checker.messagerClearMine();
-            if( hasEmpty ){
-                checker.messagerPush( new TM.TypedMessage({
-                    level: TM.MessageLevel.C.INFO,
-                    message: pwixI18n.label( I18N, 'jwks.checks.jwk_kid_empty' )
-                }));
-            }
-            if( !permitted ){
-                checker.messagerPush( new TM.TypedMessage({
-                    level: TM.MessageLevel.C.INFO,
-                    message: pwixI18n.label( I18N, 'jwks.checks.jwk_not_permitted' )
-                }));
-            }
-        }
-    });
-
     // last allow or not the creation
-    self.autorun( async () => {
-        self.APP.canCreate.set( !self.APP.emptyKid.get() && self.APP.permitted.get());
+    self.autorun(() => {
+        const entity = Template.currentData().entity.get();
+        Jwks.checks.canCreate({
+            entity: entity,
+            record: entity.DYN.records[Template.currentData().index].get()
+        }, Meteor.userId(), {
+            isOrganization: Template.currentData.isOrganization !== false
+        }).then(( res ) => {
+            // res is null or an array of TypedMessage's
+            self.APP.canCreate.set( res === null );
+            const checker = self.APP.checker.get();
+            if( checker ){
+                if( res ){
+                    checker.messagerPush( res );
+                } else {
+                    checker.messagerClearMine();
+                }
+            }
+        })
     });
 });
 
@@ -102,11 +66,9 @@ Template.jwk_new_button.onRendered( function(){
         const parentChecker = Template.currentData().checker?.get();
         const checker = self.APP.checker.get();
         if( parentChecker && !checker ){
-            /*
             self.APP.checker.set( new Forms.Checker( self, {
                 parent: parentChecker
             }));
-            */
         }
     });
 });

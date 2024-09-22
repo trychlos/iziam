@@ -242,32 +242,20 @@ export const GrantType = {
             if( GrantNature.isMandatory( selectables[nature].def )){
                 let hasOne = false;
                 array.every(( it ) => {
-                    const def = GrantType.byId( it );
-                    if( def ){
-                        const grantNature = GrantType.nature( def );
-                        if( grantNature ){
-                            if( grantNature === nature ){
-                                hasOne = true;
-                            }
-                        } else {
-                            console.warn( 'GrantType has no nature', it );
-                        }
-                    } else {
-                        console.warn( 'unable to find a GrantType definition for', it );
-                    }
+                    hasOne = Object.keys( selectables[nature].types ).includes( it );
                     return !hasOne;
                 });
                 if( !hasOne ){
                     valid = false;
                 }
             }
-            // refresh token must be associated to an authorization code
-            if( valid && nature === 'refresh' ){
-                valid &&= ( array.includes( 'authorization_code' ));
-            }
             // stops as soon as we have found an error
             return valid === true;
         });
+        // refresh token must be associated to an authorization code
+        if( valid && array.includes( 'refresh_token' ) ){
+            valid &&= ( array.includes( 'authorization_code' ));
+        }
         //console.debug( 'selectables', selectables, 'array', array, 'valid', valid );
         return valid;
     },

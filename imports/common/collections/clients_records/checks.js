@@ -16,7 +16,7 @@ import { ApplicationType } from '/imports/common/definitions/application-type.de
 //import { AuthMethod } from '/imports/common/definitions/auth-method.def.js';
 import { ClientProfile } from '/imports/common/definitions/client-profile.def.js';
 import { ClientType } from '/imports/common/definitions/client-type.def.js';
-//import { GrantType } from '/imports/common/definitions/grant-type.def.js';
+import { GrantType } from '/imports/common/definitions/grant-type.def.js';
 //import { ResponseType } from '/imports/common/definitions/response-type.def.js';
 
 import { ClientsRecords } from './index.js';
@@ -289,55 +289,26 @@ ClientsRecords.checks = {
         return null;
     },
 
-    /*
     // the grant types used on the token endpoint
-    async grant_types( value, data, coreApp={} ){
-        _assert_data_itemrv( 'ClientsRecords.check_grantTypes()', data );
-        const item = data.item.get();
-        return Promise.resolve( null )
-            .then(() => {
-                if( coreApp.update !== false ){
-                    item.grant_types = value || null;
-                    data.item.set( item );
-                }
-                // value here can be an array
-                //  test every one until finding an error
-                let array = _.isArray( value ) ? value : [value];
-                let ret = null;
-                array.every(( it ) => {
-                    const def = GrantType.byId( it );
-                    if( !def ){
-                        ret = new CoreApp.TypedMessage({
-                            type: CoreApp.MessageType.C.WARNING,
-                            message: pwixI18n.label( I18N, 'clients.check.granttype_invalid' )
-                        });
-                    // must have a secret
-                    //  must have responseTypes = ['none']
-                    //  auth method cannot be 'none'
-                    } else if( it === 'client_credentials' ){
-                        if( !data.item.clientSecrets || !data.item.clientSecrets.length ){
-                            ret = new CoreApp.TypedMessage({
-                                type: CoreApp.MessageType.C.WARNING,
-                                message: pwixI18n.label( I18N, 'clients.check.credentials_nosecret' )
-                            });
-                        } else if( !_.isEqual( data.item.responseTypes, ['none'] )){
-                            ret = new CoreApp.TypedMessage({
-                                type: CoreApp.MessageType.C.WARNING,
-                                message: pwixI18n.label( I18N, 'clients.check.credentials_rtnone' )
-                            });
-                        } else if( !data.item.token_endpoint_auth_method || data.item.token_endpoint_auth_method === 'none' ){
-                            ret = new CoreApp.TypedMessage({
-                                type: CoreApp.MessageType.C.WARNING,
-                                message: pwixI18n.label( I18N, 'clients.check.authmethod_none' )
-                            });
-                        }
-                    }
-                    return ret === null;
-                });
-                return ret;
+    // reactively update the record to let the UI auto update
+    async grant_types( value, data, opts={} ){
+        _assert_data_content( 'ClientsRecords.check_grant_types()', data );
+        let item = data.entity.get().DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.grant_types = value;
+            data.entity.get().DYN.records[data.index].set( item );
+        }
+        if( value && value.length ){
+            return GrantType.isValidSelection( data.selectables, value ) ? null : new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'clients.checks.grant_types_invalid' )
             });
+        }
+        return new TM.TypedMessage({
+            level: TM.MessageLevel.C.ERROR,
+            message: pwixI18n.label( I18N, 'clients.checks.grant_types_unset' )
+        });
     },
-    */
 
     // the label must be set, and must identify the client entity
     // need to update the entity (or something) so that the new assistant is reactive

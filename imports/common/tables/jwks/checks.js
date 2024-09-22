@@ -6,6 +6,7 @@ import _ from 'lodash';
 const assert = require( 'assert' ).strict;
 
 import { DateJs } from 'meteor/pwix:date';
+import { Permissions } from 'meteor/pwix:permissions';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { TM } from 'meteor/pwix:typed-message';
@@ -23,6 +24,45 @@ const _assert_data_itemrv = function( caller, data ){
 }
 
 Jwks.checks = {
+    // whether the userId is allowed to create a new JWK 
+    // wether the current state of the existing JWKs permit another creation
+    // @param {Object} container an { entity, record } organization/client
+    // @param {String} the current user identifier
+    // @param {Object} an optional options object with following keys:
+    //  - isOrganization: whether the container is an organization, defaulting to true
+    // @returns TM.TypedMessage or null
+    async canCreate( container, userId, opts ){
+        let res = null;
+        // is the user allowed ?
+        const isOrganization = opts.isOrganization !== false;
+        const permission = isOrganization ? 'feat.organizations.edit' : 'feat.clients.edit';
+        const permitted = await Permissions.isAllowed( permission, userId, container.entity._id );
+        if( !permitted ){
+            res = res || [];
+            res.push( new TM.TypedMessage({
+                level: TM.MessageLevel.C.INFO,
+                message: pwixI18n.label( I18N, 'jwks.checks.jwk_not_permitted' )
+            }));
+        }
+        // what is the current jwks state ?
+        //  remind that a kid is mandatory as soon as we have more than only one JWK
+        let found = false;
+        ( container.record.jwks || [] ).every(( it ) => {
+            if( !it.kid ){
+                found = true;
+            }
+            return !found;
+        });
+        if( found ){
+            res = res || [];
+            res.push( new TM.TypedMessage({
+                level: TM.MessageLevel.C.INFO,
+                message: pwixI18n.label( I18N, 'jwks.checks.jwk_kid_empty' )
+            }));
+        }
+        return res;
+    },
+
     // JWK algorithm
     // NB: this is an item edited inside of an array - so the data is different
     async jwk_alg( value, data, opts ){

@@ -47,6 +47,8 @@ Meteor.APP.i18n = {
                     home_host: 'The home URI wants a hostname',
                     home_https: 'The home URI wants only HTTPS scheme',
                     home_invalid: 'The home URI is not valid',
+                    grant_types_invalid: 'The current authorization flow and grant types selection is not valid',
+                    grant_types_unset: 'The current authorization flow and grant types selection is not set',
                     label_exists: 'The label is already used by another client',
                     label_unset: 'The label is not set',
                     logo_host: 'The logo URI wants a hostname',
@@ -127,9 +129,10 @@ Meteor.APP.i18n = {
                     tos_title: 'The URI of a page which describes the terms of service of the client'
                 },
                 jwks: {
-                    preamble: 'If your client wants use a JSON Web Keys Set document, then manage it here.<br />'
-                        +'The referenced document contains the signing key(s) the client will use to sign its tokens, and may '
-                        +'also contain encryption keys.',
+                    preamble: 'The JSON Web Key Set (JWKS) is a set of keys containing the public keys used to sign and encrypt any JSON Web Token (JWT) '
+                        +'issued by the client.<br />'
+                        +'Each JSON Web Key targets either signature or encryption role. Keys can be easily rotated using starting and ending dates.<br />'
+                        +'Active JSON Web Key Set is exposed to the Authorization Server either through a <code>JWKS URI</code> or via a whole <code>JWKS document</code>.',
                     tab_title: 'JSON Web Keys Set'
                 },
                 new: {
@@ -836,8 +839,8 @@ Meteor.APP.i18n = {
                 jwks: {
                     preamble: 'The JSON Web Key Set (JWKS) is a set of keys containing the public keys used to sign and encrypt any JSON Web Token (JWT) '
                         +'issued by the Authorization Server.<br />'
-                        +'Each JSON Web Key targets either signature or encryption role. Keys can be easily rotated using starting and ending dates.'
-                        +'Active JSON Web Key Set is exposed to your clients through the <code>JWKS page</code> document.<br />',
+                        +'Each JSON Web Key targets either signature or encryption role. Keys can be easily rotated using starting and ending dates.<br />'
+                        +'Active JSON Web Key Set is exposed to your clients through the <code>JWKS page</code> document.',
                     tab_title: 'JSON Web Keys Set'
                 },
                 keygrips: {
