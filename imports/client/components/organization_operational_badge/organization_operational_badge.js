@@ -31,6 +31,7 @@ Template.organization_operational_badge.onCreated( function(){
     // update the status when something changes
     self.autorun(() => {
         const item = Template.currentData().item;
+        //console.debug( item );
         const organization = Meteor.APP.Organizations.byId( item.DYN.entity._id );
         if( organization ){
             const status = organization.DYN.operational?.status;

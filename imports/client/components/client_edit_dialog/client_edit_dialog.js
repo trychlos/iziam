@@ -134,6 +134,12 @@ Template.client_edit_dialog.onCreated( function(){
                     ...paneData,
                     field: notesField
                 }
+            },
+            {
+                name: 'client_status_tab',
+                navLabel: pwixI18n.label( I18N, 'clients.edit.status_tab_title' ),
+                paneTemplate: 'client_status_pane',
+                paneData: paneData
             }
         ]
     });

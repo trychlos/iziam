@@ -127,6 +127,7 @@ Meteor.APP.i18n = {
                     softver_label: 'Software version :',
                     softver_ph: 'vx.yy.zzz-aaaa',
                     softver_title: 'The client software version which distinguish it from other registered clients',
+                    status_tab_title: 'Status',
                     tos_label: 'Terms of Service page URI :',
                     tos_ph: 'https://my.example.com/tos',
                     tos_title: 'The URI of a page which describes the terms of service of the client'
