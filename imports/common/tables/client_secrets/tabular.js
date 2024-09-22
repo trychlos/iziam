@@ -4,7 +4,6 @@
 
 import strftime from 'strftime';
 
-import { DateJs } from 'meteor/pwix:date';
 import { Field } from 'meteor/pwix:field';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { Tabular } from 'meteor/pwix:tabular';
@@ -20,19 +19,8 @@ import { ClientSecrets } from './index.js';
 ClientSecrets.dataSet = function( dc ){
     let dataset = [];
     const secrets = dc.listGetFn( dc.args );
-    let maxCreated = null;
-    let maxExpire = null;
     secrets.forEach(( it ) => {
         let o = it;
-        if( DateJs.compare( maxCreated, it.createdAt ) < 0 ){
-            maxCreated = it.createdAt;
-        }
-        if( it.expireAt && DateJs.compare( maxExpire, it.expireAt ) < 0 ){
-            maxExpire = it.expireAt;
-        }
-        it.lastCreated = maxCreated;
-        it.lastExpiration = maxExpire;
-        it.count = it.keylist.length;
         dataset.push( o );
     });
     //console.debug( 'dataset', dataset.length, dataset );
@@ -66,25 +54,39 @@ ClientSecrets.tabularFieldSet = function( dc ){
             dt_title: pwixI18n.label( I18N, 'clients.secrets.list.encoding_th' )
         },
         {
-            name: 'lastCreated',
+            name: 'startingAt',
             dt_type: 'string',
-            dt_title: pwixI18n.label( I18N, 'clients.secrets.list.last_created_th' ),
+            dt_title: pwixI18n.label( I18N, 'clients.secrets.list.starting_th' ),
             dt_render( data, type, rowData ){
-                return strftime( '%Y-%m-%d %H:%M:%S', rowData.lastCreated );
+                return rowData.startingAt ? strftime( '%Y-%m-%d', rowData.startingAt ) : null;
             }
         },
         {
-            name: 'lastExpiration',
+            name: 'endingAt',
             dt_type: 'string',
-            dt_title: pwixI18n.label( I18N, 'clients.secrets.list.last_expiration_th' ),
+            dt_title: pwixI18n.label( I18N, 'clients.secrets.list.ending_th' ),
             dt_render( data, type, rowData ){
-                return rowData.lastExpiration ? strftime( '%Y-%m-%d', rowData.lastExpiration ) : null;
+                return rowData.endingAt ? strftime( '%Y-%m-%d', rowData.endingAt ) : null;
             }
         },
         {
-            name: 'count',
-            dt_type: 'num',
-            dt_title: pwixI18n.label( I18N, 'clients.secrets.list.count_th' )
+            name: 'createdAt',
+            dt_type: 'string',
+            dt_title: pwixI18n.label( I18N, 'clients.secrets.list.created_at_th' ),
+            dt_render( data, type, rowData ){
+                return strftime( '%Y-%m-%d %H:%M:%S', rowData.createdAt );
+            }
+        },
+        {
+            name: 'createdBy',
+            dt_type: 'string',
+            dt_title: pwixI18n.label( I18N, 'clients.secrets.list.created_by_th' ),
+            dt_template: Meteor.isClient && Template.user_preferred_async,
+            dt_templateContext( rowData ){
+                return {
+                    userId: rowData.createdBy
+                };
+            }
         }
     ];
     const fieldset = new Field.Set( columns );

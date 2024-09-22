@@ -11,10 +11,11 @@ ClientSecrets.fn = {
     /**
      * @summary Generate the a secret and a hash for a keygrip
      * @param {Object<Keygrip>} item the current keygrip item
+     * @param {String} userId the user identifier (server-side only)
      * @returns {Object} a { secret, hash } object
      */
-    async generateSecret( item ){
-        return Meteor.isClient ? await Meteor.callAsync( 'client_generate_secret', item ) : await ClientSecrets.s.generateSecret( item );
+    async generateSecret( item, userId ){
+        return Meteor.isClient ? await Meteor.callAsync( 'client_generate_secret', item ) : await ClientSecrets.s.generateSecret( item, userId );
     },
 
     /**

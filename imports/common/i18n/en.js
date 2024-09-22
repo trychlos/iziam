@@ -328,9 +328,11 @@ Meteor.APP.i18n = {
                         secret_alg_unset: 'The secret algorithm is not set',
                         secret_encoding_invalid: 'The secret encoding is invalid',
                         secret_encoding_unset: 'The secret encoding is not set',
+                        ending_before: 'Ending date must be equal or after starting date',
                         secret_size_invalid: 'The secret size is invalid (must be a positive integer)',
                         secret_size_mini: 'The secret size must be greater than %s',
-                        secret_size_unset: 'The secret size is not set'
+                        secret_size_unset: 'The secret size is not set',
+                        starting_after: 'Starting date must be equal or before ending date'
                     },
                     edit: {
                         alg_label: 'Algorithm :',
@@ -341,12 +343,15 @@ Meteor.APP.i18n = {
                         edit_dialog_title: 'Editing the "%s" secret',
                         encoding_label: 'Encoding :',
                         encoding_title: 'How to encode the resulting hash ?',
-                        expire_label: 'Expire at :',
-                        expire_ph: 'yyyy-mm-dd',
-                        expire_title: 'An optional date of the secret expiration',
-                        hash_label: 'Hash :',
-                        hash_title: 'The generated hash',
-                        hash_tab_title: 'Secret',
+                        ending_label: 'Ending on :',
+                        ending_ph: 'yyyy-mm-dd',
+                        ending_title: 'An optional date of the ending secret validity',
+                        generate_below_text: 'The desired secret may be generated just now by clicking on the above button.<br />'
+                            +'Or it will anyway be generated at least when validating this dialog box.',
+                        generate_button_text: 'Generate',
+                        generate_button_title: 'Generate the secret',
+                        generate_tab_title: 'Auto-generation',
+                        generated: 'Secret successfully generated',
                         label_label: 'Label :',
                         label_title: 'An optional label to this secret',
                         label_ph: 'My label',
@@ -357,8 +362,12 @@ Meteor.APP.i18n = {
                             +'need to authenticate against the token endpoint.<br />'
                             +'Manage your set or secrets here.',
                         properties_tab_title: 'Properties',
+                        secret_tab_title: 'Secret',
                         size_label: 'Secret size :',
-                        size_title: 'The size of the generated secret'
+                        size_title: 'The size of the generated secret',
+                        starting_label: 'Starting on :',
+                        starting_ph: 'yyyy-mm-dd',
+                        starting_title: 'An optional date of the starting secret validity'
                     },
                     list: {
                         add_title: 'Add a new secret to your list',
@@ -370,11 +379,10 @@ Meteor.APP.i18n = {
                         delete_title: 'Delete the "%s" secret',
                         edit_title: 'Edit the "%s" secret',
                         encoding_th: 'Encoding',
-                        expire_at_th: 'Expire at',
+                        ending_th: 'Ending on',
                         label_th: 'Label',
-                        last_created_th: 'Last created',
-                        last_expiration_th: 'Last expiration',
-                        preamble: 'See below the defined client secrets.'
+                        preamble: 'See below the defined client secrets.',
+                        starting_th: 'Starting on'
                     }
                 },
                 tabular: {
@@ -563,6 +571,18 @@ Meteor.APP.i18n = {
                     sig_label: 'Signature',
                     enc_label: 'Encryption',
                     select_text: 'Select your JWK usage'
+                },
+                secret_alg: {
+                    rmd160_label: 'RMD160',
+                    sha256_label: 'SHA-256',
+                    sha384_label: 'SHA-384',
+                    sha512_label: 'SHA-512',
+                    select_text: 'Select an HMAC algorithm'
+                },
+                secret_encoding: {
+                    base64_label: 'Base64',
+                    hex_label: 'Hexadecimal',
+                    select_text: 'Select an encoding method'
                 },
                 token_extension: {
                     jwt_bearer_description: 'JSON Web Token (JWT) Profile for OAuth 2.0 Client Authentication and Authorization Grants.',

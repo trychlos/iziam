@@ -25,32 +25,30 @@ Template.jwk_keyspair_pane.onCreated( function(){
     };
 
     // instanciates the Tabbed component
-    self.autorun(() => {
-        self.APP.tabbed.setTabbedParms({
-            dataContext: Template.currentData(),
-            tabs: [
-                {
-                    name: 'jwk_private_jwk_tab',
-                    navLabel: pwixI18n.label( I18N, 'jwks.edit.private_jwk_tab_title' ),
-                    paneTemplate: 'jwk_private_jwk_pane'
-                },
-                {
-                    name: 'jwk_private_pkcs8_tab',
-                    navLabel: pwixI18n.label( I18N, 'jwks.edit.private_pkcs8_tab_title' ),
-                    paneTemplate: 'jwk_private_pkcs8_pane'
-                },
-                {
-                    name: 'jwk_public_jwk_tab',
-                    navLabel: pwixI18n.label( I18N, 'jwks.edit.public_jwk_tab_title' ),
-                    paneTemplate: 'jwk_public_jwk_pane'
-                },
-                {
-                    name: 'jwk_public_spki_tab',
-                    navLabel: pwixI18n.label( I18N, 'jwks.edit.public_spki_tab_title' ),
-                    paneTemplate: 'jwk_public_spki_pane'
-                }
-            ],
-            activateLastTab: false
-        });
+    self.APP.tabbed.setTabbedParms({
+        dataContext: Template.currentData(),
+        tabs: [
+            {
+                name: 'jwk_private_jwk_tab',
+                navLabel: pwixI18n.label( I18N, 'jwks.edit.private_jwk_tab_title' ),
+                paneTemplate: 'jwk_private_jwk_pane'
+            },
+            {
+                name: 'jwk_private_pkcs8_tab',
+                navLabel: pwixI18n.label( I18N, 'jwks.edit.private_pkcs8_tab_title' ),
+                paneTemplate: 'jwk_private_pkcs8_pane'
+            },
+            {
+                name: 'jwk_public_jwk_tab',
+                navLabel: pwixI18n.label( I18N, 'jwks.edit.public_jwk_tab_title' ),
+                paneTemplate: 'jwk_public_jwk_pane'
+            },
+            {
+                name: 'jwk_public_spki_tab',
+                navLabel: pwixI18n.label( I18N, 'jwks.edit.public_spki_tab_title' ),
+                paneTemplate: 'jwk_public_spki_pane'
+            }
+        ],
+        activateLastTab: false
     });
 });

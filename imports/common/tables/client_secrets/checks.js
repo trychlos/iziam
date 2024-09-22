@@ -5,6 +5,7 @@
 import _ from 'lodash';
 const assert = require( 'assert' ).strict;
 
+import { DateJs } from 'meteor/pwix:date';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { TM } from 'meteor/pwix:typed-message';
 
@@ -86,12 +87,18 @@ ClientSecrets.checks = {
     },
 
     // secret optional expiration date
-    async secret_expireAt( value, data, opts ){
-        _assert_data_itemrv( 'ClientSecrets.checks.secret_expireAt()', data );
+    async secret_endingAt( value, data, opts ){
+        _assert_data_itemrv( 'ClientSecrets.checks.secret_endingAt()', data );
         let item = data.item.get();
         if( opts.update !== false ){
-            item.expireAt = value ? new Date( value ) : null;
+            item.endingAt = value ? new Date( value ) : null;
             data.item.set( item );
+        }
+        if( value && item.startingAt ){
+            return DateJs.compare( item.startingAt, item.endingAt ) <= 0 ? null : new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'clients.secrets.checks.ending_before' )
+            });
         }
         return null;
     },
@@ -142,5 +149,22 @@ ClientSecrets.checks = {
             level: TM.MessageLevel.C.ERROR,
             message: pwixI18n.label( I18N, 'clients.secrets.checks.secret_size_unset' )
         });
-    }
+    },
+
+    // secret optional starting date
+    async secret_startingAt( value, data, opts ){
+        _assert_data_itemrv( 'ClientSecrets.checks.secret_startingAt()', data );
+        let item = data.item.get();
+        if( opts.update !== false ){
+            item.startingAt = value ? new Date( value ) : null;
+            data.item.set( item );
+        }
+        if( value && item.endingAt ){
+            return DateJs.compare( item.startingAt, item.endingAt ) <= 0 ? null : new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'clients.secrets.checks.starting_after' )
+            });
+        }
+        return null;
+    },
 };

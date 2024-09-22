@@ -18,10 +18,8 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 
 import { ClientsRecords } from '/imports/common/collections/clients_records/index.js';
 
-import { ClientSecrets } from '/imports/common/tables/client_secrets/index.js';
-
-import '/imports/client/components/hmac_alg_select/hmac_alg_select.js';
-import '/imports/client/components/hmac_encoding_select/hmac_encoding_select.js';
+import '/imports/client/components/secret_alg_select/secret_alg_select.js';
+import '/imports/client/components/secret_encoding_select/secret_encoding_select.js';
 
 import './client_secret_properties_pane.html';
 
@@ -94,10 +92,16 @@ Template.client_secret_properties_pane.onRendered( function(){
                             $node.val( item.size );
                         }
                     },
-                    'secrets.$.expireAt': {
-                        js: '.js-expire',
+                    'secrets.$.startingAt': {
+                        js: '.js-starting',
                         formTo( $node, item ){
-                            $node.val( item.expireAt );
+                            $node.val( item.startingAt );
+                        }
+                    },
+                    'secrets.$.endingAt': {
+                        js: '.js-ending',
+                        formTo( $node, item ){
+                            $node.val( item.endingAt );
                         }
                     }
                 }, ClientsRecords.fieldSet.get()),
@@ -117,16 +121,16 @@ Template.client_secret_properties_pane.helpers({
         return pwixI18n.label( I18N, arg.hash.key );
     },
 
-    // parms for the DateInput
-    parmsDate(){
+    // parms for the ending DateInput
+    parmsEndingDate(){
         return {
-            placeholder: pwixI18n.label( I18N, 'clients.secrets.edit.expire_ph' ),
+            placeholder: pwixI18n.label( I18N, 'clients.secrets.edit.ending_ph' ),
             withHelp: true
         };
     },
 
     // parms for the HMAC Algorith selection
-    parmsHmacAlgSelect(){
+    parmsSecretAlgSelect(){
         return {
             ...this,
             selected: this.item.get().alg || null,
@@ -135,12 +139,20 @@ Template.client_secret_properties_pane.helpers({
     },
 
     // parms for the HMAC Encoding selection
-    parmsHmacEncodingSelect(){
+    parmsSecretEncodingSelect(){
         return {
             ...this,
             selected: this.item.get().encoding || null,
             disabled: !this.isNew.get()
         }
+    },
+
+    // parms for the starting DateInput
+    parmsStartingDate(){
+        return {
+            placeholder: pwixI18n.label( I18N, 'clients.secrets.edit.starting_ph' ),
+            withHelp: true
+        };
     },
 
     // whether the size is disabled ?

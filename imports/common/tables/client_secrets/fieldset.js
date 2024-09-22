@@ -59,15 +59,22 @@ ClientSecrets.recordFieldDef = function(){
             form_check: ClientSecrets.checks.secret_hash,
         },
         {
-            name: 'secrets.$.clear',
+            name: 'secrets.$.secret',
             type: String,
             form_check: ClientSecrets.checks.secret_clear,
         },
         {
-            name: 'secrets.$.expireAt',
+            name: 'secrets.$.startingAt',
             type: Date,
             optional: true,
-            form_check: ClientSecrets.checks.secret_expireAt,
+            form_check: ClientSecrets.checks.secret_startingAt,
+            form_type: Forms.FieldType.C.OPTIONAL
+        },
+        {
+            name: 'secrets.$.endingAt',
+            type: Date,
+            optional: true,
+            form_check: ClientSecrets.checks.secret_endingAt,
             form_type: Forms.FieldType.C.OPTIONAL
         },
         {

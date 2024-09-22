@@ -16,8 +16,11 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 import { Random } from 'meteor/random';
 import { Tabbed } from 'meteor/pwix:tabbed';
 
+import { ClientSecrets } from '/imports/common/tables/client_secrets/index.js';
+
+import '/imports/client/components/client_secret_generate_pane/client_secret_generate_pane.js';
 import '/imports/client/components/client_secret_properties_pane/client_secret_properties_pane.js';
-import '/imports/client/components/client_secret_hash_pane/client_secret_hash_pane.js';
+import '/imports/client/components/client_secret_secret_pane/client_secret_secret_pane.js';
 
 import './client_secret_edit_dialog.html';
 
@@ -55,32 +58,43 @@ Template.client_secret_edit_dialog.onCreated( function(){
     });
 
     // initialize the Tabbed.Instance
-    self.autorun(() => {
-        let tabs = [
+    self.APP.tabbed.setTabbedParms({ 
+        dataContext: {
+            entity: Template.currentData().entity,
+            index: Template.currentData().index,
+            container: { entity: Template.currentData().entity.get(), record: Template.currentData().entity.get().DYN.records[Template.currentData().index].get() },
+            item: self.APP.item,
+            checker: self.APP.checker,
+            isNew: self.APP.isNew
+        },
+        tabs: [
             {
                 name: 'client_secret_properties_pane',
                 navLabel: pwixI18n.label( I18N, 'clients.secrets.edit.properties_tab_title' ),
                 paneTemplate: 'client_secret_properties_pane'
             },
             {
-                name: 'client_secret_hash_pane',
-                navLabel: pwixI18n.label( I18N, 'clients.secrets.edit.hash_tab_title' ),
-                paneTemplate: 'client_secret_hash_pane',
-                enabled: !self.APP.isNew.get()
-            }
-        ];
-        self.APP.tabbed.setTabbedParms({ 
-            dataContext: {
-                entity: Template.currentData().entity,
-                index: Template.currentData().index,
-                container: { entity: Template.currentData().entity.get(), record: Template.currentData().entity.get().DYN.records[Template.currentData().index].get() },
-                item: self.APP.item,
-                checker: self.APP.checker,
-                isNew: self.APP.isNew
+                name: 'client_secret_generate_pane',
+                navLabel: pwixI18n.label( I18N, 'clients.secrets.edit.generate_tab_title' ),
+                paneTemplate: 'client_secret_generate_pane'
             },
-            tabs: tabs
-        });
+            {
+                name: 'client_secret_secret_pane',
+                navLabel: pwixI18n.label( I18N, 'clients.secrets.edit.secret_tab_title' ),
+                paneTemplate: 'client_secret_secret_pane',
+                enabled: false
+            }
+        ]
     });
+
+    // dynamically update the tabs activability
+    self.autorun(() => {
+        self.APP.tabbed.set( 'tab.client_secret_generate_pane.shown', self.APP.isNew.get());
+    });
+    self.autorun(() => {
+        const item = self.APP.item.get();
+        self.APP.tabbed.set( 'tab.client_secret_secret_pane.enabled', Boolean( item.createdAt ));
+    })
 });
 
 Template.client_secret_edit_dialog.onRendered( function(){
@@ -144,25 +158,38 @@ Template.client_secret_edit_dialog.events({
         let record = recordRv.get();
         record.secrets = record.secrets || [];
         let found = false;
-        let item = instance.APP.item.get();
-        // update or push
-        if( instance.APP.isNew.get()){
-            Meteor.callAsync( 'client_generate_secret', item ).then(( res ) => {
-                _.merge( item, res, {
-                    createdAt: new Date(),
-                    createdBy: Meteor.userId()
-                });
-                record.secrets.push( item );
-            });
-        } else {
-            for( let i=0 ; i<record.secrets.length ; ++i ){
-                if( record.secrets[i].id === item.id ){
-                    record.secrets[i] = item;
-                    break;
+        let key = instance.APP.item.get();
+        // if the secret have not been generated yet, do it now
+        Promise.resolve( true )
+            .then(() => {
+                if( key.createdAt ){
+                    return key;
                 }
-            }
-        }
-        recordRv.set( record );
-        Modal.close();
+                return ClientSecrets.fn.generateSecret( jwk ).then(( res ) => {
+                    Tolert.success( pwixI18n.label( I18N, 'clients.secrets.edit.generated' ));
+                    return res;
+                });
+            })
+            .then(( res ) => {
+                key = res;
+                if( instance.APP.isNew.get()){
+                    record.secrets.push( key );
+                } else {
+                    for( let i=0 ; i<record.secrets.length ; ++i ){
+                        if( record.secrets[i].id === key.id ){
+                            record.secrets[i] = key;
+                            found = true;
+                            break;
+                        }
+                    }
+                    if( !found ){
+                        console.warn( 'unable to update the client secret', key );
+                    }
+                }
+            })
+            .then(() => {
+                recordRv.set( record );
+                Modal.close();
+            });
     }
 });
