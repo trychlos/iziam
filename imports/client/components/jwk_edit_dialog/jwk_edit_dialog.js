@@ -190,9 +190,8 @@ Template.jwk_edit_dialog.events({
                     return jwk;
                 }
                 return Jwks.fn.generateKeys( jwk ).then(( res ) => {
-                    jwk = res;
                     Tolert.success( pwixI18n.label( I18N, 'jwks.edit.generated' ));
-                    return jwk;
+                    return res;
                 });
             })
             .then(( res ) => {

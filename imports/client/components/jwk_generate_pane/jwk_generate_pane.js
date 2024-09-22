@@ -31,10 +31,10 @@ Template.jwk_generate_pane.onCreated( function(){
     self.APP = {
         // generate the JWK
         //  reactively update the item
-        async generate( itemRv ){
-            let item = itemRv.get();
+        async generate( dataContext ){
+            let item = dataContext.item.get();
             item = await Jwks.fn.generateKeys( item );
-            itemRv.set( item );
+            dataContext.item.set( item );
             if( item.createdAt ){
                 Tolert.success( pwixI18n.label( I18N, 'jwks.edit.generated' ));
             }
@@ -62,6 +62,6 @@ Template.jwk_generate_pane.helpers({
 Template.jwk_generate_pane.events({
     // generate the jwk key
     'click .js-generate'( event, instance ){
-        instance.APP.generate( this.item );
+        instance.APP.generate( this );
     }
 });

@@ -11,10 +11,11 @@ KeygripSecrets.fn = {
     /**
      * @summary Generate the a secret and a hash for a keygrip
      * @param {Object<Keygrip>} item the current keygrip item
+     * @param {Object} key the current key to be updated
      * @returns {Object} a { secret, hash } object
      */
-    async generateSecret( item ){
-        return Meteor.isClient ? await Meteor.callAsync( 'keygrip_generate_secret', item ) : await KeygripSecrets.s.generateSecret( item );
+    async generateSecret( item, key ){
+        return Meteor.isClient ? await Meteor.callAsync( 'keygrip_generate_secret', item, key ) : await KeygripSecrets.s.generateSecret( item, key );
     },
 
     /**

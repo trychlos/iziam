@@ -29,8 +29,8 @@ Keygrips.dataSet = function( dc ){
             if( DateJs.compare( maxCreated, it.createdAt ) < 0 ){
                 maxCreated = it.createdAt;
             }
-            if( it.expireAt && DateJs.compare( maxExpire, it.expireAt ) < 0 ){
-                maxExpire = it.expireAt;
+            if( it.expireAt && DateJs.compare( maxExpire, it.endingAt ) < 0 ){
+                maxExpire = it.endingAt;
             }
         });
         it.lastCreated = maxCreated;

@@ -85,13 +85,36 @@ Keygrips.checks = {
         return null;
     },
 
-    // keygrip secret optional expiration date
-    async keygrip_secret_expireAt( value, data, opts ){
-        _assert_data_itemrv( 'Keygrips.checks.keygrip_secret_expireAt()', data );
+    // keygrip secret optional ending date
+    async keygrip_secret_endingAt( value, data, opts ){
+        _assert_data_itemrv( 'Keygrips.checks.keygrip_secret_endingAt()', data );
         let item = data.item.get();
         if( opts.update !== false ){
-            item.expireAt = value ? new Date( value ) : null;
+            item.endingAt = value ? new Date( value ) : null;
             data.item.set( item );
+        }
+        if( value && item.startingAt ){
+            return DateJs.compare( item.startingAt, item.endingAt ) <= 0 ? null : new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'keygrips.checks.keygrip_ending_before' )
+            });
+        }
+        return null;
+    },
+
+    // keygrip secret optional starting date
+    async keygrip_secret_startingAt( value, data, opts ){
+        _assert_data_itemrv( 'Keygrips.checks.keygrip_secret_startingAt()', data );
+        let item = data.item.get();
+        if( opts.update !== false ){
+            item.startingAt = value ? new Date( value ) : null;
+            data.item.set( item );
+        }
+        if( value && item.endingAt ){
+            return DateJs.compare( item.startingAt, item.endingAt ) <= 0 ? null : new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'keygrips.checks.keygrip_starting_after' )
+            });
         }
         return null;
     },

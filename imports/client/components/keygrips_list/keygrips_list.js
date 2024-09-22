@@ -59,12 +59,12 @@ Template.keygrips_list.events({
 
     // edit a keygrip
     'tabular-edit-event .c-keygrips-list'( event, instance, data ){
-        console.debug( this );
+        //console.debug( this );
         Modal.run({
             ...this,
             mdBody: 'keygrip_edit_dialog',
             mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
-            mdClasses: 'modal-lg',
+            mdClasses: 'modal-xl',
             mdClassesContent: Meteor.APP.runContext.pageUIClasses().join( ' ' ),
             mdTitle: pwixI18n.label( I18N, 'keygrips.edit.edit_dialog_title', data.item.label || data.item.id ),
             item: data.item

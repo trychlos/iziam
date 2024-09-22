@@ -5,7 +5,7 @@
 import { KeygripSecrets } from '../index.js';
 
 Meteor.methods({
-    'keygrip_generate_secret'( item ){
-        return KeygripSecrets.s.generateSecret( item, this.userId );
+    'keygrip_generate_secret'( item, key ){
+        return KeygripSecrets.s.generateSecret( item, key, this.userId );
     }
 });

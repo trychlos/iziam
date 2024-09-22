@@ -85,6 +85,22 @@ Keygrips.recordFieldDef = function(){
             form_check: Keygrips.checks.keygrip_secret_label,
             form_type: Forms.FieldType.C.OPTIONAL
         },
+        // an optional starting date date
+        {
+            name: 'keygrips.$.keylist.$.startingAt',
+            type: Date,
+            optional: true,
+            form_check: Keygrips.checks.keygrip_secret_startingAt,
+            form_type: Forms.FieldType.C.OPTIONAL
+        },
+        // an optional ending date date
+        {
+            name: 'keygrips.$.keylist.$.endingAt',
+            type: Date,
+            optional: true,
+            form_check: Keygrips.checks.keygrip_secret_endingAt,
+            form_type: Forms.FieldType.C.OPTIONAL
+        },
         // the secret key as a base64 string
         //  secret and hash are generated at same time
         {
@@ -101,14 +117,6 @@ Keygrips.recordFieldDef = function(){
             form_check: Keygrips.checks.keygrip_secret_hash,
             form_type: Forms.FieldType.C.NONE,
             form_status: false
-        },
-        // expiration date
-        {
-            name: 'keygrips.$.keylist.$.expireAt',
-            type: Date,
-            optional: true,
-            form_check: Keygrips.checks.keygrip_secret_expireAt,
-            form_type: Forms.FieldType.C.OPTIONAL
         },
         // creation timestamp
         {

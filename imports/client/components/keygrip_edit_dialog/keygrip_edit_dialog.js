@@ -56,24 +56,22 @@ Template.keygrip_edit_dialog.onCreated( function(){
     });
 
     // instanciates a named Tabbed
-    self.autorun(() => {
-        self.APP.tabbed.setTabbedParms({ 
-            dataContext: {
-                entity: Template.currentData().entity,
-                index: Template.currentData().index,
-                container: { entity: Template.currentData().entity.get(), record: Template.currentData().entity.get().DYN.records[Template.currentData().index].get() },
-                item: self.APP.item,
-                checker: self.APP.checker,
-                isNew: self.APP.isNew
-            },
-            tabs: [
-                {
-                    name: 'keygrip_properties_pane',
-                    navLabel: pwixI18n.label( I18N, 'keygrips.edit.properties_tab_title' ),
-                    paneTemplate: 'keygrip_properties_pane'
-                }
-            ]
-        });
+    self.APP.tabbed.setTabbedParms({ 
+        dataContext: {
+            entity: Template.currentData().entity,
+            index: Template.currentData().index,
+            container: { entity: Template.currentData().entity.get(), record: Template.currentData().entity.get().DYN.records[Template.currentData().index].get() },
+            item: self.APP.item,
+            checker: self.APP.checker,
+            isNew: self.APP.isNew
+        },
+        tabs: [
+            {
+                name: 'keygrip_properties_pane',
+                navLabel: pwixI18n.label( I18N, 'keygrips.edit.properties_tab_title' ),
+                paneTemplate: 'keygrip_properties_pane'
+            }
+        ]
     });
 
     // track the count of keygrip secrets

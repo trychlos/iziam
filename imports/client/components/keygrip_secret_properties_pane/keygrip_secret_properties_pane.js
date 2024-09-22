@@ -39,6 +39,7 @@ Template.keygrip_secret_properties_pane.onCreated( function(){
         result: new ReactiveVar( null )
     };
 
+    /*
     // generate a new secret and its hash
     self.autorun(() => {
         const keygrip = Template.currentData().keygripRv.get();
@@ -54,6 +55,7 @@ Template.keygrip_secret_properties_pane.onCreated( function(){
         item.secret = res.secret;
         item.hash = res.hash;
     });
+    */
 });
 
 Template.keygrip_secret_properties_pane.onRendered( function(){
@@ -76,11 +78,18 @@ Template.keygrip_secret_properties_pane.onRendered( function(){
                             $node.val( item.label );
                         }
                     },
-                    'keygrips.$.keylist.$.expireAt': {
-                        js: '.js-expire',
+                    'keygrips.$.keylist.$.startingAt': {
+                        js: '.js-starting',
                         formTo( $node, item ){
-                            $node.val( item.expireAt );
+                            $node.val( item.startingAt );
                         }
+                    },
+                    'keygrips.$.keylist.$.endingAt': {
+                        js: '.js-ending',
+                        formTo( $node, item ){
+                            $node.val( item.endingAt );
+                        }
+                        /*
                     },
                     'keygrips.$.keylist.$.secret': {
                         js: '.js-secret',
@@ -93,6 +102,7 @@ Template.keygrip_secret_properties_pane.onRendered( function(){
                         formTo( $node, item ){
                             $node.val( item.hash );
                         }
+                            */
                     }
                 }, TenantsManager.Records.fieldSet.get()),
                 data: {
@@ -121,9 +131,17 @@ Template.keygrip_secret_properties_pane.helpers({
     },
 
     // parms for the DateInput
-    parmsDate(){
+    parmsEndingDate(){
         return {
-            placeholder: pwixI18n.label( I18N, 'keygrips.edit.expire_ph' ),
+            placeholder: pwixI18n.label( I18N, 'keygrips.edit.ending_ph' ),
+            withHelp: true
+        };
+    },
+
+    // parms for the DateInput
+    parmsStartingDate(){
+        return {
+            placeholder: pwixI18n.label( I18N, 'keygrips.edit.starting_ph' ),
             withHelp: true
         };
     }

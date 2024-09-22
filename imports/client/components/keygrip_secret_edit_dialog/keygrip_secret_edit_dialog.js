@@ -16,7 +16,11 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 import { Random } from 'meteor/random';
 import { Tabbed } from 'meteor/pwix:tabbed';
 
+import { KeygripSecrets } from '/imports/common/tables/keygrip_secrets/index.js';
+
+import '/imports/client/components/keygrip_secret_generate_pane/keygrip_secret_generate_pane.js';
 import '/imports/client/components/keygrip_secret_properties_pane/keygrip_secret_properties_pane.js';
+import '/imports/client/components/keygrip_secret_secret_pane/keygrip_secret_secret_pane.js';
 
 import './keygrip_secret_edit_dialog.html';
 
@@ -54,24 +58,43 @@ Template.keygrip_secret_edit_dialog.onCreated( function(){
     });
 
     // instanciates a named Tabbed
-    self.autorun(() => {
-        self.APP.tabbed.setTabbedParms({ 
-            dataContext: {
-                container: { entity: Template.currentData().entity.get(), record: Template.currentData().entity.get().DYN.records[Template.currentData().index].get() },
-                item: self.APP.item,
-                checker: self.APP.checker,
-                isNew: self.APP.isNew,
-                keygripRv: Template.currentData().keygripRv
+    self.APP.tabbed.setTabbedParms({ 
+        dataContext: {
+            container: { entity: Template.currentData().entity.get(), record: Template.currentData().entity.get().DYN.records[Template.currentData().index].get() },
+            item: self.APP.item,
+            checker: self.APP.checker,
+            isNew: self.APP.isNew,
+            keygripRv: Template.currentData().keygripRv
+        },
+        tabs: [
+            {
+                name: 'keygrip_secret_properties_pane',
+                navLabel: pwixI18n.label( I18N, 'keygrips.edit.secret_properties_tab_title' ),
+                paneTemplate: 'keygrip_secret_properties_pane'
             },
-            tabs: [
-                {
-                    name: 'keygrip_secret_properties_pane',
-                    navLabel: pwixI18n.label( I18N, 'keygrips.edit.secret_properties_tab_title' ),
-                    paneTemplate: 'keygrip_secret_properties_pane'
-                }
-            ]
-        });
+            {
+                name: 'keygrip_secret_generate_pane',
+                navLabel: pwixI18n.label( I18N, 'keygrips.edit.secret_generate_tab_title' ),
+                paneTemplate: 'keygrip_secret_generate_pane'
+            },
+            {
+                name: 'keygrip_secret_secret_pane',
+                navLabel: pwixI18n.label( I18N, 'keygrips.edit.secret_secret_tab_title' ),
+                paneTemplate: 'keygrip_secret_secret_pane',
+                enabled: false
+            }
+        ]
     });
+
+    // dynamically update the tabs activability
+    // no need to enable the generate tab, as all data are optional
+    self.autorun(() => {
+        self.APP.tabbed.set( 'tab.keygrip_secret_generate_pane.shown', self.APP.isNew.get());
+    });
+    self.autorun(() => {
+        const item = self.APP.item.get();
+        self.APP.tabbed.set( 'tab.keygrip_secret_secret_pane.enabled', Boolean( item.createdAt && item.secret ));
+    })
 });
 
 Template.keygrip_secret_edit_dialog.onRendered( function(){
@@ -135,22 +158,38 @@ Template.keygrip_secret_edit_dialog.events({
         let record = recordRv.get();
         record.keylist = record.keylist || [];
         let found = false;
-        const item = instance.APP.item.get();
-        //console.debug( 'item', item );
-        // update or push
-        for( let i=0 ; i<record.keylist.length ; ++i ){
-            if( record.keylist[i].id === item.id ){
-                record.keylist[i] = item;
-                found = true;
-                break;
-            }
-        }
-        if( !found ){
-            item.createdAt = new Date();
-            item.createdBy = Meteor.userId();
-            record.keylist.push( item );
-        }
-        recordRv.set( record );
-        Modal.close();
+        let key = instance.APP.item.get();
+        // if the secret has not been generated yet, do it now
+        Promise.resolve( true )
+            .then(() => {
+                if( key.createdAt ){
+                    return key;
+                }
+                return KeygripSecrets.fn.generateSecret( record, key ).then(( res ) => {
+                    Tolert.success( pwixI18n.label( I18N, 'keygrips.edit.generated' ));
+                    return res;
+                });
+            })
+            .then(( res ) => {
+                key = res;
+                if( instance.APP.isNew.get()){
+                    record.keylist.push( key );
+                } else {
+                    for( let i=0 ; i<record.keylist.length ; ++i ){
+                        if( record.keylist[i].id === key.id ){
+                            record.keylist[i] = key;
+                            found = true;
+                            break;
+                        }
+                    }
+                    if( !found ){
+                        console.warn( 'unable to update the keylist', key );
+                    }
+                }
+            })
+            .then(() => {
+                recordRv.set( record );
+                Modal.close();
+            });
     }
 });

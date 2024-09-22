@@ -674,9 +674,11 @@ Meteor.APP.i18n = {
                     keygrip_alg_unset: 'The keygrip algorithm is not set',
                     keygrip_encoding_invalid: 'The keygrip encoding is invalid',
                     keygrip_encoding_unset: 'The keygrip encoding is not set',
+                    keygrip_ending_before: 'Ending date must be equal or after starting date',
                     keygrip_size_invalid: 'The keygrip secret size is invalid (must be a positive integer)',
                     keygrip_size_mini: 'The keygrip secret size must be greater than %s',
-                    keygrip_size_unset: 'The keygrip secret size is not set'
+                    keygrip_size_unset: 'The keygrip secret size is not set',
+                    keygrip_starting_after: 'Starting date must be equal or before ending date'
                 },
                 edit: {
                     alg_label: 'Algorithm :',
@@ -685,9 +687,14 @@ Meteor.APP.i18n = {
                     edit_dialog_title: 'Editing the "%s" keygrip',
                     encoding_label: 'Encoding :',
                     encoding_title: 'How to encode the resulting hash ?',
-                    expire_label: 'Expire at :',
-                    expire_ph: 'yyyy-mm-dd',
-                    expire_title: 'An optional date of the secret expiration',
+                    ending_label: 'Ending on :',
+                    ending_ph: 'yyyy-mm-dd',
+                    ending_title: 'An optional date of the secret end of use',
+                    generate_below_text: 'The desired key may be generated just now by clicking on the above button.<br />'
+                        +'Or it will anyway be generated at least when validating this dialog box.',
+                    generate_button_text: 'Generate',
+                    generate_button_title: 'Generate the secret',
+                    generated: 'Keys successfully generated',
                     hash_label: 'Hash :',
                     hash_title: 'The generated hash',
                     label_label: 'Label :',
@@ -698,17 +705,24 @@ Meteor.APP.i18n = {
                     new_dialog_title: 'Define a new Keygrip set',
                     properties_tab_title: 'Properties',
                     secret_edit_dialog_title: 'Edit the "%s" keygrip key',
+                    secret_generate_tab_title: 'Auto-generation',
+                    secret_hash_title: 'Secret hash',
                     secret_label: 'Secret :',
                     secret_label_title: 'Provide an optional label to this keygrip set',
                     secret_new_button_label: 'New Secret',
                     secret_new_button_title: 'Define a new Keygrip secret',
                     secret_new_dialog_title: 'Define a new Keygrip secret',
-                    secret_properties_tab_title: 'Secret properties',
+                    secret_properties_tab_title: 'Properties',
+                    secret_secret_tab_title: 'Secret',
+                    secret_secret_title: 'Base64-encoded secret',
                     secret_title: 'An optional label to this keygrip secret',
                     secrets_label: 'Secrets :',
                     secrets_title: 'The secrets used to sign and verify the sent cookies',
                     size_label: 'Secret size :',
-                    size_title: 'The size of the generated secret'
+                    size_title: 'The size of the generated secret',
+                    starting_label: 'Starting on :',
+                    starting_ph: 'yyyy-mm-dd',
+                    starting_title: 'An optional date of the secret start of use'
                     },
                 list: {
                     add_title: 'Add a new secret to your list',
@@ -717,7 +731,7 @@ Meteor.APP.i18n = {
                     created_at_th: 'Created at',
                     created_by_th: 'Created by',
                     encoding_th: 'Encoding',
-                    expire_at_th: 'Expire at',
+                    ending_th: 'Ending on',
                     keygrip_delete_confirm_text: 'You are about to delete the "%s" whole keygrip.<br />Are you sure ?',
                     keygrip_delete_confirm_title: 'Delete the "%s" keygrip',
                     keygrip_delete_title: 'Delete the "%s" keygrip',
@@ -728,7 +742,8 @@ Meteor.APP.i18n = {
                     secret_delete_title: 'Delete the "%s" keygrip key',
                     secret_delete_confirm_text: 'You are about to delete the "%s" key of this keygrip.<br />Are you sure ?',
                     secret_delete_confirm_title: 'Deleting the "%s" keygrip key',
-                    secret_edit_title: 'Editing the "%s" keygrip key'
+                    secret_edit_title: 'Editing the "%s" keygrip key',
+                    starting_th: 'Starting on'
                 }
             },
             manager: {
