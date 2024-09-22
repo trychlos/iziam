@@ -21,18 +21,6 @@ export class OpenIDProvider extends mix( izProvider ).with( IGrantType, IRequest
 
     // static methods
 
-    static async handleAsterRequest( it, args, organization ){
-        /*
-        let server = OpenIDProvider.RequestServersByEntity[organization.entity._id];
-        if( !server ){
-            server = new RequestServer( OpenIDProvider.Singleton, organization, { auth: OIDAuthServer });
-            OpenIDProvider.RequestServersByEntity[organization.entity._id] = server;
-        }
-        await server.handle( args, organization );
-        */
-        return true;
-    }
-
     // private data
 
     // private methods

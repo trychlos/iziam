@@ -41,5 +41,6 @@ export class IdentityServer extends mix( izObject ).with( IRequested ){
      * @summary Make sure the server is initialized
      */
     async init(){
+        console.debug( 'initializing', this );
     }
 }

@@ -188,7 +188,7 @@ export class OIDAuthServer extends AuthServer {
         const organization = requestServer.organization();
         const issuer = Organizations.fn.fullBaseUrl( organization );
         let setup = await this._config( organization );
-        console.debug( 'setup', setup );
+        console.debug( this, 'setup', setup );
         const oidc = new Provider( issuer, setup );
         return oidc;
     }
@@ -229,15 +229,20 @@ export class OIDAuthServer extends AuthServer {
      *  but the former requires a configuration which can be changed over time
      */
     async init(){
-        await this._newOIDCProvider().then(( oidc ) => {
-            this.#oidc = oidc;
-            // install middlewares
-            return this._installMiddlewares();
-        })
-        .then(() => {
-            // from https://github.com/panva/node-oidc-provider/blob/main/example/express.js
-            const organization = this.iRequestServer().organization();
-            WebApp.handlers.use( organization.record.baseUrl, oidc.callback());
-        });
+        console.debug( 'initializing', this );
+        const self = this;
+        this._newOIDCProvider()
+            .then(( oidc ) => {
+                this.#oidc = oidc;
+            })
+            .then(() => {
+                // install middlewares
+                this._installMiddlewares();
+            })
+            .then(() => {
+                // from https://github.com/panva/node-oidc-provider/blob/main/example/express.js
+                const organization = this.iRequestServer().organization();
+                WebApp.handlers.use( organization.record.baseUrl, self.#oidc.callback());
+            });
     }
 }

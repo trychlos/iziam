@@ -29,9 +29,10 @@ Jwks.fn = {
                 active = Boolean( DateJs.compare( jwk.endingAt, Date.now()) >= 0 );
             }
             if( active ){
-                result.keys.push( it );
+                result.push( jwk );
             }
         });
+        //console.debug( 'activeKeys', result );
         return result;
     },
 
@@ -42,7 +43,7 @@ Jwks.fn = {
      */
     authKeys( container ){
         let result = { keys: [] };
-        Jwks.fn.activeKeys().forEach(( jwk ) => {
+        Jwks.fn.activeKeys( container ).forEach(( jwk ) => {
             let it = { ...jwk };
             delete it.secret;
             delete it.pair;
@@ -54,6 +55,7 @@ Jwks.fn = {
             }
             result.keys.push( it );
         });
+        //console.debug( 'authKeys', result );
         return result;
     },
 

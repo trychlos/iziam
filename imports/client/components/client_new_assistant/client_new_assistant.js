@@ -70,11 +70,6 @@ Template.client_new_assistant.onCreated( function(){
                     start: true
                 },
                 {
-                    name: 'secrets',
-                    template: 'client_new_assistant_secrets',
-                    label: pwixI18n.label( I18N, 'clients.new_assistant.secrets_nav' )
-                },
-                {
                     name: 'properties',
                     template: 'client_new_assistant_properties',
                     label: pwixI18n.label( I18N, 'clients.new_assistant.properties_nav' )
@@ -128,6 +123,11 @@ Template.client_new_assistant.onCreated( function(){
                     name: 'jwks',
                     template: 'client_new_assistant_jwks',
                     label: pwixI18n.label( I18N, 'clients.new_assistant.jwks_nav' )
+                },
+                {
+                    name: 'secrets',
+                    template: 'client_new_assistant_secrets',
+                    label: pwixI18n.label( I18N, 'clients.new_assistant.secrets_nav' )
                 },
                 /*
                 {

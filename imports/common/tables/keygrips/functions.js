@@ -9,19 +9,51 @@ import * as jose from 'jose';
 import { Keygrips } from './index.js';
 
 Keygrips.fn = {
+    /**
+     * @summary extract the active Keygrips secrets
+     * @param {Object} container an { entity, record } organization object
+     * @returns {Array<JWK>}
+     */
+    activeKeys( container ){
+        let result = [];
+        ( container.record.keygrips || [] ).forEach(( keygrip ) => {
+            const keylist = keygrip.keylist || [];
+            let activeList = [];
+            keylist.forEach(( key ) => {
+                let active = true;
+                if( active && key.startingAt ){
+                    active = Boolean( DateJs.compare( key.startingAt, Date.now()) <= 0 );
+                }
+                if( active && key.endingAt ){
+                    active = Boolean( DateJs.compare( key.endingAt, Date.now()) >= 0 );
+                }
+                if( active ){
+                    activeList.push( key );
+                }
+            });
+            if( activeList.length ){
+                let activeGrip = { ...keygrip };
+                activeGrip.keylist = activeList;
+                result.push( activeGrip );
+            }
+        });
+        //console.debug( 'activeKeygrips', result );
+        return result;
+    },
 
     /**
-     * @summary extract the keygrips secrets needed by the AuthServer
+     * @summary extract the keygrips (clear base64 encoded) secrets needed by the AuthServer
      * @param {Object} organization an { entity, record } organization object
      * @returns {Array<Secrets>}
      */
     authKeys( organization ){
         let result = [];
-        ( organization.record.keygrips || [] ).forEach(( it ) => {
+        Keygrips.fn.activeKeys( organization ).forEach(( it ) => {
             ( it.keylist || [] ).forEach(( key ) => {
                 result.push( key.secret );
             });
         });
+        //console.debug( 'authKeygrips', result );
         return result;
     },
 

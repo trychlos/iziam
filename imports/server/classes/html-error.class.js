@@ -42,11 +42,13 @@ export class HtmlError extends izObject {
     _renderBodyContent( out, error ){
         let str = '';
         Object.entries( out ).map(([ key, value ]) => {
-            str += '<pre>';
-            str += '<strong>'+key+'</strong>';
-            str += ': ';
-            str += htmlSafe( value );
-            str += '</pre>';
+            if( key !== 'iss' ){
+                str += '<pre>';
+                str += '<strong>'+key+'</strong>';
+                str += ': ';
+                str += htmlSafe( value );
+                str += '</pre>';
+            }
         });
         return str;
     }
@@ -54,8 +56,16 @@ export class HtmlError extends izObject {
     // returns the body title
     _renderBodyTitle( out, error ){
         const title = pwixI18n.label( I18N, 'auth.error.title' );
-        let str = '<h1>izIAM</h1>';
-        str += '<h2>'+title+'</h2>';
+        let str = '';
+        const url = new URL( out.iss );
+        //console.debug( url );
+        str += '<div class="header">';
+        str += ' <div class="row">';
+        str += '  <img src="'+url.origin+'/favicon.svg" width="64" />';
+        str += '  <h1>izIAM</h1>';
+        str += ' </div>'
+        str += '<h2>'+out.iss+'</h2>';
+        str += '</div>';
         return str;
     }
 
@@ -68,7 +78,9 @@ export class HtmlError extends izObject {
         const title = pwixI18n.label( I18N, 'auth.error.title' );
         str += '<title>'+title+'</title>';
         str += '<style>'
-            +'@import url(https://fonts.googleapis.com/css?family=Roboto:400,100);h1{font-weight:100;text-align:center;font-size:2.3em}body{font-family:Roboto,sans-serif;margin-top:25px;margin-bottom:25px}.container{padding:0 40px 10px;width:274px;background-color:#F7F7F7;margin:0 auto 10px;border-radius:2px;box-shadow:0 2px 2px rgba(0,0,0,.3);overflow:hidden}pre{white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space:-o-pre-wrap;word-wrap:break-word;margin:0 0 0 1em;text-indent:-1em}'
+            +'@import url(https://fonts.googleapis.com/css?family=Roboto:400,100);body{font-family:Roboto,sans-serif;margin-top:25px;margin-bottom:25px}.container{padding:0 40px 10px;width:274px;background-color:#F7F7F7;margin:0 auto 10px;border-radius:2px;box-shadow:0 2px 2px rgba(0,0,0,.3);overflow:hidden}pre{white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space:-o-pre-wrap;word-wrap:break-word;margin:0 0 0 1em;text-indent:-1em}'
+            +'.header .row { display: flex; flex-direction: row; justify-content: space-around; align-items: center; }'
+            +'h1 { margin: 0; font-size: 3em; }'
             +'</style>';
         str += '</head>';
         return str;
@@ -95,8 +107,8 @@ export class HtmlError extends izObject {
     render(){
         this.#html = '<!DOCTYPE html>'
             +'<html>';
-        this.#html += this._renderHead( out, error );
-        this.#html += this._renderBody( out, error );
+        this.#html += this._renderHead( this.#out, this.#error );
+        this.#html += this._renderBody( this.#out, this.#error );
         this.#html += '</html>';
         return this.#html;
     }
