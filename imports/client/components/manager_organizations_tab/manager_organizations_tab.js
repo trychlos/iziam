@@ -23,17 +23,27 @@ Template.manager_organizations_tab.onCreated( function(){
     self.APP = {
         entityTabsNew: [
             {
+                name: 'organization_accounts_tab',
+                navLabel: pwixI18n.label( I18N, 'organizations.edit.accounts_tab_title' ),
+                enabled: false
+            },
+            {
                 name: 'organization_clients_tab',
                 navLabel: pwixI18n.label( I18N, 'organizations.edit.clients_tab_title' ),
                 enabled: false
-            },
+            }
         ],
         entityTabsEdit: [
+            {
+                name: 'organization_accounts_tab',
+                navLabel: pwixI18n.label( I18N, 'organizations.edit.accounts_tab_title' ),
+                enabled: false
+            },
             {
                 name: 'organization_clients_tab',
                 navLabel: pwixI18n.label( I18N, 'organizations.edit.clients_tab_title' ),
                 paneTemplate: 'organization_clients_pane'
-            },
+            }
         ],
         recordTabs: [
             {
@@ -77,7 +87,7 @@ Template.manager_organizations_tab.helpers({
     },
 
     // TenantNewButton parameters
-    // disable the clients tab for new tenant
+    // disable the clients and accounts tabs for new tenant
     parmsNewTenant(){
         return {
             entityTabs: Template.instance().APP.entityTabsNew,

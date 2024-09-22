@@ -780,6 +780,9 @@ Meteor.APP.i18n = {
             },
             organizations: {
                 checks: {
+                    atdate_closest_done: 'The closest record seems OK. You may want change its validity period to make it actually operational',
+                    atdate_none: 'No validity period is valid at date',
+                    atdate_next: 'Other checks will be done on the closest record',
                     authorization_absolute: 'The authorization endpoint must be provided as an absolute path',
                     authorization_unset: 'The authorization endpoint is not set',
                     baseurl_exists: 'The candidate REST Base URL is already used by another organization',
@@ -808,6 +811,7 @@ Meteor.APP.i18n = {
                         +'Capabilities of the clients depend of their type and of the chozen authorization grant flow.',
                 },
                 edit: {
+                    accounts_tab_title: 'Accounts',
                     authorization_example: 'Authorization Server URL: &laquo; %s &raquo;',
                     authorization_label: 'Authorization endpoint :',
                     authorization_ph: '/authorization',

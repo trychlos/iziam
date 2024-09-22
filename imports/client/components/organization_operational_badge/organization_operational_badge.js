@@ -19,12 +19,25 @@ Template.organization_operational_badge.onCreated( function(){
     const self = this;
 
     self.APP = {
+        classes: new ReactiveVar( '' ),
         status: new ReactiveVar( Forms.CheckStatus.C.UNCOMPLETE )
     };
 
     // update the status when something changes
     self.autorun(() => {
         //console.debug( 'currentData', Template.currentData());
+    });
+
+    // update the status when something changes
+    self.autorun(() => {
+        const item = Template.currentData().item;
+        const organization = Meteor.APP.Organizations.byEntity( item.DYN.entity._id );
+        if( organization ){
+            const status = organization.DYN.operational?.status;
+            if( status ){
+                self.APP.status.set( status );
+            }
+        }
     });
 });
 
@@ -37,6 +50,7 @@ Template.organization_operational_badge.helpers({
     parmsStatus(){
         return {
             statusRv: Template.instance().APP.status,
+            classes: Template.instance().APP.classes,
             title: pwixI18n.label( I18N, 'organizations.tabular.operational_title' )
         };
     }
