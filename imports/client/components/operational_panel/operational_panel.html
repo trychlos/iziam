@@ -1,0 +1,18 @@
+<template name="operational_panel">
+    <div class="c-operational-panel">
+        <div class="panel-content">
+
+            <div class="panel-header">
+            </div>
+
+            <div class="panel-body forms-messager">
+                {{#each it in itemsList }}
+                    <p class="{{ itClass it }}">
+                        {{ itLabel it }}
+                    </p>
+                {{/each}}
+            </div>
+
+        </div>
+    </div>
+</template>

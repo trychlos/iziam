@@ -13,6 +13,7 @@ import '/imports/client/components/organization_dynregistration_pane/organizatio
 import '/imports/client/components/organization_jwks_pane/organization_jwks_pane.js';
 import '/imports/client/components/organization_keygrips_pane/organization_keygrips_pane.js';
 import '/imports/client/components/organization_providers_pane/organization_providers_pane.js';
+import '/imports/client/components/organization_status_pane/organization_status_pane.js';
 import '/imports/client/components/organization_urls_pane/organization_urls_pane.js';
 
 import './manager_organizations_tab.html';
@@ -31,6 +32,11 @@ Template.manager_organizations_tab.onCreated( function(){
                 name: 'organization_clients_tab',
                 navLabel: pwixI18n.label( I18N, 'organizations.edit.clients_tab_title' ),
                 enabled: false
+            },
+            {
+                name: 'organization_status_tab',
+                navLabel: pwixI18n.label( I18N, 'organizations.edit.status_tab_title' ),
+                enabled: false
             }
         ],
         entityTabsEdit: [
@@ -43,6 +49,11 @@ Template.manager_organizations_tab.onCreated( function(){
                 name: 'organization_clients_tab',
                 navLabel: pwixI18n.label( I18N, 'organizations.edit.clients_tab_title' ),
                 paneTemplate: 'organization_clients_pane'
+            },
+            {
+                name: 'organization_status_tab',
+                navLabel: pwixI18n.label( I18N, 'organizations.edit.status_tab_title' ),
+                paneTemplate: 'organization_status_pane'
             }
         ],
         recordTabs: [
