@@ -38,6 +38,9 @@ Meteor.APP.i18n = {
             clients: {
                 checks: {
                     application_type_invalid: 'The application type is unknown or not valid',
+                    atdate_closest_done: 'The closest record seems OK. You may want change its validity period to make it actually operational',
+                    atdate_none: 'No validity period is valid at date',
+                    atdate_next: 'Other checks will be done on the closest record',
                     client_type_invalid: 'The client type is unknown or not valid',
                     client_type_unset: 'The client type is not set',
                     clientid_unset: 'The client identifier is not set',
@@ -387,6 +390,7 @@ Meteor.APP.i18n = {
                 },
                 tabular: {
                     application_type_th: 'Application type',
+                    auth_method_th: 'Authentication method',
                     authorization_flow_th: 'Grant flow',
                     client_type_th: 'Client type',
                     delete_button_title: 'Delete the "%s" client',
@@ -899,7 +903,9 @@ Meteor.APP.i18n = {
                         +'Some are strongly needed, or even just required, while others may be freely chosen at your convenience.'
                 },
                 tabular: {
+                    accounts_th: 'Accounts',
                     baseurl_th: 'Base URL',
+                    clients_th: 'Clients',
                     operational_title: 'Operational status of the organization',
                 }
             },

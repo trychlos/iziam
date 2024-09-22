@@ -44,9 +44,8 @@ Permissions.set({
                         await Roles.userIsInRoles( user, 'SCOPED_CLIENT_CREATE', { scope: scope });
             },
             pub: {
-                async list_all( user, scope ){
-                    return await Roles.userIsInRoles( user, 'CLIENTS_LIST' ) ||
-                            await Roles.userIsInRoles( user, 'SCOPED_CLIENTS_LIST', { scope: scope });
+                async list_all( user ){
+                    return await Roles.userIsInRoles( user, 'CLIENTS_LIST' );
                 },
                 async tabular( user, scope ){
                     return await Roles.userIsInRoles( user, 'CLIENTS_LIST' ) ||

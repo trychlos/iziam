@@ -27,21 +27,7 @@ Template.clients_list.onCreated( function(){
         handleOne: self.subscribe( Meteor.APP.C.pub.clientsTabularOne.publish, Template.currentData().item.get()._id || null ),
         resultOne: new ReactiveVar( [] ),
         handleTwo: null,
-        closests: new ReactiveVar( [] ),
-        handleAll: null,
-        clientsAll: new ReactiveVar( [] ),
-
-        // returns the asked entity
-        byEntity( entity ){
-            let found = null;
-            self.APP.clientsAll.get().every(( it ) => {
-                if( it._id === entity ){
-                    found = it;
-                }
-                return !found;
-            });
-            return found;
-        }
+        closests: new ReactiveVar( [] )
     };
 
     // get the result of the first one
@@ -56,7 +42,6 @@ Template.clients_list.onCreated( function(){
     // subscribe to the two other publications with this result
     self.autorun(() => {
         self.APP.handleTwo = self.subscribe( Meteor.APP.C.pub.clientsTabularTwo.publish, Template.currentData().item.get()._id || null, self.APP.resultOne.get());
-        self.APP.handleAll = self.subscribe( Meteor.APP.C.pub.clientsAll.publish, Template.currentData().item.get()._id || null, self.APP.resultOne.get());
     });
 
     // subscribe to the tabular publication to get the list of closest ids
@@ -68,16 +53,6 @@ Template.clients_list.onCreated( function(){
                     closests.push( it._id );
                 });
                 self.APP.closests.set( closests );
-            });
-        }
-    });
-
-    // subscribe to the clientsAll publication to get the full list of clients
-    self.autorun(() => {
-        if( self.APP.handleAll.ready()){
-            let items = [];
-            Meteor.APP.Collections.get( Meteor.APP.C.pub.clientsAll.collection ).find().fetchAsync().then(( fetched ) => {
-                self.APP.clientsAll.set( fetched );
             });
         }
     });
@@ -130,17 +105,19 @@ Template.clients_list.events({
             entity: this.item.get(),
             record: this.item.get().DYN.closest
         };
-        const item = instance.APP.byEntity( data.item._id );
-        Modal.run({
-            ...dc,
-            mdBody: 'client_edit_dialog',
-            mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
-            mdClasses: 'modal-xxl',
-            //mdClassesContent: Meteor.APP.runContext.pageUIClasses().join( ' ' ),
-            mdTitle: pwixI18n.label( I18N, 'clients.edit.modal_title', item.DYN.closest.label ),
-            item: item,
-            organization: organization
-        });
+        const item = Meteor.APP.Clients.byId( data.item._id );
+        if( item ){
+            Modal.run({
+                ...dc,
+                mdBody: 'client_edit_dialog',
+                mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
+                mdClasses: 'modal-xxl',
+                //mdClassesContent: Meteor.APP.runContext.pageUIClasses().join( ' ' ),
+                mdTitle: pwixI18n.label( I18N, 'clients.edit.modal_title', item.DYN.closest.label ),
+                item: item,
+                organization: organization
+            });
+        }
         return false;
     }
 });

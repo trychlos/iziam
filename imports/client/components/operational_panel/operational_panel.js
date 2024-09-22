@@ -29,7 +29,7 @@ Template.operational_panel.onCreated( function(){
         if( organization ){
             // handle the client case
         } else {
-            const org = Meteor.APP.Organizations.byEntity( entity );
+            const org = Meteor.APP.Organizations.byId( entity );
             if( org ){
                 self.APP.entity.set( org );
             }

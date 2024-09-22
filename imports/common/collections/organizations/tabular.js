@@ -15,7 +15,22 @@ Organizations.tabularFieldset = function(){
                     name: 'baseUrl',
                     schema: false,
                     dt_title: pwixI18n.label( I18N, 'organizations.tabular.baseurl_th' )
+                }
+            ]
+        },
+        {
+            before: 'effectStart',
+            fields: [
+                {
+                    name: 'accountsCounts',
+                    schema: false,
+                    dt_title: pwixI18n.label( I18N, 'organizations.tabular.accounts_th' )
                 },
+                {
+                    name: 'clientsCounts',
+                    schema: false,
+                    dt_title: pwixI18n.label( I18N, 'organizations.tabular.clients_th' )
+                }
             ]
         }
     ];

@@ -2,6 +2,11 @@
  * /imports/client/init/organizations-list.js
  *
  * Maintain a reactive list of the organizations, and their operational status
+ * 
+ * Each organization item is an entity object, with a DYN:
+ * - managers
+ * - records
+ * - closest
  */
 
 import { Forms } from 'meteor/pwix:forms';
@@ -17,19 +22,19 @@ Meteor.APP.Organizations = {
     _tenants: new ReactiveVar( [] ),
 
     /**
-     * @param {String} entity the organization identifier
+     * @param {String} organizationId the organization identifier
      * @returns {Object} the found organization, with its DYN object, or null
      */
-    byEntity( id ){
+    byId( organizationId ){
         let found = null;
         Meteor.APP.Organizations._tenants.get().every(( it ) => {
-            if( it._id === id ){
+            if( it._id === organizationId ){
                 found = it;
             }
             return !found;
         });
         if( !found ){
-            console.warn( 'unable to find an organization', id );
+            console.warn( 'unable to find an organization', organizationId );
         }
         return found;
     }
@@ -40,12 +45,13 @@ Meteor.APP.Organizations = {
 Tracker.autorun(() => {
     if( Meteor.APP.Organizations._handle.ready()){
         TenantsManager.collections.get( TenantsManager.C.pub.tenantsAll.collection ).find({}).fetchAsync().then(( fetched ) => {
-            //console.debug( 'fetched', fetched );
+            //console.debug( 'organizations', fetched );
             Meteor.APP.Organizations._tenants.set( fetched );
         });
     }
 });
 
+// maintain the 'operational' status of each organization
 // when the organizations change, update their status
 // we add (or update) here a DYN.status object
 Tracker.autorun(() => {

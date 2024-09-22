@@ -59,6 +59,13 @@ const _defaultFieldSet = function(){
             dt_className: 'ui-nowrap',
             dt_title: pwixI18n.label( I18N, 'clients.tabular.authorization_flow_th' ),
         },
+        // authentication method
+        {
+            name: 'auth_method',
+            schema: false,
+            dt_className: 'ui-nowrap',
+            dt_title: pwixI18n.label( I18N, 'clients.tabular.auth_method_th' ),
+        },
         Notes.fieldDef(),
         Validity.recordsFieldDef(),
         Timestampable.fieldDef(),

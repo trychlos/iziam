@@ -19,7 +19,7 @@ Template.organization_status_pane.onRendered( function(){
     // enable/disable the tab depending of the organization status
     self.autorun(() => {
         const item = Template.currentData().item.get();
-        const organization = Meteor.APP.Organizations.byEntity( item._id );
+        const organization = Meteor.APP.Organizations.byId( item._id );
         if( organization ){
             const status = organization.DYN.operational?.status;
             self.$( '.c-organization-status-pane' ).trigger( 'tabbed-do-enable', {

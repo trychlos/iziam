@@ -19,21 +19,14 @@ import { Clients } from '../index.js';
  *  - closest: the closest record
  * @param {Object} organizationId
  */
-Meteor.publish( Meteor.APP.C.pub.clientsAll.publish, async function( organizationId, entityIdArray ){
-    if( !await Permissions.isAllowed( 'feat.clients.pub.list_all', this.userId, organizationId )){
+Meteor.publish( Meteor.APP.C.pub.clientsAll.publish, async function(){
+    if( !await Permissions.isAllowed( 'feat.clients.pub.list_all', this.userId )){
         this.ready();
         return false;
     }
-    if( !organizationId ){
-        this.ready();
-        return [];
-    }
     const self = this;
     let initializing = true;
-
-    // transform the array of objects { _id } to an array of ids
-    const entityIds = [];
-    entityIdArray.map(( it ) => { entityIds.push( it._id )});
+    const collectionName = Meteor.APP.C.pub.clientsAll.collection;
     
     // find ORG_SCOPED_MANAGER allowed users, and add to each entity the list of its records
     const f_entityTransform = async function( item ){
@@ -67,22 +60,22 @@ Meteor.publish( Meteor.APP.C.pub.clientsAll.publish, async function( organizatio
             // happens that clearing notes on server side does not publish the field 'notes' and seems that the previously 'notes' on the client is kept
             // while publishing 'notes' as undefined rightly override (and erase) the previous notes on the client
             ClientsEntities.server.addUndef( item );
-            //console.debug( 'list_all', item );
+            console.debug( 'list_all', collectionName, item._id );
             return item;
         });
     };
 
-    const entitiesObserver = ClientsEntities.collection.find({ organization: organizationId }).observeAsync({
+    const entitiesObserver = ClientsEntities.collection.find().observeAsync({
         added: async function( item ){
-            self.added( Meteor.APP.C.pub.clientsAll.collection, item._id, await f_entityTransform( item ));
+            self.added( collectionName, item._id, await f_entityTransform( item ));
         },
         changed: async function( newItem, oldItem ){
             if( !initializing ){
-                self.changed( Meteor.APP.C.pub.clientsAll.collection, newItem._id, await f_entityTransform( newItem ));
+                self.changed( collectionName, newItem._id, await f_entityTransform( newItem ));
             }
         },
         removed: async function( oldItem ){
-            self.removed( Meteor.APP.C.pub.clientsAll.collection, oldItem._id );
+            self.removed( collectionName, oldItem._id );
         }
     });
 
@@ -91,11 +84,11 @@ Meteor.publish( Meteor.APP.C.pub.clientsAll.publish, async function( organizatio
             ClientsEntities.collection.findOneAsync({ _id: item.entity }).then( async ( entity ) => {
                 if( entity ){
                     try {
-                        self.changed( Meteor.APP.C.pub.clientsAll.collection, entity._id, await f_entityTransform( entity ));
+                        self.changed( collectionName, entity._id, await f_entityTransform( entity ));
                     } catch( e ){
                         // on HMR, happens that Error: Could not find element with id wx8rdvSdJfP6fCDTy to change
-                        self.added( Meteor.APP.C.pub.clientsAll.collection, entity._id, await f_entityTransform( entity ));
-                        console.debug( e, 'ignored' );
+                        self.added( collectionName, entity._id, await f_entityTransform( entity ));
+                        //console.debug( e, 'ignored' );
                     }
                 } else {
                     console.warn( 'added: entity not found', item.entity );
@@ -106,7 +99,7 @@ Meteor.publish( Meteor.APP.C.pub.clientsAll.publish, async function( organizatio
             if( !initializing ){
                 ClientsEntities.collection.findOneAsync({ _id: newItem.entity }).then( async ( entity ) => {
                     if( entity ){
-                        self.changed( Meteor.APP.C.pub.clientsAll.collection, entity._id, await f_entityTransform( entity ));
+                        self.changed( collectionName, entity._id, await f_entityTransform( entity ));
                     } else {
                         console.warn( 'changed: entity not found', newItem.entity );
                     }
@@ -117,7 +110,7 @@ Meteor.publish( Meteor.APP.C.pub.clientsAll.publish, async function( organizatio
         removed: async function( oldItem ){
             ClientsEntities.collection.findOneAsync({ _id: oldItem.entity }).then( async ( entity ) => {
                 if( entity ){
-                    self.changed( Meteor.APP.C.pub.clientsAll.collection, oldItem.entity, await f_entityTransform( entity ));
+                    self.changed( collectionName, oldItem.entity, await f_entityTransform( entity ));
                 }
             });
         }
