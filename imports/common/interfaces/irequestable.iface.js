@@ -60,7 +60,6 @@ export const IRequestable = DeclareMixin(( superclass ) => class extends supercl
             if( it.method === args.method()){
                 if( it.path === url ){
                     found = true;
-                    //console.debug( 'found', url );
                     if( it.fn ){
                         await it.fn( it, args, organization );
                     } else {
@@ -70,7 +69,6 @@ export const IRequestable = DeclareMixin(( superclass ) => class extends supercl
                     }
                 } else if( it.path === '*' && asterCb ){
                     found = true;
-                    //console.debug( 'calling asterCb' );
                     assert( typeof asterCb === 'function', 'expects asterCb be a function, got '+asterCb );
                     await asterCb( url, args, organization, this );
                 }

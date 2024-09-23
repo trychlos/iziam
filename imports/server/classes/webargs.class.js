@@ -134,7 +134,8 @@ export class Webargs {
             }
         }
         // rather targeting scoped API
-        //  first try fixed paths, only then aster
+        //  first try fixed paths and give a chance to all providers to answer to their fixed paths
+        //  only then run asterCb, the first provider which have an aster path wins
         if( !handled && opts.providers ){
             for( let i=0 ; i<opts.providers.length && !handled ; ++i ){
                 handled = await opts.providers[i].request( url, self, opts.organization );

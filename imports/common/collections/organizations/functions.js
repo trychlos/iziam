@@ -90,7 +90,7 @@ Organizations.fn = {
         let result = {};
         const fullBaseUrl = Organizations.fn.fullBaseUrl( organization );
         const set = function( name, opts={} ){
-            let foo = organization.record[opts.name] || organization.record[name];
+            let foo = organization.record[opts.fromName] || organization.record[name];
             if( foo ){
                 result[name] = fullBaseUrl+foo;
             }
@@ -98,8 +98,6 @@ Organizations.fn = {
         set( 'authorization_endpoint' );
         set( 'introspection_endpoint' );
         set( 'jwks_uri' );
-        set( 'op_policy_uri', { name: 'pdmpUrl' });
-        set( 'op_tos_uri', { name: 'gtuUrl' });
         set( 'revocation_endpoint' );
         set( 'registration_endpoint' );
         set( 'token_endpoint' );
@@ -134,12 +132,27 @@ Organizations.fn = {
             issuer: Organizations.fn.fullBaseUrl( organization )
         };
         const set = function( name, opts={} ){
-            let foo = organization.record[name];
+            let foo = organization.record[opts.fromName] || organization.record[name];
             if( foo ){
                 data[name] = foo;
             }
         };
         _.merge( data, Organizations.fn.endpoints( organization ));
+        set( 'op_policy_uri', { fromName: 'pdmpUrl' });
+        set( 'op_tos_uri', { fromName: 'gtuUrl' });
+        // scopes_supported
+        // response_types_supported
+        // response_modes_supported
+        // grant_types_supported
+        // token_endpoint_auth_methods_supported
+        // token_endpoint_auth_signing_alg_values_supported
+        // service_documentation
+        // ui_locales_supported
+        // revocation_endpoint_auth_methods_supported
+        // revocation_endpoint_auth_signing_alg_values_supported
+        // introspection_endpoint_auth_methods_supported
+        // introspection_endpoint_auth_signing_alg_values_supported
+        // code_challenge_methods_supported
         return data;
     },
 

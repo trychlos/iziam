@@ -67,9 +67,9 @@ Template.manager_organizations_tab.onCreated( function(){
                 paneTemplate: 'organization_config_pane'
             },
             {
-                name: 'organization_urls_tab',
-                navLabel: pwixI18n.label( I18N, 'organizations.edit.urls_tab_title' ),
-                paneTemplate: 'organization_urls_pane'
+                name: 'organization_endpoints_tab',
+                navLabel: pwixI18n.label( I18N, 'organizations.edit.endpoints_tab_title' ),
+                paneTemplate: 'organization_endpoints_pane'
             },
             {
                 name: 'organization_providers_tab',

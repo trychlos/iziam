@@ -1,5 +1,5 @@
 /*
- * /imports/client/components/organization_urls_pane/organization_urls_pane.js
+ * /imports/client/components/organization_endpoints_pane/organization_endpoints_pane.js
  *
  * Parms:
  * - see README
@@ -12,9 +12,9 @@ import { TenantsManager } from 'meteor/pwix:tenants-manager';
 
 import { Organizations } from '/imports/common/collections/organizations/index.js';
 
-import './organization_urls_pane.html';
+import './organization_endpoints_pane.html';
 
-Template.organization_urls_pane.onCreated( function(){
+Template.organization_endpoints_pane.onCreated( function(){
     const self = this;
 
     self.APP = {
@@ -65,7 +65,7 @@ Template.organization_urls_pane.onCreated( function(){
     });
 });
 
-Template.organization_urls_pane.onRendered( function(){
+Template.organization_endpoints_pane.onRendered( function(){
     const self = this;
     const dataContext = Template.currentData();
 
@@ -87,7 +87,7 @@ Template.organization_urls_pane.onRendered( function(){
     });
 });
 
-Template.organization_urls_pane.helpers({
+Template.organization_endpoints_pane.helpers({
     // the full authorization endpoint url
     authorization_example(){
         const endpoint = Template.instance().APP.organization.get().record.authorization_endpoint;
