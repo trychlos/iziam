@@ -10,11 +10,11 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 import '/imports/client/components/organization_clients_pane/organization_clients_pane.js';
 import '/imports/client/components/organization_config_pane/organization_config_pane.js';
 import '/imports/client/components/organization_dynregistration_pane/organization_dynregistration_pane.js';
+import '/imports/client/components/organization_endpoints_pane/organization_endpoints_pane.js';
 import '/imports/client/components/organization_jwks_pane/organization_jwks_pane.js';
 import '/imports/client/components/organization_keygrips_pane/organization_keygrips_pane.js';
 import '/imports/client/components/organization_providers_pane/organization_providers_pane.js';
 import '/imports/client/components/organization_status_pane/organization_status_pane.js';
-import '/imports/client/components/organization_urls_pane/organization_urls_pane.js';
 
 import './manager_organizations_tab.html';
 

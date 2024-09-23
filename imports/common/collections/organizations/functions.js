@@ -9,6 +9,8 @@ import { Tracker } from 'meteor/tracker';
 
 import { izProvider } from '/imports/common/classes/iz-provider.class.js';
 
+import { AuthMethod } from '/imports/common/definitions/auth-method.def.js';
+
 import { IFeatured } from '/imports/common/interfaces/ifeatured.iface.js';
 import { IGrantType } from '/imports/common/interfaces/igranttype.iface.js';
 import { IRequires } from '/imports/common/interfaces/irequires.iface.js';
@@ -176,6 +178,20 @@ Organizations.fn = {
             res.push( providers[it].provider );
         });
         return res;
+    },
+
+    /**
+     * @summary The Authorization Server is expected to be able to advertise its configuration
+     *  Supported values mainly depend of the providers selected at the organization level.
+     * @param {Object} organization an { entity, record } organization object
+     * @returns {Array<String>} the supported auth methods
+     */
+    supportedAuthMethods( organization ){
+        let supported = [];
+        AuthMethod.Knowns().forEach(( it ) => {
+            supported.push( AuthMethod.id( it ));
+        });
+        return supported;
     },
 
     /**

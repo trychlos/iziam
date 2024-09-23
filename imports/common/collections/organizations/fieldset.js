@@ -150,26 +150,6 @@ Organizations.recordFieldset = function(){
                     name: 'response_modes_supported.$',
                     type: String
                 },
-                // array containing a list of the OAuth 2.0 grant type values that this authorization server supports
-                {
-                    name: 'grant_types_supported',
-                    type: Array,
-                    optional: true
-                },
-                {
-                    name: 'grant_types_supported.$',
-                    type: String
-                },
-                // array containing a list of client authentication methods supported by this token endpoint
-                {
-                    name: 'token_endpoint_auth_methods_supported',
-                    type: Array,
-                    optional: true
-                },
-                {
-                    name: 'token_endpoint_auth_methods_supported.$',
-                    type: String
-                },
                 // array containing a list of the JSON Web Signature (JWS) signing algorithms ("alg" values) supported by the token endpoint
                 {
                     name: 'token_endpoint_auth_signing_alg_values_supported',

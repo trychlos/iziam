@@ -51,10 +51,10 @@ OAuth2.fn = {
         };
         _.merge( data, OAuth2.fn.endpoints( organization ));
         data.grant_types_supported = Organizations.fn.supportedGrantTypes( organization );
+        data.token_endpoint_auth_methods_supported = Organizations.fn.supportedAuthMethods( organization );
         // scopes_supported
         // response_types_supported
         // response_modes_supported
-        // token_endpoint_auth_methods_supported
         // token_endpoint_auth_signing_alg_values_supported
         // service_documentation
         // ui_locales_supported
