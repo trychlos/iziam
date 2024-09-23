@@ -1,5 +1,5 @@
 /*
- * /import/common/collections/organizations/checks.js
+ * /import/common/collections/accounts/checks.js
  */
 
 const assert = require( 'assert' ).strict;

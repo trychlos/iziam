@@ -1,5 +1,5 @@
 /*
- * /imports/common/init/accounts-manager.js
+ * /imports/common/init/accounts-manager-accounts.js
  *
  * AccountsManager.Accounts instanciation for izIAM internal accounts.
  */
