@@ -13,6 +13,8 @@ import { WebApp } from 'meteor/webapp';
 import { Clients } from '/imports/common/collections/clients/index.js';
 import { Organizations } from '/imports/common/collections/organizations/index.js';
 
+import { OpenID } from '/imports/common/providers/openid-functions.js';
+
 import { Jwks } from '/imports/common/tables/jwks/index.js';
 import { Keygrips } from '/imports/common/tables/keygrips/index.js';
 
@@ -79,7 +81,7 @@ export class OIDAuthServer extends AuthServer {
                 }
             }
         });
-        let endpoints = Organizations.fn.endpoints( organization );
+        let endpoints = OpenID.fn.endpoints( organization );
         conf.routes = {};
         Object.keys( endpoints ).forEach(( it ) => {
             const key = it.replace( /_endpoint$|_uri$/, '' );

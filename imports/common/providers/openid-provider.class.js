@@ -10,10 +10,10 @@ import mix from '@vestergaard-company/js-mixin';
 
 import { izProvider } from '/imports/common/classes/iz-provider.class.js';
 
-import { Organizations } from '/imports/common/collections/organizations/index.js';
-
 import { IGrantType } from '/imports/common/interfaces/igranttype.iface.js';
 import { IRequestable } from '/imports/common/interfaces/irequestable.iface.js';
+
+import { OpenID } from '/imports/common/providers/openid-functions.js';
 
 export class OpenIDProvider extends mix( izProvider ).with( IGrantType, IRequestable ){
 
@@ -52,7 +52,7 @@ export class OpenIDProvider extends mix( izProvider ).with( IGrantType, IRequest
                     method: 'GET',
                     path: Meteor.APP.C.openidMetadataPath,
                     async fn( url, args, organization ){
-                        args.answer( Organizations.fn.metadata( organization ));
+                        args.answer( OpenID.fn.metadata( organization ));
                         args.end();
                         return true;
                     }

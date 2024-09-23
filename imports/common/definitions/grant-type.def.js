@@ -305,7 +305,7 @@ export const GrantType = {
     },
 
     /**
-     * @summary Given the selected providers, and the grant types each of these providers manage, provider a list of selectable grant types ordered by grant nature
+     * @summary Given the selected providers, and the grant types each of these providers manage, provides a list of selectable grant types ordered by grant nature
      * @param {Array<String>} providers the array of selected providers
      * @returns {Object} a hash of grant types per nature, as an object keyed per grant nature, where data is an object with following keys
      *  - def: the GrantNature definition

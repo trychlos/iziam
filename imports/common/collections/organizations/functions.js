@@ -10,7 +10,7 @@ import { Tracker } from 'meteor/tracker';
 import { izProvider } from '/imports/common/classes/iz-provider.class.js';
 
 import { IFeatured } from '/imports/common/interfaces/ifeatured.iface.js';
-import { IIdent } from '/imports/common/interfaces/iident.iface.js';
+import { IGrantType } from '/imports/common/interfaces/igranttype.iface.js';
 import { IRequires } from '/imports/common/interfaces/irequires.iface.js';
 
 import { Providers } from '/imports/common/tables/providers/index.js';
@@ -84,29 +84,6 @@ Organizations.fn = {
 
     /**
      * @param {Organizations} organization as an { entity, record } object
-     * @returns {Object} the list of configured endpoints
-     */
-    endpoints( organization ){
-        let result = {};
-        const fullBaseUrl = Organizations.fn.fullBaseUrl( organization );
-        const set = function( name, opts={} ){
-            let foo = organization.record[opts.fromName] || organization.record[name];
-            if( foo ){
-                result[name] = fullBaseUrl+foo;
-            }
-        };
-        set( 'authorization_endpoint' );
-        set( 'introspection_endpoint' );
-        set( 'jwks_uri' );
-        set( 'revocation_endpoint' );
-        set( 'registration_endpoint' );
-        set( 'token_endpoint' );
-        set( 'userinfo_endpoint' );
-        return result;
-    },
-
-    /**
-     * @param {Organizations} organization as an { entity, record } object
      * @returns {String} the full base URL for the organization, including issuer host name
      */
     fullBaseUrl( organization ){
@@ -120,40 +97,6 @@ Organizations.fn = {
      */
     issuer( organization ){
         return organization.record.issuer || Meteor.settings.public[Meteor.APP.name].environment.issuer || null;
-    },
-
-    /**
-     * @param {Organizations} organization as an { entity, record } object
-     * @returns {Object} the public metadata document as for [RFC 8414](https://datatracker.ietf.org/doc/html/rfc8414)
-     */
-    metadata( organization ){
-        let data = {
-            // always set because we have a default value in settings
-            issuer: Organizations.fn.fullBaseUrl( organization )
-        };
-        const set = function( name, opts={} ){
-            let foo = organization.record[opts.fromName] || organization.record[name];
-            if( foo ){
-                data[name] = foo;
-            }
-        };
-        _.merge( data, Organizations.fn.endpoints( organization ));
-        set( 'op_policy_uri', { fromName: 'pdmpUrl' });
-        set( 'op_tos_uri', { fromName: 'gtuUrl' });
-        // scopes_supported
-        // response_types_supported
-        // response_modes_supported
-        // grant_types_supported
-        // token_endpoint_auth_methods_supported
-        // token_endpoint_auth_signing_alg_values_supported
-        // service_documentation
-        // ui_locales_supported
-        // revocation_endpoint_auth_methods_supported
-        // revocation_endpoint_auth_signing_alg_values_supported
-        // introspection_endpoint_auth_methods_supported
-        // introspection_endpoint_auth_signing_alg_values_supported
-        // code_challenge_methods_supported
-        return data;
     },
 
     /**
@@ -233,6 +176,24 @@ Organizations.fn = {
             res.push( providers[it].provider );
         });
         return res;
+    },
+
+    /**
+     * @summary The Authorization Server is expected to be able to advertise its configuration
+     *  Supported values mainly depend of the providers selected at the organization level.
+     * @param {Object} organization an { entity, record } organization object
+     * @returns {Array<String>} the supported grant types
+     */
+    supportedGrantTypes( organization ){
+        const providers = Organizations.fn.selectedProviders( organization );
+        let supported = [];
+        Object.keys( providers ).forEach(( it ) => {
+            const p = providers[it].provider;
+            if( p instanceof IGrantType ){
+                supported = supported.concat( p.grant_types());
+            }
+        });
+        return [ ...new Set( supported )];
     },
 
     /**

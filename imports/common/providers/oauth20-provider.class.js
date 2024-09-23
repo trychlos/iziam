@@ -10,10 +10,10 @@ import mix from '@vestergaard-company/js-mixin';
 
 import { izProvider } from '/imports/common/classes/iz-provider.class.js';
 
-import { Organizations } from '/imports/common/collections/organizations/index.js';
-
 import { IGrantType } from '/imports/common/interfaces/igranttype.iface.js';
 import { IRequestable } from '/imports/common/interfaces/irequestable.iface.js';
+
+import { OAuth2 } from '/imports/common/providers/oauth2-functions.js';
 
 export class OAuth20Provider extends mix( izProvider ).with( IGrantType, IRequestable ){
 
@@ -47,7 +47,7 @@ export class OAuth20Provider extends mix( izProvider ).with( IGrantType, IReques
                     method: 'GET',
                     path: Meteor.APP.C.oauthMetadataPath,
                     async fn( url, args, organization ){
-                        args.answer( Organizations.fn.metadata( organization ));
+                        args.answer( OAuth2.fn.metadata( organization ));
                         args.end();
                         return true;
                     }
