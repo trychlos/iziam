@@ -65,8 +65,9 @@ Tracker.autorun(() => {
                     }
                 ];
             },
+            // it: the displayed closest record
             async deleteButtonEnabled( it ){
-                return Permissions.isAllowed( 'feat.clients.delete', null, it );
+                return Permissions.isAllowed( 'feat.clients.delete', Meteor.isClient && Meteor.userId(), it._id );
             },
             // display the organization label instead of the identifier in the button title
             async deleteButtonTitle( it ){

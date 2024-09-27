@@ -32,7 +32,7 @@ Template.organization_operational_badge.onCreated( function(){
     self.autorun(() => {
         const item = Template.currentData().item;
         //console.debug( item );
-        const organization = Meteor.APP.Organizations.byId( item.DYN.entity._id );
+        const organization = Meteor.APP.Organizations.byId( item.entity );
         if( organization ){
             const status = organization.DYN.operational?.status;
             if( status ){

@@ -62,38 +62,31 @@ Meteor.APP.AccountsManager.accounts = new AccountsManager.amClass({
 Permissions.set({
     pwix: {
         accounts_manager: {
-            // display permissions to allow a new button, or whether to enable an edit or a delete button
+            // manage CRUD operations
+            // args:
+            //  - amInstance: the amClass instance, always present
             feat: {
+                async create( userId, args ){
+                    return await Roles.userIsInRoles( userId, 'ACCOUNT_CREATE' );
+                },
+                // user cannot delete itself
+                //  user cannot delete an account which have higher roles, but can who has equal roles (so an admin may delete another admin)
+                // args:
+                //  - id: the target account identifier
+                async delete( userId, args ){
+                    return await Roles.userIsInRoles( userId, 'ACCOUNT_DELETE' );
+                },
                 // whether the userId account can edit the user account
                 //  user cannot edit an account which have higher roles, but can who has equal roles (so an admin may edit another admin)
-                async edit( amInstance, userId, user ){
-                    const compare = await Roles.compareLevels( userId, user );
+                // args:
+                //  - id: the target account identifier
+                async edit( userId, args ){
+                    const compare = await Roles.compareLevels( userId, args.id );
                     const haveRole = await Roles.userIsInRoles( userId, 'ACCOUNT_EDIT' );
                     return compare >= 0 && haveRole;
                 },
-                async new( amInstance, userId ){
-                    return await Roles.userIsInRoles( userId, 'ACCOUNT_CREATE' );
-                }
-            },
-            // server-side functions permissions
-            //  even if they are the very same than those of the client side, all the checks are to be revalidated
-            fn: {
-                // user cannot delete itself
-                //  user cannot delete an account which have higher roles, but can who has equal roles (so an admin may delete another admin)
-                async removeAccount( amInstance, userId, user ){
-                    return await Roles.userIsInRoles( userId, 'ACCOUNT_DELETE' );
-                },
-                async updateAccount( amInstance, userId, user ){
-                    return await Roles.userIsInRoles( userId, 'ACCOUNT_EDIT' );
-                },
-                // let any user update any of his own attributes
-                async updateAttribute( amInstance, userId, user, modifier ){
-                    return await Permissions.isAllowed( 'pwix.accounts_manager.fn.updateAccount', userId, user ) || AccountsHub.areSame( userId, user );
-                }
-            },
-            pub: {
-                async list_all( amInstance, userId ){
-                    return await Roles.userIsInRoles( userId, 'ACCOUNTS_MANAGER' );
+                async list( userId, args ){
+                    return await Roles.userIsInRoles( userId, 'ACCOUNTS_LIST' );
                 }
             }
         }

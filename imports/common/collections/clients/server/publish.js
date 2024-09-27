@@ -17,10 +17,14 @@ import { Clients } from '../index.js';
  *  where each item is a client entity, and contains a DYN sub-object with:
  *  - records: the list of validity records for this entity
  *  - closest: the closest record
- * @param {Object} organizationId
+ * @param {Object} organization as an entity item with its DYN object
  */
-Meteor.publish( Meteor.APP.C.pub.clientsAll.publish, async function(){
-    if( !await Permissions.isAllowed( 'feat.clients.pub.list_all', this.userId )){
+Meteor.publish( Meteor.APP.C.pub.clientsAll.publish, async function( organization ){
+    if( !organization ){
+        this.ready();
+        return [];
+    }
+    if( !await Permissions.isAllowed( 'feat.clients.list', this.userId, organization._id )){
         this.ready();
         return false;
     }
@@ -65,7 +69,7 @@ Meteor.publish( Meteor.APP.C.pub.clientsAll.publish, async function(){
         });
     };
 
-    const entitiesObserver = ClientsEntities.collection.find().observeAsync({
+    const entitiesObserver = ClientsEntities.collection.find( Meteor.APP.C.pub.clientsAll.query( organization )).observeAsync({
         added: async function( item ){
             self.added( collectionName, item._id, await f_entityTransform( item ));
         },
@@ -127,21 +131,22 @@ Meteor.publish( Meteor.APP.C.pub.clientsAll.publish, async function(){
 /*
  * This publishes a list of the client entities identifiers for the given organization
  * A tabular requisite n° 1
- * And also a prerequisite for clientsAll publication
  */
-Meteor.publish( Meteor.APP.C.pub.clientsTabularOne.publish, async function( organizationId ){
-    if( !await Permissions.isAllowed( 'feat.clients.pub.tabular', this.userId, organizationId )){
-        this.ready();
-        return false;
-    }
-    if( !organizationId ){
+Meteor.publish( Meteor.APP.C.pub.clientsTabularOne.publish, async function( organization ){
+    if( !organization ){
+        console.log( 'organization is not set' );
         this.ready();
         return [];
     }
-    //console.debug( 'clientsTabularOne: organization', organizationId );
+    if( !await Permissions.isAllowed( 'feat.clients.list', this.userId, organization._id )){
+        console.log( 'this publication is not allowed' );
+        this.ready();
+        return false;
+    }
+    //console.debug( 'clientsTabularOne: organization', organization, 'query', Meteor.APP.C.pub.clientsTabularOne.query( organization ));
     const self = this;
     let initializing = true;
-    const observer = ClientsEntities.collection.find({ organization: organizationId }).observeAsync({
+    const observer = ClientsEntities.collection.find( Meteor.APP.C.pub.clientsTabularOne.query( organization )).observeAsync({
         added: function( item ){
             self.added( Meteor.APP.C.pub.clientsTabularOne.collection, item._id );
         },
@@ -160,21 +165,21 @@ Meteor.publish( Meteor.APP.C.pub.clientsTabularOne.publish, async function( orga
  * This publishes a list of the closest record ids for the specified entity identifiers, as a list of { closest_id } objects
  * A tabular requisite n° 2
  */
-Meteor.publish( Meteor.APP.C.pub.clientsTabularTwo.publish, async function( organizationId, entityIdArray ){
-    if( !await Permissions.isAllowed( 'feat.clients.pub.tabular', this.userId, organizationId )){
-        this.ready();
-        return false;
-    }
-    if( !organizationId ){
+Meteor.publish( Meteor.APP.C.pub.clientsTabularTwo.publish, async function( organization, entityIdArray ){
+    if( !organization ){
         this.ready();
         return [];
+    }
+    if( !await Permissions.isAllowed( 'feat.clients.list', this.userId, organization._id )){
+        this.ready();
+        return false;
     }
     const self = this;
     let initializing = true;
     // transform the array of objects { _id } to an array of ids
     const entityIds = [];
     entityIdArray.map(( it ) => { entityIds.push( it._id )});
-    //console.debug( 'clientsTabularTwo: organization', organizationId, 'entityIdArray', entityIdArray, 'entityIds', entityIds );
+    //console.debug( 'clientsTabularTwo: organization', organization._id, 'entityIdArray', entityIdArray, 'entityIds', entityIds );
 
     // map the entities to their closest record and maintain that
     //  index is entity_id, value is closest_id
@@ -183,6 +188,7 @@ Meteor.publish( Meteor.APP.C.pub.clientsTabularTwo.publish, async function( orga
     // records are changed, added or removed for a given entity: have to recompute the closest
     const f_closestChanged = async function( entity_id ){
         ClientsRecords.collection.find({ entity: entity_id }).fetchAsync().then(( fetched ) => {
+            //console.debug( 'entity', entity_id, 'fetched', fetched );
             if( fetched && fetched.length ){
                 const closest = Validity.closestByRecords( fetched ).record;
                 if( closest ){
@@ -191,10 +197,12 @@ Meteor.publish( Meteor.APP.C.pub.clientsTabularTwo.publish, async function( orga
                         if( closest._id !== prev_closest ){
                             self.removed( Meteor.APP.C.pub.clientsTabularTwo.collection, prev_closest );
                             entities[entity_id] = closest._id;
+                            //console.debug( 'adding', closest );
                             self.added( Meteor.APP.C.pub.clientsTabularTwo.collection, closest._id );
                         }
                     } else {
                         entities[entity_id] = closest._id;
+                        //console.debug( 'adding', closest );
                         self.added( Meteor.APP.C.pub.clientsTabularTwo.collection, closest._id );
                     }
                 } else {
@@ -224,6 +232,7 @@ Meteor.publish( Meteor.APP.C.pub.clientsTabularTwo.publish, async function( orga
     self.onStop( function(){
         observer.then(( handle ) => { handle.stop(); });
     });
+    //console.debug( 'TabularTwo ready' );
     self.ready();
 });
 
@@ -265,7 +274,7 @@ Meteor.publish( Meteor.APP.C.pub.clientsTabularTwo.publish, async function( orga
 Meteor.publish( 'clientsTabularLast', async function( tableName, ids, fields ){
     // because this permission is scoped, cannot be checked here
     /*
-    if( !await Permissions.isAllowed( 'feat.clients.pub.tabular', this.userId )){
+    if( !await Permissions.isAllowed( 'feat.clients.list', this.userId )){
         this.ready();
         return false;
     }

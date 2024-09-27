@@ -28,11 +28,17 @@ Meteor.APP.C = {
     pub: {
         clientsAll: {
             collection: 'clients_all_collection',
-            publish: 'clients_all_pub'
+            publish: 'clients_all_pub',
+            query( organization ){
+                return { organization: organization._id };
+            }
         },
         clientsTabularOne: {
             collection: 'clients_tabular_one_collection',
-            publish: 'clients_tabular_one_pub'
+            publish: 'clients_tabular_one_pub',
+            query( organization ){
+                return { organization: organization._id };
+            }
         },
         clientsTabularTwo: {
             collection: 'clients_tabular_two_collection',

@@ -30,7 +30,7 @@ Template.client_new_button.onCreated( function(){
 
     // check the creation permission
     self.autorun( async () => {
-        self.APP.canCreate.set( await Permissions.isAllowed( 'feat.clients.new', Meteor.userId(), Template.currentData().item.get()._id ));
+        self.APP.canCreate.set( await Permissions.isAllowed( 'feat.clients.create', Meteor.userId(), Template.currentData().item.get()._id ));
     });
 
     // track the creation permission

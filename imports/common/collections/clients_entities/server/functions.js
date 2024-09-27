@@ -32,7 +32,7 @@ ClientsEntities.server = {
         check( selector, Object );
         check( userId, String );
         let scope;
-        if( !await Permissions.isAllowed( 'feat.clients.fn.get_by', userId, scope )){
+        if( !await Permissions.isAllowed( 'feat.clients.list', userId, scope )){
             return null;
         }
         const res = await ClientsEntities.collection.find( selector ).fetchAsync();

@@ -7,6 +7,7 @@
 import { PlusButton } from 'meteor/pwix:plus-button';
 import { pwixI18n } from 'meteor/pwix:i18n';
 
+import '/imports/client/components/organization_clients_load/organization_clients_load.js';
 import '/imports/client/components/organization_clients_pane/organization_clients_pane.js';
 import '/imports/client/components/organization_config_pane/organization_config_pane.js';
 import '/imports/client/components/organization_dynregistration_pane/organization_dynregistration_pane.js';
@@ -43,11 +44,13 @@ Template.manager_organizations_tab.onCreated( function(){
             }
         ],
         entityTabsEdit: [
+            /*
             {
                 name: 'organization_identities_tab',
                 navLabel: pwixI18n.label( I18N, 'organizations.edit.identities_tab_title' ),
                 paneTemplate: 'organization_identities_pane'
             },
+                */
             {
                 name: 'organization_clients_tab',
                 navLabel: pwixI18n.label( I18N, 'organizations.edit.clients_tab_title' ),
@@ -59,6 +62,13 @@ Template.manager_organizations_tab.onCreated( function(){
                 name: 'organization_status_tab',
                 navLabel: pwixI18n.label( I18N, 'organizations.edit.status_tab_title' ),
                 paneTemplate: 'organization_status_pane'
+            },
+            // some components which will not be shown, but are just here to load relative data
+            {
+                name: 'organization_clients_load',
+                navLabel: 'organization_clients_load',
+                paneTemplate: 'organization_clients_load',
+                shown: false
             }
         ],
         recordTabs: [

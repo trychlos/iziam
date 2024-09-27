@@ -25,32 +25,17 @@ Permissions.configure({
 Permissions.set({
     feat: {
         clients: {
+            async create( user, scope ){
+                return await Roles.userIsInRoles( user, 'SCOPED_CLIENT_CREATE', { scope: scope });
+            },
             async delete( user, scope ){
-                return await Roles.userIsInRoles( user, 'CLIENT_DELETE' ) ||
-                        await Roles.userIsInRoles( user, 'SCOPED_CLIENT_DELETE', { scope: scope });
+                return await Roles.userIsInRoles( user, 'SCOPED_CLIENT_DELETE', { scope: scope });
             },
             async edit( user, scope ){
-                return await Roles.userIsInRoles( user, 'CLIENT_EDIT' ) ||
-                        await Roles.userIsInRoles( user, 'SCOPED_CLIENT_EDIT', { scope: scope });
+                return await Roles.userIsInRoles( user, 'SCOPED_CLIENT_EDIT', { scope: scope });
             },
-            fn :{
-                async get_by( user, scope ){
-                    return await Roles.userIsInRoles( user, 'CLIENTS_LIST' ) ||
-                            await Roles.userIsInRoles( user, 'SCOPED_CLIENTS_LIST', { scope: scope });
-                }
-            },
-            async new( user, scope ){
-                return await Roles.userIsInRoles( user, 'CLIENT_CREATE' ) ||
-                        await Roles.userIsInRoles( user, 'SCOPED_CLIENT_CREATE', { scope: scope });
-            },
-            pub: {
-                async list_all( user ){
-                    return await Roles.userIsInRoles( user, 'CLIENTS_LIST' );
-                },
-                async tabular( user, scope ){
-                    return await Roles.userIsInRoles( user, 'CLIENTS_LIST' ) ||
-                            await Roles.userIsInRoles( user, 'SCOPED_CLIENTS_LIST', { scope: scope });
-                }
+            async list( user, scope ){
+                return await Roles.userIsInRoles( user, 'SCOPED_CLIENTS_LIST', { scope: scope });
             }
         },
         organizations: {

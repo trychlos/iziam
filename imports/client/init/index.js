@@ -12,10 +12,8 @@ import '/imports/client/components/provider_selection_checkbox/provider_selectio
 
 import '/imports/common/init/index.js';
 
-import './clients-list.js';
 import './display-units.js';
 import './identities-list.js';
 import './organizations-list.js';
 import './routes.js';
 import './run-context.js';
-//import './startup.js';

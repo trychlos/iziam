@@ -15,6 +15,8 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { Tolert } from 'meteor/pwix:tolert';
 
+import { Clients } from '/imports/common/collections/clients/index.js';
+
 import '/imports/client/components/client_edit_dialog/client_edit_dialog.js';
 
 import './clients_list.html';
@@ -24,9 +26,9 @@ Template.clients_list.onCreated( function(){
     //console.debug( this );
 
     self.APP = {
-        handleOne: self.subscribe( Meteor.APP.C.pub.clientsTabularOne.publish, Template.currentData().item.get()._id || null ),
+        handleOne: self.subscribe( Meteor.APP.C.pub.clientsTabularOne.publish, Template.currentData().item.get() || null ),
         resultOne: new ReactiveVar( [] ),
-        handleTwo: null,
+        handleTwo: new ReactiveVar( null ),
         closests: new ReactiveVar( [] )
     };
 
@@ -34,21 +36,25 @@ Template.clients_list.onCreated( function(){
     self.autorun(() => {
         if( self.APP.handleOne.ready()){
             Meteor.APP.Collections.get( Meteor.APP.C.pub.clientsTabularOne.collection ).find().fetchAsync().then(( fetched ) => {
+                //console.debug( 'fetched one', fetched );
                 self.APP.resultOne.set( fetched );
             });
         }
     });
 
-    // subscribe to the two other publications with this result
+    // subscribe to the second publication with this result
+    // this handle has to be reactive itself (not only the ready() method)
     self.autorun(() => {
-        self.APP.handleTwo = self.subscribe( Meteor.APP.C.pub.clientsTabularTwo.publish, Template.currentData().item.get()._id || null, self.APP.resultOne.get());
+        const fetched = self.APP.resultOne.get();
+        self.APP.handleTwo.set( self.subscribe( Meteor.APP.C.pub.clientsTabularTwo.publish, Template.currentData().item.get() || null, fetched ));
     });
 
     // subscribe to the tabular publication to get the list of closest ids
     self.autorun(() => {
-        if( self.APP.handleTwo.ready()){
+        if( self.APP.handleTwo.get()?.ready()){
             let closests = [];
             Meteor.APP.Collections.get( Meteor.APP.C.pub.clientsTabularTwo.collection ).find().fetchAsync().then(( fetched ) => {
+                //console.debug( 'fetched two', fetched );
                 fetched.forEach(( it ) => {
                     closests.push( it._id );
                 });
@@ -61,7 +67,7 @@ Template.clients_list.onCreated( function(){
 Template.clients_list.helpers({
     // whether the current user has the permission to see the list of clients for the current organization
     canList(){
-        const res = Permissions.isAllowed( 'feat.clients.pub.tabular', this.item.get()._id );
+        const res = Permissions.isAllowed( 'feat.clients.list', this.item.get()._id );
         //console.debug( 'res', res );
         return res;
     },
@@ -105,7 +111,7 @@ Template.clients_list.events({
             entity: this.item.get(),
             record: this.item.get().DYN.closest
         };
-        const item = Meteor.APP.Clients.byId( data.item._id );
+        const item = this.item.get().DYN.clients.byId( data.item._id );
         if( item ){
             Modal.run({
                 ...dc,
