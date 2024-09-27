@@ -6,17 +6,18 @@
  * Aims to maintain a registrar of all defined organizations.
  * Client side maintains a tracker on a tenant_all publication, so both client and server sides have the tools to update this central registration.
  * NB: 'central' here doesn't mean that the same instance is shared between client and server sides! That means that both instances are maintained equal.
+ * 
+ * The OrganizationsRegistrar is instanciated once in common init code.
+ * It maintains the list of all organizations.
  */
 
 import { ReactiveVar } from 'meteor/reactive-var';
 import { TenantsManager } from 'meteor/pwix:tenants-manager';
 import { Tracker } from 'meteor/tracker';
 
-import { Identities } from '/imports/common/collections/identities/index.js';
 import { Organizations } from '/imports/common/collections/organizations/index.js';
 
 import { izRegistrar } from './iz-registrar.class.js';
-import { ClientsRegistrar } from './clients-registrar.class.js';
 
 export class OrganizationsRegistrar extends izRegistrar {
 
@@ -26,10 +27,10 @@ export class OrganizationsRegistrar extends izRegistrar {
 
     // private data
 
-    // client side
+    // client side: the subscription handle
     #handle = new ReactiveVar( null );
 
-    // common
+    // common: the list of the organizations
     #list = new ReactiveVar( [] );
 
     // private methods

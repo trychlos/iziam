@@ -4,7 +4,9 @@
  * A registration of clients of an organization.
  * Relies on OrganizationsRegistrar.
  * 
- * This registrar maintains a full list of the clients of an organization both on client and server sides.
+ * The ClientsRegistrar is instanciated once per organization, when the user is about to edit it.
+ * The instance is available as <organization>.DYN.clients
+ * It maintains a full list of the clients of an organization both on client and server sides.
  */
 
 import { ReactiveVar } from 'meteor/reactive-var';
@@ -22,10 +24,13 @@ export class ClientsRegistrar extends izRegistrar {
 
     // private data
 
-    // client-side
+    // client-side: the subscription handle
     #handle = new ReactiveVar( null );
 
-    // common
+    // common: the organization 
+    #organizationId = null;
+
+    // common: the clients of the organization
     #list = new ReactiveVar( [] );
 
     // private methods
@@ -71,11 +76,13 @@ export class ClientsRegistrar extends izRegistrar {
 
         }
 
+        // common code
+
         return this;
     }
 
     /**
-     * @param {String} clientId 
+     * @param {String} clientId the client Mongo entity identifier
      * @returns {<Client>}
      */
     byId( clientId ){

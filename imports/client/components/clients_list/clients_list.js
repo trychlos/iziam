@@ -111,7 +111,8 @@ Template.clients_list.events({
             entity: this.item.get(),
             record: this.item.get().DYN.closest
         };
-        const item = this.item.get().DYN.clients.byId( data.item._id );
+        const registered = Meteor.APP.Organizations.byId( this.item.get()._id );
+        const item = registered.DYN.clients.byId( data.item._id );
         if( item ){
             Modal.run({
                 ...dc,

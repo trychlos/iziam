@@ -12,58 +12,17 @@
  * - recordTabs
  */
 
-import { ReactiveVar } from 'meteor/reactive-var';
-
-import { Identities } from '/imports/common/collections/identities/index.js';
+import { IdentitiesRegistrar } from '/imports/common/classes/identities-registrar.class.js';
 
 import './organization_identities_load.html';
 
 Template.organization_identities_load.onCreated( function(){
-    const self = this;
     //console.debug( this );
-
-    self.APP = {
-        // the organization item
-        organization: new ReactiveVar( null ),
-        // the subscription to the clients of the above organization
-        handle: new ReactiveVar( null )
-    };
-
-    // get the organization entity
-    self.autorun(() => {
-        const organization = Template.currentData().item.get();
-        if( organization ){
-            //console.debug( 'organization', organization );
-            self.APP.organization.set( organization );
-            self.APP.handle.set( self.subscribe( Meteor.APP.C.pub.identitiesAll.publish, organization ));
-            organization.DYN.identities = {
-                list: new ReactiveVar( [] ),
-                byId( identityId ){
-                    let found = null;
-                    organization.DYN.identities.list.get().every(( it ) => {
-                        if( it._id === identityId ){
-                            found = it;
-                        }
-                        return !found;
-                    });
-                    if( !found ){
-                        console.warn( 'unable to find an identity', identityId );
-                    }
-                    return found;
-                }
-            };
+    this.autorun(() => {
+        const edited = Template.currentData().item.get();
+        const organization = Meteor.APP.Organizations.byId( edited._id );
+        if( organization && !organization.DYN.identities ){
+            //organization.DYN.identities = new IdentitiesRegistrar( organization );
         }
-    });
-
-    // get the list of identities
-    // each identity is published as an object with DYN sub-object
-    self.autorun(() => {
-        if( self.APP.handle.get()?.ready()){
-            const organization = self.APP.organization.get();
-            Meteor.APP.Collections.get( Meteor.APP.C.pub.identitiesAll.collection ).find( Meteor.APP.C.pub.identitiesAll.query( organization )).fetchAsync().then(( fetched ) => {
-                //console.debug( 'fetched', fetched );
-                organization.DYN.identities.list.set( fetched );
-            });
-        }
-    });
+    })
 });
