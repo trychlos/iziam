@@ -35,8 +35,14 @@ Template.client_operational_badge.helpers({
     },
     // the status
     parmsStatus(){
+        const organization = Meteor.APP.Organizations.byId( this.item.DYN.entity.organization );
+        const clientId = this.item.DYN.entity._id;
+        //console.debug( 'organization', organization );
+        //console.debug( 'this', this );
+        //console.debug( 'organization.DYN.clients?.byId( this.item.entity._id )', organization.DYN.clients?.byId( this.item.entity._id ));
+        const rv = organization && clientId ? organization.DYN.clients?.byId( clientId )?.DYN.operational?.status : null;
         return {
-            statusRv: Template.instance().APP.status,
+            statusRv: rv,
             title: pwixI18n.label( I18N, 'clients.tabular.operational_title' )
         };
     }

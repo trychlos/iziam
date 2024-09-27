@@ -12,6 +12,7 @@ import '/imports/client/components/organization_clients_pane/organization_client
 import '/imports/client/components/organization_config_pane/organization_config_pane.js';
 import '/imports/client/components/organization_dynregistration_pane/organization_dynregistration_pane.js';
 import '/imports/client/components/organization_endpoints_pane/organization_endpoints_pane.js';
+import '/imports/client/components/organization_identities_load/organization_identities_load.js';
 import '/imports/client/components/organization_identities_pane/organization_identities_pane.js';
 import '/imports/client/components/organization_jwks_pane/organization_jwks_pane.js';
 import '/imports/client/components/organization_keygrips_pane/organization_keygrips_pane.js';
@@ -68,6 +69,12 @@ Template.manager_organizations_tab.onCreated( function(){
                 name: 'organization_clients_load',
                 navLabel: 'organization_clients_load',
                 paneTemplate: 'organization_clients_load',
+                shown: false
+            },
+            {
+                name: 'organization_identities_load',
+                navLabel: 'organization_identities_load',
+                paneTemplate: 'organization_identities_load',
                 shown: false
             }
         ],

@@ -19,6 +19,7 @@ import '../collections/accounts/index.js';
 Meteor.APP.AccountsManager = Meteor.APP.AccountsManager || {};
 
 Meteor.APP.AccountsManager.accounts = new AccountsManager.amClass({
+    name: 'users',
     additionalFieldset: {
         before: 'adminNotes',
         fields: [{
@@ -67,7 +68,12 @@ Permissions.set({
             //  - amInstance: the amClass instance, always present
             feat: {
                 async create( userId, args ){
-                    return await Roles.userIsInRoles( userId, 'ACCOUNT_CREATE' );
+                    if( args.amInstance.name() === 'users' ){
+                        return await Roles.userIsInRoles( userId, 'ACCOUNT_CREATE' );
+                    } else {
+                        console.debug( 'args', args );
+                        return false; //await Roles.userIsInRoles( userId, 'SCOPED_ACCOUNT_CREATE' );
+                    }
                 },
                 // user cannot delete itself
                 //  user cannot delete an account which have higher roles, but can who has equal roles (so an admin may delete another admin)

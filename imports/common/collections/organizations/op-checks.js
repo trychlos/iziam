@@ -5,8 +5,10 @@
 import _ from 'lodash';
 const assert = require( 'assert' ).strict;
 
+import { Forms } from 'meteor/pwix:forms';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
+import { Validity } from 'meteor/pwix:validity';
 
 import { Organizations } from './index.js';
 
@@ -17,6 +19,7 @@ import { Organizations } from './index.js';
  * @returns {Array<TypedMessage>} or null
  */
 Organizations.isOperational = async function( organization ){
+    console.debug( 'Organizations.isOperational' );
     let errors = [];
     // prepare data for the checks functions
     const data = { entity: new ReactiveVar( null ), index: 0 };
@@ -46,4 +49,53 @@ Organizations.isOperational = async function( organization ){
     await Promise.allSettled( promises );
     //console.debug( 'errors', errors );
     return errors.length ? errors : null;
+};
+
+/**
+ * @locus Client
+ * @summary Maintain the 'operational' status of each organization
+ *  When the organizations change, update their status
+ *  We add (or update) here a DYN.status object
+ * @param {Object} organization as a full entity object with its DYN sub-object
+ */
+Organizations.setupOperational = async function( item ){
+    assert( Meteor.isClient, 'expects to only be called on client side' );
+    //console.debug( 'Organizations.setupOperational' );
+    const atdate = Validity.atDateByRecords( item.DYN.records );
+    if( !item.DYN.operational ){
+        item.DYN.operational = {
+            results: [],
+            status: new ReactiveVar( Forms.FieldStatus.C.NONE )
+        };
+    }
+    if( atdate ){
+        let entity = { ...item };
+        delete entity.DYN;
+        Organizations.isOperational({ entity: entity, record: atdate }).then(( res ) => {
+            // null or a TM.TypedMessage or an array of TM.TypedMessage's
+            item.DYN.operational.results = res;
+            item.DYN.operational.status.set( res ? Forms.FieldStatus.C.UNCOMPLETE : Forms.FieldStatus.C.VALID );
+        });
+    } else {
+        item.DYN.operational.results = [];
+        item.DYN.operational.status.set( Forms.FieldStatus.C.INVALID );
+        item.DYN.operational.results.push( new TM.TypedMessage({
+            level: TM.MessageLevel.C.ERROR,
+            message: pwixI18n.label( I18N, 'organizations.checks.atdate_none' )
+        }));
+        item.DYN.operational.results.push( new TM.TypedMessage({
+            level: TM.MessageLevel.C.INFO,
+            message: pwixI18n.label( I18N, 'organizations.checks.atdate_next' )
+        }));
+        Organizations.isOperational({ entity: entity, record: item.DYN.closest }).then(( res ) => {
+            if( res ){
+                item.DYN.operational.results = item.DYN.operational.results.concat( res );
+            } else {
+                item.DYN.operational.results.push( new TM.TypedMessage({
+                    level: TM.MessageLevel.C.INFO,
+                    message: pwixI18n.label( I18N, 'organizations.checks.atdate_closest_done' )
+                }));
+            }
+        });
+    }
 };

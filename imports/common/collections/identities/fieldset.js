@@ -11,7 +11,8 @@ Identities.fieldsDef = function(){
         //  the organization entity identifier
         {
             name: 'organization',
-            type: String
+            type: String,
+            dt_tabular: false
         },
         // -- scope: profile
         // the user's full name
@@ -27,6 +28,7 @@ Identities.fieldsDef = function(){
             name: 'family_name',
             type: String,
             optional: true,
+            dt_tabular: false,
             form_check: Identities.checks.family_name,
             form_type: Forms.FieldType.C.OPTIONAL
         },
@@ -35,6 +37,7 @@ Identities.fieldsDef = function(){
             name: 'given_name',
             type: String,
             optional: true,
+            dt_tabular: false,
             form_check: Identities.checks.given_name,
             form_type: Forms.FieldType.C.OPTIONAL
         },
@@ -42,6 +45,7 @@ Identities.fieldsDef = function(){
             name: 'middle_name',
             type: String,
             optional: true,
+            dt_tabular: false,
             form_check: Identities.checks.middle_name,
             form_type: Forms.FieldType.C.OPTIONAL
         },
@@ -50,6 +54,7 @@ Identities.fieldsDef = function(){
             name: 'nickname',
             type: String,
             optional: true,
+            dt_tabular: false,
             form_check: Identities.checks.nickname,
             form_type: Forms.FieldType.C.OPTIONAL
         },
@@ -65,6 +70,7 @@ Identities.fieldsDef = function(){
             name: 'profile_url',
             type: String,
             optional: true,
+            dt_tabular: false,
             form_check: Identities.checks.profile_url,
             form_type: Forms.FieldType.C.OPTIONAL
         },
@@ -73,6 +79,7 @@ Identities.fieldsDef = function(){
             name: 'picture_url',
             type: String,
             optional: true,
+            dt_tabular: false,
             form_check: Identities.checks.picture_url,
             form_type: Forms.FieldType.C.OPTIONAL
         },
@@ -88,6 +95,7 @@ Identities.fieldsDef = function(){
             name: 'gender',
             type: String,
             optional: true,
+            dt_tabular: false,
             form_check: Identities.checks.gender,
             form_type: Forms.FieldType.C.OPTIONAL
         },
@@ -95,13 +103,15 @@ Identities.fieldsDef = function(){
         {
             name: 'birthdate',
             type: Date,
-            optional: true
+            optional: true,
+            dt_tabular: false
         },
         // only 'mm-dd' month-day
         {
             name: 'birthday',
             type: String,
-            optional: true
+            optional: true,
+            dt_tabular: false
         },
         {
             name: 'zoneinfo',
@@ -114,6 +124,7 @@ Identities.fieldsDef = function(){
             name: 'locale',
             type: String,
             optional: true,
+            dt_tabular: false,
             form_check: Identities.checks.locale,
             form_type: Forms.FieldType.C.OPTIONAL
         },
@@ -122,7 +133,8 @@ Identities.fieldsDef = function(){
         {
             name: 'addresses',
             type: Object,
-            optional: true
+            optional: true,
+            dt_tabular: false
         },
         {
             name: 'addresses.$',
@@ -187,7 +199,8 @@ Identities.fieldsDef = function(){
         {
             name: 'phones',
             type: Array,
-            optional: true
+            optional: true,
+            dt_tabular: false
         },
         {
             name: 'phones.$',
@@ -220,7 +233,8 @@ Identities.fieldsDef = function(){
         {
             name: 'usernames',
             type: Array,
-            optional: true
+            optional: true,
+            dt_tabular: false
         },
         {
             name: 'usernames.$',

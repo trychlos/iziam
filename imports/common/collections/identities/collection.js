@@ -3,5 +3,4 @@
  */
 
 export const Identities = {
-    collectionName: 'identities'
 };

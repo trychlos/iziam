@@ -1,47 +1,21 @@
 /*
- * /imports/client/init/organizations-list.js
+ * /imports/common/init/organizations-registrar.js
  *
- * Maintain a reactive list of the organizations, and their operational status
- * 
- * Each organization item is an entity object, with a DYN:
- * - managers
- * - records
- * - closest
+ * Instanciates the auto-maintained organizations registrar.
  */
 
-import { Forms } from 'meteor/pwix:forms';
-import { ReactiveVar } from 'meteor/reactive-var';
-import { TenantsManager } from 'meteor/pwix:tenants-manager';
-import { Tracker } from 'meteor/tracker';
-import { Validity } from 'meteor/pwix:validity';
+import { OrganizationsRegistrar } from '/imports/common/classes/organizations-registrar.class.js';
 
-import { Organizations } from '/imports/common/collections/organizations/index.js';
+Meteor.APP.Organizations = new OrganizationsRegistrar();
 
+/*
 Meteor.APP.Organizations = {
     _handle: Meteor.subscribe( TenantsManager.C.pub.tenantsAll.publish ),
     _tenants: new ReactiveVar( [] ),
-
-    /**
-     * @param {String} organizationId the organization identifier
-     * @returns {Object} the found organization, with its DYN object, or null
-     */
-    byId( organizationId ){
-        let found = null;
-        Meteor.APP.Organizations._tenants.get().every(( it ) => {
-            if( it._id === organizationId ){
-                found = it;
-            }
-            return !found;
-        });
-        if( !found ){
-            console.warn( 'unable to find an organization', organizationId );
-        }
-        return found;
-    }
 };
 
 // get the list of organizations
-// each organization is published by the TenantsManager as an entty object with DYN { managers, records, closest } sub-object
+// each organization is published by the TenantsManager as an entity object with DYN { managers, records, closest } sub-object
 Tracker.autorun(() => {
     if( Meteor.APP.Organizations._handle.ready()){
         TenantsManager.collections.get( TenantsManager.C.pub.tenantsAll.collection ).find({}).fetchAsync().then(( fetched ) => {
@@ -49,6 +23,14 @@ Tracker.autorun(() => {
             Meteor.APP.Organizations._tenants.set( fetched );
         });
     }
+});
+
+// define the accounts entity for each organization
+Tracker.autorun(() => {
+    Meteor.APP.Organizations._tenants.get().forEach(( it ) => {
+        it.DYN.identities = it.DYN.identities || {};
+        it.DYN.identities.instance = Identities.init( it );
+    });
 });
 
 // maintain the 'operational' status of each organization
@@ -91,3 +73,4 @@ Tracker.autorun(() => {
         //console.debug( 'it', it );
     });
 });
+*/
