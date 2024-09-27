@@ -10,7 +10,7 @@ import { Tracker } from 'meteor/tracker';
 
 import { Statistics } from './index.js';
 
-const _defaultFieldSet = function(){
+const _defaultFieldDef = function(){
     let columns = [
         // --
         //  the url pathname
@@ -67,7 +67,7 @@ const _defaultFieldSet = function(){
 };
 
 Tracker.autorun(() => {
-    let columns = _defaultFieldSet();
+    let columns = _defaultFieldDef();
     let fieldset = new Field.Set( columns );
     Statistics.fieldSet.set( fieldset );
 });

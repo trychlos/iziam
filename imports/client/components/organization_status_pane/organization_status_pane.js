@@ -25,7 +25,7 @@ Template.organization_status_pane.onRendered( function(){
             self.$( '.c-organization-status-pane' ).trigger( 'tabbed-do-enable', {
                 tabbedId: Template.currentData().tabbedId,
                 name: 'organization_status_tab',
-                enabled: status !== Forms.CheckStatus.C.VALID
+                enabled: status !== Forms.FieldStatus.C.VALID
             });
         }
     });

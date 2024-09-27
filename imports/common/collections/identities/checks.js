@@ -7,20 +7,209 @@
 import _ from 'lodash';
 const assert = require( 'assert' ).strict; // up to nodejs v16.x
 import validator from 'email-validator';
+import validUrl from 'valid-url';
 
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
+import { TM } from 'meteor/pwix:typed-message';
 
 import { Identities } from './index.js';
 
-/*
-// item is a ReactiveVar which contains the edited record
-Identities._assert_data_itemrv = function( caller, data ){
-    assert.ok( data, caller+' data required' );
-    assert.ok( data.item, caller+' data.item required' );
-    assert.ok( data.item instanceof ReactiveVar, caller+' data.item expected to be a ReactiveVar' );
+// fields check
+//  - value: mandatory, the value to be tested
+//  - data: optional, the data passed to Checker instanciation
+//    if set the target item as a ReactiveVar, i.e. the item to be updated with this value
+//  - opts: an optional behaviour options, with following keys:
+//    > update: whether the item be updated with the value, defaults to true
+//    > id: the identifier of the edited row when editing an array
+// returns a TypedMessage, or an array of TypedMessage, or null
+
+// entity is a ReactiveVar which contains the edited entity document and its validity records
+const _assert_data_content = function( caller, data ){
+    assert.ok( data, caller+' data is required' );
+    assert.ok( data.item && data.item instanceof ReactiveVar, caller+' data.item is expected to be set as a ReactiveVar, got '+data.item );
+};
+
+// returns the index of the identified row in the array
+const _id2index = function( array, id ){
+    for( let i=0 ; i<array.length ; ++i ){
+        if( array[i].id === id ){
+            return i;
+        }
+    }
+    console.warn( 'id='+id+' not found' );
+    return -1;
+};
+
+// check an url
+//  opts:
+//  - mandatory, defaulting to true
+//  - prefix, the prefix of the i18n label, defaulting to 'url'
+//  - field: the name of the field
+// returns a Promise or null
+const _check_url = function( value, opts={} ){
+    const mandatory = _.isBoolean( opts.mandatory ) ? opts.mandatory : true;
+    const prefix = opts.prefix || 'url';
+    const field = opts.field || '';
+    if( value ){
+        if( validUrl.isWebUri( value )){
+            try {
+                const url = new URL( value );
+            } catch {
+                return new TM.TypedMessage({
+                    level: TM.MessageLevel.C.ERROR,
+                    message: pwixI18n.label( I18N, 'identities.checks.'+prefix+'_invalid', field )
+                });
+            }
+            return null;
+        } else {
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'identities.checks.'+prefix+'_invalid', field )
+            });
+        }
+    } else if( mandatory ){
+        return new TM.TypedMessage({
+            level: TM.MessageLevel.C.ERROR,
+            message: pwixI18n.label( I18N, 'identities.checks.'+prefix+'_mandatory', field )
+        });
+    } else {
+        return null;
+    }
 }
 
+Identities.checks = {
+    // the family name
+    async family_name( value, data, opts ){
+        _assert_data_content( 'Identities.checks.family_name()', data );
+        let item = data.item.get();
+        if( opts.update !== false ){
+            item.family_name = value;
+            data.item.set( item );
+        }
+        return value || item.given_name || item.name ? null : new TM.TypedMessage({
+            level: TM.MessageLevel.C.WARNING,
+            message: pwixI18n.label( I18N, 'identities.checks.family_empty' )
+        });
+    },
+
+    // the gender
+    async gender( value, data, opts ){
+        _assert_data_content( 'Identities.checks.gender()', data );
+        let item = data.item.get();
+        if( opts.update !== false ){
+            item.gender = value;
+            data.item.set( item );
+        }
+        return null;
+    },
+
+    // the given name
+    async given_name( value, data, opts ){
+        _assert_data_content( 'Identities.checks.given_name()', data );
+        let item = data.item.get();
+        if( opts.update !== false ){
+            item.given_name = value;
+            data.item.set( item );
+        }
+        return value || item.family_name || item.name ? null : new TM.TypedMessage({
+            level: TM.MessageLevel.C.WARNING,
+            message: pwixI18n.label( I18N, 'identities.checks.given_empty' )
+        });
+    },
+
+    // the locale
+    async locale( value, data, opts ){
+        _assert_data_content( 'Identities.checks.locale()', data );
+        let item = data.item.get();
+        if( opts.update !== false ){
+            item.locale = value;
+            data.item.set( item );
+        }
+        return null;
+    },
+
+    // the middle name
+    async middle_name( value, data, opts ){
+        _assert_data_content( 'Identities.checks.middle_name()', data );
+        let item = data.item.get();
+        if( opts.update !== false ){
+            item.middle_name = value;
+            data.item.set( item );
+        }
+        return null;
+    },
+
+    // the full name
+    async name( value, data, opts ){
+        _assert_data_content( 'Identities.checks.name()', data );
+        let item = data.item.get();
+        if( opts.update !== false ){
+            item.name = value;
+        }
+        return value || item.family_name || item.given_name ? null : new TM.TypedMessage({
+            level: TM.MessageLevel.C.WARNING,
+            message: pwixI18n.label( I18N, 'identities.checks.name_empty' )
+        });
+    },
+
+    // the nickname
+    async nickname( value, data, opts ){
+        _assert_data_content( 'Identities.checks.nickname()', data );
+        let item = data.item.get();
+        if( opts.update !== false ){
+            item.nickname = value;
+            data.item.set( item );
+        }
+        return null;
+    },
+
+    // the picture url
+    async picture_url( value, data, opts ){
+        _assert_data_content( 'Identities.checks.picture_url()', data );
+        let item = data.item.get();
+        if( opts.update !== false ){
+            item.picture_url = value;
+            data.item.set( item );
+        }
+        return _check_url( value, { field: 'picture_url', prefix: 'picture', mandatory: false });
+    },
+
+    // the profile url
+    async profile_url( value, data, opts ){
+        _assert_data_content( 'Identities.checks.profile_url()', data );
+        let item = data.item.get();
+        if( opts.update !== false ){
+            item.profile_url = value;
+            data.item.set( item );
+        }
+        return _check_url( value, { field: 'profile_url', prefix: 'profile', mandatory: false });
+    },
+
+    // the website url
+    async website_url( value, data, opts ){
+        _assert_data_content( 'Identities.checks.website_url()', data );
+        let item = data.item.get();
+        if( opts.update !== false ){
+            item.website_url = value;
+            data.item.set( item );
+        }
+        return _check_url( value, { field: 'website_url', prefix: 'website', mandatory: false });
+    },
+
+    // the zoneinfo
+    async zoneinfo( value, data, opts ){
+        _assert_data_content( 'Identities.checks.zoneinfo()', data );
+        let item = data.item.get();
+        if( opts.update !== false ){
+            item.zoneinfo = value;
+            data.item.set( item );
+        }
+        return null;
+    }
+};
+
+/*
 // addresses
 //  when checking from the UI inputHandler() for this field, we got an identifier in the coreApp options
 //  in all other cases ?
@@ -165,7 +354,7 @@ Identities.check_emails_address = function( value, data, coreApp={} ){
                     if( !validator.validate( value )){
                         return new CoreApp.TypedMessage({
                             type: CoreApp.MessageType.C.ERROR,
-                            message: pwixI18n.label( I18N, 'identities.check.emailaddress_invalid' )
+                            message: pwixI18n.label( I18N, 'identities.checks.emailaddress_invalid' )
                         });
                     } else {
                         const fn = function( result ){
@@ -182,7 +371,7 @@ Identities.check_emails_address = function( value, data, coreApp={} ){
                             }
                             return ok ? null : new CoreApp.TypedMessage({
                                 type: CoreApp.MessageType.C.ERROR,
-                                message: pwixI18n.label( I18N, 'identities.check.emailaddress_exists' )
+                                message: pwixI18n.label( I18N, 'identities.checks.emailaddress_exists' )
                             });
                         };
                         return Meteor.isClient ?
@@ -192,7 +381,7 @@ Identities.check_emails_address = function( value, data, coreApp={} ){
                 } else {
                     return new CoreApp.TypedMessage({
                         type: CoreApp.MessageType.C.ERROR,
-                        message: pwixI18n.label( I18N, 'identities.check.emailaddress_empty' )
+                        message: pwixI18n.label( I18N, 'identities.checks.emailaddress_empty' )
                     });
                 }
             }
@@ -257,113 +446,6 @@ Identities.check_emails_verified = function( value, data, coreApp={} ){
         });
 };
 
-// the family name
-Identities.check_family_name = function( value, data, coreApp={} ){
-    Identities._assert_data_itemrv( 'Identities.check_family_name()', data );
-    const item = data.item.get();
-    return Promise.resolve( null )
-        .then(() => {
-            if( coreApp.update !== false ){
-                item.family_name = value;
-                data.item.set( item );
-            }
-            return value || item.given_name || item.name ? null : new CoreApp.TypedMessage({
-                type: CoreApp.MessageType.C.ERROR,
-                message: pwixI18n.label( I18N, 'identities.check.family_empty' )
-            });
-        });
-};
-
-// the gender
-Identities.check_gender = function( value, data, coreApp={} ){
-    Identities._assert_data_itemrv( 'Identities.check_gender()', data );
-    const item = data.item.get();
-    return Promise.resolve( null )
-        .then(() => {
-            if( coreApp.update !== false ){
-                item.gender = value;
-                data.item.set( item );
-            }
-            return null;
-        });
-};
-
-// the given name
-Identities.check_given_name = function( value, data, coreApp={} ){
-    Identities._assert_data_itemrv( 'Identities.check_given_name()', data );
-    const item = data.item.get();
-    return Promise.resolve( null )
-        .then(() => {
-            if( coreApp.update !== false ){
-                item.given_name = value;
-                data.item.set( item );
-            }
-            return value || item.family_name || item.name ? null : new CoreApp.TypedMessage({
-                type: CoreApp.MessageType.C.ERROR,
-                message: pwixI18n.label( I18N, 'identities.check.given_empty' )
-            });
-        });
-};
-
-// the locale
-Identities.check_locale = function( value, data, coreApp={} ){
-    Identities._assert_data_itemrv( 'Identities.check_locale()', data );
-    const item = data.item.get();
-    return Promise.resolve( null )
-        .then(() => {
-            if( coreApp.update !== false ){
-                item.locale = value;
-                data.item.set( item );
-            }
-            return null;
-        });
-};
-
-// the middle name
-Identities.check_middle_name = function( value, data, coreApp={} ){
-    Identities._assert_data_itemrv( 'Identities.check_middle_name()', data );
-    const item = data.item.get();
-    return Promise.resolve( null )
-        .then(() => {
-            if( coreApp.update !== false ){
-                item.middle_name = value;
-                data.item.set( item );
-            }
-            return null;
-        });
-};
-
-// the full name
-Identities.check_name = function( value, data, coreApp={} ){
-    Identities._assert_data_itemrv( 'Identities.check_name()', data );
-    const item = data.item.get();
-    return Promise.resolve( null )
-        .then(() => {
-            if( coreApp.update !== false ){
-                item.name = value;
-                data.item.set( item );
-            }
-            return value || item.family_name || item.given_name ? null : new CoreApp.TypedMessage({
-                type: CoreApp.MessageType.C.ERROR,
-                message: pwixI18n.label( I18N, 'identities.check.name_empty' )
-            });
-        });
-};
-
-// the nickname
-Identities.check_nickname = function( value, data, coreApp={} ){
-    Identities._assert_data_itemrv( 'Identities.check_nickname()', data );
-    const item = data.item.get();
-    return Promise.resolve( null )
-        .then(() => {
-            if( coreApp.update !== false ){
-                item.nickname = value;
-                data.item.set( item );
-            }
-            return null;
-        });
-};
-
 // phones
 //  when checking from the UI inputHandler() for this field, we got an identifier in the coreApp options
 //  in all other cases ?
@@ -399,7 +481,7 @@ Identities.check_phones_number = function( value, data, coreApp={} ){
                 }
                 return value ? null : new CoreApp.TypedMessage({
                     type: CoreApp.MessageType.C.ERROR,
-                    message: pwixI18n.label( I18N, 'identities.check.phonenumber_empty' )
+                    message: pwixI18n.label( I18N, 'identities.checks.phonenumber_empty' )
                 });
             }
             return null;
@@ -447,20 +529,6 @@ Identities.check_phones_verified = function( value, data, coreApp={} ){
         });
 };
 
-// the picture
-Identities.check_picture = function( value, data, coreApp={} ){
-    Identities._assert_data_itemrv( 'Identities.check_picture()', data );
-    const item = data.item.get();
-    return Promise.resolve( null )
-        .then(() => {
-            if( coreApp.update !== false ){
-                item.picture = value;
-                data.item.set( item );
-            }
-            return null;
-        });
-};
-
 // the preferred username
 Identities.check_preferred_username = function( value, data, coreApp={} ){
     Identities._assert_data_itemrv( 'Identities.check_preferred_username()', data );
@@ -469,20 +537,6 @@ Identities.check_preferred_username = function( value, data, coreApp={} ){
         .then(() => {
             if( coreApp.update !== false ){
                 item.preferred_username = value;
-                data.item.set( item );
-            }
-            return null;
-        });
-};
-
-// the profile
-Identities.check_profile = function( value, data, coreApp={} ){
-    Identities._assert_data_itemrv( 'Identities.check_profile()', data );
-    const item = data.item.get();
-    return Promise.resolve( null )
-        .then(() => {
-            if( coreApp.update !== false ){
-                item.profile = value;
                 data.item.set( item );
             }
             return null;
@@ -563,7 +617,7 @@ Identities.check_usernames_username = function( value, data, coreApp={} ){
                         }
                         return ok ? null : new CoreApp.TypedMessage({
                             type: CoreApp.MessageType.C.ERROR,
-                            message: pwixI18n.label( I18N, 'identities.check.username_exists' )
+                            message: pwixI18n.label( I18N, 'identities.checks.username_exists' )
                         });
                     };
                     return Meteor.isClient ?
@@ -572,37 +626,9 @@ Identities.check_usernames_username = function( value, data, coreApp={} ){
                 } else {
                     return new CoreApp.TypedMessage({
                         type: CoreApp.MessageType.C.ERROR,
-                        message: pwixI18n.label( I18N, 'identities.check.username_empty' )
+                        message: pwixI18n.label( I18N, 'identities.checks.username_empty' )
                     });
                 }
-            }
-            return null;
-        });
-};
-
-// the website
-Identities.check_website = function( value, data, coreApp={} ){
-    Identities._assert_data_itemrv( 'Identities.check_website()', data );
-    const item = data.item.get();
-    return Promise.resolve( null )
-        .then(() => {
-            if( coreApp.update !== false ){
-                item.website = value;
-                data.item.set( item );
-            }
-            return null;
-        });
-};
-
-// the zoneinfo
-Identities.check_zoneinfo = function( value, data, coreApp={} ){
-    Identities._assert_data_itemrv( 'Identities.check_zoneinfo()', data );
-    const item = data.item.get();
-    return Promise.resolve( null )
-        .then(() => {
-            if( coreApp.update !== false ){
-                item.zoneinfo = value;
-                data.item.set( item );
             }
             return null;
         });

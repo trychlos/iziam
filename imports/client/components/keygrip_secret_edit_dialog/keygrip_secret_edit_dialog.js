@@ -83,7 +83,8 @@ Template.keygrip_secret_edit_dialog.onCreated( function(){
                 paneTemplate: 'keygrip_secret_secret_pane',
                 enabled: false
             }
-        ]
+        ],
+        activateLastTab: false
     });
 
     // dynamically update the tabs activability

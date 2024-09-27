@@ -26,7 +26,7 @@ Template.client_status_pane.onRendered( function(){
             self.$( '.c-client-status-pane' ).trigger( 'tabbed-do-enable', {
                 tabbedId: Template.currentData().tabbedId,
                 name: 'client_status_tab',
-                enabled: status !== Forms.CheckStatus.C.VALID
+                enabled: status !== Forms.FieldStatus.C.VALID
             });
         }
     });

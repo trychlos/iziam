@@ -68,20 +68,10 @@ Identities.fn = {
      * @locus Anywhere
      * @param {Identity} identity
      */
-    dyn( identity ){
-        if( !identity.DYN ){
-            identity.DYN = {};
-        }
-        if( !identity.DYN.membership ){
-            identity.DYN.membership = [];
-        }
-        if( !identity.DYN.name ){
-            identity.DYN.name = new ReactiveVar( '' );
-        }
-        // initialize the name value, but the client must have an autorun to keep it up to date
-        Identities.fn.name( identity ).then(( name ) => {
-            identity.DYN.name.set( name );
-        });
+    DYN( identity ){
+        identity.DYN = identity.DYN || {};
+        identity.DYN.membership = identity.DYN.membership || [];
+        identity.DYN.nameRv = identity.DYN.nameRv || new ReactiveVar( null );
         // setup arrays of email address, usernames, ...
         identity.DYN.emailAddresses = ( identity.emails || [] ).map( o => o.address );
         identity.DYN.usernames = ( identity.usernames || [] ).map( o => o.username );

@@ -16,7 +16,7 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 
 import { ClientSecrets } from '/imports/common/tables/client_secrets/index.js';
 
-import '/imports/client/components/user_preferred_async/user_preferred_async.js';
+//import '/imports/client/components/user_preferred_async/user_preferred_async.js';
 
 import './client_secrets_list.html';
 

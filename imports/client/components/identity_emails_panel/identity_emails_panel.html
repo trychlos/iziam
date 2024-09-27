@@ -1,0 +1,38 @@
+<template name="identity_emails_panel">
+    <div class="x-panel c-identity-emails-panel">
+        <table class="js-table">
+
+            <thead>
+                <tr>
+                    <th class="jqwt-border jqwt-sortable ca-w40">{{ i18n key="identities.panel.emaillabel_th" }}</th>
+                    <th class="jqwt-border jqwt-sortable ca-w60">{{ i18n key="identities.panel.emailaddress_th" }}</th>
+                    <th class="jqwt-border jqwt-sortable ca-center">{{ i18n key="identities.panel.emailverified_th" }}</th>
+                    <th class="jqwt-border jqwt-sortable ca-center">{{ i18n key="identities.panel.emailpreferred_th" }}</th>
+                    <th class="ca-transparent">
+                        <button class="btn btn-sm" disabled><span class="fa-solid fa-fw fa-minus"></span></button>
+                    </th>
+                    <th>
+                        <button class="btn btn-sm btn-outline-primary js-plus"><span class="fa-solid fa-fw fa-plus"></span></button>
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {{#each it in itemsList }}
+                    <tr data-item-id="{{ it.id }}">
+                        <td><input class="form-control js-label" type="text" /></td>
+                        <td><input class="form-control js-email" type="email" /></td>
+                        <td class="ca-center"><input class="form-check-input js-verified" type="checkbox" {{ isVerified it }} /></td>
+                        <td class="ca-center"><input class="form-check-input js-preferred" type="checkbox" {{ isPreferred it }} /></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary std-shift-1 js-delete" title="{{ deleteTitle it }}">
+                                <span class="fa-solid fa-fw fa-minus"></span>
+                            </button>
+                        </td>
+                    </tr>
+                {{/each}}
+            </tbody>
+
+        </table>
+    </div>
+</template>

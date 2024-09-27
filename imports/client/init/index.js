@@ -14,6 +14,7 @@ import '/imports/common/init/index.js';
 
 import './clients-list.js';
 import './display-units.js';
+import './identities-list.js';
 import './organizations-list.js';
 import './routes.js';
 import './run-context.js';

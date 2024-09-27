@@ -11,6 +11,7 @@ import '/imports/client/components/organization_clients_pane/organization_client
 import '/imports/client/components/organization_config_pane/organization_config_pane.js';
 import '/imports/client/components/organization_dynregistration_pane/organization_dynregistration_pane.js';
 import '/imports/client/components/organization_endpoints_pane/organization_endpoints_pane.js';
+import '/imports/client/components/organization_identities_pane/organization_identities_pane.js';
 import '/imports/client/components/organization_jwks_pane/organization_jwks_pane.js';
 import '/imports/client/components/organization_keygrips_pane/organization_keygrips_pane.js';
 import '/imports/client/components/organization_providers_pane/organization_providers_pane.js';
@@ -24,8 +25,8 @@ Template.manager_organizations_tab.onCreated( function(){
     self.APP = {
         entityTabsNew: [
             {
-                name: 'organization_accounts_tab',
-                navLabel: pwixI18n.label( I18N, 'organizations.edit.accounts_tab_title' ),
+                name: 'organization_identities_tab',
+                navLabel: pwixI18n.label( I18N, 'organizations.edit.identities_tab_title' ),
                 enabled: false
             },
             {
@@ -43,9 +44,9 @@ Template.manager_organizations_tab.onCreated( function(){
         ],
         entityTabsEdit: [
             {
-                name: 'organization_accounts_tab',
-                navLabel: pwixI18n.label( I18N, 'organizations.edit.accounts_tab_title' ),
-                enabled: false
+                name: 'organization_identities_tab',
+                navLabel: pwixI18n.label( I18N, 'organizations.edit.identities_tab_title' ),
+                paneTemplate: 'organization_identities_pane'
             },
             {
                 name: 'organization_clients_tab',

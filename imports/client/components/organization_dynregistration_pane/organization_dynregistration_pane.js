@@ -49,7 +49,7 @@ Template.organization_dynregistration_pane.onRendered( function(){
                     index: Template.currentData().index
                 },
                 setForm: Template.currentData().entity.get().DYN.records[Template.currentData().index].get(),
-                checkStatusShow: Forms.C.CheckStatus.NONE
+                fieldStatusShow: Forms.C.ShowStatus.NONE
             }));
         }
     });

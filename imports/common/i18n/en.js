@@ -474,6 +474,13 @@ Meteor.APP.i18n = {
                     public_text_oauth21: 'Clients without credentials are called "public clients".',
                     select_text: 'Select the client application type',
                 },
+                gender: {
+                    female_label: 'Female',
+                    male_label: 'Male',
+                    none_label: 'None',
+                    other_label: 'Other',
+                    select_text: 'Select a gender',
+                },
                 grant_nature: {
                     access_label: 'Access token',
                     refresh_label: 'Refresh token',
@@ -577,6 +584,9 @@ Meteor.APP.i18n = {
                     enc_label: 'Encryption',
                     select_text: 'Select your JWK usage'
                 },
+                locale: {
+                    select_text: 'Choose the user\'s locale'
+                },
                 secret_alg: {
                     rmd160_label: 'RMD160',
                     sha256_label: 'SHA-256',
@@ -603,6 +613,9 @@ Meteor.APP.i18n = {
                 yesno: {
                     no: 'No',
                     yes: 'Yes'
+                },
+                zoneinfo: {
+                    select_text: 'Choose the user\'s zoneinfo'
                 }
             },
             header: {
@@ -623,6 +636,60 @@ Meteor.APP.i18n = {
                         +' <span class="label">the Easy Identity and Access Manager</span>'
                         +'</span>'
                 }
+            },
+            identities: {
+                checks: {
+                    family_empty: 'Neither family name nor given name or full name are set, but at least one should',
+                    given_empty: 'Neither given name nor family name or full name are set, but at least one should',
+                    name_empty: 'Neither full name nor given name or family name are set, but at least one should',
+                    picture_invalid: 'The picture URL is not valid',
+                    picture_mandatory: 'The picture URL is not set',
+                    profile_invalid: 'The profile URL is not valid',
+                    profile_mandatory: 'The profile URL is not set',
+                    website_invalid: 'The website URL is not valid',
+                    website_mandatory: 'The website URL is not set',
+                },
+                edit: {
+                    ident_tab_title: 'Email & password',
+                    profile_tab_title: 'Identity'
+                },
+                new: {
+                    button_label: 'New identity',
+                    button_title: 'Define a new identity as an organization account'
+                },
+                profile: {
+                    family_label: 'Family name:',
+                    family_ph: 'Doe',
+                    family_title: 'Family name',
+                    gender_label: 'Gender:',
+                    gender_title: 'The preferred user\'s gender',
+                    given_label: 'Given name:',
+                    given_ph: 'John',
+                    given_title: 'Given name',
+                    locale_label: 'Locale:',
+                    locale_title: 'The preferred user\'s locale',
+                    middle_label: 'Middle name:',
+                    middle_ph: 'X.',
+                    middle_title: 'Middle name',
+                    name_label: 'Name:',
+                    name_ph: 'John X. Doe',
+                    name_title: 'Full name',
+                    nickname_label: 'Nickname:',
+                    nickname_ph: 'Nickname',
+                    nickname_title: 'Nickname',
+                    picture_label: 'Picture:',
+                    picture_ph: 'https://me.example.com',
+                    picture_title: 'the URL of the user\'s picture',
+                    profile_label: 'Profile home page:',
+                    profile_ph: 'https://me.example.com',
+                    profile_tab: 'Profile',
+                    profile_title: 'the URL of the user\'s profile page',
+                    website_label: 'Website:',
+                    website_ph: 'https://me.example.com',
+                    website_title: 'the URL of the user\'s web page or blog',
+                    zoneinfo_label: 'Zoneinfo:',
+                    zoneinfo_title: 'The user\'s zoneinfo'
+                },
             },
             jwks: {
                 checks: {
@@ -817,7 +884,6 @@ Meteor.APP.i18n = {
                         +'Capabilities of the clients depend of their type and of the chozen authorization grant flow.',
                 },
                 edit: {
-                    accounts_tab_title: 'Accounts',
                     authorization_example: 'Authorization Server URL: &laquo; %s &raquo;',
                     authorization_label: 'Authorization endpoint :',
                     authorization_ph: '/authorization',
@@ -849,6 +915,7 @@ Meteor.APP.i18n = {
                     endsession_label: 'End session endpoint :',
                     endsession_ph: '/logout',
                     endsession_title: 'The endpoint path used to end a client session and/or to logout a connected user.',
+                    identities_tab_title: 'Identities',
                     introspection_example: 'Introspection endpoint URL: &laquo; %s &raquo;',
                     introspection_label: 'Introspection endpoint :',
                     introspection_ph: '/introspection',

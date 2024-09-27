@@ -100,7 +100,8 @@ Template.jwk_edit_dialog.onCreated( function(){
                 paneTemplate: 'jwk_keyspair_pane',
                 enabled: false
             }
-        ]
+        ],
+        activateLastTab: false
     });
 
     // dynamically update the tabs activability

@@ -1,0 +1,123 @@
+<template name="identity_profile_pane">
+    <div class="x-tab c-identity-profile-pane">
+        <div class="panel-content">
+
+            <div class="panel-header">
+            </div>
+
+            <div class="panel-body">
+                <table class="form-table ui-w100">
+                    <tr>
+                        <td class="ui-w20 label"><label class="form-label" for="identity-profile-name">{{ i18n key="identities.profile.name_label" }}</label></td>
+                        <td colspan="2" class="ui-w100">
+                            <div class="js-name ui-w100" title="{{ i18n key="identities.profile.name_title" }}">
+                                <input class="form-control" type="text" id="identity-profile-name" placeholder="{{ i18n key="identities.profile.name_ph" }}" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td colspan="2" class="ui-w100">
+                            <table>
+                                <tr>
+                                    <td class="ui-w40"><label class="ui-ml2" for="identity-profile-given">{{ i18n key="identities.profile.given_label" }}</label></td>
+                                    <td><div class="ui-ml1"></div></td>
+                                    <td class="ui-w20"><label class="ui-ml2" for="identity-profile-middle">{{ i18n key="identities.profile.middle_label" }}</label></td>
+                                    <td><div class="ui-ml1"></div></td>
+                                    <td class="ui-w40"><label class="ui-ml2" for="identity-profile-family">{{ i18n key="identities.profile.family_label" }}</label></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="js-given ui-w100" title="{{ i18n key="identities.profile.given_title" }}">
+                                            <input class="form-control" type="text" id="identity-profile-given" placeholder="{{ i18n key="identities.profile.given_ph" }}" />
+                                        </div>
+                                    </td>
+                                    <td><div class="ui-ml1"></div></td>
+                                    <td>
+                                        <div class="js-middle ui-w100" title="{{ i18n key="identities.profile.middle_title" }}">
+                                            <input class="form-control" type="text" id="identity-profile-middle" placeholder="{{ i18n key="identities.profile.middle_ph" }}" />
+                                        </div>
+                                    </td>
+                                    <td><div class="ui-ml1"></div></td>
+                                    <td>
+                                        <div class="js-family ui-w100" title="{{ i18n key="identities.profile.family_title" }}">
+                                            <input class="form-control" type="text" id="identity-profile-family" placeholder="{{ i18n key="identities.profile.family_ph" }}" />
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label"><label class="form-label" for="identity-profile-nickname">{{ i18n key="identities.profile.nickname_label" }}</label></td>
+                        <td class="ui-w4775">
+                            <div class="js-nickname ui-w100" title="{{ i18n key="identities.profile.nickname_title" }}">
+                                <input class="form-control" type="text" id="identity-profile-nickname" placeholder="{{ i18n key="identities.profile.nickname_ph" }}" />
+                            </div>
+                        </td>
+                        <td rowspan="7">
+                            {{> image_includer (parmsImage) }}
+                            <!--
+                            <div class="d-flex align-items-center justify-content-center">
+                                <div class="picture">
+                                    <div class="{{ picImgClass }}">
+                                        <img src="{{ picture }}" />
+                                    </div>
+                                    <div class="{{ picSvgClass }}">
+                                        <span class="fa-solid fa-fw fa-user"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            -->
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label"><label class="form-label">{{ i18n key="identities.profile.gender_label" }}</label></td>
+                        <td class="ui-w4775" title="{{ i18n key="identities.profile.gender_title" }}">
+                            <div class="ui-w100">
+                                {{> gender_select (parmsGender) }}
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label"><label class="form-label">{{ i18n key="identities.profile.zoneinfo_label" }}</label></td>
+                        <td class="ui-w4775" title="{{ i18n key="identities.profile.zoneinfo_title" }}">
+                            {{> zoneinfo_select (parmsZoneinfo) }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label"><label class="form-label">{{ i18n key="identities.profile.locale_label" }}</label></td>
+                        <td class="ui-w4775" title="{{ i18n key="identities.profile.locale_title" }}">
+                            {{> locale_select (parmsLocale) }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label"><label class="form-label" for="identity-profile-profile">{{ i18n key="identities.profile.profile_label" }}</label></td>
+                        <td class="ui-w4775">
+                            <div class="js-profile ui-w100" title="{{ i18n key="identities.profile.profile_title" }}">
+                                <input class="form-control" type="text" id="identity-profile-profile" placeholder="{{ i18n key="identities.profile.profile_ph" }}" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label"><label class="form-label" for="identity-profile-picture">{{ i18n key="identities.profile.picture_label" }}</label></td>
+                        <td class="ui-w4775">
+                            <div class="js-picture ui-w100" title="{{ i18n key="identities.profile.picture_title" }}">
+                                <input class="form-control" type="text" id="identity-profile-picture" placeholder="{{ i18n key="identities.profile.picture_ph" }}" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label"><label class="form-label" for="identity-profile-website">{{ i18n key="identities.profile.website_label" }}</label></td>
+                        <td class="ui-w4775">
+                            <div class="js-website ui-w100" title="{{ i18n key="identities.profile.website_title" }}">
+                                <input class="form-control" type="text" id="identity-profile-website" placeholder="{{ i18n key="identities.profile.website_ph" }}" />
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</template>

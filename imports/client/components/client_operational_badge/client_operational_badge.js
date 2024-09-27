@@ -19,7 +19,7 @@ Template.client_operational_badge.onCreated( function(){
     const self = this;
 
     self.APP = {
-        status: new ReactiveVar( Forms.CheckStatus.C.UNCOMPLETE )
+        status: new ReactiveVar( Forms.FieldStatus.C.UNCOMPLETE )
     };
 
     // update the status when something changes

@@ -10,80 +10,62 @@
 import { Identities } from '../index.js';
 
 /*
-publishComposite( 'identities.allComposite', ( organization ) => {
-    return {
-        collectionName: 'composite.Identities',
-        find(){
-            const query = organization ? { organization: organization } : {};
-            return Identities.find( query );
-        },
-        children: [
-            {
-                collectionName: 'composite.Memberships',
-                find( identity ){
-                    return Memberships.find({ child: identity._id });
-                },
-                children: [
-                    {
-                        collectionName: 'composite.Groups',
-                        find( membership ){
-                            return Groups.find({ _id: membership.group })
-                        }
-                    }
-                ]
-            }
-        ]
-    };
-});
-*/
-
-// returns the list of known identities for a given organization (of for all organizations if unset)
-//  join the mebership to each identity
-Meteor.publish( 'identities.listAll', function( organization ){
-    const query = organization ? { organization: organization } : {};
+ * returns a cursor of all identities for the organization, published here as a 'identities_all' pseudo collection
+ *  where each item is an identity, and contains a DYN sub-object with:
+ *  - memberships
+ * @param {Object} organizationId
+ */
+Meteor.publish( Meteor.APP.C.pub.identitiesAll.publish, async function(){
+    if( !await Permissions.isAllowed( 'feat.identities.pub.list_all', this.userId )){
+        this.ready();
+        return false;
+    }
     const self = this;
-    const collection_name = 'identities';
-    const userId = this.userId;
-
-    // membership is the array of the groups the identity is member of
-    const f_transform = function( item ){
+    let initializing = true;
+    const collectionName = Meteor.APP.C.pub.identitiesAll.collection;
+    
+    // find ORG_SCOPED_MANAGER allowed users, and add to each entity the list of its records
+    const f_transform = async function( item ){
         item.DYN = {
-            membership: []
+            memberships: []
         };
+        let promises = [];
         /*
-        Memberships.find({ child: item._id }).fetch().every(( doc ) => {
-            doc.o = Groups.findOne({ _id: doc.group });
-            item.DYN.membership.push( doc );
+        promises.push( Meteor.roleAssignment.find({ 'role._id': 'ORG_SCOPED_MANAGER', scope: item._id }).fetchAsync().then(( fetched ) => {
+            fetched.forEach(( it ) => {
+                Meteor.users.findOneAsync({ _id: it.user._id }).then(( user ) => {
+                    if( user ){
+                        item.DYN.managers.push( user );
+                    } else {
+                        console.warn( 'user not found, but allowed by an assigned scoped role', it.user._id );
+                    }
+                });
+            });
             return true;
-        });
+        }));
         */
-        return item;
+        return Promise.allSettled( promises ).then(() => {
+            return item;
+        });
     };
 
-    // in order the same query may be applied on client side, we have to add to item required fields
-    /*
-    const observer = Identities.find( query ).observe({
-        added: function( item ){
-            if( Meteor.APP.Run.publishIsAllowed( userId, 'identities' )){
-                self.added( collection_name, item._id, f_transform( item ));
+    const observer = Meteor.APP.AccountsManager.identities.collectionDb().find().observeAsync({
+        added: async function( item ){
+            self.added( collectionName, item._id, await f_transform( item ));
+        },
+        changed: async function( newItem, oldItem ){
+            if( !initializing ){
+                self.changed( collectionName, newItem._id, await f_transform( newItem ));
             }
         },
-        changed: function( newItem, oldItem ){
-            if( Meteor.APP.Run.publishIsAllowed( userId, 'identities' )){
-                self.changed( collection_name, newItem._id, f_transform( newItem ));
-            }
-        },
-        removed: function( oldItem ){
-            if( Meteor.APP.Run.publishIsAllowed( userId, 'identities' )){
-                self.removed( collection_name, oldItem._id, oldItem );
-            }
+        removed: async function( oldItem ){
+            self.removed( collectionName, oldItem._id );
         }
     });
-    */
 
+    initializing = false;
     self.onStop( function(){
-        observer.stop();
+        observer.then(( handle ) => { handle.stop(); });
     });
-
     self.ready();
 });

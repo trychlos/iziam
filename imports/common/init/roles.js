@@ -50,34 +50,6 @@ const roles = {
                     ]
                 },
                 {
-                    name: 'PROVIDERS_MANAGER',
-                    children: [
-                        {
-                            name: 'PROVIDERS_LIST'
-                        }
-                    ]
-                },
-                {
-                    name: 'CLIENTS_MANAGER',
-                    children: [
-                        {
-                            name: 'CLIENT_CREATE'
-                        },
-                        {
-                            name: 'CLIENT_DELETE'
-                        },
-                        {
-                            name: 'CLIENT_EDIT'
-                        },
-                        {
-                            name: 'CLIENTS_LIST'
-                        }
-                    ]
-                },
-                {
-                    name: 'EDITOR',
-                },
-                {
                     // manage *one* (or several) organization (scoped role)
                     name: 'ORG_SCOPED_MANAGER',
                     scoped: true,
@@ -108,9 +80,6 @@ const roles = {
                             ]
                         },
                         {
-                            name: 'SCOPED_EDITOR',
-                        },
-                        {
                             name: 'SCOPED_CLIENTS_MANAGER',
                             children: [
                                 {
@@ -127,54 +96,52 @@ const roles = {
                                 }
                             ]
                         },
-                            /*
                         {
-                            name: 'IDENTITIES_MANAGER',
+                            name: 'SCOPED_IDENTITIES_MANAGER',
                             children: [
                                 {
-                                    name: 'GROUPS_LIST'
+                                    name: 'SCOPED_GROUP_CREATE'
                                 },
                                 {
-                                    name: 'GROUP_CRU'
+                                    name: 'SCOPED_GROUP_DELETE'
                                 },
                                 {
-                                    name: 'GROUP_DELETE'
+                                    name: 'SCOPED_GROUP_EDIT'
                                 },
                                 {
-                                    name: 'IDENT_LIST'
+                                    name: 'SCOPED_GROUPS_LIST'
                                 },
                                 {
-                                    name: 'IDENT_CRU'
+                                    name: 'SCOPED_IDENTITY_CREATE'
                                 },
                                 {
-                                    name: 'IDENT_DELETE'
+                                    name: 'SCOPED_IDENTITY_EDIT'
                                 },
                                 {
-                                    name: 'MEMBER_LIST'
+                                    name: 'SCOPED_IDENTITY_DELETE'
                                 },
                                 {
-                                    name: 'MEMBER_CRU'
-                                },
-                                {
-                                    name: 'MEMBER_DELETE'
+                                    name: 'SCOPED_IDENTITIES_LIST'
                                 }
                             ]
                         },
                         {
-                            name: 'RESOURCES_MANAGER',
+                            name: 'SCOPED_RESOURCES_MANAGER',
                             children: [
                                 {
-                                    name: 'RES_LIST'
+                                    name: 'SCOPED_RESOURCE_CREATE'
                                 },
                                 {
-                                    name: 'RES_CRU'
+                                    name: 'SCOPED_RESOURCE_EDIT'
                                 },
                                 {
-                                    name: 'RES_DELETE'
+                                    name: 'SCOPED_RESOURCE_DELETE'
+                                },
+                                {
+                                    name: 'SCOPED_RESOURCES_LIST'
                                 }
                             ]
                         }
-                    */
                     ]
                 }
             ]

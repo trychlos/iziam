@@ -84,7 +84,8 @@ Template.client_secret_edit_dialog.onCreated( function(){
                 paneTemplate: 'client_secret_secret_pane',
                 enabled: false
             }
-        ]
+        ],
+        activateLastTab: false
     });
 
     // dynamically update the tabs activability

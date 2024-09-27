@@ -12,7 +12,7 @@ import { Validity } from 'meteor/pwix:validity';
 
 import { ClientsEntities } from './index.js';
 
-const _defaultFieldSet = function(){
+const _defaultFieldDef = function(){
     let columns = [
         // the organization entity
         // mandatory
@@ -38,7 +38,7 @@ const _defaultFieldSet = function(){
 };
 
 Tracker.autorun(() => {
-    let columns = _defaultFieldSet();
+    let columns = _defaultFieldDef();
     let fieldset = new Field.Set( columns );
     ClientsEntities.fieldSet.set( fieldset );
 });

@@ -14,7 +14,7 @@ import { YesNo } from '/imports/common/definitions/yesno.def.js';
 
 import { Clients } from './index.js';
 
-const _defaultFieldSet = function(){
+const _defaultFieldDef = function(){
     let columns = [
         // a mandatory label, identifies the client
         {
@@ -78,7 +78,7 @@ const _defaultFieldSet = function(){
 };
 
 Tracker.autorun(() => {
-    let columns = _defaultFieldSet();
+    let columns = _defaultFieldDef();
     let fieldset = new Field.Set( columns );
     // update the fieldSet definitions to display start and end effect dates
     let def = fieldset.byName( 'effectStart' );

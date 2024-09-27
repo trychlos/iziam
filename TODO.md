@@ -54,7 +54,9 @@
 |  109 | 2024- 1-20 | set removeUnsetValues be a collection behavior (item timestampable) |
 |  112 | 2024- 6-24 | customize the new account mail to verify the address |
 |  115 | 2024- 9-22 | move Jwks.fn.generateKeys() to server-side, using a method to address it from the client |
-|  116 |  |  |
+|      | 2024- 9-24 | nb: jose doesn't provide the same data when executed server-side so maybe have to change the library ? |
+|  116 | 2024- 9-24 | clientAll and identitiesAll publications: should only publish the data the user is allowed to both from scope and privacy point of view |
+|  117 |  |  |
 
 ---
 ## Done

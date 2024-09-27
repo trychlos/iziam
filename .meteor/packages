@@ -43,7 +43,6 @@ pwix:field
 pwix:i18n
 pwix:jquery-ui
 pwix:jstree
-pwix:orderable-stack
 pwix:ssr
 pwix:toggle-switch
 pwix:typed-message
@@ -58,7 +57,6 @@ pwix:options
 pwix:plus-button
 pwix:tabbed
 pwix:tolert
-pwix:accounts-tools
 pwix:bootbox
 pwix:cookie-manager
 pwix:editor
@@ -73,10 +71,10 @@ pwix:core-app
 pwix:date-input
 pwix:date
 pwix:meta-app
-pwix:accounts-conf
 pwix:tenants-manager
 pwix:permissions
 alanning:roles@4.0.0-rc.1
 pwix:app-pages
 pwix:app-edit
 pwix:assistant
+pwix:accounts-hub

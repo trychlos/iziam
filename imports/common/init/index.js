@@ -15,11 +15,11 @@ import './constants.js';
 import './i18n.js';
 import './permissions.js';
 //
-import './accounts-conf.js';
+import './accounts-base.js';
+import './accounts-hub.js';
 import './accounts-manager.js';
 import './accounts-manager-accounts.js';
 import './accounts-manager-identities.js';
-import './accounts-tools.js';
 import './accounts-ui.js';
 import './app-edit.js';
 import './app-pages.js';

@@ -24,7 +24,8 @@ Template.account_edit_pane.onCreated( function(){
     self.APP = {
         fields: {
             apiAllowed: {
-                js: '.js-api-allowed'
+                js: '.js-api-allowed',
+                form_status: Forms.C.ShowStatus.NONE
             },
             apiConnection: {
                 js: '.js-last',

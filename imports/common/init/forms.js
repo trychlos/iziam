@@ -5,8 +5,8 @@
 import { Forms } from 'meteor/pwix:forms';
 
 Forms.configure({
-    //checkStatusOverridable: true,
-    //checkStatusShow: Forms.C.CheckStatus.INDICATOR,   // Forms.C.CheckStatus.BOOTSTRAP Forms.C.CheckStatus.NONE
-    //displayFieldTypeIndicator: true,
+    //showStatusOverridable: true,
+    //fieldStatusShow: Forms.C.ShowStatus.INDICATOR,   // Forms.C.ShowStatus.BOOTSTRAP Forms.C.ShowStatus.NONE
+    //fieldTypeShow: true,
     //verbosity: Forms.C.Verbose.CONFIGURE
 });

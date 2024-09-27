@@ -20,7 +20,7 @@ Template.organization_operational_badge.onCreated( function(){
 
     self.APP = {
         classes: new ReactiveVar( '' ),
-        status: new ReactiveVar( Forms.CheckStatus.C.UNCOMPLETE )
+        status: new ReactiveVar( Forms.FieldStatus.C.UNCOMPLETE )
     };
 
     // update the status when something changes

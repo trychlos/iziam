@@ -18,7 +18,7 @@ import { Keygrips } from '/imports/common/tables/keygrips/index.js';
 
 //import '/imports/client/components/keygrip_edit_dialog/keygrip_edit_dialog.js';
 //import '/imports/client/components/keygrip_view_button/keygrip_view_button.js';
-import '/imports/client/components/user_preferred_async/user_preferred_async.js';
+//import '/imports/client/components/user_preferred_async/user_preferred_async.js';
 
 import './keygrips_list.html';
 

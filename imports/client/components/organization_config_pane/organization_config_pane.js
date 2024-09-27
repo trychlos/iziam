@@ -29,7 +29,7 @@ Template.organization_config_pane.onCreated( function(){
             },
             wantsPkce: {
                 js: '.js-pkce',
-                form_status: Forms.C.CheckStatus.TRANSPARENT
+                form_status: Forms.C.ShowStatus.TRANSPARENT
             }
         },
         // the current { entity, record } organization object

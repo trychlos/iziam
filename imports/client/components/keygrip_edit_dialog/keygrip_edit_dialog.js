@@ -71,7 +71,8 @@ Template.keygrip_edit_dialog.onCreated( function(){
                 navLabel: pwixI18n.label( I18N, 'keygrips.edit.properties_tab_title' ),
                 paneTemplate: 'keygrip_properties_pane'
             }
-        ]
+        ],
+        activateLastTab: false
     });
 
     // track the count of keygrip secrets

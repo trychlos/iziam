@@ -16,7 +16,7 @@ import { Jwks } from '/imports/common/tables/jwks/index.js';
 
 import { ClientsRecords } from './index.js';
 
-const _defaultFieldSet = function(){
+const _defaultFieldDef = function(){
     let columns = [
         // -- properties
         // the client displayed name, mandatory, unique
@@ -401,7 +401,7 @@ const _defaultFieldSet = function(){
 };
 
 Tracker.autorun(() => {
-    let columns = _defaultFieldSet();
+    let columns = _defaultFieldDef();
     let fieldset = new Field.Set( columns );
     ClientsRecords.fieldSet.set( fieldset );
 });

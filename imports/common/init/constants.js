@@ -37,6 +37,10 @@ Meteor.APP.C = {
         clientsTabularTwo: {
             collection: 'clients_tabular_two_collection',
             publish: 'clients_tabular_two_pub'
+        },
+        identitiesAll: {
+            collection: 'identities_all_collection',
+            publish: 'identities_all_pub'
         }
     },
 

@@ -1,13 +1,13 @@
 /*
  * /imports/common/init/accounts-manager-accounts.js
  *
- * AccountsManager.Accounts instanciation for izIAM internal accounts.
+ * AccountsManager.accounts instanciation for izIAM internal accounts.
  */
 
 import strftime from 'strftime';
 
+import { AccountsHub } from 'meteor/pwix:accounts-hub';
 import { AccountsManager } from 'meteor/pwix:accounts-manager';
-import { AccountsTools } from 'meteor/pwix:accounts-tools';
 import { Permissions } from 'meteor/pwix:permissions';
 import { Roles } from 'meteor/pwix:roles';
 import { pwixI18n } from 'meteor/pwix:i18n';
@@ -18,7 +18,7 @@ import '../collections/accounts/index.js';
 
 Meteor.APP.AccountsManager = Meteor.APP.AccountsManager || {};
 
-Meteor.APP.AccountsManager.Accounts = new AccountsManager.amClass({
+Meteor.APP.AccountsManager.accounts = new AccountsManager.amClass({
     additionalFieldset: {
         before: 'adminNotes',
         fields: [{
@@ -56,7 +56,7 @@ Meteor.APP.AccountsManager.Accounts = new AccountsManager.amClass({
     hideDisabled: false,
     //hideDisabled: true,
     //tabularActiveCheckboxes: false,
-    // verbosity: AccountsManager.C.Verbose.CONFIGURE
+    //verbosity: AccountsManager.C.Verbose.CONFIGURE
 });
 
 Permissions.set({
@@ -88,7 +88,7 @@ Permissions.set({
                 },
                 // let any user update any of his own attributes
                 async updateAttribute( amInstance, userId, user, modifier ){
-                    return await Permissions.isAllowed( 'pwix.accounts_manager.fn.updateAccount', userId, user ) || AccountsTools.areSame( userId, user );
+                    return await Permissions.isAllowed( 'pwix.accounts_manager.fn.updateAccount', userId, user ) || AccountsHub.areSame( userId, user );
                 }
             },
             pub: {

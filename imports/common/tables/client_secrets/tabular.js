@@ -81,10 +81,10 @@ ClientSecrets.tabularFieldSet = function( dc ){
             name: 'createdBy',
             dt_type: 'string',
             dt_title: pwixI18n.label( I18N, 'clients.secrets.list.created_by_th' ),
-            dt_template: Meteor.isClient && Template.user_preferred_async,
+            dt_template: Meteor.isClient && Template.ahPreferredLabel,
             dt_templateContext( rowData ){
                 return {
-                    userId: rowData.createdBy
+                    ahUserId: rowData.createdBy
                 };
             }
         }
