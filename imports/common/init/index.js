@@ -19,6 +19,7 @@ import './accounts-base.js';
 import './accounts-hub.js';
 import './accounts-manager.js';
 import './accounts-manager-accounts.js';
+import './accounts-manager-permissions.js';
 import './accounts-ui.js';
 import './app-edit.js';
 import './app-pages.js';

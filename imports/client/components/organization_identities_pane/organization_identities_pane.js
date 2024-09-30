@@ -25,6 +25,7 @@ Template.organization_identities_pane.onCreated( function(){
 
     self.APP = {
         organization: new ReactiveVar( null ),
+        amInstanceName: new ReactiveVar( null ),
         // new tabs for this identity
         tabsBefore: [
             {
@@ -52,6 +53,18 @@ Template.organization_identities_pane.onCreated( function(){
             it.paneData = { organization: { entity: entity, record: record }};
         });
     });
+
+    // make sure the AccountsManager is initialized before trying to initialize it
+    // happens that the IdentitiesRegistrar is initialized, and the identities loaded, from the identities_load parallel tab
+    // so we want wait for the new instance be registered before trying to display the AccountsList component
+    // thus this ReactiveVar
+    const name = Identities.instanceName( Template.currentData().item.get()._id );
+    const obj = Meteor.setInterval(() => {
+        if( AccountsHub.instances[name ] ){
+            self.APP.amInstanceName.set( name );
+            Meteor.clearInterval( obj );
+        }
+    }, 5 );
 });
 
 Template.organization_identities_pane.helpers({
@@ -63,7 +76,7 @@ Template.organization_identities_pane.helpers({
     // AccountsList parameters and its additional tabs
     parmsAccountsList(){
         return {
-            name: Identities.collectionName,
+            name: Template.instance().APP.amInstanceName.get(),
             tabsBefore: Template.instance().APP.tabsBefore,
             tabsUpdates: Template.instance().APP.tabsUpdates,
             mdClasses: 'modal-xl'
@@ -73,7 +86,7 @@ Template.organization_identities_pane.helpers({
     // AccountNewButton parameters
     parmsNewAccount(){
         return {
-            name: Identities.collectionName,
+            name: Template.instance().APP.amInstanceName.get(),
             tabsBefore: Template.instance().APP.tabsBefore,
             tabsUpdates: Template.instance().APP.tabsUpdates,
             shape: PlusButton.C.Shape.RECTANGLE,

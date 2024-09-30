@@ -32,6 +32,7 @@ export class IdentitiesRegistrar extends izRegistrar {
      * @returns {izRegistrar} the required instance, or null
      */
     static getRegistered( organization ){
+        //console.debug( 'IdentitiesRegistrar.getRegistered: organization', organization, 'registry', AccountsHub.instances );
         return AccountsHub.instances[ Identities.instanceName( organization._id ) ] || null;
     }
 
@@ -79,6 +80,7 @@ export class IdentitiesRegistrar extends izRegistrar {
      */
     constructor( organization ){
         super( ...arguments );
+        //console.warn( 'instanciating IdentitiesRegistrar', organization._id );
 
         this.#amInstance = new AccountsManager.amClass({
             name: Identities.instanceName( organization._id ),

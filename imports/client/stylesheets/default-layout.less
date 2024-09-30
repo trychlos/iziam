@@ -176,27 +176,6 @@ body {
             padding: 0 0.5em;
             height: 100%;
         }
-        .x-tab {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            margin-left: 1em;
-        }
-        .x-tab .title:first-child {
-            //padding: 0.5em 0 0 0.5em;
-        }
-        .x-tab .title:not( :first-child ){
-            //padding: 0.5em 1em 0 1em;
-        }
-        .x-tab .content {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            margin-top: 0.5em;
-        }
-        .x-tab .content.container-fluid {
-            padding: 0 0.5em;
-        }
     }
 }
 
@@ -327,6 +306,28 @@ body {
     }
 }
 
+.x-tab {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-left: 1em;
+}
+.x-tab .title:first-child {
+    //padding: 0.5em 0 0 0.5em;
+}
+.x-tab .title:not( :first-child ){
+    //padding: 0.5em 1em 0 1em;
+}
+.x-tab .content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 0.5em;
+}
+.x-tab .content.container-fluid {
+    padding: 0 0.5em;
+}
+
 /*
  * Utilities
  */
@@ -398,6 +399,11 @@ body {
 }
 
 // most of the panels have a text preamble above
+.panel-content {
+    //height: 100%;
+    display: flex;
+    flex-direction: column;
+}
 .panel-header {
     display: flex;
     flex-direction: row;
@@ -405,6 +411,9 @@ body {
 }
 .panel-preamble {
     margin: 0.5em 0;
+}
+.panel-body {
+    flex-grow: 1;
 }
 
  /*

@@ -50,18 +50,18 @@ const roles = {
                     ]
                 },
                 {
+                    // manage the clients for all organizations (e.g. a support service)
+                    name: 'CLIENTS_MANAGER'
+                },
+                {
+                    // manage the identities for all organizations (e.g. a support service)
+                    name: 'IDENTITIES_MANAGER'
+                },
+                {
                     // manage *one* (or several) organization (scoped role)
                     name: 'ORG_SCOPED_MANAGER',
                     scoped: true,
                     children: [
-                        {
-                            name: 'SCOPED_PROVIDERS_MANAGER',
-                            children: [
-                                {
-                                    name: 'SCOPED_PROVIDERS_LIST'
-                                }
-                            ]
-                        },
                         {
                             name: 'SCOPED_AUTHORIZATIONS_MANAGER',
                             children: [

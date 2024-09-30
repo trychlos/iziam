@@ -31,6 +31,7 @@ export class ClientsRegistrar extends izRegistrar {
      * @returns {izRegistrar} the required instance, or null
      */
     static getRegistered( organization ){
+        //console.debug( 'ClientsRegistrar.getRegistered: organization', organization, 'registry', this.#registry );
         return ClientsRegistrar.#registry[organization._id] || null;
     }
 
@@ -39,9 +40,6 @@ export class ClientsRegistrar extends izRegistrar {
     // client-side: the subscription handle
     #handle = new ReactiveVar( null );
 
-    // common: the organization 
-    #organizationId = null;
-
     // common: the clients of the organization
     #list = new ReactiveVar( [] );
 
@@ -49,6 +47,7 @@ export class ClientsRegistrar extends izRegistrar {
 
     _clientInit( organization ){
         const self = this;
+        //console.warn( 'instanciating ClientsRegistrar', organization._id );
         this.#handle.set( Meteor.subscribe( Meteor.APP.C.pub.clientsAll.publish, organization ));
 
         // get the list of clients

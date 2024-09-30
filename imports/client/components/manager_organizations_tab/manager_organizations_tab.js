@@ -45,13 +45,11 @@ Template.manager_organizations_tab.onCreated( function(){
             }
         ],
         entityTabsEdit: [
-            /*
             {
                 name: 'organization_identities_tab',
                 navLabel: pwixI18n.label( I18N, 'organizations.edit.identities_tab_title' ),
                 paneTemplate: 'organization_identities_pane'
             },
-                */
             {
                 name: 'organization_clients_tab',
                 navLabel: pwixI18n.label( I18N, 'organizations.edit.clients_tab_title' ),
