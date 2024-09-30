@@ -45,8 +45,9 @@ Meteor.APP.C = {
             publish: 'clients_tabular_two_pub'
         },
         identitiesAll: {
-            collection: 'identities_all_collection',
-            publish: 'identities_all_pub'
+            query( organization ){
+                return { organization: organization._id };
+            }
         }
     },
 

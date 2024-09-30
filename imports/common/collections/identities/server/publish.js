@@ -2,7 +2,9 @@
  * /imports/common/collections/identities/server/publish.js
  */
 
-//import { publishComposite } from 'meteor/reywood:publish-composite';
+const assert = require( 'assert' ).strict;
+
+import { AccountsHub } from 'meteor/pwix:accounts-hub';
 
 //import { Groups } from '/imports/collections/groups/groups.js';
 //import { Memberships } from '/imports/collections/memberships/memberships.js';
@@ -15,14 +17,21 @@ import { Identities } from '../index.js';
  *  - memberships
  * @param {Object} organizationId
  */
-Meteor.publish( Meteor.APP.C.pub.identitiesAll.publish, async function(){
-    if( !await Permissions.isAllowed( 'feat.identities.pub.list_all', this.userId )){
+Meteor.publish( Meteor.APP.C.pub.identitiesAll.publish, async function( organization ){
+    console.debug( 'publish', organization );
+    if( !organization ){
+        this.ready();
+        return [];
+    }
+    if( !await Permissions.isAllowed( 'feat.identities.list', this.userId )){
         this.ready();
         return false;
     }
     const self = this;
     let initializing = true;
-    const collectionName = Meteor.APP.C.pub.identitiesAll.collection;
+    const amInstance = AccountsHub.instances[ Identities.instanceName( +organization._id )];
+    assert( amInstance && amInstance instanceof AccountsHub.ahClass, 'expects an AccountsManager.amClass, got '+amInstance );
+    const collectionName = Meteor.APP.C.pub.identitiesAll.collection( organization._id );
     
     // find ORG_SCOPED_MANAGER allowed users, and add to each entity the list of its records
     const f_transform = async function( item ){
@@ -49,7 +58,8 @@ Meteor.publish( Meteor.APP.C.pub.identitiesAll.publish, async function(){
         });
     };
 
-    const observer = Meteor.APP.AccountsManager.identities.collectionDb().find().observeAsync({
+
+    const observer = amInstance.collection().find().observeAsync({
         added: async function( item ){
             self.added( collectionName, item._id, await f_transform( item ));
         },

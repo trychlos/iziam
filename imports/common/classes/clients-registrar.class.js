@@ -20,7 +20,19 @@ export class ClientsRegistrar extends izRegistrar {
 
     // static data
 
+    // the registry of clients registars per organization
+    static #registry = {};
+
     // static methods
+
+    /*
+     * Getter
+     * @param {Object} organization a full organization entity object, with its DYN sub-object
+     * @returns {izRegistrar} the required instance, or null
+     */
+    static getRegistered( organization ){
+        return ClientsRegistrar.#registry[organization._id] || null;
+    }
 
     // private data
 
@@ -35,7 +47,7 @@ export class ClientsRegistrar extends izRegistrar {
 
     // private methods
 
-    _initClient( organization ){
+    _clientInit( organization ){
         const self = this;
         this.#handle.set( Meteor.subscribe( Meteor.APP.C.pub.clientsAll.publish, organization ));
 
@@ -69,7 +81,7 @@ export class ClientsRegistrar extends izRegistrar {
 
         // client-side initialization
         if( Meteor.isClient ){
-            this._initClient( organization );
+            this._clientInit( organization );
 
         // server-side initialization
         } else {
@@ -77,6 +89,7 @@ export class ClientsRegistrar extends izRegistrar {
         }
 
         // common code
+        ClientsRegistrar.#registry[organization._id] = this;
 
         return this;
     }

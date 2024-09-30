@@ -22,7 +22,8 @@ Template.organization_identities_load.onCreated( function(){
         const edited = Template.currentData().item.get();
         const organization = Meteor.APP.Organizations.byId( edited._id );
         if( organization && !organization.DYN.identities ){
-            //organization.DYN.identities = new IdentitiesRegistrar( organization );
+            new IdentitiesRegistrar( organization );
+            //organization.DYN.identities = IdentitiesRegistrar.getRegistered( organization ) || new IdentitiesRegistrar( organization );
         }
     })
 });

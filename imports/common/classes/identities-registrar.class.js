@@ -10,6 +10,7 @@
  * It maintains a full list of the identities of an organization both on client and server sides.
  */
 
+import { AccountsHub } from 'meteor/pwix:accounts-hub';
 import { AccountsManager } from 'meteor/pwix:accounts-manager';
 import { Permissions } from 'meteor/pwix:permissions';
 import { ReactiveVar } from 'meteor/reactive-var';
@@ -25,6 +26,15 @@ export class IdentitiesRegistrar extends izRegistrar {
 
     // static methods
 
+    /*
+     * Getter
+     * @param {Object} organization a full organization entity object, with its DYN sub-object
+     * @returns {izRegistrar} the required instance, or null
+     */
+    static getRegistered( organization ){
+        return AccountsHub.instances[ Identities.instanceName( organization._id ) ] || null;
+    }
+
     // private data
 
     // client-side
@@ -37,15 +47,16 @@ export class IdentitiesRegistrar extends izRegistrar {
     // private methods
 
     // client-side
-    _initClient( organization ){
+    _clientInit( organization ){
         const self = this;
-        this.#handle.set( Meteor.subscribe( Meteor.APP.C.pub.identitiesAll.publish, organization ));
+        this.#handle.set( Meteor.subscribe( 'pwix_accounts_manager_accounts_list_all', self.#amInstance.name()));
 
         // get the list of identities
         // each identity is published as an object with DYN sub-object
         Tracker.autorun(() => {
             if( self.#handle.get()?.ready()){
-                Meteor.APP.Collections.get( Meteor.APP.C.pub.identitiesAll.collection ).find( Meteor.APP.C.pub.identitiesAll.query( organization )).fetchAsync().then(( fetched ) => {
+                self.#amInstance.collection().find( Meteor.APP.C.pub.identitiesAll.query( organization )).fetchAsync().then(( fetched ) => {
+                    console.debug( 'fetched', fetched );
                     self.#list.set( fetched );
                 });
             }
@@ -54,7 +65,7 @@ export class IdentitiesRegistrar extends izRegistrar {
         // client-side only autorun's
         Tracker.autorun(() => {
             self.#list.get().forEach(( it ) => {
-                // ?
+                console.debug( '(autorun' );
             });
         });
     }
@@ -66,11 +77,11 @@ export class IdentitiesRegistrar extends izRegistrar {
      * @param {<Organization>} organization the full organization entity with its DYN sub-object
      * @returns {IdentitiesRegistrar}
      */
-    constructor(){
+    constructor( organization ){
         super( ...arguments );
 
         this.#amInstance = new AccountsManager.amClass({
-            name: 'identities_'+organization._id,
+            name: Identities.instanceName( organization._id ),
             additionalFieldset: {
                 fields: Identities.fieldsDef()
             },
@@ -80,7 +91,7 @@ export class IdentitiesRegistrar extends izRegistrar {
 
         // client-side initialization
         if( Meteor.isClient ){
-            this._initClient( organization );
+            this._clientInit( organization );
 
         // server-side initialization
         } else {

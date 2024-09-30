@@ -22,7 +22,7 @@ Template.organization_clients_load.onCreated( function(){
         const edited = Template.currentData().item.get();
         const organization = Meteor.APP.Organizations.byId( edited._id );
         if( organization && !organization.DYN.clients ){
-            organization.DYN.clients = new ClientsRegistrar( organization );
+            organization.DYN.clients = ClientsRegistrar.getRegistered( organization ) || new ClientsRegistrar( organization );
         }
     })
 });

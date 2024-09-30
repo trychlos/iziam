@@ -3,4 +3,7 @@
  */
 
 export const Identities = {
+    instanceName( organizationId ){
+        return 'identities_'+organizationId;
+    }
 };
