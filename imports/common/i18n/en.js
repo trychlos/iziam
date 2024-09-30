@@ -871,6 +871,7 @@ Meteor.APP.i18n = {
                     authorization_absolute: 'The authorization endpoint must be provided as an absolute path',
                     authorization_unset: 'The authorization endpoint is not set',
                     baseurl_exists: 'The candidate REST Base URL is already used by another organization',
+                    baseurl_mandatory: 'The REST Base URL is mandatory',
                     baseurl_onelevel: 'The REST Base URL must have a single level path',
                     baseurl_reserved: 'The candidate REST Base URL is a reserved path',
                     baseurl_short: 'The REST Base URL is too short',

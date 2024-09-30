@@ -15,6 +15,7 @@ TenantsManager.configure({
     entityFields: Organizations.entityFieldset(),
     recordFields: Organizations.recordFieldset(),
     //recordFields: null,
+    //scopedManagerRole: SCOPED_TENANT_MANAGER,
     tenantButtons: Organizations.tabularButtons(),
     //tenantButtons: null,
     tenantFields: Organizations.tabularFieldset(),

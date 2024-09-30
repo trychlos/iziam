@@ -29,7 +29,10 @@ Template.organization_operational_badge.helpers({
     },
     // the status
     parmsStatus(){
-        console.debug( this );
+        //console.debug( this );
+        if( !this.item.entity ){
+            console.warn( this );
+        }
         return {
             statusRv: Meteor.APP.Organizations.byId( this.item.entity ).DYN.operational?.status,
             classes: Template.instance().APP.classes,

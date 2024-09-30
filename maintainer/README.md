@@ -155,3 +155,8 @@ As of 2024-09-16, latest oidc-provider is 8.5.1
  While got is installed, any attempts to import it produces the same error.
  Adding a 'main' key in got/package.json doesn't improve.
  Have to get back to oidc-provider 7.14.3 (last 7.x version) to get a working installation.
+
+## Counts
+
+[pierre@slim14 iziam] $ typeset -i c=0; for f in $(find ./imports/ -type f); do c+=$(wc -l "$f" | cut -d' ' -f1); done; echo $c
+32544

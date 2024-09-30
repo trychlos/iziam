@@ -59,7 +59,7 @@ const roles = {
                 },
                 {
                     // manage *one* (or several) organization (scoped role)
-                    name: 'ORG_SCOPED_MANAGER',
+                    name: 'SCOPED_TENANT_MANAGER',
                     scoped: true,
                     children: [
                         {

@@ -32,7 +32,7 @@ Template.operational_panel.onCreated( function(){
             const org = Meteor.APP.Organizations.byId( entityId );
             if( org ){
                 self.APP.entity.set( org );
-                console.debug( 'org', org );
+                //console.debug( 'org', org );
             }
         }
     });

@@ -106,7 +106,7 @@ Organizations.isOperational = async function( organization ){
  */
 Organizations.setupOperational = async function( item ){
     assert( Meteor.isClient, 'expects to only be called on client side' );
-    //console.debug( 'Organizations.setupOperational' );
+    console.debug( 'Organizations.setupOperational', item );
     const atdate = Validity.atDateByRecords( item.DYN.records );
     if( !item.DYN.operational ){
         item.DYN.operational = {

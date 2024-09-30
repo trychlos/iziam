@@ -46,7 +46,7 @@ Permissions.set({
                     if( instanceName === 'users' ){
                         return await Roles.userIsInRoles( userId, 'ACCOUNTS_LIST' );
                     } else {
-                        scope = Identities.scope( instanceName );
+                        const scope = Identities.scope( instanceName );
                         return await Roles.userIsInRoles( userId, 'SCOPED_IDENTITIES_LIST', { scope: scope }) || await Roles.userIsInRoles( userId, 'IDENTITIES_MANAGER' );
                     }
                 }

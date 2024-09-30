@@ -133,7 +133,7 @@ Organizations.checks = {
         }
         return Promise.resolve( null )
             .then(() => {
-                return _check_url( value, { mandatory: ( opts.mustHave === true ), prefix: 'baseurl' });
+                return _check_url( value, { mandatory: true, prefix: 'baseurl' });
             })
             .then(( err ) => {
                 if( err ){
