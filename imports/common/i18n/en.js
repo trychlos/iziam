@@ -544,6 +544,12 @@ Meteor.APP.i18n = {
                     ucs2_label: 'UCS-2 (legacy)',
                     select_text: 'Select an encoding method'
                 },
+                how_count: {
+                    exactly_label: 'Exactly',
+                    least_label: 'At least',
+                    most_label: 'At most',
+                    select_text: 'Select how you want count'
+                },
                 jwa_alg: {
                     a128cbc_hs256_label: 'AES_128_CBC_HMAC_SHA_256 authenticated encryption algorithm',
                     a192cbc_hs384_label: 'AES_192_CBC_HMAC_SHA_384 authenticated encryption algorithm',
@@ -652,6 +658,13 @@ Meteor.APP.i18n = {
                 edit: {
                     ident_tab_title: 'Email & password',
                     profile_tab_title: 'Identity'
+                },
+                list: {
+                    locale_th: 'Locale',
+                    name_th: 'Name',
+                    username_th: 'Username',
+                    website_th: 'Website',
+                    zoneinfo_th: 'Zoneinfo'
                 },
                 new: {
                     button_label: 'New identity',
@@ -862,7 +875,12 @@ Meteor.APP.i18n = {
                     baseurl_reserved: 'The candidate REST Base URL is a reserved path',
                     baseurl_short: 'The REST Base URL is too short',
                     baseurl_starts: 'The REST Base URL must be an absolute path (must start with \'/\')',
+                    email_count_invalid: 'The count you fixes to your email addresses is invalid',
+                    email_how_invalid: 'The way you want count your email addresses is invalid',
+                    email_how_unset: 'The way you want count your email addresses is not set',
+                    email_identifier_invalid: 'The email identifier flag is invalid',
                     end_session_absolute: 'The introspection endpoint must be provided as an absolute path',
+                    errors_count: 'Found %s error(s)',
                     introspection_absolute: 'The introspection endpoint must be provided as an absolute path',
                     issuer_hostname: 'The issuer hostname is malformed',
                     issuer_https: 'The issuer must use a HTTPS schema',
@@ -872,12 +890,17 @@ Meteor.APP.i18n = {
                     jwks_absolute: 'The JWKS document URI must be provided as an absolute path',
                     jwks_no_but_jwk: 'No JWKS URI is yet defined while at least one JWK exists',
                     jwks_uri_wo_jwk: 'A JWKS URI is specified, but no JWK is defined (yet ?)',
+                    ok: 'OK',
                     registration_absolute: 'The registration endpoint must be provided as an absolute path',
                     revocation_absolute: 'The revocation endpoint must be provided as an absolute path',
                     token_absolute: 'The token endpoint must be provided as an absolute path',
                     token_unset: 'The token endpoint is not set',
                     userinfo_absolute: 'The userinfo endpoint must be provided as an absolute path',
-                    userinfo_unset: 'The userinfo endpoint is not set'
+                    userinfo_unset: 'The userinfo endpoint is not set',
+                    username_count_invalid: 'The count you fixes to your usernames is invalid',
+                    username_how_invalid: 'The way you want count your usernames is invalid',
+                    username_how_unset: 'The way you want count your usernames is not set',
+                    username_identifier_invalid: 'The username identifier flag is invalid'
                 },
                 clients: {
                     list_preamble: 'The list of clients defined by and for the organization.<br />'
@@ -894,8 +917,6 @@ Meteor.APP.i18n = {
                         +'It is mandatory to have access to the Authorization Server REST API. '
                         +'It must be unique.',
                     clients_tab_title: 'Clients',
-                    config_preamble: 'Configure some common aspects of your OAuth organization.<br />'
-                        +'At least, a unique base URL is mandatory here.',
                     config_tab_title: 'Configuration',
                     dynamic_example: 'Dynamic registration URL: &laquo; %s &raquo;',
                     dynamic_label: 'Dynamic registration endpoint :',
@@ -915,6 +936,17 @@ Meteor.APP.i18n = {
                     endsession_label: 'End session endpoint :',
                     endsession_ph: '/logout',
                     endsession_title: 'The endpoint path used to end a client session and/or to logout a connected user.',
+                    ident_config_preamble: 'Configure the way your identities are managed.<br />'
+                        +'Make sure you configure at least one identifier per identity.',
+                    ident_config_tab_title: 'Identities',
+                    ident_email_address: 'email address(es)',
+                    ident_email_identifier: 'Make each email address an identifier of the identity',
+                    ident_email_legend: 'Manage your email addresses',
+                    ident_email_preamble: 'Configure the way you want your identities manage their email addresses.',
+                    ident_username_address: 'username(s)',
+                    ident_username_identifier: 'Make each username an identifier of the identity',
+                    ident_username_legend: 'Manage the usernames',
+                    ident_username_preamble: 'Configure the way you want your identities manage their usernames.',
                     identities_tab_title: 'Identities',
                     introspection_example: 'Introspection endpoint URL: &laquo; %s &raquo;',
                     introspection_label: 'Introspection endpoint :',
@@ -923,18 +955,24 @@ Meteor.APP.i18n = {
                     issuer_example: 'When applied to the OAuth server metadata discovery URL: &laquo; %s &raquo;',
                     issuer_label: 'Issuer :',
                     issuer_ph: 'https://iam.example.com',
-                    issuer_title: 'The way this IAM identifies itself, which is a settings value. An organization may want have its own specific value, as soon as it is conscious of DNS prerequisites.',
+                    issuer_title: 'The way this IAM identifies itself, which defaults to be a settings value. '
+                        +'An organization may want have its own specific value, as soon as it is conscious of DNS prerequisites.',
                     jwks_example: 'JWKS page URL: &laquo; %s &raquo;',
                     jwks_label: 'JWKS page path :',
                     jwks_ph: '/jwks',
                     jwks_title: 'The URL of the authorization server\'s JWK Set document. '
                         +'The referenced document contains the signing key(s) the client uses to validate signatures from the authorization server.',
+                    oauth_config_preamble: 'Configure some common aspects of your OAuth organization.',
+                    oauth_config_tab_title: 'OAuth',
                     pkce_description: 'The RFC 7636 "Proof Key for Code Exchange by OAuth Public Clients" proposes a way to mitigate authorization code interception attacks '
                         +'to which public clients are exposed because they cannot securely authenticate. The extension utilizes a dynamically created cryptographically '
                         +'random key unique for every authorization request.',
                     pkce_label: 'Make mandatory the protection of the "authorization_code" grant type with PKCE for all public clients',
                     pkce_title: 'Make a proof key for code exchange mandatory for all public clients using "authorization_code" grant type, conforming with RFC 7636',
                     providers_tab_title: 'Providers',
+                    rest_config_preamble: 'Configure the behaviour of your REST API.<br />'
+                        +'At least, a unique base URL is mandatory here.',
+                    rest_config_tab_title: 'REST API',
                     revocation_example: 'Revocation endpoint URL: &laquo; %s &raquo;',
                     revocation_label: 'Revocation endpoint :',
                     revocation_ph: '/revocation',
@@ -971,7 +1009,7 @@ Meteor.APP.i18n = {
                         +'Some are strongly needed, or even just required, while others may be freely chosen at your convenience.'
                 },
                 tabular: {
-                    accounts_th: 'Accounts',
+                    accounts_th: 'Identities',
                     baseurl_th: 'Base URL',
                     clients_th: 'Clients',
                     operational_title: 'Operational status of the organization',

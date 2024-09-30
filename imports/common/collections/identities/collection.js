@@ -8,5 +8,6 @@ export const Identities = {
     },
     scope( name ){
         return name.replace( /^identities_/, '' );
-    }
+    },
+    fieldSet: null
 };

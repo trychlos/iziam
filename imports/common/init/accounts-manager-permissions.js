@@ -17,7 +17,6 @@ Permissions.set({
             //  - amInstance: the amClass instance, always present
             feat: {
                 async create( userId, args ){
-                    console.debug( 'create', arguments );
                     const instanceName = args.amInstance.name();
                     if( instanceName === 'users' ){
                         return await Roles.userIsInRoles( userId, 'ACCOUNT_CREATE' );
@@ -43,7 +42,6 @@ Permissions.set({
                     return compare >= 0 && haveRole;
                 },
                 async list( userId, args ){
-                    console.debug( 'list', arguments );
                     const instanceName = args.amInstance.name();
                     if( instanceName === 'users' ){
                         return await Roles.userIsInRoles( userId, 'ACCOUNTS_LIST' );

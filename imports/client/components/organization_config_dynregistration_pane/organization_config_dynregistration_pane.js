@@ -1,5 +1,5 @@
 /*
- * /imports/client/components/organization_dynregistration_pane/organization_dynregistration_pane.js
+ * /imports/client/components/organization_config_dynregistration_pane/organization_config_dynregistration_pane.js
  *
  * Parms:
  * - see README
@@ -10,9 +10,9 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { TenantsManager } from 'meteor/pwix:tenants-manager';
 
-import './organization_dynregistration_pane.html';
+import './organization_config_dynregistration_pane.html';
 
-Template.organization_dynregistration_pane.onCreated( function(){
+Template.organization_config_dynregistration_pane.onCreated( function(){
     const self = this;
 
     self.APP = {
@@ -32,7 +32,7 @@ Template.organization_dynregistration_pane.onCreated( function(){
     };
 });
 
-Template.organization_dynregistration_pane.onRendered( function(){
+Template.organization_config_dynregistration_pane.onRendered( function(){
     const self = this;
     const dataContext = Template.currentData();
 
@@ -55,7 +55,7 @@ Template.organization_dynregistration_pane.onRendered( function(){
     });
 });
 
-Template.organization_dynregistration_pane.helpers({
+Template.organization_config_dynregistration_pane.helpers({
     // string translation
     i18n( arg ){
         return pwixI18n.label( I18N, arg.hash.key );

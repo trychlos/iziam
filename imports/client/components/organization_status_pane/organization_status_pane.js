@@ -35,7 +35,7 @@ Template.organization_status_pane.helpers({
     // parms for the operational panel
     parmsOperationalPanel(){
         return {
-            entity: this.item.get()._id
+            entityId: this.item.get()._id
         };
     }
 });

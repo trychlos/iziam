@@ -1,0 +1,14 @@
+<template name="howcount_select">
+    <div class="c-howcount-select ui-w100">
+
+        <select class="form-select js-howcount">
+            {{#unless hasCurrent }}
+                <option value="" selected disabled>{{ i18n key="definitions.howcount.select_text" }}</option>
+            {{/unless}}
+            {{#each it in itemsList }}
+                <option value="{{ itId it }}" {{ itSelected it }}>{{ itLabel it }}</option>
+            {{/each}}
+        </select>
+
+    </div>
+</template>

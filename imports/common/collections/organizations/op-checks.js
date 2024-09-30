@@ -34,19 +34,64 @@ Organizations.isOperational = async function( organization ){
             }
         });
     }
-    // check if the organizations has all its mandatory datas
+    // check all organizations datas
     let promises = [];
     promises.push( fnCheck( 'authorization_endpoint', organization.record.authorization_endpoint ));
     promises.push( fnCheck( 'baseUrl', organization.record.baseUrl ));
+    // code_challenge_methods_supported
+    promises.push( fnCheck( 'dynamicRegistrationByConfidential', organization.record.dynamicRegistrationByConfidential ));
+    promises.push( fnCheck( 'dynamicRegistrationByPublic', organization.record.dynamicRegistrationByPublic ));
+    promises.push( fnCheck( 'dynamicRegistrationByUser', organization.record.dynamicRegistrationByUser ));
+    promises.push( fnCheck( 'end_session_endpoint', organization.record.end_session_endpoint ));
+    promises.push( fnCheck( 'identitiesEmailAddressesCount', organization.record.identitiesEmailAddressesCount ));
+    promises.push( fnCheck( 'identitiesEmailAddressesHow', organization.record.identitiesEmailAddressesHow ));
+    promises.push( fnCheck( 'identitiesEmailAddressesIdentifier', organization.record.identitiesEmailAddressesIdentifier ));
+    promises.push( fnCheck( 'identitiesUsernamesCount', organization.record.identitiesUsernamesCount ));
+    promises.push( fnCheck( 'identitiesUsernamesHow', organization.record.identitiesUsernamesHow ));
+    promises.push( fnCheck( 'identitiesUsernamesIdentifier', organization.record.identitiesUsernamesIdentifier ));
     promises.push( fnCheck( 'introspection_endpoint', organization.record.introspection_endpoint ));
+    // introspection_endpoint_auth_methods_supported
+    // introspection_endpoint_auth_signing_alg_values_supported
     promises.push( fnCheck( 'issuer', organization.record.issuer ));
     promises.push( fnCheck( 'jwks_uri', organization.record.jwks_uri ));
+    // jwks.$.alg
+    // jwks.$.endingAt
+    // jwks.$.id
+    // jwks.$.kid
+    // jwks.$.kty
+    // jwks.$.label
+    // jwks.$.startingAt
+    // jwks.$.use
+    // keygrips.$.alg
+    // keygrips.$.encoding
+    // keygrips.$.id
+    // keygrips.$.keylist.$.endingAt
+    // keygrips.$.keylist.$.label
+    // keygrips.$.keylist.$.startingAt
+    // keygrips.$.label
+    // keygrips.$.size
     promises.push( fnCheck( 'registration_endpoint', organization.record.registration_endpoint ));
+    // request_object_signing_alg_values_supported
+    // response_modes_supported
+    // response_types_supported
     promises.push( fnCheck( 'revocation_endpoint', organization.record.revocation_endpoint ));
+    // revocation_endpoint_auth_methods_supported
+    // revocation_endpoint_auth_signing_alg_values_supported
+    // selectedProviders
+    // service_documentation
+    // signed_metadata
     promises.push( fnCheck( 'token_endpoint', organization.record.token_endpoint ));
+    // token_endpoint_auth_signing_alg_values_supported
+    // ui_locales_supported
     promises.push( fnCheck( 'userinfo_endpoint', organization.record.userinfo_endpoint ));
+    promises.push( fnCheck( 'wantsPkce', organization.record.wantsPkce ));
 
     await Promise.allSettled( promises );
+    /*
+    if( !errors.length ){
+        errors.push( ;
+    }
+        */
     //console.debug( 'errors', errors );
     return errors.length ? errors : null;
 };
@@ -56,6 +101,7 @@ Organizations.isOperational = async function( organization ){
  * @summary Maintain the 'operational' status of each organization
  *  When the organizations change, update their status
  *  We add (or update) here a DYN.status object
+ *  This is run from an autorun inside of the OrganizationsRegistrar.
  * @param {Object} organization as a full entity object with its DYN sub-object
  */
 Organizations.setupOperational = async function( item ){
@@ -75,6 +121,17 @@ Organizations.setupOperational = async function( item ){
             // null or a TM.TypedMessage or an array of TM.TypedMessage's
             item.DYN.operational.results = res;
             item.DYN.operational.status.set( res ? Forms.FieldStatus.C.UNCOMPLETE : Forms.FieldStatus.C.VALID );
+            if( res ){
+                item.DYN.operational.results.push( new TM.TypedMessage({
+                    level: TM.MessageLevel.C.INFO,
+                    message: pwixI18n.label( I18N, 'organizations.checks.errors_count', res.length )
+                }));
+            } else {
+                item.DYN.operational.results = [ new TM.TypedMessage({
+                    level: TM.MessageLevel.C.INFO,
+                    message: pwixI18n.label( I18N, 'organizations.checks.ok' )
+                })];
+            }
         });
     } else {
         item.DYN.operational.results = [];

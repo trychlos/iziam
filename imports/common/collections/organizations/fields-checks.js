@@ -13,6 +13,7 @@ import { JwkKty } from '/imports/common/definitions/jwk-kty.def.js';
 import { JwkUse } from '/imports/common/definitions/jwk-use.def.js';
 import { HmacAlg } from '/imports/common/definitions/hmac-alg.def.js';
 import { HmacEncoding } from '/imports/common/definitions/hmac-encoding.def.js';
+import { HowCount } from '/imports/common/definitions/how-count.def.js';
 
 import { Organizations } from './index.js';
 
@@ -226,6 +227,116 @@ Organizations.checks = {
             }
         }
         return null;
+    },
+
+    // how to we want manage email addresses ?
+    async identitiesEmailAddressesCount( value, data, opts ){
+        _assert_data_entityrv( 'Organizations.checks.identitiesEmailAddressesCount()', data );
+        let item = data.entity.get().DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.identitiesEmailAddressesCount = parseInt( value );
+        }
+        if( Number.isInteger( value )){
+            return null;
+        } else {
+            new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'organizations.checks.email_count_invalid' )
+            });
+        }
+    },
+
+    // how to we want manage email addresses ?
+    async identitiesEmailAddressesHow( value, data, opts ){
+        _assert_data_entityrv( 'Organizations.checks.identitiesEmailAddressesHow()', data );
+        let item = data.entity.get().DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.identitiesEmailAddressesHow = value;
+        }
+        if( value ){
+            const def = HowCount.byId( value );
+            return def ? null : new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'organizations.checks.email_how_invalid' )
+            });
+        } else {
+            new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'organizations.checks.email_how_unset' )
+            });
+        }
+    },
+
+    // are email addresses an identifier ?
+    async identitiesEmailAddressesIdentifier( value, data, opts ){
+        _assert_data_entityrv( 'Organizations.checks.identitiesEmailAddressesIdentifier()', data );
+        let item = data.entity.get().DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.identitiesEmailAddressesIdentifier = Boolean( value );
+        }
+        if( value === true || value === false ){
+            return null;
+        } else {
+            new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'organizations.checks.email_identifier_invalid' )
+            });
+        }
+    },
+
+    // how to we want manage usernames ?
+    async identitiesUsernamesCount( value, data, opts ){
+        _assert_data_entityrv( 'Organizations.checks.identitiesUsernamesCount()', data );
+        let item = data.entity.get().DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.identitiesUsernamesCount = parseInt( value );
+        }
+        if( Number.isInteger( value )){
+            return null;
+        } else {
+            new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'organizations.checks.username_count_invalid' )
+            });
+        }
+    },
+
+    // how to we want manage usernames ?
+    async identitiesUsernamesHow( value, data, opts ){
+        _assert_data_entityrv( 'Organizations.checks.identitiesUsernamesHow()', data );
+        let item = data.entity.get().DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.identitiesUsernamesHow = value;
+        }
+        if( value ){
+            const def = HowCount.byId( value );
+            return def ? null : new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'organizations.checks.username_how_invalid' )
+            });
+        } else {
+            new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'organizations.checks.username_how_unset' )
+            });
+        }
+    },
+
+    // are usernames an identifier ?
+    async identitiesUsernamesIdentifier( value, data, opts ){
+        _assert_data_entityrv( 'Organizations.checks.identitiesUsernamesIdentifier()', data );
+        let item = data.entity.get().DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.identitiesUsernamesIdentifier = Boolean( value );
+        }
+        if( value === true || value === false ){
+            return null;
+        } else {
+            new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'organizations.checks.username_identifier_invalid' )
+            });
+        }
     },
 
     // introspection endpoint

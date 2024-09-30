@@ -64,13 +64,58 @@ Organizations.recordFieldset = function(){
                     defaultValue: false,
                     form_check: Organizations.checks.dynamicRegistrationByUser
                 },
-                // -- configuration
+                // -- oauth configuration
                 // whether this organization wants all public clients use PKCE (rfc7636)
                 {
                     name: 'wantsPkce',
                     type: Boolean,
                     defaultValue: true,
                     form_check: Organizations.checks.wantsPkce,
+                    form_type: Forms.FieldType.C.NONE
+                },
+                // -- identities configuration
+                // whether the organization wants exactly/at least/at most 0..n email addresses for its identities
+                {
+                    name: 'identitiesEmailAddressesHow',
+                    type: String,
+                    defaultValue: 'least',
+                    form_check: Organizations.checks.identitiesEmailAddressesHow,
+                    form_type: Forms.FieldType.C.MANDATORY
+                },
+                {
+                    name: 'identitiesEmailAddressesCount',
+                    type: SimpleSchema.Integer,
+                    defaultValue: 1,
+                    form_check: Organizations.checks.identitiesEmailAddressesCount,
+                    form_type: Forms.FieldType.C.MANDATORY
+                },
+                {
+                    name: 'identitiesEmailAddressesIdentifier',
+                    type: Boolean,
+                    defaultValue: false,
+                    form_check: Organizations.checks.identitiesEmailAddressesIdentifier,
+                    form_type: Forms.FieldType.C.NONE
+                },
+                // whether the organization wants exactly/at least/at most 0..n usernames for its identities
+                {
+                    name: 'identitiesUsernamesHow',
+                    type: String,
+                    defaultValue: 'least',
+                    form_check: Organizations.checks.identitiesUsernamesHow,
+                    form_type: Forms.FieldType.C.MANDATORY
+                },
+                {
+                    name: 'identitiesUsernamesCount',
+                    type: SimpleSchema.Integer,
+                    defaultValue: 1,
+                    form_check: Organizations.checks.identitiesUsernamesCount,
+                    form_type: Forms.FieldType.C.MANDATORY
+                },
+                {
+                    name: 'identitiesUsernamesIdentifier',
+                    type: Boolean,
+                    defaultValue: false,
+                    form_check: Organizations.checks.identitiesUsernamesIdentifier,
                     form_type: Forms.FieldType.C.NONE
                 },
                 // -- Authorization Server Metadata

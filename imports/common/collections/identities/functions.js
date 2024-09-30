@@ -128,7 +128,7 @@ Identities.fn = {
 
     /**
      * @param {Identity} identity
-     * @return {Promise} which eventually resolves to the name of the identity
+     * @return {String} which eventually resolves to the name of the identity
      *  either as the 'name' itself, or as given_name+middle_name+family_name
      */
     name( identity ){
@@ -138,7 +138,7 @@ Identities.fn = {
         } else {
             name = ( identity.given_name || '' ) + ' ' + ( identity.middle_name || '' ) + ' ' + ( identity.family_name || '' );
         }
-        return Promise.resolve( name );
+        return name;
     },
 
     /**

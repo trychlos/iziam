@@ -25,7 +25,7 @@ import './identity_profile_pane.html';
 
 Template.identity_profile_pane.onCreated( function(){
     const self = this;
-    //console.debug( this );
+    console.debug( this );
 
     self.APP = {
         fields: {
@@ -94,15 +94,16 @@ Template.identity_profile_pane.onRendered( function(){
 
     // initialize the Checker for this panel as soon as we get the parent Checker
     self.autorun(() => {
+        const amInstance = Template.currentData().amInstance?.get();
         const parentChecker = Template.currentData().checker?.get();
         const checker = self.APP.checker.get();
-        if( parentChecker && !checker ){
+        if( amInstance && parentChecker && !checker ){
             const itemRv = Template.currentData().item;
             self.APP.checker.set( new Forms.Checker( self, {
                 parent: parentChecker,
-                panel: new Forms.Panel( self.APP.fields, Meteor.APP.AccountsManager.identities.fieldSet()),
+                panel: new Forms.Panel( self.APP.fields, amInstance.fieldSet()),
                 data: {
-                    //container: Template.currentData().container,
+                    amInstance: amInstance,
                     item: itemRv
                 },
                 setForm: itemRv.get()

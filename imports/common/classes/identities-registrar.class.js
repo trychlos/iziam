@@ -88,7 +88,8 @@ export class IdentitiesRegistrar extends izRegistrar {
                 fields: Identities.fieldsDef()
             },
             allowFn: Permissions.isAllowed,
-            hideDisabled: false
+            hideDisabled: false,
+            tabularFieldsDef: Identities.fieldsDef()
         });
 
         // client-side initialization

@@ -5,7 +5,7 @@
  * 
  * Parms:
  * - organization: an { entity, record } object if the entity is a client
- * - entity: the currently edited organization/client identifier
+ * - entityId: the currently edited organization/client identifier
  */
 
 import _ from 'lodash';
@@ -24,14 +24,15 @@ Template.operational_panel.onCreated( function(){
 
     // get the entity
     self.autorun(() => {
-        const entity = Template.currentData().entity;
+        const entityId = Template.currentData().entityId;
         const organization = Template.currentData().organization;
         if( organization ){
             // handle the client case
         } else {
-            const org = Meteor.APP.Organizations.byId( entity );
+            const org = Meteor.APP.Organizations.byId( entityId );
             if( org ){
                 self.APP.entity.set( org );
+                console.debug( 'org', org );
             }
         }
     });

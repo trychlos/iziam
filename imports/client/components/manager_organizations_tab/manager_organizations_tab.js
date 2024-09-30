@@ -9,8 +9,11 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 
 import '/imports/client/components/organization_clients_load/organization_clients_load.js';
 import '/imports/client/components/organization_clients_pane/organization_clients_pane.js';
+import '/imports/client/components/organization_config_dynregistration_pane/organization_config_dynregistration_pane.js';
+import '/imports/client/components/organization_config_ident_pane/organization_config_ident_pane.js';
+import '/imports/client/components/organization_config_oauth_pane/organization_config_oauth_pane.js';
 import '/imports/client/components/organization_config_pane/organization_config_pane.js';
-import '/imports/client/components/organization_dynregistration_pane/organization_dynregistration_pane.js';
+import '/imports/client/components/organization_config_rest_pane/organization_config_rest_pane.js';
 import '/imports/client/components/organization_endpoints_pane/organization_endpoints_pane.js';
 import '/imports/client/components/organization_identities_load/organization_identities_load.js';
 import '/imports/client/components/organization_identities_pane/organization_identities_pane.js';
@@ -91,11 +94,6 @@ Template.manager_organizations_tab.onCreated( function(){
                 name: 'organization_providers_tab',
                 navLabel: pwixI18n.label( I18N, 'organizations.edit.providers_tab_title' ),
                 paneTemplate: 'organization_providers_pane'
-            },
-            {
-                name: 'organization_dynregistration_tab',
-                navLabel: pwixI18n.label( I18N, 'organizations.edit.dynregistration_tab_title' ),
-                paneTemplate: 'organization_dynregistration_pane'
             },
             {
                 name: 'organization_jwks_tab',
