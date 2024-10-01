@@ -335,7 +335,7 @@ ClientsRecords.checks = {
                     message: pwixI18n.label( I18N, 'clients.checks.label_exists' )
                 });
             };
-            return ( Meteor.isClient ? Meteor.callAsync( 'clients_records_getBy', { label: value }) : ClientsRecords.server.getBy({ label: value }))
+            return ( Meteor.isClient ? Meteor.callAsync( 'clients_records_getBy', { label: value }) : ClientsRecords.s.getBy({ label: value }))
                 .then(( result ) => {
                     return fn( result );
                 });

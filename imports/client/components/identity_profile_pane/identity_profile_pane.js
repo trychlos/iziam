@@ -2,10 +2,10 @@
  * /imports/client/components/identity_profile_pane/identity_profile_pane.js
  *
  * Parms:
- * - amInstance: a ReactiveVar which contains the AccountsManager.amClass instance
- * - checker: a ReactiveVar which contains the parent checker
- * - organization: 
- * - item: a ReactiveVar which contains the edited identity
+ * - item: a ReactiveVar which holds the identity object to edit (may be empty, but not null)
+ * - checker: a ReactiveVar which holds the parent Checker
+ * - amInstance: a ReactiveVar which holds the amClass instance
+ * - organization: an { entity , record } organization object
  */
 
 import _ from 'lodash';
@@ -25,7 +25,7 @@ import './identity_profile_pane.html';
 
 Template.identity_profile_pane.onCreated( function(){
     const self = this;
-    console.debug( this );
+    //console.debug( this );
 
     self.APP = {
         fields: {
@@ -66,27 +66,6 @@ Template.identity_profile_pane.onCreated( function(){
         // the Form.Checker instance for this panel
         checker: new ReactiveVar( null ),
     };
-
-    /*
-    // have a ReactiveVar for the image url
-    self.autorun(() => {
-        const item = Template.currentData().item.get();
-        item.DYN = item.DYN || {};
-        item.DYN.pictureRv = item.DYN.pictureRv || new ReactiveVar( null );
-        item.DYN.pictureRv.set( item.picture_url );
-    });
-
-    // have a ReactiveVar for the name
-    self.autorun(() => {
-        const item = Template.currentData().item.get();
-        item.DYN = item.DYN || {};
-        item.DYN.nameRv = item.DYN.nameRv || new ReactiveVar( null );
-        Identities.fn.name( item )
-            .then(( name ) => {
-                item.DYN.nameRv.set( name );
-            });
-    });
-    */
 });
 
 Template.identity_profile_pane.onRendered( function(){
@@ -104,7 +83,8 @@ Template.identity_profile_pane.onRendered( function(){
                 panel: new Forms.Panel( self.APP.fields, amInstance.fieldSet()),
                 data: {
                     amInstance: amInstance,
-                    item: itemRv
+                    item: itemRv,
+                    organization: Template.currentData().organization
                 },
                 setForm: itemRv.get()
             }));
@@ -113,9 +93,42 @@ Template.identity_profile_pane.onRendered( function(){
 });
 
 Template.identity_profile_pane.helpers({
+    // whether the family name is disabled ? yes if name is set
+    familyDisabled(){
+        return this.item.get().name ? 'disabled' : '';
+    },
+
+    // whether the given name is disabled ? yes if name is set
+    givenDisabled(){
+        return this.item.get().name ? 'disabled' : '';
+    },
+
     // string translation
     i18n( arg ){
         return pwixI18n.label( I18N, arg.hash.key );
+    },
+
+    // whether the middle name is disabled ? yes if name is set
+    middleDisabled(){
+        return this.item.get().name ? 'disabled' : '';
+    },
+
+    // display the computed name if any
+    nameComputed(){
+        let name = '&nbsp;';
+        let set = false;
+        const item = this.item.get();
+        if( item.given_name || item.middle_name || item.family_name ){
+            name = Identities.fn.name( item );
+            set = true;
+        }
+        return set ? pwixI18n.label( I18N, 'identities.profile.name_computed', name ) : name;
+    },
+
+    // whether the name is disabled ? yes if either given, middle or family names are set
+    nameDisabled(){
+        const item = this.item.get();
+        return item.given_name || item.middle_name || item.family_name ? 'disabled' : '';
     },
 
     // the user gender

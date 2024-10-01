@@ -12,6 +12,7 @@
 
 import { AccountsHub } from 'meteor/pwix:accounts-hub';
 import { AccountsManager } from 'meteor/pwix:accounts-manager';
+import { Field } from 'meteor/pwix:field';
 import { Permissions } from 'meteor/pwix:permissions';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { Tracker } from 'meteor/tracker';
@@ -66,7 +67,7 @@ export class IdentitiesRegistrar extends izRegistrar {
         // client-side only autorun's
         Tracker.autorun(() => {
             self.#list.get().forEach(( it ) => {
-                console.debug( '(autorun' );
+                //console.debug( '(autorun)' );
             });
         });
     }
@@ -84,12 +85,15 @@ export class IdentitiesRegistrar extends izRegistrar {
 
         this.#amInstance = new AccountsManager.amClass({
             name: Identities.instanceName( organization._id ),
-            additionalFieldset: {
-                fields: Identities.fieldsDef()
+            baseFieldset: new Field.Set( Identities.fieldsDef( organization )),
+            clientNewFn: Identities.fn.new,
+            clientNewArgs: {
+                organization: organization
             },
+            haveIdent: false,
+            haveRoles: false,
             allowFn: Permissions.isAllowed,
-            hideDisabled: false,
-            tabularFieldsDef: Identities.fieldsDef()
+            hideDisabled: false
         });
 
         // client-side initialization
@@ -120,5 +124,12 @@ export class IdentitiesRegistrar extends izRegistrar {
             console.warn( 'unable to find an identity', identityId );
         }
         return found;
+    }
+
+    /**
+     * @returns {integer} the current identities count
+     */
+    count(){
+        return this.#list.get().length;
     }
 }

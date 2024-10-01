@@ -1,0 +1,32 @@
+<template name="identity_email_row">
+
+    <tr class="c-identity-email-row" data-item-id="{{ this.it.id }}">
+        <td>
+            <div>
+                <input class="form-control js-label" type="email" placeholder="{{ i18n key="identities.emails.label_ph" }}" />
+            </div>
+        </td>
+        <td>
+            <div class="ui-ml05">
+                <input class="form-control js-address" type="email" placeholder="{{ i18n key="identities.emails.address_ph" }}" />
+            </div>
+        </td>
+        <td>
+            <div class="ui-w100 ui-center">
+                <input class="form-check-input js-verified" type="checkbox" />
+            </div>
+        </td>
+        <td>
+            <div class="ui-w100 ui-center">
+                <input class="form-check-input js-preferred" type="checkbox" />
+            </div>
+        </td>
+        <td>{{> FormsStatusIndicator (parmsCheckStatus) }}</td>
+        <td>
+            <button class="btn btn-sm btn-outline-primary js-minus" title="{{ i18n key="identities.emails.remove_title" }}" {{ minusEnabled }} >
+                <span class="fa-solid fa-fw fa-minus"></span>
+            </button>
+        </td>
+    </tr>
+
+</template>

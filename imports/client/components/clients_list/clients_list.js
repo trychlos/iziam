@@ -13,6 +13,7 @@
 import { Permissions } from 'meteor/pwix:permissions';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
+import { TenantsManager } from 'meteor/pwix:tenants-manager';
 import { Tolert } from 'meteor/pwix:tolert';
 
 import { Clients } from '/imports/common/collections/clients/index.js';
@@ -111,7 +112,7 @@ Template.clients_list.events({
             entity: this.item.get(),
             record: this.item.get().DYN.closest
         };
-        const registered = Meteor.APP.Organizations.byId( this.item.get()._id );
+        const registered = TenantsManager.list.byEntity( this.item.get()._id );
         const item = registered.DYN.clients.byId( data.item._id );
         if( item ){
             Modal.run({

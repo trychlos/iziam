@@ -6,6 +6,6 @@ import { ClientsEntities } from '../index.js';
 
 Meteor.methods({
     async 'clients_entities_getBy'( selector ){
-        return await ClientsEntities.server.getBy( selector, this.userId );
+        return await ClientsEntities.s.getBy( selector, this.userId );
     }
 });

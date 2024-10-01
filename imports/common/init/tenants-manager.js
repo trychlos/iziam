@@ -5,6 +5,7 @@
 import { Permissions } from 'meteor/pwix:permissions';
 import { Roles } from 'meteor/pwix:roles';
 import { TenantsManager } from 'meteor/pwix:tenants-manager';
+import { Tracker } from 'meteor/tracker';
 
 import { Organizations } from '/imports/common/collections/organizations/index.js';
 
@@ -16,6 +17,7 @@ TenantsManager.configure({
     recordFields: Organizations.recordFieldset(),
     //recordFields: null,
     //scopedManagerRole: SCOPED_TENANT_MANAGER,
+    //tabularServerExtend: null,
     tenantButtons: Organizations.tabularButtons(),
     //tenantButtons: null,
     tenantFields: Organizations.tabularFieldset(),
@@ -91,3 +93,12 @@ Permissions.set({
         }
     }
 });
+
+// maintain the operational status of the organizations
+if( Meteor.isClient ){
+    Tracker.autorun(() => {
+        TenantsManager.list.get().forEach(( it ) => {
+            Organizations.setupOperational( it );
+        });
+    });
+}

@@ -27,7 +27,7 @@ Meteor.methods({
     },
 
     // insert/update an identity in the database
-    'identity.upsert'( item, groups=[] ){
-        return Identities.s.upsert( item, groups, this.userId );
+    'identity.upsert'( item, args ){
+        return Identities.s.upsert( item, args, this.userId );
     }
 });

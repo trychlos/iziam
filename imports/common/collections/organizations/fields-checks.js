@@ -112,7 +112,7 @@ Organizations.checks = {
                 });
             }
         // value is optional in the UI, but must be set for the organization be operational
-        } else if( opts.mustHave ){
+        } else if( opts.opCheck ){
             return new TM.TypedMessage({
                 level: TM.MessageLevel.C.ERROR,
                 message: pwixI18n.label( I18N, 'organizations.checks.authorization_unset' )
@@ -172,7 +172,7 @@ Organizations.checks = {
                         };
                         return Meteor.isClient ?
                             Meteor.callAsync( 'pwix_tenants_manager_records_getBy', { baseUrl: value }).then(( result ) => { return fn( result ); }) :
-                            fn( TenantsManager.Records.server.getBy({ baseUrl: value }));
+                            fn( TenantsManager.Records.s.getBy({ baseUrl: value }));
                     }
                 }
             });
@@ -551,7 +551,7 @@ Organizations.checks = {
                 }
             }
         // value is optional in the UI, but must be set for the organization be operational
-        } else if( opts.mustHave ){
+        } else if( opts.opCheck ){
             const issuer = Organizations.fn.issuer({ entity: entity, record: item });
             if( !issuer ){
                 return new TM.TypedMessage({
@@ -656,7 +656,7 @@ Organizations.checks = {
                 });
             }
         // value is optional in the UI, but must be set for the organization be operational
-        } else if( opts.mustHave ){
+        } else if( opts.opCheck ){
             return new TM.TypedMessage({
                 level: TM.MessageLevel.C.ERROR,
                 message: pwixI18n.label( I18N, 'organizations.checks.token_unset' )

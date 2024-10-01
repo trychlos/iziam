@@ -72,10 +72,10 @@ Clients.s = {
         // upsert the entity
         //  we get back not only a result but also the original entity
         //  when new, 'entity' has been updated with newly inserted id
-        let entitiesRes = await ClientsEntities.server.upsert( entity, userId );
+        let entitiesRes = await ClientsEntities.s.upsert( entity, userId );
     
         // and asks the Records to do the rest
-        let recordsRes = await ClientsRecords.server.upsert( entity, userId );
+        let recordsRes = await ClientsRecords.s.upsert( entity, userId );
     
         return {
             entities: entitiesRes,

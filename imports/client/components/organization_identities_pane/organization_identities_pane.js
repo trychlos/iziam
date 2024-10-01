@@ -14,7 +14,9 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 
 import { Identities } from '/imports/common/collections/identities/index.js';
+import { Organizations } from '/imports/common/collections/organizations/index.js';
 
+import '/imports/client/components/identity_emails_pane/identity_emails_pane.js';
 import '/imports/client/components/identity_profile_pane/identity_profile_pane.js';
 
 import './organization_identities_pane.html';
@@ -27,19 +29,19 @@ Template.organization_identities_pane.onCreated( function(){
         organization: new ReactiveVar( null ),
         amInstanceName: new ReactiveVar( null ),
         // new tabs for this identity
-        tabsBefore: [
+        tabsBefore: new ReactiveVar([
             {
                 name: 'identity_profile_tab',
                 navLabel: pwixI18n.label( I18N, 'identities.edit.profile_tab_title' ),
                 paneTemplate: 'identity_profile_pane'
+            },
+            {
+                name: 'identity_emails_tab',
+                navLabel: pwixI18n.label( I18N, 'identities.edit.emails_tab_title' ),
+                paneTemplate: 'identity_emails_pane',
+                shown: false
             }
-        ],
-        // update the standard tabs
-        tabsUpdates: {
-            account_ident_tab: {
-                navLabel: pwixI18n.label( I18N, 'identities.edit.ident_tab_title' )
-            }
-        }
+        ])
     };
 
     // set the organization record
@@ -49,7 +51,7 @@ Template.organization_identities_pane.onCreated( function(){
         const record = entity.DYN.closest;
         delete entity.DYN;
         self.APP.organization.set({ entity: entity, record: record });
-        self.APP.tabsBefore.forEach(( it ) => {
+        self.APP.tabsBefore.get().forEach(( it ) => {
             it.paneData = { organization: { entity: entity, record: record }};
         });
     });
@@ -65,6 +67,20 @@ Template.organization_identities_pane.onCreated( function(){
             Meteor.clearInterval( obj );
         }
     }, 5 );
+
+    // if we have at least one email address, show the tab
+    self.autorun(() => {
+        const organization = self.APP.organization.get();
+        if( Organizations.fn.haveAtLeastOneEmailAddress( organization )){
+            let found = false;
+            self.APP.tabsBefore.get().every(( it ) => {
+                if( it.name === 'identity_emails_tab' ){
+                    found = true;
+                    it.shown = true;
+                }
+            });
+        }
+    });
 });
 
 Template.organization_identities_pane.helpers({
@@ -77,9 +93,9 @@ Template.organization_identities_pane.helpers({
     parmsAccountsList(){
         return {
             name: Template.instance().APP.amInstanceName.get(),
-            tabsBefore: Template.instance().APP.tabsBefore,
-            tabsUpdates: Template.instance().APP.tabsUpdates,
-            mdClasses: 'modal-xl'
+            tabsBefore: Template.instance().APP.tabsBefore.get(),
+            mdClasses: 'modal-xl',
+            mdTitle: pwixI18n.label( I18N, 'identities.edit.dialog_title' )
         };
     },
 
@@ -87,12 +103,12 @@ Template.organization_identities_pane.helpers({
     parmsNewAccount(){
         return {
             name: Template.instance().APP.amInstanceName.get(),
-            tabsBefore: Template.instance().APP.tabsBefore,
-            tabsUpdates: Template.instance().APP.tabsUpdates,
+            tabsBefore: Template.instance().APP.tabsBefore.get(),
             shape: PlusButton.C.Shape.RECTANGLE,
             label: pwixI18n.label( I18N, 'identities.new.button_label' ),
             title: pwixI18n.label( I18N, 'identities.new.button_title' ),
-            mdClasses: 'modal-xl'
+            mdClasses: 'modal-xl',
+            mdTitle: pwixI18n.label( I18N, 'identities.new.dialog_title' )
         }
     }
 });

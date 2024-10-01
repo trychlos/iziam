@@ -646,19 +646,42 @@ Meteor.APP.i18n = {
             },
             identities: {
                 checks: {
-                    family_empty: 'Neither family name nor given name or full name are set, but at least one should',
-                    given_empty: 'Neither given name nor family name or full name are set, but at least one should',
-                    name_empty: 'Neither full name nor given name or family name are set, but at least one should',
+                    email_address_exists: 'The email address already exists, but should be an identifier',
+                    email_address_invalid: 'The email address is not valid',
+                    email_address_unset: 'The email address is empty',
+                    email_preferred_count: 'You have more than one preferred email address, but should have at most one',
+                    email_preferred_invalid: 'The preferred email value is invalid, must be \'true\' or \'false\'',
+                    email_verified_invalid: 'The verified email value is invalid, must be \'true\' or \'false\'',
+                    family_name_set: 'Both name and family name are set, but you should choose a unique way of naming the person',
+                    family_expects_given: 'Though not mandatory, you should better qualify the person by attributing a given name',
+                    family_wants_name: 'If not setting the family nor the given names, you should enter a full name',
+                    gender_invalid: 'The gender is not valid',
+                    given_name_set: 'Both name and given name are set, but you should choose a unique way of naming the person',
+                    given_expects_family: 'Though not mandatory, you should better qualify the person by attributing a family name',
+                    given_wants_name: 'If not setting the given nor the family names, you should enter a full name',
+                    locale_invalid: 'The locale is not valid',
+                    middle_name_set: 'Entering a middle name is exclusive from setting full name',
+                    name_others_set: 'Entering a full name is exclusive from setting given, middle or family names',
+                    name_others_unset: 'None of the name parts is set, but you should choose a way to identify the person',
                     picture_invalid: 'The picture URL is not valid',
                     picture_mandatory: 'The picture URL is not set',
                     profile_invalid: 'The profile URL is not valid',
                     profile_mandatory: 'The profile URL is not set',
                     website_invalid: 'The website URL is not valid',
                     website_mandatory: 'The website URL is not set',
+                    zoneinfo_invalid: 'The zoneinfo is not valid'
                 },
                 edit: {
-                    ident_tab_title: 'Email & password',
+                    dialog_title: 'Editing the identity',
+                    emails_tab_title: 'Email addresses',
                     profile_tab_title: 'Identity'
+                },
+                emails: {
+                    address_th: 'Address',
+                    label_th: 'Label',
+                    preamble_text: '',
+                    preferred_th: 'Preferred',
+                    verified_th: 'Verified'
                 },
                 list: {
                     locale_th: 'Locale',
@@ -669,7 +692,8 @@ Meteor.APP.i18n = {
                 },
                 new: {
                     button_label: 'New identity',
-                    button_title: 'Define a new identity as an organization account'
+                    button_title: 'Define a new identity as an organization account',
+                    dialog_title: 'Defining a new identity'
                 },
                 profile: {
                     family_label: 'Family name:',
@@ -685,8 +709,9 @@ Meteor.APP.i18n = {
                     middle_label: 'Middle name:',
                     middle_ph: 'X.',
                     middle_title: 'Middle name',
+                    name_computed: 'Computed name: &laquo;&nbsp;%s&nbsp;&raquo;',
                     name_label: 'Name:',
-                    name_ph: 'John X. Doe',
+                    name_ph: 'Doe, John X.',
                     name_title: 'Full name',
                     nickname_label: 'Nickname:',
                     nickname_ph: 'Nickname',
@@ -1027,7 +1052,7 @@ Meteor.APP.i18n = {
                         +'Some are strongly needed, or even just required, while others may be freely chosen at your convenience.'
                 },
                 tabular: {
-                    accounts_th: 'Identities',
+                    identities_th: 'Identities',
                     baseurl_th: 'Base URL',
                     clients_th: 'Clients',
                     operational_title: 'Operational status of the organization',

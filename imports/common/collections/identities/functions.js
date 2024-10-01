@@ -136,9 +136,29 @@ Identities.fn = {
         if( identity.name ){
             name = identity.name;
         } else {
-            name = ( identity.given_name || '' ) + ' ' + ( identity.middle_name || '' ) + ' ' + ( identity.family_name || '' );
+            if( identity.family_name ){
+                name += identity.family_name + ', ';
+            }
+            if( identity.given_name ){
+                name += identity.given_name + ' ';
+            }
+            if( identity.middle_name ){
+                name += identity.middle_name + ' ';
+            }
         }
         return name;
+    },
+
+    /**
+     * @locus Anywhere
+     * @param {Identity} identity
+     * @param {Object} args an object with following keys:
+     *  - organization the full organization entity with its DYN sub-object
+     * @return {Boolean} whether the new identity has been successfully created
+     */
+    async new( identity, args ){
+        identity.organization = args.organization._id;
+        return Meteor.isClient ? await Meteor.callAsync( 'identity.upsert', identity, args ) : await Identities.s.new( identity, args );
     },
 
     /**

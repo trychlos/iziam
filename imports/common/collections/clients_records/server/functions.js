@@ -9,7 +9,7 @@ import { Permissions } from 'meteor/pwix:permissions';
 
 import { ClientsRecords } from '../index.js';
 
-ClientsRecords.server = {
+ClientsRecords.s = {
     /**
      * @summary Make sure all the fields of the fieldset are set in the item, even if undefined
      * @param {Object} item
@@ -75,10 +75,10 @@ ClientsRecords.server = {
         //if( !await TenantsManager.isAllowed( 'pwix.tenants_manager.records.fn.upsert', userId, entity )){
         //    return null;
         //}
-        //console.debug( 'Records.server.upsert()', entity );
+        //console.debug( 'Records.s.upsert()', entity );
         // get the original item records to be able to detect modifications
         //  and build a hash of id -> record
-        const orig = await ClientsRecords.server.getBy({ entity: entity._id }, userId );
+        const orig = await ClientsRecords.s.getBy({ entity: entity._id }, userId );
         let origIds = {};
         orig.map(( it ) => { origIds[it._id] = it; });
         let leftIds = _.cloneDeep( origIds );

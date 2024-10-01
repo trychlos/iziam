@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { ClientsEntities } from '../index.js';
 
-ClientsEntities.server = {
+ClientsEntities.s = {
     /**
      * @summary Make sure all the fields of the fieldset are set in the item, even if undefined
      * @param {Object} item
@@ -103,7 +103,7 @@ ClientsEntities.server = {
             result.numberAfftected = await ClientsEntities.collection.updateAsync( selector, { $set: item }, { filter: false });
         } else {
             assert( !item.clientId, 'while the client entity doesn\'t exist, it does have a non null clientId: '+item.clientId );
-            item.clientId = ClientsEntities.server.newId();
+            item.clientId = ClientsEntities.s.newId();
             result.insertedId = await ClientsEntities.collection.insertAsync( item );
             result.numberAffected = 1;
             entity.clientId = item.clientId;

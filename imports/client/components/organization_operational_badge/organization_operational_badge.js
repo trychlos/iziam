@@ -11,6 +11,7 @@
 
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
+import { TenantsManager } from 'meteor/pwix:tenants-manager';
 
 import './organization_operational_badge.html';
 
@@ -34,7 +35,7 @@ Template.organization_operational_badge.helpers({
             console.warn( this );
         }
         return {
-            statusRv: Meteor.APP.Organizations.byId( this.item.entity ).DYN.operational?.status,
+            statusRv: TenantsManager.list.byEntity( this.item.entity ).DYN.operational?.status,
             classes: Template.instance().APP.classes,
             title: pwixI18n.label( I18N, 'organizations.tabular.operational_title' )
         };

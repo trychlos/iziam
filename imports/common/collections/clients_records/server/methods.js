@@ -6,7 +6,7 @@ import { ClientsRecords } from '../index.js';
 
 Meteor.methods({
     'clients_records_getBy'( selector ){
-        return ClientsRecords.server.getBy( selector, this.userId );
+        return ClientsRecords.s.getBy( selector, this.userId );
     },
 /*
     // empty the collection before importing

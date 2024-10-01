@@ -22,14 +22,22 @@ Organizations.tabularFieldset = function(){
             before: 'effectStart',
             fields: [
                 {
-                    name: 'accountsCounts',
+                    name: 'identitiesCount',
                     schema: false,
-                    dt_title: pwixI18n.label( I18N, 'organizations.tabular.accounts_th' )
+                    dt_className: 'ui-center',
+                    dt_title: pwixI18n.label( I18N, 'organizations.tabular.identities_th' ),
+                    dt_render( foo, type, rowData, columnDef ){
+                        return rowData.identitiesCount ? '<div class="dt-badge">'+rowData.identitiesCount+'</div>' : '';
+                    }
                 },
                 {
-                    name: 'clientsCounts',
+                    name: 'clientsCount',
                     schema: false,
-                    dt_title: pwixI18n.label( I18N, 'organizations.tabular.clients_th' )
+                    dt_className: 'ui-center',
+                    dt_title: pwixI18n.label( I18N, 'organizations.tabular.clients_th' ),
+                    dt_render( foo, type, rowData, columnDef ){
+                        return rowData.clientsCount ? '<div class="dt-badge">'+rowData.clientsCount+'</div>' : '';
+                    }
                 }
             ]
         }

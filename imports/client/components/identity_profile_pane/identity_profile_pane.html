@@ -8,14 +8,6 @@
             <div class="panel-body">
                 <table class="form-table ui-w100">
                     <tr>
-                        <td class="ui-w20 label"><label class="form-label" for="identity-profile-name">{{ i18n key="identities.profile.name_label" }}</label></td>
-                        <td colspan="2" class="ui-w100">
-                            <div class="js-name ui-w100" title="{{ i18n key="identities.profile.name_title" }}">
-                                <input class="form-control" type="text" id="identity-profile-name" placeholder="{{ i18n key="identities.profile.name_ph" }}" />
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
                         <td></td>
                         <td colspan="2" class="ui-w100">
                             <table>
@@ -29,23 +21,32 @@
                                 <tr>
                                     <td>
                                         <div class="js-given ui-w100" title="{{ i18n key="identities.profile.given_title" }}">
-                                            <input class="form-control" type="text" id="identity-profile-given" placeholder="{{ i18n key="identities.profile.given_ph" }}" />
+                                            <input class="form-control" type="text" id="identity-profile-given" placeholder="{{ i18n key="identities.profile.given_ph" }}" {{ givenDisabled }} />
                                         </div>
                                     </td>
                                     <td><div class="ui-ml1"></div></td>
                                     <td>
                                         <div class="js-middle ui-w100" title="{{ i18n key="identities.profile.middle_title" }}">
-                                            <input class="form-control" type="text" id="identity-profile-middle" placeholder="{{ i18n key="identities.profile.middle_ph" }}" />
+                                            <input class="form-control" type="text" id="identity-profile-middle" placeholder="{{ i18n key="identities.profile.middle_ph" }}" {{ middleDisabled }} />
                                         </div>
                                     </td>
                                     <td><div class="ui-ml1"></div></td>
                                     <td>
                                         <div class="js-family ui-w100" title="{{ i18n key="identities.profile.family_title" }}">
-                                            <input class="form-control" type="text" id="identity-profile-family" placeholder="{{ i18n key="identities.profile.family_ph" }}" />
+                                            <input class="form-control" type="text" id="identity-profile-family" placeholder="{{ i18n key="identities.profile.family_ph" }}" {{ familyDisabled }} />
                                         </div>
                                     </td>
                                 </tr>
                             </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="ui-w20 label ui-vatop"><label class="form-label ui-mt05" for="identity-profile-name">{{ i18n key="identities.profile.name_label" }}</label></td>
+                        <td colspan="2" class="ui-w100">
+                            <div class="js-name ui-w100" title="{{ i18n key="identities.profile.name_title" }}">
+                                <input class="form-control" type="text" id="identity-profile-name" placeholder="{{ i18n key="identities.profile.name_ph" }}" {{ nameDisabled }} />
+                            </div>
+                            <p class="form-subtext">{{{ nameComputed }}}</p>
                         </td>
                     </tr>
                     <tr>
@@ -57,18 +58,6 @@
                         </td>
                         <td rowspan="7">
                             {{> image_includer (parmsImage) }}
-                            <!--
-                            <div class="d-flex align-items-center justify-content-center">
-                                <div class="picture">
-                                    <div class="{{ picImgClass }}">
-                                        <img src="{{ picture }}" />
-                                    </div>
-                                    <div class="{{ picSvgClass }}">
-                                        <span class="fa-solid fa-fw fa-user"></span>
-                                    </div>
-                                </div>
-                            </div>
-                            -->
                         </td>
                     </tr>
                     <tr>

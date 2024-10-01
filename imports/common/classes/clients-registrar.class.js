@@ -110,4 +110,11 @@ export class ClientsRegistrar extends izRegistrar {
         }
         return found;
     }
+
+    /**
+     * @returns {integer} the current clients count
+     */
+    count(){
+        return this.#list.get().length;
+    }
 }

@@ -95,10 +95,41 @@ Organizations.fn = {
 
     /**
      * @param {Organizations} organization as an { entity, record } object
+     * @returns {Boolean} whether the organization wants at least one email address
+     */
+    haveAtLeastOneEmailAddress( organization ){
+        const minhow = organization.record.identitiesEmailAddressesMinHow;
+        const mincount = organization.record.identitiesEmailAddressesMinCount;
+        return (( minhow === 'exactly' || minhow === 'least' ) && parseInt( mincount ) > 0 );
+    },
+
+    /**
+     * @param {Organizations} organization as an { entity, record } object
+     * @returns {Boolean} whether the organization wants at least one username
+     */
+    haveAtLeastOneUsername( organization ){
+        const minhow = organization.record.identitiesUsernamesMinHow;
+        const mincount = organization.record.identitiesUsernamesMinCount;
+        return (( minhow === 'exactly' || minhow === 'least' ) && parseInt( mincount ) > 0 );
+    },
+
+    /**
+     * @param {Organizations} organization as an { entity, record } object
      * @returns {String} the issuer for the organization
      */
     issuer( organization ){
         return organization.record.issuer || Meteor.settings.public[Meteor.APP.name].environment.issuer || null;
+    },
+
+    /**
+     * @param {Organizations} organization as an { entity, record } object
+     * @returns {Integer} the max count of email addresses allowed by the organization
+     *  or -1 if not relevant (must not be checked)
+     */
+    maxEmailAddressesCount( organization ){
+        const maxhow = organization.record.identitiesEmailAddressesMaxHow;
+        const maxcount = organization.record.identitiesEmailAddressesMaxCount;
+        return ( maxhow === 'most' ) && parseInt( maxcount ) > 0 ? parseInt( maxcount ) : -1;
     },
 
     /**

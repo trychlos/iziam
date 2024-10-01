@@ -13,6 +13,10 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { TM } from 'meteor/pwix:typed-message';
 
+import { Gender } from '/imports/common/definitions/gender.def.js';
+import { Locale } from '/imports/common/definitions/locale.def.js';
+import { Zoneinfo } from '/imports/common/definitions/zoneinfo.def.js';
+
 import { Identities } from './index.js';
 
 // fields check
@@ -79,7 +83,125 @@ const _check_url = function( value, opts={} ){
 }
 
 Identities.checks = {
+    // emails
+    // if there is a row, it must have a valid email address
+    async email_address( value, data, opts={} ){
+        _assert_data_content( 'Identities.checks.email_address()', data );
+        let item = data.item.get();
+        const index = opts.id ? _id2index( item.emails, opts.id ) : -1;
+        if( opts.update !== false ){
+            if( index < 0 ){
+                item.emails = item.emails || [];
+                item.emails.push({ id: opts.id });
+                index = 0;
+            }
+            item.emails[index].address = value;
+        }
+        if( !value ){
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'identities.checks.email_address_unset' )
+            });
+        }
+        if( !validator.validate( value )){
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'identities.checks.email_address_invalid' )
+            });
+        }
+        if( data.organization ){
+            if( data.organization.record.identitiesEmailAddressesIdentifier ){
+                return data.amInstance.byEmailAddress( value )
+                .then(( user ) => {
+                    let ok = false;
+                    if( user ){
+                        // we have found a user
+                        ok = user._id === item._id;
+                    } else {
+                        ok = true;
+                    }
+                    return ok ? null : new TM.TypedMessage({
+                        level: TM.MessageLevel.C.ERROR,
+                        message: pwixI18n.label( I18N, 'identities.checks.email_address_exists' )
+                    });
+                });
+            }
+        } else {
+            console.warn( 'organization expected in data, not found' );
+        }
+        return null;
+    },
+
+    async email_label( value, data, opts={} ){
+        _assert_data_content( 'Identities.checks.email_label()', data );
+        let item = data.item.get();
+        const index = opts.id ? _id2index( item.emails, opts.id ) : -1;
+        if( opts.update !== false ){
+            if( index < 0 ){
+                item.emails = item.emails || [];
+                item.emails.push({ id: opts.id });
+                index = 0;
+            }
+            item.emails[index].label = value;
+        }
+        return null;
+    },
+
+    async email_preferred( value, data, opts={} ){
+        _assert_data_content( 'Identities.checks.email_preferred()', data );
+        let item = data.item.get();
+        const index = opts.id ? _id2index( item.emails, opts.id ) : -1;
+        if( opts.update !== false ){
+            if( index < 0 ){
+                item.emails = item.emails || [];
+                item.emails.push({ id: opts.id });
+                index = 0;
+            }
+            item.emails[index].preferred = Boolean( value );
+        }
+        if( value !== true && value !== false ){
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.WARNING,
+                message: pwixI18n.label( I18N, 'identities.checks.email_preferred_invalid' )
+            });
+        }
+        // must have a single preferred (if any)
+        let count = 0;
+        ( item.emails || [] ).forEach(( it ) => {
+            if( it.preferred === true ){
+                count += 1;
+            }
+        });
+        return count > 1 ? new TM.TypedMessage({
+            level: TM.MessageLevel.C.WARNING,
+            message: pwixI18n.label( I18N, 'identities.checks.email_preferred_count' )
+        }) : null;
+    },
+
+    async email_verified( value, data, opts={} ){
+        _assert_data_content( 'Identities.checks.gender()', data );
+        let item = data.item.get();
+        const index = opts.id ? _id2index( item.emails, opts.id ) : -1;
+        if( opts.update !== false ){
+            if( index < 0 ){
+                item.emails = item.emails || [];
+                item.emails.push({ id: opts.id });
+                index = 0;
+            }
+            item.emails[index].verified = Boolean( value );
+        }
+        if( value !== true && value !== false ){
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.WARNING,
+                message: pwixI18n.label( I18N, 'identities.checks.email_verified_invalid' )
+            });
+        }
+        return null;
+    },
+
     // the family name
+    // if we enter a family name, then name should be empty
+    //  and expects a given name (the middle is not enough)
     async family_name( value, data, opts ){
         _assert_data_content( 'Identities.checks.family_name()', data );
         let item = data.item.get();
@@ -87,10 +209,31 @@ Identities.checks = {
             item.family_name = value;
             data.item.set( item );
         }
-        return value || item.given_name || item.name ? null : new TM.TypedMessage({
-            level: TM.MessageLevel.C.WARNING,
-            message: pwixI18n.label( I18N, 'identities.checks.family_empty' )
-        });
+        let errors = [];
+        if( value ){
+            if( item.name ){
+                errors.push( new TM.TypedMessage({
+                    level: TM.MessageLevel.C.WARNING,
+                    message: pwixI18n.label( I18N, 'identities.checks.family_name_set' )
+                }));
+            }
+            /*
+            if( !item.given_name ){
+                errors.push( new TM.TypedMessage({
+                    level: TM.MessageLevel.C.WARNING,
+                    message: pwixI18n.label( I18N, 'identities.checks.family_expects_given' )
+                }));
+            }
+        } else {
+            if( !item.name && !item.given_name ){
+                errors.push( new TM.TypedMessage({
+                    level: TM.MessageLevel.C.WARNING,
+                    message: pwixI18n.label( I18N, 'identities.checks.family_wants_name' )
+                }));
+            }
+                */
+        }
+        return errors.length ? errors : null;
     },
 
     // the gender
@@ -101,10 +244,19 @@ Identities.checks = {
             item.gender = value;
             data.item.set( item );
         }
+        if( value ){
+            const def = Gender.byId( value );
+            return def ? null : new TM.TypedMessage({
+                level: TM.MessageLevel.C.WARNING,
+                message: pwixI18n.label( I18N, 'identities.checks.gender_invalid' )
+            });
+        }
         return null;
     },
 
     // the given name
+    // if we enter a given name, then name should be empty
+    // and expects a family name
     async given_name( value, data, opts ){
         _assert_data_content( 'Identities.checks.given_name()', data );
         let item = data.item.get();
@@ -112,10 +264,31 @@ Identities.checks = {
             item.given_name = value;
             data.item.set( item );
         }
-        return value || item.family_name || item.name ? null : new TM.TypedMessage({
-            level: TM.MessageLevel.C.WARNING,
-            message: pwixI18n.label( I18N, 'identities.checks.given_empty' )
-        });
+        let errors = [];
+        if( value ){
+            if( item.name ){
+                errors.push( new TM.TypedMessage({
+                    level: TM.MessageLevel.C.WARNING,
+                    message: pwixI18n.label( I18N, 'identities.checks.given_name_set' )
+                }));
+            }
+            /*
+            if( !item.family_name ){
+                errors.push( new TM.TypedMessage({
+                    level: TM.MessageLevel.C.WARNING,
+                    message: pwixI18n.label( I18N, 'identities.checks.given_expects_family' )
+                }));
+            }
+        } else {
+            if( !item.name && !item.family_name ){
+                errors.push( new TM.TypedMessage({
+                    level: TM.MessageLevel.C.WARNING,
+                    message: pwixI18n.label( I18N, 'identities.checks.given_wants_name' )
+                }));
+            }
+                */
+        }
+        return errors.length ? errors : null;
     },
 
     // the locale
@@ -126,10 +299,18 @@ Identities.checks = {
             item.locale = value;
             data.item.set( item );
         }
+        if( value ){
+            const def = Locale.byId( value );
+            return def ? null : new TM.TypedMessage({
+                level: TM.MessageLevel.C.WARNING,
+                message: pwixI18n.label( I18N, 'identities.checks.locale_invalid' )
+            });
+        }
         return null;
     },
 
     // the middle name
+    // exclusive from entering a name
     async middle_name( value, data, opts ){
         _assert_data_content( 'Identities.checks.middle_name()', data );
         let item = data.item.get();
@@ -137,20 +318,44 @@ Identities.checks = {
             item.middle_name = value;
             data.item.set( item );
         }
+        if( value && item.name ){
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.WARNING,
+                message: pwixI18n.label( I18N, 'identities.checks.middle_name_set' )
+            });
+        }
         return null;
     },
 
     // the full name
+    // may be computed from given_name+middle_name+family_name or entered
+    // the two ways are exclusive (but one must be used)
     async name( value, data, opts ){
         _assert_data_content( 'Identities.checks.name()', data );
         let item = data.item.get();
         if( opts.update !== false ){
             item.name = value;
+            data.item.set( item );
         }
-        return value || item.family_name || item.given_name ? null : new TM.TypedMessage({
-            level: TM.MessageLevel.C.WARNING,
-            message: pwixI18n.label( I18N, 'identities.checks.name_empty' )
-        });
+        let errors = [];
+        if( value ){
+            if( item.given_name || item.middle_name || item.family_name ){
+                errors.push( new TM.TypedMessage({
+                    level: TM.MessageLevel.C.WARNING,
+                    message: pwixI18n.label( I18N, 'identities.checks.name_others_set' )
+                }));
+            }
+            /*
+        } else {
+            if( !item.given_name && !item.middle_name && !item.family_name ){
+                errors.push( new TM.TypedMessage({
+                    level: TM.MessageLevel.C.WARNING,
+                    message: pwixI18n.label( I18N, 'identities.checks.name_others_unset' )
+                }));
+            }
+                */
+        }
+        return errors.length ? errors : null;
     },
 
     // the nickname
@@ -204,6 +409,13 @@ Identities.checks = {
         if( opts.update !== false ){
             item.zoneinfo = value;
             data.item.set( item );
+        }
+        if( value ){
+            const def = Zoneinfo.byId( value );
+            return def ? null : new TM.TypedMessage({
+                level: TM.MessageLevel.C.WARNING,
+                message: pwixI18n.label( I18N, 'identities.checks.zoneinfo_invalid' )
+            });
         }
         return null;
     }
@@ -328,119 +540,6 @@ Identities.check_birthday = function( value, data, coreApp={} ){
             if( coreApp.update !== false ){
                 item.birthday = value;
                 data.item.set( item );
-            }
-            return null;
-        });
-};
-
-// emails
-//  when checking from the UI inputHandler() for this field, we got an identifier in the coreApp options
-//  in all other cases ?
-//  - checking this field from an inputHandler() for another field ?
-//  - global checking when initializing an UI ?
-//  - global checking of an identity from the server ?
-Identities.check_emails_address = function( value, data, coreApp={} ){
-    Identities._assert_data_itemrv( 'Identities.check_emails_address()', data );
-    const item = data.item.get();
-    return Promise.resolve( null )
-        .then(() => {
-            const email = coreApp.id ? Identities.fn.emailById( item, coreApp.id ) : null;
-            if( email ){
-                if( coreApp.update !== false ){
-                    email.address = value;
-                    data.item.set( item );
-                }
-                if( value ){
-                    if( !validator.validate( value )){
-                        return new CoreApp.TypedMessage({
-                            type: CoreApp.MessageType.C.ERROR,
-                            message: pwixI18n.label( I18N, 'identities.checks.emailaddress_invalid' )
-                        });
-                    } else {
-                        const fn = function( result ){
-                            let ok = false;
-                            if( result.length ){
-                                // we have found an existing email address
-                                //  this is normal if the found identity is the same than ours
-                                const found_id = result[0]._id;
-                                if( found_id === item._id ){
-                                    ok = true;
-                                }
-                            } else {
-                                ok = true;
-                            }
-                            return ok ? null : new CoreApp.TypedMessage({
-                                type: CoreApp.MessageType.C.ERROR,
-                                message: pwixI18n.label( I18N, 'identities.checks.emailaddress_exists' )
-                            });
-                        };
-                        return Meteor.isClient ?
-                            Meteor.callPromise( 'identity.getBy', { 'emails.address': value }).then(( result ) => { return fn( result ); }) :
-                            fn( Identities.s.getBy({ 'emails.address': value }));
-                        }
-                } else {
-                    return new CoreApp.TypedMessage({
-                        type: CoreApp.MessageType.C.ERROR,
-                        message: pwixI18n.label( I18N, 'identities.checks.emailaddress_empty' )
-                    });
-                }
-            }
-            return null;
-        });
-};
-
-Identities.check_emails_label = function( value, data, coreApp={} ){
-    Identities._assert_data_itemrv( 'Identities.check_emails_label()', data );
-    const item = data.item.get();
-    return Promise.resolve( null )
-        .then(() => {
-            const email = coreApp.id ? Identities.fn.emailById( item, coreApp.id ) : null;
-            if( email ){
-                if( coreApp.update !== false ){
-                    email.label = value;
-                    data.item.set( item );
-                }
-            }
-            return null;
-        });
-};
-
-Identities.check_emails_preferred = function( value, data, coreApp={} ){
-    Identities._assert_data_itemrv( 'Identities.check_emails_preferred()', data );
-    const item = data.item.get();
-    return Promise.resolve( null )
-        .then(() => {
-            const email = coreApp.id ? Identities.fn.emailById( item, coreApp.id ) : null;
-            if( email ){
-                if( coreApp.update !== false ){
-                    email.preferred = Boolean( value );
-                    // if preferred is checked, then take care of all other preferred should be unchecked
-                    if( value ){
-                        item.emails.every(( it ) => {
-                            if( it.id !== coreApp.id && it.preferred ){
-                                it.preferred = false;
-                            }
-                            return true;
-                        });
-                    }
-                    data.item.set( item );
-                }
-            }
-            return null;
-        });
-};
-
-Identities.check_emails_verified = function( value, data, coreApp={} ){
-    Identities._assert_data_itemrv( 'Identities.check_emails_verified()', data );
-    const item = data.item.get();
-    return Promise.resolve( null )
-        .then(() => {
-            const email = coreApp.id ? Identities.fn.emailById( item, coreApp.id ) : null;
-            if( email ){
-                if( coreApp.update !== false ){
-                    email.verified = Boolean( value );
-                    data.item.set( item );
-                }
             }
             return null;
         });

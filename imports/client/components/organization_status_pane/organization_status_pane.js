@@ -7,6 +7,7 @@
  */
 
 import { Forms } from 'meteor/pwix:forms';
+import { TenantsManager } from 'meteor/pwix:tenants-manager';
 
 import '/imports/client/components/operational_panel/operational_panel.js';
 
@@ -17,9 +18,10 @@ Template.organization_status_pane.onRendered( function(){
     //console.debug( this );
 
     // enable/disable the tab depending of the organization status
+    /* useless: better show that there is not any error nor any warning
     self.autorun(() => {
         const item = Template.currentData().item.get();
-        const organization = Meteor.APP.Organizations.byId( item._id );
+        const organization = TenantsManager.list.byEntity( item._id );
         if( organization ){
             const status = organization.DYN.operational?.status;
             self.$( '.c-organization-status-pane' ).trigger( 'tabbed-do-enable', {
@@ -29,6 +31,7 @@ Template.organization_status_pane.onRendered( function(){
             });
         }
     });
+    */
 });
 
 Template.organization_status_pane.helpers({

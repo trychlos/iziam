@@ -12,6 +12,7 @@ import _ from 'lodash';
 
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
+import { TenantsManager } from 'meteor/pwix:tenants-manager';
 import { TM } from 'meteor/pwix:typed-message';
 
 import './operational_panel.html';
@@ -30,7 +31,7 @@ Template.operational_panel.onCreated( function(){
         if( organization ){
             // handle the client case
         } else {
-            const org = Meteor.APP.Organizations.byId( entityId );
+            const org = TenantsManager.list.byEntity( entityId );
             if( org ){
                 self.APP.entity.set( org );
                 //console.debug( 'org', org );
@@ -43,19 +44,22 @@ Template.operational_panel.onCreated( function(){
         let errors = 0;
         let warnings = 0;
         const entity = self.APP.entity.get();
-        entity.DYN.operational.results.forEach(( it ) => {
-            // all critical, urgent and alerts are counted as errors
-            if( TM.LevelOrder.compare( it.iTypedMessageLevel(), TM.MessageLevel.C.ERROR ) <= 0 ){
-                errors += 1;
-            }
-            if( it.iTypedMessageLevel() === TM.MessageLevel.C.WARNING ){
-                warnings += 1;
-            }
-        });
-        entity.DYN.operational.results.push( new TM.TypedMessage({
-            level: TM.MessageLevel.C.INFO,
-            message: pwixI18n.label( I18N, 'manager.checks.errors_count', errors, warnings )
-        }));
+        if( entity.DYN.operational.stats === false ){
+            entity.DYN.operational.results.forEach(( it ) => {
+                // all critical, urgent and alerts are counted as errors
+                if( TM.LevelOrder.compare( it.iTypedMessageLevel(), TM.MessageLevel.C.ERROR ) <= 0 ){
+                    errors += 1;
+                }
+                if( it.iTypedMessageLevel() === TM.MessageLevel.C.WARNING ){
+                    warnings += 1;
+                }
+            });
+            entity.DYN.operational.results.push( new TM.TypedMessage({
+                level: TM.MessageLevel.C.INFO,
+                message: pwixI18n.label( I18N, 'manager.checks.errors_count', errors, warnings )
+            }));
+            entity.DYN.operational.stats = true;
+        }
     });
 });
 

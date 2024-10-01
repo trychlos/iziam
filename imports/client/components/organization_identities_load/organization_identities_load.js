@@ -12,6 +12,8 @@
  * - recordTabs
  */
 
+import { TenantsManager } from 'meteor/pwix:tenants-manager';
+
 import { IdentitiesRegistrar } from '/imports/common/classes/identities-registrar.class.js';
 
 import './organization_identities_load.html';
@@ -20,7 +22,7 @@ Template.organization_identities_load.onCreated( function(){
     //console.debug( this );
     this.autorun(() => {
         const edited = Template.currentData().item.get();
-        const organization = Meteor.APP.Organizations.byId( edited._id );
+        const organization = TenantsManager.list.byEntity( edited._id );
         if( organization && !organization.DYN.identities ){
             organization.DYN.identities = IdentitiesRegistrar.getRegistered( organization ) || new IdentitiesRegistrar( organization );
         }

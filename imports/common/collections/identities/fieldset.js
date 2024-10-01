@@ -2,6 +2,8 @@
  * /imports/common/collections/identities/fieldset.js
  *
  * This fieldset fully overrides the default fieldset defined by AccountsManager.
+ * This same fieldset is also used for the tabular display.
+ * It includes both several optional email addresses and several optional usernames, so that all organizations options can be managed.
  */
 
 import { Forms } from 'meteor/pwix:forms';
@@ -10,101 +12,18 @@ import SimpleSchema from 'meteor/aldeed:simple-schema';
 
 import { Identities } from './index.js';
 
+/**
+ * @param {Object} organization the full organization entity with its DYN sub-object
+ * @returns {Array<Object>} suitable as an input to Field.Set()
+ */
 Identities.fieldsDef = function( organization ){
     let columns = [
         //  the organization entity identifier
         {
             name: 'organization',
             type: String,
-            dt_tabular: false
-        }
-    ];
-        columns.push(
-            {
-                name: 'emails',
-                type: Array,
-                optional: true,
-                dt_visible: false
-            },
-            {
-                name: 'emails.$',
-                type: Object,
-                optional: true,
-                dt_tabular: false
-            },
-            {
-                name: 'emails.$.id',
-                type: String,
-                dt_data: false,
-                dt_visible: false
-            },
-            {
-                name: 'emails.$.address',
-                type: String,
-                regEx: SimpleSchema.RegEx.Email,
-                dt_data: false,
-                dt_title: pwixI18n.label( I18N, 'list.email_address_th' ),
-                dt_template: Meteor.isClient && Template.dt_email_address,
-                //form_check: amClassChecks.email_address,
-                //form_type: instance.opts().haveEmailAddress() === AccountsHub.C.Identifier.MANDATORY ? Forms.FieldType.C.MANDATORY : Forms.FieldType.C.OPTIONAL
-                form_type: Forms.FieldType.C.MANDATORY
-            },
-            {
-                name: 'emails.$.verified',
-                type: Boolean,
-                defaultValue: false,
-                dt_data: false,
-                dt_title: pwixI18n.label( I18N, 'list.email_verified_th' ),
-                dt_template: Meteor.isClient && Template.dt_email_verified,
-                dt_className: 'dt-center',
-                //form_check: amClassChecks.email_verified
-            },
-            {
-                name: 'emails.$.label',
-                type: String,
-                optional: true,
-                //form_check: amClassChecks.email_label,
-                form_type: Forms.FieldType.C.OPTIONAL
-            },
-            {
-                dt_template: Meteor.isClient && Template.dt_email_more,
-                dt_className: 'dt-center'
-            }
-        );
-
-        // if have a username
-            columns.push({
-                name: 'username',
-                type: String,
-                optional: true,
-                dt_title: pwixI18n.label( I18N, 'list.username_th' ),
-                //form_check: amClassChecks.username,
-                //form_type: instance.opts().haveUsername() === AccountsHub.C.Identifier.MANDATORY ? Forms.FieldType.C.MANDATORY : Forms.FieldType.C.OPTIONAL
-                form_type: Forms.FieldType.C.OPTIONAL
-            });
-
-        // other columns
-        columns.push(
-            {
-                name: 'lastConnection',
-                type: Date,
-                optional: true,
-                dt_title: pwixI18n.label( I18N, 'list.last_connection_th' ),
-                dt_render( data, type, rowData ){
-                    return type === 'display' && rowData.lastConnection ? strftime( AccountsManager.configure().datetime, rowData.lastConnection ) : '';
-                },
-                dt_className: 'dt-center',
-                form_status: false,
-                form_check: false
-            },
-            Notes.fieldDef({
-                name: 'notes',
-                dt_title: pwixI18n.label( I18N, 'list.admin_notes_th' ),
-                form_title: pwixI18n.label( I18N, 'tabs.admin_notes_title' )
-            }),
-            Timestampable.fieldDef()
-        );
-        columns.push(
+            dt_visible: false
+        },
         // -- scope: profile
         // the user's full name
         {
@@ -149,14 +68,6 @@ Identities.fieldsDef = function( organization ){
             dt_tabular: false,
             form_check: Identities.checks.nickname,
             form_type: Forms.FieldType.C.OPTIONAL
-        },
-        // the preferred username that the user wishes to be referred to
-        //  this is the 'id' identifier of the below username in the dedicated array
-        {
-            name: 'preferred_username',
-            type: String,
-            optional: true,
-            dt_title: pwixI18n.label( I18N, 'identities.list.username_th' )
         },
         // the URL of the user's profile page
         {
@@ -222,6 +133,62 @@ Identities.fieldsDef = function( organization ){
             dt_title: pwixI18n.label( I18N, 'identities.list.locale_th' ),
             form_check: Identities.checks.locale,
             form_type: Forms.FieldType.C.OPTIONAL
+        },
+        // may host several email addresses
+        {
+            name: 'emails',
+            type: Array,
+            optional: true,
+            dt_visible: false
+        },
+        {
+            name: 'emails.$',
+            type: Object,
+            optional: true
+        },
+        {
+            name: 'emails.$.id',
+            type: String,
+            dt_data: false,
+            dt_visible: false
+        },
+        {
+            name: 'emails.$.label',
+            type: String,
+            optional: true,
+            dt_visible: false,
+            form_check: Identities.checks.email_label,
+            form_type: Forms.FieldType.C.OPTIONAL
+        },
+        {
+            name: 'emails.$.address',
+            type: String,
+            regEx: SimpleSchema.RegEx.Email,
+            dt_data: false,
+            dt_title: pwixI18n.label( I18N, 'list.email_address_th' ),
+            dt_template: Meteor.isClient && Template.dt_email_address,
+            form_check: Identities.checks.email_address,
+            form_type: Forms.FieldType.C.MANDATORY
+        },
+        {
+            name: 'emails.$.verified',
+            type: Boolean,
+            defaultValue: false,
+            dt_data: false,
+            dt_title: pwixI18n.label( I18N, 'list.email_verified_th' ),
+            dt_template: Meteor.isClient && Template.dt_email_verified,
+            form_check: Identities.checks.email_verified
+        },
+        {
+            name: 'emails.$.preferred',
+            type: Boolean,
+            defaultValue: false,
+            dt_tabular: false,
+            form_check: Identities.checks.email_preferred
+        },
+        {
+            dt_template: Meteor.isClient && Template.dt_email_more,
+            dt_className: 'dt-center'
         },
         // -- scope: address
         //  adapted from https://schema.org/PostalAddress
@@ -373,6 +340,6 @@ Identities.fieldsDef = function( organization ){
             defaultValue: false,
             dt_tabular: false
         }
-        );
+    ];
     return columns;
 };

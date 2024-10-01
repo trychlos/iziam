@@ -12,6 +12,8 @@
  * - recordTabs
  */
 
+import { TenantsManager } from 'meteor/pwix:tenants-manager';
+
 import { ClientsRegistrar } from '/imports/common/classes/clients-registrar.class.js';
 
 import './organization_clients_load.html';
@@ -20,7 +22,7 @@ Template.organization_clients_load.onCreated( function(){
     //console.debug( this );
     this.autorun(() => {
         const edited = Template.currentData().item.get();
-        const organization = Meteor.APP.Organizations.byId( edited._id );
+        const organization = TenantsManager.list.byEntity( edited._id );
         if( organization && !organization.DYN.clients ){
             organization.DYN.clients = ClientsRegistrar.getRegistered( organization ) || new ClientsRegistrar( organization );
         }

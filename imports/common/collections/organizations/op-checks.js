@@ -28,7 +28,7 @@ Organizations.isOperational = async function( organization ){
     // a generic function to call the check functions and get their result
     // the result is pushed as a Promise
     const fnCheck = async function( name, value ){
-        return Organizations.checks[name]( value, data, { update: false, mustHave: true }).then(( errs ) => {
+        return Organizations.checks[name]( value, data, { update: false, opCheck: true }).then(( errs ) => {
             if( errs ){
                 errors = errors.concat( errs );
             }
@@ -143,4 +143,5 @@ Organizations.setupOperational = async function( item ){
             }
         });
     }
+    item.DYN.operational.stats = false;
 };

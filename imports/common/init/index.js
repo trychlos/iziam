@@ -37,7 +37,6 @@ import './forms.js';
 import './modal.js';
 import './modal-info.js';
 import './notes.js';
-import './organizations-registrar.js';
 import './providers.js';
 import './reserved-words.js';
 import './roles.js';
