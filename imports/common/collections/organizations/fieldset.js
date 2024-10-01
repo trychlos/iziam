@@ -76,39 +76,67 @@ Organizations.recordFieldset = function(){
                 // -- identities configuration
                 // whether the organization wants exactly/at least/at most 0..n email addresses for its identities
                 {
-                    name: 'identitiesEmailAddressesHow',
+                    name: 'identitiesEmailAddressesMinHow',
                     type: String,
-                    defaultValue: 'least',
-                    form_check: Organizations.checks.identitiesEmailAddressesHow,
+                    defaultValue: 'exactly',
+                    form_check: Organizations.checks.identitiesEmailAddressesMinHow,
                     form_type: Forms.FieldType.C.MANDATORY
                 },
                 {
-                    name: 'identitiesEmailAddressesCount',
+                    name: 'identitiesEmailAddressesMinCount',
                     type: SimpleSchema.Integer,
                     defaultValue: 1,
-                    form_check: Organizations.checks.identitiesEmailAddressesCount,
+                    form_check: Organizations.checks.identitiesEmailAddressesMinCount,
+                    form_type: Forms.FieldType.C.MANDATORY
+                },
+                {
+                    name: 'identitiesEmailAddressesMaxHow',
+                    type: String,
+                    defaultValue: 'nospec',
+                    form_check: Organizations.checks.identitiesEmailAddressesMaxHow,
+                    form_type: Forms.FieldType.C.MANDATORY
+                },
+                {
+                    name: 'identitiesEmailAddressesMaxCount',
+                    type: SimpleSchema.Integer,
+                    defaultValue: 0,
+                    form_check: Organizations.checks.identitiesEmailAddressesMaxCount,
                     form_type: Forms.FieldType.C.MANDATORY
                 },
                 {
                     name: 'identitiesEmailAddressesIdentifier',
                     type: Boolean,
-                    defaultValue: false,
+                    defaultValue: true,
                     form_check: Organizations.checks.identitiesEmailAddressesIdentifier,
                     form_type: Forms.FieldType.C.NONE
                 },
                 // whether the organization wants exactly/at least/at most 0..n usernames for its identities
                 {
-                    name: 'identitiesUsernamesHow',
+                    name: 'identitiesUsernamesMinHow',
                     type: String,
                     defaultValue: 'least',
-                    form_check: Organizations.checks.identitiesUsernamesHow,
+                    form_check: Organizations.checks.identitiesUsernamesMinHow,
                     form_type: Forms.FieldType.C.MANDATORY
                 },
                 {
-                    name: 'identitiesUsernamesCount',
+                    name: 'identitiesUsernamesMinCount',
                     type: SimpleSchema.Integer,
-                    defaultValue: 1,
-                    form_check: Organizations.checks.identitiesUsernamesCount,
+                    defaultValue: 0,
+                    form_check: Organizations.checks.identitiesUsernamesMinCount,
+                    form_type: Forms.FieldType.C.MANDATORY
+                },
+                {
+                    name: 'identitiesUsernamesMaxHow',
+                    type: String,
+                    defaultValue: 'nospec',
+                    form_check: Organizations.checks.identitiesUsernamesMaxHow,
+                    form_type: Forms.FieldType.C.MANDATORY
+                },
+                {
+                    name: 'identitiesUsernamesMaxCount',
+                    type: SimpleSchema.Integer,
+                    defaultValue: 0,
+                    form_check: Organizations.checks.identitiesUsernamesMaxCount,
                     form_type: Forms.FieldType.C.MANDATORY
                 },
                 {

@@ -16,6 +16,7 @@ import { HmacEncoding } from '/imports/common/definitions/hmac-encoding.def.js';
 import { HowCount } from '/imports/common/definitions/how-count.def.js';
 
 import { Organizations } from './index.js';
+import { ifError } from 'assert';
 
 // fields check
 //  - value: mandatory, the value to be tested
@@ -229,44 +230,6 @@ Organizations.checks = {
         return null;
     },
 
-    // how to we want manage email addresses ?
-    async identitiesEmailAddressesCount( value, data, opts ){
-        _assert_data_entityrv( 'Organizations.checks.identitiesEmailAddressesCount()', data );
-        let item = data.entity.get().DYN.records[data.index].get();
-        if( opts.update !== false ){
-            item.identitiesEmailAddressesCount = parseInt( value );
-        }
-        if( Number.isInteger( value )){
-            return null;
-        } else {
-            new TM.TypedMessage({
-                level: TM.MessageLevel.C.ERROR,
-                message: pwixI18n.label( I18N, 'organizations.checks.email_count_invalid' )
-            });
-        }
-    },
-
-    // how to we want manage email addresses ?
-    async identitiesEmailAddressesHow( value, data, opts ){
-        _assert_data_entityrv( 'Organizations.checks.identitiesEmailAddressesHow()', data );
-        let item = data.entity.get().DYN.records[data.index].get();
-        if( opts.update !== false ){
-            item.identitiesEmailAddressesHow = value;
-        }
-        if( value ){
-            const def = HowCount.byId( value );
-            return def ? null : new TM.TypedMessage({
-                level: TM.MessageLevel.C.ERROR,
-                message: pwixI18n.label( I18N, 'organizations.checks.email_how_invalid' )
-            });
-        } else {
-            new TM.TypedMessage({
-                level: TM.MessageLevel.C.ERROR,
-                message: pwixI18n.label( I18N, 'organizations.checks.email_how_unset' )
-            });
-        }
-    },
-
     // are email addresses an identifier ?
     async identitiesEmailAddressesIdentifier( value, data, opts ){
         _assert_data_entityrv( 'Organizations.checks.identitiesEmailAddressesIdentifier()', data );
@@ -277,49 +240,136 @@ Organizations.checks = {
         if( value === true || value === false ){
             return null;
         } else {
-            new TM.TypedMessage({
+            return new TM.TypedMessage({
                 level: TM.MessageLevel.C.ERROR,
                 message: pwixI18n.label( I18N, 'organizations.checks.email_identifier_invalid' )
             });
         }
     },
 
-    // how to we want manage usernames ?
-    async identitiesUsernamesCount( value, data, opts ){
-        _assert_data_entityrv( 'Organizations.checks.identitiesUsernamesCount()', data );
+    // how do we want manage email addresses ?
+    async identitiesEmailAddressesMaxCount( value, data, opts ){
+        _assert_data_entityrv( 'Organizations.checks.identitiesEmailAddressesMaxCount()', data );
         let item = data.entity.get().DYN.records[data.index].get();
         if( opts.update !== false ){
-            item.identitiesUsernamesCount = parseInt( value );
+            item.identitiesEmailAddressesMaxCount = parseInt( value );
+            data.entity.get().DYN.records[data.index].set( item );
         }
-        if( Number.isInteger( value )){
+        value = Number( value );
+        if( Number.isInteger( value ) && parseInt( value ) >= 0 ){
             return null;
         } else {
-            new TM.TypedMessage({
+            return new TM.TypedMessage({
                 level: TM.MessageLevel.C.ERROR,
-                message: pwixI18n.label( I18N, 'organizations.checks.username_count_invalid' )
+                message: pwixI18n.label( I18N, 'organizations.checks.email_max_count_invalid' )
             });
         }
     },
 
-    // how to we want manage usernames ?
-    async identitiesUsernamesHow( value, data, opts ){
-        _assert_data_entityrv( 'Organizations.checks.identitiesUsernamesHow()', data );
+    async identitiesEmailAddressesMaxHow( value, data, opts ){
+        _assert_data_entityrv( 'Organizations.checks.identitiesEmailAddressesMaxHow()', data );
         let item = data.entity.get().DYN.records[data.index].get();
         if( opts.update !== false ){
-            item.identitiesUsernamesHow = value;
+            item.identitiesEmailAddressesMaxHow = value;
+            data.entity.get().DYN.records[data.index].set( item );
         }
         if( value ){
             const def = HowCount.byId( value );
+            if( def ){
+                return HowCount.isForMax( def ) ? null : new TM.TypedMessage({
+                        level: TM.MessageLevel.C.ERROR,
+                        message: pwixI18n.label( I18N, 'organizations.checks.email_max_how_notfor' )
+                    });
+            } else {
+                return new TM.TypedMessage({
+                    level: TM.MessageLevel.C.ERROR,
+                    message: pwixI18n.label( I18N, 'organizations.checks.email_max_how_invalid' )
+                });
+            }
+        } else {
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'organizations.checks.email_max_how_unset' )
+            });
+        }
+    },
+
+    async identitiesEmailAddressesMinCount( value, data, opts ){
+        _assert_data_entityrv( 'Organizations.checks.identitiesEmailAddressesMinCount()', data );
+        let item = data.entity.get().DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.identitiesEmailAddressesMinCount = parseInt( value );
+            data.entity.get().DYN.records[data.index].set( item );
+        }
+        value = Number( value );
+        if( Number.isInteger( value ) && parseInt( value ) >= 0 ){
+            return null;
+        } else {
+            new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'organizations.checks.email_min_count_invalid' )
+            });
+        }
+    },
+
+    async identitiesEmailAddressesMinHow( value, data, opts ){
+        _assert_data_entityrv( 'Organizations.checks.identitiesEmailAddressesMinHow()', data );
+        let item = data.entity.get().DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.identitiesEmailAddressesMinHow = value;
+            data.entity.get().DYN.records[data.index].set( item );
+        }
+        if( value ){
+            const def = HowCount.byId( value );
+            if( def ){
+                if( HowCount.isForMin( def )){
+                    return Organizations.checks.identitiesIdentifier( value, data, opts );
+                } else {
+                    return new TM.TypedMessage({
+                        level: TM.MessageLevel.C.ERROR,
+                        message: pwixI18n.label( I18N, 'organizations.checks.email_min_how_notfor' )
+                    });
+                }
+            }
             return def ? null : new TM.TypedMessage({
                 level: TM.MessageLevel.C.ERROR,
-                message: pwixI18n.label( I18N, 'organizations.checks.username_how_invalid' )
+                message: pwixI18n.label( I18N, 'organizations.checks.email_min_how_invalid' )
             });
         } else {
             new TM.TypedMessage({
                 level: TM.MessageLevel.C.ERROR,
-                message: pwixI18n.label( I18N, 'organizations.checks.username_how_unset' )
+                message: pwixI18n.label( I18N, 'organizations.checks.email_min_how_unset' )
             });
         }
+    },
+
+    // cross-check
+    // check that the identities have an identifier, either a well-defined email address or a well-defined username
+    async identitiesIdentifier( value, data, opts ){
+        _assert_data_entityrv( 'Organizations.checks.identitiesIdentifier()', data );
+        const item = data.entity.get().DYN.records[data.index].get();
+        let haveEmail = true;
+        let emailAsId = false;
+        let minhow = item.identitiesEmailAddressesMinHow;
+        let mincount = item.identitiesEmailAddressesMinCount;
+        if( !minhow || minhow === 'nospec' || ( minhow === 'exactly' && mincount === 0 )){
+            haveEmail = false;
+        } else {
+            emailAsId = item.identitiesEmailAddressesIdentifier;
+        }
+        let haveUsername = true;
+        let usernameAsId = false;
+        minhow = item.identitiesUsernamesMinHow;
+        mincount = item.identitiesUsernamesMinCount;
+        if( !minhow || minhow === 'nospec' || ( minhow === 'exactly' && mincount === 0 )){
+            haveUsername = false;
+        } else {
+            usernameAsId = item.identitiesUsernamesIdentifier;
+        }
+        return emailAsId || usernameAsId ? null : new TM.TypedMessage({
+            level: TM.MessageLevel.C.WARNING,
+            message: pwixI18n.label( I18N, 'organizations.checks.identities_noid' )
+        });
     },
 
     // are usernames an identifier ?
@@ -332,9 +382,106 @@ Organizations.checks = {
         if( value === true || value === false ){
             return null;
         } else {
-            new TM.TypedMessage({
+            return new TM.TypedMessage({
                 level: TM.MessageLevel.C.ERROR,
                 message: pwixI18n.label( I18N, 'organizations.checks.username_identifier_invalid' )
+            });
+        }
+    },
+
+    // how to we want manage usernames ?
+    async identitiesUsernamesMaxCount( value, data, opts ){
+        _assert_data_entityrv( 'Organizations.checks.identitiesUsernamesMaxCount()', data );
+        let item = data.entity.get().DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.identitiesUsernamesMaxCount = parseInt( value );
+            data.entity.get().DYN.records[data.index].set( item );
+        }
+        value = Number( value );
+        if( Number.isInteger( value ) && parseInt( value ) >= 0 ){
+            return null;
+        } else {
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'organizations.checks.username_max_count_invalid' )
+            });
+        }
+    },
+
+    async identitiesUsernamesMaxHow( value, data, opts ){
+        _assert_data_entityrv( 'Organizations.checks.identitiesUsernamesMaxHow()', data );
+        let item = data.entity.get().DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.identitiesUsernamesMaxHow = value;
+            data.entity.get().DYN.records[data.index].set( item );
+        }
+        if( value ){
+            const def = HowCount.byId( value );
+            if( def ){
+                return HowCount.isForMax( def ) ? null : new TM.TypedMessage({
+                    level: TM.MessageLevel.C.ERROR,
+                    message: pwixI18n.label( I18N, 'organizations.checks.username_max_how_notfor' )
+                });
+            } else {
+                return new TM.TypedMessage({
+                    level: TM.MessageLevel.C.ERROR,
+                    message: pwixI18n.label( I18N, 'organizations.checks.username_max_how_invalid' )
+                });
+            }
+        } else {
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'organizations.checks.username_max_how_unset' )
+            });
+        }
+    },
+
+    async identitiesUsernamesMinCount( value, data, opts ){
+        _assert_data_entityrv( 'Organizations.checks.identitiesUsernamesMinCount()', data );
+        let item = data.entity.get().DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.identitiesUsernamesMinCount = parseInt( value );
+            data.entity.get().DYN.records[data.index].set( item );
+        }
+        value = Number( value );
+        if( Number.isInteger( value ) && parseInt( value ) >= 0 ){
+            return null;
+        } else {
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'organizations.checks.username_min_count_invalid' )
+            });
+        }
+    },
+
+    async identitiesUsernamesMinHow( value, data, opts ){
+        _assert_data_entityrv( 'Organizations.checks.identitiesUsernamesMinHow()', data );
+        let item = data.entity.get().DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.identitiesUsernamesMinHow = value;
+            data.entity.get().DYN.records[data.index].set( item );
+        }
+        if( value ){
+            const def = HowCount.byId( value );
+            if( def ){
+                if( HowCount.isForMin( def )){
+                    return Organizations.checks.identitiesIdentifier( value, data, opts );
+                } else {
+                    return new TM.TypedMessage({
+                        level: TM.MessageLevel.C.ERROR,
+                        message: pwixI18n.label( I18N, 'organizations.checks.username_min_how_notfor' )
+                    });
+                } 
+            } else {
+                return new TM.TypedMessage({
+                    level: TM.MessageLevel.C.ERROR,
+                    message: pwixI18n.label( I18N, 'organizations.checks.username_min_how_invalid' )
+                });
+            }
+        } else {
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'organizations.checks.username_min_how_unset' )
             });
         }
     },

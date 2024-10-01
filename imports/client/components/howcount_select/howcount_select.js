@@ -5,6 +5,11 @@
  * 
  * Parms:
  * - selected: the current howcount
+ * - disabled: whether the select box mus tbe disabled, defaulting to false
+ * - isMax: whether to dsiplay a list for selecting a max count, defaulting to false
+ * 
+ * When selecting a minimum count, we want either an 'exactly' or an 'at least' options.
+ * Wehn selecting a max count, (if min count is not exactly), then we do not want 'at least', but rather 'at most'
  */
 
 import _ from 'lodash';
@@ -17,6 +22,11 @@ import './howcount_select.html';
 
 Template.howcount_select.helpers({
     // whether we have a currently selected howcount ?
+    disabled(){
+        return this.disabled === true ? 'disabled' : '';
+    },
+
+    // whether we have a currently selected howcount ?
     hasCurrent(){
         return !_.isNil( this.selected );
     },
@@ -28,7 +38,7 @@ Template.howcount_select.helpers({
 
     // return the list of known client types
     itemsList(){
-        return HowCount.Knowns();
+        return HowCount.KnownsFor( this.isMax === true );
     },
 
     // return the client type identifier

@@ -11,28 +11,30 @@
             <div class="panel-body">
                 <table class="form-table ui-w100">
                     <tr>
-                        <td class="ui-w15 label"></td>
+                        <td class="ui-w10 label"></td>
                         <td class="ui-w100">
                             <fieldset>
                                 <legend>{{ i18n key="organizations.edit.ident_email_legend" }}</legend>
                                 <table class="form-table ui-w100">
                                     <tr>
-                                        <td colspan="2">{{ i18n key="organizations.edit.ident_email_preamble" }}</td>
+                                        <td colspan="5">{{ i18n key="organizations.edit.ident_email_preamble" }}</td>
                                     </tr>
                                     <tr>
-                                        <td class="ui-w50">
-                                            <div class="d-flex flex-row align-items-center">
-                                                <div class="js-email-how ui-mr1">{{> howcount_select (parmsEmailHowCount) }}</div>
-                                                <input class="js-email-count" type="number" min="0" max="99999" pattern="\d*" />
-                                                <p class="ui-ml05 ui-mr05">{{ i18n key="organizations.edit.ident_email_address" }}</p>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            {{> FormsStatusIndicator (parmsEmailStatus) }}
-                                        </td>
+                                        <td class="ui-w15 label ui-vatop"><label class="form-label ui-mt05">{{ i18n key="organizations.edit.ident_email_min_label" }}</label></td>
+                                        <td class="ui-w20"><div class="js-email-min-how ui-mr1 ui-w100">{{> howcount_select (parmsEmailMinHowCount) }}</div></td>
+                                        <td class="ui-w10"><input class="js-email-min-count ui-w100" type="number" min="0" max="99999" pattern="\d*" /></td>
+                                        <td><p class="ui-ml05 ui-mr05">{{ i18n key="organizations.edit.ident_email_address" }}</p></td>
+                                        <td>{{> FormsStatusIndicator (parmsEmailMinStatus) }}</td>
                                     </tr>
                                     <tr>
-                                        <td colspan="2">
+                                        <td class="ui-w15 label ui-vatop"><label class="form-label ui-mt05">{{ i18n key="organizations.edit.ident_email_max_label" }}</label></td>
+                                        <td class="ui-w20"><div class="js-email-max-how ui-mr1 ui-w100">{{> howcount_select (parmsEmailMaxHowCount) }}</div></td>
+                                        <td class="ui-w10"><input class="js-email-max-count ui-w100" type="number" min="0" max="99999" pattern="\d*" {{ emailMaxCountDisabled }} /></td>
+                                        <td></td>
+                                        <td class="ui-w40">{{> FormsStatusIndicator (parmsEmailMaxStatus) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5">
                                             <div class="form-check js-email-identifier ui-mt05">
                                                 <input class="form-check-input" type="checkbox" id="organization-edit-ident-email-identifier" />
                                                 <label class="form-check-label" for="organization-edit-ident-email-identifier">{{ i18n key="organizations.edit.ident_email_identifier" }}</label>
@@ -44,28 +46,30 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="ui-w15 label"></td>
+                        <td class="ui-w10 label"></td>
                         <td class="ui-w100">
                             <fieldset class="ui-mt05">
                                 <legend>{{ i18n key="organizations.edit.ident_username_legend" }}</legend>
                                 <table class="form-table ui-w100">
                                     <tr>
-                                        <td colspan="2">{{ i18n key="organizations.edit.ident_username_preamble" }}</td>
+                                        <td colspan="5">{{ i18n key="organizations.edit.ident_username_preamble" }}</td>
                                     </tr>
                                     <tr>
-                                        <td class="ui-w50">
-                                            <div class="d-flex flex-row align-items-center">
-                                                <div class="js-username-how ui-mr1">{{> howcount_select (parmsEmailHowCount) }}</div>
-                                                <input class="js-username-count" type="number" min="0" max="99999" pattern="\d*" />
-                                                <p class="ui-ml05 ui-mr05">{{ i18n key="organizations.edit.ident_username_address" }}</p>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            {{> FormsStatusIndicator (parmsUsernameStatus) }}
-                                        </td>
+                                        <td class="ui-w15 label ui-vatop"><label class="form-label ui-mt05">{{ i18n key="organizations.edit.ident_username_min_label" }}</label></td>
+                                        <td class="ui-w20"><div class="js-username-min-how ui-mr1 ui-w100">{{> howcount_select (parmsUsernameMinHowCount) }}</div></td>
+                                        <td class="ui-w10"><input class="js-username-min-count" type="number" min="0" max="99999" pattern="\d*" /></td>
+                                        <td><p class="ui-ml05 ui-mr05">{{ i18n key="organizations.edit.ident_username_address" }}</p></td>
+                                        <td class="ui-w40">{{> FormsStatusIndicator (parmsUsernameMinStatus) }}</td>
                                     </tr>
                                     <tr>
-                                        <td colspan="2">
+                                        <td class="ui-w15 label ui-vatop"><label class="form-label ui-mt05">{{ i18n key="organizations.edit.ident_username_max_label" }}</label></td>
+                                        <td class="ui-w20"><div class="js-username-max-how ui-mr1 ui-w100">{{> howcount_select (parmsUsernameMaxHowCount) }}</div></td>
+                                        <td class="ui-w10"><input class="js-username-max-count" type="number" min="0" max="99999" pattern="\d*" {{ usernameMaxCountDisabled }} /></td>
+                                        <td></td>
+                                        <td class="ui-w40">{{> FormsStatusIndicator (parmsUsernameMaxStatus) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5">
                                             <div class="form-check js-username-identifier ui-mt05">
                                                 <input class="form-check-input" type="checkbox" id="organization-edit-ident-username-identifier" />
                                                 <label class="form-check-label" for="organization-edit-ident-username-identifier">{{ i18n key="organizations.edit.ident_username_identifier" }}</label>

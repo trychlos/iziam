@@ -19,7 +19,7 @@ import { Organizations } from './index.js';
  * @returns {Array<TypedMessage>} or null
  */
 Organizations.isOperational = async function( organization ){
-    console.debug( 'Organizations.isOperational' );
+    //console.debug( 'Organizations.isOperational' );
     let errors = [];
     // prepare data for the checks functions
     const data = { entity: new ReactiveVar( null ), index: 0 };
@@ -34,7 +34,7 @@ Organizations.isOperational = async function( organization ){
             }
         });
     }
-    // check all organizations datas
+    // check all organization datas
     let promises = [];
     promises.push( fnCheck( 'authorization_endpoint', organization.record.authorization_endpoint ));
     promises.push( fnCheck( 'baseUrl', organization.record.baseUrl ));
@@ -43,12 +43,17 @@ Organizations.isOperational = async function( organization ){
     promises.push( fnCheck( 'dynamicRegistrationByPublic', organization.record.dynamicRegistrationByPublic ));
     promises.push( fnCheck( 'dynamicRegistrationByUser', organization.record.dynamicRegistrationByUser ));
     promises.push( fnCheck( 'end_session_endpoint', organization.record.end_session_endpoint ));
-    promises.push( fnCheck( 'identitiesEmailAddressesCount', organization.record.identitiesEmailAddressesCount ));
-    promises.push( fnCheck( 'identitiesEmailAddressesHow', organization.record.identitiesEmailAddressesHow ));
     promises.push( fnCheck( 'identitiesEmailAddressesIdentifier', organization.record.identitiesEmailAddressesIdentifier ));
-    promises.push( fnCheck( 'identitiesUsernamesCount', organization.record.identitiesUsernamesCount ));
-    promises.push( fnCheck( 'identitiesUsernamesHow', organization.record.identitiesUsernamesHow ));
+    promises.push( fnCheck( 'identitiesEmailAddressesMaxCount', organization.record.identitiesEmailAddressesMaxCount ));
+    promises.push( fnCheck( 'identitiesEmailAddressesMaxHow', organization.record.identitiesEmailAddressesMaxHow ));
+    promises.push( fnCheck( 'identitiesEmailAddressesMinCount', organization.record.identitiesEmailAddressesMinCount ));
+    promises.push( fnCheck( 'identitiesEmailAddressesMinHow', organization.record.identitiesEmailAddressesMinHow ));
     promises.push( fnCheck( 'identitiesUsernamesIdentifier', organization.record.identitiesUsernamesIdentifier ));
+    promises.push( fnCheck( 'identitiesUsernamesMaxCount', organization.record.identitiesUsernamesMaxCount ));
+    promises.push( fnCheck( 'identitiesUsernamesMaxHow', organization.record.identitiesUsernamesMaxHow ));
+    promises.push( fnCheck( 'identitiesUsernamesMinCount', organization.record.identitiesUsernamesMinCount ));
+    promises.push( fnCheck( 'identitiesUsernamesMinHow', organization.record.identitiesUsernamesMinHow ));
+    promises.push( fnCheck( 'identitiesIdentifier' ));
     promises.push( fnCheck( 'introspection_endpoint', organization.record.introspection_endpoint ));
     // introspection_endpoint_auth_methods_supported
     // introspection_endpoint_auth_signing_alg_values_supported
@@ -85,13 +90,7 @@ Organizations.isOperational = async function( organization ){
     // ui_locales_supported
     promises.push( fnCheck( 'userinfo_endpoint', organization.record.userinfo_endpoint ));
     promises.push( fnCheck( 'wantsPkce', organization.record.wantsPkce ));
-
     await Promise.allSettled( promises );
-    /*
-    if( !errors.length ){
-        errors.push( ;
-    }
-        */
     //console.debug( 'errors', errors );
     return errors.length ? errors : null;
 };
@@ -119,19 +118,8 @@ Organizations.setupOperational = async function( item ){
         delete entity.DYN;
         Organizations.isOperational({ entity: entity, record: atdate }).then(( res ) => {
             // null or a TM.TypedMessage or an array of TM.TypedMessage's
-            item.DYN.operational.results = res;
+            item.DYN.operational.results = res || [];
             item.DYN.operational.status.set( res ? Forms.FieldStatus.C.UNCOMPLETE : Forms.FieldStatus.C.VALID );
-            if( res ){
-                item.DYN.operational.results.push( new TM.TypedMessage({
-                    level: TM.MessageLevel.C.INFO,
-                    message: pwixI18n.label( I18N, 'organizations.checks.errors_count', res.length )
-                }));
-            } else {
-                item.DYN.operational.results = [ new TM.TypedMessage({
-                    level: TM.MessageLevel.C.INFO,
-                    message: pwixI18n.label( I18N, 'organizations.checks.ok' )
-                })];
-            }
         });
     } else {
         item.DYN.operational.results = [];
@@ -155,4 +143,18 @@ Organizations.setupOperational = async function( item ){
             }
         });
     }
+    let errors = 0;
+    let warnings = 0;
+    item.DYN.operational.results.forEach(( it ) => {
+        if( it.iTypedMessageLevel() === Forms.MessageLevel.C.ERROR ){
+            errors += 1;
+        }
+        if( it.iTypedMessageLevel() === Forms.MessageLevel.C.WARNING ){
+            warnings += 1;
+        }
+    });
+    item.DYN.operational.results.push( new TM.TypedMessage({
+        level: TM.MessageLevel.C.INFO,
+        message: pwixI18n.label( I18N, 'organizations.checks.errors_count', errors, warnings )
+    }));
 };
