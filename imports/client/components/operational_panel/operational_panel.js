@@ -12,6 +12,7 @@ import _ from 'lodash';
 
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
+import { TM } from 'meteor/pwix:typed-message';
 
 import './operational_panel.html';
 
@@ -36,6 +37,26 @@ Template.operational_panel.onCreated( function(){
             }
         }
     });
+
+    // complete the checks results with a conclusion
+    self.autorun(() => {
+        let errors = 0;
+        let warnings = 0;
+        const entity = self.APP.entity.get();
+        entity.DYN.operational.results.forEach(( it ) => {
+            // all critical, urgent and alerts are counted as errors
+            if( TM.LevelOrder.compare( it.iTypedMessageLevel(), TM.MessageLevel.C.ERROR ) <= 0 ){
+                errors += 1;
+            }
+            if( it.iTypedMessageLevel() === TM.MessageLevel.C.WARNING ){
+                warnings += 1;
+            }
+        });
+        entity.DYN.operational.results.push( new TM.TypedMessage({
+            level: TM.MessageLevel.C.INFO,
+            message: pwixI18n.label( I18N, 'manager.checks.errors_count', errors, warnings )
+        }));
+    });
 });
 
 Template.operational_panel.helpers({
@@ -57,8 +78,6 @@ Template.operational_panel.helpers({
     // the list of message
     itemsList(){
         const entity = Template.instance().APP.entity.get();
-        //console.debug( 'entity', entity );
-        //console.debug( entity && entity.operational ? entity.operational.results || [] : null );
         return entity && entity.DYN && entity.DYN.operational ? entity.DYN.operational.results || [] : null;
     }
 });

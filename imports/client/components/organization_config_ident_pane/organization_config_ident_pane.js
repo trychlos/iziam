@@ -159,7 +159,6 @@ Template.organization_config_ident_pane.helpers({
     emailMaxCountDisabled(){
         const minhow = this.entity.get().DYN.records[this.index].get().identitiesEmailAddressesMinHow;
         const maxhow = this.entity.get().DYN.records[this.index].get().identitiesEmailAddressesMaxHow;
-        console.debug( 'minhow', minhow, 'maxhow', maxhow );
         return minhow === 'exactly' || maxhow === 'nospec' ? 'disabled' : '';
     },
     // string translation

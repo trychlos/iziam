@@ -19,7 +19,7 @@ import { Organizations } from './index.js';
  * @returns {Array<TypedMessage>} or null
  */
 Organizations.isOperational = async function( organization ){
-    //console.debug( 'Organizations.isOperational' );
+    console.debug( 'Organizations.isOperational', organization );
     let errors = [];
     // prepare data for the checks functions
     const data = { entity: new ReactiveVar( null ), index: 0 };
@@ -105,7 +105,7 @@ Organizations.isOperational = async function( organization ){
  */
 Organizations.setupOperational = async function( item ){
     assert( Meteor.isClient, 'expects to only be called on client side' );
-    console.debug( 'Organizations.setupOperational', item );
+    //console.debug( 'Organizations.setupOperational', item );
     const atdate = Validity.atDateByRecords( item.DYN.records );
     if( !item.DYN.operational ){
         item.DYN.operational = {
@@ -143,18 +143,4 @@ Organizations.setupOperational = async function( item ){
             }
         });
     }
-    let errors = 0;
-    let warnings = 0;
-    item.DYN.operational.results.forEach(( it ) => {
-        if( it.iTypedMessageLevel() === Forms.MessageLevel.C.ERROR ){
-            errors += 1;
-        }
-        if( it.iTypedMessageLevel() === Forms.MessageLevel.C.WARNING ){
-            warnings += 1;
-        }
-    });
-    item.DYN.operational.results.push( new TM.TypedMessage({
-        level: TM.MessageLevel.C.INFO,
-        message: pwixI18n.label( I18N, 'organizations.checks.errors_count', errors, warnings )
-    }));
 };

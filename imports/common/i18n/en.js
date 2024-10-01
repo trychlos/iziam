@@ -857,6 +857,9 @@ Meteor.APP.i18n = {
                     preamble: 'Register and manage here the accounts allowed to connect to the izIAM Identity and Access Manager.',
                     tab_title: 'Accounts Management'
                 },
+                checks: {
+                    errors_count: 'Found %s error(s), %s warning(s)',
+                },
                 organizations: {
                     preamble: 'Register and manage here the involved organizations.<br />'
                         +'Organizations can take advantage of validity periods.<br />'
@@ -887,7 +890,6 @@ Meteor.APP.i18n = {
                     email_min_how_notfor: 'The way you define your minimum count of email addresses is not suitable fo this use',
                     email_min_how_unset: 'Your minimum way of count the email addresses is not set',
                     end_session_absolute: 'The introspection endpoint must be provided as an absolute path',
-                    errors_count: 'Found %s error(s), %s warning(s)',
                     identities_noid: 'The configured identities do not have any identifier',
                     introspection_absolute: 'The introspection endpoint must be provided as an absolute path',
                     issuer_hostname: 'The issuer hostname is malformed',
