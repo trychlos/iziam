@@ -59,7 +59,7 @@ export class ClientsRegistrar extends izRegistrar {
      */
     constructor( organization ){
         super( ...arguments );
-        console.debug( 'instanciating ClientsRegistrar', organization._id );
+        //console.debug( 'instanciating ClientsRegistrar', organization._id );
         const self = this;
 
         // common code

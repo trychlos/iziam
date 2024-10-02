@@ -42,7 +42,22 @@ Identities.s = {
         return res;
     },
 
-    // try to find an identiy with a username of an email address
+    // extend the AccountsManager tabular publish function
+    // provide preferred email and username
+    async tabularExtend( item ){
+        const email = Identities.fn.emailPreferred( item );
+        if( email ){
+            item.preferredEmailAddress = email.address;
+            item.preferredEmailVerified = email.verified;
+        }
+        const username = Identities.fn.usernamePreferred( item );
+        if( username ){
+            item.preferredUsername = email.username;
+        }
+        return true;
+    },
+
+    // try to find an identiy with a username or an email address
     tryWith( id ){
         let res = Identities.find({ $or: [{ 'emails.address': id }, { 'usernames.username': id }]}).fetch();
         return res;

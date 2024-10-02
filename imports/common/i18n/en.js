@@ -684,6 +684,7 @@ Meteor.APP.i18n = {
                     verified_th: 'Verified'
                 },
                 list: {
+                    email_th: 'Email address',
                     locale_th: 'Locale',
                     name_th: 'Name',
                     username_th: 'Username',

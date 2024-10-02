@@ -10,7 +10,6 @@
  * It maintains a full list of the identities of an organization both on client and server sides.
  */
 
-import { AccountsHub } from 'meteor/pwix:accounts-hub';
 import { AccountsManager } from 'meteor/pwix:accounts-manager';
 import { Field } from 'meteor/pwix:field';
 import { Permissions } from 'meteor/pwix:permissions';
@@ -65,7 +64,7 @@ export class IdentitiesRegistrar extends izRegistrar {
      */
     constructor( organization ){
         super( ...arguments );
-        console.debug( 'instanciating IdentitiesRegistrar', organization._id );
+        //console.debug( 'instanciating IdentitiesRegistrar', organization._id );
         const self = this;
 
         this.#amInstance = new AccountsManager.amClass({
@@ -78,7 +77,9 @@ export class IdentitiesRegistrar extends izRegistrar {
             haveIdent: false,
             haveRoles: false,
             allowFn: Permissions.isAllowed,
-            hideDisabled: false
+            hideDisabled: false,
+            tabularFieldsDef: Identities.tabularFieldsDef( organization ),
+            serverTabularExtend: Meteor.isServer && Identities.s.tabularExtend
         });
 
         // common code
