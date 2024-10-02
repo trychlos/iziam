@@ -7,6 +7,9 @@ import { Roles } from 'meteor/pwix:roles';
 import { TenantsManager } from 'meteor/pwix:tenants-manager';
 import { Tracker } from 'meteor/tracker';
 
+import { ClientsRegistrar } from '/imports/common/classes/clients-registrar.class.js';
+import { IdentitiesRegistrar } from '/imports/common/classes/identities-registrar.class.js';
+
 import { Organizations } from '/imports/common/collections/organizations/index.js';
 
 TenantsManager.configure({
@@ -17,7 +20,7 @@ TenantsManager.configure({
     recordFields: Organizations.recordFieldset(),
     //recordFields: null,
     //scopedManagerRole: SCOPED_TENANT_MANAGER,
-    //tabularServerExtend: null,
+    //serverTabularExtend: null,
     tenantButtons: Organizations.tabularButtons(),
     //tenantButtons: null,
     tenantFields: Organizations.tabularFieldset(),
@@ -94,11 +97,12 @@ Permissions.set({
     }
 });
 
-// maintain the operational status of the organizations
-if( Meteor.isClient ){
-    Tracker.autorun(() => {
-        TenantsManager.list.get().forEach(( it ) => {
-            Organizations.setupOperational( it );
-        });
+Tracker.autorun(() => {
+    TenantsManager.list.get().forEach(( it ) => {
+        // maintain the operational status of the organizations
+        Organizations.setupOperational( it );
+        // instanciate a ClientsRegistrar
+        it.DYN.clients = ClientsRegistrar.getRegistered( it ) || new ClientsRegistrar( it );
+        it.DYN.identities = IdentitiesRegistrar.getRegistered( it ) || new IdentitiesRegistrar( it );
     });
-}
+});

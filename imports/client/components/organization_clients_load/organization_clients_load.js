@@ -23,8 +23,8 @@ Template.organization_clients_load.onCreated( function(){
     this.autorun(() => {
         const edited = Template.currentData().item.get();
         const organization = TenantsManager.list.byEntity( edited._id );
-        if( organization && !organization.DYN.clients ){
-            organization.DYN.clients = ClientsRegistrar.getRegistered( organization ) || new ClientsRegistrar( organization );
+        if( organization && organization.DYN.clients ){
+            organization.DYN.clients.clientLoad();
         }
     })
 });

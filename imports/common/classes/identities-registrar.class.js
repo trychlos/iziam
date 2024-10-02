@@ -25,6 +25,9 @@ export class IdentitiesRegistrar extends izRegistrar {
 
     // static data
 
+    // the registry of clients registars per organization
+    static #registry = {};
+
     // static methods
 
     /*
@@ -34,11 +37,13 @@ export class IdentitiesRegistrar extends izRegistrar {
      */
     static getRegistered( organization ){
         //console.debug( 'IdentitiesRegistrar.getRegistered: organization', organization, 'registry', AccountsHub.instances );
-        return AccountsHub.instances[ Identities.instanceName( organization._id ) ] || null;
+        return IdentitiesRegistrar.#registry[organization._id] || null;
     }
 
     // private data
 
+    // client-side: is initialized ?
+    #clientInitialized = false;
     // client-side
     #handle = new ReactiveVar( null );
 
@@ -46,31 +51,10 @@ export class IdentitiesRegistrar extends izRegistrar {
     #amInstance = null;
     #list = new ReactiveVar( [] );
 
+    // server-side: is initialized ?
+    #serverInitialized = false;
+
     // private methods
-
-    // client-side
-    _clientInit( organization ){
-        const self = this;
-        this.#handle.set( Meteor.subscribe( 'pwix_accounts_manager_accounts_list_all', self.#amInstance.name()));
-
-        // get the list of identities
-        // each identity is published as an object with DYN sub-object
-        Tracker.autorun(() => {
-            if( self.#handle.get()?.ready()){
-                self.#amInstance.collection().find( Meteor.APP.C.pub.identitiesAll.query( organization )).fetchAsync().then(( fetched ) => {
-                    console.debug( 'fetched', fetched );
-                    self.#list.set( fetched );
-                });
-            }
-        });
-
-        // client-side only autorun's
-        Tracker.autorun(() => {
-            self.#list.get().forEach(( it ) => {
-                //console.debug( '(autorun)' );
-            });
-        });
-    }
 
     // public data
 
@@ -81,7 +65,8 @@ export class IdentitiesRegistrar extends izRegistrar {
      */
     constructor( organization ){
         super( ...arguments );
-        //console.warn( 'instanciating IdentitiesRegistrar', organization._id );
+        console.debug( 'instanciating IdentitiesRegistrar', organization._id );
+        const self = this;
 
         this.#amInstance = new AccountsManager.amClass({
             name: Identities.instanceName( organization._id ),
@@ -96,14 +81,8 @@ export class IdentitiesRegistrar extends izRegistrar {
             hideDisabled: false
         });
 
-        // client-side initialization
-        if( Meteor.isClient ){
-            this._clientInit( organization );
-
-        // server-side initialization
-        } else {
-
-        }
+        // common code
+        IdentitiesRegistrar.#registry[organization._id] = this;
 
         return this;
     }
@@ -124,6 +103,31 @@ export class IdentitiesRegistrar extends izRegistrar {
             console.warn( 'unable to find an identity', identityId );
         }
         return found;
+    }
+
+    /**
+     * @summary Initialize client side
+     *  - subscribe and receive the full list of the identities of the organization
+     * @param {Organization} organization 
+     */
+    clientLoad( organization ){
+        if( !this.#clientInitialized ){
+            const self = this;
+            console.debug( 'subscribing to', self.#amInstance.name());
+            this.#handle.set( Meteor.subscribe( 'pwix_accounts_manager_accounts_list_all', self.#amInstance.name()));
+    
+            // get the list of identities
+            // each identity is published as an object with DYN sub-object
+            Tracker.autorun(() => {
+                if( self.#handle.get()?.ready()){
+                    self.#amInstance.collection().find( Meteor.APP.C.pub.identitiesAll.query( organization )).fetchAsync().then(( fetched ) => {
+                        console.debug( 'fetched', fetched );
+                        self.#list.set( fetched );
+                    });
+                }
+            });
+            this.#clientInitialized = true;
+        }
     }
 
     /**

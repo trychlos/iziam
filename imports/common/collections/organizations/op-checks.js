@@ -19,7 +19,7 @@ import { Organizations } from './index.js';
  * @returns {Array<TypedMessage>} or null
  */
 Organizations.isOperational = async function( organization ){
-    console.debug( 'Organizations.isOperational', organization );
+    Meteor.isClient && console.debug( 'Organizations.isOperational', organization );
     let errors = [];
     // prepare data for the checks functions
     const data = { entity: new ReactiveVar( null ), index: 0 };
@@ -96,7 +96,7 @@ Organizations.isOperational = async function( organization ){
 };
 
 /**
- * @locus Client
+ * @locus Anywhere
  * @summary Maintain the 'operational' status of each organization
  *  When the organizations change, update their status
  *  We add (or update) here a DYN.status object
@@ -104,7 +104,6 @@ Organizations.isOperational = async function( organization ){
  * @param {Object} organization as a full entity object with its DYN sub-object
  */
 Organizations.setupOperational = async function( item ){
-    assert( Meteor.isClient, 'expects to only be called on client side' );
     //console.debug( 'Organizations.setupOperational', item );
     const atdate = Validity.atDateByRecords( item.DYN.records );
     if( !item.DYN.operational ){

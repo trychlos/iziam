@@ -27,15 +27,13 @@ Organizations.s = {
         const amInstance = AccountsHub.instances[instanceName];
         if( amInstance ){
             assert( amInstance instanceof AccountsManager.amClass, 'expects an instance of AccountsManager.amClass, got '+amInstance );
-            item.identitiesCount = await collection.countDocuments();
-            console.debug( 'item.identitiesCount', item.identitiesCount );
+            item.identitiesCount = await amInstance.collection().countDocuments();
         } else {
             console.log( 'collection non defined', instanceName );
         }
         // count clients
         // there is one clients collection common to all organizations
         item.clientsCount = await ClientsEntities.collection.countDocuments({ organization: item.DYN.entity._id });
-        console.debug( 'item.clientsCount', item.clientsCount );
         return true;
     }
 };

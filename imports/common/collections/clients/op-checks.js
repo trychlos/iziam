@@ -17,20 +17,19 @@ import { Clients } from './index.js';
  * @param {Array<Object>} records
  * @returns {}
  */
-Clients.isOperational = async function( entity, records ){
-    console.debug( 'Clients.isOperational' );
+Clients.isOperational = async function( entity, record ){
+    Meteor.isClient && console.debug( 'Clients.isOperational', entity, record );
     return null;
 };
 
 /**
- * @locus Client
+ * @locus Anywhere
  * @summary Maintain the 'operational' status of each client
  *  When the clients change, update their status
  *  We add (or update) here a DYN.status object
  * @param {Object} client as a full entity object with its DYN sub-object
  */
 Clients.setupOperational = async function( item ){
-    assert( Meteor.isClient, 'expects to only be called on client side' );
     //console.debug( 'Clients.setupOperational' );
     const atdate = Validity.atDateByRecords( item.DYN.records );
     if( !item.DYN.operational ){
@@ -69,4 +68,5 @@ Clients.setupOperational = async function( item ){
             }
         });
     }
+    item.DYN.operational.stats = false;
 };

@@ -37,36 +37,18 @@ export class ClientsRegistrar extends izRegistrar {
 
     // private data
 
+    // client-side: is initialized ?
+    #clientInitialized = false;
     // client-side: the subscription handle
     #handle = new ReactiveVar( null );
 
     // common: the clients of the organization
     #list = new ReactiveVar( [] );
 
+    // server-side: is initialized ?
+    #serverInitialized = false;
+
     // private methods
-
-    _clientInit( organization ){
-        const self = this;
-        //console.warn( 'instanciating ClientsRegistrar', organization._id );
-        this.#handle.set( Meteor.subscribe( Meteor.APP.C.pub.clientsAll.publish, organization ));
-
-        // get the list of clients
-        // each client is published as an entity object with DYN { managers, records, closest } sub-object
-        Tracker.autorun(() => {
-            if( self.#handle.get()?.ready()){
-                Meteor.APP.Collections.get( Meteor.APP.C.pub.clientsAll.collection ).find( Meteor.APP.C.pub.clientsAll.query( organization )).fetchAsync().then(( fetched ) => {
-                    self.#list.set( fetched );
-                });
-            }
-        });
-
-        // client-side only autorun's
-        Tracker.autorun(() => {
-            self.#list.get().forEach(( it ) => {
-                Clients.setupOperational( it );
-            });
-        });
-    }
 
     // public data
 
@@ -77,18 +59,17 @@ export class ClientsRegistrar extends izRegistrar {
      */
     constructor( organization ){
         super( ...arguments );
-
-        // client-side initialization
-        if( Meteor.isClient ){
-            this._clientInit( organization );
-
-        // server-side initialization
-        } else {
-
-        }
+        console.debug( 'instanciating ClientsRegistrar', organization._id );
+        const self = this;
 
         // common code
         ClientsRegistrar.#registry[organization._id] = this;
+
+        Tracker.autorun(() => {
+            self.#list.get().forEach(( it ) => {
+                Clients.setupOperational( it );
+            });
+        });
 
         return this;
     }
@@ -109,6 +90,32 @@ export class ClientsRegistrar extends izRegistrar {
             console.warn( 'unable to find the client', clientId );
         }
         return found;
+    }
+
+    /**
+     * @locus Client
+     * @summary Initialize client side
+     *  - subscribe and receive the full list of the clients of the organization
+     *  This is run the first time we try to edit an organization
+     *  (because we are a multi-tenants application, we do not want load at startup all clients of all organizations)
+     * @param {Organization} organization 
+     */
+    clientLoad( organization ){
+        if( !this.#clientInitialized ){
+            this.#handle.set( Meteor.subscribe( Meteor.APP.C.pub.clientsAll.publish, organization ));
+            // get the list of clients
+            // each client is published as an entity object with DYN { managers, records, closest } sub-object
+            const self = this;
+            Tracker.autorun(() => {
+                if( self.#handle.get()?.ready()){
+                    Meteor.APP.Collections.get( Meteor.APP.C.pub.clientsAll.collection ).find( Meteor.APP.C.pub.clientsAll.query( organization )).fetchAsync().then(( fetched ) => {
+                        self.#list.set( fetched );
+                    });
+                }
+            });
+    
+            this.#clientInitialized = true;
+        }
     }
 
     /**
