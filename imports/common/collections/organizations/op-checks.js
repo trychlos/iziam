@@ -19,7 +19,7 @@ import { Organizations } from './index.js';
  * @returns {Array<TypedMessage>} or null
  */
 Organizations.isOperational = async function( organization ){
-    Meteor.isClient && console.debug( 'Organizations.isOperational', organization );
+    //Meteor.isClient && console.debug( 'Organizations.isOperational', organization );
     let errors = [];
     // prepare data for the checks functions
     const data = { entity: new ReactiveVar( null ), index: 0 };

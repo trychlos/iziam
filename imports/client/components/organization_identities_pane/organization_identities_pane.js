@@ -14,9 +14,9 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 
 import { Identities } from '/imports/common/collections/identities/index.js';
-import { Organizations } from '/imports/common/collections/organizations/index.js';
 
 import '/imports/client/components/identity_emails_pane/identity_emails_pane.js';
+import '/imports/client/components/identity_no_pane/identity_no_pane.js';
 import '/imports/client/components/identity_profile_pane/identity_profile_pane.js';
 
 import './organization_identities_pane.html';
@@ -38,7 +38,11 @@ Template.organization_identities_pane.onCreated( function(){
             {
                 name: 'identity_emails_tab',
                 navLabel: pwixI18n.label( I18N, 'identities.edit.emails_tab_title' ),
-                paneTemplate: 'identity_emails_pane',
+                paneTemplate: 'identity_emails_pane'
+            },
+            {
+                name: 'identity_no_tab',
+                paneTemplate: 'identity_no_pane',
                 shown: false
             }
         ])
@@ -67,20 +71,6 @@ Template.organization_identities_pane.onCreated( function(){
             Meteor.clearInterval( obj );
         }
     }, 5 );
-
-    // if we have at least one email address, show the tab
-    self.autorun(() => {
-        const organization = self.APP.organization.get();
-        if( Organizations.fn.haveAtLeastOneEmailAddress( organization )){
-            let found = false;
-            self.APP.tabsBefore.get().every(( it ) => {
-                if( it.name === 'identity_emails_tab' ){
-                    found = true;
-                    it.shown = true;
-                }
-            });
-        }
-    });
 });
 
 Template.organization_identities_pane.helpers({

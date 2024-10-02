@@ -30,14 +30,12 @@ Template.organization_operational_badge.helpers({
     },
     // the status
     parmsStatus(){
-        //console.debug( this );
-        if( !this.item.entity ){
-            console.warn( this );
-        }
-        return {
-            statusRv: TenantsManager.list.byEntity( this.item.entity ).DYN.operational?.status,
+        const entity = this.item.entity ? TenantsManager.list.byEntity( this.item.entity ) : null;
+        const statusRv = entity ? entity.DYN.operational?.status : null;
+        return statusRv ? {
+            statusRv: statusRv,
             classes: Template.instance().APP.classes,
             title: pwixI18n.label( I18N, 'organizations.tabular.operational_title' )
-        };
+        } : null;
     }
 });

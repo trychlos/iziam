@@ -205,7 +205,7 @@ Template.client_edit_dialog.events({
                     Modal.close();
                 } else {
                     instance.$( '.c-client-properties-panel' ).trigger( 'iz-clear-panel' );
-                    instance.$( 'NotesEdit' ).trigger( 'iz-clear-panel' );
+                    instance.$( '.NotesEdit' ).trigger( 'iz-clear-panel' );
                 }
             })
             .catch(( e ) => {
