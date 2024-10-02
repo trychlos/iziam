@@ -127,7 +127,7 @@ Meteor.APP.i18n = {
                     softver_label: 'Software version :',
                     softver_ph: 'vx.yy.zzz-aaaa',
                     softver_title: 'The client software version which distinguish it from other registered clients',
-                    status_tab_title: 'Status',
+                    status_tab_title: 'Operational status',
                     tos_label: 'Terms of Service page URI :',
                     tos_ph: 'https://my.example.com/tos',
                     tos_title: 'The URI of a page which describes the terms of service of the client'
@@ -916,7 +916,7 @@ Meteor.APP.i18n = {
                     email_min_how_notfor: 'The way you define your minimum count of email addresses is not suitable fo this use',
                     email_min_how_unset: 'Your minimum way of count the email addresses is not set',
                     end_session_absolute: 'The introspection endpoint must be provided as an absolute path',
-                    identities_noid: 'The configured identities do not have any identifier',
+                    identities_noid: 'The configured identities do not have any identifier, this will prevent you to define any new identity',
                     introspection_absolute: 'The introspection endpoint must be provided as an absolute path',
                     issuer_hostname: 'The issuer hostname is malformed',
                     issuer_https: 'The issuer must use a HTTPS schema',
@@ -944,7 +944,8 @@ Meteor.APP.i18n = {
                 },
                 clients: {
                     list_preamble: 'The list of clients defined by and for the organization.<br />'
-                        +'Capabilities of the clients depend of their type and of the chozen authorization grant flow.',
+                        +'Capabilities of the clients depend of their type and of the chozen authorization grant flow.<br />'
+                        +'Please note that the considered configuration is those of the <b>saved</b> organization, not those of the currently edited record.',
                 },
                 edit: {
                     authorization_example: 'Authorization Server URL: &laquo; %s &raquo;',
@@ -1021,7 +1022,7 @@ Meteor.APP.i18n = {
                     revocation_label: 'Revocation endpoint :',
                     revocation_ph: '/revocation',
                     revocation_title: 'The endpoint path used to revoke an access token.',
-                    status_tab_title: 'Status',
+                    status_tab_title: 'Operational status',
                     token_example: 'Token Server URL: &laquo; %s &raquo;',
                     token_label: 'Token endpoint :',
                     token_ph: '/token',
@@ -1030,6 +1031,10 @@ Meteor.APP.i18n = {
                     userinfo_label: 'Userinfo endpoint :',
                     userinfo_ph: '/userinfo',
                     userinfo_title: 'The endpoint path used to build the Userinfo URL, to which you can get informations about a user.',
+                },
+                identities: {
+                    list_preamble: 'Define here the identities which will make use of the OAuth features of the organization.<br />'
+                        +'Please note that the considered configuration is those of the <b>saved</b> organization, not those of the currently edited record.'
                 },
                 jwks: {
                     preamble: 'The JSON Web Key Set (JWKS) is a set of keys containing the public keys used to sign and encrypt any JSON Web Token (JWT) '

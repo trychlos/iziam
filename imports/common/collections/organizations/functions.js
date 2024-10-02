@@ -115,6 +115,32 @@ Organizations.fn = {
 
     /**
      * @param {Organizations} organization as an { entity, record } object
+     * @returns {Boolean} whether the identity has at least one identifier
+     */
+    haveIdentityIdentifier( organization ){
+        let haveEmail = true;
+        let emailAsId = false;
+        let minhow = organization.record.identitiesEmailAddressesMinHow;
+        let mincount = organization.record.identitiesEmailAddressesMinCount;
+        if( !minhow || minhow === 'nospec' || mincount === 0 ){
+            haveEmail = false;
+        } else {
+            emailAsId = organization.record.identitiesEmailAddressesIdentifier;
+        }
+        let haveUsername = true;
+        let usernameAsId = false;
+        minhow = organization.record.identitiesUsernamesMinHow;
+        mincount = organization.record.identitiesUsernamesMinCount;
+        if( !minhow || minhow === 'nospec' || mincount === 0 ){
+            haveUsername = false;
+        } else {
+            usernameAsId = organization.record.identitiesUsernamesIdentifier;
+        }
+        return emailAsId || usernameAsId;
+    },
+
+    /**
+     * @param {Organizations} organization as an { entity, record } object
      * @returns {String} the issuer for the organization
      */
     issuer( organization ){

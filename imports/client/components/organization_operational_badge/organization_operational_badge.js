@@ -10,7 +10,6 @@
  */
 
 import { pwixI18n } from 'meteor/pwix:i18n';
-import { ReactiveVar } from 'meteor/reactive-var';
 import { TenantsManager } from 'meteor/pwix:tenants-manager';
 
 import './organization_operational_badge.html';
@@ -19,7 +18,12 @@ Template.organization_operational_badge.onCreated( function(){
     const self = this;
 
     self.APP = {
-        classes: new ReactiveVar( '' ),
+        // user has clicked on the status button of the organization line
+        // arg is an object with following keys:
+        // - type: the FieldStatus status
+        onClick(){
+            console.debug( 'onClick', arguments );
+        }
     };
 });
 
@@ -34,8 +38,10 @@ Template.organization_operational_badge.helpers({
         const statusRv = entity ? entity.DYN.operational?.status : null;
         return statusRv ? {
             statusRv: statusRv,
-            classes: Template.instance().APP.classes,
-            title: pwixI18n.label( I18N, 'organizations.tabular.operational_title' )
+            title: pwixI18n.label( I18N, 'organizations.tabular.operational_title' ),
+            uncompleteButton: true,
+            invalidButton: true,
+            buttonOnClick: Template.instance().APP.onClick
         } : null;
     }
 });

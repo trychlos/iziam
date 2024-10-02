@@ -114,7 +114,7 @@ export class IdentitiesRegistrar extends izRegistrar {
     clientLoad( organization ){
         if( !this.#clientInitialized ){
             const self = this;
-            console.debug( 'subscribing to', self.#amInstance.name());
+            //console.debug( 'subscribing to', self.#amInstance.name());
             this.#handle.set( Meteor.subscribe( 'pwix_accounts_manager_accounts_list_all', self.#amInstance.name()));
     
             // get the list of identities

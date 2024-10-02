@@ -24,44 +24,34 @@ Template.organization_config_ident_pane.onCreated( function(){
     self.APP = {
         fields: {
             identitiesEmailAddressesMinHow: {
-                js: '.js-email-min-how',
-                form_status: Forms.C.ShowStatus.NONE
+                js: '.js-email-min-how'
             },
             identitiesEmailAddressesMinCount: {
-                js: '.js-email-min-count',
-                form_status: Forms.C.ShowStatus.NONE
+                js: '.js-email-min-count'
             },
             identitiesEmailAddressesMaxHow: {
-                js: '.js-email-max-how',
-                form_status: Forms.C.ShowStatus.NONE
+                js: '.js-email-max-how'
             },
             identitiesEmailAddressesMaxCount: {
-                js: '.js-email-max-count',
-                form_status: Forms.C.ShowStatus.NONE
+                js: '.js-email-max-count'
             },
             identitiesEmailAddressesIdentifier: {
-                js: '.js-email-identifier',
-                form_status: Forms.C.ShowStatus.NONE
+                js: '.js-email-identifier'
             },
             identitiesUsernamesMinHow: {
-                js: '.js-username-min-how',
-                form_status: Forms.C.ShowStatus.NONE
+                js: '.js-username-min-how'
             },
             identitiesUsernamesMinCount: {
-                js: '.js-username-min-count',
-                form_status: Forms.C.ShowStatus.NONE
+                js: '.js-username-min-count'
             },
             identitiesUsernamesMaxHow: {
-                js: '.js-username-max-how',
-                form_status: Forms.C.ShowStatus.NONE
+                js: '.js-username-max-how'
             },
             identitiesUsernamesMaxCount: {
-                js: '.js-username-max-count',
-                form_status: Forms.C.ShowStatus.NONE
+                js: '.js-username-max-count'
             },
             identitiesUsernamesIdentifier: {
-                js: '.js-username-identifier',
-                form_status: Forms.C.ShowStatus.NONE
+                js: '.js-username-identifier'
             }
         },
         // the current { entity, record } organization object
@@ -137,6 +127,7 @@ Template.organization_config_ident_pane.onRendered( function(){
                     entity: Template.currentData().entity,
                     index: Template.currentData().index
                 },
+                fieldStatusShow: false,
                 setForm: Template.currentData().entity.get().DYN.records[Template.currentData().index].get()
             }));
         }
@@ -222,5 +213,15 @@ Template.organization_config_ident_pane.helpers({
         const minhow = this.entity.get().DYN.records[this.index].get().identitiesUsernamesMinHow;
         const maxhow = this.entity.get().DYN.records[this.index].get().identitiesUsernamesMaxHow;
         return minhow === 'exactly' || maxhow === 'nospec' ? 'disabled' : '';
+    }
+});
+
+Template.organization_config_ident_pane.events({
+    'keypress .js-email-min-count'( event, instance ){
+        var charCode = ( event.which) ? event.which : event.keyCode
+        if( charCode > 31 && ( charCode < 48 || charCode > 57 )){
+            return false;
+        }
+        return true;
     }
 });

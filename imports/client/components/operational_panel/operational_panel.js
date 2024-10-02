@@ -39,7 +39,7 @@ Template.operational_panel.onCreated( function(){
         }
     });
 
-    // complete the checks results with a conclusion
+    // complete the checks results with a conclusion, counting errors (or above) and warnings
     self.autorun(() => {
         let errors = 0;
         let warnings = 0;

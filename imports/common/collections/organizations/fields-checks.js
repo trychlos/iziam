@@ -236,9 +236,10 @@ Organizations.checks = {
         let item = data.entity.get().DYN.records[data.index].get();
         if( opts.update !== false ){
             item.identitiesEmailAddressesIdentifier = Boolean( value );
+            data.entity.get().DYN.records[data.index].set( item );
         }
         if( value === true || value === false ){
-            return null;
+            return await Organizations.checks.identitiesIdentifier( null, data, opts );
         } else {
             return new TM.TypedMessage({
                 level: TM.MessageLevel.C.ERROR,
@@ -255,8 +256,8 @@ Organizations.checks = {
             item.identitiesEmailAddressesMaxCount = parseInt( value );
             data.entity.get().DYN.records[data.index].set( item );
         }
-        value = Number( value );
-        if( Number.isInteger( value ) && parseInt( value ) >= 0 ){
+        value = parseInt( value );
+        if( Number.isInteger( value ) && value >= 0 ){
             return null;
         } else {
             return new TM.TypedMessage({
@@ -301,11 +302,11 @@ Organizations.checks = {
             item.identitiesEmailAddressesMinCount = parseInt( value );
             data.entity.get().DYN.records[data.index].set( item );
         }
-        value = Number( value );
-        if( Number.isInteger( value ) && parseInt( value ) >= 0 ){
+        value = parseInt( value );
+        if( Number.isInteger( value ) && value >= 0 ){
             return null;
         } else {
-            new TM.TypedMessage({
+            return new TM.TypedMessage({
                 level: TM.MessageLevel.C.ERROR,
                 message: pwixI18n.label( I18N, 'organizations.checks.email_min_count_invalid' )
             });
@@ -323,7 +324,7 @@ Organizations.checks = {
             const def = HowCount.byId( value );
             if( def ){
                 if( HowCount.isForMin( def )){
-                    return Organizations.checks.identitiesIdentifier( value, data, opts );
+                    return null;
                 } else {
                     return new TM.TypedMessage({
                         level: TM.MessageLevel.C.ERROR,
@@ -347,29 +348,17 @@ Organizations.checks = {
     // check that the identities have an identifier, either a well-defined email address or a well-defined username
     async identitiesIdentifier( value, data, opts ){
         _assert_data_entityrv( 'Organizations.checks.identitiesIdentifier()', data );
-        const item = data.entity.get().DYN.records[data.index].get();
-        let haveEmail = true;
-        let emailAsId = false;
-        let minhow = item.identitiesEmailAddressesMinHow;
-        let mincount = item.identitiesEmailAddressesMinCount;
-        if( !minhow || minhow === 'nospec' || ( minhow === 'exactly' && mincount === 0 )){
-            haveEmail = false;
-        } else {
-            emailAsId = item.identitiesEmailAddressesIdentifier;
-        }
-        let haveUsername = true;
-        let usernameAsId = false;
-        minhow = item.identitiesUsernamesMinHow;
-        mincount = item.identitiesUsernamesMinCount;
-        if( !minhow || minhow === 'nospec' || ( minhow === 'exactly' && mincount === 0 )){
-            haveUsername = false;
-        } else {
-            usernameAsId = item.identitiesUsernamesIdentifier;
-        }
-        return emailAsId || usernameAsId ? null : new TM.TypedMessage({
+        const organization = {
+            entity: data.entity.get(),
+            record: data.entity.get().DYN.records[data.index].get()
+        };
+        const have = Organizations.fn.haveIdentityIdentifier( organization );
+        const res = have ? null : new TM.TypedMessage({
             level: TM.MessageLevel.C.WARNING,
             message: pwixI18n.label( I18N, 'organizations.checks.identities_noid' )
         });
+        //console.debug( res );
+        return res;
     },
 
     // are usernames an identifier ?
@@ -378,9 +367,10 @@ Organizations.checks = {
         let item = data.entity.get().DYN.records[data.index].get();
         if( opts.update !== false ){
             item.identitiesUsernamesIdentifier = Boolean( value );
+            data.entity.get().DYN.records[data.index].set( item );
         }
         if( value === true || value === false ){
-            return null;
+            return await Organizations.checks.identitiesIdentifier( null, data, opts );
         } else {
             return new TM.TypedMessage({
                 level: TM.MessageLevel.C.ERROR,
@@ -397,8 +387,8 @@ Organizations.checks = {
             item.identitiesUsernamesMaxCount = parseInt( value );
             data.entity.get().DYN.records[data.index].set( item );
         }
-        value = Number( value );
-        if( Number.isInteger( value ) && parseInt( value ) >= 0 ){
+        value = parseInt( value );
+        if( Number.isInteger( value ) && value >= 0 ){
             return null;
         } else {
             return new TM.TypedMessage({
@@ -443,8 +433,8 @@ Organizations.checks = {
             item.identitiesUsernamesMinCount = parseInt( value );
             data.entity.get().DYN.records[data.index].set( item );
         }
-        value = Number( value );
-        if( Number.isInteger( value ) && parseInt( value ) >= 0 ){
+        value = parseInt( value );
+        if( Number.isInteger( value ) && value >= 0 ){
             return null;
         } else {
             return new TM.TypedMessage({
@@ -465,7 +455,7 @@ Organizations.checks = {
             const def = HowCount.byId( value );
             if( def ){
                 if( HowCount.isForMin( def )){
-                    return Organizations.checks.identitiesIdentifier( value, data, opts );
+                    return null;
                 } else {
                     return new TM.TypedMessage({
                         level: TM.MessageLevel.C.ERROR,

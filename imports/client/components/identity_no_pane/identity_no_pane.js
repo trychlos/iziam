@@ -30,7 +30,7 @@ Template.identity_no_pane.onRendered( function(){
     self.autorun(() => {
         const organization = Template.currentData().organization;
         let have = Organizations.fn.haveAtLeastOneEmailAddress( organization );
-        console.debug( 'organization', organization, 'email', have );
+        //console.debug( 'organization', organization, 'email', have );
         self.$( '.c-identity-no-pane' ).trigger( 'tabbed-do-enable', {
             tabbedId: Template.currentData().tabbedId,
             name: 'identity_emails_tab',
