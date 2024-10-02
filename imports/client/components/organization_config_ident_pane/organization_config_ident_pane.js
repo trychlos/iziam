@@ -1,6 +1,8 @@
 /*
  * /imports/client/components/organization_config_ident_pane/organization_config_ident_pane.js
  *
+ * NOTE: this panel is disabled at the moment: doesn't know how to manage identities when configuration changes...
+ *
  * Parms:
  * - checker: a ReactiveVar which contains the current Forms.Checker
  * - entity: a ReactiveVar which contains the Organization entity
@@ -79,7 +81,7 @@ Template.organization_config_ident_pane.onCreated( function(){
         const entity = dataContext.entity.get();
         let record = entity.DYN.records[dataContext.index].get();
         if( !Object.keys( record ).includes( 'identitiesEmailAddressesMinHow' )){
-            record.identitiesEmailAddressesMinHow = 'exactly';
+            record.identitiesEmailAddressesMinHow = 'least';
         }
         if( !Object.keys( record ).includes( 'identitiesEmailAddressesMinCount' )){
             record.identitiesEmailAddressesMinCount = 1;
@@ -146,21 +148,29 @@ Template.organization_config_ident_pane.onRendered( function(){
 });
 
 Template.organization_config_ident_pane.helpers({
+    // disable the email address identifier checkbox
+    emailIdentifierDisabled(){
+        return 'disabled';
+    },
     // disable the email address max count when min how is exactly or max how is not specified
     emailMaxCountDisabled(){
         const minhow = this.entity.get().DYN.records[this.index].get().identitiesEmailAddressesMinHow;
         const maxhow = this.entity.get().DYN.records[this.index].get().identitiesEmailAddressesMaxHow;
         return minhow === 'exactly' || maxhow === 'nospec' ? 'disabled' : '';
     },
+    // disable the email address min count
+    emailMinCountDisabled(){
+        return 'disabled';
+    },
     // string translation
     i18n( arg ){
         return pwixI18n.label( I18N, arg.hash.key );
     },
     // parms for email max how count
-    parmsEmailMaxHowCount(){
+    parmsEmailMaxHow(){
         return {
             selected: this.entity.get().DYN.records[this.index].get().identitiesEmailAddressesMaxHow,
-            disabled: this.entity.get().DYN.records[this.index].get().identitiesEmailAddressesMinHow === 'exactly',
+            disabled: true, //this.entity.get().DYN.records[this.index].get().identitiesEmailAddressesMinHow === 'exactly',
             isMax: true
         };
     },
@@ -171,9 +181,10 @@ Template.organization_config_ident_pane.helpers({
         };
     },
     // parms for email min how count
-    parmsEmailMinHowCount(){
+    parmsEmailMinHow(){
         return {
-            selected: this.entity.get().DYN.records[this.index].get().identitiesEmailAddressesMinHow
+            selected: this.entity.get().DYN.records[this.index].get().identitiesEmailAddressesMinHow,
+            disabled: true
         };
     },
     // parms for email min status
@@ -183,10 +194,10 @@ Template.organization_config_ident_pane.helpers({
         };
     },
     // parms for username max how count
-    parmsUsernameMaxHowCount(){
+    parmsUsernameMaxHow(){
         return {
             selected: this.entity.get().DYN.records[this.index].get().identitiesUsernamesMaxHow,
-            disabled: this.entity.get().DYN.records[this.index].get().identitiesUsernamesMinHow === 'exactly',
+            disabled: true, //this.entity.get().DYN.records[this.index].get().identitiesUsernamesMinHow === 'exactly',
             isMax: true
         };
     },
@@ -197,9 +208,10 @@ Template.organization_config_ident_pane.helpers({
         };
     },
     // parms for username min how count
-    parmsUsernameMinHowCount(){
+    parmsUsernameMinHow(){
         return {
-            selected: this.entity.get().DYN.records[this.index].get().identitiesUsernamesMinHow
+            selected: this.entity.get().DYN.records[this.index].get().identitiesUsernamesMinHow,
+            disabled: true
         };
     },
     // parms for username min status
@@ -208,11 +220,19 @@ Template.organization_config_ident_pane.helpers({
             statusRv: Template.instance().APP.usernameMinRv
         };
     },
+    // disable the username identifier checkbox
+    usernameIdentifierDisabled(){
+        return 'disabled';
+    },
     // disable the username max count when min how is exactly or max how is not specified
     usernameMaxCountDisabled(){
         const minhow = this.entity.get().DYN.records[this.index].get().identitiesUsernamesMinHow;
         const maxhow = this.entity.get().DYN.records[this.index].get().identitiesUsernamesMaxHow;
         return minhow === 'exactly' || maxhow === 'nospec' ? 'disabled' : '';
+    },
+    // disable the username min count
+    usernameMinCountDisabled(){
+        return 'disabled';
     }
 });
 
