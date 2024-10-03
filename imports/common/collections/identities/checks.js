@@ -28,6 +28,16 @@ import { Identities } from './index.js';
 //    > id: the identifier of the edited row when editing an array
 // returns a TypedMessage, or an array of TypedMessage, or null
 
+// the data passed to the crossed checks
+const _assert_cross_data_content = function( caller, data ){
+    assert.ok( data, caller+' data is required' );
+    assert.ok( data.item && data.item instanceof ReactiveVar, caller+' data.item is expected to be set as a ReactiveVar, got '+data.item );
+    assert.ok( data.amInstance && data.amInstance instanceof AccountsManager.amClass, caller+' data.amInstance is expected to be set as an instance of AccountsManager.amClass, got '+data.amInstance );
+    assert.ok( data.organization && _.isObject( data.organization ), caller+' data.organization is expected to be set an object, got '+data.organization );
+    assert.ok( data.organization.entity && _.isObject( data.organization.entity ), caller+' data.organization.entity is expected to be set an object, got '+data.organization.entity );
+    assert.ok( data.organization.record && _.isObject( data.organization.record ), caller+' data.organization.record is expected to be set an object, got '+data.organization.record );
+};
+
 // entity is a ReactiveVar which contains the edited entity document and its validity records
 const _assert_data_content = function( caller, data ){
     assert.ok( data, caller+' data is required' );
@@ -83,6 +93,37 @@ const _check_url = function( value, opts={} ){
 }
 
 Identities.checks = {
+    // cross check
+    // data is:
+    //  item: a ReactiveVar which contains the currently edited identity
+    //  amInstance: the AccountsManager.amClass instance
+    //  organization: an { entity, record } object
+    //
+    // whether this identity has an identifier ?
+    async crossHasIdentifier( data, opts ){
+        _assert_cross_data_content( 'Identities.checks.crossHasIdentifier()', data );
+        let item = data.item.get();
+        let haveIdentifier = false;
+        if( !haveIdentifier && data.organization.record.identitiesEmailAddressesIdentifier ){
+            if( item.emails?.length > 0 ){
+                if( item.emails[0].address ){
+                    haveIdentifier = true;
+                }
+            }
+        }
+        if (!haveIdentifier && data.organization.record.identitiesUsernamesIdentifier ){
+            if( item.usernames?.length > 0 ){
+                if( item.usernames[0].username ){
+                    haveIdentifier = true;
+                }
+            }
+        }
+        return haveIdentifier ? null : new TM.TypedMessage({
+            level: TM.MessageLevel.C.ERROR,
+            message: pwixI18n.label( I18N, 'identities.checks.identifier_missing' )
+        });
+    },
+
     // emails
     // if there is a row, it must have a valid email address
     async email_address( value, data, opts={} ){

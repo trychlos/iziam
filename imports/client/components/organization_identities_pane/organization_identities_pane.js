@@ -1,7 +1,7 @@
 /*
  * /imports/client/components/organization_identities_pane/organization_identities_pane.js
  *
- * Display the identities.
+ * Tabular display of the identities.
  *
  * Parms:
  * - item: a ReactiveVar which contains the Organization as an entity with its DYN.records array

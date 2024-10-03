@@ -115,7 +115,7 @@ Organizations.fn = {
 
     /**
      * @param {Organizations} organization as an { entity, record } object
-     * @returns {Boolean} whether the identity has at least one identifier
+     * @returns {Boolean} whether the configured identities have at least one identifier
      */
     haveIdentityIdentifier( organization ){
         let haveEmail = true;

@@ -660,6 +660,7 @@ Meteor.APP.i18n = {
                     given_name_set: 'Both name and given name are set, but you should choose a unique way of naming the person',
                     given_expects_family: 'Though not mandatory, you should better qualify the person by attributing a family name',
                     given_wants_name: 'If not setting the given nor the family names, you should enter a full name',
+                    identifier_missing: 'An identifier is missing, but is mandatory',
                     locale_invalid: 'The locale is not valid',
                     middle_name_set: 'Entering a middle name is exclusive from setting full name',
                     name_others_set: 'Entering a full name is exclusive from setting given, middle or family names',

@@ -13,6 +13,7 @@
 
 import _ from 'lodash';
 
+import { Identities } from '/imports/common/collections/identities/index.js';
 import { Organizations } from '/imports/common/collections/organizations/index.js';
 
 import './identity_no_pane.html';
@@ -24,7 +25,7 @@ Template.identity_no_pane.onCreated( function(){
 
 Template.identity_no_pane.onRendered( function(){
     const self = this;
-    console.debug( this );
+    //console.debug( this );
 
     // if we have at least one email address (resp. one username), show the tab
     self.autorun(() => {
@@ -37,11 +38,24 @@ Template.identity_no_pane.onRendered( function(){
             enabled: have
         });
         have = Organizations.fn.haveAtLeastOneUsername( organization );
-        console.debug( 'organization', organization, 'username', have );
         self.$( '.c-identity-no-pane' ).trigger( 'tabbed-do-enable', {
             tabbedId: Template.currentData().tabbedId,
             name: 'identity_usernames_tab',
             enabled: have
         });
+    });
+
+    // the parent Checker comes from AccountsEditPanel from AccountsManager
+    // install a cross check function
+    self.autorun(() => {
+        const dc = Template.currentData();
+        const checker = dc.checker?.get();
+        if( checker ){
+            checker.crossCheckFn( Identities.checks.crossHasIdentifier, {
+                item: dc.item,
+                amInstance: dc.amInstance.get(),
+                organization: dc.organization
+            });
+        }
     });
 });

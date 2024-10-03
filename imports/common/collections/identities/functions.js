@@ -137,13 +137,22 @@ Identities.fn = {
             name = identity.name;
         } else {
             if( identity.family_name ){
-                name += identity.family_name + ', ';
+                name += identity.family_name;
+                if( identity.given_name || identity.middle_name ){
+                    name += ',';
+                }
             }
             if( identity.given_name ){
-                name += identity.given_name + ' ';
+                if( name ){
+                    name += ' ';
+                }
+                name += identity.given_name;
             }
             if( identity.middle_name ){
-                name += identity.middle_name + ' ';
+                if( name ){
+                    name += ' ';
+                }
+                name += identity.middle_name;
             }
         }
         return name;
