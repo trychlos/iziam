@@ -978,7 +978,9 @@ Meteor.APP.i18n = {
                     endsession_ph: '/logout',
                     endsession_title: 'The endpoint path used to end a client session and/or to logout a connected user.',
                     ident_config_preamble: 'Configure the way your identities are managed.<br />'
-                        +'Make sure you configure at least one identifier per identity.',
+                        +'Make sure you configure at least one identifier per identity.<br />'
+                        +'This configuration will be read-only as soon as you will have defined a first identity, as we do not know at the moment how handle'
+                        +'the configuration updates here without some sort of hard dedicated work.',
                     ident_config_tab_title: 'Identities',
                     ident_email_address: 'email address(es)',
                     ident_email_identifier: 'Make each email address an identifier of the identity',
@@ -1033,7 +1035,7 @@ Meteor.APP.i18n = {
                     userinfo_title: 'The endpoint path used to build the Userinfo URL, to which you can get informations about a user.',
                 },
                 identities: {
-                    list_preamble: 'Define here the identities which will make use of the OAuth features of the organization.<br />'
+                    list_preamble: 'Define here the identities inside of your organization.<br />'
                         +'Please note that the considered configuration is those of the <b>saved</b> organization, not those of the currently edited record.'
                 },
                 jwks: {

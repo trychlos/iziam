@@ -20,13 +20,13 @@ Template.client_operational_badge.onCreated( function(){
     const self = this;
 
     self.APP = {
-        status: new ReactiveVar( Forms.FieldStatus.C.UNCOMPLETE )
+        // user has clicked on the status button of the client line
+        // arg is an object with following keys:
+        // - type: the FieldStatus status
+        onClick(){
+            console.debug( 'onClick', arguments );
+        }
     };
-
-    // update the status when something changes
-    self.autorun(() => {
-        //console.debug( 'currentData', Template.currentData());
-    });
 });
 
 Template.client_operational_badge.helpers({
@@ -38,13 +38,13 @@ Template.client_operational_badge.helpers({
     parmsStatus(){
         const organization = TenantsManager.list.byEntity( this.item.DYN.entity.organization );
         const clientId = this.item.DYN.entity._id;
-        //console.debug( 'organization', organization );
-        //console.debug( 'this', this );
-        //console.debug( 'organization.DYN.clients?.byId( this.item.entity._id )', organization.DYN.clients?.byId( this.item.entity._id ));
         const rv = organization && clientId ? organization.DYN.clients?.byId( clientId )?.DYN.operational?.status : null;
         return {
             statusRv: rv,
-            title: pwixI18n.label( I18N, 'clients.tabular.operational_title' )
+            title: pwixI18n.label( I18N, 'clients.tabular.operational_title' ),
+            uncompleteButton: true,
+            invalidButton: true,
+            buttonOnClick: Template.instance().APP.onClick
         };
     }
 });

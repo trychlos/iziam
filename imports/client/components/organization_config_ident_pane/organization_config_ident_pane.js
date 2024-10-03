@@ -1,7 +1,7 @@
 /*
  * /imports/client/components/organization_config_ident_pane/organization_config_ident_pane.js
  *
- * NOTE: this panel is disabled at the moment: doesn't know how to manage identities when configuration changes...
+ * NOTE: this panel is disabled as soon as we have created the first identity.
  *
  * Parms:
  * - checker: a ReactiveVar which contains the current Forms.Checker
@@ -58,6 +58,8 @@ Template.organization_config_ident_pane.onCreated( function(){
         },
         // the current { entity, record } organization object
         organization: new ReactiveVar( null ),
+        // whether we have at least already one identity (and this panel is disabled)
+        haveIdentity: new ReactiveVar( false ),
         // the Checker instance for the panel
         checker: new ReactiveVar( null ),
         // a status RV for the status of the email addresses
@@ -73,6 +75,7 @@ Template.organization_config_ident_pane.onCreated( function(){
         const entity = Template.currentData().entity.get();
         const record = entity.DYN.records[Template.currentData().index].get();
         self.APP.organization.set({ entity: entity, record: record });
+        self.APP.haveIdentity.set( entity.DYN.identitiesCount > 0 );
     });
 
     // setup some default values in the organization record (must be same than those defined in fieldset)
@@ -150,7 +153,7 @@ Template.organization_config_ident_pane.onRendered( function(){
 Template.organization_config_ident_pane.helpers({
     // disable the email address identifier checkbox
     emailIdentifierDisabled(){
-        return 'disabled';
+        return Template.instance().APP.haveIdentity.get() ? 'disabled' : '';
     },
     // disable the email address max count when min how is exactly or max how is not specified
     emailMaxCountDisabled(){
@@ -160,7 +163,7 @@ Template.organization_config_ident_pane.helpers({
     },
     // disable the email address min count
     emailMinCountDisabled(){
-        return 'disabled';
+        return Template.instance().APP.haveIdentity.get() ? 'disabled' : '';
     },
     // string translation
     i18n( arg ){
@@ -170,7 +173,7 @@ Template.organization_config_ident_pane.helpers({
     parmsEmailMaxHow(){
         return {
             selected: this.entity.get().DYN.records[this.index].get().identitiesEmailAddressesMaxHow,
-            disabled: true, //this.entity.get().DYN.records[this.index].get().identitiesEmailAddressesMinHow === 'exactly',
+            disabled: Template.instance().APP.haveIdentity.get() || this.entity.get().DYN.records[this.index].get().identitiesEmailAddressesMinHow === 'exactly',
             isMax: true
         };
     },
@@ -184,7 +187,7 @@ Template.organization_config_ident_pane.helpers({
     parmsEmailMinHow(){
         return {
             selected: this.entity.get().DYN.records[this.index].get().identitiesEmailAddressesMinHow,
-            disabled: true
+            disabled: Template.instance().APP.haveIdentity.get()
         };
     },
     // parms for email min status
@@ -197,7 +200,7 @@ Template.organization_config_ident_pane.helpers({
     parmsUsernameMaxHow(){
         return {
             selected: this.entity.get().DYN.records[this.index].get().identitiesUsernamesMaxHow,
-            disabled: true, //this.entity.get().DYN.records[this.index].get().identitiesUsernamesMinHow === 'exactly',
+            disabled: Template.instance().APP.haveIdentity.get() || this.entity.get().DYN.records[this.index].get().identitiesUsernamesMinHow === 'exactly',
             isMax: true
         };
     },
@@ -211,7 +214,7 @@ Template.organization_config_ident_pane.helpers({
     parmsUsernameMinHow(){
         return {
             selected: this.entity.get().DYN.records[this.index].get().identitiesUsernamesMinHow,
-            disabled: true
+            disabled: Template.instance().APP.haveIdentity.get()
         };
     },
     // parms for username min status
@@ -222,7 +225,7 @@ Template.organization_config_ident_pane.helpers({
     },
     // disable the username identifier checkbox
     usernameIdentifierDisabled(){
-        return 'disabled';
+        return Template.instance().APP.haveIdentity.get() ? 'disabled' : '';
     },
     // disable the username max count when min how is exactly or max how is not specified
     usernameMaxCountDisabled(){
@@ -232,7 +235,7 @@ Template.organization_config_ident_pane.helpers({
     },
     // disable the username min count
     usernameMinCountDisabled(){
-        return 'disabled';
+        return Template.instance().APP.haveIdentity.get() ? 'disabled' : '';
     }
 });
 

@@ -18,8 +18,29 @@ Organizations.s = {
         return await TenantsManager.Tenants.s.getBy( selector );
     },
 
+    // extend the TenantsManager tenantsAll publication
+    // provide identitiesCount and clientsCount
+    // item is an entity with its DYN sub-object
+    async tenantsAllExtend( item ){
+        // count identities
+        // there is one dedicated identities collection per organization 
+        const instanceName = Identities.instanceName( item._id );
+        const amInstance = AccountsHub.instances[instanceName];
+        if( amInstance ){
+            assert( amInstance instanceof AccountsManager.amClass, 'expects an instance of AccountsManager.amClass, got '+amInstance );
+            item.DYN.identitiesCount = await amInstance.collection().countDocuments();
+        } else {
+            console.log( 'collection non defined', instanceName );
+        }
+        // count clients
+        // there is one clients collection common to all organizations
+        item.DYN.clientsCount = await ClientsEntities.collection.countDocuments({ organization: item._id });
+        return true;
+    },
+
     // extend the TenantsManager tabular publish function
     // provide identitiesCount and clientsCount
+    // item is a modified closest record
     async tabularExtend( item ){
         // count identities
         // there is one dedicated identities collection per organization 

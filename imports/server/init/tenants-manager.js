@@ -10,6 +10,7 @@ import { IdentitiesRegistrar } from '/imports/common/classes/identities-registra
 import { Organizations } from '/imports/common/collections/organizations/index.js';
 
 TenantsManager.configure({
+    serverAllExtend: Organizations.s.tenantsAllExtend,
     serverTabularExtend: Organizations.s.tabularExtend
 });
 
