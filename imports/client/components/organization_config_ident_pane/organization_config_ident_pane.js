@@ -165,6 +165,11 @@ Template.organization_config_ident_pane.helpers({
     emailMinCountDisabled(){
         return Template.instance().APP.haveIdentity.get() ? 'disabled' : '';
     },
+    // display just on top of the input panels a short text which explain why the panels are disabled or when they will be
+    identityTop( arg ){
+        const label = Template.instance().APP.haveIdentity.get() ? 'ident_disabled' : 'ident_enabled';
+        return pwixI18n.label( I18N, 'organizations.edit.'+label );
+    },
     // string translation
     i18n( arg ){
         return pwixI18n.label( I18N, arg.hash.key );

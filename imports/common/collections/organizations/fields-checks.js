@@ -181,9 +181,11 @@ Organizations.checks = {
     // whether the organization allow dynamic registration by confidential clients
     async dynamicRegistrationByConfidential( value, data, opts ){
         _assert_data_entityrv( 'Organizations.checks.dynamicRegistrationByConfidential()', data );
-        let item = data.entity.get().DYN.records[data.index].get();
+        let entity = data.entity.get();
+        let item = entity.DYN.records[data.index].get();
         if( opts.update !== false ){
             item.dynamicRegistrationByConfidential = Boolean( value );
+            data.entity.set( entity );
         }
         return null;
     },
@@ -191,9 +193,11 @@ Organizations.checks = {
     // whether the organization allow dynamic registration by public clients
     async dynamicRegistrationByPublic( value, data, opts ){
         _assert_data_entityrv( 'Organizations.checks.dynamicRegistrationByPublic()', data );
-        let item = data.entity.get().DYN.records[data.index].get();
+        let entity = data.entity.get();
+        let item = entity.DYN.records[data.index].get();
         if( opts.update !== false ){
             item.dynamicRegistrationByPublic = Boolean( value );
+            data.entity.set( entity );
         }
         return null;
     },
@@ -201,9 +205,11 @@ Organizations.checks = {
     // whether the organization allow dynamic registration by identified allowed users
     async dynamicRegistrationByUser( value, data, opts ){
         _assert_data_entityrv( 'Organizations.checks.dynamicRegistrationByUser()', data );
-        let item = data.entity.get().DYN.records[data.index].get();
+        let entity = data.entity.get();
+        let item = entity.DYN.records[data.index].get();
         if( opts.update !== false ){
             item.dynamicRegistrationByUser = Boolean( value );
+            data.entity.set( entity );
         }
         return null;
     },
@@ -233,10 +239,11 @@ Organizations.checks = {
     // are email addresses an identifier ?
     async identitiesEmailAddressesIdentifier( value, data, opts ){
         _assert_data_entityrv( 'Organizations.checks.identitiesEmailAddressesIdentifier()', data );
-        let item = data.entity.get().DYN.records[data.index].get();
+        let entity = data.entity.get();
+        let item = entity.DYN.records[data.index].get();
         if( opts.update !== false ){
             item.identitiesEmailAddressesIdentifier = Boolean( value );
-            data.entity.get().DYN.records[data.index].set( item );
+            data.entity.set( entity );
         }
         if( value === true || value === false ){
             return await Organizations.checks.identitiesIdentifier( null, data, opts );
@@ -251,10 +258,11 @@ Organizations.checks = {
     // how do we want manage email addresses ?
     async identitiesEmailAddressesMaxCount( value, data, opts ){
         _assert_data_entityrv( 'Organizations.checks.identitiesEmailAddressesMaxCount()', data );
-        let item = data.entity.get().DYN.records[data.index].get();
+        let entity = data.entity.get();
+        let item = entity.DYN.records[data.index].get();
         if( opts.update !== false ){
             item.identitiesEmailAddressesMaxCount = parseInt( value );
-            data.entity.get().DYN.records[data.index].set( item );
+            data.entity.set( entity );
         }
         value = parseInt( value );
         if( Number.isInteger( value ) && value >= 0 ){
@@ -269,10 +277,11 @@ Organizations.checks = {
 
     async identitiesEmailAddressesMaxHow( value, data, opts ){
         _assert_data_entityrv( 'Organizations.checks.identitiesEmailAddressesMaxHow()', data );
-        let item = data.entity.get().DYN.records[data.index].get();
+        let entity = data.entity.get();
+        let item = entity.DYN.records[data.index].get();
         if( opts.update !== false ){
             item.identitiesEmailAddressesMaxHow = value;
-            data.entity.get().DYN.records[data.index].set( item );
+            data.entity.set( entity );
         }
         if( value ){
             const def = HowCount.byId( value );
@@ -297,10 +306,11 @@ Organizations.checks = {
 
     async identitiesEmailAddressesMinCount( value, data, opts ){
         _assert_data_entityrv( 'Organizations.checks.identitiesEmailAddressesMinCount()', data );
-        let item = data.entity.get().DYN.records[data.index].get();
+        let entity = data.entity.get();
+        let item = entity.DYN.records[data.index].get();
         if( opts.update !== false ){
             item.identitiesEmailAddressesMinCount = parseInt( value );
-            data.entity.get().DYN.records[data.index].set( item );
+            data.entity.set( entity );
         }
         value = parseInt( value );
         if( Number.isInteger( value ) && value >= 0 ){
@@ -315,10 +325,11 @@ Organizations.checks = {
 
     async identitiesEmailAddressesMinHow( value, data, opts ){
         _assert_data_entityrv( 'Organizations.checks.identitiesEmailAddressesMinHow()', data );
-        let item = data.entity.get().DYN.records[data.index].get();
+        let entity = data.entity.get();
+        let item = entity.DYN.records[data.index].get();
         if( opts.update !== false ){
             item.identitiesEmailAddressesMinHow = value;
-            data.entity.get().DYN.records[data.index].set( item );
+            data.entity.set( entity );
         }
         if( value ){
             const def = HowCount.byId( value );
@@ -364,10 +375,11 @@ Organizations.checks = {
     // are usernames an identifier ?
     async identitiesUsernamesIdentifier( value, data, opts ){
         _assert_data_entityrv( 'Organizations.checks.identitiesUsernamesIdentifier()', data );
-        let item = data.entity.get().DYN.records[data.index].get();
+        let entity = data.entity.get();
+        let item = entity.DYN.records[data.index].get();
         if( opts.update !== false ){
             item.identitiesUsernamesIdentifier = Boolean( value );
-            data.entity.get().DYN.records[data.index].set( item );
+            data.entity.set( entity );
         }
         if( value === true || value === false ){
             return await Organizations.checks.identitiesIdentifier( null, data, opts );
@@ -382,10 +394,11 @@ Organizations.checks = {
     // how to we want manage usernames ?
     async identitiesUsernamesMaxCount( value, data, opts ){
         _assert_data_entityrv( 'Organizations.checks.identitiesUsernamesMaxCount()', data );
-        let item = data.entity.get().DYN.records[data.index].get();
+        let entity = data.entity.get();
+        let item = entity.DYN.records[data.index].get();
         if( opts.update !== false ){
             item.identitiesUsernamesMaxCount = parseInt( value );
-            data.entity.get().DYN.records[data.index].set( item );
+            data.entity.set( entity );
         }
         value = parseInt( value );
         if( Number.isInteger( value ) && value >= 0 ){
@@ -400,10 +413,11 @@ Organizations.checks = {
 
     async identitiesUsernamesMaxHow( value, data, opts ){
         _assert_data_entityrv( 'Organizations.checks.identitiesUsernamesMaxHow()', data );
-        let item = data.entity.get().DYN.records[data.index].get();
+        let entity = data.entity.get();
+        let item = entity.DYN.records[data.index].get();
         if( opts.update !== false ){
             item.identitiesUsernamesMaxHow = value;
-            data.entity.get().DYN.records[data.index].set( item );
+            data.entity.set( entity );
         }
         if( value ){
             const def = HowCount.byId( value );
@@ -428,10 +442,11 @@ Organizations.checks = {
 
     async identitiesUsernamesMinCount( value, data, opts ){
         _assert_data_entityrv( 'Organizations.checks.identitiesUsernamesMinCount()', data );
-        let item = data.entity.get().DYN.records[data.index].get();
+        let entity = data.entity.get();
+        let item = entity.DYN.records[data.index].get();
         if( opts.update !== false ){
             item.identitiesUsernamesMinCount = parseInt( value );
-            data.entity.get().DYN.records[data.index].set( item );
+            data.entity.set( entity );
         }
         value = parseInt( value );
         if( Number.isInteger( value ) && value >= 0 ){
@@ -446,10 +461,11 @@ Organizations.checks = {
 
     async identitiesUsernamesMinHow( value, data, opts ){
         _assert_data_entityrv( 'Organizations.checks.identitiesUsernamesMinHow()', data );
-        let item = data.entity.get().DYN.records[data.index].get();
+        let entity = data.entity.get();
+        let item = entity.DYN.records[data.index].get();
         if( opts.update !== false ){
             item.identitiesUsernamesMinHow = value;
-            data.entity.get().DYN.records[data.index].set( item );
+            data.entity.set( entity );
         }
         if( value ){
             const def = HowCount.byId( value );
@@ -679,9 +695,11 @@ Organizations.checks = {
     // whether the organization wants all clients use PKCE (rfc7636)
     async wantsPkce( value, data, opts ){
         _assert_data_entityrv( 'Organizations.checks.wantsPkce()', data );
-        let item = data.entity.get().DYN.records[data.index].get();
+        let entity = data.entity.get();
+        let item = entity.DYN.records[data.index].get();
         if( opts.update !== false ){
             item.wantsPkce = Boolean( value );
+            data.entity.set( entity );
         }
         return null;
     }

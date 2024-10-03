@@ -7,6 +7,8 @@
 import { PlusButton } from 'meteor/pwix:plus-button';
 import { pwixI18n } from 'meteor/pwix:i18n';
 
+import '/imports/client/components/clients_count_badge/clients_count_badge.js';
+import '/imports/client/components/identities_count_badge/identities_count_badge.js';
 import '/imports/client/components/organization_clients_load/organization_clients_load.js';
 import '/imports/client/components/organization_clients_pane/organization_clients_pane.js';
 import '/imports/client/components/organization_config_dynregistration_pane/organization_config_dynregistration_pane.js';
@@ -51,11 +53,13 @@ Template.manager_organizations_tab.onCreated( function(){
             {
                 name: 'organization_identities_tab',
                 navLabel: pwixI18n.label( I18N, 'organizations.edit.identities_tab_title' ),
+                navTemplate: 'identities_count_badge',
                 paneTemplate: 'organization_identities_pane'
             },
             {
                 name: 'organization_clients_tab',
                 navLabel: pwixI18n.label( I18N, 'organizations.edit.clients_tab_title' ),
+                navTemplate: 'clients_count_badge',
                 paneTemplate: 'organization_clients_pane'
             }
         ],
@@ -67,14 +71,10 @@ Template.manager_organizations_tab.onCreated( function(){
             },
             // some components which will not be shown, but are just here to load relative data
             {
-                name: 'organization_clients_load',
-                navLabel: 'organization_clients_load',
                 paneTemplate: 'organization_clients_load',
                 shown: false
             },
             {
-                name: 'organization_identities_load',
-                navLabel: 'organization_identities_load',
                 paneTemplate: 'organization_identities_load',
                 shown: false
             }

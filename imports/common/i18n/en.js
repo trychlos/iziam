@@ -394,6 +394,7 @@ Meteor.APP.i18n = {
                     auth_method_th: 'Authentication method',
                     authorization_flow_th: 'Grant flow',
                     client_type_th: 'Client type',
+                    count_badge: 'Count of defined clients',
                     delete_button_title: 'Delete the "%s" client',
                     edit_button_title: 'Edit the "%s" client',
                     enabled_th: 'Enabled',
@@ -730,6 +731,9 @@ Meteor.APP.i18n = {
                     zoneinfo_label: 'Zoneinfo:',
                     zoneinfo_title: 'The user\'s zoneinfo'
                 },
+                tabular: {
+                    count_badge: 'Count of defined identities',
+                }
             },
             jwks: {
                 checks: {
@@ -945,7 +949,7 @@ Meteor.APP.i18n = {
                 clients: {
                     list_preamble: 'The list of clients defined by and for the organization.<br />'
                         +'Capabilities of the clients depend of their type and of the chozen authorization grant flow.<br />'
-                        +'Please note that the considered configuration is those of the <b>saved</b> organization, not those of the currently edited record.',
+                        +'Please note that the considered configuration is those of the <b>saved</b> organization, not those of the currently edited record(s).',
                 },
                 edit: {
                     authorization_example: 'Authorization Server URL: &laquo; %s &raquo;',
@@ -982,6 +986,8 @@ Meteor.APP.i18n = {
                         +'This configuration will be read-only as soon as you will have defined a first identity, as we do not know at the moment how handle'
                         +'the configuration updates here without some sort of hard dedicated work.',
                     ident_config_tab_title: 'Identities',
+                    ident_disabled: 'The configuration of identities is now disabled as you have already defined identities.',
+                    ident_enabled: 'The configuration of identities is only possible while you do not have defined any identity.',
                     ident_email_address: 'email address(es)',
                     ident_email_identifier: 'Make each email address an identifier of the identity',
                     ident_email_legend: 'Manage your email addresses',
@@ -1036,7 +1042,7 @@ Meteor.APP.i18n = {
                 },
                 identities: {
                     list_preamble: 'Define here the identities inside of your organization.<br />'
-                        +'Please note that the considered configuration is those of the <b>saved</b> organization, not those of the currently edited record.'
+                        +'Please note that the considered configuration is those of the <b>saved</b> organization, not those of the currently edited record(s).'
                 },
                 jwks: {
                     preamble: 'The JSON Web Key Set (JWKS) is a set of keys containing the public keys used to sign and encrypt any JSON Web Token (JWT) '
