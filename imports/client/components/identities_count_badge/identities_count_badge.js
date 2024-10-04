@@ -9,6 +9,7 @@
  */
 
 import { pwixI18n } from 'meteor/pwix:i18n';
+import { TenantsManager } from 'meteor/pwix:tenants-manager';
 
 import './identities_count_badge.html';
 
@@ -19,6 +20,8 @@ Template.identities_count_badge.helpers({
     },
     // the count
     count(){
-        return this.item.get().DYN.identitiesCount;
+        const saved = TenantsManager.list.byEntity( this.item.get()._id );
+        //console.debug( 'saved', saved, saved.DYN.identitiesCount );
+        return saved ? saved.DYN.identitiesCount : '(?)';
     }
 });

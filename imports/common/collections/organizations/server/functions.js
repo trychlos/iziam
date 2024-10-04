@@ -2,6 +2,7 @@
  * /import/common/collections/organizations/server/functions.js
  */
 
+import _ from 'lodash';
 const assert = require( 'assert' ).strict; // up to nodejs v16.x
 
 import { AccountsHub } from 'meteor/pwix:accounts-hub';
@@ -18,6 +19,48 @@ Organizations.s = {
         return await TenantsManager.Tenants.s.getBy( selector );
     },
 
+    // a listener for create/update/delete events on AccountsManager
+    //  from AccountsManager, we get an object with an amInstance key
+    //  from Clients, we get an object with an entity key
+    onCorrelatedUpdateEvent( args ){
+        //console.debug( 'onCorrelatedUpdateEvent', arguments );
+        let organizationEntityId = null;
+        // coming from AccountsManager ?
+        if( args && args.amInstance && _.isString( args.amInstance )){
+            if( Identities.isIdentities( args.amInstance )){
+                organizationEntityId = Identities.scope( args.amInstance );
+            }
+        }
+        // coming from Clients ?
+        if( args && args.entity ){
+            organizationEntityId = args.entity.organization;
+        }
+        if( organizationEntityId ){
+            TenantsManager.Entities.collection.updateAsync({ _id: organizationEntityId }, { $set: { witness_stamp: new Date() }});
+        }
+    },
+
+    // extend the TenantsManager tabular publication
+    // provide identitiesCount and clientsCount
+    // item is a modified closest record
+    async tabularExtend( item ){
+        // count identities
+        // there is one dedicated identities collection per organization 
+        const instanceName = Identities.instanceName( item.DYN.entity._id );
+        const amInstance = AccountsHub.instances[instanceName];
+        if( amInstance ){
+            assert( amInstance instanceof AccountsManager.amClass, 'expects an instance of AccountsManager.amClass, got '+amInstance );
+            item.identitiesCount = await amInstance.collection().countDocuments();
+        // a very frequent case where the class has not yet been instanciated - not an issue
+        //} else {
+        //    console.log( 'collection non defined', instanceName );
+        }
+        // count clients
+        // there is one clients collection common to all organizations
+        item.clientsCount = await ClientsEntities.collection.countDocuments({ organization: item.DYN.entity._id });
+        return true;
+    },
+
     // extend the TenantsManager tenantsAll publication
     // provide identitiesCount and clientsCount
     // item is an entity with its DYN sub-object
@@ -29,32 +72,13 @@ Organizations.s = {
         if( amInstance ){
             assert( amInstance instanceof AccountsManager.amClass, 'expects an instance of AccountsManager.amClass, got '+amInstance );
             item.DYN.identitiesCount = await amInstance.collection().countDocuments();
-        } else {
-            console.log( 'collection non defined', instanceName );
+        // a very frequent case where the class has not yet been instanciated - not an issue
+        //} else {
+        //    console.log( 'collection non defined', instanceName );
         }
         // count clients
         // there is one clients collection common to all organizations
         item.DYN.clientsCount = await ClientsEntities.collection.countDocuments({ organization: item._id });
-        return true;
-    },
-
-    // extend the TenantsManager tabular publish function
-    // provide identitiesCount and clientsCount
-    // item is a modified closest record
-    async tabularExtend( item ){
-        // count identities
-        // there is one dedicated identities collection per organization 
-        const instanceName = Identities.instanceName( item.DYN.entity._id );
-        const amInstance = AccountsHub.instances[instanceName];
-        if( amInstance ){
-            assert( amInstance instanceof AccountsManager.amClass, 'expects an instance of AccountsManager.amClass, got '+amInstance );
-            item.identitiesCount = await amInstance.collection().countDocuments();
-        } else {
-            console.log( 'collection non defined', instanceName );
-        }
-        // count clients
-        // there is one clients collection common to all organizations
-        item.clientsCount = await ClientsEntities.collection.countDocuments({ organization: item.DYN.entity._id });
         return true;
     }
 };

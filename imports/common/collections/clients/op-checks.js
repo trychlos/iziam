@@ -38,9 +38,9 @@ Clients.setupOperational = async function( item ){
             status: new ReactiveVar( Forms.FieldStatus.C.NONE )
         };
     }
+    let entity = { ...item };
+    delete entity.DYN;
     if( atdate ){
-        let entity = { ...item };
-        delete entity.DYN;
         Clients.isOperational({ entity: entity, record: atdate }).then(( res ) => {
             // null or a TM.TypedMessage or an array of TM.TypedMessage's
             item.DYN.operational.results = res;
@@ -57,7 +57,7 @@ Clients.setupOperational = async function( item ){
             level: TM.MessageLevel.C.INFO,
             message: pwixI18n.label( I18N, 'clients.checks.atdate_next' )
         }));
-        Organizations.isOperational({ entity: entity, record: item.DYN.closest }).then(( res ) => {
+        Clients.isOperational({ entity: entity, record: item.DYN.closest }).then(( res ) => {
             if( res ){
                 item.DYN.operational.results = item.DYN.operational.results.concat( res );
             } else {

@@ -60,7 +60,7 @@ Template.organization_identities_pane.onCreated( function(){
         });
     });
 
-    // make sure the AccountsManager is initialized before trying to initialize it
+    // make sure the AccountsManager is initialized before trying to instanciate it here
     // happens that the IdentitiesRegistrar is initialized, and the identities loaded, from the identities_load parallel tab
     // so we want wait for the new instance be registered before trying to display the AccountsList component
     // thus this ReactiveVar

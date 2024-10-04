@@ -22,14 +22,11 @@ Identities.tabularFieldsDef = function( organization ){
             dt_visible: false
         },
         // -- scope: profile
-        // the user's full name
+        // the user's full name, either entered or computed
         {
-            name: 'name',
+            name: 'tabular_name',
             type: String,
-            optional: true,
-            dt_title: pwixI18n.label( I18N, 'identities.list.name_th' ),
-            form_check: Identities.checks.name,
-            form_type: Forms.FieldType.C.OPTIONAL
+            dt_title: pwixI18n.label( I18N, 'identities.list.name_th' )
         },
         // the user's surname(s) or last name(s)
         {
@@ -115,6 +112,11 @@ Identities.tabularFieldsDef = function( organization ){
             name: 'preferredUsername',
             type: String,
             dt_title: pwixI18n.label( I18N, 'identities.list.username_th' )
+        },
+        Timestampable.fieldDef(),
+        {
+            name: 'DYN',
+            dt_visible: false
         }
     ];
     return columns;

@@ -25,17 +25,35 @@ Template.client_new_button.onCreated( function(){
     //console.debug( this );
 
     self.APP = {
-        canCreate: new ReactiveVar( false )
+        allowed: new ReactiveVar( false ),
+        organization: new ReactiveVar( null ),
+        haveProviders: new ReactiveVar( false ),
+        enabled: new ReactiveVar( false )
     };
 
     // check the creation permission
     self.autorun( async () => {
-        self.APP.canCreate.set( await Permissions.isAllowed( 'feat.clients.create', Meteor.userId(), Template.currentData().item.get()._id ));
+        self.APP.allowed.set( await Permissions.isAllowed( 'feat.clients.create', Meteor.userId(), Template.currentData().item.get()._id ));
     });
 
-    // track the creation permission
-    self.autorun( async () => {
-        //console.debug( 'canCreate', self.APP.canCreate.get());
+    // build the organization { entity, record } object
+    self.autorun(() => {
+        const item = Template.currentData().item.get();
+        self.APP.organization.set({
+            entity: item,
+            record: item.DYN.closest
+        });
+    });
+
+    // must have providers
+    self.autorun(() => {
+        const organization = self.APP.organization.get();
+        self.APP.haveProviders.set( organization.record.selectedProviders && _.isArray( organization.record.selectedProviders ) && organization.record.selectedProviders.length );
+    });
+
+    // enable the PlusButton
+    self.autorun(() => {
+        self.APP.enabled.set( self.APP.allowed.get() && self.APP.haveProviders.get());
     });
 });
 
@@ -46,7 +64,8 @@ Template.client_new_button.helpers({
             ...this,
             label: pwixI18n.label( I18N, 'clients.new.button_label' ),
             shape: PlusButton.C.Shape.RECTANGLE,
-            title: pwixI18n.label( I18N, 'clients.new.button_title' )
+            title: pwixI18n.label( I18N, 'clients.new.button_title' ),
+            enabled: Template.instance().APP.enabled
         }
     },
 });
@@ -55,15 +74,13 @@ Template.client_new_button.events({
     'click .plusButton'( event, instance ){
         let dc = { ...this };
         delete dc.entityTabs;
+        delete dc.entityTabsAfter;
         delete dc.recordTabs;
+        delete dc.recordTabsAfter;
         delete dc.checker;
-        const organization = {
-            entity: this.item.get(),
-            record: this.item.get().DYN.closest
-        };
         Modal.run({
             ...dc,
-            organization: organization,
+            organization: instance.APP.organization.get(),
             mdBody: 'client_new_assistant',
             mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
             mdClasses: 'modal-xxl',

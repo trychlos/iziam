@@ -32,7 +32,7 @@ Template.identity_email_row.onCreated( function(){
                     return $node.val();
                 },
                 formTo( $node, item ){
-                    $node.val( item.address );
+                    $node.val( item.label );
                 }
             },
             'emails.$.address': {
@@ -59,7 +59,7 @@ Template.identity_email_row.onCreated( function(){
                     return $node.prop( 'checked' );
                 },
                 formTo( $node, item ){
-                    $node.prop( 'checked', item.verified );
+                    $node.prop( 'checked', item.preferred );
                 }
             }
         },

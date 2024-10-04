@@ -36,9 +36,11 @@ Template.organization_operational_badge.helpers({
     parmsStatus(){
         const entity = this.item.entity ? TenantsManager.list.byEntity( this.item.entity ) : null;
         const statusRv = entity ? entity.DYN.operational?.status : null;
+        const title = statusRv && statusRv.get() === Forms.FieldStatus.C.VALID ?
+            pwixI18n.label( I18N, 'organizations.tabular.operational_valid_title' ) : pwixI18n.label( I18N, 'organizations.tabular.operational_invalid_title' );
         return statusRv ? {
             statusRv: statusRv,
-            title: pwixI18n.label( I18N, 'organizations.tabular.operational_title' ),
+            title: title,
             uncompleteButton: true,
             invalidButton: true,
             buttonOnClick: Template.instance().APP.onClick

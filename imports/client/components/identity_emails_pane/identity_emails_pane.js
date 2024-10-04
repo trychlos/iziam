@@ -36,7 +36,7 @@ Template.identity_emails_pane.onCreated( function(){
         self.APP.emailsCount.set(( item.emails || [] ).length );
     });
 
-    // have the max count allowed by the organization
+    // have the max count allowed by the organization (or -1 if not relevant)
     self.autorun(() => {
         self.APP.maxCount = Organizations.fn.maxEmailAddressesCount( Template.currentData().organization );
     });

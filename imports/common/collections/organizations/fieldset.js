@@ -13,7 +13,19 @@ import { Keygrips } from '/imports/common/tables/keygrips/index.js';
 import { Organizations } from './index.js';
 
 Organizations.entityFieldset = function(){
-    return null;
+    return [
+        {
+            fields: [
+                // a timestamp field which is updated when a correlated collection (identities, clients, ...) is itself updated
+                // this way the DYN datas are too updated by the publication and they can be reactive in the UI
+                {
+                    name: 'witness_stamp',
+                    type: Date,
+                    optional: true
+                }
+            ]
+        }
+    ];
 };
 
 Organizations.recordFieldset = function(){
@@ -35,7 +47,8 @@ Organizations.recordFieldset = function(){
                 {
                     name: 'selectedProviders',
                     type: Array,
-                    optional: true
+                    optional: true,
+                    form_check: Organizations.checks.selectedProviders
                 },
                 // the provider IIdent identifier
                 {
@@ -354,7 +367,7 @@ Organizations.recordFieldset = function(){
                     optional: true,
                     form_check: Organizations.checks.userinfo_endpoint,
                     form_type: Forms.FieldType.C.OPTIONAL
-                },
+                }
             ]
         }
     ];

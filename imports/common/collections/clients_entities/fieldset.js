@@ -6,7 +6,6 @@
 
 import { Field } from 'meteor/pwix:field';
 import { Notes } from 'meteor/pwix:notes';
-import { pwixI18n } from 'meteor/pwix:i18n';
 import { Tracker } from 'meteor/tracker';
 import { Validity } from 'meteor/pwix:validity';
 

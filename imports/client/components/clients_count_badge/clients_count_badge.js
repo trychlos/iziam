@@ -9,6 +9,7 @@
  */
 
 import { pwixI18n } from 'meteor/pwix:i18n';
+import { TenantsManager } from 'meteor/pwix:tenants-manager';
 
 import './clients_count_badge.html';
 
@@ -19,6 +20,7 @@ Template.clients_count_badge.helpers({
     },
     // the count
     count(){
-        return this.item.get().DYN.clientsCount;
+        const saved = TenantsManager.list.byEntity( this.item.get()._id );
+        return saved ? saved.DYN.clientsCount : '(?)';
     }
 });

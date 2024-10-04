@@ -82,7 +82,7 @@ Organizations.isOperational = async function( organization ){
     promises.push( fnCheck( 'revocation_endpoint', organization.record.revocation_endpoint ));
     // revocation_endpoint_auth_methods_supported
     // revocation_endpoint_auth_signing_alg_values_supported
-    // selectedProviders
+    promises.push( fnCheck( 'selectedProviders', organization.record.selectedProviders ));
     // service_documentation
     // signed_metadata
     promises.push( fnCheck( 'token_endpoint', organization.record.token_endpoint ));
@@ -112,9 +112,9 @@ Organizations.setupOperational = async function( item ){
             status: new ReactiveVar( Forms.FieldStatus.C.NONE )
         };
     }
+    let entity = { ...item };
+    delete entity.DYN;
     if( atdate ){
-        let entity = { ...item };
-        delete entity.DYN;
         Organizations.isOperational({ entity: entity, record: atdate }).then(( res ) => {
             // null or a TM.TypedMessage or an array of TM.TypedMessage's
             item.DYN.operational.results = res || [];

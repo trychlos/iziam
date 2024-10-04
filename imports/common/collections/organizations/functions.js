@@ -159,6 +159,17 @@ Organizations.fn = {
     },
 
     /**
+     * @param {Organizations} organization as an { entity, record } object
+     * @returns {Integer} the max count of usernames allowed by the organization
+     *  or -1 if not relevant (must not be checked)
+     */
+    maxUsernamesCount( organization ){
+        const maxhow = organization.record.identitiesUsernamesMaxHow;
+        const maxcount = organization.record.identitiesUsernamesMaxCount;
+        return ( maxhow === 'most' ) && parseInt( maxcount ) > 0 ? parseInt( maxcount ) : -1;
+    },
+
+    /**
      * @summary Compute and returns the list of selected providers for the entity/record organization
      *  Computed selected providers are:
      *  - providers explicitely selected by the organization manager to be allowed to the clients (read from the organization records)

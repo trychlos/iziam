@@ -15,8 +15,9 @@ import { HmacAlg } from '/imports/common/definitions/hmac-alg.def.js';
 import { HmacEncoding } from '/imports/common/definitions/hmac-encoding.def.js';
 import { HowCount } from '/imports/common/definitions/how-count.def.js';
 
+import { Providers } from '/imports/common/tables/providers/index.js';
+
 import { Organizations } from './index.js';
-import { ifError } from 'assert';
 
 // fields check
 //  - value: mandatory, the value to be tested
@@ -112,9 +113,9 @@ Organizations.checks = {
                 });
             }
         // value is optional in the UI, but must be set for the organization be operational
-        } else if( opts.opCheck ){
+        } else {
             return new TM.TypedMessage({
-                level: TM.MessageLevel.C.ERROR,
+                level: opts.opCheck ? TM.MessageLevel.C.ERROR : TM.MessageLevel.C.WARNING,
                 message: pwixI18n.label( I18N, 'organizations.checks.authorization_unset' )
             });
         }
@@ -643,6 +644,37 @@ Organizations.checks = {
         return null;
     },
 
+    // selectedProviders
+    // there should be at least one - we will not be able to create any client while no provider is selected
+    // value here is expected to be the array of selected providers identifiers
+    async selectedProviders( value, data, opts ){
+        //console.debug( 'checks.token_endpoint' );
+        _assert_data_entityrv( 'Organizations.checks.selectedProviders()', data );
+        let entity = data.entity.get();
+        let item = entity.DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.selectedProviders = value;
+            data.entity.set( entity );
+        }
+        if( value && _.isArray( value ) && value.length ){
+            let res = [];
+            value.forEach(( it ) => {
+                const provider = Providers.byId( it );
+                if( !provider ){
+                    res.push( new TM.TypedMessage({
+                        level: TM.MessageLevel.C.WARNING,
+                        message: pwixI18n.label( I18N, 'organizations.checks.provider_unknown', it )
+                    }));
+                }
+            });
+            return res.length ? res : null;
+        }
+        return new TM.TypedMessage({
+            level: TM.MessageLevel.C.WARNING,
+            message: pwixI18n.label( I18N, 'organizations.checks.provider_unset', it )
+        });
+    },
+
     // token endpoint
     // must be provided as an absolute path
     async token_endpoint( value, data, opts ){
@@ -662,9 +694,9 @@ Organizations.checks = {
                 });
             }
         // value is optional in the UI, but must be set for the organization be operational
-        } else if( opts.opCheck ){
+        } else {
             return new TM.TypedMessage({
-                level: TM.MessageLevel.C.ERROR,
+                level: opts.opCheck ? TM.MessageLevel.C.ERROR : TM.MessageLevel.C.WARNING,
                 message: pwixI18n.label( I18N, 'organizations.checks.token_unset' )
             });
         }

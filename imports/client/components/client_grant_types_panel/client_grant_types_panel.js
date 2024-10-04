@@ -186,6 +186,7 @@ Template.client_grant_types_panel.helpers({
 
     // list of available natures (sorted to have access at first position)
     naturesList(){
+        //console.debug( 'naturesList', Object.keys( Template.instance().APP.selectables.get()).sort());
         return Object.keys( Template.instance().APP.selectables.get()).sort();
     }
 });

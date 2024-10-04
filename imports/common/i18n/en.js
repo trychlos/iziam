@@ -402,7 +402,8 @@ Meteor.APP.i18n = {
                     info_button_title: 'Informations about the "%s" client',
                     info_modal_title: 'Informations about the "%s" client',
                     label_th: 'Label',
-                    operational_title: 'Operational status of the client'
+                    operational_invalid_title: 'The client is not operational! Please fix that',
+                    operational_valid_title: 'The client is fully operational'
                 }
             },
             definitions: {
@@ -931,6 +932,8 @@ Meteor.APP.i18n = {
                     jwks_absolute: 'The JWKS document URI must be provided as an absolute path',
                     jwks_no_but_jwk: 'No JWKS URI is yet defined while at least one JWK exists',
                     jwks_uri_wo_jwk: 'A JWKS URI is specified, but no JWK is defined (yet ?)',
+                    provider_unknown: 'The "%s" provider is not registered',
+                    provider_unset: 'There is no selected feature providers, but this is needed',
                     registration_absolute: 'The registration endpoint must be provided as an absolute path',
                     revocation_absolute: 'The revocation endpoint must be provided as an absolute path',
                     token_absolute: 'The token endpoint must be provided as an absolute path',
@@ -1070,7 +1073,8 @@ Meteor.APP.i18n = {
                     identities_th: 'Identities',
                     baseurl_th: 'Base URL',
                     clients_th: 'Clients',
-                    operational_title: 'Operational status of the organization',
+                    operational_invalid_title: 'The organization is not operational! Please fix that',
+                    operational_valid_title: 'The organization is fully operational'
                 }
             },
             powered_by: {

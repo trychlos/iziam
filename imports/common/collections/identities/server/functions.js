@@ -38,13 +38,18 @@ Identities.s = {
     // delete an identity
     removeById( id, userId ){
         let res = Identities.remove({ _id: id });
-        Memberships.s.removeByIdentity( id );
+        //Memberships.s.removeByIdentity( id );
         return res;
     },
 
     // extend the AccountsManager tabular publish function
-    // provide preferred email and username
+    // provide a tabular_name, preferred email and username
+    // tabular_name: a tabular column to display a full name *without* modifying the record
     async tabularExtend( item ){
+        item.tabular_name = item.name;
+        if( !item.name ){
+            item.tabular_name = Identities.fn.name( item );
+        }
         const email = Identities.fn.emailPreferred( item );
         if( email ){
             item.preferredEmailAddress = email.address;
@@ -87,6 +92,7 @@ Identities.s = {
                 delete item.usernames;
             }
             res = await collection.upsertAsync({ _id: item._id }, { $set: item });
+            AccountsManager.s.eventEmitter.emit( 'update', { amInstance: Identities.instanceName( args.organization._id ), item: item });
             // get the newly inserted id
             if( res.insertedId ){
                 item._id = res.insertedId;

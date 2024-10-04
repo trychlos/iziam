@@ -106,7 +106,9 @@ Template.clients_list.events({
     'tabular-edit-event .c-clients-list'( event, instance, data ){
         let dc = { ...this };
         delete dc.entityTabs;
-        delete dc.recordTabs
+        delete dc.entityTabsAfter;
+        delete dc.recordTabs;
+        delete dc.recordTabsAfter;
         delete dc.checker;
         const organization = {
             entity: this.item.get(),
