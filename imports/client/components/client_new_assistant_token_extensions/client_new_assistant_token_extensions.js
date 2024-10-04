@@ -16,6 +16,7 @@
 import _ from 'lodash';
 
 import { pwixI18n } from 'meteor/pwix:i18n';
+import { ReactiveVar } from 'meteor/reactive-var';
 
 import '/imports/client/components/client_token_extensions_panel/client_token_extensions_panel.js';
 
@@ -27,8 +28,19 @@ Template.client_new_assistant_token_extensions.onCreated( function(){
     self.APP = {
         // the selectables grant types
         // computed by the embedded component, passed-in via iz-token-extensions event
-        selectables: null
+        selectables: new ReactiveVar( null )
     };
+});
+
+Template.client_new_assistant_token_extensions.onRendered( function(){
+    const self = this;
+
+    // tracks the selected providers to enable/disable this pane
+    // this "token extensions" pane requires to have a provider with ITokenExtension interface
+    self.autorun(() => {
+        const selectables = self.APP.selectables.get() || [];
+        self.$( '.c-client-new-assistant-token-extensions' ).trigger( 'assistant-do-enable-tab', { name: 'formaters', enabled: selectables.length });
+    });
 });
 
 Template.client_new_assistant_token_extensions.helpers({
@@ -63,6 +75,6 @@ Template.client_new_assistant_token_extensions.events({
         this.parentAPP.assistantStatus.set( 'token_extensions', data.token_extensions );
     },
     'iz-selectables .c-client-new-assistant-token-extensions'( event, instance, data ){
-        instance.APP.selectables = data.selectables;
+        instance.APP.selectables.set( data.selectables );
     }
 });

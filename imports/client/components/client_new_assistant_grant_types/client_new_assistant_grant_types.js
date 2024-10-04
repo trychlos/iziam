@@ -43,11 +43,9 @@ Template.client_new_assistant_grant_types.onRendered( function(){
     // tracks the selected providers to enable/disable this pane
     // this "grant types" pane requires to have a provider for oauth2 feature
     self.autorun(() => {
-        if( Clients.fn.hasSelectedProviders()){
-            const dataDict = Template.currentData().parentAPP.assistantStatus;
-            const selected = dataDict.get( 'selectedProviders' ) || [];
-            self.$( '.c-client-new-assistant-grant-types' ).trigger( 'assistant-do-enable-tab', { name: 'grant',  enabled: Providers.hasFeature( selected, 'oauth2' ) });
-        }
+        const dataDict = Template.currentData().parentAPP.assistantStatus;
+        const selected = dataDict.get( 'selectedProviders' ) || [];
+        self.$( '.c-client-new-assistant-grant-types' ).trigger( 'assistant-do-enable-tab', { name: 'grant', enabled: Providers.hasFeature( selected, 'oauth2' ) });
     });
 
     // tracks the selection to enable/disable the Next button when the pane is active
@@ -56,7 +54,7 @@ Template.client_new_assistant_grant_types.onRendered( function(){
         const dataDict = Template.currentData().parentAPP.assistantStatus;
         if( dataDict.get( 'activePane' ) === 'grant' ){
             const array = dataDict.get( 'grant_types' ) || [];
-            self.$( '.c-client-new-assistant-grant-types' ).trigger( 'assistant-do-action-set', { action: 'next',  enable: GrantType.isValidSelection( self.APP.selectables, array )});
+            self.$( '.c-client-new-assistant-grant-types' ).trigger( 'assistant-do-action-set', { action: 'next', enable: GrantType.isValidSelection( self.APP.selectables, array )});
         }
     });
 });

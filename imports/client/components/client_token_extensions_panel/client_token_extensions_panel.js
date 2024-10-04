@@ -14,10 +14,6 @@
  * - entity: the currently edited client entity as a ReactiveVar
  * - index: the index of the edited record
  * - checker: the Forms.Checker which manages the parent component as a ReactiveVar
- * - selectables: the list of selectables tokens
- *   this is up to the caller to present to this chooser either a list of grant types, or a list of token formaters
- * 
- * Forms.Checker doesn't manage well radio buttons: do not use here.
  */
 
 import _ from 'lodash';
@@ -28,8 +24,6 @@ import { ReactiveVar } from 'meteor/reactive-var';
 import { Organizations } from '/imports/common/collections/organizations/index.js';
 
 import { TokenExtension } from '/imports/common/definitions/token-extension.def.js';
-
-import { Providers } from '/imports/common/tables/providers/index.js';
 
 import './client_token_extensions_panel.html';
 
@@ -53,9 +47,18 @@ Template.client_token_extensions_panel.onCreated( function(){
         self.APP.organizationProviders.set( Organizations.fn.selectedProviders( Template.currentData().organization ));
     });
 
-    // get the selectable grant types
+    // get the selectable token extensions
     self.autorun(() => {
         self.APP.selectables.set( TokenExtension.Selectables( Object.keys( self.APP.organizationProviders.get())));
+    });
+});
+
+Template.client_token_extensions_panel.onRendered( function(){
+    const self = this;
+
+    // advertise of the selectable token extensions
+    self.autorun(() => {
+        self.$( '.c-client-token-extensions-panel' ).trigger( 'iz-selectables', { selectables: self.APP.selectables.get() });
     });
 });
 
@@ -100,7 +103,7 @@ Template.client_token_extensions_panel.events({
         let record = this.entity.get().DYN.records[this.index].get();
         record.token_extensions = selected;
         this.entity.get().DYN.records[this.index].set( record );
-        // advertize the eventual caller (e.g. the client_new_assistant) of the new auth method
+        // advertize the eventual caller (e.g. the client_new_assistant) of the new selected extensions
         instance.$( '.c-client-token-extensions-panel' ).trigger( 'iz-token-extensions', { token_extensions: selected });
     }
 });

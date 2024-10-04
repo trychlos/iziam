@@ -648,7 +648,6 @@ Organizations.checks = {
     // there should be at least one - we will not be able to create any client while no provider is selected
     // value here is expected to be the array of selected providers identifiers
     async selectedProviders( value, data, opts ){
-        //console.debug( 'checks.token_endpoint' );
         _assert_data_entityrv( 'Organizations.checks.selectedProviders()', data );
         let entity = data.entity.get();
         let item = entity.DYN.records[data.index].get();
@@ -670,8 +669,8 @@ Organizations.checks = {
             return res.length ? res : null;
         }
         return new TM.TypedMessage({
-            level: TM.MessageLevel.C.WARNING,
-            message: pwixI18n.label( I18N, 'organizations.checks.provider_unset', it )
+            level: opts.opCheck ? TM.MessageLevel.C.ERROR : TM.MessageLevel.C.WARNING,
+            message: pwixI18n.label( I18N, 'organizations.checks.provider_unset' )
         });
     },
 
