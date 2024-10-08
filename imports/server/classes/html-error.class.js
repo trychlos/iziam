@@ -55,16 +55,18 @@ export class HtmlError extends izObject {
 
     // returns the body title
     _renderBodyTitle( out, error ){
+        //console.debug( '_renderBodyTitle', arguments );
         const title = pwixI18n.label( I18N, 'auth.error.title' );
         let str = '';
-        const url = new URL( out.iss );
-        //console.debug( url );
         str += '<div class="header">';
         str += ' <div class="row">';
-        str += '  <img src="'+url.origin+'/favicon.svg" width="64" />';
+        if( out.iss ){
+            const url = new URL( out.iss );
+            str += '  <img src="'+url.origin+'/favicon.svg" width="64" />';
+        }
         str += '  <h1>izIAM</h1>';
         str += ' </div>'
-        str += '<h2>'+out.iss+'</h2>';
+        str += '<h2>'+( out.iss || out.error )+'</h2>';
         str += '</div>';
         return str;
     }

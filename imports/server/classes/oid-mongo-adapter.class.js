@@ -103,7 +103,7 @@ export class OIDMongoAdapter extends izObject {
     // this method is called with the client_id
     // extends it to search also in our clients collection
     async find( _id ){
-        console.debug( 'find', arguments );
+        console.debug( 'find', this.name, arguments );
         //const result = await this.coll().find(
         //    { _id },
         //    { payload: 1 },
@@ -112,9 +112,15 @@ export class OIDMongoAdapter extends izObject {
             { _id },
             { payload: 1 },
         );
+        // search in Interactions model
+        if( !result ){
+            result = await this.coll().findOneAsync({ _id: _id });
+        }
+        // search in Clients model
         if( !result ){
             result = await OIDAuthServer.byClientId( _id );
         }
+        //console.debug( 'result', result );
         if( !result ) return undefined;
         return result.payload;
     }

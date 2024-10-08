@@ -58,6 +58,7 @@ import '/imports/client/components/client_application_type_select/client_applica
 import '/imports/client/components/client_auth_method_panel/client_auth_method_panel.js';
 import '/imports/client/components/client_config_panel/client_config_panel.js';
 import '/imports/client/components/client_contacts_panel/client_contacts_panel.js';
+import '/imports/client/components/client_entity_properties_pane/client_entity_properties_pane.js';
 import '/imports/client/components/client_entity_validities_pane/client_entity_validities_pane.js';
 import '/imports/client/components/client_grant_types_panel/client_grant_types_panel.js';
 import '/imports/client/components/client_jwks_panel/client_jwks_panel.js';
@@ -125,6 +126,12 @@ Template.client_edit_dialog.onCreated( function(){
                     template: 'client_record_tabbed',
                 },
                 withValidities: true
+            },
+            {
+                name: 'client_entity_properties_tab',
+                navLabel: pwixI18n.label( I18N, 'clients.edit.entity_properties_tab_title' ),
+                paneTemplate: 'client_entity_properties_pane',
+                paneData: paneData
             },
             {
                 name: 'client_entity_notes_tab',

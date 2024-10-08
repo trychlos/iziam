@@ -88,7 +88,7 @@ Template.client_redirect_row.onRendered( function(){
                             return $node.val();
                         },
                         formTo( $node, item ){
-                            $node.val( item.url );
+                            $node.val( item.uri );
                         }
                     }
                 }, ClientsRecords.fieldSet.get()),

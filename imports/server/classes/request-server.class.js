@@ -80,9 +80,18 @@ export class RequestServer {
      *  There is no expected returned value, but should answer() and must end().
      */
     async handle( url, args ){
+        //console.debug( 'handling', url );
         //args.answer({ ok: true });
         //args.end();
         this.#authServer.handle( url, args );
+    }
+
+    /**
+     * Getter
+     * @returns {IdentityServer} the attached identity server
+     */
+    async identityServer(){
+        return this.#identityServer;
     }
 
     /**
@@ -110,5 +119,13 @@ export class RequestServer {
      */
     requestable(){
         return this.#requestable;
+    }
+
+    /**
+     * Getter
+     * @returns {ResourceServer} the attached identity server
+     */
+    async resourceServer(){
+        return this.#resourceServer;
     }
 }

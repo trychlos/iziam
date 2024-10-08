@@ -6,6 +6,7 @@
 
 import _ from 'lodash';
 const assert = require( 'assert' ).strict; // up to nodejs v16.x
+import mix from '@vestergaard-company/js-mixin';
 import Provider from 'oidc-provider';
 
 import { WebApp } from 'meteor/webapp';
@@ -22,29 +23,26 @@ import { AuthServer } from '/imports/server/classes/auth-server.class.js';
 import { HtmlError } from '/imports/server/classes/html-error.class.js';
 import { OIDMongoAdapter } from '/imports/server/classes/oid-mongo-adapter.class.js';
 
-export class OIDAuthServer extends AuthServer {
+import { IRenderer } from '/imports/server/interfaces/irenderer.iface.js';
+
+export class OIDAuthServer extends mix( AuthServer ).with( IRenderer ){
 
     // static data
 
     // static methods
 
     /**
-     * @summary Convert a { entity, record } client object into a format suitable for use by OpenID Auth Server
+     * @summary Find a connecting client
      * @param {String} clientId the client identifier
      * @returns {Object} a client suitable for use by openid auth server, or null
+     *  Keep the payload intermediate key as this is the preferred format of the OIDMongoAdapter
      */
     static async byClientId( clientId ){
         const client = await Clients.s.byClientIdAtDate( clientId );
         let result = null;
-        if( client && client.enabled ){
+        if( client && client.record.enabled ){
             result = {
-                client_id: client.entity.clientId,
-                grant_types: client.record.grant_types,
-                token_endpoint_auth_method: client.record.token_endpoint_auth_method
-            };
-            if( client.record.redirect_uris && client.record.redirect_uris.length > 0 ){
-                result.redirect_uris = [];
-                client.record.redirect_uris.map( it => result.redirect_uris.push( it.uri ));
+                payload: await Clients.s.registeredMetadata( client )
             }
         }
         return result;
@@ -53,6 +51,7 @@ export class OIDAuthServer extends AuthServer {
     // private data
 
     #oidc = null;
+    #routes = null;
 
     // private methods
 
@@ -68,7 +67,7 @@ export class OIDAuthServer extends AuthServer {
                 }
             }
         };
-        // organization setup
+        // organization OIDC Provider setup
         conf.jwks = Jwks.fn.authKeys( organization );
         _.merge( conf, {
             cookies: {
@@ -79,8 +78,13 @@ export class OIDAuthServer extends AuthServer {
                 short: {
                     signed: true
                 }
+            },
+            ttl: {
+                Session: 60000, // not sure if unit to be used is ms ?
+                Interaction: 60000
             }
         });
+        // provide routes endpoints
         let endpoints = OpenID.fn.endpoints( organization );
         conf.routes = {};
         Object.keys( endpoints ).forEach(( it ) => {
@@ -94,8 +98,33 @@ export class OIDAuthServer extends AuthServer {
         });
         // enable the token introspection if we have a configured endpoint for that
         if( conf.routes.introspection ){
-            conf.features.introspection = true;
+            conf.features.introspection = { enabled: true };
         }
+
+        // https://github.com/panva/node-oidc-provider/blob/v7.14.3/docs/README.md#accounts
+        // define IdentityServer
+        conf.findAccount = this.iRequestServer().identityServer().findAccount;
+
+        // https://github.com/panva/node-oidc-provider/blob/v7.14.3/docs/README.md#interactionsurl
+        // make sure our interactions url is prefixed with our base url
+        conf.interactions = {
+            async url( ctx, interaction ){
+                //console.debug( 'ctx', ctx, 'interaction', interaction );
+                return organization.record.baseUrl+'/interaction/'+interaction.uid;
+                //return organization.record.baseUrl+'/interaction';
+            }
+        };
+
+        // https://github.com/panva/node-oidc-provider/blob/410bdaa88342da8a75b6cfd08d51d218acd23bbe/lib/helpers/defaults.js#L650
+        // description: Default client metadata to be assigned when unspecified by the client metadata,
+        // e.g. during Dynamic Client Registration or for statically configured clients.
+        //conf.clientDefaults = {
+        //    grant_types: ['authorization_code'],
+        //    id_token_signed_response_alg: 'RS256',
+        //    response_types: ['code'],
+        //    token_endpoint_auth_method: 'client_secret_basic',
+        //},
+
         // have a Mongo adapter for storing issued tokens, codes, user sessions, dynamically registered clients, etc.
         await OIDMongoAdapter.connect( 'oid_adapter_' );
         conf.adapter = OIDMongoAdapter;
@@ -107,6 +136,10 @@ export class OIDAuthServer extends AuthServer {
     // install our middlewares in our newly instanciated oidc-provider
     async _installMiddlewares(){
         //console.debug( 'installing middlewares' );
+        const requestServer = this.iRequestServer();
+        const organization = requestServer.organization();
+        const self = this;
+
         this.#oidc.use( async ( ctx, next ) => {
             // ctx: {
             //     request: {
@@ -141,6 +174,20 @@ export class OIDAuthServer extends AuthServer {
              * you may target a specific action here by matching `ctx.path`
              */
             console.log( 'pre middleware', ctx.method, ctx.path );
+
+            const url = ctx.path.substring( organization.record.baseUrl.length );
+            const words = url.split( '/' );
+            //console.debug( 'url', url, 'words', words );
+
+            // GET /iziam/interaction/:uid
+            if( ctx.method === 'GET' && words[1] === 'interaction' && words.length === 3 ){
+                await self.renderGetInteraction( self.#oidc, ctx, next )
+            }
+
+            // POST /iziam/interaction/:uid/login
+            if( ctx.method === 'POST' && words[1] === 'interaction' && words[3] === 'login' && words.length === 4 ){
+                await self.renderPostLogin( self.#oidc, ctx, next )
+            }
 
             await next();
 
@@ -183,18 +230,6 @@ export class OIDAuthServer extends AuthServer {
         });
     }
 
-    // returns a new OIDC Provider
-    //  must have at least an issuer
-    async _newOIDCProvider(){
-        const requestServer = this.iRequestServer();
-        const organization = requestServer.organization();
-        const issuer = Organizations.fn.fullBaseUrl( organization );
-        let setup = await this._config( organization );
-        console.debug( this, 'setup', setup );
-        const oidc = new Provider( issuer, setup );
-        return oidc;
-    }
-
     // builds the HTML code used to render an error
     async _renderError( ctx, out, error ){
         ctx.type = 'html';
@@ -222,6 +257,8 @@ export class OIDAuthServer extends AuthServer {
      *  There is no expected returned value, but should answer() and must end().
      */
     async handle( url, args ){
+        //console.debug( 'this', this, 'this.#oidc', this.#oidc, 'url', url, 'args', args );
+        assert( this.#oidc && this.#oidc instanceof Provider, 'expects an instance of (node-oidc-) Provider, got '+this.#oidc );
         this.#oidc.callback()( args.req(), args.res(), args.next());
     }
 
@@ -233,18 +270,15 @@ export class OIDAuthServer extends AuthServer {
     async init(){
         console.debug( 'initializing', this );
         const self = this;
-        this._newOIDCProvider()
-            .then(( oidc ) => {
-                this.#oidc = oidc;
-            })
-            .then(() => {
-                // install middlewares
-                this._installMiddlewares();
-            })
-            .then(() => {
-                // from https://github.com/panva/node-oidc-provider/blob/main/example/express.js
-                const organization = this.iRequestServer().organization();
-                WebApp.handlers.use( organization.record.baseUrl, self.#oidc.callback());
-            });
-    }
+        const requestServer = this.iRequestServer();
+        const organization = requestServer.organization();
+        const issuer = Organizations.fn.fullBaseUrl( organization );
+        let setup = await this._config( organization );
+        console.debug( this, 'setup', setup );
+        this.#oidc = new Provider( issuer, setup );
+        assert( this.#oidc && this.#oidc instanceof Provider, 'expects an instance of (node-oidc-) Provider, got '+this.#oidc );
+        await self._installMiddlewares();
+        // from https://github.com/panva/node-oidc-provider/blob/main/example/express.js
+        WebApp.handlers.use( organization.record.baseUrl, self.#oidc.callback());
+   }
 }

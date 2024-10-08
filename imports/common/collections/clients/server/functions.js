@@ -44,19 +44,20 @@ Clients.s.byClientIdAtDate = async function( clientId ){
     return result;
 };
 
-/*
-// update (actually replace) the data provided via the FormChecker fields
-updateByFields( item, fields, userId ){
-    let set = {};
-    Object.keys( fields ).every(( f ) => {
-        //console.debug( f, item[f] );
-        set[f] = item[f];
-        return true;
-    })
-    const res = Clients.update({ _id: item._id }, { $set: set });
-    return res;
-},
-*/
+// returns the registered client metadata
+// client: an { entity, record } object
+Clients.s.registeredMetadata = async function( client ){
+    let data = {
+        client_id: client.entity.clientId,
+        grant_types: client.record.grant_types,
+        token_endpoint_auth_method: client.record.token_endpoint_auth_method,
+    };
+    if( client.record.redirect_uris && client.record.redirect_uris.length > 0 ){
+        data.redirect_uris = [];
+        client.record.redirect_uris.map( it => data.redirect_uris.push( it.uri ));
+    }
+    return data;
+};
 
 // entity is the client entity with a DYN.records array of ReactiveVar's
 //  there is at least one item

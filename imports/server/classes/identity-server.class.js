@@ -38,6 +38,20 @@ export class IdentityServer extends mix( izObject ).with( IRequested ){
     }
 
     /**
+     * @param {Object} ctx
+     * @param {String} id
+     * @return {Object} the found identity
+     *  https://github.com/panva/node-oidc-provider/blob/v7.14.3/docs/README.md#accounts
+     */
+    async findAccount( ctx, id ){
+        console.debug( 'findAccount', arguments );
+        return {
+            accountId: id,
+            async claims(use, scope) { return { sub: id }; },
+        };
+    }
+
+    /**
      * @summary Make sure the server is initialized
      */
     async init(){

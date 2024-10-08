@@ -5,7 +5,11 @@
  *
  * Test with:
  *  curl --no-progress-meter --verbose http://localhost:3003/mmm/.well-known/oauth-authorization-server | jq
+ *  curl --no-progress-meter --verbose http://localhost:3003/mmm/.well-known/openid-configuration | jq
  *  curl --no-progress-meter --verbose --header 'X-izDate-Key: 1234' 'http://localhost:3000/api/v2/date?timezone=Europe/Paris&format=%y%m%d' | jq
+ * 
+ * To check that the redirect url is working:
+ *  curl --no-progress-meter -k --verbose https://slim14.trychlos.lan/_oauth/iziam
  */
 
 import _ from 'lodash';

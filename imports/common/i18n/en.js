@@ -33,6 +33,15 @@ Meteor.APP.i18n = {
             auth: {
                 error: {
                     title: 'Oops! Something went wrong'
+                },
+                render: {
+                    consent_title: 'Authorize',
+                    login_button: 'Log-in',
+                    login_label: 'Your account identifier :',
+                    login_ph: 'me@example.com',
+                    login_title: 'Log-in to %s',
+                    password_label: 'Your password :',
+                    password_ph: 'XXXXXXXX'
                 }
             },
             clients: {
@@ -96,11 +105,14 @@ Meteor.APP.i18n = {
                     edit_success: 'The client "%s" has been successfully updated',
                     enabled_label: 'Client is enabled',
                     entity_notes_tab_title: 'Common notes',
+                    entity_properties_tab_title: 'Common properties',
                     entity_validities_tab_title: 'By validity period(s)',
                     error: 'Unfortunately, an error has been detected./ Please retry later',
                     home_label: 'Home page URI :',
                     home_ph: 'https://my.example.com/',
                     home_title: 'The URI of a web site',
+                    id_label: 'Identifier :',
+                    id_title: 'The client unique identifier to present to the OAuth server',
                     jwks_tab_title: 'JSON Web Key Set',
                     label_label: 'Label :',
                     label_ph: 'My unique label',
