@@ -9,6 +9,8 @@
 import _ from 'lodash';
 const assert = require( 'assert' ).strict; // up to nodejs v16.x
 
+import { WebApp } from 'meteor/webapp';
+
 import { IRequestable } from '/imports/common/interfaces/irequestable.iface.js';
 
 import { AuthServer } from '/imports/server/classes/auth-server.class.js';
@@ -39,6 +41,9 @@ export class RequestServer {
     #identityServer = null;
     #resourceServer = null;
 
+    // the dedicated Express routes for this request server
+    #router = null;
+
     // private methods
 
     // public data
@@ -66,10 +71,21 @@ export class RequestServer {
         this.#identityServer = opts.identity ? new RequestServer.classes[opts.identity]( this ) : new IdentityServer( this );
         this.#resourceServer = opts.resource ? new RequestServer.classes[opts.resource]( this ) : new ResourceServer( this );
 
+        // instanciates the WebApp Express routes instance
+        this.#router = WebApp.express.Router();
+
         //console.debug( 'arguments', arguments );
         //console.debug( 'this', this );
 
         return this;
+    }
+
+    /**
+     * Getter
+     * @returns {AuthServer} the attached authorization server
+     */
+    authServer(){
+        return this.#authServer;
     }
 
     /**
@@ -90,7 +106,7 @@ export class RequestServer {
      * Getter
      * @returns {IdentityServer} the attached identity server
      */
-    async identityServer(){
+    identityServer(){
         return this.#identityServer;
     }
 
@@ -125,7 +141,14 @@ export class RequestServer {
      * Getter
      * @returns {ResourceServer} the attached identity server
      */
-    async resourceServer(){
+    resourceServer(){
         return this.#resourceServer;
+    }
+
+    /**
+     * @returns {Express.Router}
+     */
+    router(){
+        return this.#router;
     }
 }

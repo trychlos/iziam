@@ -55,6 +55,10 @@ export class OAuth20Provider extends mix( izProvider ).with( IGrantType, IReques
                 {
                     method: 'GET',
                     path: '*'
+                },
+                {
+                    method: 'POST',
+                    path: '*'
                 }
             ],
             // authorization grant types are defined by the spec

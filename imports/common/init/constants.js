@@ -55,6 +55,8 @@ Meteor.APP.C = {
     oauthMetadataPath: '/.well-known/oauth-authorization-server',
     // the server metadata discovery OAuth URL path
     openidMetadataPath: '/.well-known/openid-configuration',
+    // the interaction path used by the node-oidc-provider package
+    oidcInteractionPath: '/interaction',
 
     // when generating a cookie keygrip key secret, the used defaults
     keygripDefAlg: 'SHA512',

@@ -65,6 +65,10 @@ export class OAuth21Provider extends mix( izProvider ).with( IGrantType, IReques
                 {
                     method: 'GET',
                     path: '*'
+                },
+                {
+                    method: 'POST',
+                    path: '*'
                 }
             ],
             irequires: [

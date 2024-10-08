@@ -6,6 +6,7 @@
 
 import _ from 'lodash';
 const assert = require( 'assert' ).strict; // up to nodejs v16.x
+//import bodyParser from 'body-parser';
 import mix from '@vestergaard-company/js-mixin';
 import Provider from 'oidc-provider';
 
@@ -50,8 +51,8 @@ export class OIDAuthServer extends mix( AuthServer ).with( IRenderer ){
 
     // private data
 
+    // the OIDC Provider instance
     #oidc = null;
-    #routes = null;
 
     // private methods
 
@@ -109,9 +110,7 @@ export class OIDAuthServer extends mix( AuthServer ).with( IRenderer ){
         // make sure our interactions url is prefixed with our base url
         conf.interactions = {
             async url( ctx, interaction ){
-                //console.debug( 'ctx', ctx, 'interaction', interaction );
-                return organization.record.baseUrl+'/interaction/'+interaction.uid;
-                //return organization.record.baseUrl+'/interaction';
+                return organization.record.baseUrl + Meteor.APP.C.oidcInteractionPath + '/' + interaction.uid;
             }
         };
 
@@ -133,8 +132,32 @@ export class OIDAuthServer extends mix( AuthServer ).with( IRenderer ){
         return conf;
     }
 
-    // install our middlewares in our newly instanciated oidc-provider
-    async _installMiddlewares(){
+    // install a body parser to handle POST requests
+    async _installBodyParser(){
+        const router = this.iRequestServer().router();
+        router.use( WebApp.express.urlencoded({ extended: true, type: 'application/x-www-form-urlencoded' }));
+        router.use( WebApp.express.json());
+    }
+
+    // install interactions routes
+    async _installInteractions(){
+        const self = this;
+        console.debug('installing interactions middleware');
+        const router = this.iRequestServer().router();
+        router.get( Meteor.APP.C.oidcInteractionPath+'/:uid', async ( req, res, next ) => {
+            return this.renderGetInteraction( this.#oidc, req, res, next );
+        });
+        router.post( Meteor.APP.C.oidcInteractionPath+'/:uid/login', async ( req, res, next ) => {
+            return this.renderPostLogin( this.#oidc, req, res, next );
+        });
+        router.post( Meteor.APP.C.oidcInteractionPath+'/:uid/confirm', async ( req, res, next ) => {
+            return this.renderPostConfirm( this.#oidc, req, res, next );
+        });
+        console.debug('returning from interactions');
+    }
+
+    // install the OIDC pre- and post-middlewares
+    async _installOIDCMiddleware(){
         //console.debug( 'installing middlewares' );
         const requestServer = this.iRequestServer();
         const organization = requestServer.organization();
@@ -174,20 +197,6 @@ export class OIDAuthServer extends mix( AuthServer ).with( IRenderer ){
              * you may target a specific action here by matching `ctx.path`
              */
             console.log( 'pre middleware', ctx.method, ctx.path );
-
-            const url = ctx.path.substring( organization.record.baseUrl.length );
-            const words = url.split( '/' );
-            //console.debug( 'url', url, 'words', words );
-
-            // GET /iziam/interaction/:uid
-            if( ctx.method === 'GET' && words[1] === 'interaction' && words.length === 3 ){
-                await self.renderGetInteraction( self.#oidc, ctx, next )
-            }
-
-            // POST /iziam/interaction/:uid/login
-            if( ctx.method === 'POST' && words[1] === 'interaction' && words[3] === 'login' && words.length === 4 ){
-                await self.renderPostLogin( self.#oidc, ctx, next )
-            }
 
             await next();
 
@@ -277,8 +286,15 @@ export class OIDAuthServer extends mix( AuthServer ).with( IRenderer ){
         console.debug( this, 'setup', setup );
         this.#oidc = new Provider( issuer, setup );
         assert( this.#oidc && this.#oidc instanceof Provider, 'expects an instance of (node-oidc-) Provider, got '+this.#oidc );
-        await self._installMiddlewares();
+        await self._installBodyParser();
+        await self._installInteractions();
+        await self._installOIDCMiddleware();
         // from https://github.com/panva/node-oidc-provider/blob/main/example/express.js
-        WebApp.handlers.use( organization.record.baseUrl, self.#oidc.callback());
+        //  https://v3-migration-docs.meteor.com/breaking-changes/#webapp-switches-to-express
+        //  https://forums.meteor.com/t/what-is-the-meteor-3-express-replacement-for-picker-middleware/61616
+        Meteor.APP.express.use( organization.record.baseUrl, this.iRequestServer().router());
+        Meteor.APP.express.use( organization.record.baseUrl, self.#oidc.callback());
+        //this.app().use( organization.record.baseUrl, [ this.router(), self.#oidc.callback() ]); // same, but prefer above writing
+        //WebApp.handlers.use( Meteor.APP.express );
    }
 }

@@ -60,6 +60,10 @@ export class OpenIDProvider extends mix( izProvider ).with( IGrantType, IRequest
                 {
                     method: 'GET',
                     path: '*'
+                },
+                {
+                    method: 'POST',
+                    path: '*'
                 }
             ],
             irequires: [

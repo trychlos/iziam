@@ -52,6 +52,18 @@ export class IdentityServer extends mix( izObject ).with( IRequested ){
     }
 
     /**
+     * @param {String} login
+     * @return {Object} the found identity
+     *  https://github.com/panva/node-oidc-provider/blob/v7.14.3/docs/README.md#accounts
+     */
+    async findByLogin( login ){
+        console.debug( 'findByLogin', arguments );
+        return {
+            login: login
+        };
+    }
+
+    /**
      * @summary Make sure the server is initialized
      */
     async init(){

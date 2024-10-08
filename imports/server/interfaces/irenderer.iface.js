@@ -22,15 +22,23 @@ const debug = ( obj ) => querystring.stringify( Object.entries( obj ).reduce(( a
 
 export const IRenderer = DeclareMixin(( superclass ) => class extends superclass {
 
-    _renderBody( interaction, client ){
+    _renderBody( req, res, provider, interaction, client ){
         let str = '';
         switch( interaction.prompt.name ){
             case 'login':
+                let route;
+                try {
+                    const url = new URL( interaction.returnTo );
+                    route = url.origin + this.iRequestServer().organization().record.baseUrl + Meteor.APP.C.oidcInteractionPath + '/' + interaction.uid + '/login';
+                } catch( e ){
+                    console.error( e );
+                    next( e, req, res, next );
+                }
                 str += ''
                     +'<body class="h-100">\n'
                     +'  <div class="preamble">'
                     +'  </div>'
-                    +'  <form class="h-100" autocomplete="off" action="'+interaction.returnTo+'/login" method="post">\n'
+                    +'  <form class="h-100" autocomplete="off" action="'+route+'" method="post" enctype="application/x-www-form-urlencoded">\n'
                     +'    <input type="hidden" name="prompt" value="login" />\n'
                     +'    <table class="form-table w-100">'
                     +'      <tr>'
@@ -66,12 +74,13 @@ export const IRenderer = DeclareMixin(( superclass ) => class extends superclass
                 break;
             case 'consent':
                 break;
-            default: 
+            default:
+                res.status( 501 ).send( 'Not implemented.' );
         }
         return str;
     }
 
-    _renderHead( interaction ){
+    _renderHead( req, res, provider, interaction, client ){
         let str = '<head>';
         str += '<meta http-equiv="X-UA-Compatible" content="IE=edge">';
         str += '<meta charset="utf-8">';
@@ -106,24 +115,20 @@ export const IRenderer = DeclareMixin(( superclass ) => class extends superclass
      * @summary Render a dialog box to the user-agent client
      *  GET /iziam/interaction/:uid
      */
-    async renderGetInteraction( provider, ctx, next ){
+    async renderGetInteraction( provider, req, res, next ){
         try {
-            //console.debug( 'renderGetInteraction provider', provider );
-            const interaction = await provider.interactionDetails( ctx.req, ctx.res );
-            //console.debug( 'interaction', interaction );
+            const interaction = await provider.interactionDetails( req, res );
             const client = await provider.Client.find( interaction.params.client_id );
-            //console.debug( 'client', client );
-            //console.debug( 'res.render', ctx.res.render, typeof ctx.res.render );
             let html = '<!DOCTYPE html>'
                 +'<html class="h-100">';
-            html += this._renderHead( interaction );
-            html += this._renderBody( interaction, client );
+            html += this._renderHead( req, res, provider, interaction, client );
+            html += this._renderBody( req, res, provider, interaction, client );
             html += '</html>';
-            ctx.res.send( html );
+            return res.send( html );
 
         } catch( err ){
-            console.debug( 'err', err );
-            //return next(err);
+            console.error( 'err', err );
+            return next( err );
         }
     }
 
@@ -131,13 +136,27 @@ export const IRenderer = DeclareMixin(( superclass ) => class extends superclass
      * @summary Render a dialog box to the user-agent client
      *  POST /iziam/interaction/:uid/login
      */
-    async renderPostLogin( provider, ctx, next ){
+    async renderPostLogin( provider, req, res, next ){
         try {
             console.debug( 'renderPostLogin provider', provider );
+            const { express } = WebApp;
+            const interaction = await provider.interactionDetails( req, res );
+            assert( interaction && interaction.prompt && interaction.prompt.name === 'login', 'expects "login" prompt name, got '+interaction.prompt.name );
+            assert( req.body && req.body.prompt === 'login', 'expects "login" prompt name, got '+req.body.prompt );
+            const account = await this.iRequestServer().identityServer().findByLogin( req.body.login );
+            if( account ){
+                console.debug( 'account', account );
+                const result = {
+                    login: {
+                        accountId: account.login,
+                    },
+                };
+                await provider.interactionFinished( req, res, result, { mergeWithLastSubmission: false });
+            }
 
         } catch( err ){
-            console.debug( 'err', err );
-            //return next(err);
+            console.error( 'err', err );
+            return next( err );
         }
     }
 });
