@@ -56,7 +56,9 @@
 |  115 | 2024- 9-22 | move Jwks.fn.generateKeys() to server-side, using a method to address it from the client |
 |      | 2024- 9-24 | nb: jose doesn't provide the same data when executed server-side so maybe have to change the library ? |
 |  116 | 2024- 9-24 | clientAll and identitiesAll publications: should only publish the data the user is allowed to both from scope and privacy point of view |
-|  117 |  |  |
+|  117 | 2024-10- 9 | should define a policy for acr values (see Meteor.APP.C.oidcEndUserPasswordAcr) |
+|  118 | 2024-10- 9 | clients should be able to provide some javascript/ejs to display in interactions dialogs |
+|  119 |  |  |
 
 ---
 ## Done

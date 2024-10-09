@@ -53,12 +53,14 @@ export const IRequestable = DeclareMixin(( superclass ) => class extends supercl
      * @returns {Boolean} whether we have handled the requested url
      */
     async request( url, args, organization, asterCb ){
-        //console.debug( this.identId(), url );
+        const localUrl = url.substring( organization.record.baseUrl.length );
+        const baseUrl = organization.record.baseUrl + '/';
+        //console.debug( this.identId(), 'url', url, 'localUrl', localUrl );
         let found = false;
         for( let i=0 ; i<this.#priv.irequestable.length && !found ; ++i ){
             const it = this.#priv.irequestable[i];
             if( it.method === args.method()){
-                if( it.path === url ){
+                if( it.path === localUrl && url.startsWith( baseUrl )){
                     found = true;
                     if( it.fn ){
                         await it.fn( it, args, organization );

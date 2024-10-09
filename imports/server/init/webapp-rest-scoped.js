@@ -144,9 +144,11 @@ async function handleScoped( req, res ){
                 if( organization ){
                     const providers = Organizations.fn.byTypeSorted( organization, IRequestable );
                     //console.debug( providers );
+                    //console.debug( req.method, req.url );
                     return args.handle( scoped, {
                         organization: organization,
-                        url: req.url.substring( baseUrl.length ),
+                        //url: req.url.substring( baseUrl.length ),
+                        //url: req.url,
                         providers: providers,
                         asterCb: fn_asterPath
                     });

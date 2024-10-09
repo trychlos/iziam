@@ -88,7 +88,7 @@ export class OIDMongoAdapter extends izObject {
     // NOTE: the payload for Session model may contain client_id as keys, make sure you do not use
     //   dots (".") in your client_id value charset.
     async upsert( _id, payload, expiresIn ){
-        console.debug( 'upsert', arguments );
+        //console.debug( 'upsert', arguments );
         let expiresAt;
         if( expiresIn ){
           expiresAt = new Date( Date.now() + ( expiresIn * 1000 ));

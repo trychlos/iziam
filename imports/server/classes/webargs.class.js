@@ -115,9 +115,10 @@ export class Webargs {
     async handle( api, opts ){
         const self = this;
         const url = opts.url || this.#req.url;
+        //console.debug( 'url', url );
         let handled = false;
         let provider = null;
-        // rather targeting global API
+        // targeting global API
         if( api[this.#req.method] ){
             for( let i=0 ; i<api[this.#req.method].length && !handled ; ++i ){
                 const it = api[this.#req.method][i];
@@ -133,7 +134,7 @@ export class Webargs {
                 }
             }
         }
-        // rather targeting scoped API
+        // targeting scoped API
         //  first try fixed paths and give a chance to all providers to answer to their fixed paths
         //  only then run asterCb, the first provider which have an aster path wins
         if( !handled && opts.providers ){

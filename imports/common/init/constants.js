@@ -58,6 +58,9 @@ Meteor.APP.C = {
     // the interaction path used by the node-oidc-provider package
     oidcInteractionPath: '/interaction',
 
+    // a standard acr when authenticating an end-user with its password
+    oidcEndUserPasswordAcr: 'urn:iziam:password:0',
+
     // when generating a cookie keygrip key secret, the used defaults
     keygripDefAlg: 'SHA512',
     keygripDefEncoding: 'hex',

@@ -8,3 +8,11 @@ import { WebApp } from 'meteor/webapp';
 
 Meteor.APP.express = WebApp.express();
 WebApp.handlers.use( Meteor.APP.express );
+
+// this global handler see all application urls, including both the UI part and the REST part
+if( true ){
+    WebApp.handlers.use( async ( req, res, next ) => {
+        console.debug( 'webapp-express handlers.use', req.method, req.url );
+        next();
+    });
+}

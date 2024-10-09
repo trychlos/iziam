@@ -34,7 +34,7 @@ Meteor.APP.i18n = {
                 error: {
                     title: 'Oops! Something went wrong'
                 },
-                render: {
+                interactions: {
                     consent_title: 'Authorize',
                     login_button: 'Log-in',
                     login_label: 'Your account identifier :',
