@@ -110,6 +110,10 @@ const _validUrl = function( value, opts ){
         } else {
             try {
                 const url = new URL( value );
+                console.debug( 'url', url );
+                /*
+                    SHOULD ALSO ACCEPT HTTP://LOCALHOST
+
                 if( opts.acceptOthers === false && url.protocol !== 'https:' ){
                     return new TM.TypedMessage({
                         level: TM.MessageLevel.C.ERROR,
@@ -120,7 +124,7 @@ const _validUrl = function( value, opts ){
                         level: TM.MessageLevel.C.ERROR,
                         message: pwixI18n.label( I18N, opts.prefix+'_http' )
                     });
-                } else if( opts.wantHost !== false && !url.hostname && specialProtocols.includes( url.protocol )){
+                } else */ if( opts.wantHost !== false && !url.hostname && specialProtocols.includes( url.protocol )){
                     return new TM.TypedMessage({
                         level: TM.MessageLevel.C.ERROR,
                         message: pwixI18n.label( I18N, opts.prefix+'_host' )

@@ -1,5 +1,5 @@
 /*
- * /imports/server/classes/error.class.js
+ * /imports/server/classes/oid-errors.class.js
  *
  * A class to provide an error page..
  */
@@ -10,7 +10,7 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 
 import { izObject } from '/imports/common/classes/iz-object.class.js';
 
-export class HtmlError extends izObject {
+export class OIDErrors extends izObject {
 
     // static data
 

@@ -35,13 +35,21 @@ Meteor.APP.i18n = {
                     title: 'Oops! Something went wrong'
                 },
                 interactions: {
+                    cancel_button: 'Cancel',
+                    claims_title: 'Claims :',
+                    consent_button: 'Authorize',
                     consent_title: 'Authorize',
                     login_button: 'Log-in',
                     login_label: 'Your account identifier :',
                     login_ph: 'me@example.com',
                     login_title: 'Log-in to %s',
+                    none_grant: 'No additional authorization is asked by the client, which only needs you confirm previously given authorizations.',
+                    offline_already: 'The client is asking to have offline access to these authorizations, that you have previously granted.',
+                    offline_togrant: 'The client is asking to have offline access to these authorizations.',
                     password_label: 'Your password :',
-                    password_ph: 'XXXXXXXX'
+                    password_ph: 'xxxxxxxx',
+                    scopes_title: 'Scopes :',
+                    rar_title: 'Authorization details :'
                 }
             },
             clients: {

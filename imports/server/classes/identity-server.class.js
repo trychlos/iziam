@@ -38,12 +38,15 @@ export class IdentityServer extends mix( izObject ).with( IRequested ){
     }
 
     /**
-     * @param {Object} ctx
+     * @param {Object} ctx the koa request context
      * @param {String} id
+     * @param {String} token a reference to the token used for which a given account is being loaded,
+     *  it is undefined in scenarios where account claims are returned from authorization endpoint
      * @return {Object} the found identity
      *  https://github.com/panva/node-oidc-provider/blob/v7.14.3/docs/README.md#accounts
+     *  https://github.com/panva/node-oidc-provider/blob/47a77d9afe90578ea4dfed554994b60b837a3059/example/support/account.js
      */
-    async findAccount( ctx, id ){
+    async findAccount( ctx, id, token ){
         console.debug( 'findAccount', arguments );
         return {
             accountId: id,
@@ -69,6 +72,7 @@ export class IdentityServer extends mix( izObject ).with( IRequested ){
      * @param {String} login
      * @return {Object} the found identity
      *  https://github.com/panva/node-oidc-provider/blob/v7.14.3/docs/README.md#accounts
+     *  This is only used from the interaction '/interaction/:uid:login' route
      */
     async findByLogin( login ){
         console.debug( 'findByLogin', arguments );

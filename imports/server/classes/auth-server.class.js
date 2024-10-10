@@ -10,7 +10,7 @@ import _ from 'lodash';
 const assert = require( 'assert' ).strict; // up to nodejs v16.x
 import mix from '@vestergaard-company/js-mixin';
 
-import { WebApp } from 'meteor/webapp';
+import { Clients } from '/imports/common/collections/clients/index.js';
 
 import { izObject } from '/imports/common/classes/iz-object.class.js';
 
@@ -21,6 +21,24 @@ export class AuthServer extends mix( izObject ).with( IRequested ){
     // static data
 
     // static methods
+
+    /**
+     * @summary Find a connecting client
+     * @param {String} clientId the client identifier
+     * @returns {Object} a client suitable for use by openid auth server, or null
+     *  Keep the payload intermediate key as this is the preferred format of the OIDMongoAdapter
+     */
+    static async byClientId( clientId ){
+        const client = await Clients.s.byClientIdAtDate( clientId );
+        let result = null;
+        if( client && client.record.enabled ){
+            result = {
+                payload: await Clients.s.registeredMetadata( client )
+            }
+        }
+        result.payload.logo_uri = 'https://image.example.com/svg';
+        return result;
+    }
 
     // private data
 

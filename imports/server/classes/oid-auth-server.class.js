@@ -6,13 +6,11 @@
 
 import _ from 'lodash';
 const assert = require( 'assert' ).strict; // up to nodejs v16.x
-//import bodyParser from 'body-parser';
 import mix from '@vestergaard-company/js-mixin';
 import Provider from 'oidc-provider';
 
 import { WebApp } from 'meteor/webapp';
 
-import { Clients } from '/imports/common/collections/clients/index.js';
 import { Organizations } from '/imports/common/collections/organizations/index.js';
 
 import { OpenID } from '/imports/common/providers/openid-functions.js';
@@ -21,33 +19,16 @@ import { Jwks } from '/imports/common/tables/jwks/index.js';
 import { Keygrips } from '/imports/common/tables/keygrips/index.js';
 
 import { AuthServer } from '/imports/server/classes/auth-server.class.js';
-import { HtmlError } from '/imports/server/classes/html-error.class.js';
+import { OIDErrors } from '/imports/server/classes/oid-errors.class.js';
 import { OIDMongoAdapter } from '/imports/server/classes/oid-mongo-adapter.class.js';
 
-import { IRenderer } from '/imports/server/interfaces/irenderer.iface.js';
+import { IOIDInteractions } from '/imports/server/interfaces/ioid-interactions.iface.js';
 
-export class OIDAuthServer extends mix( AuthServer ).with( IRenderer ){
+export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
 
     // static data
 
     // static methods
-
-    /**
-     * @summary Find a connecting client
-     * @param {String} clientId the client identifier
-     * @returns {Object} a client suitable for use by openid auth server, or null
-     *  Keep the payload intermediate key as this is the preferred format of the OIDMongoAdapter
-     */
-    static async byClientId( clientId ){
-        const client = await Clients.s.byClientIdAtDate( clientId );
-        let result = null;
-        if( client && client.record.enabled ){
-            result = {
-                payload: await Clients.s.registeredMetadata( client )
-            }
-        }
-        return result;
-    }
 
     // private data
 
@@ -128,8 +109,15 @@ export class OIDAuthServer extends mix( AuthServer ).with( IRenderer ){
         await OIDMongoAdapter.connect( 'oid_adapter_' );
         conf.adapter = OIDMongoAdapter;
         // error rendering
-        conf.renderError = this._renderError;
+        conf.renderError = this._errorRender;
         return conf;
+    }
+
+    // builds the HTML code used to render an error
+    // this function is called outside of any class context, so this is not defined
+    async _errorRender( ctx, out, error ){
+        ctx.type = 'html';
+        ctx.body = new OIDErrors( out, error ).render();
     }
 
     // after the successful login, the OIDC provider redirects to <baseUrl>/auth/<uid>
@@ -149,10 +137,12 @@ export class OIDAuthServer extends mix( AuthServer ).with( IRenderer ){
         const router = this.iRequestServer().router();
         router.use( WebApp.express.urlencoded({ extended: true, type: 'application/x-www-form-urlencoded' }));
         router.use( WebApp.express.json());
-        router.use(( req, res, next ) => {
-            console.debug( 'express router', req.method, req.url );
-            next();
-        });
+        if( true ){
+            router.use(( req, res, next ) => {
+                console.debug( '_installBodyParser router', req.method, req.url );
+                next();
+            });
+        }
     }
 
     // install interactions routes
@@ -164,20 +154,23 @@ export class OIDAuthServer extends mix( AuthServer ).with( IRenderer ){
             next();
         };
         router.get( Meteor.APP.C.oidcInteractionPath+'/:uid', setNoCache, async ( req, res, next ) => {
-            return this.renderGetLogin( this.#oidc, req, res, next );
+            return this.interactionGetLogin( this.#oidc, req, res, next );
         });
         router.post(  Meteor.APP.C.oidcInteractionPath+'/:uid/login', setNoCache, async ( req, res, next ) => {
-            return this.renderPostLogin( this.#oidc, req, res, next );
+            return this.interactionPostLogin( this.#oidc, req, res, next );
         });
         router.post(  Meteor.APP.C.oidcInteractionPath+'/:uid/confirm', setNoCache, async ( req, res, next ) => {
-            return this.renderPostConfirm( this.#oidc, req, res, next );
+            return this.interactionPostConfirm( this.#oidc, req, res, next );
         });
         router.get(  Meteor.APP.C.oidcInteractionPath+'/:uid/abort', setNoCache, async ( req, res, next ) => {
-            return this.renderGetAbort( this.#oidc, req, res, next );
+            return this.interactionGetAbort( this.#oidc, req, res, next );
+        });
+        router.get(  Meteor.APP.C.oidcInteractionPath+'/:uid/cancel', setNoCache, async ( req, res, next ) => {
+            return this.interactionGetCancel( this.#oidc, req, res, next );
         });
         if( true ){
             router.use(( req, res, next ) => {
-                console.debug( 'router', req.url );
+                console.debug( '_installInteractions router', req.method, req.url );
                 next();
             });
         }
@@ -220,7 +213,7 @@ export class OIDAuthServer extends mix( AuthServer ).with( IRenderer ){
              */
             console.log( 'pre middleware', ctx.method, ctx.path );
 
-            //await this.renderTryInteractions( this.#oidc, ctx, next );
+            //await this.interactionTry( this.#oidc, ctx, next );
 
             await next();
 
@@ -261,12 +254,6 @@ export class OIDAuthServer extends mix( AuthServer ).with( IRenderer ){
             // as of oidc-provider 7.14.3, there is no ctx.oidc when the route is wrong
             console.log( 'post middleware', ctx.method, ctx.oidc?.route );
         });
-    }
-
-    // builds the HTML code used to render an error
-    async _renderError( ctx, out, error ){
-        ctx.type = 'html';
-        ctx.body = new HtmlError( out, error ).render();
     }
 
     // public data

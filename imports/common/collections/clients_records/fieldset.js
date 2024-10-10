@@ -389,6 +389,7 @@ const _defaultFieldDef = function(){
             name: 'request_uris.$.id',
             type: String
         },
+        // post_logout_redirect_uris (yes this is an array according to node-oidc-provider)
         */
         // client secrets
         ClientSecrets.recordFieldDef(),
