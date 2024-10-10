@@ -16,9 +16,9 @@ import { WebApp } from 'meteor/webapp';
 
 import { Webargs } from '/imports/server/classes/webargs.class.js';
 
-// non-scoped REST API
+// global (non-scoped) REST API
 //  As a design decision, all global REST API must start with /vnn
-const globals = {
+const globalApi = {
     GET: [
         // entry point of the global REST API -> just list the available commands
         {
@@ -34,12 +34,12 @@ const globals = {
 }
 
 // @async
-// @param {Object} it the 'globals' object item containing the path and the function...
+// @param {Object} it the 'globalApi' object item containing the path and the function...
 // @param {WebArgs} args
 // @returns {Boolean} whether we have ended the request,
 async function v1_listCommands( it, args ){
     let res = { result: [] };
-    globals.GET.forEach(( it ) => {
+    globalApi.GET.forEach(( it ) => {
         if( it.path !== '/v1' ){
             res.result.push( it.path );
         }
@@ -69,14 +69,13 @@ async function handleGlobals( req, res ){
     if( words[1].match( /^v[\d]+$/ )){
         found = true;
         // the request matches a REST global request - it must be considered as handled, try to answer it
-        let args = new Webargs( req, res );
-        args.handle( globals );
+        await new Webargs( req, res ).handle( globalApi );
     }
     return found;
 }
 
 // this global handler see all application urls, including both the UI part and the REST part
-WebApp.handlers.use(( req, res, next ) => {
+WebApp.handlers.use( async ( req, res, next ) => {
     handleGlobals( req, res ).then(( handled ) => {
         if( !handled ){
             next();

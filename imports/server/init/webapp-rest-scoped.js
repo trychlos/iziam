@@ -25,44 +25,14 @@ import { IRequestable } from '/imports/common/interfaces/irequestable.iface.js';
 import { RequestServer } from '/imports/server/classes/request-server.class.js';
 import { Webargs } from '/imports/server/classes/webargs.class.js';
 
-// a map of the instanciated RequestServer's per organization entity and AuthServer provider id
+// a map of the instanciated RequestServer's per organization entity
 let requestServersByEntities = {};
 
-// organization-scoped REST API
-const scoped = {
-    GET: [
-        // fixed paths which do not depend of any provider: none
-        // at the end, try organization-configured endpoints: handled by each IRequestable provider
-    ]
-}
-
-// @async
-// @param {Object} it the 'globals' object item containing the path and the function...
-// @param {WebArgs} args
-// @param {Object} organization the { entity, record } at date organization object
-// @returns {Boolean} whether we have ended the request,
-async function fn_wellKnown( it, args, organization ){
-    args.answer( Organizations.fn.metadata( organization ));
-    args.end();
-    return true;
-}
-
-async function fn_findPath( it, args, organization ){
-    //args.answer( Organizations.fn.metadata( organization ));
-    //args.end();
-    //return true;
-}
-
 async function fn_asterPath( url, args, organization, provider ){
-    let entityServers = requestServersByEntities[organization.entity._id];
-    if( !entityServers ){
-        requestServersByEntities[organization.entity._id] = {};
-        entityServers = requestServersByEntities[organization.entity._id];
-    }
-    let server = entityServers[provider.identId()];
+    let server = requestServersByEntities[organization.entity._id];
     if( !server ){
         server = new RequestServer( provider, organization, await provider.requestOptions());
-        entityServers[provider.identId()] = server;
+        requestServersByEntities[organization.entity._id] = server;
         await server.init();
     }
     server.handle( url, args );
@@ -125,38 +95,36 @@ async function handleScoped( req, res ){
     const words = req.url.split( '/' );
     assert( !words[0], 'expects an absolute pathname, got '+req.url );
     const baseUrl = '/'+words[1];
-    return Organizations.s.getBy({ baseUrl: baseUrl }).then(( fetched ) => {
-        // if no organization has this base url, then do not handle
-        if( fetched.records.length === 0 ){
-            return false;
-        }
-        // in all other cases, this must be considered as handled
-        // if at least one record, make sure we address only one entity
-        let args = new Webargs( req, res );
-        _checkDistinctEntities( args, fetched )
-            .then(( ok ) => {
-                return ok ? _getOrganizationAtDate( args, fetched ) : null;
-            })
-            .then(( organization ) => {
-                return organization ? _checkOperationalOrganization( args, organization ) : null;
-            })
-            .then(( organization ) => {
-                if( organization ){
-                    const providers = Organizations.fn.byTypeSorted( organization, IRequestable );
-                    //console.debug( providers );
-                    //console.debug( req.method, req.url );
-                    return args.handle( scoped, {
-                        organization: organization,
-                        //url: req.url.substring( baseUrl.length ),
-                        //url: req.url,
-                        providers: providers,
-                        asterCb: fn_asterPath
-                    });
-                }
-                return null;
-            });
+    const fetched = await Organizations.s.getBy({ baseUrl: baseUrl });
+    // if no organization has this base url, then do not handle
+    if( fetched.records.length === 0 ){
+        return false;
+    }
+    let args = new Webargs( req, res );
+    // make sure all fetched record belong to the same organization entity
+    if( !await _checkDistinctEntities( args, fetched )){
+        return false;
+    }
+    // have an organization at date
+    const organization = await _getOrganizationAtDate( args, fetched );
+    if( !organization ){
+        return false;
+    }
+    // the request can be considered handled as soon as an at-date organization is expected to answer it
+    if( !await _checkOperationalOrganization( args, organization )){
         return true;
+    }
+    const providers = Organizations.fn.byTypeSorted( organization, IRequestable );
+    //console.debug( providers );
+    //console.debug( req.method, req.url );
+    await args.handle( null, {
+        organization: organization,
+        //url: req.url.substring( baseUrl.length ),
+        //url: req.url,
+        providers: providers,
+        asterCb: fn_asterPath
     });
+    return true;
 }
 
 // this global handler see all application urls, including both the UI part and the REST part

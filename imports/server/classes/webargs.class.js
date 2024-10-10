@@ -103,8 +103,8 @@ export class Webargs {
     }
 
     /**
-     * @param {Object} api the object which describe the global or scoped API
-     * @param {Object} opts an optional options object with following keys:
+     * @param {Object} globalApi the object which describe the global API, null when trying to detect a scoped request
+     * @param {Object} scopedOpts an optional options object with following keys:
      *  - organization: the { entity, record } at date non null organization object, if and only if we are handling an organization-scoped request
      *  - url: the url to be searched as an API path, defaulting to req.url
      *  - providers: a sorted list of providers which may be able to deal with this request
@@ -112,20 +112,18 @@ export class Webargs {
      * NB: must terminate by calling end() to answer to the client
      * @returns {izProvider} a provider willing to handle and answer, or null
      */
-    async handle( api, opts ){
+    async handle( globalApi, scopedOpts ){
         const self = this;
-        const url = opts.url || this.#req.url;
-        //console.debug( 'url', url );
         let handled = false;
         let provider = null;
         // targeting global API
-        if( api[this.#req.method] ){
-            for( let i=0 ; i<api[this.#req.method].length && !handled ; ++i ){
-                const it = api[this.#req.method][i];
+        if( globalApi && globalApi[this.#req.method] ){
+            for( let i=0 ; i<globalApi[this.#req.method].length && !handled ; ++i ){
+                const it = globalApi[this.#req.method][i];
                 if( url === it.path || it.path === '*' ){
                     handled = true;
                     if( it.fn ){
-                        await it.fn( it, self, opts.organization );
+                        await it.fn( it, self );
                     } else {
                         self.error( 'the requested url "'+this.#req.url+'" doesn\'t have any associated function' );
                         self.status( 501 ); // not implemented
@@ -134,15 +132,16 @@ export class Webargs {
                 }
             }
         }
-        // targeting scoped API
+        // targeting scoped request
         //  first try fixed paths and give a chance to all providers to answer to their fixed paths
         //  only then run asterCb, the first provider which have an aster path wins
-        if( !handled && opts.providers ){
-            for( let i=0 ; i<opts.providers.length && !handled ; ++i ){
-                handled = await opts.providers[i].request( url, self, opts.organization );
+        const url = scopedOpts.url || this.#req.url;
+        if( !handled && scopedOpts.providers ){
+            for( let i=0 ; i<scopedOpts.providers.length && !handled ; ++i ){
+                handled = await scopedOpts.providers[i].request( url, self, scopedOpts.organization );
             }
-            for( let i=0 ; i<opts.providers.length && !handled ; ++i ){
-                handled = await opts.providers[i].request( url, self, opts.organization, opts.asterCb );
+            for( let i=0 ; i<scopedOpts.providers.length && !handled ; ++i ){
+                handled = await scopedOpts.providers[i].request( url, self, scopedOpts.organization, scopedOpts.asterCb );
             }
         }
         if( !handled ){

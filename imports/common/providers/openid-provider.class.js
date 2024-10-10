@@ -116,6 +116,7 @@ export class OpenIDProvider extends mix( izProvider ).with( IGrantType, IRequest
      * @param {Object} identity the identity object as found by the IdentityServer
      * @returns {Promise} which eventually will resolve to a claims object, or null
      */
+    /*
     async claims( ctx, token, use, scope, claims, rejected, oidc, identity ){
         //console.debug( 'token', token, 'ctx', ctx, 'ctx.oidc', ctx.oidc, 'oidc', oidc, 'identity', identity );
         let res = null;
@@ -127,6 +128,7 @@ export class OpenIDProvider extends mix( izProvider ).with( IGrantType, IRequest
         }
         return Promise.resolve( res );
     }
+    */
 
     /**
      * @locus Server
