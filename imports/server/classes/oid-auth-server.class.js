@@ -46,6 +46,9 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
             features: {
                 devInteractions: {
                     enabled: false
+                },
+                rpInitiatedLogout: {
+                    enabled: true
                 }
             }
         };
@@ -106,10 +109,14 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
         //},
 
         // have a Mongo adapter for storing issued tokens, codes, user sessions, dynamically registered clients, etc.
-        await OIDMongoAdapter.connect( 'oid_adapter_' );
+        await OIDMongoAdapter.connect( 'oidc_' );
         conf.adapter = OIDMongoAdapter;
+
         // error rendering
         conf.renderError = this._errorRender;
+
+        // unfortunately, the node-oidc-provider is written so that the configuration set at instanciation time is not modifiable
+        //  have to find a way to reset it...
         return conf;
     }
 
@@ -122,8 +129,7 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
 
     // after the successful login, the OIDC provider redirects to <baseUrl>/auth/<uid>
     //  which happens to be seen here as just /auth/<uid>
-    async _installAuth(){
-        const router = this.iRequestServer().router();
+    async _installAuth( router ){
         router.get( '/auth/:uid', async ( req, res, next ) => {
             console.debug( 'req.url', req.url );
             req.url = this.iRequestServer().organization().record.baseUrl + req.url;
@@ -133,22 +139,16 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
 
     // install a body parser to handle POST requests
     // the iRequestServer router will be mounted under baseUrl, so is dedicated to this organization
-    async _installBodyParser(){
-        const router = this.iRequestServer().router();
+    async _installBodyParser( router ){
+        console.debug( 'installing bodyParser middlewares' );
         router.use( WebApp.express.urlencoded({ extended: true, type: 'application/x-www-form-urlencoded' }));
         router.use( WebApp.express.json());
-        if( true ){
-            router.use(( req, res, next ) => {
-                console.debug( '_installBodyParser router', req.method, req.url );
-                next();
-            });
-        }
     }
 
     // install interactions routes
     //  must be defined without the baseUrl as these routes are to be mounted under this same baseUrl
-    async _installInteractions(){
-        const router = this.iRequestServer().router();
+    async _installInteractions( router ){
+        console.debug( 'installing interactions middlewares' );
         const setNoCache = function( req, res, next ){
             res.set('cache-control', 'no-store');
             next();
@@ -168,16 +168,11 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
         router.get(  Meteor.APP.C.oidcInteractionPath+'/:uid/cancel', setNoCache, async ( req, res, next ) => {
             return this.interactionGetCancel( this.#oidc, req, res, next );
         });
-        if( true ){
-            router.use(( req, res, next ) => {
-                console.debug( '_installInteractions router', req.method, req.url );
-                next();
-            });
-        }
     }
 
     // install the OIDC pre- and post-middlewares
     async _installOIDCMiddleware(){
+        console.debug( 'installing OIDC middleware' );
         this.#oidc.use( async ( ctx, next ) => {
             // ctx: {
             //     request: {
@@ -256,6 +251,18 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
         });
     }
 
+    // install a body parser to handle POST requests
+    // the iRequestServer router will be mounted under baseUrl, so is dedicated to this organization
+    async _installTrace( router ){
+        console.debug( 'installing trace middleware' );
+        if( true ){
+            router.use(( req, res, next ) => {
+                console.debug( 'router', req.method, req.url );
+                next();
+            });
+        }
+    }
+
     // public data
 
     /**
@@ -298,15 +305,18 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
         console.debug( this, 'setup', setup );
         this.#oidc = new Provider( issuer, setup );
         assert( this.#oidc && this.#oidc instanceof Provider, 'expects an instance of (node-oidc-) Provider, got '+this.#oidc );
-        await self._installBodyParser();
-        await self._installAuth();
-        await self._installInteractions();
-        await self._installOIDCMiddleware();
+        const router = this.iRequestServer().router();
+        await this._installBodyParser( router );
+        //await self._installAuth( router );
+        await this._installInteractions( router );
+        await this._installTrace( router );
+        await this._installOIDCMiddleware();
         // from https://github.com/panva/node-oidc-provider/blob/main/example/express.js
         //  https://v3-migration-docs.meteor.com/breaking-changes/#webapp-switches-to-express
         //  https://forums.meteor.com/t/what-is-the-meteor-3-express-replacement-for-picker-middleware/61616
-        Meteor.APP.express.use( organization.record.baseUrl, this.iRequestServer().router());
-        Meteor.APP.express.use( organization.record.baseUrl, self.#oidc.callback());
+        Meteor.APP.express.use( organization.record.baseUrl, router );
+        Meteor.APP.express.use( organization.record.baseUrl, this.#oidc.callback());
+        console.debug( 'routes mounted under', organization.record.baseUrl );
         //WebApp.handlers.use( organization.record.baseUrl, self.#oidc.callback());
         //this.app().use( organization.record.baseUrl, [ this.router(), self.#oidc.callback() ]); // same, but prefer above writing
         //WebApp.handlers.use( Meteor.APP.express );

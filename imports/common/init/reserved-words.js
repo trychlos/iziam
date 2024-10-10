@@ -35,7 +35,7 @@ Meteor.APP.isReservedWord = function( path ){
     //  '/v' is forbidden too
     } else {
         const regex = /\/v[\d]*/;
-        if( path.match( regex )){
+        if( path === '/packages' || path.match( regex )){
             reserved = true;
         }
     }

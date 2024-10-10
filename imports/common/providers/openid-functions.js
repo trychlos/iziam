@@ -24,6 +24,7 @@ OpenID.fn = {
     endpoints( organization ){
         let result = OAuth2.fn.endpoints( organization );
         const fullBaseUrl = Organizations.fn.fullBaseUrl( organization );
+        //console.debug( 'fullBaseUrl', fullBaseUrl );
         const set = function( name, opts={} ){
             let foo = organization.record[opts.fromName] || organization.record[name];
             if( foo ){
