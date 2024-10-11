@@ -68,7 +68,6 @@ Meteor.APP.C = {
     keygripMinSize: 32,
 
     // when generating a client secret, the used defaults
-    secretDefAlg: 'SHA512',
     secretDefEncoding: 'hex',
     secretDefSize: 64,
     secretMinSize: 32,

@@ -23,13 +23,8 @@ Template.client_secret_secret_pane.helpers({
         return pwixI18n.label( I18N, arg.hash.key );
     },
 
-    treeifiedHash(){
-        const item = this.item.get();
-        return item.hash || null;
-    },
-
     treeifiedSecret(){
         const item = this.item.get();
-        return item.secret || null;
+        return item.hex || null;
     }
 });

@@ -18,7 +18,6 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 
 import { ClientsRecords } from '/imports/common/collections/clients_records/index.js';
 
-import '/imports/client/components/secret_alg_select/secret_alg_select.js';
 import '/imports/client/components/secret_encoding_select/secret_encoding_select.js';
 
 import './client_secret_properties_pane.html';
@@ -36,10 +35,6 @@ Template.client_secret_properties_pane.onCreated( function(){
     self.autorun(() => {
         let item = Template.currentData().item.get();
         let changed = false;
-        if( !item.alg ){
-            item.alg = Meteor.APP.C.secretDefAlg;
-            changed = true;
-        }
         if( !item.encoding ){
             item.encoding = Meteor.APP.C.secretDefEncoding;
             changed = true;
@@ -72,12 +67,6 @@ Template.client_secret_properties_pane.onRendered( function(){
                         js: '.js-label',
                         formTo( $node, item ){
                             $node.val( item.label );
-                        }
-                    },
-                    'secrets.$.alg': {
-                        js: '.js-alg',
-                        formTo( $node, item ){
-                            $node.val( item.alg );
                         }
                     },
                     'secrets.$.encoding': {
@@ -129,21 +118,13 @@ Template.client_secret_properties_pane.helpers({
         };
     },
 
-    // parms for the HMAC Algorith selection
-    parmsSecretAlgSelect(){
-        return {
-            ...this,
-            selected: this.item.get().alg || null,
-            disabled: !this.isNew.get()
-        }
-    },
-
     // parms for the HMAC Encoding selection
+    //  default is hex - not modifiable
     parmsSecretEncodingSelect(){
         return {
             ...this,
             selected: this.item.get().encoding || null,
-            disabled: !this.isNew.get()
+            disabled: true
         }
     },
 

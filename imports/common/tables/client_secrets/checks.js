@@ -31,6 +31,7 @@ const _assert_data_itemrv = function( caller, data ){
 
 ClientSecrets.checks = {
 
+    /*
     // secret algorithm
     async secret_alg( value, data, opts ){
         _assert_data_itemrv( 'ClientSecrets.checks.secret_alg()', data );
@@ -52,17 +53,7 @@ ClientSecrets.checks = {
             });
         }
     },
-
-    // clear secret
-    async secret_clear( value, data, opts ){
-        _assert_data_itemrv( 'ClientSecrets.checks.secret_clear()', data );
-        let item = data.item.get();
-        if( opts.update !== false ){
-            item.clear = value;
-            data.item.set( item );
-        }
-        return null;
-    },
+    */
 
     // secret encoding
     async secret_encoding( value, data, opts ){
@@ -103,12 +94,25 @@ ClientSecrets.checks = {
         return null;
     },
 
+    /*
     // secret hash
     async secret_hash( value, data, opts ){
         _assert_data_itemrv( 'ClientSecrets.checks.secret_hash()', data );
         let item = data.item.get();
         if( opts.update !== false ){
             item.hash = value;
+            data.item.set( item );
+        }
+        return null;
+    },
+    */
+
+    // clear secret as an hex value
+    async secret_hex( value, data, opts ){
+        _assert_data_itemrv( 'ClientSecrets.checks.secret_hex()', data );
+        let item = data.item.get();
+        if( opts.update !== false ){
+            item.hex = value;
             data.item.set( item );
         }
         return null;

@@ -159,32 +159,32 @@ Template.client_secret_edit_dialog.events({
         let record = recordRv.get();
         record.secrets = record.secrets || [];
         let found = false;
-        let key = instance.APP.item.get();
+        let secret = instance.APP.item.get();
         // if the secret have not been generated yet, do it now
         Promise.resolve( true )
             .then(() => {
-                if( key.createdAt ){
-                    return key;
+                if( secret.createdAt ){
+                    return secret;
                 }
-                return ClientSecrets.fn.generateSecret( jwk ).then(( res ) => {
+                return ClientSecrets.fn.generateSecret( secret ).then(( res ) => {
                     Tolert.success( pwixI18n.label( I18N, 'clients.secrets.edit.generated' ));
                     return res;
                 });
             })
             .then(( res ) => {
-                key = res;
+                secret = res;
                 if( instance.APP.isNew.get()){
-                    record.secrets.push( key );
+                    record.secrets.push( secret );
                 } else {
                     for( let i=0 ; i<record.secrets.length ; ++i ){
-                        if( record.secrets[i].id === key.id ){
-                            record.secrets[i] = key;
+                        if( record.secrets[i].id === secret.id ){
+                            record.secrets[i] = secret;
                             found = true;
                             break;
                         }
                     }
                     if( !found ){
-                        console.warn( 'unable to update the client secret', key );
+                        console.warn( 'unable to update the client secret', secret );
                     }
                 }
             })

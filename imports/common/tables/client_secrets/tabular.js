@@ -44,11 +44,6 @@ ClientSecrets.tabularFieldSet = function( dc ){
             dt_title: pwixI18n.label( I18N, 'clients.secrets.list.label_th' )
         },
         {
-            name: 'alg',
-            dt_type: 'string',
-            dt_title: pwixI18n.label( I18N, 'clients.secrets.list.alg_th' )
-        },
-        {
             name: 'encoding',
             dt_type: 'string',
             dt_title: pwixI18n.label( I18N, 'clients.secrets.list.encoding_th' )

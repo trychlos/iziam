@@ -386,6 +386,7 @@ Meteor.APP.i18n = {
                             +'need to authenticate against the token endpoint.<br />'
                             +'Manage your set or secrets here.',
                         properties_tab_title: 'Properties',
+                        secret_hex_title: 'Hex-encoded secret',
                         secret_tab_title: 'Secret',
                         size_label: 'Secret size :',
                         size_title: 'The size of the generated secret',
@@ -395,7 +396,6 @@ Meteor.APP.i18n = {
                     },
                     list: {
                         add_title: 'Add a new secret to your list',
-                        alg_th: 'Algorithm',
                         created_at_th: 'Created at',
                         created_by_th: 'Created by',
                         delete_confirm_text: 'You are about to delete the "%s" secret.<br />Are you sure ?',

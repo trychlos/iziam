@@ -42,26 +42,15 @@ ClientSecrets.recordFieldDef = function(){
             form_type: Forms.FieldType.C.OPTIONAL
         },
         {
-            name: 'secrets.$.alg',
-            type: String,
-            form_check: ClientSecrets.checks.secret_alg,
-            form_type: Forms.FieldType.C.OPTIONAL
-        },
-        {
             name: 'secrets.$.encoding',
             type: String,
             form_check: ClientSecrets.checks.secret_encoding,
             form_type: Forms.FieldType.C.OPTIONAL
         },
         {
-            name: 'secrets.$.hash',
+            name: 'secrets.$.hex',
             type: String,
-            form_check: ClientSecrets.checks.secret_hash,
-        },
-        {
-            name: 'secrets.$.secret',
-            type: String,
-            form_check: ClientSecrets.checks.secret_clear,
+            form_check: ClientSecrets.checks.secret_hex,
         },
         {
             name: 'secrets.$.startingAt',

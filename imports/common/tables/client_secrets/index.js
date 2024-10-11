@@ -7,6 +7,8 @@
  * In all other cases, a client must have at least one secret.
  *
  * The tabular display of the client secrets.
+ *
+ * See https://www.oauth.com/oauth2-servers/client-registration/client-id-secret/
  */
 
 export { ClientSecrets } from './object.js';

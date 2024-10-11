@@ -25,7 +25,7 @@ Template.client_secret_generate_pane.onCreated( function(){
     //console.debug( this );
 
     self.APP = {
-        // generate the JWK
+        // generate the secret
         //  reactively update the item
         async generate( dataContext ){
             let item = dataContext.item.get();
@@ -41,12 +41,12 @@ Template.client_secret_generate_pane.onCreated( function(){
 Template.client_secret_generate_pane.helpers({
     // have a color class which exhibit the enable status
     btnClass(){
-        return this.item.get().alg ? 'btn-secondary' : 'btn-outline-secondary';
+        return this.item.get().encoding && this.item.get().size ? 'btn-secondary' : 'btn-outline-secondary';
     },
 
     // whether the Generate button is disabled
     btnDisabled(){
-        return this.item.get().alg ? '' : 'disabled';
+        return this.item.get().encoding && this.item.get().size ? '' : 'disabled';
     },
 
     // string translation

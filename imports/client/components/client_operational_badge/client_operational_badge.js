@@ -11,7 +11,6 @@
 
 import { Forms } from 'meteor/pwix:forms';
 import { pwixI18n } from 'meteor/pwix:i18n';
-import { ReactiveVar } from 'meteor/reactive-var';
 import { TenantsManager } from 'meteor/pwix:tenants-manager';
 
 import './client_operational_badge.html';
@@ -36,17 +35,19 @@ Template.client_operational_badge.helpers({
     },
     // the status
     parmsStatus(){
-        const organization = TenantsManager.list.byEntity( this.item.DYN.entity.organization );
-        const clientId = this.item.DYN.entity._id;
-        const statusRv = organization && clientId ? organization.DYN.clients?.byId( clientId )?.DYN.operational?.status : null;
-        const title = statusRv && statusRv.get() === Forms.FieldStatus.C.VALID ?
-            pwixI18n.label( I18N, 'clients.tabular.operational_valid_title' ) : pwixI18n.label( I18N, 'clients.tabular.operational_invalid_title' );
-        return {
-            statusRv: statusRv,
-            title: title,
-            uncompleteButton: true,
-            invalidButton: true,
-            buttonOnClick: Template.instance().APP.onClick
-        };
+        if( this.item.DYN?.entity?.organization ){
+            const organization = TenantsManager.list.byEntity( this.item.DYN.entity.organization );
+            const clientId = this.item.DYN.entity._id;
+            const statusRv = organization && clientId ? organization.DYN.clients?.byId( clientId )?.DYN.operational?.status : null;
+            const title = statusRv && statusRv.get() === Forms.FieldStatus.C.VALID ?
+                pwixI18n.label( I18N, 'clients.tabular.operational_valid_title' ) : pwixI18n.label( I18N, 'clients.tabular.operational_invalid_title' );
+            return {
+                statusRv: statusRv,
+                title: title,
+                uncompleteButton: true,
+                invalidButton: true,
+                buttonOnClick: Template.instance().APP.onClick
+            };
+        }
     }
 });

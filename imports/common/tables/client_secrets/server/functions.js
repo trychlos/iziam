@@ -17,8 +17,7 @@ ClientSecrets.s = {
      * @returns {Object} this same item
      */
     async generateSecret( item, userId ){
-        item.secret = randomBytes( item.size ).toString( 'base64' );
-        item.hash = createHash( item.alg ).update( item.secret ).digest( item.encoding );
+        item.hex = randomBytes( item.size ).toString( Meteor.APP.C.secretDefEncoding );
         item.createdAt = new Date();
         item.createdBy = userId;
         return item;
