@@ -1,0 +1,18 @@
+<template name="organization_groups_pane">
+    <div class="x-tab c-organization-groups-pane">
+        <div class="panel-content">
+
+            <div class="panel-header">
+                <div class="panel-preamble">
+                    {{{ i18n key="organizations.groups.list_preamble" }}}
+                </div>
+                {{> group_new_button }}
+            </div>
+
+            <div class="panel-body">
+                {{> groups_tree_panel }}
+            </div>
+
+        </div>
+    </div>
+</template>

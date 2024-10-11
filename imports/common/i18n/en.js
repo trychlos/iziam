@@ -535,6 +535,11 @@ Meteor.APP.i18n = {
                     reftoken_label: 'Refresh token grant',
                     select_text: 'Select the grant type your client will use at the token endpoint'
                 },
+                group_type: {
+                    group_label: 'Group',
+                    identity_label: 'Identity',
+                    select_text: 'Select the desired group type'
+                },
                 hmac_alg: {
                     blake2b512_label: 'Blake2b 512',
                     blake2s256_label: 'Blake2s 256',
@@ -652,6 +657,28 @@ Meteor.APP.i18n = {
                 },
                 zoneinfo: {
                     select_text: 'Choose the user\'s zoneinfo'
+                }
+            },
+            groups: {
+                checks: {
+                    label_exists: 'The label is already used',
+                    label_mandatory: 'The label is not set'
+                },
+                edit: {
+                    children_tab_title: 'Children',
+                    edit_success: 'The group "%s" has been successfully updated',
+                    error: 'An error has been detected. Please retry later or inform tyour administrator',
+                    label_label: 'Label :',
+                    label_ph: 'A group label',
+                    label_title: 'The label attached to the group, must be unique',
+                    new_success: 'The group "%s" has been successfully created',
+                    notes_tab_title: 'Notes',
+                    properties_tab_title: 'Properties'
+                },
+                new: {
+                    button_label: 'New group',
+                    button_title: 'Define a new group',
+                    dialog_title: 'Defining a new group'
                 }
             },
             header: {
@@ -1012,6 +1039,7 @@ Meteor.APP.i18n = {
                     endsession_label: 'End session endpoint :',
                     endsession_ph: '/logout',
                     endsession_title: 'The endpoint path used to end a client session and/or to logout a connected user.',
+                    groups_tab_title: 'Groups',
                     ident_config_preamble: 'Configure the way your identities are managed.<br />'
                         +'Make sure you configure at least one identifier per identity.<br />'
                         +'This configuration will be read-only as soon as you will have defined a first identity, as we do not know at the moment how handle'
@@ -1070,6 +1098,10 @@ Meteor.APP.i18n = {
                     userinfo_label: 'Userinfo endpoint :',
                     userinfo_ph: '/userinfo',
                     userinfo_title: 'The endpoint path used to build the Userinfo URL, to which you can get informations about a user.',
+                },
+                groups: {
+                    list_preamble: 'Define here the groups inside of your organization.<br />'
+                        +'Groups from a hierachic tree, where eeach item can be either a group or an identity, though only groups can have children.'
                 },
                 identities: {
                     list_preamble: 'Define here the identities inside of your organization.<br />'

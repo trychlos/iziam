@@ -26,16 +26,30 @@ Permissions.set({
     feat: {
         clients: {
             async create( user, scope ){
-                return await Roles.userIsInRoles( user, 'SCOPED_CLIENT_CREATE', { scope: scope });
+                return await Roles.userIsInRoles( user, 'CLIENTS_MANAGER' ) || await Roles.userIsInRoles( user, 'SCOPED_CLIENT_CREATE', { scope: scope });
             },
             async delete( user, scope ){
-                return await Roles.userIsInRoles( user, 'SCOPED_CLIENT_DELETE', { scope: scope });
+                return await Roles.userIsInRoles( user, 'CLIENTS_MANAGER' ) || await Roles.userIsInRoles( user, 'SCOPED_CLIENT_DELETE', { scope: scope });
             },
             async edit( user, scope ){
-                return await Roles.userIsInRoles( user, 'SCOPED_CLIENT_EDIT', { scope: scope });
+                return await Roles.userIsInRoles( user, 'CLIENTS_MANAGER' ) || await Roles.userIsInRoles( user, 'SCOPED_CLIENT_EDIT', { scope: scope });
             },
             async list( user, scope ){
-                return await Roles.userIsInRoles( user, 'SCOPED_CLIENTS_LIST', { scope: scope });
+                return await Roles.userIsInRoles( user, 'CLIENTS_MANAGER' ) || await Roles.userIsInRoles( user, 'SCOPED_CLIENTS_LIST', { scope: scope });
+            }
+        },
+        groups: {
+            async create( user, scope ){
+                return await Roles.userIsInRoles( user, 'IDENTITIES_MANAGER' ) || await Roles.userIsInRoles( user, 'SCOPED_GROUP_CREATE', { scope: scope });
+            },
+            async delete( user, scope ){
+                return await Roles.userIsInRoles( user, 'IDENTITIES_MANAGER' ) || await Roles.userIsInRoles( user, 'SCOPED_GROUP_DELETE', { scope: scope });
+            },
+            async edit( user, scope ){
+                return await Roles.userIsInRoles( user, 'IDENTITIES_MANAGER' ) || await Roles.userIsInRoles( user, 'SCOPED_GROUP_EDIT', { scope: scope });
+            },
+            async list( user, scope ){
+                return await Roles.userIsInRoles( user, 'IDENTITIES_MANAGER' ) || await Roles.userIsInRoles( user, 'SCOPED_GROUPS_LIST', { scope: scope });
             }
         },
         organizations: {
