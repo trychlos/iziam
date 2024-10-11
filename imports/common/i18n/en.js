@@ -50,6 +50,12 @@ Meteor.APP.i18n = {
                     password_ph: 'xxxxxxxx',
                     scopes_title: 'Scopes :',
                     rar_title: 'Authorization details :'
+                },
+                logout: {
+                    cancel_button: 'Cancel',
+                    dialog_title: 'User logout',
+                    form_title: 'Are you sure you want to log out ?',
+                    ok_button: 'Logout'
                 }
             },
             clients: {

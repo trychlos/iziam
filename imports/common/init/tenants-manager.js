@@ -100,9 +100,16 @@ Permissions.set({
 Tracker.autorun(() => {
     TenantsManager.list.get().forEach(( it ) => {
         // maintain the operational status of the organizations
-        Organizations.setupOperational( it );
-        // instanciate a ClientsRegistrar
-        it.DYN.clients = ClientsRegistrar.getRegistered( it ) || new ClientsRegistrar( it );
-        it.DYN.identities = IdentitiesRegistrar.getRegistered( it ) || new IdentitiesRegistrar( it );
+        if( Meteor.isClient ){
+            Organizations.setupOperational( it );
+        }
+        // instanciate a ClientsRegistrar if needed
+        if( !it.DYN.clients ){
+            it.DYN.clients = ClientsRegistrar.getRegistered( it ) || new ClientsRegistrar( it );
+        }
+        // instanciate a IdentitiesRegistrar if needed
+        if( !it.DYN.identities ){
+            it.DYN.identities = IdentitiesRegistrar.getRegistered( it ) || new IdentitiesRegistrar( it );
+        }
     });
 });

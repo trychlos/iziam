@@ -23,7 +23,6 @@ export class OIDErrors extends izObject {
     #error = null;
 
     // runtime
-    #html = null;
 
     // private methods
 
@@ -34,7 +33,7 @@ export class OIDErrors extends izObject {
         str += this._renderBodyTitle( out, error );
         str += this._renderBodyContent( out, error );
         str += '</div>';
-        str += '<body>';
+        str += '</body>';
         return str;
     }
 
@@ -92,7 +91,7 @@ export class OIDErrors extends izObject {
 
     /**
      * Constructor
-     * @returns {HtmlError} this instance
+     * @returns {OIDErrors} this instance
      */
     constructor( out, error ){
         super( ...arguments );
@@ -107,11 +106,11 @@ export class OIDErrors extends izObject {
      * @returns {String} the HTML output
      */
     render(){
-        this.#html = '<!DOCTYPE html>'
-            +'<html>';
-        this.#html += this._renderHead( this.#out, this.#error );
-        this.#html += this._renderBody( this.#out, this.#error );
-        this.#html += '</html>';
-        return this.#html;
+        let html = '<!DOCTYPE html>'
+            +'<html>'
+            + this._renderHead( this.#out, this.#error );
+            + this._renderBody( this.#out, this.#error );
+            + '</html>';
+        return html;
     }
 }

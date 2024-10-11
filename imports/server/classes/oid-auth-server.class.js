@@ -8,6 +8,8 @@ import _ from 'lodash';
 const assert = require( 'assert' ).strict; // up to nodejs v16.x
 import mix from '@vestergaard-company/js-mixin';
 import Provider from 'oidc-provider';
+import revoke from 'oidc-provider/lib/helpers/revoke.js';
+import * as ssHandler from 'oidc-provider/lib/helpers/samesite_handler.js';
 
 import { WebApp } from 'meteor/webapp';
 
@@ -20,6 +22,7 @@ import { Keygrips } from '/imports/common/tables/keygrips/index.js';
 
 import { AuthServer } from '/imports/server/classes/auth-server.class.js';
 import { OIDErrors } from '/imports/server/classes/oid-errors.class.js';
+import { OIDLogout } from '/imports/server/classes/oid-logout.class.js';
 import { OIDMongoAdapter } from '/imports/server/classes/oid-mongo-adapter.class.js';
 
 import { IOIDInteractions } from '/imports/server/interfaces/ioid-interactions.iface.js';
@@ -48,7 +51,8 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
                     enabled: false
                 },
                 rpInitiatedLogout: {
-                    enabled: true
+                    enabled: true,
+                    logoutSource: this._logoutSource
                 }
             }
         };
@@ -242,6 +246,30 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
             //console.log( 'post middleware', ctx );
             // as of oidc-provider 7.14.3, there is no ctx.oidc when the route is wrong
             console.log( 'post middleware', ctx.method, ctx.oidc?.route );
+
+            // from https://github.com/panva/node-oidc-provider/blob/47a77d9afe90578ea4dfed554994b60b837a3059/lib/actions/end_session.js#L76
+            if( ctx.method === 'GET' && ctx.oidc?.route === 'end_session' ){
+                const { oidc: { session, params } } = ctx;
+                if (session.authorizations) {
+                    await Promise.all(
+                      Object.entries(session.authorizations).map(async ([clientId, { grantId }]) => {
+                        // Drop the grants without offline_access
+                        // Note: tokens that don't get dropped due to offline_access having being added
+                        // later will still not work, as such they will be orphaned until their TTL hits
+                        if (grantId && !session.authorizationFor(clientId).persistsLogout) {
+                          await revoke(ctx, grantId);
+                        }
+                      }),
+                    );
+                  }
+                  await session.destroy();
+                  ssHandler.set(
+                    ctx.oidc.cookies,
+                    ctx.oidc.provider.cookieName('session'),
+                    null,
+                    {},
+                );
+            }
         });
     }
 
@@ -256,6 +284,13 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
                 next();
             });
         }
+    }
+
+    // builds the HTML code to ask for user logout confirmation
+    async _logoutSource( ctx, form ){
+        ctx.type = 'html';
+        const html = new OIDLogout( form ).render();
+        ctx.res.send( html );
     }
 
     // public data
@@ -304,9 +339,9 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
             if( this.#oidc ){
                 assert( this.#oidc instanceof Provider, 'expects an instance of (node-oidc-) Provider, got '+this.#oidc );
                 const router = this.iRequestServer().router();
+                await this._installTrace( router );
                 await this._installBodyParser( router );
                 await this._installInteractions( router );
-                await this._installTrace( router );
                 await this._installOIDCMiddleware();
                 // from https://github.com/panva/node-oidc-provider/blob/main/example/express.js
                 //  https://v3-migration-docs.meteor.com/breaking-changes/#webapp-switches-to-express
@@ -321,3 +356,4 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
         return success;
     }
 }
+

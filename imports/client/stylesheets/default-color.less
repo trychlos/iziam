@@ -22,11 +22,19 @@
         background-color: @darkerbg;
     }
 }
+
 .t-default-color.modal-content {
     background-color: @bgcolor;
     .dropdown-menu {
         background-color: @darkerbg;
     }
+}
+
+// have a gray color for placeholders
+// doesn't work :(
+::placeholder {
+    color: blue;
+    opacity: 1; // firefox
 }
 
 // app-footer is displayed as a droppable ribbon on bottom of the page, with links

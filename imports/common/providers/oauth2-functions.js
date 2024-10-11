@@ -26,7 +26,8 @@ OAuth2.fn = {
                 result[name] = fullBaseUrl+foo;
             }
         };
-        set( 'authorization_endpoint' );
+        set( 'introspection_endpoint' );
+        set( 'end_session_endpoint' );
         set( 'introspection_endpoint' );
         set( 'jwks_uri' );
         set( 'revocation_endpoint' );

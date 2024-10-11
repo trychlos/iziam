@@ -100,7 +100,6 @@ Organizations.isOperational = async function( organization ){
  * @summary Maintain the 'operational' status of each organization
  *  When the organizations change, update their status
  *  We add (or update) here a DYN.status object
- *  This is run from an autorun inside of the OrganizationsRegistrar.
  * @param {Object} organization as a full entity object with its DYN sub-object
  */
 Organizations.setupOperational = async function( item ){
@@ -144,3 +143,4 @@ Organizations.setupOperational = async function( item ){
     }
     item.DYN.operational.stats = false;
 };
+//
