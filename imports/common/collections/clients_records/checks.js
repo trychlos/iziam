@@ -97,6 +97,7 @@ const _validEmail = function( value, opts ){
 const _validUrl = function( value, opts ){
     if( value ){
         const specialProtocols = [ 'ftp:', 'file:', 'http:', 'https:', 'ws:', 'wss:' ];
+        const localhost = [ 'localhost', '127.0.0.1', '::1' ];
         if( _.isNil( validUrl.isUri( value ))){
             return new TM.TypedMessage({
                 level: TM.MessageLevel.C.ERROR,
@@ -110,10 +111,11 @@ const _validUrl = function( value, opts ){
         } else {
             try {
                 const url = new URL( value );
-                console.debug( 'url', url );
-                /*
-                    SHOULD ALSO ACCEPT HTTP://LOCALHOST
-
+                //console.debug( 'url', url );
+                // accept http://localhost if not in production
+                if( url.protocol === 'http:' && localhost.includes( url.hostname ) && Meteor.settings.public[Meteor.APP.name].environment.type !== 'production' ){
+                    return null;
+                }
                 if( opts.acceptOthers === false && url.protocol !== 'https:' ){
                     return new TM.TypedMessage({
                         level: TM.MessageLevel.C.ERROR,
@@ -124,7 +126,7 @@ const _validUrl = function( value, opts ){
                         level: TM.MessageLevel.C.ERROR,
                         message: pwixI18n.label( I18N, opts.prefix+'_http' )
                     });
-                } else */ if( opts.wantHost !== false && !url.hostname && specialProtocols.includes( url.protocol )){
+                } else if( opts.wantHost !== false && !url.hostname && specialProtocols.includes( url.protocol )){
                     return new TM.TypedMessage({
                         level: TM.MessageLevel.C.ERROR,
                         message: pwixI18n.label( I18N, opts.prefix+'_host' )
