@@ -41,7 +41,7 @@ export const IRequestable = DeclareMixin(( superclass ) => class extends supercl
      * @locus Server
      * @returns {Object} the options needed to instanciate a RequestServer
      */
-    async requestOptions(){
+    requestOptions(){
         return {};
     }
 

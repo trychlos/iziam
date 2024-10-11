@@ -60,7 +60,7 @@ export class RequestServer {
      */
     constructor( provider, organization, opts={} ){
         assert( provider && provider instanceof IRequestable, 'expects a IRequestable instance, got '+provider );
-        console.debug( 'instanciating RequestServer', provider.identId(), organization.entity._id );
+        console.debug( 'instanciating RequestServer', provider.identId(), organization.entity._id, organization.record.baseUrl );
 
         // keep instanciation arguments
         this.#requestable = provider;

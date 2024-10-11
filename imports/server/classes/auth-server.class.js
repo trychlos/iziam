@@ -53,7 +53,7 @@ export class AuthServer extends mix( izObject ).with( IRequested ){
      */
     constructor( server ){
         super( ...arguments );
-        console.debug( 'instanciating AuthServer' );
+        console.debug( 'instanciating', server.organization().record.baseUrl, this );
         return this;
     }
 

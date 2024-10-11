@@ -70,13 +70,14 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
             }
         });
         // provide routes endpoints
+        //  NB: they must be provided without the baseUrl as node-oidc-provider will prefix these with the mount path
         let endpoints = OpenID.fn.endpoints( organization );
         conf.routes = {};
         Object.keys( endpoints ).forEach(( it ) => {
             const key = it.replace( /_endpoint$|_uri$/, '' );
             try {
                 const url = new URL( endpoints[it] );
-                conf.routes[key] = url.pathname;
+                conf.routes[key] = url.pathname.substring( organization.record.baseUrl.length );
             } catch {
                 // just ignore
             };
@@ -127,20 +128,10 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
         ctx.body = new OIDErrors( out, error ).render();
     }
 
-    // after the successful login, the OIDC provider redirects to <baseUrl>/auth/<uid>
-    //  which happens to be seen here as just /auth/<uid>
-    async _installAuth( router ){
-        router.get( '/auth/:uid', async ( req, res, next ) => {
-            console.debug( 'req.url', req.url );
-            req.url = this.iRequestServer().organization().record.baseUrl + req.url;
-            next();
-        });
-    }
-
     // install a body parser to handle POST requests
     // the iRequestServer router will be mounted under baseUrl, so is dedicated to this organization
     async _installBodyParser( router ){
-        console.debug( 'installing bodyParser middlewares' );
+        console.debug( 'installing', this.iRequestServer().organization().record.baseUrl, 'bodyParser middlewares' );
         router.use( WebApp.express.urlencoded({ extended: true, type: 'application/x-www-form-urlencoded' }));
         router.use( WebApp.express.json());
     }
@@ -148,7 +139,7 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
     // install interactions routes
     //  must be defined without the baseUrl as these routes are to be mounted under this same baseUrl
     async _installInteractions( router ){
-        console.debug( 'installing interactions middlewares' );
+        console.debug( 'installing', this.iRequestServer().organization().record.baseUrl, 'interactions middlewares' );
         const setNoCache = function( req, res, next ){
             res.set('cache-control', 'no-store');
             next();
@@ -172,7 +163,7 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
 
     // install the OIDC pre- and post-middlewares
     async _installOIDCMiddleware(){
-        console.debug( 'installing OIDC middleware' );
+        console.debug( 'installing', this.iRequestServer().organization().record.baseUrl, 'OIDC middleware' );
         this.#oidc.use( async ( ctx, next ) => {
             // ctx: {
             //     request: {
@@ -202,13 +193,16 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
             //     res: '<original node res>',
             //     socket: '<original node socket>'
             // }
+            //
+            // ctx.path:            /auth
+            // ctx.req.originalUrl: /iziam/auth
+            // ctx.req.baseUrl:     /iziam
+            // ctx.href:            http://localhost:3003/auth?client....
 
             /* pre-processing
              * you may target a specific action here by matching `ctx.path`
              */
             console.log( 'pre middleware', ctx.method, ctx.path );
-
-            //await this.interactionTry( this.#oidc, ctx, next );
 
             await next();
 
@@ -254,10 +248,11 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
     // install a body parser to handle POST requests
     // the iRequestServer router will be mounted under baseUrl, so is dedicated to this organization
     async _installTrace( router ){
-        console.debug( 'installing trace middleware' );
+        const baseUrl = this.iRequestServer().organization().record.baseUrl;
+        console.debug( 'installing', baseUrl, 'trace middleware' );
         if( true ){
             router.use(( req, res, next ) => {
-                console.debug( 'router', req.method, req.url );
+                console.debug( 'router', baseUrl, req.method, req.url );
                 next();
             });
         }
@@ -270,9 +265,9 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
      * @param {RequestServer} server the parent RequestServer instance
      * @returns {OIDAuthServer}
      */
-    constructor(){
+    constructor( server ){
         super( ...arguments );
-        console.debug( 'instanciating OIDAuthServer' );
+        console.debug( 'instanciating', server.organization().record.baseUrl, this );
         return this;
     }
 
@@ -294,31 +289,35 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
      * @summary Make sure the server is initialized
      *  We would wish have an OIDC Provider with the same time life as this AuthServer
      *  but the former requires a configuration which can be changed over time
+     * @returns {Boolean} true if success
      */
     async init(){
-        console.debug( 'initializing', this );
-        const self = this;
+        let success = false;
         const requestServer = this.iRequestServer();
         const organization = requestServer.organization();
+        console.debug( 'initializing', organization.record.baseUrl, this );
         const issuer = Organizations.fn.fullBaseUrl( organization );
         let setup = await this._config( organization );
-        console.debug( this, 'setup', setup );
-        this.#oidc = new Provider( issuer, setup );
-        assert( this.#oidc && this.#oidc instanceof Provider, 'expects an instance of (node-oidc-) Provider, got '+this.#oidc );
-        const router = this.iRequestServer().router();
-        await this._installBodyParser( router );
-        //await self._installAuth( router );
-        await this._installInteractions( router );
-        await this._installTrace( router );
-        await this._installOIDCMiddleware();
-        // from https://github.com/panva/node-oidc-provider/blob/main/example/express.js
-        //  https://v3-migration-docs.meteor.com/breaking-changes/#webapp-switches-to-express
-        //  https://forums.meteor.com/t/what-is-the-meteor-3-express-replacement-for-picker-middleware/61616
-        Meteor.APP.express.use( organization.record.baseUrl, router );
-        Meteor.APP.express.use( organization.record.baseUrl, this.#oidc.callback());
-        console.debug( 'routes mounted under', organization.record.baseUrl );
-        //WebApp.handlers.use( organization.record.baseUrl, self.#oidc.callback());
-        //this.app().use( organization.record.baseUrl, [ this.router(), self.#oidc.callback() ]); // same, but prefer above writing
-        //WebApp.handlers.use( Meteor.APP.express );
-   }
+        console.debug( organization.record.baseUrl, this, 'setup', setup );
+        try {
+            this.#oidc = new Provider( issuer, setup );
+            if( this.#oidc ){
+                assert( this.#oidc instanceof Provider, 'expects an instance of (node-oidc-) Provider, got '+this.#oidc );
+                const router = this.iRequestServer().router();
+                await this._installBodyParser( router );
+                await this._installInteractions( router );
+                await this._installTrace( router );
+                await this._installOIDCMiddleware();
+                // from https://github.com/panva/node-oidc-provider/blob/main/example/express.js
+                //  https://v3-migration-docs.meteor.com/breaking-changes/#webapp-switches-to-express
+                //  https://forums.meteor.com/t/what-is-the-meteor-3-express-replacement-for-picker-middleware/61616
+                Meteor.APP.express.use( organization.record.baseUrl, router );
+                Meteor.APP.express.use( organization.record.baseUrl, this.#oidc.callback());
+                success = true;
+            }
+        } catch( err ){
+            console.error( err );
+        }
+        return success;
+    }
 }

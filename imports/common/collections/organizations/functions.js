@@ -43,7 +43,7 @@ Organizations.fn = {
     /**
      * @summary Returns a list of the organization selected providers which match a specified type, sorted by their prerequisites and their versions
      *  which means than we will have, for example openid 1.0 -> oauth 2.1 -> oauth 2.0
-     *  so the first is the preferred (because the more advanced) and the last is the less preferred (because the oldest)
+     *  so the first is the preferred (because the more advanced or the more complete) and the last is the less preferred (because the oldest)
      * @param {Organizations} organization as an { entity, record } object
      * @param {Object} type the instance type to be filtered
      * @returns {Array<izProvider>} the filtered/sorted providers

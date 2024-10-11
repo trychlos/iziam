@@ -33,7 +33,7 @@ export class ResourceServer extends mix( izObject ).with( IRequested ){
      */
     constructor( server ){
         super( ...arguments );
-        console.debug( 'instanciating ResourceServer' );
+        console.debug( 'instanciating', server.organization().record.baseUrl, this );
         return this;
     }
 
@@ -41,6 +41,6 @@ export class ResourceServer extends mix( izObject ).with( IRequested ){
      * @summary Make sure the server is initialized
      */
     async init(){
-        console.debug( 'initializing', this );
+        console.debug( 'initializing', this.iRequestServer().organization().record.baseUrl, this );
     }
 }

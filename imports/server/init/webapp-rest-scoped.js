@@ -15,6 +15,8 @@
 import _ from 'lodash';
 const assert = require( 'assert' ).strict; // up to nodejs v16.x
 
+import { TenantsManager } from 'meteor/pwix:tenants-manager';
+import { Tracker } from 'meteor/tracker';
 import { Validity } from 'meteor/pwix:validity';
 import { WebApp } from 'meteor/webapp';
 
@@ -26,6 +28,9 @@ import { RequestServer } from '/imports/server/classes/request-server.class.js';
 import { Webargs } from '/imports/server/classes/webargs.class.js';
 
 // a map of the instanciated RequestServer's per organization entity
+// each item is an object with:
+//  - organization: an { entity, record } organization object
+//  - server: the requestServer instance
 let requestServersByEntities = {};
 
 async function fn_asterPath( url, args, organization, provider ){
@@ -92,6 +97,7 @@ async function _checkOperationalOrganization( args, organization ){
 // Handle organization-scoped requests, i.e. requests whose first level is the base URL of an organization
 //  return true|false whether we have (at least tried to) handled this request
 async function handleScoped( req, res ){
+    console.debug( 'handleScoped', req.url );
     const words = req.url.split( '/' );
     assert( !words[0], 'expects an absolute pathname, got '+req.url );
     const baseUrl = '/'+words[1];
@@ -134,4 +140,65 @@ WebApp.handlers.use( async ( req, res, next ) => {
             next();
         }
     });
+});
+
+// predefine routes for each operational organization
+Tracker.autorun(() => {
+    //console.debug( 'scanning tenants list', TenantsManager.list.get().length );
+    TenantsManager.list.get().forEach( async ( it ) => {
+        //console.debug( 'it._id', it._id );
+        let obj = requestServersByEntities[it._id];
+        const atdate = Validity.atDateByRecords( it.DYN.records );
+        let organization = null;
+        let operational = false;
+        if( atdate ){
+            const entity = { ...it };
+            delete entity.DYN;
+            organization = { entity: entity, record: atdate };
+            const tms = await Organizations.isOperational( organization );
+            operational = ( tms === null );
+        }
+        //console.debug( 'obj', obj ? 'set':'null', 'operational', operational );
+        // we may or may not have a suitable object
+        if( obj ){
+            if( operational && organization.record.baseUrl === obj.organization.record.baseUrl ){
+                // make sure the organization is up to date
+                obj.organization = organization;
+                assert( obj.server instanceof RequestServer, 'expects an instance of RequestServer, got '+obj.server );
+                // done
+            } else {
+                // either we no more have a suitable organization, or the baseUrl has changed
+                console.warn( 'TODO: have to remove all (no more suitable) RequestServer routes for', obj );
+                delete requestServersByEntities[it._id];
+                obj = null;
+            }
+        }
+        // we have a suitable organization and not yet (or no more) the ad-hoc RequestServer
+        if( !obj && operational ){
+            const providers = Organizations.fn.byTypeSorted( organization, IRequestable );
+            let server = null;
+            providers.every(( p ) => {
+                server = new RequestServer( p, organization, p.requestOptions());
+                return server === null;
+            });
+            if( server ){
+                assert( server instanceof RequestServer, 'expects an instance of RequestServer, got '+server );
+                if( await server.init()){
+                    requestServersByEntities[it._id] = {
+                        organization: organization,
+                        server: server
+                    };
+                }
+            }
+        }
+    });
+});
+
+// remove routes for disappeared organizations
+TenantsManager.s.eventEmitter.on( 'tenant-delete', ( args ) => {
+    const obj = requestServersByEntities[args.id];
+    if( obj ){
+        console.warn( 'TODO: have to remove all (no more suitable) RequestServer routes for', obj );
+        delete requestServersByEntities[args.id];
+    }
 });

@@ -134,7 +134,7 @@ export class OpenIDProvider extends mix( izProvider ).with( IGrantType, IRequest
      * @locus Server
      * @returns {Object} the options needed to instanciate a RequestServer
      */
-    async requestOptions(){
+    requestOptions(){
         return { auth: 'OIDAuthServer' };
     }
 }

@@ -109,13 +109,14 @@ export class Webargs {
      *  - url: the url to be searched as an API path, defaulting to req.url
      *  - providers: a sorted list of providers which may be able to deal with this request
      *  - asterCb: an async callback which targets the aster path, and run server-side
-     * NB: must terminate by calling end() to answer to the client
      * @returns {izProvider} a provider willing to handle and answer, or null
+     *  NB: must terminate by calling end() to answer to the client
      */
-    async handle( globalApi, scopedOpts ){
+    async handle( globalApi, scopedOpts={} ){
         const self = this;
         let handled = false;
         let provider = null;
+        const url = scopedOpts.url || this.#req.url;
         // targeting global API
         if( globalApi && globalApi[this.#req.method] ){
             for( let i=0 ; i<globalApi[this.#req.method].length && !handled ; ++i ){
@@ -135,7 +136,6 @@ export class Webargs {
         // targeting scoped request
         //  first try fixed paths and give a chance to all providers to answer to their fixed paths
         //  only then run asterCb, the first provider which have an aster path wins
-        const url = scopedOpts.url || this.#req.url;
         if( !handled && scopedOpts.providers ){
             for( let i=0 ; i<scopedOpts.providers.length && !handled ; ++i ){
                 handled = await scopedOpts.providers[i].request( url, self, scopedOpts.organization );
