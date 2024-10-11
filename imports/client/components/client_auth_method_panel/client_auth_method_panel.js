@@ -53,7 +53,7 @@ Template.client_auth_method_panel.onCreated( function(){
         const profileDef = profileId ? ClientProfile.byId( profileId ) : null;
         let selectableIds = [];
         let selectableDefs = [];
-        if( isAssistant ){
+        if( isAssistant && profileDef && clientType ){
             selectableIds = ClientProfile.defaultAuthMethods( profileDef );
             if( !selectableIds || !selectableIds.length ){
                 typeDef = ClientType.byId( clientType );
@@ -61,7 +61,7 @@ Template.client_auth_method_panel.onCreated( function(){
                     selectableIds = ClientType.defaultAuthMethods( typeDef );
                 }
             }
-        } else {
+        } else if( !isAssistant ){
             AuthMethod.Knowns().forEach(( it ) => {
                 selectableIds.push( AuthMethod.id( it ));
             });

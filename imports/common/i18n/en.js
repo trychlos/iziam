@@ -406,6 +406,7 @@ Meteor.APP.i18n = {
                         ending_th: 'Ending on',
                         label_th: 'Label',
                         preamble: 'See below the defined client secrets.',
+                        size_th: 'Size',
                         starting_th: 'Starting on'
                     }
                 },

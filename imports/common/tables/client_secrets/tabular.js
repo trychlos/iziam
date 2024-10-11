@@ -49,6 +49,11 @@ ClientSecrets.tabularFieldSet = function( dc ){
             dt_title: pwixI18n.label( I18N, 'clients.secrets.list.encoding_th' )
         },
         {
+            name: 'size',
+            dt_type: 'num',
+            dt_title: pwixI18n.label( I18N, 'clients.secrets.list.size_th' )
+        },
+        {
             name: 'startingAt',
             dt_type: 'string',
             dt_title: pwixI18n.label( I18N, 'clients.secrets.list.starting_th' ),
