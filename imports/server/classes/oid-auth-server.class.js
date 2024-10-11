@@ -8,8 +8,6 @@ import _ from 'lodash';
 const assert = require( 'assert' ).strict; // up to nodejs v16.x
 import mix from '@vestergaard-company/js-mixin';
 import Provider from 'oidc-provider';
-import revoke from 'oidc-provider/lib/helpers/revoke.js';
-import * as ssHandler from 'oidc-provider/lib/helpers/samesite_handler.js';
 
 import { WebApp } from 'meteor/webapp';
 
@@ -168,6 +166,7 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
     // install the OIDC pre- and post-middlewares
     async _installOIDCMiddleware(){
         console.debug( 'installing', this.iRequestServer().organization().record.baseUrl, 'OIDC middleware' );
+        const self = this;
         this.#oidc.use( async ( ctx, next ) => {
             // ctx: {
             //     request: {
@@ -208,6 +207,11 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
              */
             console.log( 'pre middleware', ctx.method, ctx.path );
 
+            // have to run the end of session ourselves as oidc-provider doesn't do it :(
+            if( ctx.method === 'GET' && ctx.path === '/logout' ){
+                return OIDLogout.endSession( self.#oidc, ctx, next );
+            }
+
             await next();
 
             /* post-processing
@@ -246,30 +250,6 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
             //console.log( 'post middleware', ctx );
             // as of oidc-provider 7.14.3, there is no ctx.oidc when the route is wrong
             console.log( 'post middleware', ctx.method, ctx.oidc?.route );
-
-            // from https://github.com/panva/node-oidc-provider/blob/47a77d9afe90578ea4dfed554994b60b837a3059/lib/actions/end_session.js#L76
-            if( ctx.method === 'GET' && ctx.oidc?.route === 'end_session' ){
-                const { oidc: { session, params } } = ctx;
-                if (session.authorizations) {
-                    await Promise.all(
-                      Object.entries(session.authorizations).map(async ([clientId, { grantId }]) => {
-                        // Drop the grants without offline_access
-                        // Note: tokens that don't get dropped due to offline_access having being added
-                        // later will still not work, as such they will be orphaned until their TTL hits
-                        if (grantId && !session.authorizationFor(clientId).persistsLogout) {
-                          await revoke(ctx, grantId);
-                        }
-                      }),
-                    );
-                  }
-                  await session.destroy();
-                  ssHandler.set(
-                    ctx.oidc.cookies,
-                    ctx.oidc.provider.cookieName('session'),
-                    null,
-                    {},
-                );
-            }
         });
     }
 
@@ -288,9 +268,10 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
 
     // builds the HTML code to ask for user logout confirmation
     async _logoutSource( ctx, form ){
-        ctx.type = 'html';
-        const html = new OIDLogout( form ).render();
-        ctx.res.send( html );
+        //ctx.type = 'html';
+        //const html = new OIDLogout( ctx, form ).render();
+        //ctx.res.send( html );
+        await new OIDLogout( ctx, form ).render();
     }
 
     // public data
@@ -356,4 +337,3 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
         return success;
     }
 }
-
