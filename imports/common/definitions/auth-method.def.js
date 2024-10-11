@@ -137,6 +137,19 @@ export const AuthMethod = {
     },
 
     /**
+     * @param {String} id the auth method
+     * @returns {String} the label attached to this auth method, or null
+     */
+    labelFromAuthMethod( id ){
+        let label = null;
+        let def = AuthMethod.byId( id );
+        if( def ){
+            label = AuthMethod.label( def );
+        }
+        return label;
+    },
+
+    /**
      * @param {Object} def a AuthMethod definition as returned by AuthMethod.Knowns()
      * @returns {Boolean} whether this authentification method makes use of a shared secret, defaulting to true
      */

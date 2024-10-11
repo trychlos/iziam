@@ -36,7 +36,6 @@ export class AuthServer extends mix( izObject ).with( IRequested ){
                 payload: await Clients.s.registeredMetadata( client )
             }
         }
-        result.payload.logo_uri = 'https://image.example.com/svg';
         return result;
     }
 

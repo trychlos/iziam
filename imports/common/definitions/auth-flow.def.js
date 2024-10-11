@@ -97,7 +97,7 @@ export const AuthFlow = {
     },
 
     /**
-     * @param {Array<GrantType} array a list of grant types
+     * @param {Array<GrantType>} array a list of grant types
      * @returns {String} the label attached to auth flow of the access grant type (if any), or null
      */
     labelFromGrantTypes( array ){

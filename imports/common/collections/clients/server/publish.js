@@ -9,6 +9,7 @@ import { ClientsEntities } from '/imports/common/collections/clients_entities/in
 import { ClientsRecords } from '/imports/common/collections/clients_records/index.js';
 
 import { AuthFlow } from '/imports/common/definitions/auth-flow.def.js';
+import { AuthMethod } from '/imports/common/definitions/auth-method.def.js';
 
 import { Clients } from '../index.js';
 
@@ -304,6 +305,7 @@ Meteor.publish( 'clientsTabularLast', async function( tableName, ids, fields ){
             item.DYN.analyze = Validity.analyzeByRecords( fetched );
             item.DYN.records = fetched;
             item.authorization_flow = AuthFlow.labelFromGrantTypes( item.grant_types );
+            item.auth_method = AuthMethod.labelFromAuthMethod( item.token_endpoint_auth_method );
             const res = Validity.englobingPeriodByRecords( fetched );
             item.effectStart = res.start;
             item.effectEnd = res.end;

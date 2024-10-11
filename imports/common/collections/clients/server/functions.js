@@ -11,6 +11,8 @@ import { Clients } from '../index.js';
 import { ClientsEntities} from '/imports/common/collections/clients_entities/index.js';
 import { ClientsRecords} from '/imports/common/collections/clients_records/index.js';
 
+import { ClientSecrets} from '/imports/common/tables/client_secrets/index.js';
+
 Clients.s = Clients.s || {};
 
 /**
@@ -55,6 +57,14 @@ Clients.s.registeredMetadata = async function( client ){
     if( client.record.redirect_uris && client.record.redirect_uris.length > 0 ){
         data.redirect_uris = [];
         client.record.redirect_uris.map( it => data.redirect_uris.push( it.uri ));
+    }
+    if( client.record.secrets && client.record.secrets.length ){
+        const secret = ClientSecrets.fn.atDate( client.record.secrets );
+        if( secret && secret.hex ){
+            data.client_secret = secret.hex;
+        } else {
+            console.warn( 'no secret found at date' );
+        }
     }
     return data;
 };

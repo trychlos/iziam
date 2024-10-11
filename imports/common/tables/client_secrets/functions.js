@@ -5,17 +5,37 @@
 import _ from 'lodash';
 const assert = require( 'assert' ).strict;
 
+import { DateJs } from 'meteor/pwix:date';
+
 import { ClientSecrets } from './index.js';
 
 ClientSecrets.fn = {
     /**
-     * @summary Generate the a secret and a hash for a keygrip
-     * @param {Object<Keygrip>} item the current keygrip item
+     * @summary Generate a client secret
+     * @param {Object<Secret>} item the current secret item
      * @param {String} userId the user identifier (server-side only)
-     * @returns {Object} a { secret, hash } object
+     * @returns {Object} a { hex } object
      */
     async generateSecret( item, userId ){
         return Meteor.isClient ? await Meteor.callAsync( 'client_generate_secret', item ) : await ClientSecrets.s.generateSecret( item, userId );
+    },
+
+    /**
+     * @summary Find the first secret which applies at date
+     * @param {Array<Secrets>} array the secrets array
+     * @returns {Object<Secret>} the found secret, or null
+     */
+    atDate( array ){
+        let found = null;
+        const now = new Date();
+        for( let i=0 ; i<array.length ; ++i ){
+            const secret = array[i];
+            if( DateJs.compare( secret.startingAt, now ) <= 0 && DateJs.compare( secret.endingAt, now, { start: false }) >= 0 ){
+                found = secret;
+                break;
+            }
+        }
+        return found;
     },
 
     /**

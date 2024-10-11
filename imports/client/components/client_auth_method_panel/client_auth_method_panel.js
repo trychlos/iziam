@@ -11,6 +11,7 @@
  * - entity: the currently edited client entity as a ReactiveVar
  * - index: the index of the edited record
  * - checker: the Forms.Checker which manages the parent component as a ReactiveVar
+ * - isAssistant: whether we are running inside of the new client assistant, defaulting to false
  * 
  * Forms.Checker doesn't manage well radio buttons: do not use here.
  */
@@ -46,26 +47,32 @@ Template.client_auth_method_panel.onCreated( function(){
     // they depend of the client type, may be superseded by the client profile
     self.autorun(() => {
         const record = Template.currentData().entity.get().DYN.records[Template.currentData().index].get();
+        const isAssistant = Template.currentData().isAssistant === true;
         const clientType = record.client_type || null;
         const profileId = record.profile || null;
         const profileDef = profileId ? ClientProfile.byId( profileId ) : null;
+        let selectableIds = [];
         let selectableDefs = [];
-        if( clientType && profileDef ){
-            let selectableIds = ClientProfile.defaultAuthMethods( profileDef );
+        if( isAssistant ){
+            selectableIds = ClientProfile.defaultAuthMethods( profileDef );
             if( !selectableIds || !selectableIds.length ){
                 typeDef = ClientType.byId( clientType );
                 if( typeDef ){
                     selectableIds = ClientType.defaultAuthMethods( typeDef );
                 }
             }
-            selectableIds = selectableIds || [];
-            selectableIds.forEach(( it ) => {
-                const def = AuthMethod.byId( it );
-                if( def ){
-                    selectableDefs.push( def );
-                }
+        } else {
+            AuthMethod.Knowns().forEach(( it ) => {
+                selectableIds.push( AuthMethod.id( it ));
             });
         }
+        selectableIds = selectableIds || [];
+        selectableIds.forEach(( it ) => {
+            const def = AuthMethod.byId( it );
+            if( def ){
+                selectableDefs.push( def );
+            }
+        });
         self.APP.selectables.set( selectableDefs );
     });
 
@@ -73,6 +80,7 @@ Template.client_auth_method_panel.onCreated( function(){
     // make sure these two are compatible
     self.autorun(() => {
         const recordRv = Template.currentData().entity.get().DYN.records[Template.currentData().index];
+        const isAssistant = Template.currentData().isAssistant === true;
         let record = recordRv.get();
         const clientType = record.client_type;
         if( clientType ){
@@ -80,7 +88,7 @@ Template.client_auth_method_panel.onCreated( function(){
             if( typeDef ){
                 const authMethod = record.token_endpoint_auth_method;
                 const defaultMethods = ClientType.defaultAuthMethods( typeDef );
-                if( !authMethod || !defaultMethods.includes( authMethod )){
+                if( !authMethod || ( isAssistant && !defaultMethods.includes( authMethod ))){
                     record.token_endpoint_auth_method = defaultMethods[0];
                     recordRv.set( record );
                 }
@@ -156,7 +164,7 @@ Template.client_auth_method_panel.events({
     // reactively set the record to trigger UI updates
     'click .by-item'( event, instance ){
         const id = instance.$( event.currentTarget ).data( 'item-id' );
-        let record = this.entity.get().DYN.records[this.index].get()
+        let record = this.entity.get().DYN.records[this.index].get();
         record.token_endpoint_auth_method = id;
         this.entity.get().DYN.records[this.index].set( record );
         // advertize the eventual caller (e.g. the client_new_assistant) of the new auth method
