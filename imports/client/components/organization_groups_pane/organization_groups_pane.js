@@ -13,7 +13,7 @@
 import { pwixI18n } from 'meteor/pwix:i18n';
 
 import '/imports/client/components/group_new_button/group_new_button.js';
-import '/imports/client/components/groups_tree_panel/groups_tree_panel.js';
+import '/imports/client/components/groups_tree/groups_tree.js';
 
 import './organization_groups_pane.html';
 

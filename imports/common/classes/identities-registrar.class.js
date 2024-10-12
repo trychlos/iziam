@@ -47,6 +47,7 @@ export class IdentitiesRegistrar extends izRegistrar {
     #handle = new ReactiveVar( null );
 
     // common
+    #organization = null;
     #amInstance = null;
     #list = new ReactiveVar( [] );
 
@@ -83,6 +84,7 @@ export class IdentitiesRegistrar extends izRegistrar {
         });
 
         // common code
+        this.#organization = organization;
         IdentitiesRegistrar.#registry[organization._id] = this;
 
         return this;
@@ -109,10 +111,9 @@ export class IdentitiesRegistrar extends izRegistrar {
     /**
      * @summary Initialize client side
      *  - subscribe and receive the full list of the identities of the organization
-     * @param {Organization} organization 
      */
-    clientLoad( organization ){
-        if( !this.#clientInitialized ){
+    identitiesLoad(){
+        if( Meteor.isClient && !this.#clientInitialized ){
             const self = this;
             //console.debug( 'subscribing to', self.#amInstance.name());
             this.#handle.set( Meteor.subscribe( 'pwix_accounts_manager_accounts_list_all', self.#amInstance.name()));
@@ -121,7 +122,7 @@ export class IdentitiesRegistrar extends izRegistrar {
             // each identity is published as an object with DYN sub-object
             Tracker.autorun(() => {
                 if( self.#handle.get()?.ready()){
-                    self.#amInstance.collection().find( Meteor.APP.C.pub.identitiesAll.query( organization )).fetchAsync().then(( fetched ) => {
+                    self.#amInstance.collection().find( Meteor.APP.C.pub.identitiesAll.query( self.#organization )).fetchAsync().then(( fetched ) => {
                         console.debug( 'fetched', fetched );
                         self.#list.set( fetched );
                     });

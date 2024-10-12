@@ -22,6 +22,11 @@ Organizations.tabularFieldset = function(){
             before: 'effectStart',
             fields: [
                 {
+                    name: 'groupsCount',
+                    schema: false,
+                    dt_visible: false
+                },
+                {
                     name: 'identitiesCount',
                     schema: false,
                     dt_className: 'ui-center',

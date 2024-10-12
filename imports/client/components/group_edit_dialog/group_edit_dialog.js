@@ -53,7 +53,7 @@ Template.group_edit_dialog.onCreated( function(){
     // setup the item to be edited
     //  we want a clone deep of the provided item, so that we are able to cancel the edition without keeping any sort of data
     self.autorun(() => {
-        const dup = _.cloneDeep( Template.currentData().item || { DYN: { children: [] }});
+        const dup = _.cloneDeep( Template.currentData().item || { organization: Template.currentData().organization.entity._id, DYN: { children: [] }});
         self.APP.item.set( dup );
     });
 

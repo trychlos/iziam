@@ -17,6 +17,7 @@ import '/imports/client/components/organization_config_oauth_pane/organization_c
 import '/imports/client/components/organization_config_pane/organization_config_pane.js';
 import '/imports/client/components/organization_config_rest_pane/organization_config_rest_pane.js';
 import '/imports/client/components/organization_endpoints_pane/organization_endpoints_pane.js';
+import '/imports/client/components/organization_groups_load/organization_groups_load.js';
 import '/imports/client/components/organization_groups_pane/organization_groups_pane.js';
 import '/imports/client/components/organization_identities_load/organization_identities_load.js';
 import '/imports/client/components/organization_identities_pane/organization_identities_pane.js';
@@ -78,6 +79,10 @@ Template.manager_organizations_tab.onCreated( function(){
             // some components which will not be shown, but are just here to load relative data
             {
                 paneTemplate: 'organization_clients_load',
+                shown: false
+            },
+            {
+                paneTemplate: 'organization_groups_load',
                 shown: false
             },
             {

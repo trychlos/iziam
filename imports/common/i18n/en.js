@@ -1101,7 +1101,7 @@ Meteor.APP.i18n = {
                 },
                 groups: {
                     list_preamble: 'Define here the groups inside of your organization.<br />'
-                        +'Groups from a hierachic tree, where eeach item can be either a group or an identity, though only groups can have children.'
+                        +'Groups from a hierachic tree, where each item can be either a group or an identity, though only groups can have children.'
                 },
                 identities: {
                     list_preamble: 'Define here the identities inside of your organization.<br />'

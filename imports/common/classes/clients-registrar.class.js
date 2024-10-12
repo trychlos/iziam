@@ -43,6 +43,7 @@ export class ClientsRegistrar extends izRegistrar {
     #handle = new ReactiveVar( null );
 
     // common: the clients of the organization
+    #organization = null;
     #list = new ReactiveVar( [] );
 
     // server-side: is initialized ?
@@ -63,6 +64,7 @@ export class ClientsRegistrar extends izRegistrar {
         const self = this;
 
         // common code
+        this.#organization = organization;
         ClientsRegistrar.#registry[organization._id] = this;
 
         Tracker.autorun(() => {
@@ -98,17 +100,16 @@ export class ClientsRegistrar extends izRegistrar {
      *  - subscribe and receive the full list of the clients of the organization
      *  This is run the first time we try to edit an organization
      *  (because we are a multi-tenants application, we do not want load at startup all clients of all organizations)
-     * @param {Organization} organization 
      */
-    clientLoad( organization ){
-        if( !this.#clientInitialized ){
-            this.#handle.set( Meteor.subscribe( Meteor.APP.C.pub.clientsAll.publish, organization ));
+    clientsLoad(){
+        if( Meteor.isClient && !this.#clientInitialized ){
+            this.#handle.set( Meteor.subscribe( Meteor.APP.C.pub.clientsAll.publish, this.#organization ));
             // get the list of clients
             // each client is published as an entity object with DYN { managers, records, closest } sub-object
             const self = this;
             Tracker.autorun(() => {
                 if( self.#handle.get()?.ready()){
-                    Meteor.APP.Collections.get( Meteor.APP.C.pub.clientsAll.collection ).find( Meteor.APP.C.pub.clientsAll.query( organization )).fetchAsync().then(( fetched ) => {
+                    Meteor.APP.Collections.get( Meteor.APP.C.pub.clientsAll.collection ).find( Meteor.APP.C.pub.clientsAll.query( self.#organization )).fetchAsync().then(( fetched ) => {
                         self.#list.set( fetched );
                     });
                 }

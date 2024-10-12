@@ -7,21 +7,28 @@ import { Identities } from '/imports/common/collections/identities/index.js';
 
 import { Groups } from '../index.js';
 
-// returns the list of known groups for a given organization (of for all organizations if unset)
-//  the list of (direct) members as an array of <Groups> of <Identities> objects
-Meteor.publish( 'groups.listAll', function( organization ){
-    const query = organization ? { organization: organization } : {};
+// returns the list of known groups for a given organization
+//  the list of (direct) members as an array of <Groups> objects
+Meteor.publish( 'groups.listAll', async function( organization ){
+    if( !organization ){
+        this.ready();
+        return [];
+    }
+    if( !await Permissions.isAllowed( 'feat.groups.list', this.userId, organization._id )){
+        this.ready();
+        return false;
+    }
     const self = this;
-    const collection_name = 'groups';
-    const userId = this.userId;
+    let initializing = true;
 
     // members is the array of Groups and Identities which are member of this group
     // membership is the array of groups this group is member of
     const f_transform = function( item ){
         item.DYN = {
-            members: [],
-            membership: []
+            //members: [],
+            //membership: []
         };
+        /*
         Memberships.find({ group: item._id }).fetch().every(( doc ) => {
             doc.o = doc.type === 'G' ? Groups.findOne({ _id: doc.child }) : Identities.findOne({ _id: doc.child });
             item.DYN.members.push( doc );
@@ -32,31 +39,26 @@ Meteor.publish( 'groups.listAll', function( organization ){
             item.DYN.membership.push( doc );
             return true;
         });
+        */
         return item;
     };
 
     // in order the same query may be applied on client side, we have to add to item required fields
-    const observer = Groups.find( query ).observe({
+    const observer = Groups.collection.find({ organization: organization._id }).observeAsync({
         added: function( item ){
-            if( Meteor.APP.Run.publishIsAllowed( userId, 'groups' )){
-                self.added( collection_name, item._id, f_transform( item ));
-            }
+            self.added( Groups.collectionName, item._id, f_transform( item ));
         },
         changed: function( newItem, oldItem ){
-            if( Meteor.APP.Run.publishIsAllowed( userId, 'groups' )){
-                self.changed( collection_name, newItem._id, f_transform( newItem ));
-            }
+            self.changed( Groups.collectionName, newItem._id, f_transform( newItem ));
         },
         removed: function( oldItem ){
-            if( Meteor.APP.Run.publishIsAllowed( userId, 'groups' )){
-                self.removed( collection_name, oldItem._id, oldItem );
-            }
+            self.removed( Groups.collectionName, oldItem._id, oldItem );
         }
     });
 
+    initializing = false;
     self.onStop( function(){
-        observer.stop();
+        observer.then(( handle ) => { handle.stop(); });
     });
-
     self.ready();
 });

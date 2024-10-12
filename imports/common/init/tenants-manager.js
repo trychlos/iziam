@@ -8,6 +8,7 @@ import { TenantsManager } from 'meteor/pwix:tenants-manager';
 import { Tracker } from 'meteor/tracker';
 
 import { ClientsRegistrar } from '/imports/common/classes/clients-registrar.class.js';
+import { GroupsRegistrar } from '/imports/common/classes/groups-registrar.class.js';
 import { IdentitiesRegistrar } from '/imports/common/classes/identities-registrar.class.js';
 
 import { Organizations } from '/imports/common/collections/organizations/index.js';
@@ -106,6 +107,10 @@ Tracker.autorun(() => {
         // instanciate a ClientsRegistrar if needed
         if( !it.DYN.clients ){
             it.DYN.clients = ClientsRegistrar.getRegistered( it ) || new ClientsRegistrar( it );
+        }
+        // instanciate a GroupsRegistrar if needed
+        if( !it.DYN.groups ){
+            it.DYN.groups = GroupsRegistrar.getRegistered( it ) || new GroupsRegistrar( it );
         }
         // instanciate a IdentitiesRegistrar if needed
         if( !it.DYN.identities ){
