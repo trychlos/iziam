@@ -15,14 +15,29 @@ const _defaultFieldDef = function(){
             name: 'organization',
             type: String
         },
-        // the group displayed name, mandatory, should be unique
+        // the item type, either a 'G' group or a 'I' for identity
+        {
+            name: 'type',
+            type: String,
+            defaultValue: 'G'
+        },
+        // the group displayed name, mandatory, should be unique, only set for groups
+        //  identity name is set as DYN.name by the publication function
         {
             name: 'label',
             type: String,
+            optional: true,
             form_check: Groups.checks.label,
             form_type: Forms.FieldType.C.MANDATORY,
             help_tooltip: pwixI18n.label( I18N, 'clients.metadata.client_name' )
         },
+        // the parent identifier, necessarily a group if set
+        {
+            name: 'parent',
+            type: String,
+            optional: true
+        },
+        /*
         // the children of this group
         {
             name: 'children',
@@ -43,6 +58,7 @@ const _defaultFieldDef = function(){
             name: 'children.$.id',
             type: String
         },
+        */
         Notes.fieldDef(),
         Timestampable.fieldDef()
     ];

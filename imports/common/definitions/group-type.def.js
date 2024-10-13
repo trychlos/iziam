@@ -14,12 +14,12 @@ export const GroupType = {
         {
             id: 'G',
             label: 'definitions.group_type.group_label',
-            icon: ''
+            icon: 'type-group fa-solid fa-people-group'
         },
         {
             id: 'I',
             label: 'definitions.group_type.identity_label',
-            icon: ''
+            icon: 'type-identity fa-solid fa-user'
         }
     ],
 

@@ -8,6 +8,7 @@ import { PlusButton } from 'meteor/pwix:plus-button';
 import { pwixI18n } from 'meteor/pwix:i18n';
 
 import '/imports/client/components/clients_count_badge/clients_count_badge.js';
+import '/imports/client/components/groups_count_badge/groups_count_badge.js';
 import '/imports/client/components/identities_count_badge/identities_count_badge.js';
 import '/imports/client/components/organization_clients_load/organization_clients_load.js';
 import '/imports/client/components/organization_clients_pane/organization_clients_pane.js';
@@ -55,6 +56,7 @@ Template.manager_organizations_tab.onCreated( function(){
             {
                 name: 'organization_groups_tab',
                 navLabel: pwixI18n.label( I18N, 'organizations.edit.groups_tab_title' ),
+                navTemplate: 'groups_count_badge',
                 paneTemplate: 'organization_groups_pane'
             },
             {

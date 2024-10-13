@@ -306,6 +306,41 @@ body {
     }
 }
 
+.c-groups-edit-dialog,
+.c-organization-groups-pane {
+    .groups-body,
+    .c-groups-tree,
+    .panel-content {
+        height: 100%;
+    }
+    .c-groups-buttons {
+        white-space: nowrap;
+        margin: 0 1em;
+    }
+    .c-groups-tree {
+        margin-left: 1em;
+        width: 100%;
+        border: 1px solid lightgray;
+        border-radius: 0.25em;
+        padding: 1em;
+        li.jstree-node,
+        .jstree-wholerow,
+        a.jstree-anchor {
+            line-height: 2em;
+            min-height: 2em;
+        }
+        li.jstree-node svg {
+            margin-right: 0.5em;
+        }
+        li.jstree-node svg.type-group {
+            color: var( --bs-primary );
+        }
+        li.jstree-node svg.type-identity {
+            color: var( --bs-info );
+        }
+    }
+}
+
 .x-tab {
     height: 100%;
     display: flex;
@@ -437,6 +472,7 @@ body {
 }
 
 .c-clients-count-badge,
+.c-groups-count-badge,
 .c-identities-count-badge {
     span.badge {
         top: -3em;

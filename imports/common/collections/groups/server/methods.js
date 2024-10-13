@@ -26,8 +26,13 @@ Meteor.methods({
         return await Groups.s.removeById( id, this.userId );
     },
 
-    // insert/update an group in the database
-    async 'groups.upsert'( item, groups=[], identities=[] ){
-        return await Groups.s.upsert( item, groups, identities, this.userId );
+    // insert/update a group in the database
+    async 'groups.upsert_item'( item ){
+        return await Groups.s.upsert_item( item, this.userId );
+    },
+
+    // insert/update all the groups tree
+    async 'groups.upsert_tree'( organizationId, groups ){
+        return await Groups.s.upsert_tree( organizationId, groups, this.userId );
     }
 });

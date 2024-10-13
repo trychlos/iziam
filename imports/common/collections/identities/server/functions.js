@@ -14,9 +14,9 @@ import { Identities } from '../index.js';
 
 Identities.s = {
     // return the collection for the identities of the organization
-    // organization: the full organization entity object, with its DYN sub-object
-    collection( organization ){
-        const instanceName = Identities.instanceName( organization._id );
+    // organizationId: the organization identifier
+    collection( organizationId ){
+        const instanceName = Identities.instanceName( organizationId );
         const amInstance = instanceName ? AccountsHub.instances[instanceName] : null;
         if( amInstance ){
             assert( amInstance instanceof AccountsManager.amClass, 'expects an instance of AccountsManager.amClass, got'+amInstance );
@@ -25,22 +25,16 @@ Identities.s = {
     },
 
     // returns the queried items
-    getBy( query ){
-        let res = Identities.find( query ).fetch();
+    async getBy( organizationId, query ){
+        const collection = Identities.s.collection( organizationId );
+        let res = await collection.find( query ).fetchAsync();
         return res;
     },
 
     // returns {Promises} which eventually resolves to all identities for an organization
-    listAllAsync( organization ){
-        return Identities.find({ organization: organization }).fetchAsync();
-    },
-
-    // delete an identity
-    removeById( id, userId ){
-        let res = Identities.remove({ _id: id });
-        //Memberships.s.removeByIdentity( id );
-        return res;
-    },
+    //listAllAsync( organization ){
+    //    return Identities.find({ organization: organization }).fetchAsync();
+    //},
 
     // extend the AccountsManager tabular publish function
     // provide a tabular_name, preferred email and username
@@ -71,13 +65,12 @@ Identities.s = {
     // @returns {Object} the upsert result
     async upsert( item, args, userId ){
         //console.debug( 'Identities.s.upsert', item, args );
-        const collection = Identities.s.collection( args.organization );
+        const collection = Identities.s.collection( args.organization._id );
         let res = false;
         if( collection ){
             // save the DYN sub-object to restore it later, but not be written in dbms
             const DYN = item.DYN;
             delete item.DYN;
-            //Meteor.APP.Helpers.removeUnsetValues( item );
             // do not write rows without value, nor empty arrays
             if( !item.addresses?.length ){
                 delete item.addresses;

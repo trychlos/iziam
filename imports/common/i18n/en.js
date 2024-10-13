@@ -666,19 +666,29 @@ Meteor.APP.i18n = {
                 },
                 edit: {
                     children_tab_title: 'Children',
-                    edit_success: 'The group "%s" has been successfully updated',
+                    dialog_title: 'Editing the groups hierarchy',
                     error: 'An error has been detected. Please retry later or inform tyour administrator',
+                    group_edit_success: 'The group "%s" has been successfully updated',
+                    group_new_success: 'The group "%s" has been successfully created',
                     label_label: 'Label :',
                     label_ph: 'A group label',
                     label_title: 'The label attached to the group, must be unique',
-                    new_success: 'The group "%s" has been successfully created',
                     notes_tab_title: 'Notes',
-                    properties_tab_title: 'Properties'
+                    properties_tab_title: 'Properties',
+                    tree_edit_success: 'The groups hierarchy has been successfully updated'
                 },
                 new: {
                     button_label: 'New group',
                     button_title: 'Define a new group',
                     dialog_title: 'Defining a new group'
+                },
+                tabular: {
+                    count_badge: 'Count of defined groups',
+                    delete_item_button: 'Delete group',
+                    edit_item_button: 'Edit group',
+                    edit_tree_button: 'Edit the groups tree',
+                    new_item_button: 'New group',
+                    remove_item_button: 'Remove item'
                 }
             },
             header: {
@@ -1101,7 +1111,7 @@ Meteor.APP.i18n = {
                 },
                 groups: {
                     list_preamble: 'Define here the groups inside of your organization.<br />'
-                        +'Groups from a hierachic tree, where each item can be either a group or an identity, though only groups can have children.'
+                        +'Groups form a hierachic tree, where each item can be either a group or an identity, though only groups can have children.'
                 },
                 identities: {
                     list_preamble: 'Define here the identities inside of your organization.<br />'
