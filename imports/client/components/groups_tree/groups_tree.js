@@ -9,6 +9,9 @@
  * - checker: a ReactiveVar which contains the parent Forms.Checker
  * - groups: a ReactiveVar which contains the groups of the organization
  * - editable: whether the tree is editable, defaulting to true
+ * - withCheckboxes: whether the tree has checkboxes, defaulting to false
+ * - withIdentities: whether to display the identities, defaulting to true
+ * - selected: an array of the checkboxes to check
  */
 
 import _ from 'lodash';
@@ -31,9 +34,14 @@ Template.groups_tree.onCreated( function(){
         tree_nodes_created: {},
         tree_nodes_waiting: {},
         tree_populated_rv: new ReactiveVar( false ),
+        tree_checked_rv: new ReactiveVar( false ),
 
         // whether the tree is readonly
         readOnly: new ReactiveVar( false ),
+        // whether the tree has checkboxes
+        withCheckboxes: new ReactiveVar( false ),
+        // whether to display the identities
+        withIdentities: new ReactiveVar( true ),
 
         // the previous version of tree data
         prevData: null,
@@ -144,16 +152,18 @@ Template.groups_tree.onCreated( function(){
         // create a new node
         //  the caller has made sure the parent is available if not null
         tree_create_node( group, parent=null ){
-            self.APP.tree_nodes_asked[group._id] = group;
-            const parent_node = parent ? self.APP.tree_nodes_created[ parent ] : null;
-            const $tree = self.APP.$tree.get();
-            $tree.jstree( true ).create_node( parent_node, {
-                "id": group._id,
-                "text": group.label || group.DYN?.label,
-                "children": [],
-                "doc": group,
-                "type": group.type
-            });
+            if( group.type !== 'I' || self.APP.withIdentities.get()){
+                self.APP.tree_nodes_asked[group._id] = group;
+                const parent_node = parent ? self.APP.tree_nodes_created[ parent ] : null;
+                const $tree = self.APP.$tree.get();
+                $tree.jstree( true ).create_node( parent_node, {
+                    "id": group._id,
+                    "text": group.label || group.DYN?.label,
+                    "children": [],
+                    "doc": group,
+                    "type": group.type
+                });
+            }
         },
 
         // delete a node
@@ -194,6 +204,14 @@ Template.groups_tree.onCreated( function(){
             return self.APP.tree_built_rv.get();
         },
 
+        // getter/setter: whether the initial checkboxes have been checked
+        tree_checked( done ){
+            if( done === true || done === false ){
+                self.APP.tree_checked_rv.set( done );
+            }
+            return self.APP.tree_checked_rv.get();
+        },
+
         // getter/setter: whether the tree has been populated
         tree_populated( done ){
             if( done === true || done === false ){
@@ -215,6 +233,18 @@ Template.groups_tree.onCreated( function(){
     self.autorun(() => {
         const editable = Template.currentData().editable !== false;
         self.APP.readOnly.set( !editable );
+    });
+
+    // whether the tree has checkboxes, defaulting to false
+    self.autorun(() => {
+        const checkboxes = Template.currentData().withCheckboxes === true;
+        self.APP.withCheckboxes.set( checkboxes );
+    });
+
+    // whether to display the identities, defaulting to true
+    self.autorun(() => {
+        const withIdent = Template.currentData().withIdentities !== false;
+        self.APP.withIdentities.set( withIdent );
     });
 
     // track the ready status
@@ -279,6 +309,9 @@ Template.groups_tree.onRendered( function(){
             ];
             if( !self.APP.readOnly.get()){
                 plugins.push( 'dnd' );
+            }
+            if( self.APP.withCheckboxes.get()){
+                plugins.push( 'checkbox' );
             }
             $tree.jstree({
                 core: {
@@ -380,7 +413,7 @@ Template.groups_tree.onRendered( function(){
         }
     });
 
-    // when the tree is ready, advertise of a get function
+    // when the tree is ready, advertise of the get function
     self.autorun(() => {
         if( self.APP.tree_ready()){
             self.$( '.c-groups-tree' ).trigger( 'tree-fns', { fnGet: self.APP.getTree });
@@ -391,6 +424,15 @@ Template.groups_tree.onRendered( function(){
     self.autorun(() => {
         if( self.APP.tree_populated()){
             self.APP.$tree.get().jstree( true ).open_all();
+        }
+    });
+
+    // if we have checkboxes, then check them
+    self.autorun(() => {
+        if( self.APP.tree_populated() && self.APP.withCheckboxes.get() && !self.APP.tree_checked()){
+            ( Template.currentData().selected || [] ).forEach(( it ) => {
+                console.debug( 'checking', it );
+            });
         }
     });
 });

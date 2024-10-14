@@ -743,7 +743,12 @@ Meteor.APP.i18n = {
                 edit: {
                     dialog_title: 'Editing the identity',
                     emails_tab_title: 'Email addresses',
+                    groups_tab_title: 'Groups',
                     profile_tab_title: 'Identity'
+                },
+                groups: {
+                    preamble_text: 'The groups this identity is member of.<br />'
+                        +'When attributing (checking) a group, the identity becomes also a member of all parents of this checked group.'
                 },
                 emails: {
                     address_th: 'Address',
@@ -1118,7 +1123,8 @@ Meteor.APP.i18n = {
                 groups: {
                     list_preamble: 'Define here the groups inside of your organization.<br />'
                         +'Groups form a hierachic tree, where each item can be either a group or an identity, though only groups can have children.<br />'
-                        +'Identities are so necessarily written as members of a group, never can be inserted at the root of the tree.'
+                        +'Identities are so necessarily written as members of a group, never can be inserted at the root of the tree.<br />'
+                        +'Please note that the considered configuration is those of the <b>saved</b> organization, not those of the currently edited record(s).'
                 },
                 identities: {
                     list_preamble: 'Define here the identities inside of your organization.<br />'
