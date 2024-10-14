@@ -2,6 +2,22 @@
  * /imports/client/components/organization_groups_pane/organization_groups_pane.js
  *
  * Display the groups.
+ * 
+ * +- <this>
+ *     |
+ *     +- group_new_button
+ *     |   |
+ *     |   +-> trigger group_edit_dialog
+ *     |
+ *     +- group_new_button
+ *     |
+ *     +- groups_panel
+ *         |
+ *         +- groups_tree
+ *         |
+ *         +- groups_buttons
+ *         |
+ *         +-> trigger groups_edit_dialog
  *
  * Parms:
  * - item: a ReactiveVar which contains the Organization as an entity with its DYN.records array

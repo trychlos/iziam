@@ -6,15 +6,16 @@
  * Parms:
  * - item: a ReactiveVar which contains the Organization as an entity with its DYN.records array
  * - checker: a ReactiveVar which contains the parent Forms.Checker
- * - groups: a ReactiveVar which contains the groups of the organization
- * - editable: whether the tree is editable, defaulting to true
+ * - groups: the groups of the organization
  */
 
 import { pwixI18n } from 'meteor/pwix:i18n';
 
+import { Groups } from '/imports/common/collections/groups/index.js';
+
 import '/imports/client/components/group_new_button/group_new_button.js';
 import '/imports/client/components/groups_panel/groups_panel.js';
-import '/imports/client/components/identities_select/identities_select.js';
+import '/imports/client/components/identities_select_dialog/identities_select_dialog.js';
 
 import './groups_hierarchy_pane.html';
 
@@ -23,12 +24,14 @@ Template.groups_hierarchy_pane.onCreated( function(){
     //console.debug( this );
 
     self.APP = {
-        // the current tree selection
+        // the current tree selected node
         tree_selected: new ReactiveVar( null ),
+        // the identities ids which are members of currently selected group
+        groupIdentities: new ReactiveVar( [] ),
         // whether the buttons can be enabled
         editEnabled: new ReactiveVar( false ),
         removeEnabled: new ReactiveVar( false ),
-        addEnabled: new ReactiveVar( false ),
+        identitiesEnabled: new ReactiveVar( false ),
 
         // return the selected item
         selectedItem(){
@@ -39,22 +42,23 @@ Template.groups_hierarchy_pane.onCreated( function(){
         // set the identities attached to the current group
         setIdentities( selected, dc ){
             const selectedGroupNode = self.APP.tree_selected.get();
-            const groups = dc.groups.get();
-            let newgroups = [];
-            let found = false;
-            // remove identities whose parent if the selected group
-            groups.forEach(( it ) => {
-                if( it.type !== 'I' || it.parent !== selectedGroupNode.id ){
-                    newgroups.push( it );
-                }
-            });
-            // add identities
-            selected.forEach(( it ) => {
-                newgroups.push({ type: 'I', _id: it._id, parent: selectedGroupNode.id, DYN: { label: it.DYN?.label }});
-            });
-            // and set new groups
-            console.debug( 'newgroups', newgroups );
-            dc.groups.set( newgroups );
+            if( selectedGroupNode ){
+                const groups = dc.groups.get();
+                let newgroups = [];
+                let found = false;
+                // remove identities whose parent if the selected group
+                groups.forEach(( it ) => {
+                    if( it.type !== 'I' || it.parent !== selectedGroupNode.id ){
+                        newgroups.push( it );
+                    }
+                });
+                // add identities
+                selected.forEach(( it ) => {
+                    newgroups.push({ type: 'I', _id: it._id, parent: selectedGroupNode.id, DYN: { label: it.DYN?.label }});
+                });
+                // and set new groups
+                dc.groups.set( newgroups );
+            }
         }
     };
 
@@ -64,12 +68,26 @@ Template.groups_hierarchy_pane.onCreated( function(){
         const type = node && node.type ? node.type : null
         self.APP.editEnabled.set( type === 'G' );
         self.APP.removeEnabled.set( Boolean( type ));
-        self.APP.addEnabled.set( type === 'G' );
+        self.APP.identitiesEnabled.set( type === 'G' );
     });
 
     // track the groups
     self.autorun(() => {
-        console.debug( 'groups', Template.currentData().groups.get());
+        //console.debug( 'groups', Template.currentData().groups.get());
+    });
+
+    // track the identities which are members of currently selected group
+    self.autorun(() => {
+        const node = self.APP.tree_selected.get();
+        const group = node ? node.original.doc : null;
+        let identities = [];
+        if( group ){
+            Groups.fn.getIdentities( Template.currentData().item.get(), Template.currentData().groups.get(), group ).forEach(( it ) => {
+                identities.push( it );
+            });
+        }
+        self.APP.groupIdentities.set( identities );
+        //console.debug( 'group', group, 'identities', self.APP.identities.get());
     });
 });
 
@@ -79,12 +97,13 @@ Template.groups_hierarchy_pane.helpers({
             ...this,
            editEnabled: Boolean( Template.instance().APP.editEnabled.get()),
            removeEnabled: Boolean( Template.instance().APP.removeEnabled.get()),
-           addEnabled: Boolean( Template.instance().APP.addEnabled.get())
+           identitiesEnabled: Boolean( Template.instance().APP.identitiesEnabled.get())
         };
     },
     parmsTree(){
         return {
             ...this,
+            withCheckboxes: false
         };
     }
 });
@@ -104,7 +123,8 @@ Template.groups_hierarchy_pane.events({
             organization: this.item.get(),
             targetDatabase: false,
             groupsRv: this.groups,
-            mdBody: 'identities_select',
+            selected: instance.APP.groupIdentities.get(),
+            mdBody: 'identities_select_dialog',
             mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
             mdClasses: 'modal-lg',
             mdClassesContent: Meteor.APP.runContext.pageUIClasses().join( ' ' ),
@@ -149,5 +169,6 @@ Template.groups_hierarchy_pane.events({
 
     'click .js-remove-item'( event, instance ){
         instance.$( '.c-groups-tree' ).trigger( 'tree-remove-node', { node: instance.APP.selectedItem() });
+        instance.$( '.c-groups-tree' ).trigger( 'tree-rowselect', { node: null });
     }
 });

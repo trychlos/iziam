@@ -691,6 +691,13 @@ Meteor.APP.i18n = {
                     identities_button: 'Add identities',
                     new_item_button: 'New group',
                     remove_item_button: 'Remove item'
+                },
+                tree: {
+                    close_all_button: 'Close all',
+                    no_data: 'There is not yet any group defined for the organization.<br />'
+                        +'Please click "New group" above, or edit the groups hierarchy.',    
+                    open_all_button: 'Open all',
+                    show_identities_button: 'Show identities'
                 }
             },
             header: {

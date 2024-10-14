@@ -297,6 +297,7 @@ body {
 
 .c-client-new-button,
 .c-client-secret-new-button,
+.c-group-new-button,
 .c-jwk-new-button,
 .c-keygrip-new-button,
 .c-keygrip-secret-new-button {
@@ -323,22 +324,30 @@ body {
         border: 1px solid lightgray;
         border-radius: 0.25em;
         padding: 1em;
-        li.jstree-node,
-        .jstree-wholerow,
-        a.jstree-anchor {
-            line-height: 2em;
-            min-height: 2em;
+        .tree {
+            min-height: 350px;
+            li.jstree-node,
+            .jstree-wholerow,
+            a.jstree-anchor {
+                line-height: 2em;
+                min-height: 2em;
+            }
+            li.jstree-node svg {
+                margin-right: 0.5em;
+            }
+            li.jstree-node svg.type-group {
+                height: 1em;
+                color: var( --bs-primary );
+            }
+            li.jstree-node svg.type-identity {
+                height: 1em;
+                color: var( --bs-info );
+            }
         }
-        li.jstree-node svg {
-            margin-right: 0.5em;
-        }
-        li.jstree-node svg.type-group {
-            height: 1em;
-            color: var( --bs-primary );
-        }
-        li.jstree-node svg.type-identity {
-            height: 1em;
-            color: var( --bs-info );
+        .c-buttons {
+            margin-top: 1em;
+            padding-top: 0.5em;
+            border-top: 1px solid lightgray;
         }
     }
 }

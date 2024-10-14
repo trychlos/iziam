@@ -9,13 +9,15 @@
  * - checker: a ReactiveVar which contains the parent Forms.Checker
  * - groups: a ReactiveVar which contains the groups of the organization
  * - editable: whether the tree is editable, defaulting to true
- * - withCheckboxes: whether the tree has checkboxes, defaulting to false
+ *   here, 'editable' means that we allow dnd, so change the tree
+ * - withCheckboxes: whether the tree has checkboxes, defaulting to true
  * - withIdentities: whether to display the identities, defaulting to true
- * - selected: an array of the checkboxes to check
+ * - selected: an array of the checkboxes to check, only considered if withCheckboxes is truethy
  */
 
 import _ from 'lodash';
 
+import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 
 import { GroupType } from '/imports/common/definitions/group-type.def.js';
@@ -37,9 +39,9 @@ Template.groups_tree.onCreated( function(){
         tree_checked_rv: new ReactiveVar( false ),
 
         // whether the tree is readonly
-        readOnly: new ReactiveVar( false ),
+        editable: new ReactiveVar( true ),
         // whether the tree has checkboxes
-        withCheckboxes: new ReactiveVar( false ),
+        withCheckboxes: new ReactiveVar( true ),
         // whether to display the identities
         withIdentities: new ReactiveVar( true ),
 
@@ -229,22 +231,22 @@ Template.groups_tree.onCreated( function(){
         }
     };
 
-    // whether the tree is editable
+    // whether the tree is editable, defaulting to true
     self.autorun(() => {
         const editable = Template.currentData().editable !== false;
-        self.APP.readOnly.set( !editable );
+        self.APP.editable.set( editable );
     });
 
-    // whether the tree has checkboxes, defaulting to false
+    // whether the tree has checkboxes, defaulting to true
     self.autorun(() => {
-        const checkboxes = Template.currentData().withCheckboxes === true;
-        self.APP.withCheckboxes.set( checkboxes );
+        const withCheckboxes = Template.currentData().withCheckboxes !== false;
+        self.APP.withCheckboxes.set( withCheckboxes );
     });
 
     // whether to display the identities, defaulting to true
     self.autorun(() => {
-        const withIdent = Template.currentData().withIdentities !== false;
-        self.APP.withIdentities.set( withIdent );
+        const withIdentities = Template.currentData().withIdentities !== false;
+        self.APP.withIdentities.set( withIdentities );
     });
 
     // track the ready status
@@ -265,18 +267,6 @@ Template.groups_tree.onCreated( function(){
     // track the groups list
     self.autorun(() => {
         //console.debug( 'groups', Template.currentData().groups );
-    });
-
-    // if the tree is editable, attach a selected() function to groups list
-    self.autorun(() => {
-        if( !self.APP.readOnly.get()){
-            let groups = Template.currentData().groups;
-            if( groups && !groups.selected ){
-                groups.selected = function(){
-                    return({ item: 'me', other: 'other' });
-                }
-            }
-        }
     });
 });
 
@@ -307,7 +297,7 @@ Template.groups_tree.onRendered( function(){
                 'types',
                 'wholerow'
             ];
-            if( !self.APP.readOnly.get()){
+            if( self.APP.editable.get()){
                 plugins.push( 'dnd' );
             }
             if( self.APP.withCheckboxes.get()){
@@ -369,11 +359,11 @@ Template.groups_tree.onRendered( function(){
             .on( 'disable_node.jstree', ( event, data ) => {
                 $tree.jstree( true ).get_node( data.node.id, true ).addClass( 'pr-disabled' );
             })
-            // 'enable_checkbox.jstree' data = { node, jsTree instance }
+            // 'select_node.jstree' data = { node, jsTree instance }
             .on( 'select_node.jstree', ( event, { event2, instance, node, selected }) => {
                 self.$( '.c-groups-tree' ).trigger( 'tree-rowselect', { node: node });
             })
-            // 'enable_checkbox.jstree' data = { node, jsTree instance }
+            // 'deselect_node.jstree' data = { node, jsTree instance }
             .on( 'deselect_node.jstree', ( event, data ) => {
                 self.$( '.c-groups-tree' ).trigger( 'tree-rowselect', { node: null });
             });
@@ -435,6 +425,43 @@ Template.groups_tree.onRendered( function(){
             });
         }
     });
+});
+
+Template.groups_tree.helpers({
+    // whether the close_all button is enabled ?
+    closeButtonDisabled(){
+        return this.groups.get().length ? '' : 'disabled';
+    },
+
+    // show when there is data
+    showIfData(){
+        return this.groups && this.groups.get() && this.groups.get().length > 0 ? 'ui-dblock' : 'ui-dnone';
+    },
+
+    // show when there is no data
+    showIfEmpty(){
+        return this.groups && this.groups.get() && this.groups.get().length > 0 ? 'ui-dnone' : 'ui-dblock';
+    },
+
+    // whether the user may choose to show identities ?
+    haveShowIdentitiesButton(){
+        return Template.instance().APP.withIdentities.get();
+    },
+
+    // whether the chooser is enabled ?
+    identitiesButtonDisabled(){
+        return this.groups.get().length ? '' : 'disabled';
+    },
+
+    // string translation
+    i18n( arg ){
+        return pwixI18n.label( I18N, arg.hash.key );
+    },
+
+    // whether the open_all button is enabled ?
+    openButtonDisabled(){
+        return this.groups.get().length ? '' : 'disabled';
+    },
 });
 
 Template.groups_tree.events({

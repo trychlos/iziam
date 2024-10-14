@@ -6,7 +6,6 @@
  * Parms:
  * - item: a ReactiveVar which contains the Organization as an entity with its DYN.records array
  * - checker: a ReactiveVar which contains the parent Forms.Checker
- * - plus all plusButton parameters will be passed through
  */
 
 import { Modal } from 'meteor/pwix:modal';
@@ -49,7 +48,8 @@ Template.groups_panel.helpers({
             item: this.item,
             checker: this.checker,
             groups: Template.instance().APP.groups,
-            editable: false
+            editable: false,
+            withCheckboxes: false
         };
     }
 });

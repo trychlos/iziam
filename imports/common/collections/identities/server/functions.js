@@ -44,7 +44,6 @@ Identities.s = {
         const parentsFn = async function( parentId ){
             if( parentId ){
                 list[parentId] = true;
-                console.debug( 'pushing', item._id, parentId );
                 const written = await Groups.s.getBy({ type: 'G', _id: parentId }, userId );
                 for( const it of written ){
                     await parentsFn( it.parent );

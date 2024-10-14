@@ -2,6 +2,16 @@
  * /imports/client/components/groups_edit_dialog/groups_edit_dialog.js
  *
  * Display the groups tree as an editable component with dnD and delete features.
+ * 
+ * +- <this>
+ *     |
+ *     +- groups_hierarchy_pane
+ *         |
+ *         +- groups_tree
+ *         |
+ *         +- groups_buttons
+ *         |
+ *         +-> trigger identities_select_dialog
  *
  * Parms:
  * - item: a ReactiveVar which contains the Organization as an entity with its DYN.records array
@@ -69,7 +79,6 @@ Template.groups_edit_dialog.onCreated( function(){
     // initialize the Tabbed.Instance
     const paneData = {
         ...Template.currentData(),
-        organization: self.APP.organization.get(),
         groups: self.APP.groups.get()
     };
     const notesField = Groups.fieldSet.get().byName( 'notes' );
@@ -79,12 +88,6 @@ Template.groups_edit_dialog.onCreated( function(){
                 name: 'groups_hierarchy_tab',
                 navLabel: pwixI18n.label( I18N, 'groups.edit.hierarchy_tab_title' ),
                 paneTemplate: 'groups_hierarchy_pane',
-                paneData: paneData
-            },
-            {
-                name: 'groups_identities_tab',
-                navLabel: pwixI18n.label( I18N, 'groups.edit.identities_tab_title' ),
-                paneTemplate: 'groups_identities_pane',
                 paneData: paneData
             }
         ]

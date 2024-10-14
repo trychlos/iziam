@@ -1,7 +1,25 @@
 <template name="groups_tree">
-    <div class="c-groups-tree">
+    <div class="c-groups-tree d-flex flex-column">
 
-        <div class="tree">
+        <div class="tree-empty flex-grow-1 {{ showIfEmpty }}">
+            <div class="app-hcenter app-vcenter">
+                {{{ i18n key="groups.tree.no_data" }}}
+            </div>
+        </div>
+
+        <div class="tree flex-grow-1 {{ showIfData }}">
+        </div>
+
+        <div clas="c-buttons">
+            {{#if haveShowIdentitiesButton }}
+                <div class="form-check">
+                    <input class="form-check-input" id="groups-tree-show-identities" type="checkbox" {{ identitiesButtonDisabled }} />
+                    <label class="form-check-label" for="groups-tree-show-identities" >{{ i18n key="groups.tree.show_identities_button" }}</label>
+                </div>
+            {{/if}}
+
+            <button class="btn btn-sm btn-outline-primary" {{ openButtonDisabled }}>{{ i18n key="groups.tree.open_all_button" }}</button>
+            <button class="btn btn-sm btn-outline-primary" {{ closeButtonDisabled }}>{{ i18n key="groups.tree.close_all_button" }}</button>
         </div>
 
     </div>

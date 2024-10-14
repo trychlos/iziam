@@ -10,7 +10,7 @@
  * - editable: whether the tree is editable, defaulting to true
  * - editEnabled: the enable/disable state of the Edit button, defaulting to true
  * - removeEnabled: the enable/disable state of the Delete button, defaulting to true
- * - addEnabled: the enable/disable state of the Add identities button, defaulting to true
+ * - identitiesEnabled: the enable/disable state of the Add identities button, defaulting to true
  */
 
 import _ from 'lodash';
@@ -26,8 +26,8 @@ Template.groups_buttons.onCreated( function(){
 
 Template.groups_buttons.helpers({
     // whether the Add identities button is enabled ?
-    addDisabled(){
-        return this.addEnabled !== false ? '' : 'disabled';
+    identitiesEnabled(){
+        return this.identitiesEnabled !== false ? '' : 'disabled';
     },
 
     // whether the Delete button is enabled ?

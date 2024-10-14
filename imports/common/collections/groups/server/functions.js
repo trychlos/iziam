@@ -51,7 +51,7 @@ Groups.s = {
         // first delete the previous organization groups tree
         res.push( await Groups.collection.removeAsync({ organization: organizationId }));
         // then insert the new groups hierarchy
-        if( groups && _.isArray( groups ) && groups.length ){
+        if( groups && _.isArray( groups )){
             const flat = Groups.fn.tree2flat( organizationId, groups );
             flat.forEach( async ( it ) => {
                 res.push( await Groups.collection.upsertAsync({ _id: it._id }, { $set: it }));

@@ -10,6 +10,22 @@ import { Groups } from './index.js';
 Groups.fn = {
 
     /**
+     * @param {Object} organization entity with its DYN sub-object
+     * @param {Array} groups the list of groups in the organization (may be different of the content of GroupsRegistrar when editing)
+     * @param {Object} group the group we search the members of
+     * @returns {Array} identities group items, at least an empty array
+     */
+    getIdentities( organization, groups, group ){
+        let identities = [];
+        groups.forEach(( it ) => {
+            if( it.parent === group._id && it.type === 'I' ){
+                identities.push( it );
+            }
+        });
+        return identities;
+    },
+
+    /**
      * @summary Transform a tree representing the groups hierarchy to a flat array suitable to be written in database
      *  In the tree, each item may have children
      *  While our flat representation reverse the sens and item smay are attached to a parent
@@ -36,5 +52,5 @@ Groups.fn = {
             flat_fn( it );
         });
         return flat;
-    },
+    }
 };

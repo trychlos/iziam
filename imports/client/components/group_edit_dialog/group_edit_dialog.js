@@ -5,11 +5,14 @@
  * Can be called:
  * - either as any other sort of new client/identity/etc. -> and store into the database
  * - or from an tree edit session, and the the new item is to go into the edited groups list
+ * 
+ * +- <this>
+ *     |
+ *     +- group_properties_pane
  *
  * Parms:
  * - item: the group to be edited, or null
  * - checker: a ReactiveVar which contains the parent Forms.Checker
- * - plus all plusButton parameters will be passed through
  * - organization: the full organization entity with its DYN sub-object
  * - targetDatabase: whether the new group is to be storfed in the database, defaulting to true
  * - groupsRv: when targetDatabase is false, a ReactiveVar which contains the groups where the group item is to be pushed if new, or changed
