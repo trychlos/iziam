@@ -18,8 +18,9 @@ const _assert_data_content = function( caller, data ){
     assert.ok( data.item instanceof ReactiveVar, caller+' data.item expected to be a ReactiveVar' );
 }
 
-// name - must be unique
 Groups.checks = {
+    // label - must be unique
+    //  not only in the database, but also in the passed-in groups being edited
     async label( value, data, opts={} ){
         _assert_data_content( 'Groups.checks.label()', data );
         let item = data.item.get();
@@ -46,8 +47,24 @@ Groups.checks = {
                     message: pwixI18n.label( I18N, 'groups.checks.label_exists' )
                 });
             };
-            const res = await ( Meteor.isClient ? Meteor.callAsync( 'groups.getBy', { label: value }) : Groups.s.getBy({ label: value }));
-            return fn( res );
+            let res = await ( Meteor.isClient ? Meteor.callAsync( 'groups.getBy', { label: value }) : Groups.s.getBy({ label: value }));
+            res = fn( res );
+            if( res ){
+                return res;
+            }
+            if( data.targetDatabase === false ){
+                let found = false;
+                data.groupsRv.get().every(( it ) => {
+                    if( it.label === value ){
+                        found = true;
+                    }
+                    return !found;
+                });
+                return found ? new TM.TypedMessage({
+                    level: TM.MessageLevel.C.ERROR,
+                    message: pwixI18n.label( I18N, 'groups.checks.label_exists' )
+                }) : null;
+            }
         } else {
             return new TM.TypedMessage({
                 level: TM.MessageLevel.C.ERROR,

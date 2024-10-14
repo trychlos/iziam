@@ -670,6 +670,8 @@ Meteor.APP.i18n = {
                     error: 'An error has been detected. Please retry later or inform tyour administrator',
                     group_edit_success: 'The group "%s" has been successfully updated',
                     group_new_success: 'The group "%s" has been successfully created',
+                    hierarchy_tab_title: 'Hierarchy',
+                    identities_tab_title: 'Identities',
                     label_label: 'Label :',
                     label_ph: 'A group label',
                     label_title: 'The label attached to the group, must be unique',
@@ -684,9 +686,9 @@ Meteor.APP.i18n = {
                 },
                 tabular: {
                     count_badge: 'Count of defined groups',
-                    delete_item_button: 'Delete group',
                     edit_item_button: 'Edit group',
                     edit_tree_button: 'Edit the groups tree',
+                    identities_button: 'Add identities',
                     new_item_button: 'New group',
                     remove_item_button: 'Remove item'
                 }
@@ -796,6 +798,10 @@ Meteor.APP.i18n = {
                     website_title: 'the URL of the user\'s web page or blog',
                     zoneinfo_label: 'Zoneinfo:',
                     zoneinfo_title: 'The user\'s zoneinfo'
+                },
+                select: {
+                    dialog_title: 'Select identities',
+                    select_text: 'Select identities'
                 },
                 tabular: {
                     count_badge: 'Count of defined identities',
@@ -1111,7 +1117,8 @@ Meteor.APP.i18n = {
                 },
                 groups: {
                     list_preamble: 'Define here the groups inside of your organization.<br />'
-                        +'Groups form a hierachic tree, where each item can be either a group or an identity, though only groups can have children.'
+                        +'Groups form a hierachic tree, where each item can be either a group or an identity, though only groups can have children.<br />'
+                        +'Identities are so necessarily written as members of a group, never can be inserted at the root of the tree.'
                 },
                 identities: {
                     list_preamble: 'Define here the identities inside of your organization.<br />'

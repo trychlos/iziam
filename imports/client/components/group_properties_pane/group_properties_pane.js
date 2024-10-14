@@ -6,7 +6,9 @@
  * Parms:
  * - item: a ReactiveVar which holds the group object to edit (may be empty, but not null)
  * - checker: a ReactiveVar which holds the parent Checker
- * - organization: an { entity, record } organization object
+ * - organization: the full organization entity with its DYN sub-object
+ * - targetDatabase: whether the new group is to be storfed in the database, defaulting to true
+ * - groupsRv: when targetDatabase is false, a ReactiveVar which contains the groups where the group item is to be pushed if new, or changed
  */
 
 import _ from 'lodash';
@@ -50,7 +52,9 @@ Template.group_properties_pane.onRendered( function(){
                 panel: new Forms.Panel( self.APP.fields, Groups.fieldSet.get()),
                 data: {
                     item: Template.currentData().item,
-                    organization: Template.currentData().organization
+                    organization: Template.currentData().organization,
+                    targetDatabase: Template.currentData().targetDatabase,
+                    groupsRv: Template.currentData().groupsRv
                 },
                 setForm: item
             }));

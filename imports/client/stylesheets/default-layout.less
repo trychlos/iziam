@@ -318,7 +318,6 @@ body {
         margin: 0 1em;
     }
     .c-groups-tree {
-        margin-left: 1em;
         width: 100%;
         border: 1px solid lightgray;
         border-radius: 0.25em;
@@ -333,10 +332,39 @@ body {
             margin-right: 0.5em;
         }
         li.jstree-node svg.type-group {
+            height: 1em;
             color: var( --bs-primary );
         }
         li.jstree-node svg.type-identity {
+            height: 1em;
             color: var( --bs-info );
+        }
+    }
+}
+
+.c-organization-groups-pane {
+    .c-groups-tree {
+        margin-left: 1em;
+    }
+}
+
+// multiple-select adjustements
+.c-identities-select {
+    height: 20em;
+    .multiple-select {
+        .icon-caret {
+            display: none;
+        }
+        button.ms-choice {
+            border: 0;
+            span {
+                top: 0.3em;
+            }
+            span.placeholder {
+                color: x-transparent;
+                cursor: inherit;
+                background-color: inherit;
+            }
         }
     }
 }
@@ -579,20 +607,6 @@ body {
     td.disabled select {
         font-style: italic;
         color: gray;
-    }
-    // multiple-select adjustements
-    .multiple-select {
-        button.ms-choice {
-            border: 0;
-            span {
-                top: 0.3em;
-            }
-            span.placeholder {
-                color: x-transparent;
-                cursor: inherit;
-                background-color: inherit;
-            }
-        }
     }
     // nav and tabs
     .nav-link {

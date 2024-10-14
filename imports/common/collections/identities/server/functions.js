@@ -8,11 +8,17 @@ const assert = require( 'assert' ).strict; // up to nodejs v16.x
 import { AccountsHub } from 'meteor/pwix:accounts-hub';
 import { AccountsManager } from 'meteor/pwix:accounts-manager';
 
-//import { Memberships } from '/imports/collections/memberships/memberships.js';
+import { Groups } from '/imports/common/collections/groups/index.js';
 
 import { Identities } from '../index.js';
 
 Identities.s = {
+
+    // extend the AccountsManager All publication
+    async allExtend( item, userId ){
+        item.DYN.memberOf = await Identities.s.memberOf( item, userId );
+    },
+
     // return the collection for the identities of the organization
     // organizationId: the organization identifier
     collection( organizationId ){
@@ -25,21 +31,38 @@ Identities.s = {
     },
 
     // returns the queried items
-    async getBy( organizationId, query ){
-        const collection = Identities.s.collection( organizationId );
-        let res = await collection.find( query ).fetchAsync();
-        return res;
+    async getBy( organizationId, query, userId ){
+        const instanceName = Identities.instanceName( organizationId );
+        return await AccountsManager.s.getBy( instanceName, query, userId );
     },
 
-    // returns {Promises} which eventually resolves to all identities for an organization
-    //listAllAsync( organization ){
-    //    return Identities.find({ organization: organization }).fetchAsync();
-    //},
+    // returns the full list of groups this identity is member of
+    // if set, an identity is necessarily inside of a group
+    //  maybe this group is itself inside of another group and so on
+    async memberOf( item, userId ){
+        let list = {};
+        const parentsFn = async function( parentId ){
+            if( parentId ){
+                list[parentId] = true;
+                console.debug( 'pushing', item._id, parentId );
+                const written = await Groups.s.getBy({ type: 'G', _id: parentId }, userId );
+                for( const it of written ){
+                    await parentsFn( it.parent );
+                };
+            }
+            return true;
+        };
+        const written = await Groups.s.getBy({ type: 'I', _id: item._id }, userId );
+        for( const it of written ){
+            await parentsFn( it.parent );
+        };
+        return Object.keys( list );
+    },
 
     // extend the AccountsManager tabular publish function
     // provide a tabular_name, preferred email and username
     // tabular_name: a tabular column to display a full name *without* modifying the record
-    async tabularExtend( item ){
+    async tabularExtend( item, userId ){
         item.tabular_name = item.name;
         if( !item.name ){
             item.tabular_name = Identities.fn.name( item );

@@ -4,7 +4,7 @@
  * Display the groups tree as a read-only component, and an 'edit' button.
  *
  * Parms:
- * - item: a ReactiveVar which contains the Organization
+ * - item: a ReactiveVar which contains the Organization as an entity with its DYN.records array
  * - checker: a ReactiveVar which contains the parent Forms.Checker
  * - plus all plusButton parameters will be passed through
  */
@@ -38,16 +38,18 @@ Template.groups_panel.onCreated( function(){
 Template.groups_panel.helpers({
     parmsButtons(){
         return {
-            ...this,
-            editable: false,
-            groups: Template.instance().APP.groups.get()
+            item: this.item,
+            checker: this.checker,
+            groups: Template.instance().APP.groups,
+            editable: false
         };
     },
     parmsTree(){
         return {
-            ...this,
-            editable: false,
-            groups: Template.instance().APP.groups.get()
+            item: this.item,
+            checker: this.checker,
+            groups: Template.instance().APP.groups,
+            editable: false
         };
     }
 });
@@ -57,7 +59,8 @@ Template.groups_panel.events({
         Modal.run({
             item: this.item,
             checker: this.checker,
-            groups: instance.APP.groups.get(),
+            groups: instance.APP.groups,
+            organization: this.organization,
             editable: true,
             mdBody: 'groups_edit_dialog',
             mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],

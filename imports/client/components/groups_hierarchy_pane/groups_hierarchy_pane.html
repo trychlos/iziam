@@ -1,0 +1,20 @@
+<template name="groups_hierarchy_pane">
+    <div class="c-groups-hierarchy-pane">
+        <div class="panel-content">
+
+            <div class="panel-header">
+            </div>
+
+            <div class="panel-body">
+                <div class="groups-body d-flex">
+                    
+                    {{> groups_tree (parmsTree) }}
+                    
+                    {{> groups_buttons (parmsButtons) }}
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</template>

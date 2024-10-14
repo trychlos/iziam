@@ -761,7 +761,7 @@ Identities.check_usernames_username = function( value, data, coreApp={} ){
                         });
                     };
                     return Meteor.isClient ?
-                        Meteor.callPromise( 'identity.getBy', { 'usernames.username': value }).then(( result ) => { return fn( result ); }) :
+                        Meteor.callPromise( 'identities.getBy', { 'usernames.username': value }).then(( result ) => { return fn( result ); }) :
                         fn( Identities.s.getBy({ 'usernames.username': value }));
                 } else {
                     return new CoreApp.TypedMessage({

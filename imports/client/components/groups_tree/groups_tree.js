@@ -5,9 +5,9 @@
  * NB: while Roles tree are driven by children, this one is driven by parent. This is slightly different in the final code.
  *
  * Parms:
- * - item: a ReactiveVar which contains the Organization
+ * - item: a ReactiveVar which contains the Organization as an entity with its DYN.records array
  * - checker: a ReactiveVar which contains the parent Forms.Checker
- * - groups: the list of groups for the organization
+ * - groups: a ReactiveVar which contains the groups of the organization
  * - editable: whether the tree is editable, defaulting to true
  */
 
@@ -30,14 +30,13 @@ Template.groups_tree.onCreated( function(){
         tree_nodes_asked: {},
         tree_nodes_created: {},
         tree_nodes_waiting: {},
-        tree_built_rv: new ReactiveVar( false ),
         tree_populated_rv: new ReactiveVar( false ),
 
         // whether the tree is readonly
         readOnly: new ReactiveVar( false ),
 
-        // last built and populated tree
-        prevTree: null,
+        // the previous version of tree data
+        prevData: null,
 
         // whether trigger pr-change event
         //  doesn't trigger the event when checkboxes are programatically checked
@@ -110,17 +109,14 @@ Template.groups_tree.onCreated( function(){
         tree_create_ask( group, parent=null ){
             if( parent ){
                 if( Object.keys( self.APP.tree_nodes_created ).includes( parent )){
-                    console.debug( 'node under created parent', group, parent );
                     self.APP.tree_create_node( group, parent );
                 } else {
                     if( !Object.keys( self.APP.tree_nodes_waiting ).includes( parent )){
                         self.APP.tree_nodes_waiting[ parent ] = [];
                     }
-                    console.debug( 'parent is not created, so waiting', group, parent );
                     self.APP.tree_nodes_waiting[ parent ].push( group );
                 }
             } else {
-                console.debug( 'node at root', group );
                 self.APP.tree_create_node( group );
             }
         },
@@ -131,7 +127,6 @@ Template.groups_tree.onCreated( function(){
         tree_create_done( data ){
             const group = data.node.original.doc;
             self.APP.tree_nodes_created[ group._id ] = data.node;
-            console.debug( 'created', group );
             delete self.APP.tree_nodes_asked[ group._id ];
             // dealing with waiting for this parent
             if( Object.keys( self.APP.tree_nodes_waiting ).includes( group._id )){
@@ -142,20 +137,19 @@ Template.groups_tree.onCreated( function(){
             }
             // when we have created all the nodes...
             if( Object.keys( self.APP.tree_nodes_waiting ).length === 0 ){
-                self.APP.tree_built( true );
+                self.APP.tree_populated( true );
             }
         },
 
         // create a new node
         //  the caller has made sure the parent is available if not null
         tree_create_node( group, parent=null ){
-            console.debug( 'creating', group );
             self.APP.tree_nodes_asked[group._id] = group;
             const parent_node = parent ? self.APP.tree_nodes_created[ parent ] : null;
             const $tree = self.APP.$tree.get();
             $tree.jstree( true ).create_node( parent_node, {
                 "id": group._id,
-                "text": group.label,
+                "text": group.label || group.DYN?.label,
                 "children": [],
                 "doc": group,
                 "type": group.type
@@ -173,6 +167,8 @@ Template.groups_tree.onCreated( function(){
 
         // check_callback function for dnd_move
         // we do not allow reordering, which implies that dnd must change the parent
+        // more.dnd: true
+        // more.pos = a (after), b (before) or i (inside)
         tree_dnd_move_check( node, node_parent, node_position, more ){
             return node.parent !== node_parent.id;
         },
@@ -181,8 +177,13 @@ Template.groups_tree.onCreated( function(){
         tree_dnd_stop( event, data, element, helper ){
             const $tree = self.APP.$tree.get();
             //console.debug( 'data', data );
-            const moved = $tree.jstree( true ).get_node( data.obj );
-            $tree.jstree( true ).open_node( moved.parent );
+            // Uncaught TypeError: $tree.jstree(...).get_node is not a function
+            try {
+                const moved = $tree.jstree( true ).get_node( data.obj );
+                $tree.jstree( true ).open_node( moved.parent );
+            } catch( e ){
+                console.warn( e );
+            }
         },
 
         // getter/setter: whether the creation of the tree is done
@@ -214,15 +215,6 @@ Template.groups_tree.onCreated( function(){
     self.autorun(() => {
         const editable = Template.currentData().editable !== false;
         self.APP.readOnly.set( !editable );
-    });
-
-    // track the groups -> have to rebuild the tree on changes
-    self.autorun(() => {
-        const groups = Template.currentData().groups;
-        if( !_.isEqual( groups, self.APP.prevTree )){
-            self.APP.prevTree = _.cloneDeep( groups );
-            self.APP.tree_built( false );
-        }
     });
 
     // track the ready status
@@ -367,23 +359,23 @@ Template.groups_tree.onRendered( function(){
     //  displaying the groups hierarchy
     self.autorun(() => {
         const $tree = self.APP.$tree.get();
-        const groups = Template.currentData().groups;
-        if( $tree && self.APP.tree_ready() && !self.APP.tree_built()){
+        const groups = Template.currentData().groups.get();
+        if( !_.isEqual( groups, self.APP.prevData) && $tree && self.APP.tree_ready()){
+            // keep the tree data
+            self.APP.prevData = _.cloneDeep( groups );
             // reset the tree
-            //console.debug( 'reset and rebuild the tree' );
+            //console.debug( 'reset the tree' );
             $tree.jstree( true ).delete_node( Object.values( self.APP.tree_nodes_created ));
             self.APP.tree_nodes_asked = {};
             self.APP.tree_nodes_created = {};
             self.APP.tree_nodes_waiting = {};
+            self.APP.tree_populated( false );
             // and rebuild it
             //console.debug( 'rebuild the tree' );
             let promises = [];
             // display the group/identity item, attaching it to its parent
             groups.forEach( async ( it ) => {
                 promises.push( self.APP.tree_create_ask.bind( self )( it, it.parent ));
-            });
-            Promise.allSettled( promises ).then(() => {
-                self.APP.tree_populated( false );
             });
         }
     });
@@ -393,5 +385,20 @@ Template.groups_tree.onRendered( function(){
         if( self.APP.tree_ready()){
             self.$( '.c-groups-tree' ).trigger( 'tree-fns', { fnGet: self.APP.getTree });
         }
-    })
+    });
+
+    // when the tree has been populated, open all nodes
+    self.autorun(() => {
+        if( self.APP.tree_populated()){
+            self.APP.$tree.get().jstree( true ).open_all();
+        }
+    });
+});
+
+Template.groups_tree.events({
+    // the user has clicked on 'remove item' button
+    // the parent panel relays that by triggering this event
+    'tree-remove-node .c-groups-tree'( event, instance, data ){
+        instance.APP.$tree.get().jstree( true ).delete_node( data.node._id );
+    }
 });

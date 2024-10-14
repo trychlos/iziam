@@ -10,7 +10,7 @@ import { Groups } from '../index.js';
 
 Groups.s = {
     // returns the queried items
-    async getBy( query ){
+    async getBy( query, userId ){
         const res = await Groups.collection.find( query ).fetchAsync();
         return res;
     },

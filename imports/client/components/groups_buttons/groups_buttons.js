@@ -4,20 +4,18 @@
  * The buttons to edit the groups tree.
  *
  * Parms:
- * - item: a ReactiveVar which contains the Organization
+ * - item: a ReactiveVar which contains the Organization as an entity with its DYN.records array
  * - checker: a ReactiveVar which contains the parent Forms.Checker
- * - groups: the list of groups for the organization
+ * - groups: a ReactiveVar which contains the groups of the organization
  * - editable: whether the tree is editable, defaulting to true
  * - editEnabled: the enable/disable state of the Edit button, defaulting to true
- * - deleteEnabled: the enable/disable state of the Delete button, defaulting to true
  * - removeEnabled: the enable/disable state of the Delete button, defaulting to true
+ * - addEnabled: the enable/disable state of the Add identities button, defaulting to true
  */
 
 import _ from 'lodash';
 
-import { Permissions } from 'meteor/pwix:permissions';
 import { pwixI18n } from 'meteor/pwix:i18n';
-import { ReactiveVar } from 'meteor/reactive-var';
 
 import './groups_buttons.html';
 
@@ -27,6 +25,11 @@ Template.groups_buttons.onCreated( function(){
 });
 
 Template.groups_buttons.helpers({
+    // whether the Add identities button is enabled ?
+    addDisabled(){
+        return this.addEnabled !== false ? '' : 'disabled';
+    },
+
     // whether the Delete button is enabled ?
     deleteDisabled(){
         return this.deleteEnabled !== false ? '' : 'disabled';

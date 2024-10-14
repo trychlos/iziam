@@ -64,21 +64,6 @@ Identities.fn = {
     },
 
     /**
-     * @summary Setup dynamic vars for the UI
-     * @locus Anywhere
-     * @param {Identity} identity
-     */
-    DYN( identity ){
-        identity.DYN = identity.DYN || {};
-        identity.DYN.membership = identity.DYN.membership || [];
-        identity.DYN.nameRv = identity.DYN.nameRv || new ReactiveVar( null );
-        // setup arrays of email address, usernames, ...
-        identity.DYN.emailAddresses = ( identity.emails || [] ).map( o => o.address );
-        identity.DYN.usernames = ( identity.usernames || [] ).map( o => o.username );
-        identity.DYN.groupNames = identity.DYN.membership.map( doc => doc.o.name );
-    },
-
-    /**
      * @param {Identity} identity
      * @param {String} id
      * @return {Object} the email object which holds this id, or null
@@ -124,6 +109,14 @@ Identities.fn = {
             return true;
         });
         return Promise.resolve( array.join( ', ' ));
+    },
+
+    /**
+     * @param {Identity} identity
+     * @return {String} which eventually resolves to a label to assciate to this identity
+     */
+    label( identity ){
+        return Identities.fn.name( identity ) || Identities.fn.emailPreferred( identity )?.address || Identities.fn.usernamePreferred( identity )?.username;;
     },
 
     /**

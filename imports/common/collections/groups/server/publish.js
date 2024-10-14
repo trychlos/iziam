@@ -3,7 +3,6 @@
  */
 
 import { Identities } from '/imports/common/collections/identities/index.js';
-//import { Memberships } from '/imports/collections/memberships/memberships.js';
 
 import { Groups } from '../index.js';
 
@@ -23,31 +22,15 @@ Meteor.publish( 'groups.listAll', async function( organization ){
     let initializing = true;
 
     // set the name if the item is an identity
-    // members is the array of Groups and Identities which are member of this group
-    // membership is the array of groups this group is member of
     const f_transform = async function( item ){
         item.DYN = {
-            //members: [],
-            //membership: []
         };
-        /*
-        Memberships.find({ group: item._id }).fetch().every(( doc ) => {
-            doc.o = doc.type === 'G' ? Groups.findOne({ _id: doc.child }) : Identities.findOne({ _id: doc.child });
-            item.DYN.members.push( doc );
-            return true;
-        });
-        Memberships.find({ child: item._id }).fetch().every(( doc ) => {
-            doc.o = Groups.findOne({ _id: doc.group });
-            item.DYN.membership.push( doc );
-            return true;
-        });
-        */
         if( item.type === 'I' ){
-            const identities = await Identities.s.getBy( organization._id, { _id: item._id });
+            const identities = await Identities.s.getBy( item.organization, { _id: item._id }, self.userId );
             if( identities && identities.length ){
-                item.DYN.name = Identities.fn.fname( identities[0] );
+                item.DYN.label = Identities.fn.label( identities[0] );
             } else {
-                item.DYN.name = '<identity not found>';
+                item.DYN.label = '<identity not found>';
             }
         }
         //console.debug( 'item', item );

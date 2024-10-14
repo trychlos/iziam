@@ -80,6 +80,7 @@ export class IdentitiesRegistrar extends izRegistrar {
             allowFn: Permissions.isAllowed,
             hideDisabled: false,
             tabularFieldsDef: Identities.tabularFieldsDef( organization ),
+            serverAllExtend: Meteor.isServer && Identities.s.allExtend,
             serverTabularExtend: Meteor.isServer && Identities.s.tabularExtend
         });
 
@@ -106,6 +107,13 @@ export class IdentitiesRegistrar extends izRegistrar {
             console.warn( 'unable to find an identity', identityId );
         }
         return found;
+    }
+
+    /**
+     * @returns {Array} the loaded identities
+     */
+    get(){
+        return this.#list.get();
     }
 
     /**

@@ -31,6 +31,7 @@
     "jstree": "^3.3.16",
     "lodash": "^4.17.21",
     "meteor-node-stubs": "^1.2.7",
+    "multiple-select": "^1.7.0",
     "oidc-provider": "^7.14.3",
     "openid-client": "^5.6.5",
     "printf": "^0.6.1",

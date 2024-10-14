@@ -10,9 +10,9 @@
  * - item: the group to be edited, or null
  * - checker: a ReactiveVar which contains the parent Forms.Checker
  * - plus all plusButton parameters will be passed through
- * - organization: an { entity, record } organization object
+ * - organization: the full organization entity with its DYN sub-object
  * - targetDatabase: whether the new group is to be storfed in the database, defaulting to true
- * - groupsRv: when targetDatabase is false, a ReactiveVar which contains the groups where the new group item is to be pushed
+ * - groupsRv: when targetDatabase is false, a ReactiveVar which contains the groups where the group item is to be pushed if new, or changed
  */
 
 import _ from 'lodash';
@@ -20,13 +20,13 @@ import _ from 'lodash';
 import { Forms } from 'meteor/pwix:forms';
 import { Modal } from 'meteor/pwix:modal';
 import { pwixI18n } from 'meteor/pwix:i18n';
+import { Random } from 'meteor/random';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { Tabbed } from 'meteor/pwix:tabbed';
 import { Tolert } from 'meteor/pwix:tolert';
 
 import { Groups } from '/imports/common/collections/groups/index.js';
 
-import '/imports/client/components/group_children_pane/group_children_pane.js';
 import '/imports/client/components/group_properties_pane/group_properties_pane.js';
 
 import './group_edit_dialog.html';
@@ -59,9 +59,9 @@ Template.group_edit_dialog.onCreated( function(){
     //  we want a clone deep of the provided item, so that we are able to cancel the edition without keeping any sort of data
     self.autorun(() => {
         const dup = _.cloneDeep( Template.currentData().item || {
-            organization: Template.currentData().organization.entity._id,
-            type: 'G',
-            DYN: { children: [] }
+            _id: Random.id(),
+            organization: Template.currentData().organization._id,
+            type: 'G'
         });
         self.APP.item.set( dup );
     });
@@ -79,12 +79,6 @@ Template.group_edit_dialog.onCreated( function(){
                 name: 'group_properties_tab',
                 navLabel: pwixI18n.label( I18N, 'groups.edit.properties_tab_title' ),
                 paneTemplate: 'group_properties_pane',
-                paneData: paneData
-            },
-            {
-                name: 'group_children_tab',
-                navLabel: pwixI18n.label( I18N, 'groups.edit.children_tab_title' ),
-                paneTemplate: 'group_children_pane',
                 paneData: paneData
             },
             {
