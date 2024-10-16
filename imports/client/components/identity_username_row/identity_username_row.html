@@ -1,0 +1,27 @@
+<template name="identity_username_row">
+
+    <tr class="c-identity-username-row" data-item-id="{{ this.it._id }}">
+        <td>
+            <div>
+                <input class="form-control js-label" type="text" placeholder="{{ i18n key="identities.usernames.label_ph" }}" />
+            </div>
+        </td>
+        <td>
+            <div class="ui-ml05">
+                <input class="form-control js-username" type="text" placeholder="{{ i18n key="identities.usernames.username_ph" }}" />
+            </div>
+        </td>
+        <td>
+            <div class="ui-w100 ui-center">
+                <input class="form-check-input js-preferred" type="checkbox" {{ preferredDisabled this.it }} />
+            </div>
+        </td>
+        <td>{{> FormsStatusIndicator (parmsCheckStatus) }}</td>
+        <td>
+            <button class="btn btn-sm btn-outline-primary js-minus" title="{{ minusTitle this.it }}" {{ minusEnabled this.it }} >
+                <span class="fa-solid fa-fw fa-minus"></span>
+            </button>
+        </td>
+    </tr>
+
+</template>

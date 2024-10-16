@@ -12,6 +12,7 @@ import validUrl from 'valid-url';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { TM } from 'meteor/pwix:typed-message';
+import { Validity } from 'meteor/pwix:validity';
 
 import { Gender } from '/imports/common/definitions/gender.def.js';
 import { Locale } from '/imports/common/definitions/locale.def.js';
@@ -29,13 +30,13 @@ import { Identities } from './index.js';
 // returns a TypedMessage, or an array of TypedMessage, or null
 
 // the data passed to the crossed checks
+// in the UI, organization is an entity with its DYN sub-object
+// from the REST API, this is an { entity, record } object
 const _assert_cross_data_content = function( caller, data ){
     assert.ok( data, caller+' data is required' );
     assert.ok( data.item && data.item instanceof ReactiveVar, caller+' data.item is expected to be set as a ReactiveVar, got '+data.item );
     assert.ok( data.amInstance && data.amInstance instanceof AccountsManager.amClass, caller+' data.amInstance is expected to be set as an instance of AccountsManager.amClass, got '+data.amInstance );
     assert.ok( data.organization && _.isObject( data.organization ), caller+' data.organization is expected to be set an object, got '+data.organization );
-    assert.ok( data.organization.entity && _.isObject( data.organization.entity ), caller+' data.organization.entity is expected to be set an object, got '+data.organization.entity );
-    assert.ok( data.organization.record && _.isObject( data.organization.record ), caller+' data.organization.record is expected to be set an object, got '+data.organization.record );
 };
 
 // entity is a ReactiveVar which contains the edited entity document and its validity records
@@ -47,7 +48,7 @@ const _assert_data_content = function( caller, data ){
 // returns the index of the identified row in the array
 const _id2index = function( array, id ){
     for( let i=0 ; i<array.length ; ++i ){
-        if( array[i].id === id ){
+        if( array[i]._id === id ){
             return i;
         }
     }
@@ -104,19 +105,24 @@ Identities.checks = {
         _assert_cross_data_content( 'Identities.checks.crossHasIdentifier()', data );
         let item = data.item.get();
         let haveIdentifier = false;
-        if( !haveIdentifier && data.organization.record.identitiesEmailAddressesIdentifier ){
-            if( item.emails?.length > 0 ){
-                if( item.emails[0].address ){
-                    haveIdentifier = true;
+        const organization = Validity.getEntityRecord( data.organization );
+        if( organization ){
+            if( !haveIdentifier && organization.record.identitiesEmailAddressesIdentifier ){
+                if( item.emails?.length > 0 ){
+                    if( item.emails[0].address ){
+                        haveIdentifier = true;
+                    }
                 }
             }
-        }
-        if (!haveIdentifier && data.organization.record.identitiesUsernamesIdentifier ){
-            if( item.usernames?.length > 0 ){
-                if( item.usernames[0].username ){
-                    haveIdentifier = true;
+            if (!haveIdentifier && organization.record.identitiesUsernamesIdentifier ){
+                if( item.usernames?.length > 0 ){
+                    if( item.usernames[0].username ){
+                        haveIdentifier = true;
+                    }
                 }
             }
+        } else {
+            console.warn( 'unable to get an organization' );
         }
         return haveIdentifier ? null : new TM.TypedMessage({
             level: TM.MessageLevel.C.ERROR,
@@ -133,10 +139,11 @@ Identities.checks = {
         if( opts.update !== false ){
             if( index < 0 ){
                 item.emails = item.emails || [];
-                item.emails.push({ id: opts.id });
+                item.emails.push({ _id: opts.id });
                 index = 0;
             }
             item.emails[index].address = value;
+            data.item.set( item );
         }
         if( !value ){
             return new TM.TypedMessage({
@@ -151,21 +158,24 @@ Identities.checks = {
             });
         }
         if( data.organization ){
-            if( data.organization.record.identitiesEmailAddressesIdentifier ){
+            const organization = Validity.getEntityRecord( data.organization );
+            if( organization.record.identitiesEmailAddressesIdentifier ){
                 return data.amInstance.byEmailAddress( value )
-                .then(( user ) => {
-                    let ok = false;
-                    if( user ){
-                        // we have found a user
-                        ok = user._id === item._id;
-                    } else {
-                        ok = true;
-                    }
-                    return ok ? null : new TM.TypedMessage({
-                        level: TM.MessageLevel.C.ERROR,
-                        message: pwixI18n.label( I18N, 'identities.checks.email_address_exists' )
+                    .then(( user ) => {
+                        let ok = true;
+                        if( user ){
+                            user.emails.every(( it ) => {
+                                if( it.address === value && it._id !== opts.id ){
+                                    ok = false;
+                                }
+                                return ok;
+                            });
+                        }
+                        return ok ? null : new TM.TypedMessage({
+                            level: TM.MessageLevel.C.ERROR,
+                            message: pwixI18n.label( I18N, 'identities.checks.email_address_exists' )
+                        });
                     });
-                });
             }
         } else {
             console.warn( 'organization expected in data, not found' );
@@ -180,10 +190,11 @@ Identities.checks = {
         if( opts.update !== false ){
             if( index < 0 ){
                 item.emails = item.emails || [];
-                item.emails.push({ id: opts.id });
+                item.emails.push({ _id: opts.id });
                 index = 0;
             }
             item.emails[index].label = value;
+            data.item.set( item );
         }
         return null;
     },
@@ -195,10 +206,11 @@ Identities.checks = {
         if( opts.update !== false ){
             if( index < 0 ){
                 item.emails = item.emails || [];
-                item.emails.push({ id: opts.id });
+                item.emails.push({ _id: opts.id });
                 index = 0;
             }
             item.emails[index].preferred = Boolean( value );
+            data.item.set( item );
         }
         if( value !== true && value !== false ){
             return new TM.TypedMessage({
@@ -226,10 +238,11 @@ Identities.checks = {
         if( opts.update !== false ){
             if( index < 0 ){
                 item.emails = item.emails || [];
-                item.emails.push({ id: opts.id });
+                item.emails.push({ _id: opts.id });
                 index = 0;
             }
             item.emails[index].verified = Boolean( value );
+            data.item.set( item );
         }
         if( value !== true && value !== false ){
             return new TM.TypedMessage({
@@ -242,7 +255,6 @@ Identities.checks = {
 
     // the family name
     // if we enter a family name, then name should be empty
-    //  and expects a given name (the middle is not enough)
     async family_name( value, data, opts ){
         _assert_data_content( 'Identities.checks.family_name()', data );
         let item = data.item.get();
@@ -258,21 +270,6 @@ Identities.checks = {
                     message: pwixI18n.label( I18N, 'identities.checks.family_name_set' )
                 }));
             }
-            /*
-            if( !item.given_name ){
-                errors.push( new TM.TypedMessage({
-                    level: TM.MessageLevel.C.WARNING,
-                    message: pwixI18n.label( I18N, 'identities.checks.family_expects_given' )
-                }));
-            }
-        } else {
-            if( !item.name && !item.given_name ){
-                errors.push( new TM.TypedMessage({
-                    level: TM.MessageLevel.C.WARNING,
-                    message: pwixI18n.label( I18N, 'identities.checks.family_wants_name' )
-                }));
-            }
-                */
         }
         return errors.length ? errors : null;
     },
@@ -297,7 +294,6 @@ Identities.checks = {
 
     // the given name
     // if we enter a given name, then name should be empty
-    // and expects a family name
     async given_name( value, data, opts ){
         _assert_data_content( 'Identities.checks.given_name()', data );
         let item = data.item.get();
@@ -313,21 +309,6 @@ Identities.checks = {
                     message: pwixI18n.label( I18N, 'identities.checks.given_name_set' )
                 }));
             }
-            /*
-            if( !item.family_name ){
-                errors.push( new TM.TypedMessage({
-                    level: TM.MessageLevel.C.WARNING,
-                    message: pwixI18n.label( I18N, 'identities.checks.given_expects_family' )
-                }));
-            }
-        } else {
-            if( !item.name && !item.family_name ){
-                errors.push( new TM.TypedMessage({
-                    level: TM.MessageLevel.C.WARNING,
-                    message: pwixI18n.label( I18N, 'identities.checks.given_wants_name' )
-                }));
-            }
-                */
         }
         return errors.length ? errors : null;
     },
@@ -386,15 +367,13 @@ Identities.checks = {
                     message: pwixI18n.label( I18N, 'identities.checks.name_others_set' )
                 }));
             }
-            /*
         } else {
-            if( !item.given_name && !item.middle_name && !item.family_name ){
+            if( !item.given_name && !item.family_name ){
                 errors.push( new TM.TypedMessage({
                     level: TM.MessageLevel.C.WARNING,
                     message: pwixI18n.label( I18N, 'identities.checks.name_others_unset' )
                 }));
             }
-                */
         }
         return errors.length ? errors : null;
     },
@@ -430,6 +409,101 @@ Identities.checks = {
             data.item.set( item );
         }
         return _check_url( value, { field: 'profile_url', prefix: 'profile', mandatory: false });
+    },
+
+    // usernames
+    async username_label( value, data, opts={} ){
+        _assert_data_content( 'Identities.checks.username_label()', data );
+        let item = data.item.get();
+        const index = opts.id ? _id2index( item.usernames, opts.id ) : -1;
+        if( opts.update !== false ){
+            if( index < 0 ){
+                item.usernames = item.usernames || [];
+                item.usernames.push({ _id: opts.id });
+                index = 0;
+            }
+            item.usernames[index].label = value;
+            data.item.set( item );
+        }
+        return null;
+    },
+
+    async username_preferred( value, data, opts={} ){
+        _assert_data_content( 'Identities.checks.username_preferred()', data );
+        let item = data.item.get();
+        const index = opts.id ? _id2index( item.usernames, opts.id ) : -1;
+        if( opts.update !== false ){
+            if( index < 0 ){
+                item.usernames = item.usernames || [];
+                item.usernames.push({ _id: opts.id });
+                index = 0;
+            }
+            item.usernames[index].preferred = Boolean( value );
+            data.item.set( item );
+        }
+        if( value !== true && value !== false ){
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.WARNING,
+                message: pwixI18n.label( I18N, 'identities.checks.username_preferred_invalid' )
+            });
+        }
+        // must have a single preferred (if any)
+        let count = 0;
+        ( item.usernames || [] ).forEach(( it ) => {
+            if( it.preferred === true ){
+                count += 1;
+            }
+        });
+        return count > 1 ? new TM.TypedMessage({
+            level: TM.MessageLevel.C.WARNING,
+            message: pwixI18n.label( I18N, 'identities.checks.username_preferred_count' )
+        }) : null;
+    },
+
+    // if there is a row, it must have a valid username
+    async username_username( value, data, opts={} ){
+        _assert_data_content( 'Identities.checks.username_address()', data );
+        let item = data.item.get();
+        let index = opts.id ? _id2index( item.usernames, opts.id ) : -1;
+        if( opts.update !== false ){
+            if( index < 0 ){
+                item.usernames = item.usernames || [];
+                item.usernames.push({ _id: opts.id });
+                index = 0;
+            }
+            item.usernames[index].username = value;
+            data.item.set( item );
+        }
+        if( !value ){
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'identities.checks.username_unset' )
+            });
+        }
+        if( data.organization ){
+            const organization = Validity.getEntityRecord( data.organization );
+            if( organization.record.identitiesUsernamesIdentifier ){
+                return data.amInstance.byUsername( value )
+                    .then(( user ) => {
+                        let ok = true;
+                        if( user ){
+                            user.usernames.every(( it ) => {
+                                if( it.username === value && it._id !== opts.id ){
+                                    ok = false;
+                                }
+                                return ok;
+                            });
+                        }
+                        return ok ? null : new TM.TypedMessage({
+                            level: TM.MessageLevel.C.ERROR,
+                            message: pwixI18n.label( I18N, 'identities.checks.username_exists' )
+                        });
+                    });
+            }
+        } else {
+            console.warn( 'organization expected in data, not found' );
+        }
+        return null;
     },
 
     // the website url
@@ -663,111 +737,6 @@ Identities.check_phones_verified = function( value, data, coreApp={} ){
                 if( coreApp.update !== false ){
                     phone.verified = Boolean( value );
                     data.item.set( item );
-                }
-            }
-            return null;
-        });
-};
-
-// the preferred username
-Identities.check_preferred_username = function( value, data, coreApp={} ){
-    Identities._assert_data_itemrv( 'Identities.check_preferred_username()', data );
-    const item = data.item.get();
-    return Promise.resolve( null )
-        .then(() => {
-            if( coreApp.update !== false ){
-                item.preferred_username = value;
-                data.item.set( item );
-            }
-            return null;
-        });
-};
-
-// usernames
-//  when checking from the UI inputHandler() for this field, we got an identifier in the coreApp options
-//  in all other cases ?
-//  - checking this field from an inputHandler() for another field ?
-//  - global checking when initializing an UI ?
-//  - global checking of an identity from the server ?
-Identities.check_usernames_label = function( value, data, coreApp={} ){
-    Identities._assert_data_itemrv( 'Identities.check_usernames_label()', data );
-    const item = data.item.get();
-    return Promise.resolve( null )
-        .then(() => {
-            const username = coreApp.id ? Identities.fn.usernameById( item, coreApp.id ) : null;
-            if( username ){
-                if( coreApp.update !== false ){
-                    username.label = value;
-                    data.item.set( item );
-                }
-            }
-            return null;
-        });
-};
-
-Identities.check_usernames_preferred = function( value, data, coreApp={} ){
-    Identities._assert_data_itemrv( 'Identities.check_usernames_preferred()', data );
-    const item = data.item.get();
-    return Promise.resolve( null )
-        .then(() => {
-            const username = coreApp.id ? Identities.fn.usernameById( item, coreApp.id ) : null;
-            if( username ){
-                if( coreApp.update !== false ){
-                    username.preferred = Boolean( value );
-                    // if preferred is checked, then take care of all other preferred should be unchecked
-                    if( value ){
-                        item.usernames.every(( it ) => {
-                            if( it.id !== coreApp.id && it.preferred ){
-                                it.preferred = false;
-                            }
-                            return true;
-                        });
-                    }
-                    data.item.set( item );
-                }
-            }
-            return null;
-        });
-};
-
-Identities.check_usernames_username = function( value, data, coreApp={} ){
-    Identities._assert_data_itemrv( 'Identities.check_usernames_username()', data );
-    const item = data.item.get();
-    return Promise.resolve( null )
-        .then(() => {
-            const username = coreApp.id ? Identities.fn.usernameById( item, coreApp.id ) : null;
-            if( username ){
-                if( coreApp.update !== false ){
-                    username.username = value;
-                    data.item.set( item );
-                }
-                if( value ){
-                    const fn = function( result ){
-                        let ok = false;
-                        if( result.length ){
-                            // we have found an existing username
-                            //  this is normal if the found identity is the same than ours
-                            const found_id = result[0].usernames[0].id;
-                            const me = username.id;
-                            if( me === found_id ){
-                                ok = true;
-                            }
-                        } else {
-                            ok = true;
-                        }
-                        return ok ? null : new CoreApp.TypedMessage({
-                            type: CoreApp.MessageType.C.ERROR,
-                            message: pwixI18n.label( I18N, 'identities.checks.username_exists' )
-                        });
-                    };
-                    return Meteor.isClient ?
-                        Meteor.callPromise( 'identities.getBy', { 'usernames.username': value }).then(( result ) => { return fn( result ); }) :
-                        fn( Identities.s.getBy({ 'usernames.username': value }));
-                } else {
-                    return new CoreApp.TypedMessage({
-                        type: CoreApp.MessageType.C.ERROR,
-                        message: pwixI18n.label( I18N, 'identities.checks.username_empty' )
-                    });
                 }
             }
             return null;

@@ -58,7 +58,8 @@
 |  117 | 2024-10- 9 | should define a policy for acr values (see Meteor.APP.C.oidcEndUserPasswordAcr) |
 |  118 | 2024-10- 9 | clients should be able to provide some javascript/ejs to display in interactions dialogs |
 |  119 | 2024-10-16 | BUG: when updating groups of an identity, the client groupsRegistrar content is badly updated (publication is fine, but subcription only receives a part) |
-|  120 |  |  |
+|  120 | 2024-10-16 | input placeholders are too close of black - have a lighter gray and italics |
+|  121 |  |  |
 
 ---
 ## Done

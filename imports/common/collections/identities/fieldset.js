@@ -131,7 +131,7 @@ Identities.fieldsDef = function( organization ){
             optional: true
         },
         {
-            name: 'emails.$.id',
+            name: 'emails.$._id',
             type: String
         },
         {
@@ -270,22 +270,27 @@ Identities.fieldsDef = function( organization ){
             type: Object
         },
         {
-            name: 'usernames.$.id',
+            name: 'usernames.$._id',
             type: String
         },
         {
             name: 'usernames.$.label',
             type: String,
-            optional: true
+            optional: true,
+            form_check: Identities.checks.username_label,
+            form_type: Forms.FieldType.C.OPTIONAL
         },
         {
             name: 'usernames.$.username',
-            type: String
+            type: String,
+            form_check: Identities.checks.username_username,
+            form_type: Forms.FieldType.C.MANDATORY
         },
         {
             name: 'usernames.$.preferred',
             type: Boolean,
-            defaultValue: false
+            defaultValue: false,
+            form_check: Identities.checks.username_preferred
         }
     ];
     return columns;

@@ -73,7 +73,7 @@ Identities.s = {
         }
         const username = Identities.fn.usernamePreferred( item );
         if( username ){
-            item.preferredUsername = email.username;
+            item.preferredUsername = username.username;
         }
         return true;
     },

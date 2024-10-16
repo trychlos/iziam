@@ -80,10 +80,8 @@ Template.identity_emails_pane.events({
         //console.debug( 'click.js-plus' );
         const item = this.item.get();
         item.emails = item.emails || [];
-        const id = Random.id();
-        //console.debug( 'adding', id );
         item.emails.push({
-            id: id
+            _id: Random.id()
         });
         this.item.set( item );
     }

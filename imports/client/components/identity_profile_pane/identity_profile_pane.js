@@ -66,6 +66,17 @@ Template.identity_profile_pane.onCreated( function(){
         },
         // the Form.Checker instance for this panel
         checker: new ReactiveVar( null ),
+
+        // set the name
+        setName( item ){
+            let name = '';
+            if( item.family_name || item.middle_name || item.given_name ){
+                name = Identities.fn.name( item );
+            }
+            if( !item.name ){
+                self.$( '.c-identity-profile-pane .js-name input' ).val( name );
+            }
+        }
     };
 });
 
@@ -91,6 +102,12 @@ Template.identity_profile_pane.onRendered( function(){
             }));
         }
     });
+
+    // maintain the display name
+    self.autorun(() => {
+        const item = Template.currentData().item.get();
+        self.APP.setName( item );
+    })
 });
 
 Template.identity_profile_pane.helpers({
@@ -112,18 +129,6 @@ Template.identity_profile_pane.helpers({
     // whether the middle name is disabled ? yes if name is set
     middleDisabled(){
         return this.item.get().name ? 'disabled' : '';
-    },
-
-    // display the computed name if any
-    nameComputed(){
-        let name = '&nbsp;';
-        let set = false;
-        const item = this.item.get();
-        if( item.given_name || item.middle_name || item.family_name ){
-            name = Identities.fn.name( item );
-            set = true;
-        }
-        return set ? pwixI18n.label( I18N, 'identities.profile.name_computed', name ) : name;
     },
 
     // whether the name is disabled ? yes if either given, middle or family names are set

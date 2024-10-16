@@ -1,15 +1,15 @@
 /*
- * /imports/client/components/identity_email_row/identity_email_row.js
+ * /imports/client/components/identity_username_row/identity_username_row.js
  *
- * Manage an email adress, maybe empty but have at least an id.
+ * Manage an username adress, maybe empty but have at least an id.
  *
  * Parms:
  * - item: a ReactiveVar which holds the identity object to edit (may be empty, but not null)
  * - checker: a ReactiveVar which holds the parent Checker
  * - amInstance: a ReactiveVar which holds the amClass instance
  * - organization: the Organization as an entity with its DYN.records array
- * - it: the emails row to be managed here
- * - emailsCount: a ReactiveVar which counts the email addresses
+ * - it: the username row to be managed here
+ * - usernamesCount: a ReactiveVar which counts the usernames
  */
 
 import _ from 'lodash';
@@ -18,15 +18,15 @@ import { AccountsHub } from 'meteor/pwix:accounts-hub';
 import { Forms } from 'meteor/pwix:forms';
 import { pwixI18n } from 'meteor/pwix:i18n';
 
-import './identity_email_row.html';
+import './identity_username_row.html';
 
-Template.identity_email_row.onCreated( function(){
+Template.identity_username_row.onCreated( function(){
     const self = this;
 
     self.APP = {
         // the fields
         fields: {
-            'emails.$.label': {
+            'usernames.$.label': {
                 js: '.js-label',
                 formFrom( $node ){
                     return $node.val();
@@ -35,25 +35,16 @@ Template.identity_email_row.onCreated( function(){
                     $node.val( item.label );
                 }
             },
-            'emails.$.address': {
-                js: '.js-address',
+            'usernames.$.username': {
+                js: '.js-username',
                 formFrom( $node ){
                     return $node.val();
                 },
                 formTo( $node, item ){
-                    $node.val( item.address );
+                    $node.val( item.username );
                 }
             },
-            'emails.$.verified': {
-                js: '.js-verified',
-                formFrom( $node ){
-                    return $node.prop( 'checked' );
-                },
-                formTo( $node, item ){
-                    $node.prop( 'checked', item.verified );
-                }
-            },
-            'emails.$.preferred': {
+            'usernames.$.preferred': {
                 js: '.js-preferred',
                 formFrom( $node ){
                     return $node.prop( 'checked' );
@@ -66,24 +57,24 @@ Template.identity_email_row.onCreated( function(){
         // the Form.Checker instance for this panel
         checker: new ReactiveVar( null ),
 
-        // remove the email item
+        // remove the username item
         removeById( id ){
             const item = Template.currentData().item.get();
-            let emails = item.emails || [];
+            let usernames = item.usernames || [];
             let found = -1;
-            for( let i=0 ; i<emails.length ; ++i ){
-                if( emails[i].id === id ){
+            for( let i=0 ; i<usernames.length ; ++i ){
+                if( usernames[i]._id === id ){
                     found = i;
                     break;
                 }
             }
             if( found !== -1 ){
-                emails.splice( found, 1 );
+                usernames.splice( found, 1 );
                 Template.currentData().item.set( item );
                 self.APP.checker.get().removeMe();
             } else {
                 console.warn( id, 'not found' );
-                const trs = $( '.c-identity-emails-pane tr.c-identity-email-row' );
+                const trs = $( '.c-identity-usernames-pane tr.c-identity-username-row' );
                 $.each( trs, function( index, object ){
                     console.debug( index, $( object ).data( 'item-id' ));
                 });
@@ -92,7 +83,7 @@ Template.identity_email_row.onCreated( function(){
     };
 });
 
-Template.identity_email_row.onRendered( function(){
+Template.identity_username_row.onRendered( function(){
     const self = this;
     let itemRv = null;
 
@@ -123,21 +114,21 @@ Template.identity_email_row.onRendered( function(){
     });
 });
 
-Template.identity_email_row.helpers({
+Template.identity_username_row.helpers({
     // string translation
     i18n( arg ){
         return pwixI18n.label( I18N, arg.hash.key );
     },
 
-    // rule: doesn't remove last connection way, i.e. keep at least one username or one email address
+    // rule: doesn't remove last identifier
     minusEnabled( it ){
         const haveUseableUsername = this.amInstance?.get().opts().haveUsername() !== AccountsHub.C.Identifier.NONE && this.item.get().username;
-        return ( haveUseableUsername || this.emailsCount.get() > 1 ) ? '' : 'disabled';
+        return ( haveUseableUsername || this.usernamesCount.get() > 1 ) ? '' : 'disabled';
     },
 
     // have a title per button
     minusTitle( it ){
-        return pwixI18n.label( I18N, 'identities.emails.remove_title', it.address );
+        return pwixI18n.label( I18N, 'identities.usernames.remove_title', it.username );
     },
 
     // provide params to FormsStatusIndicator template
@@ -146,15 +137,28 @@ Template.identity_email_row.helpers({
         return {
             statusRv: Template.instance().APP.checker.get()?.iStatusableStatusRv() || null
         };
+    },
+
+    // disable the preferred checkbox if another row is already checked
+    preferredDisabled( item ){
+        const usernames = this.item.get().usernames || [];
+        let alreadyChecked = false;
+        usernames.every(( it ) => {
+            if( it._id !== item._id && it.preferred ){
+                alreadyChecked = true;
+            }
+            return !alreadyChecked;
+        });
+        return alreadyChecked ? 'disabled': '';
     }
 });
 
-Template.identity_email_row.events({
-    'click .c-identity-email-row .js-minus'( event, instance ){
+Template.identity_username_row.events({
+    'click .c-identity-username-row .js-minus'( event, instance ){
         instance.APP.removeById( this.it._id );
-    },
+    }
 });
 
-Template.identity_email_row.onDestroyed( function(){
+Template.identity_username_row.onDestroyed( function(){
     //console.debug( 'onDestroyed', Template.currentData().it.id );
 });

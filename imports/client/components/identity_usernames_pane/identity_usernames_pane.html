@@ -1,0 +1,33 @@
+<template name="identity_usernames_pane">
+    <div class="x-tab c-identity-usernames-pane">
+        <div class="panel-content">
+
+            <div class="panel-header">
+            </div>
+
+            <div class="panel-body">
+                <table class="form-table subtable">
+                    <thead>
+                        <tr>
+                            <th class="ui-w40"><div class="ui-ml2">{{ i18n key="identities.usernames.label_th" }}</div></th>
+                            <th class="ui-w40"><div class="ui-ml2">{{ i18n key="identities.usernames.username_th" }}</div></th>
+                            <th class="ui-center">{{ i18n key="identities.usernames.preferred_th" }}</th>
+                            <th></th>
+                            <th>
+                                <button class="btn btn-sm btn-outline-primary js-plus" title="{{ i18n key="identities.usernames.add_title" }}" {{ plusDisabled }} >
+                                    <span class="fa-solid fa-fw fa-plus"></span>
+                                </button>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each it in itemsList }}
+                            {{> identity_username_row (parmsUsernameRow it) }}
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</template>

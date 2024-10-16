@@ -743,6 +743,10 @@ Meteor.APP.i18n = {
                     picture_mandatory: 'The picture URL is not set',
                     profile_invalid: 'The profile URL is not valid',
                     profile_mandatory: 'The profile URL is not set',
+                    username_exists: 'The username already exists, but should be an identifier',
+                    username_preferred_count: 'You have more than one preferred username, but should have at most one',
+                    username_preferred_invalid: 'The preferred username value is invalid, must be \'true\' or \'false\'',
+                    username_unset: 'The username is not set',
                     website_invalid: 'The website URL is not valid',
                     website_mandatory: 'The website URL is not set',
                     zoneinfo_invalid: 'The zoneinfo is not valid'
@@ -751,18 +755,21 @@ Meteor.APP.i18n = {
                     dialog_title: 'Editing the "%s" identity',
                     emails_tab_title: 'Email addresses',
                     groups_tab_title: 'Groups',
-                    profile_tab_title: 'Identity'
-                },
-                groups: {
-                    preamble_text: 'The groups this identity is member of.<br />'
-                        +'When attributing (checking) a group, the identity becomes also a member of all parents of this checked group.'
+                    profile_tab_title: 'Identity',
+                    usernames_tab_title: 'Usernames'
                 },
                 emails: {
+                    add_title: 'Define a new email address',
                     address_th: 'Address',
                     label_th: 'Label',
                     preamble_text: '',
                     preferred_th: 'Preferred',
+                    remove_title: 'Remove this "%s" email address',
                     verified_th: 'Verified'
+                },
+                groups: {
+                    preamble_text: 'The groups this identity is member of.<br />'
+                        +'When attributing (checking) a group, the identity becomes also a member of all parents of this checked group.'
                 },
                 list: {
                     email_th: 'Email address',
@@ -817,6 +824,14 @@ Meteor.APP.i18n = {
                 },
                 tabular: {
                     count_badge: 'Count of defined identities',
+                },
+                usernames: {
+                    add_title: 'Define a new username',
+                    username_th: 'Username',
+                    label_th: 'Label',
+                    preamble_text: '',
+                    preferred_th: 'Preferred',
+                    remove_title: 'Remove this "%s" username',
                 }
             },
             jwks: {

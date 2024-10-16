@@ -17,6 +17,8 @@
  *                      |
  *                      +- identity_emails_pane
  *                      |
+ *                      +- identity_usernames_pane
+ *                      |
  *                      +- identity_groups_pane
  *                      |
  *                      +- identity_no_pane
@@ -37,6 +39,7 @@ import '/imports/client/components/identity_emails_pane/identity_emails_pane.js'
 import '/imports/client/components/identity_groups_pane/identity_groups_pane.js';
 import '/imports/client/components/identity_no_pane/identity_no_pane.js';
 import '/imports/client/components/identity_profile_pane/identity_profile_pane.js';
+import '/imports/client/components/identity_usernames_pane/identity_usernames_pane.js';
 
 import './organization_identities_pane.html';
 
@@ -57,6 +60,11 @@ Template.organization_identities_pane.onCreated( function(){
                 name: 'identity_emails_tab',
                 navLabel: pwixI18n.label( I18N, 'identities.edit.emails_tab_title' ),
                 paneTemplate: 'identity_emails_pane'
+            },
+            {
+                name: 'identity_usernames_tab',
+                navLabel: pwixI18n.label( I18N, 'identities.edit.usernames_tab_title' ),
+                paneTemplate: 'identity_usernames_pane'
             },
             {
                 name: 'identity_groups_tab',
