@@ -2,6 +2,16 @@
  * /imports/client/components/organization_clients_pane/organization_clients_pane.js
  *
  * Display the clients.
+ * 
+ * +- <this>
+ *     |
+ *     +- client_new_button
+ *     |   |
+ *     |   +-> trigger client_new_assistant
+ *     |
+ *     +- clients_list
+ *         |
+ *         +-> trigger client_edit_dialog
  *
  * Parms:
  * - item: a ReactiveVar which contains the Organization as an entity with its DYN.records array

@@ -160,7 +160,7 @@ Identities.fn = {
      */
     async new( identity, args ){
         identity.organization = args.organization._id;
-        return Meteor.isClient ? await Meteor.callAsync( 'identity.upsert', identity, args ) : await Identities.s.new( identity, args );
+        return Meteor.isClient ? await Meteor.callAsync( 'identity.upsert', identity, args ) : await Identities.s.upsert( identity, args );
     },
 
     /**

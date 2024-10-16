@@ -16,8 +16,6 @@
  * Parms:
  * - item: a ReactiveVar which contains the Organization as an entity with its DYN.records array
  * - checker: a ReactiveVar which contains the parent Forms.Checker
- * - groups: a ReactiveVar which contains the groups of the organization
- * - editable, defaulting to true
  */
 
 import _ from 'lodash';
@@ -40,9 +38,7 @@ Template.groups_edit_dialog.onCreated( function(){
     self.APP = {
         // whether we are running inside of a Modal
         isModal: new ReactiveVar( false ),
-        // the organization as an { entity, record } object
-        organization: new ReactiveVar( null ),
-        // a deep copy of the groups
+        // a deep copy of the organization groups
         groups: new ReactiveVar( [] ),
         // the entity tabbed
         tabbed: new Tabbed.Instance( self, { name: 'groups_edit_dialog' }),
@@ -62,24 +58,19 @@ Template.groups_edit_dialog.onCreated( function(){
         }
     };
 
-    // build the organization { entity, record } object
+    // take a deep copy of the groups to be edited
     self.autorun(() => {
         const item = Template.currentData().item.get();
-        self.APP.organization.set({
-            entity: item,
-            record: item.DYN.closest
-        });
-    });
-
-    // edit a copy of the groups
-    self.autorun(() => {
-        self.APP.groups.set( _.cloneDeep( Template.currentData().groups ));
+        const organization = TenantsManager.list.byEntity( item._id );
+        if( organization ){
+            self.APP.groups.set( _.cloneDeep( organization.DYN.groups.get()));
+        }
     });
 
     // initialize the Tabbed.Instance
     const paneData = {
         ...Template.currentData(),
-        groups: self.APP.groups.get()
+        groups: self.APP.groups
     };
     const notesField = Groups.fieldSet.get().byName( 'notes' );
     self.APP.tabbed.setTabbedParms({
@@ -130,7 +121,7 @@ Template.groups_edit_dialog.events({
     // rewrite the full tree
     'iz-submit .c-groups-edit-dialog'( event, instance ){
         const groups = instance.APP.getTree();
-        const organizationId = instance.APP.organization.get().entity._id;
+        const organizationId = this.item.get()._id;
         const closeFn = function(){
             if( instance.APP.isModal.get()){
                 Modal.close();

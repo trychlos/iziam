@@ -9,8 +9,6 @@
  *     |   |
  *     |   +-> trigger group_edit_dialog
  *     |
- *     +- group_new_button
- *     |
  *     +- groups_panel
  *         |
  *         +- groups_tree

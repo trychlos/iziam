@@ -6,7 +6,7 @@
  * Parms:
  * - item: a ReactiveVar which contains the Organization as an entity with its DYN.records array
  * - checker: a ReactiveVar which contains the parent Forms.Checker
- * - groups: the groups of the organization
+ * - groups: a ReactiveVar which contains a deep copy of the groups of the organization, to be edited
  */
 
 import { pwixI18n } from 'meteor/pwix:i18n';
@@ -43,18 +43,17 @@ Template.groups_hierarchy_pane.onCreated( function(){
         setIdentities( selected, dc ){
             const selectedGroupNode = self.APP.tree_selected.get();
             if( selectedGroupNode ){
-                const groups = dc.groups.get();
                 let newgroups = [];
                 let found = false;
-                // remove identities whose parent if the selected group
-                groups.forEach(( it ) => {
+                // remove identities attached to the selected group
+                dc.groups.get().forEach(( it ) => {
                     if( it.type !== 'I' || it.parent !== selectedGroupNode.id ){
                         newgroups.push( it );
                     }
                 });
-                // add identities
+                // re-attach new identities
                 selected.forEach(( it ) => {
-                    newgroups.push({ type: 'I', _id: it._id, parent: selectedGroupNode.id, DYN: { label: it.DYN?.label }});
+                    newgroups.push({ type: 'I', identity: it._id, parent: selectedGroupNode.id, DYN: { label: it.DYN?.label }});
                 });
                 // and set new groups
                 dc.groups.set( newgroups );
@@ -103,6 +102,7 @@ Template.groups_hierarchy_pane.helpers({
     parmsTree(){
         return {
             ...this,
+            groups: this.groups.get(),
             withCheckboxes: false
         };
     }
@@ -121,16 +121,13 @@ Template.groups_hierarchy_pane.events({
         Modal.run({
             ...this,
             organization: this.item.get(),
-            targetDatabase: false,
-            groupsRv: this.groups,
             selected: instance.APP.groupIdentities.get(),
+            selectTarget: instance.$( '.c-groups-hierarchy-pane' ),
             mdBody: 'identities_select_dialog',
             mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
             mdClasses: 'modal-lg',
             mdClassesContent: Meteor.APP.runContext.pageUIClasses().join( ' ' ),
-            mdTitle: pwixI18n.label( I18N, 'identities.select.dialog_title' ),
-            selectTarget: instance.$( '.c-groups-hierarchy-pane' ),
-            item: null
+            mdTitle: pwixI18n.label( I18N, 'identities.select.dialog_title' )
         });
         return false;
     },

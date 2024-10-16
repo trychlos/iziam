@@ -103,7 +103,7 @@ export class GroupsRegistrar extends izRegistrar {
     groupsLoad(){
         if( Meteor.isClient && !this.#clientInitialized ){
             const self = this;
-            this.#handle.set( Meteor.subscribe( 'groups.listAll', this.#organization ));
+            this.#handle.set( Meteor.subscribe( 'groups.listAll', this.#organization._id ));
     
             // get the list of groups
             // each group is published as an object with DYN sub-object
@@ -115,6 +115,7 @@ export class GroupsRegistrar extends izRegistrar {
                     });
                 }
             });
+
             this.#clientInitialized = true;
         }
     }

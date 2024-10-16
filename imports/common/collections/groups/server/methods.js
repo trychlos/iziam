@@ -8,9 +8,10 @@ Meteor.methods({
     // retrieve all queried records for the group
     //  always returns an array, may be empty
     async 'groups.getBy'( query ){
-        return await Groups.s.getBy( query );
+        return await Groups.s.getBy( query, this.userId );
     },
 
+    /*
     // empty the collection before importing
     async 'groups.empty'(){
         return await Groups.remove({});
@@ -25,6 +26,7 @@ Meteor.methods({
     async 'groups.removeById'( id ){
         return await Groups.s.removeById( id, this.userId );
     },
+    */
 
     // insert/update a group in the database
     async 'groups.upsert_item'( item ){

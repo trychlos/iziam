@@ -748,7 +748,7 @@ Meteor.APP.i18n = {
                     zoneinfo_invalid: 'The zoneinfo is not valid'
                 },
                 edit: {
-                    dialog_title: 'Editing the identity',
+                    dialog_title: 'Editing the "%s" identity',
                     emails_tab_title: 'Email addresses',
                     groups_tab_title: 'Groups',
                     profile_tab_title: 'Identity'
@@ -767,7 +767,7 @@ Meteor.APP.i18n = {
                 list: {
                     email_th: 'Email address',
                     locale_th: 'Locale',
-                    name_th: 'Name',
+                    name_th: '<i>Better label</i>',
                     username_th: 'Username',
                     website_th: 'Website',
                     zoneinfo_th: 'Zoneinfo'

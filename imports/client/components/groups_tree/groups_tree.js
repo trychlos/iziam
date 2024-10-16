@@ -7,7 +7,7 @@
  * Parms:
  * - item: a ReactiveVar which contains the Organization as an entity with its DYN.records array
  * - checker: a ReactiveVar which contains the parent Forms.Checker
- * - groups: a ReactiveVar which contains the groups of the organization
+ * - groups: the groups of the organization
  * - editable: whether the tree is editable, defaulting to true
  *   here, 'editable' means that we allow dnd, so change the tree
  * - withCheckboxes: whether the tree has checkboxes, defaulting to true
@@ -55,6 +55,7 @@ Template.groups_tree.onCreated( function(){
         // this function returns the whole tree of node.original.doc whith the children updated
         //  written to be callable from anywhere (and advertised to others when the tree is ready)
         // the caller may pass a function to be called on each document
+        // if withCheckboxes is truethy, we add 'DYN.checked' and 'DYN.enabled' attributes to each document
         getTree( fnDoc ){
             let tree = [];
             const $tree = self.APP.$tree.get();
@@ -67,6 +68,11 @@ Template.groups_tree.onCreated( function(){
                         fnDoc( doc );
                     }
                     doc.children = [];
+                    if( self.APP.withCheckboxes.get()){
+                        doc.DYN = doc.DYN || {};
+                        doc.DYN.checked = node.state.checked;
+                        doc.DYN.enabled = !node.state.disabled;
+                    }
                     array.push( doc );
                     if( node.children ){
                         node.children.forEach(( id ) => {
@@ -87,29 +93,28 @@ Template.groups_tree.onCreated( function(){
             return tree;
         },
 
-        // we have explicitely or programatically checked an item (but cascade doesn't come here)
+        // we have explicitely or programatically checked an item
+        // cascade is automatically handled by jsTree when the user checks a checkbox, *not* when we call check_node()
         //  data = { node, selected, event, jsTree instance }
         tree_checkbox_check( data ){
             const $tree = self.APP.$tree.get();
-            data.node.children_d.every(( id ) => {
-                $tree.jstree( true ).disable_node( id );
-                return true;
-            });
-            if( self.APP.triggerChangeEvent ){
-                //console.debug( 'triggering pr-change due to checkbox check' );
-                $tree.trigger( 'pr-change' );
+            //console.debug( data.node );
+            for( let i=0 ; i<data.node.parents.length-1 ; ++i ){
+                $tree.jstree( true ).check_node( data.node.parents[i] );
+                $tree.jstree( true ).disable_node( data.node.parents[i] );
             }
+            $tree.trigger( 'tree-check' );
         },
 
-        // we have explicitely or programatically unchecked an item (but cascade doesn't come here)
+        // we have explicitely or programatically unchecked an item
         //  data = { node, selected, event, jsTree instance }
         tree_checkbox_uncheck( data ){
             const $tree = self.APP.$tree.get();
-            data.node.children_d.forEach(( id ) => {
-                $tree.jstree( true ).enable_node( id );
-            });
-            //console.debug( 'triggering pr-change due to checkbox uncheck' );
-            $tree.trigger( 'pr-change' );
+            for( let i=0 ; i<data.node.parents.length-1 ; ++i ){
+                $tree.jstree( true ).uncheck_node( data.node.parents[i] );
+                $tree.jstree( true ).enable_node( data.node.parents[i] );
+            }
+            $tree.trigger( 'tree-check' );
         },
 
         // ask for create a new node for the tree
@@ -293,6 +298,7 @@ Template.groups_tree.onRendered( function(){
                 };
             });
             let plugins = [
+                'conditionalselect',
                 'sort',
                 'types',
                 'wholerow'
@@ -319,6 +325,14 @@ Template.groups_tree.onRendered( function(){
                     multiple: false
                 },
                 plugins: plugins,
+                checkbox: {
+                    three_state: false,
+                    whole_node: true,
+                    tie_selection: false
+                },
+                conditionalselect( node, event ){
+                    return self.APP.editable.get();
+                },
                 dnd: {
                     copy: false,
                     open_timeout: 250
@@ -364,7 +378,9 @@ Template.groups_tree.onRendered( function(){
                 self.$( '.c-groups-tree' ).trigger( 'tree-rowselect', { node: node });
             })
             // 'deselect_node.jstree' data = { node, jsTree instance }
+            // pwi 2024-10-14 doesn't know when this event is sent as doesn't log
             .on( 'deselect_node.jstree', ( event, data ) => {
+                console.debug( event.type );
                 self.$( '.c-groups-tree' ).trigger( 'tree-rowselect', { node: null });
             });
         }
@@ -382,7 +398,7 @@ Template.groups_tree.onRendered( function(){
     //  displaying the groups hierarchy
     self.autorun(() => {
         const $tree = self.APP.$tree.get();
-        const groups = Template.currentData().groups.get();
+        const groups = Template.currentData().groups;
         if( !_.isEqual( groups, self.APP.prevData) && $tree && self.APP.tree_ready()){
             // keep the tree data
             self.APP.prevData = _.cloneDeep( groups );
@@ -419,9 +435,10 @@ Template.groups_tree.onRendered( function(){
 
     // if we have checkboxes, then check them
     self.autorun(() => {
+        //console.debug( 'populated', self.APP.tree_populated(), 'withCheckboxes', self.APP.withCheckboxes.get(), 'checked', self.APP.tree_checked(), 'selected', Template.currentData().selected );
         if( self.APP.tree_populated() && self.APP.withCheckboxes.get() && !self.APP.tree_checked()){
             ( Template.currentData().selected || [] ).forEach(( it ) => {
-                console.debug( 'checking', it );
+                self.APP.$tree.get().jstree( true ).check_node( it );
             });
         }
     });
@@ -430,27 +447,27 @@ Template.groups_tree.onRendered( function(){
 Template.groups_tree.helpers({
     // whether the close_all button is enabled ?
     closeButtonDisabled(){
-        return this.groups.get().length ? '' : 'disabled';
+        return this.groups && this.groups.length > 0 ? '' : 'disabled';
     },
 
     // show when there is data
     showIfData(){
-        return this.groups && this.groups.get() && this.groups.get().length > 0 ? 'ui-dblock' : 'ui-dnone';
+        return this.groups && this.groups.length > 0 ? 'ui-dblock' : 'ui-dnone';
     },
 
     // show when there is no data
     showIfEmpty(){
-        return this.groups && this.groups.get() && this.groups.get().length > 0 ? 'ui-dnone' : 'ui-dblock';
+        return this.groups && this.groups.length > 0 ? 'ui-dnone' : 'ui-dblock';
     },
 
     // whether the user may choose to show identities ?
     haveShowIdentitiesButton(){
-        return Template.instance().APP.withIdentities.get();
+        return false;// Template.instance().APP.withIdentities.get();
     },
 
-    // whether the chooser is enabled ?
+    // whether the identities chooser is enabled ?
     identitiesButtonDisabled(){
-        return this.groups.get().length ? '' : 'disabled';
+        return this.groups && this.groups.length > 0 ? '' : 'disabled';
     },
 
     // string translation
@@ -460,12 +477,29 @@ Template.groups_tree.helpers({
 
     // whether the open_all button is enabled ?
     openButtonDisabled(){
-        return this.groups.get().length ? '' : 'disabled';
+        return this.groups && this.groups.length > 0 ? '' : 'disabled';
     },
 });
 
 Template.groups_tree.events({
-    // the user has clicked on 'remove item' button
+    // show/hide the identities
+    'click .js-show'( event, instance ){
+        return false;
+    },
+
+    // close all nodes
+    'click .js-close'( event, instance ){
+        instance.APP.$tree.get().jstree( true ).close_all();
+        return false;
+    },
+
+    // open all nodes
+    'click .js-open'( event, instance ){
+        instance.APP.$tree.get().jstree( true ).open_all();
+        return false;
+    },
+
+    // the user has clicked on 'remove item' button on the companion buttons component
     // the parent panel relays that by triggering this event
     'tree-remove-node .c-groups-tree'( event, instance, data ){
         instance.APP.$tree.get().jstree( true ).delete_node( data.node._id );

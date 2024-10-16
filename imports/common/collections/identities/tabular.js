@@ -15,103 +15,94 @@ import { Identities } from './index.js';
  */
 Identities.tabularFieldsDef = function( organization ){
     let columns = [
-        //  the organization entity identifier
-        {
-            name: 'organization',
-            type: String,
-            dt_visible: false
-        },
         // -- scope: profile
         // the user's full name, either entered or computed
+        // this is the default AccountsManager sort order - leave it as first column
         {
             name: 'tabular_name',
-            type: String,
+            dt_type: 'string',
             dt_title: pwixI18n.label( I18N, 'identities.list.name_th' )
         },
         // the user's surname(s) or last name(s)
         {
             name: 'family_name',
-            type: String,
             dt_visible: false
         },
         // the user's given name(s) or first name(s)
         {
             name: 'given_name',
-            type: String,
             dt_visible: false
         },
         {
             name: 'middle_name',
-            type: String,
             dt_visible: false
         },
         // the user's nick name that may or may not be the same as the given_name
         {
             name: 'nickname',
-            type: String,
             dt_visible: false
         },
         // the URL of the user's profile page
         {
             name: 'profile_url',
-            type: String,
             dt_visible: false
         },
         // the URL of the user's profile picture
         {
             name: 'picture_url',
-            type: String,
             dt_visible: false
         },
         // the URL of the user's web page or blog
         {
             name: 'website_url',
-            type: String,
+            dt_type: 'string',
             dt_title: pwixI18n.label( I18N, 'identities.list.website_th' )
         },
         {
             name: 'gender',
-            type: String,
             dt_visible: false
         },
         // full birth date
         {
             name: 'birthdate',
-            type: Date,
             dt_visible: false
         },
         // only 'mm-dd' month-day
         {
             name: 'birthday',
-            type: String,
             dt_visible: false
         },
         {
             name: 'zoneinfo',
-            type: String,
+            dt_type: 'string',
             dt_title: pwixI18n.label( I18N, 'identities.list.zoneinfo_th' )
         },
         {
             name: 'locale',
-            type: String,
+            dt_type: 'string',
             dt_title: pwixI18n.label( I18N, 'identities.list.locale_th' )
         },
         // a preferred email address
         {
             name: 'preferredEmailAddress',
-            type: String,
+            dt_type: 'string',
             dt_title: pwixI18n.label( I18N, 'identities.list.email_th' )
         },
         {
             name: 'preferredEmailVerified',
-            type: Boolean,
             dt_visible: false
         },
         // a preferred username
         {
             name: 'preferredUsername',
-            type: String,
+            dt_type: 'string',
             dt_title: pwixI18n.label( I18N, 'identities.list.username_th' )
+        },
+        //  the organization entity identifier
+        {
+            name: 'organization',
+            dt_type: 'string',
+            dt_visible: false
         },
         Timestampable.fieldDef(),
         {

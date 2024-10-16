@@ -10,6 +10,7 @@ import { Groups } from './index.js';
 Groups.fn = {
 
     /**
+     * @summary Extract from the groups definitions the list of identities attached to the specified group
      * @param {Object} organization entity with its DYN sub-object
      * @param {Array} groups the list of groups in the organization (may be different of the content of GroupsRegistrar when editing)
      * @param {Object} group the group we search the members of
@@ -28,14 +29,13 @@ Groups.fn = {
     /**
      * @summary Transform a tree representing the groups hierarchy to a flat array suitable to be written in database
      *  In the tree, each item may have children
-     *  While our flat representation reverse the sens and item smay are attached to a parent
+     *  While our flat representation reverse the sens and items are attached to a parent
      * @locus Anywhere
+     * @param {String} organizationId
      * @param {Array<Group>} tree
-     * @param {Object} opts an optional options object with following keys:
-     *  - organizationId: the organization identifier
      * @returns {Array<Group>} flat
      */
-    tree2flat( organizationId, tree, opts={} ){
+    tree2flat( organizationId, tree ){
         let flat = [];
         const flat_fn = function( it, parent=null ){
             const children = it.children || [];

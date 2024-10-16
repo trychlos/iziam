@@ -7,12 +7,10 @@
  * - item: a ReactiveVar which holds the identity object to edit (may be empty, but not null)
  * - checker: a ReactiveVar which holds the parent Checker
  * - amInstance: a ReactiveVar which holds the amClass instance
- * - organization: an { entity , record } organization object
+ * - organization: the Organization as an entity with its DYN.records array
  * 
  * Events:
- * - groups-selected: the new selected groups items, re-triggered each time the selection changes
- * - groups-validated: if run inside a dialog, the new selected groups items, when the dialog is validated
- *   these two events hold a data as:
+ * - groups-selected: the newly selected groups items, re-triggered each time the selection changes, with data:
  *   > selected: an array of selected ids
  *   > items: an array of selected groups
  */
@@ -23,18 +21,18 @@ import './groups_select.html';
 
 Template.groups_select.onCreated( function(){
     const self = this;
-    console.debug( this );
+    //console.debug( this );
     
     self.APP = {
-        groups: new ReactiveVar( [] )
+        // address the *saved* organization entity
+        organization: new ReactiveVar( [] ),
+        // a function to get the tree content
+        fnGet: null
     };
 
     self.autorun(() => {
         const item = Template.currentData().organization;
-        const organization = TenantsManager.list.byEntity( item.entity._id );
-        if( organization ){
-            self.APP.groups.set( organization.DYN.groups.get());
-        }
+        self.APP.organization.set( TenantsManager.list.byEntity( item._id ));
     });
 });
 
@@ -42,11 +40,46 @@ Template.groups_select.helpers({
     // parms for the groups_tree component
     parmsTree(){
         return {
-            groups: Template.instance().APP.groups,
+            groups: Template.instance().APP.organization.get().DYN.groups.get(),
             editable: false,
             withCheckboxes: true,
             withIdentities: false,
-            selected: this.item.get().DYN.memberOf
+            selected: this.item.get().DYN?.memberOf?.direct || []
         };
+    }
+});
+
+Template.groups_select.events({
+    // functions advertising
+    'tree-fns .c-groups-select'( event, instance, data ){
+        instance.APP.fnGet = data.fnGet;
+    },
+
+    // the user has checked/unchecked a group
+    'tree-check .c-groups-select'( event, instance ){
+        if( instance.APP.fnGet ){
+            let direct = [];
+            let all = [];
+            const recfn = function( it ){
+                if( it.DYN.checked === true ){
+                    all.push( it._id );
+                    if( it.DYN.enabled === true ){
+                        direct.push( it._id );
+                    }
+                }
+                if( it.children ){
+                    it.children.forEach(( child ) => {
+                        recfn( child );
+                    });
+                }
+            };
+            instance.APP.fnGet().forEach(( it ) => {
+                recfn( it );
+            });
+            let item = this.item.get()
+            item.DYN.memberOf = { all: all, direct: direct };
+            // no need of reactivity at the time
+            //this.item.set( item );
+        }
     }
 });

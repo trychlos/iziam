@@ -7,7 +7,7 @@
  * - item: a ReactiveVar which holds the identity object to edit (may be empty, but not null)
  * - checker: a ReactiveVar which holds the parent Checker
  * - amInstance: a ReactiveVar which holds the amClass instance
- * - organization: an { entity , record } organization object
+ * - organization: the Organization as an entity with its DYN.records array
  */
 
 import _ from 'lodash';

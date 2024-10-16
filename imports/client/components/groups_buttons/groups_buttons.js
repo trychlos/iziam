@@ -6,7 +6,6 @@
  * Parms:
  * - item: a ReactiveVar which contains the Organization as an entity with its DYN.records array
  * - checker: a ReactiveVar which contains the parent Forms.Checker
- * - groups: a ReactiveVar which contains the groups of the organization
  * - editable: whether the tree is editable, defaulting to true
  * - editEnabled: the enable/disable state of the Edit button, defaulting to true
  * - removeEnabled: the enable/disable state of the Delete button, defaulting to true

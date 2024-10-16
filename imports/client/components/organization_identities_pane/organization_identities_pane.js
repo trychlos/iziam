@@ -2,6 +2,24 @@
  * /imports/client/components/organization_identities_pane/organization_identities_pane.js
  *
  * Tabular display of the identities.
+ * 
+ * +- <this>
+ *     |
+ *     +- AccountNewButton
+ *     |   |
+ *     |   +-> trigger AccountEditPanel
+ *     |
+ *     +- AccountsList
+ *         |
+ *         +-> trigger AccountEditPanel
+ *                      |
+ *                      +- identity_profile_pane
+ *                      |
+ *                      +- identity_emails_pane
+ *                      |
+ *                      +- identity_groups_pane
+ *                      |
+ *                      +- identity_no_pane
  *
  * Parms:
  * - item: a ReactiveVar which contains the Organization as an entity with its DYN.records array
@@ -27,7 +45,6 @@ Template.organization_identities_pane.onCreated( function(){
     //console.debug( this );
 
     self.APP = {
-        organization: new ReactiveVar( null ),
         amInstanceName: new ReactiveVar( null ),
         // new tabs for this identity
         tabsBefore: new ReactiveVar([
@@ -57,12 +74,8 @@ Template.organization_identities_pane.onCreated( function(){
     // set the organization record
     // and add it as a data context to the tabs
     self.autorun(() => {
-        let entity = { ...Template.currentData().item.get() };
-        const record = entity.DYN.closest;
-        delete entity.DYN;
-        self.APP.organization.set({ entity: entity, record: record });
         self.APP.tabsBefore.get().forEach(( it ) => {
-            it.paneData = { organization: { entity: entity, record: record }};
+            it.paneData = { organization: Template.currentData().item.get() };
         });
     });
 
@@ -86,12 +99,15 @@ Template.organization_identities_pane.helpers({
     },
 
     // AccountsList parameters and its additional tabs
+    // item here is the tabular one
     parmsAccountsList(){
         return {
             name: Template.instance().APP.amInstanceName.get(),
             tabsBefore: Template.instance().APP.tabsBefore.get(),
             mdClasses: 'modal-xl',
-            mdTitle: pwixI18n.label( I18N, 'identities.edit.dialog_title' )
+            editTitle( item ){
+                return pwixI18n.label( I18N, 'identities.edit.dialog_title', item.tabular_name );
+            }
         };
     },
 

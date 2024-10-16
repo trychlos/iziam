@@ -5,7 +5,7 @@
  * 
  * Parms:
  * - organization: the Organization as an entity with its DYN.records array
- * - selected: the selected identities group items
+ * - selected: the currently selected identities group items (for the current group)
  * - disabled: whether this component should be disabled, defaulting to false
  * - selectOptions: additional configuration options for multiple-select component
  * - selectTarget: the jQuery object which will receive the selected result of the dialog

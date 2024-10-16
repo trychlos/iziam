@@ -20,17 +20,16 @@ import './groups_panel.html';
 
 Template.groups_panel.onCreated( function(){
     const self = this;
-    
+
     self.APP = {
-        groups: new ReactiveVar( [] )
+        // address the *saved* organization entity
+        organization: new ReactiveVar( [] )
     };
 
-    self.autorun(() => {
+        // address the groups from the organization entity
+        self.autorun(() => {
         const item = Template.currentData().item.get();
-        const organization = TenantsManager.list.byEntity( item._id );
-        if( organization ){
-            self.APP.groups.set( organization.DYN.groups.get());
-        }
+        self.APP.organization.set( TenantsManager.list.byEntity( item._id ));
     });
 });
 
@@ -39,7 +38,6 @@ Template.groups_panel.helpers({
         return {
             item: this.item,
             checker: this.checker,
-            groups: Template.instance().APP.groups,
             editable: false
         };
     },
@@ -47,7 +45,7 @@ Template.groups_panel.helpers({
         return {
             item: this.item,
             checker: this.checker,
-            groups: Template.instance().APP.groups,
+            groups: Template.instance().APP.organization.get().DYN.groups.get(),
             editable: false,
             withCheckboxes: false
         };
@@ -59,9 +57,6 @@ Template.groups_panel.events({
         Modal.run({
             item: this.item,
             checker: this.checker,
-            groups: instance.APP.groups,
-            organization: this.organization,
-            editable: true,
             mdBody: 'groups_edit_dialog',
             mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
             mdClasses: 'modal-lg',

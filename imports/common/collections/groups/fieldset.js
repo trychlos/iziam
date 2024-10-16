@@ -37,6 +37,14 @@ const _defaultFieldDef = function(){
             type: String,
             optional: true
         },
+        // the identity identifier, only if an identity
+        //  as the group identifier is same than the record identifier
+        //  needed as an identity may be attached to several groups, so the identity idenfier cannot be used as the record identifier
+        {
+            name: 'identity',
+            type: String,
+            optional: true
+        },
         Notes.fieldDef(),
         Timestampable.fieldDef()
     ];

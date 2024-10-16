@@ -12,8 +12,8 @@
  * 
  * Events:
  * - identities-selected: the new selected identities items, re-triggered each time the selection changes, with data:
- *   > selected: an array of selected ids
- *   > items: an array of selected identities
+ *   > selected: an array of selected identities ids
+ *   > items: an array of selected identities groups items
  */
 
 import _ from 'lodash';
@@ -34,7 +34,7 @@ Template.identities_select.onCreated( function(){
         selectedIds: new ReactiveVar( [] ),
 
         // send the selection on each selection change
-        // selected: an array of selected ids
+        // selected: an array of selected identities ids
         // items: an array of selected identities
         triggerSelected( event, selected, dc ){
             let items = [];
@@ -52,12 +52,16 @@ Template.identities_select.onCreated( function(){
         }
     };
 
-    // convert the selected identites as group items to an array of ids
+    // convert the selected identites as group items to an array of identities ids
     self.autorun(() => {
         let ids = [];
         const selected = Template.currentData().selected;
         selected.forEach(( it ) => {
-            ids.push( it._id );
+            if( it.type === 'I' ){
+                ids.push( it.identity );
+            } else {
+                console.warn( 'unexpected group item type', it );
+            }
         });
         self.APP.selectedIds.set( ids );
     })
