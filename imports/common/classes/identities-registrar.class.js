@@ -79,6 +79,7 @@ export class IdentitiesRegistrar extends izRegistrar {
             haveRoles: false,
             allowFn: Permissions.isAllowed,
             hideDisabled: false,
+            preferredLabel: Identities.fn.preferredLabel,
             tabularFieldsDef: Identities.tabularFieldsDef( organization ),
             serverAllExtend: Meteor.isServer && Identities.s.allExtend,
             serverTabularExtend: Meteor.isServer && Identities.s.tabularExtend

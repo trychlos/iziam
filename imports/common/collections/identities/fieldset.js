@@ -172,7 +172,7 @@ Identities.fieldsDef = function( organization ){
             type: Object
         },
         {
-            name: 'addresses.$.id',
+            name: 'addresses.$._id',
             type: String
         },
         {
@@ -237,7 +237,7 @@ Identities.fieldsDef = function( organization ){
             type: Object
         },
         {
-            name: 'phones.$.id',
+            name: 'phones.$._id',
             type: String
         },
         {

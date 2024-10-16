@@ -36,7 +36,7 @@ Identities.fn = {
     addressById( identity, id ){
         let found = null;
         ( identity.addresses || [] ).every(( it ) => {
-            if( it.id === id ){
+            if( it._id === id ){
                 found = it;
             }
             return found === null;
@@ -71,7 +71,7 @@ Identities.fn = {
     emailById( identity, id ){
         let found = null;
         ( identity.emails || [] ).every(( it ) => {
-            if( it.id === id ){
+            if( it._id === id ){
                 found = it;
             }
             return found === null;
@@ -113,10 +113,10 @@ Identities.fn = {
 
     /**
      * @param {Identity} identity
-     * @return {String} which eventually resolves to a label to assciate to this identity
+     * @return {String} which eventually resolves to a label (the said 'better label') to associate to this identity
      */
     label( identity ){
-        return Identities.fn.name( identity ) || Identities.fn.emailPreferred( identity )?.address || Identities.fn.usernamePreferred( identity )?.username;;
+        return Identities.fn.name( identity ) || Identities.fn.emailPreferred( identity )?.address || Identities.fn.usernamePreferred( identity )?.username || identity.DYN?.label;
     },
 
     /**
@@ -171,7 +171,7 @@ Identities.fn = {
     phoneById( identity, id ){
         let found = null;
         ( identity.phones || [] ).every(( it ) => {
-            if( it.id === id ){
+            if( it._id === id ){
                 found = it;
             }
             return found === null;
@@ -198,6 +198,25 @@ Identities.fn = {
         return found;
     },
 
+
+    /**
+     * @summary Returns the preferred label for the user
+     *  Override the AccountsHub.preferredLabel() for the amClass instances
+     * @locus Anywhere
+     * @param {String|Object} user the user identifier or the user document
+     * @param {String} preferred the optional caller preference, either AccountsHub.C.PreferredLabel.USERNAME or AccountsHub.C.PreferredLabel.EMAIL_ADDRESS,
+     *  defaulting to the value configured at instanciation time
+     * @returns {Promise} a Promise which eventually will resolve to an object with following keys:
+     *  - label: the computed preferred label
+     *  - origin: the origin, which may be 'ID' or AccountsHub.C.PreferredLabel.USERNAME or AccountsHub.C.PreferredLabel.EMAIL_ADDRESS
+     */
+    async preferredLabel( user, preferred=null ){
+        return user ? {
+            label: Identities.fn.label( user ),
+            origin: 'IDENTITY'
+        } : null;
+    },
+
     /**
      * @param {Identity} identity
      * @param {String} id
@@ -206,7 +225,7 @@ Identities.fn = {
     usernameById( identity, id ){
         let found = null;
         ( identity.usernames || [] ).every(( it ) => {
-            if( it.id === id ){
+            if( it._id === id ){
                 found = it;
             }
             return found === null;
