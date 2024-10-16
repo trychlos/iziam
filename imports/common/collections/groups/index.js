@@ -3,6 +3,8 @@
  *
  * The groups registered with an organization.
  * 
+ * Groups are stored in collections per organization (as identities).
+ * 
  * This is a tree where each group can have only one parent.
  */
 

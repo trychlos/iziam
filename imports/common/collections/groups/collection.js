@@ -6,11 +6,28 @@ import { Mongo } from 'meteor/mongo';
 import { ReactiveVar } from 'meteor/reactive-var';
 
 export const Groups = {
-    collectionName: 'groups',
-    collection: null,
+    collections: {},
+    collection( organizationId ){
+        if( !Groups.collections[organizationId] ){
+            Groups.collections[organizationId] = new Mongo.Collection( Groups.collectionName( organizationId ));
+            if( Meteor.isServer ){
+                Groups.collections[organizationId].deny({
+                    insert(){ return true; },
+                    update(){ return true; },
+                    remove(){ return true; },
+                });
+            }
+        }
+        return Groups.collections[organizationId];
+    },
+    collectionName( organizationId ){
+        return 'groups_'+organizationId;
+    },
+    isGroups( name ){
+        return name.startsWith( 'groups_' );
+    },
+    scope( name ){
+        return name.replace( /^groups_/, '' );
+    },
     fieldSet: new ReactiveVar( null )
 };
-
-Groups.collection = new Mongo.Collection( Groups.collectionName );
-
-// we need the collection name both here to name the collection, and when publishing to tabular...

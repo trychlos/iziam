@@ -16,8 +16,7 @@
 |    9 | 2023- 9- 6 | feat: manage authorization providers |
 |   17 | 2023-11-30 | have user settings |
 |   26 | 2023-12-20 | oidc-provider NOTICE: default ttl.ClientCredentials function called, you SHOULD change it in order to define the expiration for ClientCredentials artifacts |
-|   27 | 2024- 1- 4 | have an option to restart the OIDC server (reload the updated clients) |
-|   28 | 2024- 1- 4 | have optional introspection endpoint and only enable instospection if this endpoint is set |
+|   28 | 2024- 1- 4 | have optional      endpoint and only enable instospection if this endpoint is set |
 |   29 | 2024- 1- 4 | have end_session_endpoint |
 |      | 2024- 1-11 | defined and editable as logoutEndpoint, not used at the moment |
 |   33 | 2024- 1- 5 | have a waiting cursor when calling a server method |
@@ -58,7 +57,8 @@
 |  116 | 2024- 9-24 | clientAll and identitiesAll publications: should only publish the data the user is allowed to both from scope and privacy point of view |
 |  117 | 2024-10- 9 | should define a policy for acr values (see Meteor.APP.C.oidcEndUserPasswordAcr) |
 |  118 | 2024-10- 9 | clients should be able to provide some javascript/ejs to display in interactions dialogs |
-|  119 |  |  |
+|  119 | 2024-10-16 | BUG: when updating groups of an identity, the client groupsRegistrar content is badly updated (publication is fine, but subcription only receives a part) |
+|  120 |  |  |
 
 ---
 ## Done
@@ -111,6 +111,8 @@
 |      | 2024- 1- 8 | field_type_indicator is removed |
 |   25 | 2023-12-19 | different panes (e.g. clients management) are not reactive between them, but should |
 |      | 2024- 9-14 | dohne with pwix:tabbed |
+|   27 | 2024- 1- 4 | have an option to restart the OIDC server (reload the updated clients) |
+|      | 2024-10-16 | obsolete as clients are no more statically defined |
 |   29 | 2024- 1- 4 | have a client option to authorize to issue a refresh_token when asked scope has offline_access |
 |      | 2024- 1-18 | this is the role of the refresh token grant type |
 |   30 | 2024- 1- 4 | FormChecker error when updating client grant types (multiple select) |

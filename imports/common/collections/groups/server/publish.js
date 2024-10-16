@@ -37,18 +37,18 @@ Meteor.publish( 'groups.listAll', async function( organizationId ){
     };
 
     // in order the same query may be applied on client side, we have to add to item required fields
-    const observer = Groups.collection.find({ organization: organizationId }).observeAsync({
+    const observer = Groups.collection( organizationId ).find({ organization: organizationId }).observeAsync({
         added: async function( item ){
-            console.debug( 'added', item._id );
-            self.added( Groups.collectionName, item._id, await f_transform( item ));
+            self.added( Groups.collectionName( organizationId ), item._id, await f_transform( item ));
+            //console.debug( 'added', item._id );
         },
         changed: async function( newItem, oldItem ){
-            console.debug( 'changed', newItem._id );
-            self.changed( Groups.collectionName, newItem._id, await f_transform( newItem ));
+            self.changed( Groups.collectionName( organizationId ), newItem._id, await f_transform( newItem ));
+            //console.debug( 'changed', newItem._id );
         },
         removed: function( oldItem ){
-            console.debug( 'removed', oldItem._id );
-            self.removed( Groups.collectionName, oldItem._id, oldItem );
+            self.removed( Groups.collectionName( organizationId ), oldItem._id, oldItem );
+            //console.debug( 'removed', oldItem._id );
         }
     });
 

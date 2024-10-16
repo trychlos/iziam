@@ -109,7 +109,7 @@ export class GroupsRegistrar extends izRegistrar {
             // each group is published as an object with DYN sub-object
             Tracker.autorun(() => {
                 if( self.#handle.get()?.ready()){
-                    Groups.collection.find({ organization: self.#organization._id }).fetchAsync().then(( fetched ) => {
+                    Groups.collection( self.#organization._id ).find({ organization: self.#organization._id }).fetchAsync().then(( fetched ) => {
                         console.debug( 'fetched', fetched );
                         self.#list.set( fetched );
                     });

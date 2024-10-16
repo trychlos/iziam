@@ -157,7 +157,7 @@ Template.group_edit_dialog.events({
             }
         }
         if( this.targetDatabase !== false ){
-            Meteor.callAsync( 'groups.upsert_item', item )
+            Meteor.callAsync( 'groups.upsert_item', this.organization._id, item )
                 .then(() => {
                     Tolert.success( pwixI18n.label( I18N, instance.APP.isNew.get() ? 'groups.edit.group_new_success' : 'groups.edit.group_edit_success', item.label ));
                     closeFn();

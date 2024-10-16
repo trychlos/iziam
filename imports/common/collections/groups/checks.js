@@ -50,7 +50,9 @@ Groups.checks = {
                     message: pwixI18n.label( I18N, 'groups.checks.label_exists' )
                 });
             };
-            let res = await ( Meteor.isClient ? Meteor.callAsync( 'groups.getBy', { organization: data.organization._id, label: value }) : Groups.s.getBy({ organization: data.organization._id, label: value }));
+            let res = await ( Meteor.isClient ? 
+                    Meteor.callAsync( 'groups.getBy', data.organization._id, { organization: data.organization._id, label: value }) :
+                    Groups.s.getBy( data.organization._id, { organization: data.organization._id, label: value }));
             res = fn( res );
             if( res ){
                 return res;

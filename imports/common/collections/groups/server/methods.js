@@ -7,8 +7,8 @@ import { Groups } from '../index.js';
 Meteor.methods({
     // retrieve all queried records for the group
     //  always returns an array, may be empty
-    async 'groups.getBy'( query ){
-        return await Groups.s.getBy( query, this.userId );
+    async 'groups.getBy'( organizationId, query ){
+        return await Groups.s.getBy( organizationId, query, this.userId );
     },
 
     /*
@@ -29,8 +29,8 @@ Meteor.methods({
     */
 
     // insert/update a group in the database
-    async 'groups.upsert_item'( item ){
-        return await Groups.s.upsert_item( item, this.userId );
+    async 'groups.upsert_item'( organizationId, item ){
+        return await Groups.s.upsert_item( organizationId, item, this.userId );
     },
 
     // insert/update all the groups tree

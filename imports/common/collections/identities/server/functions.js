@@ -15,8 +15,8 @@ import { Identities } from '../index.js';
 Identities.s = {
 
     // extend the AccountsManager All publication
-    async allExtend( item, userId ){
-        item.DYN.memberOf = await Identities.s.memberOf( item, userId );
+    async allExtend( instanceName, item, userId ){
+        item.DYN.memberOf = await Identities.s.memberOf( Identities.scope( instanceName ), item, userId );
         item.DYN.label = await Identities.fn.label( item );
     },
 
@@ -41,20 +41,20 @@ Identities.s = {
     // if set, an identity is necessarily inside of a group
     //  maybe this group is itself inside of another group and so on
     // returns an object { all: [], direct: [] }
-    async memberOf( item, userId ){
+    async memberOf( organizationId, item, userId ){
         let all = {};
         let direct = {};
         const parentsFn = async function( parentId, hash ){
             if( parentId ){
                 hash[parentId] = true;
                 all[parentId] = true;
-                const written = await Groups.s.getBy({ type: 'G', _id: parentId }, userId );
+                const written = await Groups.s.getBy( organizationId, { type: 'G', _id: parentId }, userId );
                 for( const it of written ){
                     await parentsFn( it.parent, all );
                 };
             }
         };
-        const written = await Groups.s.getBy({ type: 'I', identity: item._id }, userId );
+        const written = await Groups.s.getBy( organizationId, { type: 'I', identity: item._id }, userId );
         for( const it of written ){
             await parentsFn( it.parent, direct );
         };
@@ -64,7 +64,7 @@ Identities.s = {
     // extend the AccountsManager tabular publish function
     // provide a tabular_name, preferred email and username
     // tabular_name: a tabular column to display a full name *without* modifying the record
-    async tabularExtend( item, userId ){
+    async tabularExtend( instanceName, item, userId ){
         item.tabular_name = await Identities.fn.label( item );
         const email = Identities.fn.emailPreferred( item );
         if( email ){

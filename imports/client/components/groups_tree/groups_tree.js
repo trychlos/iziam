@@ -107,12 +107,33 @@ Template.groups_tree.onCreated( function(){
         },
 
         // we have explicitely or programatically unchecked an item
+        // only uncheck the parents if there is no other selected nodes in this level for this parent
         //  data = { node, selected, event, jsTree instance }
         tree_checkbox_uncheck( data ){
             const $tree = self.APP.$tree.get();
-            for( let i=0 ; i<data.node.parents.length-1 ; ++i ){
-                $tree.jstree( true ).uncheck_node( data.node.parents[i] );
-                $tree.jstree( true ).enable_node( data.node.parents[i] );
+            // get besides nodes but not this one
+            const parent_node = $tree.jstree( true ).get_node( data.node.parent );
+            if( parent_node ){
+                let haveChecked = false;
+                let besides = [];
+                parent_node.children.forEach(( it ) => {
+                    if( it !== data.node.id ){
+                        besides.push( it );
+                    }
+                })
+                for( let i=0 ; i<besides.length ; ++i ){
+                    const node = $tree.jstree( true ).get_node( besides[i] );
+                    if( node && node.state.checked ){
+                        haveChecked = true;
+                        break;
+                    }
+                }
+                if( !haveChecked ){
+                    for( let i=0 ; i<data.node.parents.length-1 ; ++i ){
+                        $tree.jstree( true ).uncheck_node( data.node.parents[i] );
+                        $tree.jstree( true ).enable_node( data.node.parents[i] );
+                    }
+                }
             }
             $tree.trigger( 'tree-check' );
         },
@@ -341,7 +362,9 @@ Template.groups_tree.onRendered( function(){
                     const node_a = this.get_node( a );
                     const node_b = this.get_node( b );
                     const type = node_a.type > node_b.type ? 1 : ( node_a.type < node_b.type ? -1 : 0 );
-                    return type ? type : ( node_a.text > node_b.text ? 1 : ( node_a.text < node_b.text ? -1 : 0 ));
+                    const label_a = String( node_a.text ).toString().toUpperCase();
+                    const label_b = String( node_b.text ).toString().toUpperCase();
+                    return type ? type : ( label_a > label_b ? 1 : ( label_a < label_b ? -1 : 0 ));
                 },
                 types: typesDefs
             })
