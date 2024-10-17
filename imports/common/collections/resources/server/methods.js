@@ -11,6 +11,11 @@ Meteor.methods({
         return Resources.s.getBy( organizationId, query, this.userId );
     },
 
+    // delete a resource
+    'resources.removeById'( organizationId, itemId ){
+        return Resources.s.removeById( organizationId, itemId, this.userId );
+    },
+
     // upsert an item
     'resources.upsert'( organizationId, item ){
         return Resources.s.upsert( organizationId, item, this.userId );

@@ -24,6 +24,20 @@ Permissions.configure({
 
 Permissions.set({
     feat: {
+        authorizations: {
+            async create( user, scope ){
+                return await Roles.userIsInRoles( user, 'AUTHORIZATIONS_MANAGER' ) || await Roles.userIsInRoles( user, 'SCOPED_AUTHORIZATION_CREATE', { scope: scope });
+            },
+            async delete( user, scope ){
+                return await Roles.userIsInRoles( user, 'AUTHORIZATIONS_MANAGER' ) || await Roles.userIsInRoles( user, 'SCOPED_AUTHORIZATION_DELETE', { scope: scope });
+            },
+            async edit( user, scope ){
+                return await Roles.userIsInRoles( user, 'AUTHORIZATIONS_MANAGER' ) || await Roles.userIsInRoles( user, 'SCOPED_AUTHORIZATION_EDIT', { scope: scope });
+            },
+            async list( user, scope ){
+                return await Roles.userIsInRoles( user, 'AUTHORIZATIONS_MANAGER' ) || await Roles.userIsInRoles( user, 'SCOPED_AUTHORIZATION_LIST', { scope: scope });
+            }
+        },
         clients: {
             async create( user, scope ){
                 return await Roles.userIsInRoles( user, 'CLIENTS_MANAGER' ) || await Roles.userIsInRoles( user, 'SCOPED_CLIENT_CREATE', { scope: scope });

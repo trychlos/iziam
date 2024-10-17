@@ -9,7 +9,7 @@ import { Resources } from '/imports/common/collections/resources/index.js';
 
 /**
  * @locus Anywhere
- * @summary Instanciates the Tabular.Table display to let an organization manages its JWKS
+ * @summary Instanciates the Tabular.Table display to let an organization manages its resources
  *  This must be run in common code
  * @param {String} organizationId
  */

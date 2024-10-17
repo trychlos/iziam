@@ -40,7 +40,7 @@ const _assert_data_content = function( caller, data ){
     entity.DYN.records.forEach(( it ) => {
         assert.ok( it && it instanceof ReactiveVar, caller+' each record is expected to be a ReactiveVar, got '+it );
     });
-    // this index because we are managing valdiity periods here
+    // this index because we are managing validity periods here
     assert.ok( _.isNumber( data.index ) && data.index >= 0, caller+' data.index is expected to be a positive or zero integer, got '+data.index );
 };
 

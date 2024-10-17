@@ -1,0 +1,11 @@
+<template name="authorization_edit_dialog">
+    <div class="c-authorization-edit-dialog">
+
+        {{> Tabbed name="authorization_edit_dialog" }}
+
+        {{#if isModal }}
+            {{> FormsMessager (parmsMessager) }}
+        {{/if}}
+
+    </div>
+</template>

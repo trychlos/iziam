@@ -30,7 +30,7 @@ import './client_properties_panel.html';
 
 Template.client_properties_panel.onCreated( function(){
     const self = this;
-    //console.debug( this );
+    console.debug( this );
 
     self.APP = {
         fields: {

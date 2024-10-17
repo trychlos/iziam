@@ -39,8 +39,8 @@ export const GroupType = {
             return found === null;
         });
         if( !found && !this.warnedById[id] ){
-            console.warn( 'grant nature not found', id );
-            GrantNature.warnedById[id] = true;
+            console.warn( 'group type not found', id );
+            GroupType.warnedById[id] = true;
         }
         return found;
     },

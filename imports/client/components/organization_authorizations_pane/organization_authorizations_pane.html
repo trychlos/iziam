@@ -1,0 +1,18 @@
+<template name="organization_authorizations_pane">
+    <div class="x-tab c-organization-authorizations-pane">
+        <div class="panel-content">
+
+            <div class="panel-header">
+                <div class="panel-preamble">
+                    {{{ i18n key="organizations.authorizations.list_preamble" }}}
+                </div>
+                {{> authorization_new_button }}
+            </div>
+
+            <div class="panel-body">
+                {{> authorizations_list }}
+            </div>
+
+        </div>
+    </div>
+</template>

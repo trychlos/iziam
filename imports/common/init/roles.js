@@ -50,6 +50,10 @@ const roles = {
                     ]
                 },
                 {
+                    // manage the authorizations for all organizations (e.g. a support service)
+                    name: 'AUTHORIZATIONS_MANAGER'
+                },
+                {
                     // manage the clients for all organizations (e.g. a support service)
                     name: 'CLIENTS_MANAGER'
                 },

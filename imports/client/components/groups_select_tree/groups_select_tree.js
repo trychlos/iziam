@@ -1,5 +1,5 @@
 /*
- * /imports/client/components/groups_select/groups_select.js
+ * /imports/client/components/groups_select_tree/groups_select_tree.js
  *
  * Select zero to n groups in the hierarchic tree.
  * 
@@ -17,9 +17,9 @@
 
 import _ from 'lodash';
 
-import './groups_select.html';
+import './groups_select_tree.html';
 
-Template.groups_select.onCreated( function(){
+Template.groups_select_tree.onCreated( function(){
     const self = this;
     //console.debug( this );
     
@@ -36,21 +36,20 @@ Template.groups_select.onCreated( function(){
     });
 });
 
-Template.groups_select.helpers({
+Template.groups_select_tree.helpers({
     // parms for the groups_tree component
     parmsTree(){
         console.debug( 'groups', Template.instance().APP.organization.get().DYN.groups.get());
         return {
             groups: Template.instance().APP.organization.get().DYN.groups.get(),
             editable: false,
-            withCheckboxes: true,
             withIdentities: false,
             selected: this.item.get().DYN?.memberOf?.direct || []
         };
     }
 });
 
-Template.groups_select.events({
+Template.groups_select_tree.events({
     // functions advertising
     'tree-fns .c-groups-select'( event, instance, data ){
         instance.APP.fnGet = data.fnGet;

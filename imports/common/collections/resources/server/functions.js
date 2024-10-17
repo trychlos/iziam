@@ -16,8 +16,12 @@ Resources.s = _.merge( Resources.s, {
     },
 
     // remove an identified authorization
-    async removeById( organizationId, id ){
-        const res = Resources.collection( organizationId ).removAsync({ _id: id });
+    async removeById( organizationId, itemId, userId ){
+        let res = await Permissions.isAllowed( 'feat.resources.delete', userId, organizationId );
+        if( !res ){
+            return false;
+        }
+        res = Resources.collection( organizationId ).removAsync({ _id: itemId });
         Resources.s.eventEmitter.emit( 'delete', { organizationId: organizationId, userId: userId });
         console.debug( 'Authorizations.removeById', res );
         return res;

@@ -15,6 +15,11 @@ import { Resources } from '/imports/common/collections/resources/index.js';
 
 import { Organizations } from '../index.js';
 
+Authorizations.s.eventEmitter.on( 'create', Organizations.s.onCorrelatedUpdateEvent );
+Authorizations.s.eventEmitter.on( 'delete', Organizations.s.onCorrelatedUpdateEvent );
+Authorizations.s.eventEmitter.on( 'update', Organizations.s.onCorrelatedUpdateEvent );
+Authorizations.s.eventEmitter.on( 'upsert', Organizations.s.onCorrelatedUpdateEvent );
+
 AccountsManager.s.eventEmitter.on( 'create', Organizations.s.onCorrelatedUpdateEvent );
 AccountsManager.s.eventEmitter.on( 'delete', Organizations.s.onCorrelatedUpdateEvent );
 AccountsManager.s.eventEmitter.on( 'update', Organizations.s.onCorrelatedUpdateEvent );
