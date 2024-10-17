@@ -23,7 +23,7 @@
 import { pwixI18n } from 'meteor/pwix:i18n';
 
 import '/imports/client/components/resource_new_button/resource_new_button.js';
-//import '/imports/client/components/resources_list/resources_list.js';
+import '/imports/client/components/resources_list/resources_list.js';
 
 import './organization_resources_pane.html';
 

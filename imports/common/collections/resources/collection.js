@@ -9,6 +9,7 @@ import { Tracker } from 'meteor/tracker';
 
 export const Resources = {
     collections: {},
+    tabulars: {},
     collection( organizationId ){
         if( !Resources.collections[organizationId] ){
             const c = new Mongo.Collection( Resources.collectionName( organizationId ));

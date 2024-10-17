@@ -15,21 +15,4 @@ Meteor.methods({
     'resources.upsert'( organizationId, item ){
         return Resources.s.upsert( organizationId, item, this.userId );
     }
-
-    /*
-    // empty the collection before importing
-    'authorizations.empty'(){
-        return Authorizations.remove({});
-    },
-
-    // import an element from a JSON file
-    'authorizations.import'( elt ){
-        return Authorizations.insert( elt );
-    },
-
-    // delete an item
-    'authorizations.removeById'( id ){
-        return Authorizations.s.removeById({ _id: id });
-    },
-        */
 });

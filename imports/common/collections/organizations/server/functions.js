@@ -29,7 +29,7 @@ Organizations.s = {
     //  (groups, identities, clients and so on). This way, organization is updated, publications are updated, and user interface can reflect
     //  the changes.
     onCorrelatedUpdateEvent( args ){
-        console.debug( 'onCorrelatedUpdateEvent', arguments );
+        console.debug( 'onCorrelatedUpdateEvent', args );
         let organizationEntityId = null;
         // coming from AccountsManager ?
         if( args && args.amInstance && _.isString( args.amInstance )){
@@ -41,7 +41,7 @@ Organizations.s = {
         if( args && args.entity ){
             organizationEntityId = args.entity.organization;
         }
-        // coming from Groups ?
+        // coming from Groups or Resources ?
         if( args && args.organizationId ){
             organizationEntityId = args.organizationId;
         }

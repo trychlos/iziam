@@ -13,3 +13,4 @@ export { Resources } from './collection.js';
 import './checks.js';
 import './fieldset.js';
 import './functions.js';
+import './tabular.js';

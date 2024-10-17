@@ -10,9 +10,6 @@
  * It maintains a full list of the resources of an organization both on client and server sides.
  */
 
-import { AccountsManager } from 'meteor/pwix:accounts-manager';
-import { Field } from 'meteor/pwix:field';
-import { Permissions } from 'meteor/pwix:permissions';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { Tracker } from 'meteor/tracker';
 
@@ -70,6 +67,7 @@ export class ResourcesRegistrar extends izRegistrar {
         // common code
         this.#organization = organization;
         ResourcesRegistrar.#registry[organization._id] = this;
+        Resources.getTabular( organization._id );
 
         return this;
     }

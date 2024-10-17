@@ -1268,6 +1268,19 @@ Meteor.APP.i18n = {
                     starting_label: 'Starting on :',
                     starting_ph: 'yyyy-mm-dd',
                     starting_title: 'An optional date of the resource activation start',
+                },
+                tabular: {
+                    created_at_th: 'Last update at',
+                    created_by_th: 'Last update by',
+                    delete_confirm_text: 'You are about to delete the "%s" resource.<br />Are you sure ?',
+                    delete_confirm_title: 'Delete the "%s" resource',
+                    delete_title: 'Delete the "%s" resource',
+                    edit_title: 'Edit the "%s" resource',
+                    ending_on_th: 'Ending on',
+                    info_title: 'Informations about the "%s" resource',
+                    label_th: 'Label',
+                    name_th: 'Name',
+                    starting_on_th: 'Starting on'
                 }
             },
             validity: {
