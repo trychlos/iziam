@@ -72,7 +72,6 @@ Template.groups_edit_dialog.onCreated( function(){
         ...Template.currentData(),
         groups: self.APP.groups
     };
-    const notesField = Groups.fieldSet.get().byName( 'notes' );
     self.APP.tabbed.setTabbedParms({
         tabs: [
             {

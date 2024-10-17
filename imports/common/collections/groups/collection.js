@@ -4,19 +4,29 @@
 
 import { Mongo } from 'meteor/mongo';
 import { ReactiveVar } from 'meteor/reactive-var';
+import SimpleSchema from 'meteor/aldeed:simple-schema';
+import { Tracker } from 'meteor/tracker';
 
 export const Groups = {
     collections: {},
     collection( organizationId ){
         if( !Groups.collections[organizationId] ){
-            Groups.collections[organizationId] = new Mongo.Collection( Groups.collectionName( organizationId ));
+            const c = new Mongo.Collection( Groups.collectionName( organizationId ));
             if( Meteor.isServer ){
-                Groups.collections[organizationId].deny({
+                c.deny({
                     insert(){ return true; },
                     update(){ return true; },
                     remove(){ return true; },
                 });
             }
+            Tracker.autorun(() => {
+                const fieldSet = Groups.fieldSet.get();
+                if( fieldSet ){
+                    c.attachSchema( new SimpleSchema( fieldSet.toSchema()), { replace: true });
+                    c.attachBehaviour( 'timestampable' );
+                }
+            });
+            Groups.collections[organizationId] = c;
         }
         return Groups.collections[organizationId];
     },

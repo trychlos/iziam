@@ -7,9 +7,11 @@ import { Roles } from 'meteor/pwix:roles';
 import { TenantsManager } from 'meteor/pwix:tenants-manager';
 import { Tracker } from 'meteor/tracker';
 
+import { AuthorizationsRegistrar } from '/imports/common/classes/authorizations-registrar.class.js';
 import { ClientsRegistrar } from '/imports/common/classes/clients-registrar.class.js';
 import { GroupsRegistrar } from '/imports/common/classes/groups-registrar.class.js';
 import { IdentitiesRegistrar } from '/imports/common/classes/identities-registrar.class.js';
+import { ResourcesRegistrar } from '/imports/common/classes/resources-registrar.class.js';
 
 import { Organizations } from '/imports/common/collections/organizations/index.js';
 
@@ -104,6 +106,10 @@ Tracker.autorun(() => {
         if( Meteor.isClient ){
             Organizations.setupOperational( it );
         }
+        // instanciate a AuthorizationsRegistrar if needed
+        if( !it.DYN.authorizations ){
+            it.DYN.authorizations = AuthorizationsRegistrar.getRegistered( it ) || new AuthorizationsRegistrar( it );
+        }
         // instanciate a ClientsRegistrar if needed
         if( !it.DYN.clients ){
             it.DYN.clients = ClientsRegistrar.getRegistered( it ) || new ClientsRegistrar( it );
@@ -115,6 +121,10 @@ Tracker.autorun(() => {
         // instanciate a IdentitiesRegistrar if needed
         if( !it.DYN.identities ){
             it.DYN.identities = IdentitiesRegistrar.getRegistered( it ) || new IdentitiesRegistrar( it );
+        }
+        // instanciate a ResourcesRegistrar if needed
+        if( !it.DYN.resources ){
+            it.DYN.resources = ResourcesRegistrar.getRegistered( it ) || new ResourcesRegistrar( it );
         }
     });
 });

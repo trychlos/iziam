@@ -11,23 +11,6 @@ Meteor.methods({
         return await Groups.s.getBy( organizationId, query, this.userId );
     },
 
-    /*
-    // empty the collection before importing
-    async 'groups.empty'(){
-        return await Groups.remove({});
-    },
-
-    // import an element from a JSON file
-    async 'groups.import'( elt ){
-        return await Groups.insert( elt );
-    },
-
-    // delete an item
-    async 'groups.removeById'( id ){
-        return await Groups.s.removeById( id, this.userId );
-    },
-    */
-
     // insert/update a group in the database
     async 'groups.upsert_item'( organizationId, item ){
         return await Groups.s.upsert_item( organizationId, item, this.userId );

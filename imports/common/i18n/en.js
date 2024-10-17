@@ -812,7 +812,7 @@ Meteor.APP.i18n = {
                 list: {
                     email_th: 'Email address',
                     locale_th: 'Locale',
-                    name_th: '<i>Better label</i>',
+                    name_th: '<i>Best label</i>',
                     username_th: 'Username',
                     website_th: 'Website',
                     zoneinfo_th: 'Zoneinfo'
@@ -1106,6 +1106,7 @@ Meteor.APP.i18n = {
                     authorization_label: 'Authorization endpoint :',
                     authorization_ph: '/authorization',
                     authorization_title: 'The endpoint path used to build the Authorization Server URL, to which the clients must address their authorization grant requests.',
+                    authorizations_tab_title: 'Authorizations',
                     baseurl_label: 'REST Base URL :',
                     baseurl_ph: '/base',
                     baseurl_title: 'The first level of all REST URL\'s managed by and available to this organization and its clients. '
@@ -1174,6 +1175,7 @@ Meteor.APP.i18n = {
                     pkce_label: 'Make mandatory the protection of the "authorization_code" grant type with PKCE for all public clients',
                     pkce_title: 'Make a proof key for code exchange mandatory for all public clients using "authorization_code" grant type, conforming with RFC 7636',
                     providers_tab_title: 'Providers',
+                    resources_tab_title: 'Resources',
                     rest_config_preamble: 'Configure the behaviour of your REST API.<br />'
                         +'At least, a unique base URL is mandatory here.',
                     rest_config_tab_title: 'REST API',
@@ -1240,6 +1242,32 @@ Meteor.APP.i18n = {
                     label_th: 'Label',
                     origin_th: 'Origin',
                     selected_th: 'Selected'
+                }
+            },
+            resources: {
+                checks: {
+                    name_exists: 'The resource name already exists',
+                    name_unset: 'The resource name is not set'
+                },
+                edit: {
+                    edit_success: 'The resource "%s" has been successfully updated',
+                    error: 'An error has been unfortunately detected. Please retry later',
+                    ending_label: 'Ending on :',
+                    ending_ph: 'yyyy-mm-dd',
+                    ending_title: 'An optional date of the resource activation end',
+                    label_label: 'Label :',
+                    label_title: 'Have an optional label',
+                    name_label: 'Name :',
+                    name_title: 'Name the resource, must be unique, should be considered immutable',
+                    new_button_label: 'New resource',
+                    new_button_title: 'Define a new resource',
+                    new_dialog_title: 'Defining a new resource',
+                    new_success: 'The resource "%s" has been successfully created',
+                    notes_tab_title: 'Notes',
+                    properties_tab_title: 'Properties',
+                    starting_label: 'Starting on :',
+                    starting_ph: 'yyyy-mm-dd',
+                    starting_title: 'An optional date of the resource activation start',
                 }
             },
             validity: {

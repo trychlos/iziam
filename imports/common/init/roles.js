@@ -58,6 +58,10 @@ const roles = {
                     name: 'IDENTITIES_MANAGER'
                 },
                 {
+                    // manage the resources for all organizations (e.g. a support service)
+                    name: 'RESOURCES_MANAGER'
+                },
+                {
                     // manage *one* (or several) organization (scoped role)
                     name: 'SCOPED_TENANT_MANAGER',
                     scoped: true,

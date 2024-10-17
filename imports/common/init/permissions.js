@@ -65,7 +65,21 @@ Permissions.set({
             async list( user ){
                 return await Roles.userIsInRoles( user, Meteor.APP.C.appAdmin );
             }
-        }
+        },
+        resources: {
+            async create( user, scope ){
+                return await Roles.userIsInRoles( user, 'RESOURCES_MANAGER' ) || await Roles.userIsInRoles( user, 'SCOPED_RESOURCE_CREATE', { scope: scope });
+            },
+            async delete( user, scope ){
+                return await Roles.userIsInRoles( user, 'RESOURCES_MANAGER' ) || await Roles.userIsInRoles( user, 'SCOPED_RESOURCE_DELETE', { scope: scope });
+            },
+            async edit( user, scope ){
+                return await Roles.userIsInRoles( user, 'RESOURCES_MANAGER' ) || await Roles.userIsInRoles( user, 'SCOPED_RESOURCE_EDIT', { scope: scope });
+            },
+            async list( user, scope ){
+                return await Roles.userIsInRoles( user, 'RESOURCES_MANAGER' ) || await Roles.userIsInRoles( user, 'SCOPED_RESOURCE_LIST', { scope: scope });
+            }
+        },
     },
     // the permissions needed to have an item in the specified menu
     menus: {

@@ -32,6 +32,27 @@ Groups.checks = {
             data.item.set( item );
         }
         if( value ){
+            let res = null;
+            let array = [];
+            if( data.targetDatabase === false ){
+                array = data.groupsRv.get();
+            } else {
+                array = await ( Meteor.isClient ? 
+                    Meteor.callAsync( 'groups.getBy', data.organization._id, { organization: data.organization._id, label: value }) :
+                    Groups.s.getBy( data.organization._id, { organization: data.organization._id, label: value }));
+            }
+            let found = false;
+            array.every(( it ) => {
+                if( it._id !== item._id && it.label === value ){
+                    found = true;
+                }
+                return !found;
+            });
+            return found ? new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'groups.checks.label_exists' )
+            }) : null;
+            /*
             const fn = function( result ){
                 let ok = false;
                 if( result.length ){
@@ -50,27 +71,22 @@ Groups.checks = {
                     message: pwixI18n.label( I18N, 'groups.checks.label_exists' )
                 });
             };
-            let res = await ( Meteor.isClient ? 
-                    Meteor.callAsync( 'groups.getBy', data.organization._id, { organization: data.organization._id, label: value }) :
-                    Groups.s.getBy( data.organization._id, { organization: data.organization._id, label: value }));
-            res = fn( res );
-            if( res ){
-                return res;
-            }
             if( data.targetDatabase === false ){
                 let found = false;
                 data.groupsRv.get().every(( it ) => {
-                    if( it.label === value ){
+                    if( it.label === value && it._id !== item._id ){
                         found = true;
                     }
                     return !found;
                 });
-                return found ? new TM.TypedMessage({
-                    level: TM.MessageLevel.C.ERROR,
-                    message: pwixI18n.label( I18N, 'groups.checks.label_exists' )
-                }) : null;
+            } else {
+                res = await ( Meteor.isClient ? 
+                    Meteor.callAsync( 'groups.getBy', data.organization._id, { organization: data.organization._id, label: value }) :
+                    Groups.s.getBy( data.organization._id, { organization: data.organization._id, label: value }));
+                res = fn( res );
             }
             return res;
+            */
         } else {
             return new TM.TypedMessage({
                 level: TM.MessageLevel.C.ERROR,

@@ -155,7 +155,7 @@ Template.group_edit_dialog.events({
                 instance.$( '.c-group-properties-panel' ).trigger( 'iz-clear-panel' );
                 instance.$( '.NotesEdit' ).trigger( 'iz-clear-panel' );
             }
-        }
+        };
         if( this.targetDatabase !== false ){
             Meteor.callAsync( 'groups.upsert_item', this.organization._id, item )
                 .then(() => {

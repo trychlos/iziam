@@ -29,6 +29,15 @@ Groups.s = {
         // save the DYN sub-object to restore it later, but not be written in dbms
         const DYN = item.DYN;
         delete item.DYN;
+        /*
+        const orig = await Groups.collection( organizationId ).findOneAsync({ _id: item._id });
+        let res;
+        if( orig ){
+            res = await Groups.collection( organizationId ).updateAsync({ _id: item._id }, { $set: item });
+        } else {
+            res = await Groups.collection( organizationId ).insertAsync({ _id: item._id }, { $set: item });
+        }
+        */
         const res = await Groups.collection( organizationId ).upsertAsync({ _id: item._id }, { $set: item });
         // get the newly inserted id
         if( res.insertedId ){
@@ -67,7 +76,15 @@ Groups.s = {
         if( groups && _.isArray( groups )){
             const flat = Groups.fn.tree2flat( organizationId, groups );
             for( const it of flat ){
+                const orig = await Groups.collection( organizationId ).findOneAsync({ _id: it._id });
+                if( orig ){
+                    res.push( await Groups.collection( organizationId ).updateAsync({ _id: it._id }, { $set: it }));
+                } else {
+                    res.push( await Groups.collection( organizationId ).insertAsync( it ));
+                }
+               /*
                 res.push( await Groups.collection( organizationId ).upsertAsync({ _id: it._id }, { $set: it }));
+                */
             }
         } else {
             console.warn( 'Groups.s.upsert_tree() expects an array of groups, got '+groups );
