@@ -97,13 +97,17 @@ Identities.fieldsDef = function( organization ){
         {
             name: 'birthdate',
             type: Date,
-            optional: true
+            optional: true,
+            form_check: Identities.checks.birthdate,
+            form_type: Forms.FieldType.C.OPTIONAL
         },
         // only 'mm-dd' month-day
         {
             name: 'birthday',
             type: String,
-            optional: true
+            optional: true,
+            form_check: Identities.checks.birthday,
+            form_type: Forms.FieldType.C.OPTIONAL
         },
         {
             name: 'zoneinfo',
@@ -164,7 +168,7 @@ Identities.fieldsDef = function( organization ){
         //  adapted from https://schema.org/PostalAddress
         {
             name: 'addresses',
-            type: Object,
+            type: Array,
             optional: true
         },
         {
@@ -178,52 +182,71 @@ Identities.fieldsDef = function( organization ){
         {
             name: 'addresses.$.label',
             type: String,
-            optional: true
+            optional: true,
+            form_check: Identities.checks.address_label,
+            form_type: Forms.FieldType.C.OPTIONAL
         },
         {
-            name: 'addresses.$.address1',
+            name: 'addresses.$.line1',
             type: String,
-            optional: true
+            optional: true,
+            form_check: Identities.checks.address_line1,
+            form_type: Forms.FieldType.C.OPTIONAL
         },
         {
-            name: 'addresses.$.address2',
+            name: 'addresses.$.line2',
             type: String,
-            optional: true
+            optional: true,
+            form_check: Identities.checks.address_line2,
+            form_type: Forms.FieldType.C.OPTIONAL
         },
         {
-            name: 'addresses.$.address3',
+            name: 'addresses.$.line3',
             type: String,
-            optional: true
+            optional: true,
+            form_check: Identities.checks.address_line3,
+            form_type: Forms.FieldType.C.OPTIONAL
         },
         {
             name: 'addresses.$.postalCode',
             type: String,
-            optional: true
+            optional: true,
+            form_check: Identities.checks.address_postal_code,
+            form_type: Forms.FieldType.C.OPTIONAL
         },
         {
             name: 'addresses.$.region',
             type: String,
-            optional: true
+            optional: true,
+            form_check: Identities.checks.address_region,
+            form_type: Forms.FieldType.C.OPTIONAL
         },
         {
             name: 'addresses.$.locality',
             type: String,
-            optional: true
+            optional: true,
+            form_check: Identities.checks.address_locality,
+            form_type: Forms.FieldType.C.OPTIONAL
         },
         {
             name: 'addresses.$.country',
             type: String,
-            optional: true
+            optional: true,
+            form_check: Identities.checks.address_country,
+            form_type: Forms.FieldType.C.OPTIONAL
         },
         {
             name: 'addresses.$.poNumber',
             type: String,
-            optional: true
+            optional: true,
+            form_check: Identities.checks.address_po_number,
+            form_type: Forms.FieldType.C.OPTIONAL
         },
         {
             name: 'addresses.$.preferred',
             type: Boolean,
-            defaultValue: false
+            defaultValue: false,
+            form_check: Identities.checks.address_preferred,
         },
         // -- scope: phone
         //  we do not require phone number unicity
@@ -243,21 +266,27 @@ Identities.fieldsDef = function( organization ){
         {
             name: 'phones.$.label',
             type: String,
-            optional: true
+            optional: true,
+            form_check: Identities.checks.phone_label,
+            form_type: Forms.FieldType.C.OPTIONAL
         },
         {
             name: 'phones.$.number',
-            type: String
+            type: String,
+            form_check: Identities.checks.phone_number,
+            form_type: Forms.FieldType.C.OPTIONAL
         },
         {
             name: 'phones.$.verified',
             type: Boolean,
-            defaultValue: false
+            defaultValue: false,
+            form_check: Identities.checks.phone_verified
         },
         {
             name: 'phones.$.preferred',
             type: Boolean,
-            defaultValue: false
+            defaultValue: false,
+            form_check: Identities.checks.phone_preferred
         },
         // -- scope: username
         {

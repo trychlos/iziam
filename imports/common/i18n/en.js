@@ -720,7 +720,33 @@ Meteor.APP.i18n = {
                 }
             },
             identities: {
+                addresses: {
+                    add_title: 'Define a new address',
+                    country_ph: 'Country',
+                    country_th: 'Country',
+                    label_ph: 'A label',
+                    label_th: 'Label',
+                    line1_ph: 'Line 1',
+                    line1_th: 'Line 1',
+                    line2_ph: 'Line 2',
+                    line2_th: 'Line 2',
+                    line3_ph: 'Line 3',
+                    line3_th: 'Line 3',
+                    locality_ph: 'Locality',
+                    locality_th: 'Locality',
+                    ponumber_ph: 'P.O. Number',
+                    ponumber_th: 'P.O. Number',
+                    postalcode_ph: '111 111',
+                    postalcode_th: 'Postal Code',
+                    preferred_th: 'Preferred',
+                    region_ph: 'Region',
+                    region_th: 'Region',
+                    remove_title: 'Remove this "%s" address'
+                },
                 checks: {
+                    address_preferred_count: 'You have more than one preferred postal address, but should have at most one',
+                    address_preferred_invalid: 'The postal address preferred value is invalid, must be \'true\' or \'false\'',
+                    address_unset: 'The address is not set',
                     email_address_exists: 'The email address already exists, but should be an identifier',
                     email_address_invalid: 'The email address is not valid',
                     email_address_unset: 'The email address is empty',
@@ -739,6 +765,10 @@ Meteor.APP.i18n = {
                     middle_name_set: 'Entering a middle name is exclusive from setting full name',
                     name_others_set: 'Entering a full name is exclusive from setting given, middle or family names',
                     name_others_unset: 'None of the name parts is set, but you should choose a way to identify the person',
+                    phone_number_unset: 'The phone number is not set',
+                    phone_preferred_count: 'You have more than one preferred phone, but should have at most one',
+                    phone_preferred_invalid: 'The phone preferred value is invalid, must be \'true\' or \'false\'',
+                    phone_verified_invalid: 'The phone verified value is invalid, must be \'true\' or \'false\'',
                     picture_invalid: 'The picture URL is not valid',
                     picture_mandatory: 'The picture URL is not set',
                     profile_invalid: 'The profile URL is not valid',
@@ -752,9 +782,11 @@ Meteor.APP.i18n = {
                     zoneinfo_invalid: 'The zoneinfo is not valid'
                 },
                 edit: {
+                    addresses_tab_title: 'Addresses',
                     dialog_title: 'Editing the "%s" identity',
                     emails_tab_title: 'Email addresses',
                     groups_tab_title: 'Groups',
+                    phones_tab_title: 'Phones',
                     profile_tab_title: 'Identity',
                     usernames_tab_title: 'Usernames'
                 },
@@ -783,6 +815,17 @@ Meteor.APP.i18n = {
                     button_label: 'New identity',
                     button_title: 'Define a new identity as an organization account',
                     dialog_title: 'Defining a new identity'
+                },
+                phones: {
+                    add_title: 'Define a new phone',
+                    label_ph: 'A label',
+                    label_th: 'Label',
+                    number_ph: 'A number',
+                    number_th: 'Number',
+                    preamble_text: '',
+                    preferred_th: 'Preferred',
+                    remove_title: 'Remove this "%s" phone',
+                    verified_th: 'Verified'
                 },
                 profile: {
                     family_label: 'Family name:',

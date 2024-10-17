@@ -130,6 +130,215 @@ Identities.checks = {
         });
     },
 
+    // addresses
+    async address_country( value, data, opts={} ){
+        _assert_data_content( 'Identities.checks.address_country()', data );
+        let item = data.item.get();
+        const index = opts.id ? _id2index( item.addresses, opts.id ) : -1;
+        if( opts.update !== false ){
+            if( index < 0 ){
+                item.addresses = item.addresses || [];
+                item.addresses.push({ _id: opts.id });
+                index = 0;
+            }
+            item.addresses[index].country = value;
+            data.item.set( item );
+        }
+        return Identities.checks.address_empty( item.addresses[index] );
+    },
+
+    // whether this address object is empty ?
+    // called for each address field, emits a warning if the address is empty
+    async address_empty( address ){
+        let item = data.item.get();
+        return Identities.fn.addressEmpty( address ) ? new TM.TypedMessage({
+            level: TM.MessageLevel.C.WARNING,
+            message: pwixI18n.label( I18N, 'identities.checks.address_unset' )
+        }) : null;
+    },
+
+    async address_label( value, data, opts={} ){
+        _assert_data_content( 'Identities.checks.address_label()', data );
+        let item = data.item.get();
+        const index = opts.id ? _id2index( item.addresses, opts.id ) : -1;
+        if( opts.update !== false ){
+            if( index < 0 ){
+                item.addresses = item.addresses || [];
+                item.addresses.push({ _id: opts.id });
+                index = 0;
+            }
+            item.addresses[index].label = value;
+            data.item.set( item );
+        }
+        return null;
+    },
+
+    async address_line1( value, data, opts={} ){
+        _assert_data_content( 'Identities.checks.address_line1()', data );
+        let item = data.item.get();
+        const index = opts.id ? _id2index( item.addresses, opts.id ) : -1;
+        if( opts.update !== false ){
+            if( index < 0 ){
+                item.addresses = item.addresses || [];
+                item.addresses.push({ _id: opts.id });
+                index = 0;
+            }
+            item.addresses[index].line1 = value;
+            data.item.set( item );
+        }
+        return Identities.checks.address_empty( item.addresses[index] );
+    },
+
+    async address_line2( value, data, opts={} ){
+        _assert_data_content( 'Identities.checks.address_line2()', data );
+        let item = data.item.get();
+        const index = opts.id ? _id2index( item.addresses, opts.id ) : -1;
+        if( opts.update !== false ){
+            if( index < 0 ){
+                item.addresses = item.addresses || [];
+                item.addresses.push({ _id: opts.id });
+                index = 0;
+            }
+            item.addresses[index].line2 = value;
+            data.item.set( item );
+        }
+        return Identities.checks.address_empty( item.addresses[index] );
+    },
+
+    async address_line3( value, data, opts={} ){
+        _assert_data_content( 'Identities.checks.address_line3()', data );
+        let item = data.item.get();
+        const index = opts.id ? _id2index( item.addresses, opts.id ) : -1;
+        if( opts.update !== false ){
+            if( index < 0 ){
+                item.addresses = item.addresses || [];
+                item.addresses.push({ _id: opts.id });
+                index = 0;
+            }
+            item.addresses[index].line3 = value;
+            data.item.set( item );
+        }
+        return Identities.checks.address_empty( item.addresses[index] );
+    },
+
+    async address_locality( value, data, opts={} ){
+        _assert_data_content( 'Identities.checks.address_locality()', data );
+        let item = data.item.get();
+        const index = opts.id ? _id2index( item.addresses, opts.id ) : -1;
+        if( opts.update !== false ){
+            if( index < 0 ){
+                item.addresses = item.addresses || [];
+                item.addresses.push({ _id: opts.id });
+                index = 0;
+            }
+            item.addresses[index].locality = value;
+            data.item.set( item );
+        }
+        return Identities.checks.address_empty( item.addresses[index] );
+    },
+
+    async address_po_number( value, data, opts={} ){
+        _assert_data_content( 'Identities.checks.address_po_number()', data );
+        let item = data.item.get();
+        const index = opts.id ? _id2index( item.addresses, opts.id ) : -1;
+        if( opts.update !== false ){
+            if( index < 0 ){
+                item.addresses = item.addresses || [];
+                item.addresses.push({ _id: opts.id });
+                index = 0;
+            }
+            item.addresses[index].poNumber = value;
+            data.item.set( item );
+        }
+        return Identities.checks.address_empty( item.addresses[index] );
+    },
+
+    async address_postal_code( value, data, opts={} ){
+        _assert_data_content( 'Identities.checks.address_postal_code()', data );
+        let item = data.item.get();
+        const index = opts.id ? _id2index( item.addresses, opts.id ) : -1;
+        if( opts.update !== false ){
+            if( index < 0 ){
+                item.addresses = item.addresses || [];
+                item.addresses.push({ _id: opts.id });
+                index = 0;
+            }
+            item.addresses[index].postalCode = value;
+            data.item.set( item );
+        }
+        return Identities.checks.address_empty( item.addresses[index] );
+    },
+
+    async address_preferred( value, data, opts={} ){
+        _assert_data_content( 'Identities.checks.address_preferred()', data );
+        let item = data.item.get();
+        const index = opts.id ? _id2index( item.addresses, opts.id ) : -1;
+        if( opts.update !== false ){
+            if( index < 0 ){
+                item.addresses = item.addresses || [];
+                item.addresses.push({ _id: opts.id });
+                index = 0;
+            }
+            item.addresses[index].preferred = Boolean( value );
+            data.item.set( item );
+        }
+        if( value !== true && value !== false ){
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.WARNING,
+                message: pwixI18n.label( I18N, 'identities.checks.address_preferred_invalid' )
+            });
+        }
+        // must have a single preferred (if any)
+        let count = 0;
+        ( item.addresses || [] ).forEach(( it ) => {
+            if( it.preferred === true ){
+                count += 1;
+            }
+        });
+        return count > 1 ? new TM.TypedMessage({
+            level: TM.MessageLevel.C.WARNING,
+            message: pwixI18n.label( I18N, 'identities.checks.address_preferred_count' )
+        }) : null;
+    },
+
+    async address_region( value, data, opts={} ){
+        _assert_data_content( 'Identities.checks.address_region()', data );
+        let item = data.item.get();
+        const index = opts.id ? _id2index( item.addresses, opts.id ) : -1;
+        if( opts.update !== false ){
+            if( index < 0 ){
+                item.addresses = item.addresses || [];
+                item.addresses.push({ _id: opts.id });
+                index = 0;
+            }
+            item.addresses[index].region = value;
+            data.item.set( item );
+        }
+        return Identities.checks.address_empty( item.addresses[index] );
+    },
+
+    // the birthdate (full date)
+    async birthdate( value, data, opts={} ){
+        _assert_data_content( 'Identities.checks.birthdate()', data );
+        let item = data.item.get();
+        if( opts.update !== false ){
+            item.birthdate = new Date( value );
+            data.item.set( item );
+        }
+        return null;
+    },
+
+    // the birthday ('mm-dd' string)
+    async birthday( value, data, opts={} ){
+        _assert_data_content( 'Identities.checks.birthday()', data );
+        let item = data.item.get();
+        if( opts.update !== false ){
+            item.birthday = value;
+            data.item.set( item );
+        }
+        return null;
+    },
+
     // emails
     // if there is a row, it must have a valid email address
     async email_address( value, data, opts={} ){
@@ -146,6 +355,8 @@ Identities.checks = {
             data.item.set( item );
         }
         if( !value ){
+            // this is an error if this identity doesn't have yet any identifier
+            //  else only a warning
             return new TM.TypedMessage({
                 level: TM.MessageLevel.C.ERROR,
                 message: pwixI18n.label( I18N, 'identities.checks.email_address_unset' )
@@ -232,7 +443,7 @@ Identities.checks = {
     },
 
     async email_verified( value, data, opts={} ){
-        _assert_data_content( 'Identities.checks.gender()', data );
+        _assert_data_content( 'Identities.checks.email_verified()', data );
         let item = data.item.get();
         const index = opts.id ? _id2index( item.emails, opts.id ) : -1;
         if( opts.update !== false ){
@@ -389,6 +600,98 @@ Identities.checks = {
         return null;
     },
 
+    async phone_label( value, data, opts={} ){
+        _assert_data_content( 'Identities.checks.phone_label()', data );
+        let item = data.item.get();
+        const index = opts.id ? _id2index( item.phones, opts.id ) : -1;
+        if( opts.update !== false ){
+            if( index < 0 ){
+                item.phones = item.phones || [];
+                item.phones.push({ _id: opts.id });
+                index = 0;
+            }
+            item.phones[index].label = value;
+            data.item.set( item );
+        }
+        return null;
+    },
+
+    async phone_number( value, data, opts={} ){
+        _assert_data_content( 'Identities.checks.phone_numnber()', data );
+        let item = data.item.get();
+        const index = opts.id ? _id2index( item.phones, opts.id ) : -1;
+        if( opts.update !== false ){
+            if( index < 0 ){
+                item.phones = item.phones || [];
+                item.phones.push({ _id: opts.id });
+                index = 0;
+            }
+            item.phones[index].number = value;
+            data.item.set( item );
+        }
+        if( !value ){
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.WARNING,
+                message: pwixI18n.label( I18N, 'identities.checks.phone_number_unset' )
+            });
+        }
+        return null;
+    },
+
+    async phone_preferred( value, data, opts={} ){
+        _assert_data_content( 'Identities.checks.phone_preferred()', data );
+        let item = data.item.get();
+        const index = opts.id ? _id2index( item.phones, opts.id ) : -1;
+        if( opts.update !== false ){
+            if( index < 0 ){
+                item.phones = item.phones || [];
+                item.phones.push({ _id: opts.id });
+                index = 0;
+            }
+            item.phones[index].preferred = Boolean( value );
+            data.item.set( item );
+        }
+        if( value !== true && value !== false ){
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.WARNING,
+                message: pwixI18n.label( I18N, 'identities.checks.phone_preferred_invalid' )
+            });
+        }
+        // must have a single preferred (if any)
+        let count = 0;
+        ( item.phones || [] ).forEach(( it ) => {
+            if( it.preferred === true ){
+                count += 1;
+            }
+        });
+        return count > 1 ? new TM.TypedMessage({
+            level: TM.MessageLevel.C.WARNING,
+            message: pwixI18n.label( I18N, 'identities.checks.phone_preferred_count' )
+        }) : null;
+    },
+
+    async phone_verified( value, data, opts={} ){
+        _assert_data_content( 'Identities.checks.phone_verified()', data );
+        let item = data.item.get();
+        const index = opts.id ? _id2index( item.phones, opts.id ) : -1;
+        if( opts.update !== false ){
+            if( index < 0 ){
+                item.phones = item.phones || [];
+                item.phones.push({ _id: opts.id });
+                index = 0;
+            }
+            item.phones[index].verified = Boolean( value );
+            data.item.set( item );
+        }
+        if( value !== true && value !== false ){
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.WARNING,
+                message: pwixI18n.label( I18N, 'identities.checks.phone_verified_invalid' )
+            });
+        }
+        return null;
+    },
+
     // the picture url
     async picture_url( value, data, opts ){
         _assert_data_content( 'Identities.checks.picture_url()', data );
@@ -475,6 +778,8 @@ Identities.checks = {
             data.item.set( item );
         }
         if( !value ){
+            // this is an error if this identity doesn't have yet any identifier
+            //  else just a warning
             return new TM.TypedMessage({
                 level: TM.MessageLevel.C.ERROR,
                 message: pwixI18n.label( I18N, 'identities.checks.username_unset' )
@@ -535,211 +840,3 @@ Identities.checks = {
         return null;
     }
 };
-
-/*
-// addresses
-//  when checking from the UI inputHandler() for this field, we got an identifier in the coreApp options
-//  in all other cases ?
-//  - checking this field from an inputHandler() for another field ?
-//  - global checking when initializing an UI ?
-//  - global checking of an identity from the server ?
-Identities.check_addresses_address1 = function( value, data, coreApp={} ){
-    Identities._assert_data_itemrv( 'Identities.check_addresses_number()', data );
-    const item = data.item.get();
-    return Promise.resolve( null )
-        .then(() => {
-            const address = coreApp.id ? Identities.fn.addressById( item, coreApp.id ) : null;
-            if( address ){
-                if( coreApp.update !== false ){
-                    address.address1 = value;
-                    data.item.set( item );
-                }
-            }
-            return null;
-        });
-};
-
-Identities.check_addresses_address2 = function( value, data, coreApp={} ){
-    Identities._assert_data_itemrv( 'Identities.check_addresses_number()', data );
-    const item = data.item.get();
-    return Promise.resolve( null )
-        .then(() => {
-            const address = coreApp.id ? Identities.fn.addressById( item, coreApp.id ) : null;
-            if( address ){
-                if( coreApp.update !== false ){
-                    address.address2 = value;
-                    data.item.set( item );
-                }
-            }
-            return null;
-        });
-};
-
-Identities.check_addresses_address3 = function( value, data, coreApp={} ){
-    Identities._assert_data_itemrv( 'Identities.check_addresses_number()', data );
-    const item = data.item.get();
-    return Promise.resolve( null )
-        .then(() => {
-            const address = coreApp.id ? Identities.fn.addressById( item, coreApp.id ) : null;
-            if( address ){
-                if( coreApp.update !== false ){
-                    address.address3 = value;
-                    data.item.set( item );
-                }
-            }
-            return null;
-        });
-};
-
-Identities.check_addresses_label = function( value, data, coreApp={} ){
-    Identities._assert_data_itemrv( 'Identities.check_addresses_label()', data );
-    const item = data.item.get();
-    return Promise.resolve( null )
-        .then(() => {
-            const address = coreApp.id ? Identities.fn.addressById( item, coreApp.id ) : null;
-            if( address ){
-                if( coreApp.update !== false ){
-                    address.label = value;
-                    data.item.set( item );
-                }
-            }
-            return null;
-        });
-};
-
-Identities.check_addresses_preferred = function( value, data, coreApp={} ){
-    Identities._assert_data_itemrv( 'Identities.check_addresses_preferred()', data );
-    const item = data.item.get();
-    return Promise.resolve( null )
-        .then(() => {
-            const address = coreApp.id ? Identities.fn.addressById( item, coreApp.id ) : null;
-            if( address ){
-                if( coreApp.update !== false ){
-                    address.preferred = Boolean( value );
-                    // if preferred is checked, then take care of all other preferred should be unchecked
-                    if( value ){
-                        item.addresses.every(( it ) => {
-                            if( it.id !== coreApp.id && it.preferred ){
-                                it.preferred = false;
-                            }
-                            return true;
-                        });
-                    }
-                    data.item.set( item );
-                }
-            }
-            return null;
-        });
-};
-
-// the birthdate (full date)
-Identities.check_birthdate = function( value, data, coreApp={} ){
-    Identities._assert_data_itemrv( 'Identities.check_birthdate()', data );
-    const item = data.item.get();
-    return Promise.resolve( null )
-        .then(() => {
-            if( coreApp.update !== false ){
-                item.birthdate = value;
-                data.item.set( item );
-            }
-            return null;
-        });
-};
-
-// the birthday ('mm-dd' string)
-Identities.check_birthday = function( value, data, coreApp={} ){
-    Identities._assert_data_itemrv( 'Identities.check_birthday()', data );
-    const item = data.item.get();
-    return Promise.resolve( null )
-        .then(() => {
-            if( coreApp.update !== false ){
-                item.birthday = value;
-                data.item.set( item );
-            }
-            return null;
-        });
-};
-
-// phones
-//  when checking from the UI inputHandler() for this field, we got an identifier in the coreApp options
-//  in all other cases ?
-//  - checking this field from an inputHandler() for another field ?
-//  - global checking when initializing an UI ?
-//  - global checking of an identity from the server ?
-Identities.check_phones_label = function( value, data, coreApp={} ){
-    Identities._assert_data_itemrv( 'Identities.check_phones_label()', data );
-    const item = data.item.get();
-    return Promise.resolve( null )
-        .then(() => {
-            const phone = coreApp.id ? Identities.fn.phoneById( item, coreApp.id ) : null;
-            if( phone ){
-                if( coreApp.update !== false ){
-                    phone.label = value;
-                    data.item.set( item );
-                }
-            }
-            return null;
-        });
-};
-
-Identities.check_phones_number = function( value, data, coreApp={} ){
-    Identities._assert_data_itemrv( 'Identities.check_phones_number()', data );
-    const item = data.item.get();
-    return Promise.resolve( null )
-        .then(() => {
-            const phone = coreApp.id ? Identities.fn.phoneById( item, coreApp.id ) : null;
-            if( phone ){
-                if( coreApp.update !== false ){
-                    phone.number = value;
-                    data.item.set( item );
-                }
-                return value ? null : new CoreApp.TypedMessage({
-                    type: CoreApp.MessageType.C.ERROR,
-                    message: pwixI18n.label( I18N, 'identities.checks.phonenumber_empty' )
-                });
-            }
-            return null;
-        });
-};
-
-Identities.check_phones_preferred = function( value, data, coreApp={} ){
-    Identities._assert_data_itemrv( 'Identities.check_phones_preferred()', data );
-    const item = data.item.get();
-    return Promise.resolve( null )
-        .then(() => {
-            const phone = coreApp.id ? Identities.fn.phoneById( item, coreApp.id ) : null;
-            if( phone ){
-                if( coreApp.update !== false ){
-                    phone.preferred = Boolean( value );
-                    // if preferred is checked, then take care of all other preferred should be unchecked
-                    if( value ){
-                        item.phones.every(( it ) => {
-                            if( it.id !== coreApp.id && it.preferred ){
-                                it.preferred = false;
-                            }
-                            return true;
-                        });
-                    }
-                    data.item.set( item );
-                }
-            }
-            return null;
-        });
-};
-
-Identities.check_phones_verified = function( value, data, coreApp={} ){
-    Identities._assert_data_itemrv( 'Identities.check_phones_verified()', data );
-    const item = data.item.get();
-    return Promise.resolve( null )
-        .then(() => {
-            const phone = coreApp.id ? Identities.fn.phoneById( item, coreApp.id ) : null;
-            if( phone ){
-                if( coreApp.update !== false ){
-                    phone.verified = Boolean( value );
-                    data.item.set( item );
-                }
-            }
-            return null;
-        });
-};
-*/

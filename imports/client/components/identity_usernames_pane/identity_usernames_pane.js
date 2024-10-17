@@ -16,6 +16,7 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 import { Random } from 'meteor/random';
 import { ReactiveVar } from 'meteor/reactive-var';
 
+import { Identities } from '/imports/common/collections/identities/index.js';
 import { Organizations } from '/imports/common/collections/organizations/index.js';
 
 import '/imports/client/components/identity_username_row/identity_username_row.js';
@@ -59,19 +60,22 @@ Template.identity_usernames_pane.helpers({
         return this.item.get().usernames || [];
     },
 
-    // passes the same data context, just replacing the parent checker by our own
+    // passes the same data context, just adding our item
     parmsUsernameRow( it ){
-        const parms = { ...this };
-        parms.usernamesCount = Template.instance().APP.usernamesCount;
-        parms.it = it;
-        return parms;
+        return {
+            ...this,
+            usernamesCount: Template.instance().APP.usernamesCount,
+            it: it
+        };
     },
 
     // disable the plus button when we have reached the max count of usernames allowed by the organization
     plusDisabled(){
         const maxCount = Template.instance().APP.maxCount;
         const count = Template.instance().APP.usernamesCount.get();
-        return ( maxCount === -1 || maxCount > count ) ? '' : 'disabled';
+        const usernames = this.item.get().usernames || [];
+        const username = usernames.length ? usernames[usernames.length-1] : null;
+        return ( !username || !Identities.fn.usernameEmpty( username ) || maxCount === -1 || maxCount > count ) ? '' : 'disabled';
     }
 });
 

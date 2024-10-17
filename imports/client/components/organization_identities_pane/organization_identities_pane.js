@@ -19,6 +19,10 @@
  *                      |
  *                      +- identity_usernames_pane
  *                      |
+ *                      +- identity_addresses_pane
+ *                      |
+ *                      +- identity_phones_pane
+ *                      |
  *                      +- identity_groups_pane
  *                      |
  *                      +- identity_no_pane
@@ -35,9 +39,11 @@ import { ReactiveVar } from 'meteor/reactive-var';
 
 import { Identities } from '/imports/common/collections/identities/index.js';
 
+import '/imports/client/components/identity_addresses_pane/identity_addresses_pane.js';
 import '/imports/client/components/identity_emails_pane/identity_emails_pane.js';
 import '/imports/client/components/identity_groups_pane/identity_groups_pane.js';
 import '/imports/client/components/identity_no_pane/identity_no_pane.js';
+import '/imports/client/components/identity_phones_pane/identity_phones_pane.js';
 import '/imports/client/components/identity_profile_pane/identity_profile_pane.js';
 import '/imports/client/components/identity_usernames_pane/identity_usernames_pane.js';
 
@@ -65,6 +71,16 @@ Template.organization_identities_pane.onCreated( function(){
                 name: 'identity_usernames_tab',
                 navLabel: pwixI18n.label( I18N, 'identities.edit.usernames_tab_title' ),
                 paneTemplate: 'identity_usernames_pane'
+            },
+            {
+                name: 'identity_addresses_tab',
+                navLabel: pwixI18n.label( I18N, 'identities.edit.addresses_tab_title' ),
+                paneTemplate: 'identity_addresses_pane'
+            },
+            {
+                name: 'identity_phones_tab',
+                navLabel: pwixI18n.label( I18N, 'identities.edit.phones_tab_title' ),
+                paneTemplate: 'identity_phones_pane'
             },
             {
                 name: 'identity_groups_tab',

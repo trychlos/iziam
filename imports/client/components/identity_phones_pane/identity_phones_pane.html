@@ -1,0 +1,37 @@
+<template name="identity_phones_pane">
+    <div class="x-tab c-identity-phones-pane">
+        <div class="panel-content">
+
+            <div class="panel-header">
+                <div class="panel-preamble">
+                    {{{ i18n key="identities.phones.preamble_text" }}}
+                </div>
+            </div>
+
+            <div class="panel-body">
+                <table class="form-table subtable">
+                    <thead>
+                        <tr>
+                            <th class="ui-w40"><div class="ui-ml2">{{ i18n key="identities.phones.label_th" }}</div></th>
+                            <th class="ui-w40"><div class="ui-ml2">{{ i18n key="identities.phones.number_th" }}</div></th>
+                            <th class="ui-center">{{ i18n key="identities.phones.verified_th" }}</th>
+                            <th class="ui-center">{{ i18n key="identities.phones.preferred_th" }}</th>
+                            <th></th>
+                            <th>
+                                <button class="btn btn-sm btn-outline-primary js-plus" title="{{ i18n key="identities.phones.add_title" }}" {{ plusDisabled }} >
+                                    <span class="fa-solid fa-fw fa-plus"></span>
+                                </button>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each it in itemsList }}
+                            {{> identity_phone_row (parmsPhoneRow it) }}
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</template>

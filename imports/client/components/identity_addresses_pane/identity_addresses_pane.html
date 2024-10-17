@@ -1,0 +1,47 @@
+<template name="identity_addresses_pane">
+    <div class="x-tab c-identity-addresses-pane">
+        <div class="pane-content">
+
+            <div class="pane-header">
+                <div class="pane-preamble">
+                    {{{ i18n key="identities.addresses.preamble_text" }}}
+                </div>
+            </div>
+
+            <div class="pane-body">
+                <table class="form-table subtable">
+                    <thead>
+                        <tr>
+                            <th class="ui-w20"><div class="ui-ml2">{{ i18n key="identities.addresses.label_th" }}</div></th>
+                            <th class="ui-w20"><div class="ui-ml2">{{ i18n key="identities.addresses.line1_th" }}</div></th>
+                            <th class="ui-w20"><div class="ui-ml2">{{ i18n key="identities.addresses.line2_th" }}</div></th>
+                            <th class="ui-w20"><div class="ui-ml2">{{ i18n key="identities.addresses.line3_th" }}</div></th>
+                            <th class="ui-center">{{ i18n key="identities.addresses.preferred_th" }}</th>
+                            <th></th>
+                            <th>
+                                <button class="btn btn-sm btn-outline-primary js-plus" title="{{ i18n key="identities.addresses.add_title" }}" {{ plusDisabled }} >
+                                    <span class="fa-solid fa-fw fa-plus"></span>
+                                </button>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th class="ui-w20"><div class="ui-ml2">{{ i18n key="identities.addresses.postalcode_th" }}</div></th>
+                            <th class="ui-w20"><div class="ui-ml2">{{ i18n key="identities.addresses.locality_th" }}</div></th>
+                            <th class="ui-w20"><div class="ui-ml2">{{ i18n key="identities.addresses.region_th" }}</div></th>
+                            <th class="ui-w20"><div class="ui-ml2">{{ i18n key="identities.addresses.country_th" }}</div></th>
+                            <th class="ui-w20"><div class="ui-ml2">{{ i18n key="identities.addresses.ponumber_th" }}</div></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each it in itemsList }}
+                            {{> identity_address_row (parmsAddressRow it) }}
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</template>

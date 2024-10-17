@@ -16,16 +16,40 @@ Identities.fn = {
      * @return {String} the address in a single string
      */
     address( address ){
+        return Identities.fn.addressJoined( ', ' );
+    },
+
+    /**
+     * @param {Address} address an address object
+     * @return {Array} each field in an array
+     */
+    addressAsArray( address ){
         let array = [];
-        address.address1 && array.push( address.address1 );
-        address.address2 && array.push( address.address2 );
-        address.address3 && array.push( address.address3 );
+        address.line1 && array.push( address.line1 );
+        address.line2 && array.push( address.line2 );
+        address.line3 && array.push( address.lineaddress3 );
         address.poNumber && array.push( 'PO.'+address.poNumber );
         address.postalCode && array.push( address.postalCode );
         address.locality && array.push( address.locality );
         address.region && array.push( address.region );
         address.country && array.push( address.country );
-        return array.join( ' ' );
+        return array;
+    },
+
+    /**
+     * @param {Address} address an address object
+     * @return {Boolean} whether the address is empty
+     */
+    addressEmpty( address ){
+        return Boolean( Identities.fn.addressJoined( address ).length === 0 );
+    },
+
+    /**
+     * @param {Address} address an address object
+     * @return {String} the address in a single string
+     */
+    addressJoined( address, join='' ){
+        return Identities.fn.addressAsArray( address ).join( join );
     },
 
     /**
@@ -77,6 +101,14 @@ Identities.fn = {
             return found === null;
         });
         return found;
+    },
+
+    /**
+     * @param {EmailAddress} email an email address object
+     * @return {Boolean} whether the email is empty
+     */
+    emailEmpty( email ){
+        return !email.label && !email.address;
     },
 
     /**
@@ -180,6 +212,14 @@ Identities.fn = {
     },
 
     /**
+     * @param {Phone} phone a phone object
+     * @return {Boolean} whether the username is empty
+     */
+    phoneEmpty( phone ){
+        return !phone.label && !phone.number;
+    },
+
+    /**
      * @param {Identity} identity
      * @return {Object} the preferred phone object, or the first one if none is set as preferred, or null if there is none
      */
@@ -231,6 +271,14 @@ Identities.fn = {
             return found === null;
         });
         return found;
+    },
+
+    /**
+     * @param {Username} username a username object
+     * @return {Boolean} whether the username is empty
+     */
+    usernameEmpty( username ){
+        return !username.label && !username.address;
     },
 
     /**

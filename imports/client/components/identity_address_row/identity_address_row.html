@@ -1,0 +1,73 @@
+<template name="identity_address_row">
+
+    <tr class="c-identity-address-row" data-item-id="{{ this.it._id }}">
+        <td colspan="7">
+            <div class="separator"></div>
+            <table>
+                <tr>
+                    <td>
+                        <div>
+                            <input class="form-control js-label" type="text" placeholder="{{ i18n key="identities.addresses.label_ph" }}" />
+                        </div>
+                    </td>
+                    <td>
+                        <div class="ui-ml05">
+                            <input class="form-control js-line1" type="text" placeholder="{{ i18n key="identities.addresses.line1_ph" }}" />
+                        </div>
+                    </td>
+                    <td>
+                        <div class="ui-ml05">
+                            <input class="form-control js-line2" type="text" placeholder="{{ i18n key="identities.addresses.line2_ph" }}" />
+                        </div>
+                    </td>
+                    <td>
+                        <div class="ui-ml05">
+                            <input class="form-control js-line3" type="text" placeholder="{{ i18n key="identities.addresses.line3_ph" }}" />
+                        </div>
+                    </td>
+                    <td>
+                        <div class="ui-w100 ui-center">
+                            <input class="form-check-input js-preferred" type="checkbox" />
+                        </div>
+                    </td>
+                    <td>{{> FormsStatusIndicator (parmsCheckStatus) }}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary ui-ml025 js-minus" title="{{ minusTitle this.it }}" {{ minusEnabled this.it }} >
+                            <span class="fa-solid fa-fw fa-minus"></span>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div>
+                            <input class="form-control js-postal" type="text" placeholder="{{ i18n key="identities.addresses.postalcode_ph" }}" />
+                        </div>
+                    </td>
+                    <td>
+                        <div class="ui-ml05">
+                            <input class="form-control js-locality" type="text" placeholder="{{ i18n key="identities.addresses.locality_ph" }}" />
+                        </div>
+                    </td>
+                    <td>
+                        <div class="ui-ml05">
+                            <input class="form-control js-region" type="text" placeholder="{{ i18n key="identities.addresses.region_ph" }}" />
+                        </div>
+                    </td>
+                    <td>
+                        <div class="ui-ml05">
+                            <input class="form-control js-country" type="text" placeholder="{{ i18n key="identities.addresses.country_ph" }}" />
+                        </div>
+                    </td>
+                    <td>
+                        <div class="ui-ml05">
+                            <input class="form-control js-ponumber" type="text" placeholder="{{ i18n key="identities.addresses.ponumber_ph" }}" />
+                        </div>
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+
+</template>
