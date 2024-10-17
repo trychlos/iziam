@@ -46,6 +46,29 @@ Clients.s.byClientIdAtDate = async function( clientId ){
     return result;
 };
 
+// entity is the client entity with a DYN.records array of ReactiveVar's
+//  there is at least one item
+// @returns {Object} with full result
+// @throws {Error}
+Clients.s.delete = async function( entityId, userId ){
+    check( entityId, String );
+    check( userId, String );
+    //if( !await TenantsManager.isAllowed( 'pwix.tenants_manager.feat.delete', userId, entity )){
+    //    return null;
+    //}
+    // delete the entity
+    let entitiesRes = await ClientsEntities.s.delete( entityId, userId );
+    // and delete all the Records
+    let recordsRes = await ClientsRecords.s.delete( entityId, userId );
+    // emit an event
+    Clients.s.eventEmitter.emit( 'delete', { entity: entityId });
+
+    return {
+        entities: entitiesRes,
+        records: recordsRes
+    }
+};
+
 // returns the registered client metadata
 // client: an { entity, record } object
 Clients.s.registeredMetadata = async function( client ){

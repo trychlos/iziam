@@ -42,21 +42,18 @@ ClientsRecords.s = {
     },
 
     /*
-    // return a client by its name
-    byName( name ){
-        return Clients.findOne({ name: name });
-    },
-
-
-    // update (actually replace) the data provided via the FormChecker fields
-    updateByFields( item, fields, userId ){
-        let set = {};
-        Object.keys( fields ).every(( f ) => {
-            //console.debug( f, item[f] );
-            set[f] = item[f];
-            return true;
-        })
-        const res = Clients.update({ _id: item._id }, { $set: set });
+     * @param {String} entityId
+     * @param {String} userId
+     * @returns {Integer} count of deleted
+     */
+    async delete( entityId, userId ){
+        check( entityId, String );
+        check( userId, String );
+        //let scope;
+        //if( !await Permissions.isAllowed( 'feat.clients.delete', userId, scope )){
+        //    return null;
+        //}
+        const res = await ClientsRecords.collection.removeAsync({ entity: entityId });
         return res;
     },
 

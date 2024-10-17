@@ -24,10 +24,10 @@ ClientsEntities.s = {
     },
 
     /*
-    * @param {Object} selector
-    * @param {String} userId
-    * @returns {Array} may be empty
-    */
+     * @param {Object} selector
+     * @param {String} userId
+     * @returns {Array} may be empty
+     */
     async getBy( selector, userId ){
         check( selector, Object );
         check( userId, String );
@@ -37,6 +37,22 @@ ClientsEntities.s = {
         }
         const res = await ClientsEntities.collection.find( selector ).fetchAsync();
         //console.debug( 'records', selector, res );
+        return res;
+    },
+
+    /*
+     * @param {String} entityId
+     * @param {String} userId
+     * @returns {Integer} count of deleted
+     */
+    async delete( entityId, userId ){
+        check( entityId, String );
+        check( userId, String );
+        //let scope;
+        //if( !await Permissions.isAllowed( 'feat.clients.delete', userId, scope )){
+        //    return null;
+        //}
+        const res = await ClientsEntities.collection.removeAsync({ _id: entityId });
         return res;
     },
 

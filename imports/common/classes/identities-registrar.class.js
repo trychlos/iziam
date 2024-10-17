@@ -104,8 +104,9 @@ export class IdentitiesRegistrar extends izRegistrar {
             }
             return !found;
         });
+        // this may be normal just after having deleted an item - so better to not warn
         if( !found ){
-            console.warn( 'unable to find an identity', identityId );
+            console.debug( 'unable to find identity', identityId );
         }
         return found;
     }

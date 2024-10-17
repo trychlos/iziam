@@ -90,9 +90,8 @@ Template.clients_list.events({
     // delete a client - this will delete all the validity records too
     'tabular-delete-event .c-clients-list'( event, instance, data ){
         const label = data.item.label;
-        Meteor.callAsync( 'clients_delete', data.item.entity )
+        Meteor.callAsync( 'client.delete', data.item.entity )
             .then(( res ) => {
-                console.debug( res );
                 Tolert.success( pwixI18n.label( I18N, 'delete.success', label ));
             })
             .catch(( e ) => {

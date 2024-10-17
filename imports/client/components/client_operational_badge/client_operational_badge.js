@@ -33,6 +33,7 @@ Template.client_operational_badge.helpers({
     i18n( arg ){
         return pwixI18n.label( I18N, arg.hash.key );
     },
+
     // the status
     parmsStatus(){
         if( this.item.DYN?.entity?.organization ){
