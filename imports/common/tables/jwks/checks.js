@@ -131,7 +131,7 @@ Jwks.checks = {
                 message: pwixI18n.label( I18N, 'jwks.checks.jwk_kid_exists' )
             }) : null;
         } else {
-            const level = jwks.length < 1 ? TM.MessageLevel.C.WARNING : TM.MessageLevel.C.ERROR;
+            const level = jwks.length <= 1 ? TM.MessageLevel.C.WARNING : TM.MessageLevel.C.ERROR;
             return new TM.TypedMessage({
                 level: level,
                 message: pwixI18n.label( I18N, 'jwks.checks.jwk_kid_unset' )
