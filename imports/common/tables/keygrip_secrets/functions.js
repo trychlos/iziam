@@ -38,7 +38,7 @@ KeygripSecrets.fn = {
         KeygripSecrets.fn._selected_providers.dep.changed();
     },
     remove( o, keyId ){
-        o.caller.keylist = o.caller.keylist.filter( it => it.id !== keyId );
+        o.caller.keylist = o.caller.keylist.filter( it => it._id !== keyId );
         KeygripSecrets.fn._list.dep.changed();
     }
 };

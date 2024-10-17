@@ -1,7 +1,7 @@
 /*
  * /imports/client/components/keygrip_properties_pane/keygrip_properties_pane.js
  *
- * Manage a keygrip, maybe empty but have at least an id.
+ * Manage a keygrip, maybe empty but have at least an _id.
  *
  * Parms:
  * - container: an { entity, record } organization object

@@ -34,7 +34,7 @@ Keygrips.recordFieldDef = function(){
             type: Object
         },
         {
-            name: 'keygrips.$.id',
+            name: 'keygrips.$._id',
             type: String
         },
         {
@@ -75,7 +75,7 @@ Keygrips.recordFieldDef = function(){
             type: Object
         },
         {
-            name: 'keygrips.$.keylist.$.id',
+            name: 'keygrips.$.keylist.$._id',
             type: String
         },
         {

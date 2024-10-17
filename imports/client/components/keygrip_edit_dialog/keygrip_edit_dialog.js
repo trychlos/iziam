@@ -45,7 +45,7 @@ Template.keygrip_edit_dialog.onCreated( function(){
     // it will go into the currently edited organization record only if the user validates this dialog box
     self.autorun(() => {
         const dcItem = Template.currentData().item;
-        let item = dcItem ? _.cloneDeep( dcItem ) : { id: Random.id() };
+        let item = dcItem ? _.cloneDeep( dcItem ) : { _id: Random.id() };
         self.APP.item.set( item );
         self.APP.isNew.set( dcItem === null );
     });
@@ -145,7 +145,7 @@ Template.keygrip_edit_dialog.events({
         const item = instance.APP.item.get();
         // update or push
         for( let i=0 ; i<record.keygrips.length ; ++i ){
-            if( record.keygrips[i].id === item.id ){
+            if( record.keygrips[i]._id === item._id ){
                 record.keygrips[i] = item;
                 found = true;
                 break;

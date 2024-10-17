@@ -77,7 +77,7 @@ Keygrips.fn = {
         Keygrips.fn._selected_providers.dep.changed();
     },
     remove( o, keygripId ){
-        o.caller.record.keygrips = o.caller.record.keygrips.filter( it => it.id !== keygripId );
+        o.caller.record.keygrips = o.caller.record.keygrips.filter( it => it._id !== keygripId );
         Keygrips.fn._list.dep.changed();
     }
 };

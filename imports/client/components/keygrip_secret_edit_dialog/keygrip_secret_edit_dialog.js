@@ -47,7 +47,7 @@ Template.keygrip_secret_edit_dialog.onCreated( function(){
     // it will go into the currently edited organization record only if the user validates this dialog box
     self.autorun(() => {
         const dcItem = Template.currentData().item;
-        let item = dcItem ? _.cloneDeep( dcItem ) : { id: Random.id() };
+        let item = dcItem ? _.cloneDeep( dcItem ) : { _id: Random.id() };
         self.APP.item.set( item );
         self.APP.isNew.set( dcItem === null );
     });
@@ -177,7 +177,7 @@ Template.keygrip_secret_edit_dialog.events({
                     record.keylist.push( key );
                 } else {
                     for( let i=0 ; i<record.keylist.length ; ++i ){
-                        if( record.keylist[i].id === key.id ){
+                        if( record.keylist[i]._id === key._id ){
                             record.keylist[i] = key;
                             found = true;
                             break;

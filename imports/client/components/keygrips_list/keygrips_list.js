@@ -53,7 +53,7 @@ Template.keygrips_list.helpers({
 Template.keygrips_list.events({
     // delete a key
     'tabular-delete-event .c-keygrips-list'( event, instance, data ){
-        this.listRemoveFn( this.args, data.item.id );
+        this.listRemoveFn( this.args, data.item._id );
         return false; // doesn't propagate
     },
 
@@ -66,7 +66,7 @@ Template.keygrips_list.events({
             mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
             mdClasses: 'modal-xl',
             mdClassesContent: Meteor.APP.runContext.pageUIClasses().join( ' ' ),
-            mdTitle: pwixI18n.label( I18N, 'keygrips.edit.edit_dialog_title', data.item.label || data.item.id ),
+            mdTitle: pwixI18n.label( I18N, 'keygrips.edit.edit_dialog_title', data.item.label || data.item._id ),
             item: data.item
         });
         return false;

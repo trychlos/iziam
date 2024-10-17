@@ -85,7 +85,7 @@ const _check_url = function( value, opts={} ){
 // returns the index of the identified row in the array
 const _id2index = function( array, id ){
     for( let i=0 ; i<array.length ; ++i ){
-        if( array[i].id === id ){
+        if( array[i]._id === id ){
             return i;
         }
     }

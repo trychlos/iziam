@@ -51,7 +51,7 @@ Template.keygrip_secrets_list.helpers({
 Template.keygrip_secrets_list.events({
     // delete a key
     'tabular-delete-event .c-keygrip-secrets-list'( event, instance, data ){
-        this.listRemoveFn( this.args, data.item.id );
+        this.listRemoveFn( this.args, data.item._id );
         // reactively update the keygrip
         const item = this.item.get();
         this.item.set( item );
@@ -67,7 +67,7 @@ Template.keygrip_secrets_list.events({
             mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
             mdClasses: 'modal-lg',
             mdClassesContent: Meteor.APP.runContext.pageUIClasses().join( ' ' ),
-            mdTitle: pwixI18n.label( I18N, 'keygrips.edit.secret_edit_dialog_title', data.item.label || data.item.id ),
+            mdTitle: pwixI18n.label( I18N, 'keygrips.edit.secret_edit_dialog_title', data.item.label || data.item._id ),
             item: data.item
         });
         return false;
