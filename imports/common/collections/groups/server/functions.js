@@ -4,11 +4,10 @@
 
 import _ from 'lodash';
 
-//import { Memberships } from '/imports/collections/memberships/memberships.js';
-
 import { Groups } from '../index.js';
 
-Groups.s = {
+Groups.s = _.merge( Groups.s, {
+
     // dump the groups for this organization
     async dump( organizationId ){
         const res = await Groups.collection( organizationId ).find({ organization: organizationId }, { $sort: { _id: 1 }}).fetchAsync();
@@ -43,11 +42,9 @@ Groups.s = {
         if( res.insertedId ){
             item._id = res.insertedId;
         }
-        //if( res.numberAffected ){
-        //    Memberships.s.upsertByGroup( item.organization, item._id, groups, identities, userId );
-        //}
+        Groups.s.eventEmitter.emit( 'upsert', { organizationId: organizationId, userId: userId });
         item.DYN = DYN;
-        console.debug( 'Groups.upsert_item', res );
+        console.debug( 'Groups.upsert', res );
         return res;
     },
 
@@ -62,6 +59,7 @@ Groups.s = {
         for await ( const it of ( memberOf.direct || [] )){
             res.push( await Groups.collection( organizationId ).insertAsync({ organization: organizationId, type: 'I', identity: identityId, parent: it }));
         }
+        Groups.s.eventEmitter.emit( 'upsert', { organizationId: organizationId, userId: userId });
         //await Groups.s.dump( organizationId );
         //console.debug( 'Groups.s.updateMemberships', res );
         return res;
@@ -76,20 +74,21 @@ Groups.s = {
         if( groups && _.isArray( groups )){
             const flat = Groups.fn.tree2flat( organizationId, groups );
             for( const it of flat ){
+                /*
                 const orig = await Groups.collection( organizationId ).findOneAsync({ _id: it._id });
                 if( orig ){
                     res.push( await Groups.collection( organizationId ).updateAsync({ _id: it._id }, { $set: it }));
                 } else {
                     res.push( await Groups.collection( organizationId ).insertAsync( it ));
                 }
-               /*
+                    */
                 res.push( await Groups.collection( organizationId ).upsertAsync({ _id: it._id }, { $set: it }));
-                */
             }
+            Groups.s.eventEmitter.emit( 'upsert', { organizationId: organizationId, userId: userId });
         } else {
             console.warn( 'Groups.s.upsert_tree() expects an array of groups, got '+groups );
         }
         console.debug( 'res', res );
         return res;
     }
-};
+});

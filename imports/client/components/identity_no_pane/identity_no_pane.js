@@ -58,4 +58,10 @@ Template.identity_no_pane.onRendered( function(){
             });
         }
     });
+
+    // make sure we have a DYN sub-object on new identities
+    self.autorun(() => {
+        let item = Template.currentData().item.get();
+        item.DYN = item.DYN || {};
+    });
 });

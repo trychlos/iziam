@@ -135,12 +135,10 @@ Meteor.publish( Meteor.APP.C.pub.clientsAll.publish, async function( organizatio
  */
 Meteor.publish( Meteor.APP.C.pub.clientsTabularOne.publish, async function( organization ){
     if( !organization ){
-        console.log( 'organization is not set' );
         this.ready();
         return [];
     }
     if( !await Permissions.isAllowed( 'feat.clients.list', this.userId, organization._id )){
-        console.log( 'this publication is not allowed' );
         this.ready();
         return false;
     }

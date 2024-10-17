@@ -1,0 +1,11 @@
+<template name="resource_edit_dialog">
+    <div class="c-resource-edit-dialog">
+
+        {{> Tabbed name="resource_edit_dialog" }}
+
+        {{#if isModal }}
+            {{> FormsMessager (parmsMessager) }}
+        {{/if}}
+
+    </div>
+</template>

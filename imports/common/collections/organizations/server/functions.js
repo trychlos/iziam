@@ -9,9 +9,11 @@ import { AccountsHub } from 'meteor/pwix:accounts-hub';
 import { AccountsManager } from 'meteor/pwix:accounts-manager';
 import { TenantsManager } from 'meteor/pwix:tenants-manager';
 
+import { Authorizations } from '/imports/common/collections/authorizations/index.js';
 import { ClientsEntities } from '/imports/common/collections/clients_entities/index.js';
 import { Groups } from '/imports/common/collections/groups/index.js';
 import { Identities } from '/imports/common/collections/identities/index.js';
+import { Resources } from '/imports/common/collections/resources/index.js';
 
 import { Organizations } from '../index.js';
 
@@ -27,7 +29,7 @@ Organizations.s = {
     //  (groups, identities, clients and so on). This way, organization is updated, publications are updated, and user interface can reflect
     //  the changes.
     onCorrelatedUpdateEvent( args ){
-        //console.debug( 'onCorrelatedUpdateEvent', arguments );
+        console.debug( 'onCorrelatedUpdateEvent', arguments );
         let organizationEntityId = null;
         // coming from AccountsManager ?
         if( args && args.amInstance && _.isString( args.amInstance )){
@@ -39,6 +41,11 @@ Organizations.s = {
         if( args && args.entity ){
             organizationEntityId = args.entity.organization;
         }
+        // coming from Groups ?
+        if( args && args.organizationId ){
+            organizationEntityId = args.organizationId;
+        }
+        // expects an organization identifier here
         if( organizationEntityId ){
             TenantsManager.Entities.collection.updateAsync({ _id: organizationEntityId }, { $set: { witness_stamp: new Date() }});
         }
@@ -48,6 +55,10 @@ Organizations.s = {
     // provide groupsCount, identitiesCount and clientsCount
     // item is a modified closest record
     async tabularExtend( item ){
+        //console.debug( 'item', item );
+        // count authorizations
+        // there is one authorization collection for each organization
+        item.authorizationsCount = await Authorizations.collection( item._id ).countDocuments({ organization: item._id });
         // count clients
         // there is one clients collection common to all organizations
         item.clientsCount = await ClientsEntities.collection.countDocuments({ organization: item.DYN.entity._id });
@@ -65,6 +76,9 @@ Organizations.s = {
         //} else {
         //    console.log( 'collection non defined', instanceName );
         }
+        // count resources
+        // there is one groups collection common to all organizations
+        item.resourcesCount = await Resources.collection( item.DYN.entity._id ).countDocuments({ organization: item.DYN.entity._id });
         return true;
     },
 
@@ -72,6 +86,9 @@ Organizations.s = {
     // provide groupsCount, identitiesCount and clientsCount
     // item is an entity with its DYN sub-object
     async tenantsAllExtend( item ){
+        // count authorizations
+        // there is one authorization collection for each organization
+        item.DYN.authorizationsCount = await Authorizations.collection( item._id ).countDocuments({ organization: item._id });
         // count clients
         // there is one clients collection common to all organizations
         item.DYN.clientsCount = await ClientsEntities.collection.countDocuments({ organization: item._id });
@@ -89,6 +106,9 @@ Organizations.s = {
         //} else {
         //    console.log( 'collection non defined', instanceName );
         }
+        // count resources
+        // there is one resources collection for each organization
+        item.DYN.resourcesCount = await Resources.collection( item._id ).countDocuments({ organization: item._id });
         return true;
     }
 };

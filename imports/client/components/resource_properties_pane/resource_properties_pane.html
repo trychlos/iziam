@@ -1,0 +1,43 @@
+<template name="resource_properties_pane">
+    <div class="x-tab c-resource-properties-pane">
+        <div class="panel-content">
+
+            <div class="panel-header">
+            </div>
+
+            <div class="panel-body">
+                <table class="form-table ui-w100">
+                    <tr>
+                        <td class="ui-w20 label"><label class="form-label" for="resource-label">{{ i18n key="resources.edit.label_label" }}</label></td>
+                        <td class="ui-w100">
+                            <input class="form-control flex-grow-1 js-label" type="text" id="resource-label" placeholder="{{ i18n key="resources.edit.label_ph" }}" title="{{ i18n key="resources.edit.label_title" }}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="ui-w20 label"><label class="form-label">{{ i18n key="resources.edit.name_label" }}</label></td>
+                        <td class="ui-w100">
+                            <input class="form-control flex-grow-1 js-name" type="text" id="resource-name" placeholder="{{ i18n key="resources.edit.name_ph" }}" title="{{ i18n key="resources.edit.name_title" }}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="ui-w20 label"><label class="form-label" for="resource-starting">{{ i18n key="resources.edit.starting_label" }}</label></td>
+                        <td class="ui-w100">
+                            <div class="ui-w50 ui-mt025 js-starting" title="{{ i18n key="resources.edit.starting_title" }}">
+                                {{> DateInput (parmsStartDate) }}
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="ui-w20 label"><label class="form-label" for="resource-ending">{{ i18n key="resources.edit.ending_label" }}</label></td>
+                        <td class="ui-w100">
+                            <div class="ui-w50 ui-mt025 js-ending" title="{{ i18n key="resources.edit.ending_title" }}">
+                                {{> DateInput (parmsEndDate) }}
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</template>

@@ -39,6 +39,7 @@ Template.groups_select.onCreated( function(){
 Template.groups_select.helpers({
     // parms for the groups_tree component
     parmsTree(){
+        console.debug( 'groups', Template.instance().APP.organization.get().DYN.groups.get());
         return {
             groups: Template.instance().APP.organization.get().DYN.groups.get(),
             editable: false,

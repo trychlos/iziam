@@ -43,6 +43,16 @@ Organizations.tabularFieldset = function(){
                     dt_render( foo, type, rowData, columnDef ){
                         return rowData.clientsCount ? '<div class="dt-badge">'+rowData.clientsCount+'</div>' : '';
                     }
+                },
+                {
+                    name: 'resourcesCount',
+                    schema: false,
+                    dt_visible: false
+                },
+                {
+                    name: 'authorizationsCount',
+                    schema: false,
+                    dt_visible: false
                 }
             ]
         }
