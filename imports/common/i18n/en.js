@@ -628,6 +628,12 @@ Meteor.APP.i18n = {
                 locale: {
                     select_text: 'Choose the user\'s locale'
                 },
+                response_type: {
+                    code_label: 'Authorization Code Grant Flow',
+                    none_label: 'None',
+                    select_text: 'The response types the client can use in its requests',
+                    token_label: 'Implicit Grant Flow'
+                },
                 secret_alg: {
                     rmd160_label: 'RMD160',
                     sha256_label: 'SHA-256',
