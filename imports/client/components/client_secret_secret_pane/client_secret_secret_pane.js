@@ -1,7 +1,7 @@
 /*
  * /imports/client/components/client_secret_secret_pane/client_secret_secret_pane.js
  *
- * Manage a keygrip secret, maybe empty but have at least an id.
+ * Manage a keygrip secret, maybe empty but have at least an _id.
  *
  * Parms:
  * - container: an { entity, record } organization object

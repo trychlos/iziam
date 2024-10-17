@@ -53,7 +53,7 @@ Template.jwks_list.helpers({
 Template.jwks_list.events({
     // delete a key
     'tabular-delete-event .c-jwks-list'( event, instance, data ){
-        this.listRemoveFn( this.args, data.item.id );
+        this.listRemoveFn( this.args, data.item._id );
         return false; // doesn't propagate
     },
 
@@ -65,7 +65,7 @@ Template.jwks_list.events({
             mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
             mdClasses: 'modal-lg',
             mdClassesContent: Meteor.APP.runContext.pageUIClasses().join( ' ' ),
-            mdTitle: pwixI18n.label( I18N, 'jwks.edit.edit_dialog_title', data.item.label || data.item.id ),
+            mdTitle: pwixI18n.label( I18N, 'jwks.edit.edit_dialog_title', data.item.label || data.item._id ),
             item: data.item
         });
     }

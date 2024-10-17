@@ -38,7 +38,7 @@ Jwks.dataSet = function( dc ){
 Jwks.tabularFieldSet = function( dc ){
     let columns = [
         {
-            name: 'id',
+            name: '_id',
             dt_visible: false
         },
         {
@@ -128,16 +128,16 @@ Jwks.tabular = function( dc ){
         tabular: {
             withInfoButton: false,
             async deleteButtonTitle( it ){
-                return pwixI18n.label( I18N, 'jwks.list.delete_title', it.label || it.id );
+                return pwixI18n.label( I18N, 'jwks.list.delete_title', it.label || it._id );
             },
             async deleteConfirmationText( it ){
-                return pwixI18n.label( I18N, 'jwks.list.delete_confirm_text', it.label || it.id );
+                return pwixI18n.label( I18N, 'jwks.list.delete_confirm_text', it.label || it._id );
             },
             async deleteConfirmationTitle( it ){
-                return pwixI18n.label( I18N, 'jwks.list.delete_confirm_title', it.label || it.id );
+                return pwixI18n.label( I18N, 'jwks.list.delete_confirm_title', it.label || it._id );
             },
             async editButtonTitle( it ){
-                return pwixI18n.label( I18N, 'jwks.list.edit_title', it.label || it.id );
+                return pwixI18n.label( I18N, 'jwks.list.edit_title', it.label || it._id );
             },
             dataContext: dc
         },

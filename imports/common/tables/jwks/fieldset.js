@@ -28,7 +28,7 @@ Jwks.recordFieldDef = function(){
         },
         // key identifier (kid)
         {
-            name: 'jwks.$.id',
+            name: 'jwks.$._id',
             type: String
         },
         {

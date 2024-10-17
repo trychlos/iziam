@@ -47,7 +47,7 @@ Template.client_redirects_panel.onCreated( function(){
             const item = recordRv.get();
             item.redirect_uris = item.redirect_uris || [];
             item.redirect_uris.push({
-                id: Random.id()
+                _id: Random.id()
             });
             recordRv.set( item );
             self.APP.haveAddedOne = true;
@@ -144,6 +144,13 @@ Template.client_redirects_panel.helpers({
         parms.checker = Template.instance().APP.checker;
         parms.it = it;
         return parms;
+    },
+
+    // whether the plus button is enabled ?
+    plusDisabled(){
+        const redirects = this.entity.get().DYN.records[this.index].get().redirect_uris || [];
+        const last = redirects.length ? redirects[redirects.length-1] : null;
+        return !last || last.uri ? '' : 'disabled';
     }
 });
 

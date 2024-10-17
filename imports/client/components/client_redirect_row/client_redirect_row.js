@@ -25,8 +25,6 @@ Template.client_redirect_row.onCreated( function(){
     self.APP = {
         // the Form.Checker instance for this panel
         checker: new ReactiveVar( null ),
-        // whether this row is the last of the array ?
-        isLast: new ReactiveVar( false ),
 
         // reactively remove the item
         removeById( id ){
@@ -35,7 +33,7 @@ Template.client_redirect_row.onCreated( function(){
             let rows = item.redirect_uris || [];
             let found = -1;
             for( let i=0 ; i<rows.length ; ++i ){
-                if( rows[i].id === id ){
+                if( rows[i]._id === id ){
                     found = i;
                     break;
                 }
@@ -53,22 +51,6 @@ Template.client_redirect_row.onCreated( function(){
             }
         }
     };
-
-    // whether this row is the last of the array ?
-    self.autorun(() => {
-        const myId = Template.currentData().it.id;
-        const rows = Template.currentData().entity.get().DYN.records[Template.currentData().index].get().redirect_uris || [];
-        let found = -1;
-        for( let i=0 ; i<rows.length ; ++i ){
-            if( rows[i].id === myId ){
-                found = i;
-                break;
-            }
-        }
-        const last = ( found === rows.length-1 );
-        //console.debug( 'isLast', myId, last );
-        self.APP.isLast.set( last );
-    });
 });
 
 Template.client_redirect_row.onRendered( function(){
@@ -96,7 +78,7 @@ Template.client_redirect_row.onRendered( function(){
                     entity: Template.currentData().entity,
                     index: Template.currentData().index
                 },
-                id: Template.currentData().it.id,
+                id: Template.currentData().it._id,
                 setForm: Template.currentData().it
             }));
         }
@@ -109,16 +91,15 @@ Template.client_redirect_row.helpers({
         return pwixI18n.label( I18N, arg.hash.key );
     },
 
-    // note: weird things happen when inserting/deleting rows, unless we delete only last row
-    // but we accept to remove all redirect urls (which will disable the client by the fact)
+    // we accept to remove all redirect urls (which will disable the client by the fact)
     minusEnabled(){
-        return Template.instance().APP.isLast.get() ? '' : 'disabled';
+        return '';
     }
 });
 
 Template.client_redirect_row.events({
     'click .c-client-redirect-row .js-minus'( event, instance ){
-        const id = this.it.id;
+        const id = this.it._id;
         instance.APP.removeById( id );
     },
 });

@@ -58,7 +58,7 @@ ClientSecrets.fn = {
         ClientSecrets.fn._selected_providers.dep.changed();
     },
     remove( o, secretId ){
-        o.caller.record.secrets = o.caller.record.secrets.filter( it => it.id !== secretId );
+        o.caller.record.secrets = o.caller.record.secrets.filter( it => it._id !== secretId );
         ClientSecrets.fn._list.dep.changed();
     }
 };

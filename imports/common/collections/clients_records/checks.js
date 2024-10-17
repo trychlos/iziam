@@ -47,7 +47,7 @@ const _assert_data_content = function( caller, data ){
 // returns the index of the identified row in the array
 const _id2index = function( array, id ){
     for( let i=0 ; i<array.length ; ++i ){
-        if( array[i].id === id ){
+        if( array[i]._id === id ){
             return i;
         }
     }
@@ -261,7 +261,7 @@ ClientsRecords.checks = {
         if( opts.update !== false ){
             if( index < 0 ){
                 item.contacts = item.contacts || [];
-                item.contacts.push({ id: opts.id });
+                item.contacts.push({ _id: opts.id });
                 index = 0;
             }
             item.contacts[index].email = value;
@@ -400,7 +400,7 @@ ClientsRecords.checks = {
         if( opts.update !== false ){
             if( index < 0 ){
                 item.redirect_uris = item.redirect_uris || [];
-                item.redirect_uris.push({ id: opts.id });
+                item.redirect_uris.push({ _id: opts.id });
                 index = 0;
             }
             item.redirect_uris[index].uri = value;

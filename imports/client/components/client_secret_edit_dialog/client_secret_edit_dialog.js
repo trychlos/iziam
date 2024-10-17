@@ -47,7 +47,7 @@ Template.client_secret_edit_dialog.onCreated( function(){
     // it will go into the currently edited organization record only if the user validates this dialog box
     self.autorun(() => {
         const dcItem = Template.currentData().item;
-        let item = dcItem ? _.cloneDeep( dcItem ) : { id: Random.id() };
+        let item = dcItem ? _.cloneDeep( dcItem ) : { _id: Random.id() };
         self.APP.item.set( item );
         self.APP.isNew.set( dcItem === null );
     });
@@ -177,7 +177,7 @@ Template.client_secret_edit_dialog.events({
                     record.secrets.push( secret );
                 } else {
                     for( let i=0 ; i<record.secrets.length ; ++i ){
-                        if( record.secrets[i].id === secret.id ){
+                        if( record.secrets[i]._id === secret._id ){
                             record.secrets[i] = secret;
                             found = true;
                             break;

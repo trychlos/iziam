@@ -129,7 +129,7 @@ Jwks.fn = {
     joinedLabels( array ){
         let res = [];
         ( array || [] ).forEach(( it ) => {
-            res.push(( it.kid || it.label || it.id ) + '-' + it.use + '-' + it.kty );
+            res.push(( it.kid || it.label || it._id ) + '-' + it.use + '-' + it.kty );
         });
         return res.join( ', ' );
     },
@@ -153,7 +153,7 @@ Jwks.fn = {
         Jwks.fn._list.dep.changed();
     },
     remove( o, jwkId ){
-        o.caller.record.jwks = o.caller.record.jwks.filter( it => it.id !== jwkId );
+        o.caller.record.jwks = o.caller.record.jwks.filter( it => it._id !== jwkId );
         Jwks.fn._list.dep.changed();
     }
 };

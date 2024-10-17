@@ -1,7 +1,7 @@
 /*
  * /imports/client/components/jwk_properties_pane/jwk_properties_pane.js
  *
- * Manage a JWK, maybe empty but have at least an id.
+ * Manage a JWK, maybe empty but have at least an _id.
  * When editing, doesn't let the main characteristics of the key (use, kty, alg) be modified
  *
  * Parms:

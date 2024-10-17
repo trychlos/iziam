@@ -121,7 +121,7 @@ Jwks.checks = {
         if( value ){
             let found = false;
             jwks.every(( it ) => {
-                if( it.kid === value && it.id !== item.id ){
+                if( it.kid === value && it._id !== item._id ){
                     found = true;
                 }
                 return !found;

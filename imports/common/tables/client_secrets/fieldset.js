@@ -25,7 +25,7 @@ ClientSecrets.recordFieldDef = function(){
             type: Object
         },
         {
-            name: 'secrets.$.id',     // the UI needs an identifier for each item
+            name: 'secrets.$._id',     // the UI needs a '_id' identifier for each item
             type: String
         },
         {

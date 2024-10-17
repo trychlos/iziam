@@ -55,7 +55,7 @@ Template.jwk_edit_dialog.onCreated( function(){
     // it will go into the currently edited organization record only if the user validates this dialog box
     self.autorun(() => {
         const dcItem = Template.currentData().item;
-        let item = dcItem ? _.cloneDeep( dcItem ) : { id: Random.id() };
+        let item = dcItem ? _.cloneDeep( dcItem ) : { _id: Random.id() };
         self.APP.item.set( item );
         self.APP.isNew.set( dcItem === null );
     });
@@ -201,7 +201,7 @@ Template.jwk_edit_dialog.events({
                     record.jwks.push( jwk );
                 } else {
                     for( let i=0 ; i<record.jwks.length ; ++i ){
-                        if( record.jwks[i].id === jwk.id ){
+                        if( record.jwks[i]._id === jwk._id ){
                             record.jwks[i] = jwk;
                             found = true;
                             break;

@@ -39,7 +39,7 @@ Template.client_contacts_panel.onCreated( function(){
             const item = recordRv.get();
             item.contacts = item.contacts || [];
             item.contacts.push({
-                id: Random.id()
+                _id: Random.id()
             });
             recordRv.set( item );
             self.APP.haveAddedOne = true;
@@ -110,6 +110,13 @@ Template.client_contacts_panel.helpers({
         parms.checker = Template.instance().APP.checker;
         parms.it = it;
         return parms;
+    },
+
+    // whether the plus button is enabled
+    plusDisabled(){
+        const contacts = this.entity.get().DYN.records[this.index].get().contacts || [];
+        const last = contacts.length ? contacts[contacts.length-1] : null;
+        return !last || last.email ? '' : 'disabled';
     }
 });
 

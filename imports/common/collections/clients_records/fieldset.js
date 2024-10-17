@@ -97,7 +97,7 @@ const _defaultFieldDef = function(){
             form_check: ClientsRecords.checks.redirect_uri
         },
         {
-            name: 'redirect_uris.$.id',
+            name: 'redirect_uris.$._id',
             type: String
         },
         // the authentification method against the token endpoint
@@ -192,7 +192,7 @@ const _defaultFieldDef = function(){
             form_check: ClientsRecords.checks.contact_email
         },
         {
-            name: 'contacts.$.id',
+            name: 'contacts.$._id',
             type: String
         },
         // the client terms of service

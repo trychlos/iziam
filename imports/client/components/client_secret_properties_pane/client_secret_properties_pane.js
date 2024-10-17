@@ -1,7 +1,7 @@
 /*
  * /imports/client/components/client_secret_properties_pane/client_secret_properties_pane.js
  *
- * Manage a client secret, maybe empty but have at least an id.
+ * Manage a client secret, maybe empty but have at least an _id.
  * One cannot modify a secret: once created, only label and expiration date can be updated.
  *
  * Parms:
