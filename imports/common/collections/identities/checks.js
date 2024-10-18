@@ -104,8 +104,6 @@ Identities.checks = {
     // emits a warning if the address is empty
     async crossAddress( data, opts ){
         const address = opts.checker.panel().objectData();
-        console.debug( 'array', Identities.fn.addressAsArray( address ));
-        console.debug( 'empty', Identities.fn.addressEmpty( address ));
         return Identities.fn.addressEmpty( address ) ? new TM.TypedMessage({
             level: TM.MessageLevel.C.WARNING,
             message: pwixI18n.label( I18N, 'identities.checks.address_unset' )
@@ -115,27 +113,8 @@ Identities.checks = {
     // whether this identity has an identifier ?
     async crossHasIdentifier( data, opts ){
         _assert_cross_data_content( 'Identities.checks.crossHasIdentifier()', data );
-        let item = data.item.get();
-        let haveIdentifier = false;
-        const organization = Validity.getEntityRecord( data.organization );
-        if( organization ){
-            if( !haveIdentifier && organization.record.identitiesEmailAddressesIdentifier ){
-                if( item.emails?.length > 0 ){
-                    if( item.emails[0].address ){
-                        haveIdentifier = true;
-                    }
-                }
-            }
-            if (!haveIdentifier && organization.record.identitiesUsernamesIdentifier ){
-                if( item.usernames?.length > 0 ){
-                    if( item.usernames[0].username ){
-                        haveIdentifier = true;
-                    }
-                }
-            }
-        } else {
-            console.warn( 'unable to get an organization' );
-        }
+        const item = data.item.get();
+        const haveIdentifier = await Identities.fn.hasIdentifier( data.organization, item );
         return haveIdentifier ? null : new TM.TypedMessage({
             level: TM.MessageLevel.C.ERROR,
             message: pwixI18n.label( I18N, 'identities.checks.identifier_missing' )
@@ -780,10 +759,11 @@ Identities.checks = {
             data.item.set( item );
         }
         if( !value ){
+            const haveIdentifier = await Identities.fn.hasIdentifier( data.organization, item );
             // this is an error if this identity doesn't have yet any identifier
             //  else just a warning
             return new TM.TypedMessage({
-                level: TM.MessageLevel.C.ERROR,
+                level: haveIdentifier ? TM.MessageLevel.C.WARNING : TM.MessageLevel.C.ERROR,
                 message: pwixI18n.label( I18N, 'identities.checks.username_unset' )
             });
         }

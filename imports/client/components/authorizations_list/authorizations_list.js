@@ -44,6 +44,7 @@ Template.authorizations_list.helpers({
 Template.authorizations_list.events({
     // delete a authorization
     'tabular-delete-event .c-authorizations-list'( event, instance, data ){
+        console.debug( 'this', this, 'data', data );
         const label = data.item.label;
         Meteor.callAsync( 'authorizations.removeById', this.item.get()._id, data.item.entity._id )
             .then(( res ) => {
@@ -58,6 +59,7 @@ Template.authorizations_list.events({
     // edit a authorization
     //  the buttons from tabular provide the entity document
     'tabular-edit-event .c-authorizations-list'( event, instance, data ){
+        console.debug( 'this', this, 'data', data );
         let dc = { ...this };
         delete dc.entityTabs;
         delete dc.entityTabsAfter;

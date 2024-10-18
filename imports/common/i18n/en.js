@@ -60,8 +60,11 @@ Meteor.APP.i18n = {
             },
             authorizations: {
                 checks: {
+                    ending_invalid: 'Ending date is not valid',
                     group_unknown: 'The group is not known',
                     group_unset: 'The group is not set',
+                    starting_ending: 'Starting date should be lesser than or equal to ending date',
+                    starting_invalid: 'Starting date is not valid',
                     type_unknown: 'The target type is not known',
                     type_unset: 'The target type is not set'
                 },

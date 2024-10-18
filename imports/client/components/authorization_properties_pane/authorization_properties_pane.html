@@ -16,7 +16,12 @@
                     <tr>
                         <td class="ui-w20 label"><label class="form-label">{{ i18n key="authorizations.edit.group_label" }}</label></td>
                         <td class="ui-w100">
-                            <input class="form-control flex-grow-1 js-group" type="text" id="authorization-name" placeholder="{{ i18n key="authorizations.edit.name_ph" }}" title="{{ i18n key="authorizations.edit.name_title" }}" />
+                            <div class="d-flex ui-w100 js-group">
+                                <input class="form-control flex-grow-1" type="text" id="authorization-name" placeholder="{{ i18n key="authorizations.edit.name_ph" }}" title="{{ i18n key="authorizations.edit.name_title" }}" />
+                                <button class="btn btn-sm btn-outline-secondary ui-ml025 js-tree">
+                                    <span class="fa-solid fa-folder-tree"></span>
+                                </button>
+                            </div>
                         </td>
                     </tr>
                     <tr>

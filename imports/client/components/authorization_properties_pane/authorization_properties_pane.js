@@ -64,7 +64,8 @@ Template.authorization_properties_pane.onRendered( function(){
                     entity: Template.currentData().entity,
                     item: itemRv
                 },
-                setForm: itemRv.get()
+                setForm: itemRv.get(),
+                crossCheckFn: Authorizations.checks.crossCheckProperties
             }));
         }
     });
@@ -94,17 +95,7 @@ Template.authorization_properties_pane.helpers({
 });
 
 Template.authorization_properties_pane.events({
-    /*
-    // generate the authorization
-    'click .js-generate'( event, instance ){
-        instance.APP.generate( this.item );
-    },
-    */
-    // reset the algorithm on any change on usage or crypto family
-    'authorization-use-selected .c-authorization-properties-pane'( event, instance, data ){
-        instance.APP.resetAlg( this.item.get());
-    },
-    'authorization-kty-selected .c-authorization-properties-pane'( event, instance, data ){
-        instance.APP.resetAlg( this.item.get());
+    'click .js-tree'( event, instance ){
+        
     }
 });

@@ -81,7 +81,7 @@ Template.groups_hierarchy_pane.onCreated( function(){
         const group = node ? node.original.doc : null;
         let identities = [];
         if( group ){
-            Groups.fn.getIdentities( Template.currentData().item.get(), Template.currentData().groups.get(), group ).forEach(( it ) => {
+            Groups.fn.getIdentities( Template.currentData().item.get()._id, Template.currentData().groups.get(), group ).forEach(( it ) => {
                 identities.push( it );
             });
         }

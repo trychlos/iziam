@@ -5,6 +5,7 @@
 import _ from 'lodash';
 const assert = require( 'assert' ).strict; // up to nodejs v16.x
 
+import { DateJs } from 'meteor/pwix:date';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { TenantsManager } from 'meteor/pwix:tenants-manager';
@@ -23,6 +24,33 @@ const _assert_data_itemrv = function( caller, data ){
 
 Authorizations.checks = {
 
+    // cross checks
+    async crossCheckProperties( data, opts={} ){
+        let result = [];
+        const _check = async function( fn ){
+            let res = await fn( data, opts );
+            if( res ){
+                res = _.isArray( res ) ? res : [ res ];
+                result = result.concat( res );
+            }
+        };
+        await _check( Authorizations.checks.crossCheckStartingEnding );
+        return result.length ? result : null;
+    },
+
+    // compare starting vs ending dates
+    async crossCheckStartingEnding( data, opts={} ){
+        const item = data.item.get()
+        if( item.startingAt && item.endingAt ){
+            const cmp = DateJs.compare( item.startingAt, item.endingAt );
+            return cmp <= 0 ? null : new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'authorizations.checks.starting_ending' )
+            });
+        }
+        return null;
+    },
+
     // the group which holds the authorization
     // must exists
     async group( value, data, opts={} ){
@@ -34,7 +62,7 @@ Authorizations.checks = {
         }
         if( value ){
             const organization = TenantsManager.list.byEntity( data.entity._id );
-            const group = organization ? organization.DYN.groups.byId( value ) : null;
+            const group = organization ? organization.DYN.groups.byLabel( value ) : null;
             return group ? null : new TM.TypedMessage({
                 level: TM.MessageLevel.C.ERROR,
                 message: pwixI18n.label( I18N, 'authorizations.checks.group_unknown' )
@@ -58,22 +86,34 @@ Authorizations.checks = {
         return null;
     },
 
-    async endingAt(){
+    async endingAt( value, data, opts={} ){
         _assert_data_itemrv( 'Authorizations.checks.endingAt()', data );
         let item = data.item.get();
         if( opts.update !== false ){
-            item.endingAt = new Date( value );
+            item.endingAt = value ? new Date( value ) : value;
             data.item.set( item );
+        }
+        if( value ){
+            return DateJs.isValid( value ) ? null : new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'authorizations.checks.ending_invalid' )
+            });
         }
         return null;
     },
 
-    async startingAt(){
+    async startingAt( value, data, opts={} ){
         _assert_data_itemrv( 'Authorizations.checks.startingAt()', data );
         let item = data.item.get();
         if( opts.update !== false ){
-            item.startingAt = new Date( value );
+            item.startingAt = value ? new Date( value ) : value;
             data.item.set( item );
+        }
+        if( value ){
+            return DateJs.isValid( value ) ? null : new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'authorizations.checks.starting_invalid' )
+            });
         }
         return null;
     },

@@ -56,8 +56,10 @@ Groups.s = _.merge( Groups.s, {
         res.push( await Groups.collection( organizationId ).removeAsync({ organization: organizationId, type: 'I', identity: identityId }));
         //await Groups.s.dump( organizationId );
         // then insert the new memberships
-        for await ( const it of ( memberOf.direct || [] )){
-            res.push( await Groups.collection( organizationId ).insertAsync({ organization: organizationId, type: 'I', identity: identityId, parent: it }));
+        if( memberOf && memberOf.direct ){
+            for await ( const it of ( memberOf.direct || [] )){
+                res.push( await Groups.collection( organizationId ).insertAsync({ organization: organizationId, type: 'I', identity: identityId, parent: it }));
+            }
         }
         Groups.s.eventEmitter.emit( 'upsert', { organizationId: organizationId, userId: userId });
         //await Groups.s.dump( organizationId );

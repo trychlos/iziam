@@ -17,7 +17,7 @@ Identities.s = {
     // extend the AccountsManager All publication
     async allExtend( instanceName, item, userId ){
         item.DYN.memberOf = await Identities.s.memberOf( Identities.scope( instanceName ), item, userId );
-        item.DYN.label = await Identities.fn.label( item );
+        item.DYN.label = await Identities.fn.bestLabel( item );
     },
 
     // return the collection for the identities of the organization
@@ -65,7 +65,7 @@ Identities.s = {
     // provide a tabular_name, preferred email and username
     // tabular_name: a tabular column to display a full name *without* modifying the record
     async tabularExtend( instanceName, item, userId ){
-        item.tabular_name = await Identities.fn.label( item );
+        item.tabular_name = await Identities.fn.bestLabel( item );
         const email = Identities.fn.emailPreferred( item );
         if( email ){
             item.preferredEmailAddress = email.address;

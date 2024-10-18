@@ -10,13 +10,24 @@ import { Groups } from './index.js';
 Groups.fn = {
 
     /**
+     * @param {String} organizationId
+     * @param {Object|String} group the group identifier or the group object
+     * @returns {String} the best label we can get for group
+     */
+    async bestLabel( organizationId, group ){
+        let groupObject = await Groups.fn.group( organizationId, group );
+        const label = groupObject.label || groupObject._id;
+        return label;
+    },
+
+    /**
      * @summary Extract from the groups definitions the list of identities attached to the specified group
-     * @param {Object} organization entity with its DYN sub-object
+     * @param {String} organizationId
      * @param {Array} groups the list of groups in the organization (may be different of the content of GroupsRegistrar when editing)
      * @param {Object} group the group we search the members of
      * @returns {Array} identities group items, at least an empty array
      */
-    getIdentities( organization, groups, group ){
+    getIdentities( organizationId, groups, group ){
         let identities = [];
         groups.forEach(( it ) => {
             if( it.parent === group._id && it.type === 'I' ){
@@ -24,6 +35,22 @@ Groups.fn = {
             }
         });
         return identities;
+    },
+
+    /**
+     * @param {String} organizationId
+     * @param {Object|String} group the group identifier or the group object
+     * @returns {Object} the group object
+     */
+    async group( organizationId, group ){
+        let groupObject = null;
+        if( _.isString( group )){
+            const array = await( Meteor.isClient ? Meteor.callAsync( 'groups.getBy', organizationId, { _id: group }) : Groups.s.getBy( organizationId, { _id: group }));
+            groupObject = array && array.length && array[0];
+        } else {
+            groupObject = group;
+        }
+        return groupObject;
     },
 
     /**

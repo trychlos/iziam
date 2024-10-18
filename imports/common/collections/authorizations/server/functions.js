@@ -30,6 +30,14 @@ Authorizations.s = _.merge( Authorizations.s, {
         if( !await Permissions.isAllowed( 'feat.authorizations.create', userId, organizationId )){
             return false;
         }
-        console.debug( 'Authorizations.s.upsert', organizationId, item );
+        const DYN = item.DYN;
+        delete item.DYN;
+        const res = await Authorizations.collection( organizationId ).upsertAsync({ _id: item._id }, { $set: item });
+        item.DYN = DYN || {};
+        if( res.insertedId ){
+            item._id = res.insertedId;
+        }
+        console.debug( 'Authorizations.upsert', res );
+        return res;
     }
 });

@@ -21,15 +21,15 @@ Meteor.methods({
     'authorizations.import'( elt ){
         return Authorizations.insert( elt );
     },
-
+        */
 
     // upsert an item
-    'authorizations.upsert'( elt ){
-        return Authorizations.s.upsert({ _id: id });
-    }
-        */
+    async 'authorizations.upsert'( organizationId, item ){
+        return await Authorizations.s.upsert( organizationId, item, this.userId );
+    },
+
     // delete an item
-    'authorizations.removeById'( id ){
-        return Authorizations.s.removeById({ _id: id });
+    async 'authorizations.removeById'( organizationId, itemId ){
+        return await Authorizations.s.removeById( organizationId, itemId, this.userId );
     },
 });

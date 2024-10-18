@@ -56,10 +56,10 @@ Template.identities_select_dialog.onCreated( function(){
         if( registrar ){
             const identities = registrar.get().sort(( a, b ) => {
                 if( !a.DYN.label ){
-                    a.DYN.label = Identities.fn.label( a );
+                    a.DYN.label = Identities.fn.bestLabel( a );
                 }
                 if( !b.DYN.label ){
-                    b.DYN.label = Identities.fn.label( b );
+                    b.DYN.label = Identities.fn.bestLabel( b );
                 }
                 return a.DYN.label > b.DYN.label ? 1 : ( a.DYN.label < b.DYN.label ? -1 : 0 );
             });

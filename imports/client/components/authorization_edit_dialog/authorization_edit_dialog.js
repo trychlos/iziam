@@ -150,6 +150,8 @@ Template.authorization_edit_dialog.events({
     // the user may have already generated its keys - if not, we compute them here
     'iz-submit .c-authorization-edit-dialog'( event, instance ){
         const item = instance.APP.item.get();
+        // a bad hack for tests
+        item.type = 'C';
         const closeFn = function(){
             if( instance.APP.isModal.get()){
                 Modal.close();

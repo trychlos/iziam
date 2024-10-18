@@ -26,7 +26,7 @@ import './identity_profile_pane.html';
 
 Template.identity_profile_pane.onCreated( function(){
     const self = this;
-    console.debug( this );
+    //console.debug( this );
 
     self.APP = {
         fields: {

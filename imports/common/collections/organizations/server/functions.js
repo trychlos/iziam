@@ -58,16 +58,16 @@ Organizations.s = {
         //console.debug( 'item', item );
         // count authorizations
         // there is one authorization collection for each organization
-        item.authorizationsCount = await Authorizations.collection( item._id ).countDocuments({ organization: item._id });
+        item.authorizationsCount = await Authorizations.collection( item.entity ).countDocuments({ organization: item.entity });
         // count clients
         // there is one clients collection common to all organizations
-        item.clientsCount = await ClientsEntities.collection.countDocuments({ organization: item.DYN.entity._id });
+        item.clientsCount = await ClientsEntities.collection.countDocuments({ organization: item.entity });
         // count groups
         // there is one groups collection common to all organizations
-        item.groupsCount = await Groups.collection( item.DYN.entity._id ).countDocuments({ organization: item.DYN.entity._id });
+        item.groupsCount = await Groups.collection( item.entity ).countDocuments({ organization: item.entity });
         // count identities
         // there is one dedicated identities collection per organization 
-        const instanceName = Identities.instanceName( item.DYN.entity._id );
+        const instanceName = Identities.instanceName( item.entity );
         const amInstance = AccountsHub.instances[instanceName];
         if( amInstance ){
             assert( amInstance instanceof AccountsManager.amClass, 'expects an instance of AccountsManager.amClass, got '+amInstance );
@@ -78,7 +78,7 @@ Organizations.s = {
         }
         // count resources
         // there is one groups collection common to all organizations
-        item.resourcesCount = await Resources.collection( item.DYN.entity._id ).countDocuments({ organization: item.DYN.entity._id });
+        item.resourcesCount = await Resources.collection( item.entity ).countDocuments({ organization: item.entity });
         return true;
     },
 

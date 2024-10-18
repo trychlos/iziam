@@ -91,6 +91,21 @@ export class GroupsRegistrar extends izRegistrar {
     }
 
     /**
+     * @param {String} label the group label
+     * @returns {Object} the found group, with its DYN object, or null
+     */
+    byLabel( label ){
+        let found = null;
+        this.#list.get().every(( it ) => {
+            if( it.label === label ){
+                found = it;
+            }
+            return !found;
+        });
+        return found;
+    }
+
+    /**
      * @returns {Array<Group>} the current list of groups
      */
     get(){

@@ -156,6 +156,36 @@ As of 2024-09-16, latest oidc-provider is 8.5.1
  Adding a 'main' key in got/package.json doesn't improve.
  Have to get back to oidc-provider 7.14.3 (last 7.x version) to get a working installation.
 
+## Authorizations management
+
+Use case 1
+
+    An application delegates its users management to izIAM.
+    The application is the client.
+    Users are registered at the organization level as identities.
+
+    We so must have a link identity <-> client.
+
+    We use groups of identities to group identities.
+    The above assertion can be rewritten as a link group <-> client
+
+    With OpenID:
+    - the client connects and authenticates itself, then asks for a user permission
+    - OpenID asks the user who authenticates and gives the permissions he wishes
+    - Among the available scopes, we define 'org.trychlos.iziam:groups' which contains the list of groups of the (authenticated) identity
+      Note that there is here some sort of leak of informations as the client application will then get the list of all groups of the user, even it does need only some of them.
+
+    Two ways of doing that:
+    1. Associates a group (or a list of groups) to the client
+    2. Delegates to the client the task of accepting or refusing this identity
+
+    This may be a client configuration option for this authentication grant flow which involves a user authentication:
+    - application is allowed to asks for a list of scopes to be defined at the client level
+
+    - the application decides to accept or deny an identity when it gets the identity 'org.trychlos.iziam:groups' groups list
+    - the application wants only receive the identities which are member of such or such group(s)
+      it may still (and always) deny or refuse the access
+
 ## Counts
 
 [pierre@slim14 iziam] $ typeset -i c=0; for f in $(find ./imports/ -type f); do c+=$(wc -l "$f" | cut -d' ' -f1); done; echo $c

@@ -5,7 +5,7 @@
 import _ from 'lodash';
 const assert = require( 'assert' ).strict; // up to nodejs v16.x
 
-import { ReactiveVar } from 'meteor/reactive-var';
+import { Validity } from 'meteor/pwix:validity';
 
 import { Identities } from './index.js';
 
@@ -97,6 +97,14 @@ Identities.fn = {
 
     /**
      * @param {Identity} identity
+     * @return {String} which eventually resolves to a label (the said 'better label') to associate to this identity
+     */
+    bestLabel( identity ){
+        return Identities.fn.name( identity ) || Identities.fn.emailPreferred( identity )?.address || Identities.fn.usernamePreferred( identity )?.username || identity.DYN?.label;
+    },
+
+    /**
+     * @param {Identity} identity
      * @param {String} id
      * @return {Object} the email object which holds this id, or null
      */
@@ -152,11 +160,45 @@ Identities.fn = {
     },
 
     /**
-     * @param {Identity} identity
-     * @return {String} which eventually resolves to a label (the said 'better label') to associate to this identity
+     * @param {Object} organization an organization entity or an organization { entity, record }
+     * @param {Object|String} identity an identity identifier or an identity obkect
+     * @returns {Boolean} whether this identity has the identifier required by the organization configuration
      */
-    label( identity ){
-        return Identities.fn.name( identity ) || Identities.fn.emailPreferred( identity )?.address || Identities.fn.usernamePreferred( identity )?.username || identity.DYN?.label;
+    async hasIdentifier( organization, identity ){
+        let haveIdentifier = false;
+        const org = Validity.getEntityRecord( organization );
+        let ident = await Identities.fn.identity( org.entity._id, identity );
+        if( !haveIdentifier && organization.record.identitiesEmailAddressesIdentifier ){
+            if( ident.emails?.length > 0 ){
+                if( ident.emails[0].address ){
+                    haveIdentifier = true;
+                }
+            }
+        }
+        if (!haveIdentifier && organization.record.identitiesUsernamesIdentifier ){
+            if( ident.usernames?.length > 0 ){
+                if( ident.usernames[0].username ){
+                    haveIdentifier = true;
+                }
+            }
+        }
+        return haveIdentifier;
+    },
+
+    /**
+     * @param {String} organizationId
+     * @param {Object|String} identity an identity identifier or an identity object
+     * @returns {Object} the identity object
+     */
+    async identity( organization, identity ){
+        let ident = null;
+        if( _.isString( identity )){
+            const array = await( Meteor.isClient ? Meteor.callAsync( 'identities.getBy', organizationId, { _id: identity }) : Identities.s.getBy( organizationId, { _id: identity }));
+            ident = array && array.length && array[0];
+        } else {
+            ident = identity;
+        }
+        return ident;
     },
 
     /**
@@ -260,7 +302,7 @@ Identities.fn = {
      */
     async preferredLabel( user, preferred=null ){
         return user ? {
-            label: Identities.fn.label( user ),
+            label: Identities.fn.bestLabel( user ),
             origin: 'IDENTITY'
         } : null;
     },
