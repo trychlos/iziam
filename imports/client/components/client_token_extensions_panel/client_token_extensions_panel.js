@@ -37,7 +37,9 @@ Template.client_token_extensions_panel.onCreated( function(){
 
         // whether this item is selected
         isSelected( dataContext, it ){
-            const selected = ( dataContext.entity.get().DYN.records[dataContext.index].get().token_extensions || [] ).includes( it );
+            const selected =
+                ( dataContext.entity.get().DYN.records[dataContext.index].get().token_extensions || [] ).includes( it ) ||
+                    Organizations.fn.wantsTokenExtension( dataContext.organization, it );
             return selected;
         }
     };
@@ -63,6 +65,11 @@ Template.client_token_extensions_panel.onRendered( function(){
 });
 
 Template.client_token_extensions_panel.helpers({
+    // whether we have some items to choose among
+    haveItems(){
+        return Template.instance().APP.selectables.get().length > 0;
+    },
+
     // string translation
     i18n( arg ){
         return pwixI18n.label( I18N, arg.hash.key );
@@ -79,6 +86,7 @@ Template.client_token_extensions_panel.helpers({
     },
 
     itDisabled( it ){
+        return Organizations.fn.wantsTokenExtension( this.organization, it ) ? 'disabled' : '';
     },
 
     // label

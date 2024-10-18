@@ -78,7 +78,7 @@ Organizations.recordFieldset = function(){
                     form_check: Organizations.checks.dynamicRegistrationByUser
                 },
                 // -- oauth configuration
-                // whether this organization wants all public clients use PKCE (rfc7636)
+                // whether this organization wants *all* clients use PKCE (rfc7636)
                 {
                     name: 'wantsPkce',
                     type: Boolean,

@@ -83,7 +83,7 @@ Template.client_record_tabbed.onCreated( function(){
                 },
                 {
                     navLabel: pwixI18n.label( I18N, 'clients.edit.config_tab_title' ),
-                    paneTemplate: 'client_config_panel',
+                    paneTemplate: 'client_config_pane',
                     paneData: paneData
                 },
                 {

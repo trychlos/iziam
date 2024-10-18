@@ -156,6 +156,7 @@ Meteor.APP.i18n = {
                     application_type_label: 'Application type :',
                     auth_flow_tab_title: 'Authorization flow',
                     auth_method_tab_title: 'Authentication method',
+                    authorizations_tab_title: 'Authorizations',
                     client_type_label: 'Client type :',
                     config_tab_title: 'Configuration',
                     contacts_tab_title: 'Contacts',
@@ -184,6 +185,8 @@ Meteor.APP.i18n = {
                     logo_title: 'The URI of a logo displayable to an end-user',
                     modal_title: 'Edit the "%s" client',
                     new_success: 'The client "%s" has been successfully created',
+                    no_token_extension: 'There is no available token extension.<br />'
+                        +'Most probaly, you want select the providers able to give you the needed features.',
                     privacy_label: 'Privacy policy page URI :',
                     privacy_ph: 'https://my.example.com/privacy',
                     privacy_title: 'The URI of a page which describes the privacy policy of the client',
@@ -194,6 +197,7 @@ Meteor.APP.i18n = {
                     redirects_tab_title: 'Redirect URLs',
                     redirects_text: 'The authorization flow you have chosen implies to predefine at least one redirection URI.<br />'
                         +'The Authorization Server will restrict the grant flow redirections to one of below URIs.',
+                    scopes_tab_title: 'Scopes',
                     secrets_tab_title: 'Secrets',
                     softid_label: 'Software identifier :',
                     softid_ph: 'MySoftware',
@@ -202,6 +206,7 @@ Meteor.APP.i18n = {
                     softver_ph: 'vx.yy.zzz-aaaa',
                     softver_title: 'The client software version which distinguish it from other registered clients',
                     status_tab_title: 'Operational status',
+                    token_extensions_tab_title: 'Token Extensions',
                     tos_label: 'Terms of Service page URI :',
                     tos_ph: 'https://my.example.com/tos',
                     tos_title: 'The URI of a page which describes the terms of service of the client'
@@ -1229,9 +1234,10 @@ Meteor.APP.i18n = {
                     oauth_config_tab_title: 'OAuth',
                     pkce_description: 'The RFC 7636 "Proof Key for Code Exchange by OAuth Public Clients" proposes a way to mitigate authorization code interception attacks '
                         +'to which public clients are exposed because they cannot securely authenticate. The extension utilizes a dynamically created cryptographically '
-                        +'random key unique for every authorization request.',
-                    pkce_label: 'Make mandatory the protection of the "authorization_code" grant type with PKCE for all public clients',
-                    pkce_title: 'Make a proof key for code exchange mandatory for all public clients using "authorization_code" grant type, conforming with RFC 7636',
+                        +'random key unique for every authorization request. It ensures that the application that starts the authentication flow is the same one that finishes it.<br />'
+                        +'Initially defined for public clients and Authorization Code Grant Flow, it is now widely used, and you can force its use here.',
+                    pkce_label: 'Make mandatory the PKCE usage for all clients',
+                    pkce_title: 'Make a proof key for code exchange mandatory for all clients, conforming with RFC 7636',
                     providers_tab_title: 'Providers',
                     resources_tab_title: 'Resources',
                     rest_config_preamble: 'Configure the behaviour of your REST API.<br />'

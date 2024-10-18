@@ -59,7 +59,9 @@
 |  118 | 2024-10- 9 | clients should be able to provide some javascript/ejs to display in interactions dialogs |
 |  119 | 2024-10-16 | BUG: when updating groups of an identity, the client groupsRegistrar content is badly updated (publication is fine, but subcription only receives a part) |
 |  120 | 2024-10-16 | input placeholders are too close of black - have a lighter gray and italics |
-|  121 |  |  |
+|  121 | 2025-10-18 | token extensions: the organization should be able to make mandatory all token extensions provided by the selected providers |
+|      |            | this implies having a small companion collection with a row per available token extension or an array inside of the current schema |
+|  122 |  |  |
 
 ---
 ## Done

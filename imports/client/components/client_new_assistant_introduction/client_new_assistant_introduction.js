@@ -6,7 +6,21 @@
 
 import { pwixI18n } from 'meteor/pwix:i18n';
 
+import { Organizations } from '/imports/common/collections/organizations/index.js';
+
 import './client_new_assistant_introduction.html';
+
+Template.client_new_assistant_introduction.onRendered( function(){
+    const self = this;
+
+    // get current providers selected by the organization
+    self.autorun(() => {
+        const dataDict = Template.currentData().parentAPP.assistantStatus;
+        if( dataDict.get( 'activePane' ) === 'introduction' ){
+            dataDict.set( 'selectedProviders', Object.keys( Organizations.fn.selectedProviders( Template.currentData().organization )));
+        }
+    });
+});
 
 Template.client_new_assistant_introduction.helpers({
     // string translation

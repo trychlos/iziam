@@ -56,7 +56,7 @@ import { ClientsEntities } from '/imports/common/collections/clients_entities/in
 
 import '/imports/client/components/client_application_type_select/client_application_type_select.js';
 import '/imports/client/components/client_auth_method_panel/client_auth_method_panel.js';
-import '/imports/client/components/client_config_panel/client_config_panel.js';
+import '/imports/client/components/client_config_pane/client_config_pane.js';
 import '/imports/client/components/client_contacts_panel/client_contacts_panel.js';
 import '/imports/client/components/client_entity_properties_pane/client_entity_properties_pane.js';
 import '/imports/client/components/client_entity_validities_pane/client_entity_validities_pane.js';

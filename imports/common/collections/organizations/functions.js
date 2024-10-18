@@ -11,6 +11,7 @@ import { Validity } from 'meteor/pwix:validity';
 import { izProvider } from '/imports/common/classes/iz-provider.class.js';
 
 import { AuthMethod } from '/imports/common/definitions/auth-method.def.js';
+import { TokenExtension } from '/imports/common/definitions/token-extension.def.js';
 
 import { IFeatured } from '/imports/common/interfaces/ifeatured.iface.js';
 import { IGrantType } from '/imports/common/interfaces/igranttype.iface.js';
@@ -211,6 +212,7 @@ Organizations.fn = {
         });
         // update the record with this current result
         canonical.record.selectedProviders = Object.keys( result );
+        //console.debug( 'result', result );
         return result;
     },
 
@@ -285,7 +287,7 @@ Organizations.fn = {
         });
         return [ ...new Set( supported )];
     },
-
+    
     /**
      * @locus Anywhere
      * @param {Object} organization
@@ -294,5 +296,16 @@ Organizations.fn = {
     wantsPkce( organization ){
         const canonical = Validity.getEntityRecord( organization );
         return canonical.record.wantsPkce !== false;
+    },
+    
+    /**
+     * @locus Anywhere
+     * @param {Object} organization
+     * @param {TokenExtension|String} extension either an identifier or an object
+     * @returns {Boolean} whether this organization has made mandatory this extension
+     */
+    wantsTokenExtension( organization, extension ){
+        // TODO
+        return extension.id === 'pkce' ? Organizations.fn.wantsPkce( organization ) : false;
     }
 };
