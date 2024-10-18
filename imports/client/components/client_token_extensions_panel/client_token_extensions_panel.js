@@ -10,10 +10,10 @@
  * - or inside the client-edit.
  * 
  * Parms:
- * - organization: an { entity, record } object
  * - entity: the currently edited client entity as a ReactiveVar
  * - index: the index of the edited record
  * - checker: the Forms.Checker which manages the parent component as a ReactiveVar
+ * - organization: the Organization as an entity with its DYN.records array
  */
 
 import _ from 'lodash';

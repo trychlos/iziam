@@ -3,8 +3,9 @@
  *
  * Parms:
  * - entity: a ReactiveVar which contains the Organization, with its DYN.records array of ReactiveVar's
- * - index: the index of the current edited organization record
+ * - index: the index of the current edited Client record
  * - checker: a ReactiveVar which contains the parent checker
+ * - organization: the Organization as an entity with its DYN.records array
  */
 
 import { pwixI18n } from 'meteor/pwix:i18n';
@@ -26,6 +27,8 @@ Template.client_jwks_panel.onCreated( function(){
         client: new ReactiveVar({ entity: null, record: null })
     };
 
+    // because the entityis very incomplete when running from the client new assistant, we cannot rely on Validity.getEntityRecord()
+    //  so built the { entity, record } here
     self.autorun(() => {
         let entity = { ...Template.currentData().entity.get() };
         delete entity.DYN;
@@ -43,8 +46,10 @@ Template.client_jwks_panel.helpers({
     // parms for the jwks_list
     // see the jwks_list component for a description of the expected data context
     parmsJwksList(){
-        let parms = {
-            ...this,
+        return {
+            entity: this.entity,
+            index: this.index,
+            organization: this.organization,
             listGetFn: Jwks.fn.get,
             listAddFn: Jwks.fn.add,
             listRemoveFn: Jwks.fn.remove,
@@ -53,6 +58,5 @@ Template.client_jwks_panel.helpers({
                 parent: this.organization
             }
         };
-        return parms;
     }
 });

@@ -4,7 +4,7 @@
  * Parms:
  * - item: a ReactiveVar which contains the Client, with its DYN.records array of ReactiveVar's
  * - checker: a ReactiveVar which contains the parent checker
- * - organization: an { entity, record } object
+ * - organization: the Organization as an entity with its DYN.records array
  */
 
 import '/imports/client/components/operational_panel/operational_panel.js';

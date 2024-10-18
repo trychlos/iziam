@@ -5,8 +5,9 @@
  *
  * Parms:
  * - entity: the currently edited entity as a ReactiveVar
- * - index: the index of the edited record
+ * - index: the index of the currently edited Client record
  * - checker: a ReactiveVar which holds the parent Checker
+ * - organization: the Organization as an entity with its DYN.records array
  * - haveOne: whether to provide an empty row at initialization when there is not yet any contact url, defaulting to true
  * - enableChecks: whether the checks should be enabled at startup, defaulting to true
  */
@@ -114,9 +115,9 @@ Template.client_contacts_panel.helpers({
 
     // whether the plus button is enabled
     plusDisabled(){
-        const contacts = this.entity.get().DYN.records[this.index].get().contacts || [];
-        const last = contacts.length ? contacts[contacts.length-1] : null;
-        return !last || last.email ? '' : 'disabled';
+        const checker = Template.instance().APP.checker.get();
+        const valid = checker ? checker.iStatusableValidity() : false;
+        return valid ? '' : 'disabled';
     }
 });
 

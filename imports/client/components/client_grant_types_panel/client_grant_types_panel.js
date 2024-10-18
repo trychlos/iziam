@@ -8,10 +8,10 @@
  * - or inside the client-edit.
  * 
  * Parms:
- * - organization: an { entity, record } object
  * - entity: the currently edited client entity as a ReactiveVar
- * - index: the index of the edited record
+ * - index: the index of the currently edited Client record
  * - checker: the Forms.Checker which manages the parent component as a ReactiveVar
+ * - organization: the Organization as an entity with its DYN.records array
  * - enableChecks: whether the checks should be enabled at startup, defaulting to true
  * 
  * Forms.Checker doesn't manage well radio buttons: do not use here.

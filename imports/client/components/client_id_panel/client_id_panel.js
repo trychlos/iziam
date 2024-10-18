@@ -5,10 +5,10 @@
  * Displays the generated identifier.
  * 
  * Parms:
- * - organization: an { entity, record } object
  * - entity: the currently edited client entity as a ReactiveVar
- * - index: the index of the edited record
+ * - index: the index of the currently edited client record
  * - checker: the Forms.Checker which manages the parent component as a ReactiveVar
+ * - organization: the Organization as an entity with its DYN.records array
  */
 
 import { Forms } from 'meteor/pwix:forms';

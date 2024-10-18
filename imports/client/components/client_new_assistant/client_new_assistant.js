@@ -9,8 +9,8 @@
  * - embedded panel are expected to publish their changes to the assistant which keep track of the interesting things in the assistantStatus ReactiveDict.
  * 
  * Parms:
- * - organization: an { entity, record } object which provides the current closest Organization
  * - item: null
+ * - organization: the Organization as an entity with its DYN.records array
  */
 
 import _ from 'lodash';
@@ -181,7 +181,7 @@ Template.client_new_assistant.onCreated( function(){
 
     // build a suitable new client entity
     self.APP.entity.set({
-        organization: Template.currentData().organization.entity._id,
+        organization: Template.currentData().organization._id,
         DYN: {
             records: [
                 new ReactiveVar( {} )

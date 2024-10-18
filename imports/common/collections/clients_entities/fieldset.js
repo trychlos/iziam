@@ -5,6 +5,7 @@
  */
 
 import { Field } from 'meteor/pwix:field';
+import { Forms } from 'meteor/pwix:forms';
 import { Notes } from 'meteor/pwix:notes';
 import { Tracker } from 'meteor/tracker';
 import { Validity } from 'meteor/pwix:validity';
@@ -25,6 +26,7 @@ const _defaultFieldDef = function(){
             name: 'clientId',
             type: String,
             form_check: ClientsEntities.checks.clientId,
+            form_type: Forms.FieldType.C.NONE
         },
         // common notes
         Notes.fieldDef(),

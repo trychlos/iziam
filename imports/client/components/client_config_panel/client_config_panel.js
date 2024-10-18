@@ -2,10 +2,10 @@
  * /imports/client/components/client_config_panel/client_config_panel.js
  *
  * Parms:
- * - organization: an { entity, record } object
  * - entity: a ReactiveVar which contains the Organization, with its DYN.records array of ReactiveVar's
- * - index: the index of the current edited organization record
+ * - index: the index of the currently edited Client record
  * - checker: a ReactiveVar which contains the parent checker
+ * - organization: the Organization as an entity with its DYN.records array
  */
 
 import { pwixI18n } from 'meteor/pwix:i18n';

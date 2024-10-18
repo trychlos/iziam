@@ -109,22 +109,18 @@ Template.clients_list.events({
         delete dc.recordTabs;
         delete dc.recordTabsAfter;
         delete dc.checker;
-        const organization = {
-            entity: this.item.get(),
-            record: this.item.get().DYN.closest
-        };
-        const registered = TenantsManager.list.byEntity( this.item.get()._id );
-        const item = registered.DYN.clients.byId( data.item._id );
+        dc.organization = this.item.get();
+        const saved = TenantsManager.list.byEntity( this.item.get()._id );
+        const item = saved.DYN.clients.byId( data.item._id );
         if( item ){
             Modal.run({
                 ...dc,
+                item: item,
                 mdBody: 'client_edit_dialog',
                 mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
                 mdClasses: 'modal-xxl',
                 //mdClassesContent: Meteor.APP.runContext.pageUIClasses().join( ' ' ),
-                mdTitle: pwixI18n.label( I18N, 'clients.edit.modal_title', item.DYN.closest.label ),
-                item: item,
-                organization: organization
+                mdTitle: pwixI18n.label( I18N, 'clients.edit.modal_title', item.DYN.closest.label )
             });
         }
         return false;

@@ -9,8 +9,9 @@
  * 
  * Parms:
  * - entity: the currently edited client entity as a ReactiveVar
- * - index: the index of the edited record
+ * - index: the index of the currently edited Client record
  * - checker: the Forms.Checker which manages the parent component as a ReactiveVar
+ * - organization: the Organization as an entity with its DYN.records array
  * - enableChecks: whether the checks should be enabled at startup, defaulting to true
  * - withEnabled: whether we want an enabled checkbox, defaulting to false
  * - withProfile: whether we want a profile selection (only in edit_dialog, not in new_assistant), defaulting to false
@@ -30,7 +31,7 @@ import './client_properties_panel.html';
 
 Template.client_properties_panel.onCreated( function(){
     const self = this;
-    console.debug( this );
+    //console.debug( this );
 
     self.APP = {
         fields: {
@@ -71,7 +72,10 @@ Template.client_properties_panel.onCreated( function(){
     });
     self.autorun(() => {
         if( Template.currentData().withEnabled === true ){
-            self.APP.fields.enabled = { js: '.js-enabled' };
+            self.APP.fields.enabled = {
+                js: '.js-enabled',
+                form_type: Forms.FieldType.C.TRANSPARENT
+            };
         }
     });
     self.autorun(() => {

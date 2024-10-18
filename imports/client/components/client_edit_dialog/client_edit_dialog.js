@@ -36,10 +36,10 @@
  *  This template hierarchy can run inside of a plain page or of a modal; this is up to the caller, and dynamically identified here.
  *
  * Parms:
- * - organization: an { entity, record } object which provides the current closest Organization
  * - item: the to-be-edited entity item, null when new
  *      including DYN.managers and DYN.records arrays
  *      this item will be left unchanged until panel submission
+ * - organization: the Organization as an entity with its DYN.records array
  */
 
 import _ from 'lodash';

@@ -9,6 +9,7 @@
  * - entity: the currently edited entity as a ReactiveVar
  * - index: the index of the edited record
  * - checker: the Forms.Checker which manages the parent component
+ * - organization: the Organization as an entity with its DYN.records array
  *
  * Because client_record_tabbed, which hosts client properties as tabs, is itself hosted inside of ValidityTabbed component with one tab per validity period,
  *  we identify each validity period through the tab identifier allocated by the ValidityTabbed (which happens to be the Tabbed parent of this client_record_tabbed).

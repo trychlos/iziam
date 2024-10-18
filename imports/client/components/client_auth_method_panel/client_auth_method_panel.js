@@ -9,8 +9,9 @@
  * 
  * Parms:
  * - entity: the currently edited client entity as a ReactiveVar
- * - index: the index of the edited record
+ * - index: the index of the currently edited Client record
  * - checker: the Forms.Checker which manages the parent component as a ReactiveVar
+ * - organization: the Organization as an entity with its DYN.records array
  * - isAssistant: whether we are running inside of the new client assistant, defaulting to false
  * 
  * Forms.Checker doesn't manage well radio buttons: do not use here.

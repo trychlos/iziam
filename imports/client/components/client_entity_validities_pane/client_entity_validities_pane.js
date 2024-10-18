@@ -6,6 +6,7 @@
  * Parms:
  * - item: a ReactiveVar which holds the client entity to edit
  * - checker: the parent Checker
+ * - organization: the Organization as an entity with its DYN.records array
  */
 
 import _ from 'lodash';
