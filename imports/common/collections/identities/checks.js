@@ -99,7 +99,19 @@ Identities.checks = {
     //  item: a ReactiveVar which contains the currently edited identity
     //  amInstance: the AccountsManager.amClass instance
     //  organization: an { entity, record } object
-    //
+
+    // whether this address object is set ?
+    // emits a warning if the address is empty
+    async crossAddress( data, opts ){
+        const address = opts.checker.panel().objectData();
+        console.debug( 'array', Identities.fn.addressAsArray( address ));
+        console.debug( 'empty', Identities.fn.addressEmpty( address ));
+        return Identities.fn.addressEmpty( address ) ? new TM.TypedMessage({
+            level: TM.MessageLevel.C.WARNING,
+            message: pwixI18n.label( I18N, 'identities.checks.address_unset' )
+        }) : null;
+    },
+
     // whether this identity has an identifier ?
     async crossHasIdentifier( data, opts ){
         _assert_cross_data_content( 'Identities.checks.crossHasIdentifier()', data );
@@ -144,17 +156,7 @@ Identities.checks = {
             item.addresses[index].country = value;
             data.item.set( item );
         }
-        return Identities.checks.address_empty( item.addresses[index] );
-    },
-
-    // whether this address object is empty ?
-    // called for each address field, emits a warning if the address is empty
-    async address_empty( address ){
-        let item = data.item.get();
-        return Identities.fn.addressEmpty( address ) ? new TM.TypedMessage({
-            level: TM.MessageLevel.C.WARNING,
-            message: pwixI18n.label( I18N, 'identities.checks.address_unset' )
-        }) : null;
+        return null;
     },
 
     async address_label( value, data, opts={} ){
@@ -186,7 +188,7 @@ Identities.checks = {
             item.addresses[index].line1 = value;
             data.item.set( item );
         }
-        return Identities.checks.address_empty( item.addresses[index] );
+        return null;
     },
 
     async address_line2( value, data, opts={} ){
@@ -202,7 +204,7 @@ Identities.checks = {
             item.addresses[index].line2 = value;
             data.item.set( item );
         }
-        return Identities.checks.address_empty( item.addresses[index] );
+        return null;
     },
 
     async address_line3( value, data, opts={} ){
@@ -218,7 +220,7 @@ Identities.checks = {
             item.addresses[index].line3 = value;
             data.item.set( item );
         }
-        return Identities.checks.address_empty( item.addresses[index] );
+        return null;
     },
 
     async address_locality( value, data, opts={} ){
@@ -234,7 +236,7 @@ Identities.checks = {
             item.addresses[index].locality = value;
             data.item.set( item );
         }
-        return Identities.checks.address_empty( item.addresses[index] );
+        return null;
     },
 
     async address_po_number( value, data, opts={} ){
@@ -250,7 +252,7 @@ Identities.checks = {
             item.addresses[index].poNumber = value;
             data.item.set( item );
         }
-        return Identities.checks.address_empty( item.addresses[index] );
+        return null;
     },
 
     async address_postal_code( value, data, opts={} ){
@@ -266,7 +268,7 @@ Identities.checks = {
             item.addresses[index].postalCode = value;
             data.item.set( item );
         }
-        return Identities.checks.address_empty( item.addresses[index] );
+        return null;
     },
 
     async address_preferred( value, data, opts={} ){
@@ -314,7 +316,7 @@ Identities.checks = {
             item.addresses[index].region = value;
             data.item.set( item );
         }
-        return Identities.checks.address_empty( item.addresses[index] );
+        return null;
     },
 
     // the birthdate (full date)

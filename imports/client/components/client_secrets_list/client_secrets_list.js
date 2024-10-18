@@ -50,7 +50,6 @@ Template.client_secrets_list.events({
 
     // edit a keygrip
     'tabular-edit-event .c-client-secrets-list'( event, instance, data ){
-        console.debug( this );
         Modal.run({
             ...this,
             mdBody: 'client_secret_edit_dialog',

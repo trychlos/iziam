@@ -71,7 +71,7 @@ Template.identity_phone_row.onCreated( function(){
             let phones = item.phones || [];
             let found = -1;
             for( let i=0 ; i<phones.length ; ++i ){
-                if( phones[i].id === id ){
+                if( phones[i]._id === id ){
                     found = i;
                     break;
                 }

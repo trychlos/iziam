@@ -22,17 +22,25 @@ Identities.fn = {
     /**
      * @param {Address} address an address object
      * @return {Array} each field in an array
+     *  NB: this weird code to handle both objects as { line1, line2, ... } and as { addresses.$.line1, addresses.$.line2, ... }
      */
     addressAsArray( address ){
         let array = [];
-        address.line1 && array.push( address.line1 );
-        address.line2 && array.push( address.line2 );
-        address.line3 && array.push( address.lineaddress3 );
-        address.poNumber && array.push( 'PO.'+address.poNumber );
-        address.postalCode && array.push( address.postalCode );
-        address.locality && array.push( address.locality );
-        address.region && array.push( address.region );
-        address.country && array.push( address.country );
+        let bis = {};
+        Object.keys( address ).forEach(( it ) => {
+            const w = it.split( /\./ );
+            const key = w[w.length-1];
+            address[it] && ( bis[key] = address[it] );
+        });
+        // have to scan each field in this order to have a label in standard address order
+        bis.line1 && array.push( bis.line1 );
+        bis.line2 && array.push( bis.line2 );
+        bis.line3 && array.push( bis.line3 );
+        bis.poNumber && array.push( 'PO.'+bis.poNumber );
+        bis.postalCode && array.push( bis.postalCode );
+        bis.locality && array.push( bis.locality );
+        bis.region && array.push( bis.region );
+        bis.country && array.push( bis.country );
         return array;
     },
 

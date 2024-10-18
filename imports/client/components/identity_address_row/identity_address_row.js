@@ -126,7 +126,7 @@ Template.identity_address_row.onCreated( function(){
             let addresses = item.addresses || [];
             let found = -1;
             for( let i=0 ; i<addresses.length ; ++i ){
-                if( addresses[i].id === id ){
+                if( addresses[i]._id === id ){
                     found = i;
                     break;
                 }
@@ -162,6 +162,7 @@ Template.identity_address_row.onRendered( function(){
         const checker = self.APP.checker.get();
         if( amInstance && parentChecker && !checker ){
             self.APP.checker.set( new Forms.Checker( self, {
+                name: 'identity_address_row',
                 parent: parentChecker,
                 panel: new Forms.Panel( self.APP.fields, amInstance.fieldSet()),
                 data: {
@@ -171,7 +172,8 @@ Template.identity_address_row.onRendered( function(){
                 },
                 id: Template.currentData().it._id,
                 fieldStatusShow: Forms.C.ShowStatus.NONE,
-                setForm: Template.currentData().it
+                setForm: Template.currentData().it,
+                crossCheckFn: Identities.checks.crossAddress
             }));
         }
     });
