@@ -9,13 +9,14 @@ const assert = require( 'assert' ).strict;
 import mix from '@vestergaard-company/js-mixin';
 
 import { izProvider } from '/imports/common/classes/iz-provider.class.js';
+import { OpenID } from '/imports/common/classes/openid.class.js';
+import { Scope } from '/imports/common/classes/scope.class.js';
 
 import { IGrantType } from '/imports/common/interfaces/igranttype.iface.js';
 import { IRequestable } from '/imports/common/interfaces/irequestable.iface.js';
+import { IScope } from '/imports/common/interfaces/iscope.iface.js';
 
-import { OpenID } from '/imports/common/providers/openid-functions.js';
-
-export class OpenIDProvider extends mix( izProvider ).with( IGrantType, IRequestable ){
+export class OpenIDProvider extends mix( izProvider ).with( IGrantType, IRequestable, IScope ){
 
     // static data
 
@@ -68,6 +69,11 @@ export class OpenIDProvider extends mix( izProvider ).with( IGrantType, IRequest
             ],
             irequires: [
                 'oauth2'
+            ],
+            // see https://openid.net/specs/openid-connect-core-1_0.html#ScopeClaims
+            iscope: [
+                Scope.byName( 'openid' ),
+                Scope.byName( 'offline_access' )
             ]
             /*
             iresource: {

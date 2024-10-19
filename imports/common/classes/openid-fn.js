@@ -1,5 +1,5 @@
 /*
- * /imports/common/providers/openid-functions.js
+ * /imports/common/classes/openid-fn.js
  *
  * OpenID Connect functions
  * 
@@ -10,13 +10,11 @@
 import _ from 'lodash';
 const assert = require( 'assert' ).strict;
 
+import { OAuth2 } from '/imports/common/classes/oauth2.class.js';
+
 import { Organizations } from '/imports/common/collections/organizations/index.js';
 
-import { OAuth2 } from '/imports/common/providers/oauth2-functions.js';
-
-export const OpenID = {};
-
-OpenID.fn = {
+export const _openid_fn = {
     /**
      * @param {Organizations} organization as an { entity, record } object
      * @returns {Object} the list of configured endpoints
@@ -71,6 +69,7 @@ OpenID.fn = {
         // request_parameter_supported
         // request_uri_parameter_supported
         // require_request_uri_registration
+        console.debug( 'OpenID metadata', data );
         return data;
     }
 };

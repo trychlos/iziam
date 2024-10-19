@@ -14,11 +14,10 @@ const assert = require( 'assert' ).strict;
 import mix from '@vestergaard-company/js-mixin';
 
 import { izProvider } from '/imports/common/classes/iz-provider.class.js';
+import { OAuth2 } from '/imports/common/classes/oauth2.class.js';
 
 import { IGrantType } from '/imports/common/interfaces/igranttype.iface.js';
 import { IRequestable } from '/imports/common/interfaces/irequestable.iface.js';
-
-import { OAuth2 } from '/imports/common/providers/oauth2-functions.js';
 
 export class OAuth21Provider extends mix( izProvider ).with( IGrantType, IRequestable ){
 

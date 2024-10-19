@@ -70,7 +70,7 @@ export class IdentitiesRegistrar extends izRegistrar {
 
         this.#amInstance = new AccountsManager.amClass({
             name: Identities.instanceName( organization._id ),
-            baseFieldset: new Field.Set( Identities.fieldsDef( organization )),
+            baseFieldset: new Field.Set( Identities.fieldsDef()),
             clientNewFn: Identities.fn.new,
             clientNewArgs: {
                 organization: organization

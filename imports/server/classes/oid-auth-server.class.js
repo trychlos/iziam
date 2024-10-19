@@ -11,9 +11,10 @@ import Provider from 'oidc-provider';
 
 import { WebApp } from 'meteor/webapp';
 
-import { Organizations } from '/imports/common/collections/organizations/index.js';
+import { OpenID } from '/imports/common/classes/openid.class.js';
+import { Scope } from '/imports/common/classes/scope.class.js';
 
-import { OpenID } from '/imports/common/providers/openid-functions.js';
+import { Organizations } from '/imports/common/collections/organizations/index.js';
 
 import { Jwks } from '/imports/common/tables/jwks/index.js';
 import { Keygrips } from '/imports/common/tables/keygrips/index.js';
@@ -43,6 +44,7 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
      * @returns {Object} the configuration needed for this OIDAuthServer (and the underlying OpenID Connect Provider)
      */
     async _config( organization ){
+        const self = this;
         let conf = {
             features: {
                 devInteractions: {
@@ -89,9 +91,18 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
             conf.features.introspection = { enabled: true };
         }
 
+        // supported scopes
+        //  'openid' and 'offline_access' are set by default, but adding scopes removes 'offline_access', leaving only 'openid' plus additional scopes
+        conf.scopes = Scope.scopeNames();
+
         // https://github.com/panva/node-oidc-provider/blob/v7.14.3/docs/README.md#accounts
         // define IdentityServer
-        conf.findAccount = this.iRequestServer().identityServer().findAccount;
+        //conf.findAccount = this.iRequestServer().identityServer().findAccount;
+        conf.findAccount = async ( ctx, id, token ) => {
+            const identityServer = self.iRequestServer().identityServer();
+            const organization = self.iRequestServer().organization();
+            return await identityServer.findAccount( organization, ctx, id, token );
+        };
 
         // https://github.com/panva/node-oidc-provider/blob/v7.14.3/docs/README.md#interactionsurl
         // make sure our interactions url is prefixed with our base url
@@ -207,7 +218,7 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
              */
             console.log( 'pre middleware', ctx.method, ctx.path );
 
-            // have to run the end of session ourselves as oidc-provider doesn't do it :(
+            // have to run the end of session ourselves as oidc-provider doesn't do it (or I don't understand how to) :(
             if( ctx.method === 'GET' && ctx.path === '/logout' ){
                 return OIDLogout.endSession( self.#oidc, ctx, next );
             }
@@ -283,7 +294,6 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
      */
     constructor( server ){
         super( ...arguments );
-        console.debug( 'instanciating', server.organization().record.baseUrl, this );
         return this;
     }
 
@@ -313,7 +323,7 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
         const organization = requestServer.organization();
         console.debug( 'initializing', organization.record.baseUrl, this );
         const issuer = Organizations.fn.fullBaseUrl( organization );
-        let setup = await this._config( organization );
+        const setup = await this._config( organization );
         console.debug( organization.record.baseUrl, this, 'setup', setup );
         try {
             this.#oidc = new Provider( issuer, setup );

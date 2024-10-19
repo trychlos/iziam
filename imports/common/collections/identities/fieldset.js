@@ -4,6 +4,12 @@
  * This fieldset fully overrides the default fieldset defined by AccountsManager.
  * It includes both several optional email addresses and several optional usernames, so that all organizations options can be managed.
  * A dedicated tabular fieldset is also provided.
+ * 
+ * OpenID Identities claims are defined heren, under an 'oid' key:
+ * - claim_name: defaults to name
+ * - claim_use: defaults to all
+ * - claim_fn: when the value must be computed
+ * - scopes: the list of the scopes which include this claim
  */
 
 import { Forms } from 'meteor/pwix:forms';
@@ -12,15 +18,21 @@ import SimpleSchema from 'meteor/aldeed:simple-schema';
 import { Identities } from './index.js';
 
 /**
- * @param {Object} organization the full organization entity with its DYN sub-object
  * @returns {Array<Object>} suitable as an input to Field.Set()
+ *  NB: cannot depend of the organization as this is also used to register identity scopes
  */
-Identities.fieldsDef = function( organization ){
+Identities.fieldsDef = function(){
     let columns = [
         //  the organization entity identifier
         {
             name: 'organization',
-            type: String
+            type: String,
+            oid: {
+                claim_name: 'tid',
+                scopes: [
+                    'openid'
+                ]
+            }
         },
         // -- scope: profile
         // the user's full name
@@ -53,6 +65,21 @@ Identities.fieldsDef = function( organization ){
             optional: true,
             form_check: Identities.checks.middle_name,
             form_type: Forms.FieldType.C.OPTIONAL
+        },
+        // the best label for the identity
+        {
+            schema: false,
+            tabular: false,
+            form: false,
+            oid: {
+                claim_name: 'urn:org.trychlos.iziam:identity:claim:best_label',
+                claim_fn( identity ){
+                    return Identities.fn.bestLabel( identity );
+                },
+                scopes: [
+                    'urn:org.trychlos.iziam:identity:scope:profile'
+                ]
+            }
         },
         // the user's nick name that may or may not be the same as the given_name
         {
@@ -163,6 +190,39 @@ Identities.fieldsDef = function( organization ){
             type: Boolean,
             defaultValue: false,
             form_check: Identities.checks.email_preferred
+        },
+        // the preferred email address for the identity (computed)
+        {
+            schema: false,
+            tabular: false,
+            form: false,
+            oid: {
+                claim_name: 'email',
+                scopes: 'email',
+                claim_fn( identity ){
+                    return Identities.fn.emailPreferred( identity ).address;
+                },
+                scopes: [
+                    'openid',
+                    'email'
+                ]
+            }
+        },
+        {
+            schema: false,
+            tabular: false,
+            form: false,
+            oid: {
+                claim_name: 'email_verified',
+                scopes: 'email',
+                claim_fn( identity ){
+                    return Identities.fn.emailPreferred( identity ).verified;
+                },
+                scopes: [
+                    'openid',
+                    'email'
+                ]
+            }
         },
         // -- scope: address
         //  adapted from https://schema.org/PostalAddress

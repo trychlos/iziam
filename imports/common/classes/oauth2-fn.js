@@ -1,5 +1,5 @@
 /*
- * /imports/common/providers/oauth2-functions.js
+ * /imports/common/classes/oauth2-fn.js
  *
  * OAuth 2 functions
  */
@@ -7,11 +7,11 @@
 import _ from 'lodash';
 const assert = require( 'assert' ).strict;
 
+import { OAuth2 } from '/imports/common/classes/oauth2.class.js';
+
 import { Organizations } from '/imports/common/collections/organizations/index.js';
 
-export const OAuth2 = {};
-
-OAuth2.fn = {
+export const _oauth2_fn = {
     /**
      * @param {Organizations} organization as an { entity, record } object
      * @returns {Object} the list of configured endpoints
@@ -26,7 +26,7 @@ OAuth2.fn = {
                 result[name] = fullBaseUrl+foo;
             }
         };
-        set( 'introspection_endpoint' );
+        set( 'authorization_endpoint' );
         set( 'end_session_endpoint' );
         set( 'introspection_endpoint' );
         set( 'jwks_uri' );
@@ -41,6 +41,7 @@ OAuth2.fn = {
      * @returns {Object} the public OAuth metadata document as for [RFC 8414](https://datatracker.ietf.org/doc/html/rfc8414)
      */
     metadata( organization ){
+        console.debug( 'OAuth2 metadata' );
         let data = {
             // always set because we have a default value in settings
             issuer: Organizations.fn.fullBaseUrl( organization )

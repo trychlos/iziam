@@ -34,6 +34,7 @@ import { Webargs } from '/imports/server/classes/webargs.class.js';
 let requestServersByEntities = {};
 
 async function fn_asterPath( url, args, organization, provider ){
+    //console.debug( 'fn_asterPath', url );
     let server = requestServersByEntities[organization.entity._id];
     if( !server ){
         server = new RequestServer( provider, organization, await provider.requestOptions());
@@ -125,8 +126,6 @@ async function handleScoped( req, res ){
     //console.debug( req.method, req.url );
     await args.handle( null, {
         organization: organization,
-        //url: req.url.substring( baseUrl.length ),
-        //url: req.url,
         providers: providers,
         asterCb: fn_asterPath
     });
@@ -134,6 +133,7 @@ async function handleScoped( req, res ){
 }
 
 // this global handler see all application urls, including both the UI part and the REST part
+/*
 WebApp.handlers.use( async ( req, res, next ) => {
     handleScoped( req, res ).then(( handled ) => {
         if( !handled ){
@@ -141,6 +141,7 @@ WebApp.handlers.use( async ( req, res, next ) => {
         }
     });
 });
+*/
 
 // predefine routes for each operational organization
 Tracker.autorun(() => {
@@ -161,13 +162,11 @@ Tracker.autorun(() => {
         //console.debug( 'obj', obj ? 'set':'null', 'operational', operational );
         // we may or may not have a suitable object
         if( obj ){
-            if( operational && organization.record.baseUrl === obj.organization.record.baseUrl ){
-                // make sure the organization is up to date
-                obj.organization = organization;
+            if( operational && _.isEqual( organization, obj.organization )){
+                // the organization is up to date
                 assert( obj.server instanceof RequestServer, 'expects an instance of RequestServer, got '+obj.server );
-                // done
             } else {
-                // either we no more have a suitable organization, or the baseUrl has changed
+                // either we no more have a suitable organization, or something has changed
                 console.warn( 'TODO: have to remove all (no more suitable) RequestServer routes for', obj );
                 delete requestServersByEntities[it._id];
                 obj = null;

@@ -881,6 +881,26 @@ export const Locale = {
         'zu_ZA.iso88591',
         'zu_ZA.utf8',
     ],
+
+    // only warn once when byId() doesn't find the item
+    warnedById: {},
+
+    /**
+     * @param {String} id a zoneinfo identifier
+     * @returns {Object} the zoneinfo definition, or null
+     */
+    byId( id ){
+        let found = null;
+        if( this.Knowns().includes( id )){
+            found = id;
+        }
+        if( !found && !this.warnedById[id] ){
+            console.warn( 'locale not found', id );
+            this.warnedById[id] = true;
+        }
+        return found;
+    },
+
     /**
      * @returns {Array} the list of known locales
      */

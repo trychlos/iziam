@@ -41,6 +41,10 @@ Permissions.set({
                     const haveRole = await Roles.userIsInRoles( userId, 'ACCOUNT_EDIT' );
                     return compare >= 0 && haveRole;
                 },
+                // getBy can be used from server without any userId available
+                async getBy( userId, args ){
+                    return true;
+                },
                 async list( userId, args ){
                     const instanceName = args.amInstance.name();
                     if( instanceName === 'users' ){

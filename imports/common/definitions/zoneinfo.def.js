@@ -606,6 +606,25 @@ export const Zoneinfo = {
         'Zulu'
     ],
 
+    // only warn once when byId() doesn't find the item
+    warnedById: {},
+
+    /**
+     * @param {String} id a zoneinfo identifier
+     * @returns {Object} the zoneinfo definition, or null
+     */
+    byId( id ){
+        let found = null;
+        if( this.Knowns().includes( id )){
+            found = id;
+        }
+        if( !found && !this.warnedById[id] ){
+            console.warn( 'zoneinfo not found', id );
+            this.warnedById[id] = true;
+        }
+        return found;
+    },
+
     /**
      * @returns {Array} the list of known zoneinfos
      */

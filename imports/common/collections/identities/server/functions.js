@@ -31,6 +31,25 @@ Identities.s = {
         return amInstance ? amInstance.collection() : null;
     },
 
+    // from an OAuth identity server, get an identity by its id, whatever means an 'id'
+    // organization is an { entity, record } object
+    // id is an email or a username ?
+    // returns either a unique identity, or null
+    async findById( organization, id ){
+        let res = [];
+        // try with the internal immutable identifier
+        res = res.concat( await Identities.s.getBy( organization.entity._id, { _id: id }));
+        // try with email addresses if allowed to
+        if( organization.record.identitiesEmailAddressesIdentifier === true ){
+            res = res.concat( await Identities.s.getBy( organization.entity._id, { 'emails.address': id }));
+        }
+        // try with usernames if allowed to
+        if( organization.record.identitiesUsernamesIdentifier === true ){
+            res = res.concat( await Identities.s.getBy( organization.entity._id, { 'usernames.username': id }));
+        }
+        return res.length === 1 ? res[0] : null;
+    },
+
     // returns the queried items
     async getBy( organizationId, query, userId ){
         const instanceName = Identities.instanceName( organizationId );
