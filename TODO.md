@@ -40,7 +40,6 @@
 |   61 | 2024- 1-10 | identities: add titre, titre post-nominal |
 |   64 | 2024- 1-10 | display the picture in organizations list, identities list |
 |   66 | 2024- 1-11 | auth server: have a button to display the .well-known/openid-configuration |
-|   72 | 2024- 1-12 | use image_includer component in the identity properties |
 |   77 | 2024- 1-12 | multiple-select: review the select box size to align with standard bootstrap select boxes |
 |   81 | 2024- 1-12 | providers_tab: display available resources and scopes when isAdmin |
 |   86 | 2024- 1-13 | keygrip_secret: ask for user confirmation when removing an item and also when validating the dialog |
@@ -166,6 +165,8 @@
 |   71 | 2024- 1-11 | obsolete tabbed_template in profit of coreTabbedTemplate |
 |      | 2024- 1-16 | note that events have been renamed to tabbed-do-xxx, tabbed-pane-xxx and also the data field names to tabbedId and tabbedName.. |
 |      | 2024- 1-19 | done |
+|   72 | 2024- 1-12 | use image_includer component in the identity properties |
+|      | 2024-10-23 | done, then obsoleted with ImageIncluder packager |
 |   73 | 2024- 1-12 | bug: all organizations have notes and no more centered in the column |
 |      | 2024- 1-13 | fixed |
 |   74 | 2024- 1-12 | have a jwks edit dialog, including the jwks pane without validities (i.e. for current org record) |

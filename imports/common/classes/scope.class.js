@@ -29,7 +29,7 @@ export class Scope extends izObject {
     /**
      * @returns {Array<String>} the list of supported scopes
      */ 
-    static scopeNames(){
+    static scopeList(){
         return Object.keys( Scope._scopes );
     }
 
@@ -50,6 +50,7 @@ export class Scope extends izObject {
      */
     constructor( scope ){
         super( ...arguments );
+        //console.debug( 'instanciating', this , scope );
 
         // keep the instanciation arguments
         this.#scope = scope;

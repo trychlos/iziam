@@ -3,99 +3,116 @@
         <div class="panel-content">
 
             <div class="panel-header">
+                <div class="preamble ui-mt05 ui-mb05">
+                    {{{ i18n key="clients.edit.properties_preamble" }}}
+                </div>
             </div>
 
             <div class="panel-body">
                 <table class="form-table ui-w100">
                     <tr>
-                        <td class="ui-w20 label"><label class="form-label" for="client-panel-label">{{ i18n key="clients.edit.label_label" }}</label></td>
-                        <td class="ui-w100">
-                            <input class="form-control flex-grow-1 js-label" type="text" id="client-panel-label" placeholder="{{ i18n key="clients.edit.label_ph" }}" title="{{ i18n key="clients.edit.label_title" }}" />
+                        <td class="label"><label class="form-label" for="client-panel-label">{{ i18n key="clients.edit.label_label" }}</label></td>
+                        <td class="">
+                            <input class="form-control js-label" type="text" id="client-panel-label" placeholder="{{ i18n key="clients.edit.label_ph" }}" title="{{ i18n key="clients.edit.label_title" }}" />
                         </td>
+                        <td colspan="3"></td>
                     </tr>
                     <tr>
                         <td class="label"><label class="form-label" for="client-panel-description">{{ i18n key="clients.edit.description_label" }}</label></td>
-                        <td>
+                        <td colspan="4">
                             <input class="form-control js-description" type="text" id="client-panel-description" placeholder="{{ i18n key="clients.edit.description_ph" }}" title="{{ i18n key="clients.edit.description_title" }}" />
                         </td>
                     </tr>
                     <tr>
                         <td class="label"><label class="form-label" for="client-panel-logo">{{ i18n key="clients.edit.logo_label" }}</label></td>
-                        <td>
+                        <td colspan="3" class="">
                             <input class="form-control js-logo" type="text" id="client-panel-logo" placeholder="{{ i18n key="clients.edit.logo_ph" }}" title="{{ i18n key="clients.edit.logo_title" }}" />
+                        </td>
+                        <td rowspan="4">
+                            {{> ImageIncluder (parmsImage) }}
                         </td>
                     </tr>
                     <tr>
                         <td class="label"><label class="form-label" for="client-panel-home">{{ i18n key="clients.edit.home_label" }}</label></td>
-                        <td>
+                        <td colspan="3" class="">
                             <input class="form-control js-home" type="text" id="client-panel-home" placeholder="{{ i18n key="clients.edit.home_ph" }}" title="{{ i18n key="clients.edit.home_title" }}" />
                         </td>
                     </tr>
                     <tr>
                         <td class="label"><label class="form-label" for="client-panel-tos">{{ i18n key="clients.edit.tos_label" }}</label></td>
-                        <td>
+                        <td colspan="3" class="">
                             <input class="form-control js-tos" type="text" id="client-panel-tos" placeholder="{{ i18n key="clients.edit.tos_ph" }}" title="{{ i18n key="clients.edit.tos_title" }}" />
                         </td>
                     </tr>
                     <tr>
                         <td class="label"><label class="form-label" for="client-panel-privacy">{{ i18n key="clients.edit.privacy_label" }}</label></td>
-                        <td>
+                        <td colspan="3" class="">
                             <input class="form-control js-privacy" type="text" id="client-panel-privacy" placeholder="{{ i18n key="clients.edit.privacy_ph" }}" title="{{ i18n key="clients.edit.privacy_title" }}" />
                         </td>
                     </tr>
                     <tr>
                         <td class="label"><label class="form-label" for="client-panel-softid">{{ i18n key="clients.edit.softid_label" }}</label></td>
-                        <td>
-                            <input class="form-control ui-w50 js-softid" type="text" id="client-panel-softid" placeholder="{{ i18n key="clients.edit.softid_ph" }}" title="{{ i18n key="clients.edit.softid_title" }}" />
+                        <td class="ui-w40">
+                            <input class="form-control js-softid" type="text" id="client-panel-softid" placeholder="{{ i18n key="clients.edit.softid_ph" }}" title="{{ i18n key="clients.edit.softid_title" }}" />
+                        </td>
+                        <td><div class="ui-ml1"></div></td>
+                        <td class="label"><label class="form-label" for="client-panel-softver">{{ i18n key="clients.edit.softver_label" }}</label></td>
+                        <td class="ui-w40">
+                            <input class="form-control js-softver" type="text" id="client-panel-softver" placeholder="{{ i18n key="clients.edit.softver_ph" }}" title="{{ i18n key="clients.edit.softver_title" }}" />
                         </td>
                     </tr>
                     <tr>
-                        <td class="label"><label class="form-label" for="client-panel-softver">{{ i18n key="clients.edit.softver_label" }}</label></td>
+                        <td class="label"><label class="form-label" for="client-panel-author">{{ i18n key="clients.edit.author_label" }}</label></td>
                         <td>
-                            <input class="form-control ui-w50 js-softver" type="text" id="client-panel-softver" placeholder="{{ i18n key="clients.edit.softver_ph" }}" title="{{ i18n key="clients.edit.softver_title" }}" />
+                            <input class="form-control js-author" type="text" id="client-panel-author" placeholder="{{ i18n key="clients.edit.author_ph" }}" title="{{ i18n key="clients.edit.author_title" }}" />
                         </td>
+                        <td colspan="3"></td>
                     </tr>
-                    {{#if withProfile }}
-                        <tr>
+                    <tr>
+                        {{#if withProfile }}
                             <td class="label"><label class="form-label">{{ i18n key="clients.edit.profile_label" }}</label></td>
                             <td>
-                                <div class="ui-mt025 ui-w50 js-profile">
+                                <div class="ui-w100 js-profile">
                                     {{> client_profile_select (parmsProfileSelect) }}
                                 </div>
                             </td>
-                        </tr>
-                    {{/if}}
-                    {{#if withClientType }}
-                        <tr>
+                        {{else}}
+                            <td colspan="2"></td>
+                        {{/if}}
+                        <td></td>
+                        {{#if withClientType }}
                             <td class="label"><label class="form-label">{{ i18n key="clients.edit.client_type_label" }}</label></td>
                             <td>
-                                <div class="ui-mt025 ui-w50 js-client-type">
+                                <div class="ui-w100 js-client-type">
                                     {{> client_type_select (parmsClientTypeSelect) }}
                                 </div>
                             </td>
-                        </tr>
-                    {{/if}}
-                    {{#if withApplicationType }}
-                        <tr>
+                        {{else}}
+                            <td colspan="2"></td>
+                        {{/if}}
+                    </tr>
+                    <tr>
+                        {{#if withApplicationType }}
                             <td class="label"><label class="form-label">{{ i18n key="clients.edit.application_type_label" }}</label></td>
                             <td>
-                                <div class="ui-mt025 ui-w50 js-application-type">
+                                <div class="ui-w100 js-application-type">
                                     {{> client_application_type_select (parmsApplicationTypeSelect) }}
                                 </div>
                             </td>
-                        </tr>
-                    {{/if}}
-                    {{#if withEnabled }}
-                        <tr>
+                        {{else}}
+                            <td colspan="2"></td>
+                        {{/if}}
+                        <td></td>
+                        {{#if withEnabled }}
                             <td class="label"></td>
                             <td>
-                                <div class="form-check ui-mt05 ui-mb05 ui-w50 js-enabled">
+                                <div class="form-check ui-w100 js-enabled">
                                     <input class="form-check-input ui-mr025" id="client-enabled" type="checkbox" {{ enabledChecked }} {{ enabledDisabled }} />
                                     <label class="form-check-label" for="client-enabled">{{ i18n key="clients.edit.enabled_label" }}</label>
                                 </div>
                             </td>
-                        </tr>
-                    {{/if}}
+                        {{/if}}
+                    </tr>
                 </table>
             </div>
 

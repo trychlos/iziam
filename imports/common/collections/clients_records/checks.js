@@ -212,6 +212,15 @@ ClientsRecords.checks = {
         return null;
     },
 
+    async author( value, data, opts ){
+        _assert_data_content( 'ClientsRecords.checks.author()', data );
+        let item = data.entity.get().DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.author = value;
+        }
+        return null;
+    },
+
     // client type: mandatory, must exist
     async client_type( value, data, opts ){
         _assert_data_content( 'ClientsRecords.checks.client_type()', data );
@@ -353,11 +362,13 @@ ClientsRecords.checks = {
         }
     },
 
+    // be reactive to let the UI auto-update
     async logo_uri( value, data, opts ){
         _assert_data_content( 'ClientsRecords.checks.logo_uri()', data );
         let item = data.entity.get().DYN.records[data.index].get();
         if( opts.update !== false ){
             item.logo_uri = value;
+            data.entity.get().DYN.records[data.index].set( item );
         }
         return _validUrl( value, { prefix: 'clients.checks.logo', acceptOthers: false });
     },

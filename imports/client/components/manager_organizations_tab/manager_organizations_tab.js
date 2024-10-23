@@ -27,6 +27,7 @@ import '/imports/client/components/organization_identities_load/organization_ide
 import '/imports/client/components/organization_identities_pane/organization_identities_pane.js';
 import '/imports/client/components/organization_jwks_pane/organization_jwks_pane.js';
 import '/imports/client/components/organization_keygrips_pane/organization_keygrips_pane.js';
+import '/imports/client/components/organization_mandatory_pane/organization_mandatory_pane.js';
 import '/imports/client/components/organization_providers_pane/organization_providers_pane.js';
 import '/imports/client/components/organization_resources_load/organization_resources_load.js';
 import '/imports/client/components/organization_resources_pane/organization_resources_pane.js';
@@ -133,6 +134,13 @@ Template.manager_organizations_tab.onCreated( function(){
                 shown: false
             }
         ],
+        recordTabsBefore: [
+            {
+                name: 'organization_mandatory_tab',
+                navLabel: pwixI18n.label( I18N, 'organizations.edit.mandatory_tab_title' ),
+                paneTemplate: 'organization_mandatory_pane'
+            }
+        ],
         recordTabs: [
             {
                 name: 'organization_config_tab',
@@ -175,6 +183,7 @@ Template.manager_organizations_tab.helpers({
         return {
             entityTabs: Template.instance().APP.entityTabsNew,
             entityTabsAfter: Template.instance().APP.entityTabsAfterNew,
+            recordTabsBefore: Template.instance().APP.recordTabsBefore,
             recordTabs: Template.instance().APP.recordTabs,
             shape: PlusButton.C.Shape.RECTANGLE,
             mdClasses: 'modal-xxl'
@@ -186,6 +195,7 @@ Template.manager_organizations_tab.helpers({
         return {
             entityTabs: Template.instance().APP.entityTabsEdit,
             entityTabsAfter: Template.instance().APP.entityTabsAfterEdit,
+            recordTabsBefore: Template.instance().APP.recordTabsBefore,
             recordTabs: Template.instance().APP.recordTabs,
             mdClasses: 'modal-xxl'
         }

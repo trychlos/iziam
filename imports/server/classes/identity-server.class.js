@@ -59,7 +59,7 @@ export class IdentityServer extends mix( izObject ).with( IRequested ){
      *       iat: 1729330460,
      *       exp: 1729331060,
      *       accountId: 'test@test.te',
-     *       acr: 'urn:iziam:password:0',
+     *       acr: 'urn:org.trychlos.iziam:password:0',
      *       authTime: 1729330460,
      *       codeChallenge: 'ExqfiztGHg2EsVtY8hOm_gs1Yck1JJIM5WsXOrMZiiE',
      *       codeChallengeMethod: 'S256',
@@ -78,15 +78,15 @@ export class IdentityServer extends mix( izObject ).with( IRequested ){
      */
     async findAccount( organization, ctx, id, token ){
         const identity = await Identities.s.findById( organization, id );
+        //console.debug( 'identity', identity );
         // seems that oidc-provider doesn't accept another subject that the provided id
         const subject = id;
         //const subject = identity ? this.subject( identity ) : null;
-        console.debug( 'subject', subject );
         return identity ? {
             accountId: subject,
             async claims( use, scope, claims, rejected ){
                 return await Identities.claims.oidcRequest( organization, identity, subject, use, scope, claims, rejected );
-            },
+            }
         } : null;
     }
 

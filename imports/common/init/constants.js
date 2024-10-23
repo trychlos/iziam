@@ -57,6 +57,8 @@ Meteor.APP.C = {
     openidMetadataPath: '/.well-known/openid-configuration',
     // the interaction path used by the node-oidc-provider package
     oidcInteractionPath: '/interaction',
+    // a common prefix to all our dedicated data
+    oidcUrn: 'urn:org.trychlos.iziam:',
 
     // a standard acr when authenticating an end-user with its password
     oidcEndUserPasswordAcr: 'urn:iziam:password:0',

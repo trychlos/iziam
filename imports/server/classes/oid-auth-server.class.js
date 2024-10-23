@@ -11,6 +11,7 @@ import Provider from 'oidc-provider';
 
 import { WebApp } from 'meteor/webapp';
 
+import { Claim } from '/imports/common/classes/claim.class.js';
 import { OpenID } from '/imports/common/classes/openid.class.js';
 import { Scope } from '/imports/common/classes/scope.class.js';
 
@@ -90,10 +91,18 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
         if( conf.routes.introspection ){
             conf.features.introspection = { enabled: true };
         }
+        // enable the token userinfo if we have a configured endpoint for that
+        if( conf.routes.userinfo ){
+            conf.features.userinfo = { enabled: true };
+        }
 
         // supported scopes
         //  'openid' and 'offline_access' are set by default, but adding scopes removes 'offline_access', leaving only 'openid' plus additional scopes
-        conf.scopes = Scope.scopeNames();
+        conf.scopes = Scope.scopeList();
+
+        // supported claims
+        //  'openid' and 'offline_access' are set by default, but adding scopes removes 'offline_access', leaving only 'openid' plus additional scopes
+        conf.claims = Claim.claimList();
 
         // https://github.com/panva/node-oidc-provider/blob/v7.14.3/docs/README.md#accounts
         // define IdentityServer

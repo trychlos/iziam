@@ -353,12 +353,6 @@ body {
     }
 }
 
-.c-organization-groups-pane {
-    .c-groups-tree {
-        margin-left: 1em;
-    }
-}
-
 // multiple-select adjustements
 .c-identities-select {
     height: 20em;
@@ -376,6 +370,36 @@ body {
                 cursor: inherit;
                 background-color: inherit;
             }
+        }
+    }
+}
+
+.c-organization-config-ident-pane {
+    fieldset {
+        border: 1px solid lightgray;
+        border-radius: 0.5em;
+        -moz-border-radius: 0.5em;
+        padding: 0.5em;
+    }
+    fieldset legend {
+        font-size: 1em;
+        float: inherit;
+        width: auto;
+        padding-left: 0.5em;
+        padding-right: 0.5em;
+        margin: 0;
+    }
+}
+.c-organization-groups-pane {
+    .c-groups-tree {
+        margin-left: 1em;
+    }
+}
+
+.TenantEditPanel {
+    .c-record-properties-pane {
+        .tr-label {
+            display:none;
         }
     }
 }
@@ -451,23 +475,6 @@ body {
         color: gray;
     }
 }
-.c-image-includer {
-    .includer-top-picture {
-        .includer-picture {
-            border: 1px solid lightgray;
-            border-radius: 0.5em;
-            padding: 0.25em;
-            svg {
-                width: 12em;
-                height: 14em;
-                color: lightgray;
-            }
-            img {
-                width: 9.5em;
-            }
-        }
-    }
-}
 
 // most of the panels have a text preamble above
 .panel-content {
@@ -485,23 +492,6 @@ body {
 }
 .panel-body {
     flex-grow: 1;
-}
-
-.c-organization-config-ident-pane {
-    fieldset {
-        border: 1px solid lightgray;
-        border-radius: 0.5em;
-        -moz-border-radius: 0.5em;
-        padding: 0.5em;
-    }
-    fieldset legend {
-        font-size: 1em;
-        float: inherit;
-        width: auto;
-        padding-left: 0.5em;
-        padding-right: 0.5em;
-        margin: 0;
-    }
 }
 
 .c-identity-address-row,

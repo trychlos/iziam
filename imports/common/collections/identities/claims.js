@@ -19,7 +19,7 @@ Identities.claims = {
 
     // returns the name of the claim
     claim_name( def ){
-        return def.def().oid.claim_name || def.name();
+        return def.def().oid.name || def.name();
     },
 
     // called once at IdentiyScopesProvider instanciation
@@ -29,19 +29,23 @@ Identities.claims = {
             const oid = it.def().oid;
             const name = this.claim_name( it );
             let opts = {};
-            if(oid.claim_fn ){
-                opts.fn = oid.claim_fn;
+            if(oid.fn ){
+                opts.fn = oid.fn;
             }
-            if(oid.claim_args ){
-                opts.args = oid.claim_args;
+            if(oid.args ){
+                opts.args = oid.args;
             }
             if(oid.scopes ){
                 opts.scopes = oid.scopes;
+            }
+            if(oid.use ){
+                opts.use = oid.use;
             }
             opts.def = it;
             const claim = new Claim( name, opts );
             Identities.claims._myClaims[name] = claim;
         });
+        //console.debug( 'Identities.claims._myClaims', Identities.claims._myClaims );
     },
 
     // returns {Array<Field.Def>} the list of fields which provide a claim
@@ -58,6 +62,7 @@ Identities.claims = {
      *   claims depending on the scope automatically you might want to skip
      *   loading some claims from external resources or through db projection etc. based on this
      *   detail or not return them in ID Tokens but only UserInfo and so on
+     *   e.g. 'openid email profile'
      * @param claims {object} - the part of the claims authorization parameter for either
      *   "id_token" or "userinfo" (depends on the "use" param)
      * @param rejected {Array[String]} - claim names that were rejected by the end-user, you might
@@ -65,50 +70,47 @@ Identities.claims = {
      * @return {Object} the claims for this identity
      */
     async oidcRequest( organization, identity, subject, use, scope, claims, rejected ){
+        console.debug( 'oidcRequest', arguments );
         // must return as least a sub (subject)
         let result = {
             sub: subject
         };
         switch( use ){
             case 'id_token':
-                break;
             case 'userinfo':
-                break;
+                for ( const claim of Object.values( Identities.claims._myClaims )){
+                    if( claim.isForUse( use ) && claim.isForScopes( scope )){
+                        const name = claim.name();
+                        const opts = claim.opts();
+                        // the claim value, either computed, or from the identity
+                        //  note that array-ed fields value must be computed
+                        let value = undefined;
+                        if( opts.fn ){
+                            if( typeof opts.fn === 'function' ){
+                                value = await opts.fn( identity );
+                            } else {
+                                console.warn( 'expects fn be a function', opts );
+                            }
+                        } else {
+                            const def = opts.def;
+                            const fieldName = def.name();
+                            if( fieldName ){
+                                value = identity[fieldName];
+                            }
+                        }
+                        // if the claim has been explicitely refused ?
+                        if( rejected && rejected.includes( name )){
+                            name = undefined;
+                            value = undefined;
+                        }
+                        if( name && value !== undefined ){
+                            result[name] = value;
+                        }
+                    }
+                }
+            break;
         }
-        Identities.claims.get( organization.entity._id ).forEach(( it ) => {
-            const oid = it.def().oid;
-            // the claim name, either specified, defaulting to the field name (if set)
-            const itname = it.name();
-            const name = this.claim_name( it );
-            // the claim value, either computed, or from the identity
-            //  note that array-ed fields value must be computed
-            let value = undefined;
-            if( oid.claim_fn ){
-                if( typeof oid.claim_fn === 'function' ){
-                    value = oid.claim_fn( identity );
-                } else {
-                    console.warn( 'expects claim_fn be a function', it );
-                }
-            } else {
-                if( itname ){
-                    value = identity[itname];
-                }
-            }
-            // if the claim is reserved for some use ?
-            if( oid.claim_use && !oid.claim_use.includes( use )){
-                name = undefined;
-                value = undefined;
-            }
-            // if the claim has been explicitely refused ?
-            if( rejected && rejected.includes( name )){
-                name = undefined;
-                value = undefined;
-            }
-            if( name && value !== undefined ){
-                result[name] = value;
-            }
-        });
-        console.debug( 'oidcRequest result', result );
+        console.debug( 'oidcRequest result', use, result );
         return result;
     },
 

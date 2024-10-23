@@ -58,6 +58,9 @@ Template.client_properties_panel.onCreated( function(){
             },
             software_version: {
                 js: '.js-softver'
+            },
+            author: {
+                js: '.js-author'
             }
         },
         // the Forms.Checker instance
@@ -152,6 +155,15 @@ Template.client_properties_panel.helpers({
     parmsClientTypeSelect(){
         return {
             selected: this.entity.get().DYN.records[this.index].get().client_type
+        };
+    },
+
+    // parms for ImageIncluder
+    parmsImage(){
+        return {
+            imageUrl: this.entity.get().DYN.records[this.index].get().logo_uri,
+            imageWidth: '9em',
+            imageHeight: '9em'  // 4 rows -> 4x2.5em -> 10em
         };
     },
 

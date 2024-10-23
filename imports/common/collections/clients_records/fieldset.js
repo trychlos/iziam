@@ -2,6 +2,8 @@
  * /imports/common/collections/clients_records/fieldset.js
  *
  * The clients registered with an organization.
+ *
+ * See https://datatracker.ietf.org/doc/html/rfc7591#section-2 Client Metadata
  */
 
 import { Field } from 'meteor/pwix:field';
@@ -34,6 +36,14 @@ const _defaultFieldDef = function(){
             type: String,
             optional: true,
             form_check: ClientsRecords.checks.description,
+            form_type: Forms.FieldType.C.OPTIONAL
+        },
+        // a not too long description (not a note)
+        {
+            name: 'author',
+            type: String,
+            optional: true,
+            form_check: ClientsRecords.checks.author,
             form_type: Forms.FieldType.C.OPTIONAL
         },
         // whether the client is enabled ?

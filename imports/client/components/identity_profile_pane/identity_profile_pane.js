@@ -18,7 +18,6 @@ import { Validity } from 'meteor/pwix:validity';
 import { Identities } from '/imports/common/collections/identities/index.js';
 
 import '/imports/client/components/gender_select/gender_select.js';
-import '/imports/client/components/image_includer/image_includer.js';
 import '/imports/client/components/locale_select/locale_select.js';
 import '/imports/client/components/zoneinfo_select/zoneinfo_select.js';
 
@@ -147,7 +146,8 @@ Template.identity_profile_pane.helpers({
     // the picture url
     parmsImage(){
         return {
-            imageUrl: this.item.get().picture_url
+            imageUrl: this.item.get().picture_url,
+            defaultIcon: 'fa-user'
         };
     },
 
@@ -163,21 +163,6 @@ Template.identity_profile_pane.helpers({
         return {
             selected: this.item.get().zoneinfo
         };
-    },
-
-    // the user's picture
-    picture(){
-        return this.item.get().picture || '';
-    },
-
-    // show the picture ?
-    picImgClass(){
-        return this.item.get().picture && this.item.get().picture.length ? 'x-dblock' : 'x-dnone';
-    },
-
-    // hide the svg if we have a picture (FontAwesome is not dynamic)
-    picSvgClass(){
-        return this.item.get().picture && this.item.get().picture.length ? 'x-dnone' : 'x-dblock';
     }
 });
 

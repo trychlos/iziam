@@ -10,6 +10,10 @@ import querystring from 'querystring';
 
 import { pwixI18n } from 'meteor/pwix:i18n';
 
+import { Clients } from '/imports/common/collections/clients/index.js';
+
+import { isImage } from '/imports/common/helpers/is-image.js';
+
 const keys = new Set();
 const debug = ( obj ) => querystring.stringify( Object.entries( obj ).reduce(( acc, [ key, value ]) => {
     keys.add( key );
@@ -22,14 +26,28 @@ const debug = ( obj ) => querystring.stringify( Object.entries( obj ).reduce(( a
 
 export const IOIDInteractions = DeclareMixin(( superclass ) => class extends superclass {
 
-    _renderBody( req, res, provider, interaction, client ){
+    // compute the displayable logo
+    // either from the client, or from the organization, defaulting to izIAM
+    async _getLogo( client ){
+        let logo = client.record.logo_uri;
+        if( logo && await isImage( logo )){
+            return logo;
+        }
+        logo = this.iRequestServer().organization().record.logoUrl
+        if( logo && await isImage( logo )){
+            return logo;
+        }
+        return '/images/site-logo.svg';
+    }
+
+    async _renderBody( req, res, provider, interaction, client ){
         let str = '';
         switch( interaction.prompt.name ){
             case 'login':
-                str = this._renderBodyLogin( req, res, provider, interaction, client );
+                str = await this._renderBodyLogin( req, res, provider, interaction, client );
                 break;
             case 'consent':
-                str = this._renderBodyConsent( req, res, provider, interaction, client );
+                str = await this._renderBodyConsent( req, res, provider, interaction, client );
                 break;
             default:
                 res.status( 501 ).send( 'Not implemented.' );
@@ -37,7 +55,7 @@ export const IOIDInteractions = DeclareMixin(( superclass ) => class extends sup
         return str;
     }
 
-    _renderBodyConsent( req, res, provider, interaction, client ){
+    async _renderBodyConsent( req, res, provider, interaction, client ){
         let route, cancel;
         try {
             const url = new URL( interaction.returnTo );
@@ -49,13 +67,17 @@ export const IOIDInteractions = DeclareMixin(( superclass ) => class extends sup
         }
         let str = ''
             +'<body>'
-            + this._renderPreamble( req, res, provider, interaction, client );
+            + await this._renderPreamble( req, res, provider, interaction, client );
         // https://github.com/panva/node-oidc-provider/blob/47a77d9afe90578ea4dfed554994b60b837a3059/lib/views/interaction.js#L6
-        console.debug( 'interaction.details', interaction.details );
-        console.debug( '[ interaction.details.missingOIDCScope, interaction.details.missingOIDCClaims, interaction.details.missingResourceScopes, interaction.details.rar].filter( Boolean )', [ interaction.details?.missingOIDCScope, interaction.details?.missingOIDCClaims, interaction.details?.missingResourceScopes, interaction.details?.rar].filter( Boolean ));
-        if([ interaction.details?.missingOIDCScope, interaction.details?.missingOIDCClaims, interaction.details?.missingResourceScopes, interaction.details?.rar].filter( Boolean ).length > 0 ){
+        // giving the above code, it is more than probable that details is moved to interaction in v8
+        //console.debug( 'interaction', interaction );
+        //console.debug( 'interaction.prompt.details', interaction.prompt.details );
+        const details = interaction.prompt.details;
+        console.debug( '[ details.missingOIDCScope, details.missingOIDCClaims, details.missingResourceScopes, details.rar].filter( Boolean )', [ details?.missingOIDCScope, details?.missingOIDCClaims, details?.missingResourceScopes, details?.rar].filter( Boolean ));
+        if([ details?.missingOIDCScope, details?.missingOIDCClaims, details?.missingResourceScopes, details?.rar].filter( Boolean ).length > 0 ){
+            str += '<div class="consent d-flex justify-content-center">';
             str += '<ul>';
-            let missingOIDCScope = new Set( interaction.details?.missingOIDCScope );
+            let missingOIDCScope = new Set( details?.missingOIDCScope );
             missingOIDCScope.delete( 'openid' );
             missingOIDCScope.delete( 'offline_access' );
             if( missingOIDCScope.size ){
@@ -66,7 +88,7 @@ export const IOIDInteractions = DeclareMixin(( superclass ) => class extends sup
                 });
                 str += '</ul>';
             }
-            let missingOIDCClaims = new Set( interaction.details?.missingOIDCClaims );
+            let missingOIDCClaims = new Set( details?.missingOIDCClaims );
             [ 'sub', 'sid', 'auth_time', 'acr', 'amr', 'iss' ].forEach( Set.prototype.delete.bind( missingOIDCClaims ));
             if( missingOIDCClaims.size ){
                 str += '<li>'+pwixI18n.label( I18N, 'auth.interactions.claims_title' )+'</li>';
@@ -76,7 +98,7 @@ export const IOIDInteractions = DeclareMixin(( superclass ) => class extends sup
                 });
                 str += '</ul>';
             }
-            let missingResourceScopes = interaction.details?.missingResourceScopes;
+            let missingResourceScopes = details?.missingResourceScopes;
             if( missingResourceScopes ){
                 for( const [ indicator, scopes ] of Object.entries( missingResourceScopes )){
                     str += '<li>'+indicator+' :</li>';
@@ -87,7 +109,7 @@ export const IOIDInteractions = DeclareMixin(( superclass ) => class extends sup
                     str += '</ul>';
                 }
             }
-            let rar = interaction.details?.rar;
+            let rar = details?.rar;
             if( rar ){
                 str += '<li>'+pwixI18n.label( I18N, 'auth.interactions.rar_title' )+'</li>';
                 str += '<ul>';
@@ -97,23 +119,26 @@ export const IOIDInteractions = DeclareMixin(( superclass ) => class extends sup
                 str += '</ul>';
             }
             if( interaction.params?.scope && interaction.params?.scope.includes( 'offline_access' )){
-                const already_granted = (( !interaction.details?.missingOIDCScope ) || !interaction.details?.missingOIDCScope.includes( 'offline_access' ));
+                const already_granted = (( !details?.missingOIDCScope ) || !details?.missingOIDCScope.includes( 'offline_access' ));
                 str += '<li>'+pwixI18n.label( I18N, already_granted ? 'auth.interactions.offline_already' : 'auth.interactions.offline_togrant' )+'</li>';
             }
             str += '</ul>';
+            str += '</div>';
         } else {
             str += '<div class="no-grant">'+pwixI18n.label( I18N, 'auth.interactions.none_grant' )+'</div>';
         }
         str += ''
             +'  <form autocomplete="off" action="'+route+'" method="post">'
             +'    <input type="hidden" name="prompt" value="consent" />'
-            +'    <button type="submit" class="login login-submit btn btn-sm btn-primary">'+pwixI18n.label( I18N, 'auth.interactions.consent_button' )+'</button>'
+            +'    <div class="d-flex justify-content-center w-100" />'
+            +'      <button type="submit" class="login login-submit btn btn-sm btn-primary">'+pwixI18n.label( I18N, 'auth.interactions.consent_button' )+'</button>'
+            +'    </div>'
             +'  </form>'
             +'</body>';
         return str;
     }
 
-    _renderBodyLogin( req, res, provider, interaction, client ){
+    async _renderBodyLogin( req, res, provider, interaction, client ){
         console.debug( 'interaction', interaction );
         console.debug( 'client', client );
         let route, cancel;
@@ -127,8 +152,8 @@ export const IOIDInteractions = DeclareMixin(( superclass ) => class extends sup
         }
         let str = ''
             +'<body>'
-            + this._renderPreamble( req, res, provider, interaction, client )
-            +'  <form class="h-100" autocomplete="off" action="'+route+'" method="post" enctype="application/x-www-form-urlencoded">'
+            + await this._renderPreamble( req, res, provider, interaction, client )
+            +'  <form autocomplete="off" action="'+route+'" method="post" enctype="application/x-www-form-urlencoded">'
             +'    <input type="hidden" name="prompt" value="login" />'
             +'    <table class="form-table w-100">'
             +'      <tr>'
@@ -167,7 +192,7 @@ export const IOIDInteractions = DeclareMixin(( superclass ) => class extends sup
         return str;
     }
 
-    _renderHead( req, res, provider, interaction, client ){
+    async _renderHead( req, res, provider, interaction, client ){
         let str = '<head>';
         str += '<meta http-equiv="X-UA-Compatible" content="IE=edge">';
         str += '<meta charset="utf-8">';
@@ -186,10 +211,11 @@ export const IOIDInteractions = DeclareMixin(( superclass ) => class extends sup
             +'    font-style: normal;'
             +'    display: flex;'
             +'    flex-direction: column;'
-            +'    justify-content: space-evenly;'
             +'    height: 100%;'
             +'  }'
-            +'  form { display: flex; align-items:center; justify-content: center; }'
+            +'  img.logo { width: 10em; }'
+            +'  .preamble .text p { font-size: 1.75em; }'
+            +'  form { display: flex; margin-top: 2em; }'
             +'  tr:not(:first-child) td { padding-top: 1em; }'
             +'  td.ui-w40 { width: 40%; }'
             +'  td.ui-w60 { width: 60%; }'
@@ -203,9 +229,33 @@ export const IOIDInteractions = DeclareMixin(( superclass ) => class extends sup
     }
 
     // Display a client-dependant preamble
-    _renderPreamble( req, res, provider, interaction, client ){
-        let str = '';
+    async _renderPreamble( req, res, provider, interaction, client ){
+        let str = ''
+            +'<div class="preamble d-flex align-items-center">'
+            +'  <div class="logo">'+await this._renderPreambleLogo( interaction, client )+'</div>'
+            +'  <div class="text">'+await this._renderPreambleText( interaction, client )+'</div>'
+            +'</div>'
         return str;
+    }
+
+    // Display the client logo, or the organization logo, or the izIAM logo
+    async _renderPreambleLogo( interaction, client ){
+        const logo = await this._getLogo( client );
+        let str = ''
+            +'<img class="logo" src="'+logo+'" />';
+        return str;
+    }
+
+    // Display the clietn logo, or the organization logo, or the izIAM logo
+    async _renderPreambleText( interaction, client ){
+        switch( interaction.prompt.name ){
+            case 'login':
+                return pwixI18n.label( I18N, 'auth.interactions.login_preamble', client.record.label );
+            case 'consent':
+                return pwixI18n.label( I18N, 'auth.interactions.consent_preamble', client.record.label );
+            default:
+                res.status( 501 ).send( 'Not implemented.' );
+        }
     }
 
     /**
@@ -257,11 +307,12 @@ export const IOIDInteractions = DeclareMixin(( superclass ) => class extends sup
         console.debug( 'interactionGetLogin' );
         try {
             const interaction = await provider.interactionDetails( req, res );
-            const client = await provider.Client.find( interaction.params.client_id );
+            //let client = await provider.Client.find( interaction.params.client_id );
+            const client = await Clients.s.byClientIdAtDate( interaction.params.client_id );
             let html = '<!DOCTYPE html>'
                 +'<html class="h-100">';
-            html += this._renderHead( req, res, provider, interaction, client );
-            html += this._renderBody( req, res, provider, interaction, client );
+            html += await this._renderHead( req, res, provider, interaction, client );
+            html += await this._renderBody( req, res, provider, interaction, client );
             html += '</html>';
             return res.send( html );
 

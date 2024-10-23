@@ -34,6 +34,7 @@ import './display-units.js';
 import './env-settings.js';
 import './field.js';
 import './forms.js';
+import './image-includer.js';
 import './modal.js';
 import './modal-info.js';
 import './notes.js';

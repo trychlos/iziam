@@ -1,0 +1,45 @@
+<template name="organization_mandatory_pane">
+    <div class="x-tab c-organization-mandatory-pane">
+        <div class="panel-content">
+
+            <div class="panel-header">
+                <div class="panel-preamble">
+                    {{{ i18n key="organizations.edit.mandatory_preamble" }}}
+                </div>    
+            </div>
+
+            <div class="panel-body">
+                <table class="form-table ui-w100">
+                    <tr>
+                        <td></td>
+                        <td><div class="ui-ml2"><i>{{{ i18n key="organizations.edit.mandatory_label_preamble" }}}</i></div></td>
+                    </tr>
+                    <tr>
+                        <td class="label"><label class="form-label" for="client-panel-label">{{ i18n key="clients.edit.label_label" }}</label></td>
+                        <td class="ui-w100">
+                            <div class="ui-w50 js-label">
+                                <input class="form-control" type="text" id="client-panel-label" placeholder="{{ i18n key="clients.edit.label_ph" }}" title="{{ i18n key="clients.edit.label_title" }}" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><div class="ui-mt1"></div></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><div class="ui-ml2"><i>{{{ i18n key="organizations.edit.mandatory_baseurl_preamble" }}}</i></div></td>
+                    </tr>
+                    <tr>
+                        <td class="label"><label class="form-label" for="baseurl-label">{{ i18n key="organizations.edit.baseurl_label" }}</label></td>
+                        <td class="ui-w100">
+                            <div class="ui-w50 js-baseurl">
+                                <input class="form-control" type="text" id="baseurl-label" placeholder="{{ i18n key="organizations.edit.baseurl_ph" }}" title="{{ i18n key="organizations.edit.baseurl_title" }}" />
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</template>

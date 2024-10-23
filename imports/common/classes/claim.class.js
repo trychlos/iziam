@@ -31,6 +31,28 @@ export class Claim extends izObject {
         return claim;
     }
 
+    /**
+     * @returns {Object} the claims configuration for oidc-provider configuration
+     *  See https://github.com/panva/node-oidc-provider/blob/47a77d9afe90578ea4dfed554994b60b837a3059/recipes/claim_configuration.md
+     */
+    static claimList(){
+        let res = {};
+        Object.values( Claim._claims ).forEach(( it ) => {
+            const scopes = it.scopes();
+            if( scopes && _.isArray( scopes ) && scopes.length ){
+                scopes.forEach(( s ) => {
+                    const scopeName = s.name();
+                    res[scopeName] = res[scopeName] || [];
+                    res[scopeName].push( it.name());
+                });
+            } else {
+                res[it.name()] = null;
+            }
+        });
+        //§console.debug( 'res', res );
+        return res;
+    }
+
     // private data
     // instanciation time
     #claim = null;
@@ -55,6 +77,7 @@ export class Claim extends izObject {
      */
     constructor( claim, opts={} ){
         super( ...arguments );
+        //console.debug( 'instanciating', this , claim );
 
         // keep instanciation arguments
         this.#claim = claim;
@@ -77,6 +100,41 @@ export class Claim extends izObject {
     }
 
     /**
+     * @param {String|Array<String>} scopes a space-separated list of scopes or an array of individual scopes
+     * @return {Boolean} whether this claim is suitable for one of these scopes
+     */
+    isForScopes( scopes ){
+        let array = scopes;
+        if( _.isString( scopes )){
+            array = scopes.split( /\s+/ );
+        }
+        let found = false;
+        this.#scopes.every(( it ) => {
+            if( array.includes( it.name())){
+                found = true;
+            }
+            return !found;
+        });
+        return found;
+    }
+
+    /**
+     * @param {String} use either 'id_token' or 'userinfo'
+     * @return {Boolean} whether this claim is suitable for the proposed use
+     */
+    isForUse( use ){
+        const forUse = this.opts().use;
+        return ( !forUse || !forUse.length || forUse.includes( use ));
+    }
+
+    /**
+     * @returns {String} the claim name
+     */
+    name(){
+        return this.#claim;
+    }
+
+    /**
      * @returns {Object} the options provided at instanciation time
      */
     opts(){
@@ -89,5 +147,14 @@ export class Claim extends izObject {
      */
     scopes(){
         return this.#scopes;
+    }
+
+    /**
+     * @returns {Array<String>} the uses accepted by this claim, or null which means all
+     */
+    use(){
+        let use = this.opts().use;
+        use = use ? ( _.isArray( use ) ? use : [ use ]) : null;
+        return use;
     }
 }

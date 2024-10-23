@@ -38,10 +38,12 @@ Meteor.APP.i18n = {
                     cancel_button: 'Cancel',
                     claims_title: 'Claims :',
                     consent_button: 'Authorize',
+                    consent_preamble: '<p>The client application <b>%s</b> asks for your following informations:</p>',
                     consent_title: 'Authorize',
                     login_button: 'Log-in',
                     login_label: 'Your account identifier :',
                     login_ph: 'me@example.com',
+                    login_preamble: '<p>The client application <b>%s</b> wants you identify and authenticate yourself.</p>',
                     login_title: 'Log-in to %s',
                     none_grant: 'No additional authorization is asked by the client, which only needs you confirm previously given authorizations.',
                     offline_already: 'The client is asking to have offline access to these authorizations, that you have previously granted.',
@@ -156,6 +158,9 @@ Meteor.APP.i18n = {
                     application_type_label: 'Application type :',
                     auth_flow_tab_title: 'Authorization flow',
                     auth_method_tab_title: 'Authentication method',
+                    author_label: 'Author :',
+                    author_ph: 'The client author',
+                    author_title: 'The client application author or developer',
                     authorizations_tab_title: 'Authorizations',
                     client_type_label: 'Client type :',
                     config_tab_title: 'Configuration',
@@ -191,6 +196,8 @@ Meteor.APP.i18n = {
                     privacy_ph: 'https://my.example.com/privacy',
                     privacy_title: 'The URI of a page which describes the privacy policy of the client',
                     profile_label: 'Profile :',
+                    properties_preamble: 'The mandatory label below will take place as the unique <code>client_name</code> OAuth Client Metadata.<br />'
+                        +'Take care that all these below properties may be displayed to the end-user during login interactions.',
                     properties_tab_title: 'Properties',
                     providers_tab_title: 'Providers',
                     record_notes_tab_title: 'Notes',
@@ -1230,6 +1237,11 @@ Meteor.APP.i18n = {
                     jwks_ph: '/jwks',
                     jwks_title: 'The URL of the authorization server\'s JWK Set document. '
                         +'The referenced document contains the signing key(s) the client uses to validate signatures from the authorization server.',
+                    mandatory_baseurl_preamble: 'The common prefix of all the URL\'s used in the REST API.<br />'
+                        +'It is used as an identifier by the HTTP router to identify the target organization. It must be unique.',
+                    mandatory_label_preamble: 'The label of the organization.<br />'
+                        +'It is used as an identifier, and let you easily identiy this organization in a list. It must be unique.',
+                    mandatory_tab_title: 'Mandatory values',
                     oauth_config_preamble: 'Configure some common aspects of your OAuth organization.',
                     oauth_config_tab_title: 'OAuth',
                     pkce_description: 'The RFC 7636 "Proof Key for Code Exchange by OAuth Public Clients" proposes a way to mitigate authorization code interception attacks '

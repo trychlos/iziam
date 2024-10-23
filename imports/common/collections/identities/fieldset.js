@@ -6,11 +6,13 @@
  * A dedicated tabular fieldset is also provided.
  * 
  * OpenID Identities claims are defined heren, under an 'oid' key:
- * - claim_name: defaults to name
- * - claim_use: defaults to all
- * - claim_fn: when the value must be computed
+ * - name: defaults to name
+ * - use: defaults to all
+ * - fn: when the value must be computed
  * - scopes: the list of the scopes which include this claim
  */
+
+import strftime from 'strftime';
 
 import { Forms } from 'meteor/pwix:forms';
 import SimpleSchema from 'meteor/aldeed:simple-schema';
@@ -28,7 +30,7 @@ Identities.fieldsDef = function(){
             name: 'organization',
             type: String,
             oid: {
-                claim_name: 'tid',
+                name: 'tid',
                 scopes: [
                     'openid'
                 ]
@@ -41,7 +43,15 @@ Identities.fieldsDef = function(){
             type: String,
             optional: true,
             form_check: Identities.checks.name,
-            form_type: Forms.FieldType.C.OPTIONAL
+            form_type: Forms.FieldType.C.OPTIONAL,
+            oid: {
+                scopes: [
+                    'profile'
+                ],
+                use: [
+                    'userinfo'
+                ]
+            }
         },
         // the user's surname(s) or last name(s)
         {
@@ -49,7 +59,15 @@ Identities.fieldsDef = function(){
             type: String,
             optional: true,
             form_check: Identities.checks.family_name,
-            form_type: Forms.FieldType.C.OPTIONAL
+            form_type: Forms.FieldType.C.OPTIONAL,
+            oid: {
+                scopes: [
+                    'profile'
+                ],
+                use: [
+                    'userinfo'
+                ]
+            }
         },
         // the user's given name(s) or first name(s)
         {
@@ -57,14 +75,30 @@ Identities.fieldsDef = function(){
             type: String,
             optional: true,
             form_check: Identities.checks.given_name,
-            form_type: Forms.FieldType.C.OPTIONAL
+            form_type: Forms.FieldType.C.OPTIONAL,
+            oid: {
+                scopes: [
+                    'profile'
+                ],
+                use: [
+                    'userinfo'
+                ]
+            }
         },
         {
             name: 'middle_name',
             type: String,
             optional: true,
             form_check: Identities.checks.middle_name,
-            form_type: Forms.FieldType.C.OPTIONAL
+            form_type: Forms.FieldType.C.OPTIONAL,
+            oid: {
+                scopes: [
+                    'profile'
+                ],
+                use: [
+                    'userinfo'
+                ]
+            }
         },
         // the best label for the identity
         {
@@ -72,12 +106,12 @@ Identities.fieldsDef = function(){
             tabular: false,
             form: false,
             oid: {
-                claim_name: 'urn:org.trychlos.iziam:identity:claim:best_label',
-                claim_fn( identity ){
-                    return Identities.fn.bestLabel( identity );
+                name: Meteor.APP.C.oidcUrn+'identity:claim:best_label',
+                async fn( identity ){
+                    return await Identities.fn.bestLabel( identity );
                 },
                 scopes: [
-                    'urn:org.trychlos.iziam:identity:scope:profile'
+                    Meteor.APP.C.oidcUrn+'identity:scope:profile'
                 ]
             }
         },
@@ -87,7 +121,12 @@ Identities.fieldsDef = function(){
             type: String,
             optional: true,
             form_check: Identities.checks.nickname,
-            form_type: Forms.FieldType.C.OPTIONAL
+            form_type: Forms.FieldType.C.OPTIONAL,
+            oid: {
+                scopes: [
+                    'profile'
+                ]
+            }
         },
         // the URL of the user's profile page
         {
@@ -95,7 +134,16 @@ Identities.fieldsDef = function(){
             type: String,
             optional: true,
             form_check: Identities.checks.profile_url,
-            form_type: Forms.FieldType.C.OPTIONAL
+            form_type: Forms.FieldType.C.OPTIONAL,
+            oid: {
+                name: 'profile',
+                scopes: [
+                    'profile'
+                ],
+                use: [
+                    'userinfo'
+                ]
+            }
         },
         // the URL of the user's profile picture
         {
@@ -103,7 +151,16 @@ Identities.fieldsDef = function(){
             type: String,
             optional: true,
             form_check: Identities.checks.picture_url,
-            form_type: Forms.FieldType.C.OPTIONAL
+            form_type: Forms.FieldType.C.OPTIONAL,
+            oid: {
+                name: 'picture',
+                scopes: [
+                    'profile'
+                ],
+                use: [
+                    'userinfo'
+                ]
+            }
         },
         // the URL of the user's web page or blog
         {
@@ -111,14 +168,31 @@ Identities.fieldsDef = function(){
             type: String,
             optional: true,
             form_check: Identities.checks.website_url,
-            form_type: Forms.FieldType.C.OPTIONAL
+            form_type: Forms.FieldType.C.OPTIONAL,
+            oid: {
+                name: 'website',
+                scopes: [
+                    'profile'
+                ],
+                use: [
+                    'userinfo'
+                ]
+            }
         },
         {
             name: 'gender',
             type: String,
             optional: true,
             form_check: Identities.checks.gender,
-            form_type: Forms.FieldType.C.OPTIONAL
+            form_type: Forms.FieldType.C.OPTIONAL,
+            oid: {
+                scopes: [
+                    'profile'
+                ],
+                use: [
+                    'userinfo'
+                ]
+            }
         },
         // full birth date
         {
@@ -126,7 +200,15 @@ Identities.fieldsDef = function(){
             type: Date,
             optional: true,
             form_check: Identities.checks.birthdate,
-            form_type: Forms.FieldType.C.OPTIONAL
+            form_type: Forms.FieldType.C.OPTIONAL,
+            oid: {
+                scopes: [
+                    'profile'
+                ],
+                use: [
+                    'userinfo'
+                ]
+            }
         },
         // only 'mm-dd' month-day
         {
@@ -134,21 +216,43 @@ Identities.fieldsDef = function(){
             type: String,
             optional: true,
             form_check: Identities.checks.birthday,
-            form_type: Forms.FieldType.C.OPTIONAL
+            form_type: Forms.FieldType.C.OPTIONAL,
+            oid: {
+                name: Meteor.APP.C.oidcUrn+'identity:claim:birthday',
+                async fn( identity ){
+                    return strftime( '%Y-%m-%d %H:%M:%S', identity.birthday );
+                },
+                scopes: [
+                    Meteor.APP.C.oidcUrn+'identity:scope:profile'
+                ]
+            }
         },
         {
             name: 'zoneinfo',
             type: String,
             optional: true,
             form_check: Identities.checks.zoneinfo,
-            form_type: Forms.FieldType.C.OPTIONAL
+            form_type: Forms.FieldType.C.OPTIONAL,
+            oid: {
+                scopes: [
+                    'profile'
+                ]
+            }
         },
         {
             name: 'locale',
             type: String,
             optional: true,
             form_check: Identities.checks.locale,
-            form_type: Forms.FieldType.C.OPTIONAL
+            form_type: Forms.FieldType.C.OPTIONAL,
+            oid: {
+                scopes: [
+                    'profile'
+                ],
+                use: [
+                    'userinfo'
+                ]
+            }
         },
         // may host several email addresses
         {
@@ -197,13 +301,11 @@ Identities.fieldsDef = function(){
             tabular: false,
             form: false,
             oid: {
-                claim_name: 'email',
-                scopes: 'email',
-                claim_fn( identity ){
-                    return Identities.fn.emailPreferred( identity ).address;
+                name: 'email',
+                async fn( identity ){
+                    return await Identities.fn.emailPreferred( identity )?.address;
                 },
                 scopes: [
-                    'openid',
                     'email'
                 ]
             }
@@ -213,13 +315,11 @@ Identities.fieldsDef = function(){
             tabular: false,
             form: false,
             oid: {
-                claim_name: 'email_verified',
-                scopes: 'email',
-                claim_fn( identity ){
-                    return Identities.fn.emailPreferred( identity ).verified;
+                name: 'email_verified',
+                async fn( identity ){
+                    return await Identities.fn.emailPreferred( identity )?.verified;
                 },
                 scopes: [
-                    'openid',
                     'email'
                 ]
             }
@@ -380,6 +480,38 @@ Identities.fieldsDef = function(){
             type: Boolean,
             defaultValue: false,
             form_check: Identities.checks.username_preferred
+        },
+        // the preferred username for the identity (computed)
+        {
+            schema: false,
+            tabular: false,
+            form: false,
+            oid: {
+                name: 'preferred_username',
+                async fn( identity ){
+                    return await Identities.fn.usernamePreferred( identity )?.username;
+                },
+                scopes: [
+                    'profile'
+                ],
+                use: [
+                    'userinfo'
+                ]
+            }
+        },
+        {
+            schema: false,
+            tabular: false,
+            form: false,
+            oid: {
+                name: 'updated_at',
+                fn( identity ){
+                    return strftime( '%Y-%m-%d %H:%M:%S', identity.updatedAt || identity.createdAt );
+                },
+                scopes: [
+                    'profile'
+                ]
+            }
         }
     ];
     return columns;

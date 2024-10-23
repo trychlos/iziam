@@ -2,6 +2,7 @@
  * /import/common/tables/jwks/tabular.js
  */
 
+import _ from 'lodash';
 import strftime from 'strftime';
 
 import { Field } from 'meteor/pwix:field';
@@ -22,6 +23,10 @@ import { Jwks } from './index.js';
 Jwks.dataSet = function( dc ){
     let dataset = [];
     const jwks = dc.listGetFn( dc.args );
+    // may happen that we have just an { _id: null } object as a survival of an old code error - just erase it
+    if( !_.isArray( jwks )){
+        jwks = [];
+    }
     jwks.forEach(( it ) => {
         let o = it;
         dataset.push( o );

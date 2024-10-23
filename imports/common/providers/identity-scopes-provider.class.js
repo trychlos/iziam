@@ -31,8 +31,11 @@ export class IdentityScopesProvider extends mix( izProvider ).with( IScope ){
      * @returns {IdentityScopesProvider}
      */
     constructor(){
+
         // first, let the identities register their claims
         Identities.claims.defineClaims();
+
+        // only then, call super with args
         super({
             iident: {
                 id: 'org.trychlos.iziam.provider.identity.scopes.0',
