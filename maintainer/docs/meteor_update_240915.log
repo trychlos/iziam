@@ -1,0 +1,54 @@
+meteor update
+                                              
+While checking for email@3.0.1:
+error: No compatible binary build found for this package. Contact the package author and ask them to publish it for your platform.
+
+aldeed:tabular: updating npm dependencies -- datatables.net...
+                                              
+Changes to your project's package version selections from updating the release:
+                                              
+accounts-base      upgraded from 3.0.0 to 3.0.1
+accounts-password  upgraded from 3.0.0 to 3.0.1
+ddp-client         upgraded from 3.0.0 to 3.0.1
+ddp-common         upgraded from 1.4.3 to 1.4.4
+ddp-server         upgraded from 3.0.0 to 3.0.1
+minimongo          upgraded from 2.0.0 to 2.0.1
+mongo              upgraded from 2.0.0 to 2.0.1
+npm-mongo          upgraded from 4.16.2 to 4.17.4
+webapp             upgraded from 2.0.0 to 2.0.1
+
+iziam: updated to Meteor 3.0.2.               
+                                              
+Changes to your project's package version selections from updating package versions:
+                                              
+accounts-base  upgraded from 3.0.1 to 3.0.2   
+mongo          upgraded from 2.0.1 to 2.0.2
+mongo-decimal  upgraded from 0.1.4-beta300.7 to 0.1.4
+
+                                              
+The following top-level dependencies were not updated to the very latest version available:
+ * aldeed:simple-schema 1.13.1 (2.0.0 is available)
+ * raix:eventemitter 1.0.0 (2.0.0 is available)
+                                              
+Newer versions of the following indirect dependencies are available:
+ * accounts-password 3.0.1 (3.0.2 is available)
+ * email 3.0.100 (3.1.0 is available)         
+These versions may not be compatible with your project.
+To update one or more of these packages to their latest
+compatible versions, pass their names to `meteor update`,
+or just run `meteor update --all-packages`.
+If the packages do not upgrade after this, this could mean
+that there is a newer version of Meteor which the package
+requires, but it not yet recommended or that some package
+dependencies are not up to date and don't allow you to get
+the latest package version.
+[pierre@slim14 iziam] $                       
+[pierre@slim14 iziam] $ meteor add email@3.1.0
+ => Errors while adding packages:             
+                                              
+While selecting package versions:
+error: No version of email satisfies all constraints: @3.1.0, @~3.0.1
+Constraints on package "email":
+* email@3.1.0 <- top level
+* email@~3.0.1 <- top level
+* email@3.0.1 <- accounts-password 3.0.1 <- pwix:accounts-ui 1.8.0-rc
