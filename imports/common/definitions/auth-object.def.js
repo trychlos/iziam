@@ -1,5 +1,5 @@
 /*
- * /imports/common/definitions/auth-target.def.js
+ * /imports/common/definitions/auth-object.def.js
  *
  * Whether the authorization item is about a resource or a client
  */
@@ -9,15 +9,15 @@ const assert = require( 'assert' ).strict;
 
 import { pwixI18n } from 'meteor/pwix:i18n';
 
-export const AuthTarget = {
+export const AuthObject = {
    C: [
         {
             id: 'C',
-            label: 'definitions.auth_target.client_label'
+            label: 'definitions.auth_object.client_label'
         },
         {
             id: 'R',
-            label: 'definitions.auth_target.resource_label'
+            label: 'definitions.auth_object.resource_label'
         }
     ],
 
@@ -38,13 +38,13 @@ export const AuthTarget = {
         });
         if( !found && !this.warnedById[id] ){
             console.warn( 'auth type not found', id );
-            AuthTarget.warnedById[id] = true;
+            AuthObject.warnedById[id] = true;
         }
         return found;
     },
 
     /**
-     * @param {Object} def the definition as returned by AuthTarget.Knowns()
+     * @param {Object} def the definition as returned by AuthObject.Knowns()
      * @returns {String} the identifier associated to this authorization type
      */
     id( def ){
@@ -59,7 +59,7 @@ export const AuthTarget = {
     },
 
     /**
-     * @param {Object} def the definition as returned by AuthTarget.Knowns()
+     * @param {Object} def the definition as returned by AuthObject.Knowns()
      * @returns {String} the label associated to this authorization type
      */
     label( def ){

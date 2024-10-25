@@ -27,7 +27,7 @@ Meteor.publish( 'groups.listAll', async function( organizationId ){
         if( item.type === 'I' ){
             const identities = await Identities.s.getBy( item.organization, { _id: item.identity }, self.userId );
             if( identities && identities.length ){
-                item.DYN.label = Identities.fn.label( identities[0] );
+                item.DYN.label = Identities.fn.bestLabel( identities[0] );
             } else {
                 item.DYN.label = '<identity \''+item.identity+'\' not found>';
             }

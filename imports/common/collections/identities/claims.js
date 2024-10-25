@@ -17,6 +17,12 @@ Identities.claims = {
 
     _myClaims: {},
 
+    _defineClaim( name, opts ){
+        const claim = new Claim( name, opts );
+        Identities.claims._myClaims[name] = claim;
+        return claim;
+    },
+
     // returns the name of the claim
     claim_name( def ){
         return def.def().oid.name || def.name();
@@ -25,27 +31,36 @@ Identities.claims = {
     // called once at IdentiyScopesProvider instanciation
     //  register all the provided claims now
     defineClaims(){
+        // claims directly derived from fieldset
         this.get().forEach(( it ) => {
             const oid = it.def().oid;
             const name = this.claim_name( it );
             let opts = {};
-            if(oid.fn ){
+            if( oid.fn ){
                 opts.fn = oid.fn;
             }
-            if(oid.args ){
+            if( oid.args ){
                 opts.args = oid.args;
             }
-            if(oid.scopes ){
+            if( oid.scopes ){
                 opts.scopes = oid.scopes;
             }
-            if(oid.use ){
+            if( oid.use ){
                 opts.use = oid.use;
             }
             opts.def = it;
-            const claim = new Claim( name, opts );
-            Identities.claims._myClaims[name] = claim;
+            Identities.claims._defineClaim( name, opts );
         });
-        //console.debug( 'Identities.claims._myClaims', Identities.claims._myClaims );
+        // other claims
+        Identities.claims._defineClaim( Meteor.APP.C.oidcUrn+'identity:claim:groups', {
+            fn( identity ){
+                return identity.DYN.groups;
+            },
+            scopes: [
+                Meteor.APP.C.oidcUrn+'identity:scope:profile',
+                Meteor.APP.C.oidcUrn+'identity:scope:groups',
+            ]
+        });
     },
 
     // returns {Array<Field.Def>} the list of fields which provide a claim

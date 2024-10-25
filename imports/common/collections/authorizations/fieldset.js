@@ -12,7 +12,7 @@ import { TenantsManager } from 'meteor/pwix:tenants-manager';
 import { Timestampable } from 'meteor/pwix:collection-timestampable';
 import { Tracker } from 'meteor/tracker';
 
-import { AuthTarget } from '/imports/common/definitions/auth-target.def.js';
+import { AuthObject } from '/imports/common/definitions/auth-object.def.js';
 
 import { Authorizations } from './index.js';
 
@@ -35,6 +35,16 @@ const _defaultFieldDef = function(){
             form_check: Authorizations.checks.label,
             form_type: Forms.FieldType.C.OPTIONAL
         },
+        // subject, either an identities group or a clients (m-to-m) group
+        //  subject_type is 'G' or 'C'
+        {
+            name: 'subject_type',
+            type: String
+        },
+        {
+            name: 'subject_id',
+            type: String
+        },
         // the group we are talking of
         {
             name: 'group',
@@ -48,14 +58,37 @@ const _defaultFieldDef = function(){
             form_check: Authorizations.checks.group,
             form_type: Forms.FieldType.C.MANDATORY
         },
+        // object, either a client or a resource
+        {
+            name: 'object_type',
+            type: String
+        },
+        {
+            name: 'object_id',
+            type: String
+        },
+        // an optional free list of permissions, or access levels, or...?
+        {
+            name: 'permissions',
+            type: Array,
+            optional: true
+        },
+        {
+            name: 'permissions.$',
+            type: Object
+        },
+        {
+            name: 'permissions.$.name',
+            type: String
+        },
         // the type of authorized targets, eiher clients or resources
         {
             name: 'type',
             type: String,
             dt_title: pwixI18n.label( I18N, 'authorizations.tabular.type_th' ),
             dt_render( data, type, rowData ){
-                const def = AuthTarget.byId( rowData.type );
-                return def ? AuthTarget.label( def ) : null;
+                const def = AuthObject.byId( rowData.type );
+                return def ? AuthObject.label( def ) : null;
             },
             form_check: Authorizations.checks.type,
             form_type: Forms.FieldType.C.MANDATORY

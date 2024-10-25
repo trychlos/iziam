@@ -207,21 +207,19 @@ Template.groups_tree.onCreated( function(){
         // we do not allow reordering, which implies that dnd must change the parent
         // more.dnd: true
         // more.pos = a (after), b (before) or i (inside)
+        // + identities can only gio inside a group
         tree_dnd_move_check( node, node_parent, node_position, more ){
-            return node.parent !== node_parent.id;
+            return node.parent !== node_parent.id &&
+                ( node.type !== 'I' || node_parent.type === 'G' );
         },
 
         // dnd stop: open the (new) parent
-        tree_dnd_stop( event, data, element, helper ){
+        tree_dnd_stop( event, data ){
             const $tree = self.APP.$tree.get();
-            //console.debug( 'data', data );
-            // Uncaught TypeError: $tree.jstree(...).get_node is not a function
-            try {
-                const moved = $tree.jstree( true ).get_node( data.obj );
-                $tree.jstree( true ).open_node( moved.parent );
-            } catch( e ){
-                console.warn( e );
-            }
+            const moved = $tree.jstree( true ).get_node( data.element );
+            const closest = data.event.target.closest( 'a.jstree-anchor' );
+            //const target_node = $tree.jstree( true ).get_node( closest ); // works but useless
+            $tree.jstree( true ).open_node( closest );
         },
 
         // getter/setter: whether the creation of the tree is done
@@ -413,8 +411,9 @@ Template.groups_tree.onRendered( function(){
         .on( 'dnd_move.vakata', ( event, { data, element, event2, helper }) => {
             self.APP.tree_dnd_move( event, data, element, helper );
         })
-        .on( 'dnd_stop.vakata', ( event, { data, element, event2, helper }) => {
-            self.APP.tree_dnd_stop( event, data, element, helper );
+        //.on( 'dnd_stop.vakata', ( event, { data, element, event2, helper }) => {
+        .on( 'dnd_stop.vakata', ( event, data ) => {
+            self.APP.tree_dnd_stop( event, data );
         });
 
     // build the groups tree

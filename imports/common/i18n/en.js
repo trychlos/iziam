@@ -532,10 +532,15 @@ Meteor.APP.i18n = {
                     post_label: 'Shared secret - HTTP POST parms',
                     post_short: 'Shared / POST'
                 },
-                auth_target: {
+                auth_object: {
                     client_label: 'Client',
                     resource_label: 'Resource',
-                    select_text: 'Select the authentication target type'
+                    select_text: 'Select the authorization object type'
+                },
+                auth_subject: {
+                    clients_label: 'Clients',
+                    identities_label: 'Identities',
+                    select_text: 'Select the authorization subject type'
                 },
                 client_profile: {
                     confidential_label: 'Trusted user-oriented',

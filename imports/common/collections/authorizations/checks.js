@@ -11,7 +11,7 @@ import { ReactiveVar } from 'meteor/reactive-var';
 import { TenantsManager } from 'meteor/pwix:tenants-manager';
 import { TM } from 'meteor/pwix:typed-message';
 
-import { AuthTarget } from '/imports/common/definitions/auth-target.def.js';
+import { AuthObject } from '/imports/common/definitions/auth-object.def.js';
 
 import { Authorizations } from './index.js';
 
@@ -140,7 +140,7 @@ Authorizations.checks = {
             data.item.set( item );
         }
         if( value ){
-            const def = AuthTarget.byId( value );
+            const def = AuthObject.byId( value );
             return def ? null : new TM.TypedMessage({
                 level: TM.MessageLevel.C.ERROR,
                 message: pwixI18n.label( I18N, 'authorizations.checks.type_unknown' )

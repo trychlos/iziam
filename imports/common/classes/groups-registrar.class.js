@@ -85,7 +85,7 @@ export class GroupsRegistrar extends izRegistrar {
         });
         // this may be normal just after having deleted an item - so better to not warn
         if( !found ){
-            console.debug( 'unable to find group', groupId );
+            console.warn( 'unable to find group', groupId );
         }
         return found;
     }
