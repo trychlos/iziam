@@ -1,5 +1,5 @@
 /*
- * /imports/common/collections/groups/server/index.js
+ * /imports/common/collections/clients_groups/server/index.js
  */
 
 import './event-emitter.js';

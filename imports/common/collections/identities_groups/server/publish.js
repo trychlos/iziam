@@ -1,13 +1,13 @@
 /*
- * /imports/common/collections/groups/server/publish.js
+ * /imports/common/collections/identities_groups/server/publish.js
  */
 
 import { Identities } from '/imports/common/collections/identities/index.js';
 
-import { Groups } from '../index.js';
+import { IdentitiesGroups } from '../index.js';
 
 // returns the list of known groups for a given organization
-//  the list of (direct) members as an array of <Groups> objects
+//  the list of (direct) members as an array of <IdentitiesGroups> objects
 Meteor.publish( 'groups.listAll', async function( organizationId ){
     if( !organizationId ){
         this.ready();
@@ -37,17 +37,17 @@ Meteor.publish( 'groups.listAll', async function( organizationId ){
     };
 
     // in order the same query may be applied on client side, we have to add to item required fields
-    const observer = Groups.collection( organizationId ).find({ organization: organizationId }).observeAsync({
+    const observer = IdentitiesGroups.collection( organizationId ).find({ organization: organizationId }).observeAsync({
         added: async function( item ){
-            self.added( Groups.collectionName( organizationId ), item._id, await f_transform( item ));
+            self.added( IdentitiesGroups.collectionName( organizationId ), item._id, await f_transform( item ));
             //console.debug( 'added', item._id );
         },
         changed: async function( newItem, oldItem ){
-            self.changed( Groups.collectionName( organizationId ), newItem._id, await f_transform( newItem ));
+            self.changed( IdentitiesGroups.collectionName( organizationId ), newItem._id, await f_transform( newItem ));
             //console.debug( 'changed', newItem._id );
         },
         removed: function( oldItem ){
-            self.removed( Groups.collectionName( organizationId ), oldItem._id, oldItem );
+            self.removed( IdentitiesGroups.collectionName( organizationId ), oldItem._id, oldItem );
             //console.debug( 'removed', oldItem._id );
         }
     });

@@ -1,14 +1,13 @@
 /*
- * /imports/common/collections/groups/fieldset.js
+ * /imports/common/collections/identities_groups/fieldset.js
  */
 
 import { Field } from 'meteor/pwix:field';
 import { Notes } from 'meteor/pwix:notes';
-import { pwixI18n } from 'meteor/pwix:i18n';
 import { Timestampable } from 'meteor/pwix:collection-timestampable';
 import { Tracker } from 'meteor/tracker';
 
-import { Groups } from './index.js';
+import { IdentitiesGroups } from './index.js';
 
 const _defaultFieldDef = function(){
     let columns = [
@@ -29,9 +28,8 @@ const _defaultFieldDef = function(){
             name: 'label',
             type: String,
             optional: true,
-            form_check: Groups.checks.label,
-            form_type: Forms.FieldType.C.MANDATORY,
-            help_tooltip: pwixI18n.label( I18N, 'clients.metadata.client_name' )
+            form_check: IdentitiesGroups.checks.label,
+            form_type: Forms.FieldType.C.MANDATORY
         },
         // the parent identifier, necessarily a group if set
         {
@@ -56,5 +54,5 @@ const _defaultFieldDef = function(){
 Tracker.autorun(() => {
     let columns = _defaultFieldDef();
     let fieldset = new Field.Set( columns );
-    Groups.fieldSet.set( fieldset );
+    IdentitiesGroups.fieldSet.set( fieldset );
 });

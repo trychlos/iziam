@@ -1,5 +1,5 @@
 /*
- * /imports/common/collections/groups/collection.js
+ * /imports/common/collections/clients_groups/collection.js
  */
 
 import { Mongo } from 'meteor/mongo';
@@ -7,11 +7,11 @@ import { ReactiveVar } from 'meteor/reactive-var';
 import SimpleSchema from 'meteor/aldeed:simple-schema';
 import { Tracker } from 'meteor/tracker';
 
-export const Groups = {
+export const ClientsGroups = {
     collections: {},
     collection( organizationId ){
-        if( !Groups.collections[organizationId] ){
-            const c = new Mongo.Collection( Groups.collectionName( organizationId ));
+        if( !ClientsGroups.collections[organizationId] ){
+            const c = new Mongo.Collection( ClientsGroups.collectionName( organizationId ));
             if( Meteor.isServer ){
                 c.deny({
                     insert(){ return true; },
@@ -20,24 +20,24 @@ export const Groups = {
                 });
             }
             Tracker.autorun(() => {
-                const fieldSet = Groups.fieldSet.get();
+                const fieldSet = ClientsGroups.fieldSet.get();
                 if( fieldSet ){
                     c.attachSchema( new SimpleSchema( fieldSet.toSchema()), { replace: true });
                     c.attachBehaviour( 'timestampable' );
                 }
             });
-            Groups.collections[organizationId] = c;
+            ClientsGroups.collections[organizationId] = c;
         }
-        return Groups.collections[organizationId];
+        return ClientsGroups.collections[organizationId];
     },
     collectionName( organizationId ){
-        return 'groups_'+organizationId;
+        return 'clients_groups_'+organizationId;
     },
     isGroups( name ){
-        return name.startsWith( 'groups_' );
+        return name.startsWith( 'clients_groups_' );
     },
     scope( name ){
-        return name.replace( /^groups_/, '' );
+        return name.replace( /^clients_groups_/, '' );
     },
     fieldSet: new ReactiveVar( null )
 };

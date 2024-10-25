@@ -1,5 +1,5 @@
 /*
- * /imports/client/components/groups_count_badge/groups_count_badge.js
+ * /imports/client/components/identities_groups_count_badge/identities_groups_count_badge.js
  *
  * A small badge attached to the 'Groups' nav which displays the groups count.
  * 
@@ -11,9 +11,9 @@
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { TenantsManager } from 'meteor/pwix:tenants-manager';
 
-import './groups_count_badge.html';
+import './identities_groups_count_badge.html';
 
-Template.groups_count_badge.helpers({
+Template.identities_groups_count_badge.helpers({
     // string translation
     i18n( arg ){
         return pwixI18n.label( I18N, arg.hash.key );

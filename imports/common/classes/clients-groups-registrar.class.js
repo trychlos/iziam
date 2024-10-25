@@ -1,5 +1,5 @@
 /*
- * /imports/common/classes/groups-registrar.class.js
+ * /imports/common/classes/identities-groups-registrar.class.js
  *
  * A registration of groups attached to an organization.
  * This is needed so that we are able to manage groups instances from common code.

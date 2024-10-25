@@ -9,8 +9,9 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 
 import '/imports/client/components/authorizations_count_badge/authorizations_count_badge.js';
 import '/imports/client/components/clients_count_badge/clients_count_badge.js';
-import '/imports/client/components/groups_count_badge/groups_count_badge.js';
+import '/imports/client/components/clients_groups_count_badge/clients_groups_count_badge.js';
 import '/imports/client/components/identities_count_badge/identities_count_badge.js';
+import '/imports/client/components/identities_groups_count_badge/identities_groups_count_badge.js';
 import '/imports/client/components/organization_authorizations_load/organization_authorizations_load.js';
 import '/imports/client/components/organization_authorizations_pane/organization_authorizations_pane.js';
 import '/imports/client/components/organization_clients_load/organization_clients_load.js';
@@ -21,8 +22,8 @@ import '/imports/client/components/organization_config_oauth_pane/organization_c
 import '/imports/client/components/organization_config_pane/organization_config_pane.js';
 import '/imports/client/components/organization_config_rest_pane/organization_config_rest_pane.js';
 import '/imports/client/components/organization_endpoints_pane/organization_endpoints_pane.js';
-import '/imports/client/components/organization_groups_load/organization_groups_load.js';
-import '/imports/client/components/organization_groups_pane/organization_groups_pane.js';
+import '/imports/client/components/organization_identities_groups_load/organization_identities_groups_load.js';
+import '/imports/client/components/organization_identities_groups_pane/organization_identities_groups_pane.js';
 import '/imports/client/components/organization_identities_load/organization_identities_load.js';
 import '/imports/client/components/organization_identities_pane/organization_identities_pane.js';
 import '/imports/client/components/organization_jwks_pane/organization_jwks_pane.js';
@@ -42,18 +43,23 @@ Template.manager_organizations_tab.onCreated( function(){
     self.APP = {
         entityTabsNew: [
             {
-                name: 'organization_groups_tab',
-                navLabel: pwixI18n.label( I18N, 'organizations.edit.groups_tab_title' ),
-                enabled: false
-            },
-            {
                 name: 'organization_identities_tab',
                 navLabel: pwixI18n.label( I18N, 'organizations.edit.identities_tab_title' ),
                 enabled: false
             },
             {
+                name: 'organization_identities_groups_tab',
+                navLabel: pwixI18n.label( I18N, 'organizations.edit.identities_groups_tab_title' ),
+                enabled: false
+            },
+            {
                 name: 'organization_clients_tab',
                 navLabel: pwixI18n.label( I18N, 'organizations.edit.clients_tab_title' ),
+                enabled: false
+            },
+            {
+                name: 'organization_clients_groups_tab',
+                navLabel: pwixI18n.label( I18N, 'organizations.edit.clients_groups_tab_title' ),
                 enabled: false
             },
             {
@@ -76,22 +82,28 @@ Template.manager_organizations_tab.onCreated( function(){
         ],
         entityTabsEdit: [
             {
-                name: 'organization_groups_tab',
-                navLabel: pwixI18n.label( I18N, 'organizations.edit.groups_tab_title' ),
-                navTemplate: 'groups_count_badge',
-                paneTemplate: 'organization_groups_pane'
-            },
-            {
                 name: 'organization_identities_tab',
                 navLabel: pwixI18n.label( I18N, 'organizations.edit.identities_tab_title' ),
                 navTemplate: 'identities_count_badge',
                 paneTemplate: 'organization_identities_pane'
             },
             {
+                name: 'organization_identities_groups_tab',
+                navLabel: pwixI18n.label( I18N, 'organizations.edit.identities_groups_tab_title' ),
+                navTemplate: 'identities_groups_count_badge',
+                paneTemplate: 'organization_identities_groups_pane'
+            },
+            {
                 name: 'organization_clients_tab',
                 navLabel: pwixI18n.label( I18N, 'organizations.edit.clients_tab_title' ),
                 navTemplate: 'clients_count_badge',
                 paneTemplate: 'organization_clients_pane'
+            },
+            {
+                name: 'organization_clients_groups_tab',
+                navLabel: pwixI18n.label( I18N, 'organizations.edit.clients_groups_tab_title' ),
+                navTemplate: 'clients_groups_count_badge',
+                paneTemplate: 'organization_clients_groups_pane'
             },
             {
                 name: 'organization_resources_tab',
@@ -122,7 +134,7 @@ Template.manager_organizations_tab.onCreated( function(){
                 shown: false
             },
             {
-                paneTemplate: 'organization_groups_load',
+                paneTemplate: 'organization_identities_groups_load',
                 shown: false
             },
             {

@@ -1,5 +1,5 @@
 /*
- * /imports/client/components/organization_groups_pane/organization_groups_pane.js
+ * /imports/client/components/organization_identities_groups_pane/organization_identities_groups_pane.js
  *
  * Display the groups.
  * 
@@ -29,9 +29,9 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 import '/imports/client/components/group_new_button/group_new_button.js';
 import '/imports/client/components/groups_panel/groups_panel.js';
 
-import './organization_groups_pane.html';
+import './organization_identities_groups_pane.html';
 
-Template.organization_groups_pane.helpers({
+Template.organization_identities_groups_pane.helpers({
     // string translation
     i18n( arg ){
         return pwixI18n.label( I18N, arg.hash.key );

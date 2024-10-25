@@ -69,6 +69,27 @@ Clients.s.delete = async function( entityId, userId ){
     }
 };
 
+// Find and returns the client entity with its DYN records
+// @returns {Object} with full result
+// @throws {Error}
+Clients.s.getByEntity = async function( organizationId, entityId, userId ){
+    check( organizationId, String );
+    check( entityId, String );
+    check( userId, String );
+    //if( !await TenantsManager.isAllowed( 'pwix.tenants_manager.feat.delete', userId, entity )){
+    //    return null;
+    //}
+    // get the entity
+    let entitiesRes = await ClientsEntities.s.getBy({ _id: entityId }, userId );
+    // and get all the Records
+    let recordsRes = await ClientsRecords.s.getBy({ entity: entityId }, userId );
+
+    return {
+        entities: entitiesRes,
+        records: recordsRes
+    }
+};
+
 // returns the registered client metadata
 // client: an { entity, record } object
 Clients.s.registeredMetadata = async function( client ){

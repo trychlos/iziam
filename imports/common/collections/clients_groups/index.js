@@ -1,14 +1,14 @@
 /*
- * /imports/common/collections/groups/index.js
+ * /imports/common/collections/clients_groups/index.js
  *
- * The groups registered with an organization.
+ * The clients groups registered with an organization.
  * 
  * Groups are stored in collections per organization (as identities).
  * 
  * This is a tree where each group can have only one parent.
  */
 
-export { Groups } from './collection.js';
+export { ClientsGroups } from './collection.js';
 
 import './checks.js';
 import './fieldset.js';

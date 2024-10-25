@@ -892,7 +892,9 @@ Meteor.APP.i18n = {
                     verified_th: 'Verified'
                 },
                 groups: {
-                    preamble_text: 'The groups this identity is member of.<br />'
+                    clients_preamble: 'The groups this client is member of.<br />'
+                        +'When attributing (checking) a group, the client becomes also a member of all parents of this checked group.',
+                    identities_preamble: 'The groups this identity is member of.<br />'
                         +'When attributing (checking) a group, the identity becomes also a member of all parents of this checked group.'
                 },
                 list: {
@@ -1204,6 +1206,7 @@ Meteor.APP.i18n = {
                         +'It is mandatory to have access to the Authorization Server REST API. '
                         +'It must be unique.',
                     clients_tab_title: 'Clients',
+                    clients_groups_tab_title: 'Clients Groups',
                     config_tab_title: 'Configuration',
                     dynamic_example: 'Dynamic registration URL: &laquo; %s &raquo;',
                     dynamic_label: 'Dynamic registration endpoint :',
@@ -1223,7 +1226,6 @@ Meteor.APP.i18n = {
                     endsession_label: 'End session endpoint :',
                     endsession_ph: '/logout',
                     endsession_title: 'The endpoint path used to end a client session and/or to logout a connected user.',
-                    groups_tab_title: 'Groups',
                     ident_config_preamble: 'Configure the way your identities are managed.<br />'
                         +'Make sure you configure at least one identifier per identity.<br />'
                         +'This configuration will be read-only as soon as you will have defined a first identity, as we do not know at the moment how handle'
@@ -1244,6 +1246,7 @@ Meteor.APP.i18n = {
                     ident_username_legend: 'Manage the usernames',
                     ident_username_preamble: 'Configure the way you want your identities manage their usernames.',
                     identities_tab_title: 'Identities',
+                    identities_groups_tab_title: 'Identities Groups',
                     introspection_example: 'Introspection endpoint URL: &laquo; %s &raquo;',
                     introspection_label: 'Introspection endpoint :',
                     introspection_ph: '/introspection',
@@ -1291,7 +1294,11 @@ Meteor.APP.i18n = {
                     userinfo_title: 'The endpoint path used to build the Userinfo URL, to which you can get informations about a user.',
                 },
                 groups: {
-                    list_preamble: 'Define here the groups inside of your organization.<br />'
+                    clients_list_preamble: 'Define here the groups of clients inside of your organization.<br />'
+                        +'Groups form a hierachic tree, where each item can be either a group or a client, though only groups can have children.<br />'
+                        +'Clients are so necessarily written as members of a group, never can be inserted at the root of the tree.<br />'
+                        +'Please note that the considered configuration is those of the <b>saved</b> organization, not those of the currently edited record(s).',
+                    identities_list_preamble: 'Define here the groups of identities inside of your organization.<br />'
                         +'Groups form a hierachic tree, where each item can be either a group or an identity, though only groups can have children.<br />'
                         +'Identities are so necessarily written as members of a group, never can be inserted at the root of the tree.<br />'
                         +'Please note that the considered configuration is those of the <b>saved</b> organization, not those of the currently edited record(s).'

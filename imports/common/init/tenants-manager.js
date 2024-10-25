@@ -8,8 +8,9 @@ import { TenantsManager } from 'meteor/pwix:tenants-manager';
 import { Tracker } from 'meteor/tracker';
 
 import { AuthorizationsRegistrar } from '/imports/common/classes/authorizations-registrar.class.js';
+import { ClientsGroupsRegistrar } from '/imports/common/classes/clients-groups-registrar.class.js';
 import { ClientsRegistrar } from '/imports/common/classes/clients-registrar.class.js';
-import { GroupsRegistrar } from '/imports/common/classes/groups-registrar.class.js';
+import { IdentitiesGroupsRegistrar } from '/imports/common/classes/identities-groups-registrar.class.js';
 import { IdentitiesRegistrar } from '/imports/common/classes/identities-registrar.class.js';
 import { ResourcesRegistrar } from '/imports/common/classes/resources-registrar.class.js';
 
@@ -114,13 +115,17 @@ Tracker.autorun(() => {
         if( !it.DYN.clients ){
             it.DYN.clients = ClientsRegistrar.getRegistered( it ) || new ClientsRegistrar( it );
         }
-        // instanciate a GroupsRegistrar if needed
-        if( !it.DYN.groups ){
-            it.DYN.groups = GroupsRegistrar.getRegistered( it ) || new GroupsRegistrar( it );
+        // instanciate a ClientsGroupsRegistrar if needed
+        if( !it.DYN.clients_groups ){
+            it.DYN.clients_groups = ClientsGroupsRegistrar.getRegistered( it ) || new ClientsGroupsRegistrar( it );
         }
         // instanciate a IdentitiesRegistrar if needed
         if( !it.DYN.identities ){
             it.DYN.identities = IdentitiesRegistrar.getRegistered( it ) || new IdentitiesRegistrar( it );
+        }
+        // instanciate a IdentitiesGroupsRegistrar if needed
+        if( !it.DYN.identities_groups ){
+            it.DYN.identities_groups = IdentitiesGroupsRegistrar.getRegistered( it ) || new IdentitiesGroupsRegistrar( it );
         }
         // instanciate a ResourcesRegistrar if needed
         if( !it.DYN.resources ){

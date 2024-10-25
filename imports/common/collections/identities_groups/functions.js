@@ -1,13 +1,13 @@
 /*
- * /imports/common/collections/groups/functions.js
+ * /imports/common/collections/identities_groups/functions.js
  */
 
 import _ from 'lodash';
 const assert = require( 'assert' ).strict; // up to nodejs v16.x
 
-import { Groups } from './index.js';
+import { IdentitiesGroups } from './index.js';
 
-Groups.fn = {
+IdentitiesGroups.fn = {
 
     /**
      * @param {String} organizationId
@@ -15,7 +15,7 @@ Groups.fn = {
      * @returns {String} the best label we can get for group
      */
     async bestLabel( organizationId, group ){
-        let groupObject = await Groups.fn.group( organizationId, group );
+        let groupObject = await IdentitiesGroups.fn.group( organizationId, group );
         const label = groupObject.label || groupObject._id;
         return label;
     },
@@ -45,7 +45,7 @@ Groups.fn = {
     async group( organizationId, group ){
         let groupObject = null;
         if( _.isString( group )){
-            const array = await( Meteor.isClient ? Meteor.callAsync( 'groups.getBy', organizationId, { _id: group }) : Groups.s.getBy( organizationId, { _id: group }));
+            const array = await( Meteor.isClient ? Meteor.callAsync( 'groups.getBy', organizationId, { _id: group }) : IdentitiesGroups.s.getBy( organizationId, { _id: group }));
             groupObject = array && array.length && array[0];
         } else {
             groupObject = group;

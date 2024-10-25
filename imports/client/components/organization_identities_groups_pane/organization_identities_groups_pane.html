@@ -1,0 +1,20 @@
+<template name="organization_identities_groups_pane">
+    <div class="x-tab c-organization-identities-groups-pane">
+        <div class="panel-content ui-h100">
+
+            <div class="panel-header">
+                <div class="panel-preamble">
+                    {{{ i18n key="organizations.groups.identities_list_preamble" }}}
+                </div>
+                <!--
+                {{> group_new_button }}
+                -->
+            </div>
+
+            <div class="panel-body">
+                {{> groups_panel }}
+            </div>
+
+        </div>
+    </div>
+</template>

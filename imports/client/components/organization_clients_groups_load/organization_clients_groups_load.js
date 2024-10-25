@@ -1,7 +1,7 @@
 /*
- * /imports/client/components/organization_groups_load/organization_groups_load.js
+ * /imports/client/components/organization_clients_groups_load/organization_clients_groups_load.js
  *
- * An non-visible component which loads the groups of the organization into the GroupsRegistrar installed in organization.DYN.groups
+ * An non-visible component which loads the clients groups of the organization into the ClientsGroupsRegistrar installed in organization.DYN.clients_groups
  * - list: a ReactiveVar which contains the array of the groups
  * - byId( id<String> ): <Group>: a search function available at '<organization>.DYN.groups.byId()'
  * 
@@ -16,15 +16,15 @@
 
 import { TenantsManager } from 'meteor/pwix:tenants-manager';
 
-import './organization_groups_load.html';
+import './organization_clients_groups_load.html';
 
-Template.organization_groups_load.onCreated( function(){
+Template.organization_clients_groups_load.onCreated( function(){
     //console.debug( this );
     this.autorun(() => {
         const edited = Template.currentData().item.get();
         const organization = TenantsManager.list.byEntity( edited._id );
-        if( organization && organization.DYN.groups ){
-            organization.DYN.groups.groupsLoad();
+        if( organization && organization.DYN.clients_groups ){
+            organization.DYN.clients_groups.groupsLoad();
         }
     });
 });
