@@ -29,9 +29,12 @@ export const IOIDInteractions = DeclareMixin(( superclass ) => class extends sup
     // compute the displayable logo
     // either from the client, or from the organization, defaulting to izIAM
     async _getLogo( client ){
-        let logo = client.record.logo_uri;
-        if( logo && await isImage( logo )){
-            return logo;
+        let logo = null;
+        if( client ){
+            logo = client.record.logo_uri;
+            if( logo && await isImage( logo )){
+                return logo;
+            }
         }
         logo = this.iRequestServer().organization().record.logoUrl
         if( logo && await isImage( logo )){
@@ -192,14 +195,29 @@ export const IOIDInteractions = DeclareMixin(( superclass ) => class extends sup
         return str;
     }
 
+    async _renderError( msg ){
+        let str = ''
+            + await this._renderHead()
+            +'<body>'
+            + await this._renderPreamble()
+            +'  <div class="error">'
+            +'    <p>'+msg+'</p>'
+            +'    <button class="btn btn-primary" onclick="window.close()">'+pwixI18n.label( I18N, 'auth.interactions.close_button' )+'</button>'
+            +'  </div>'
+            +'</body>';
+        return str;
+    }
+
     async _renderHead( req, res, provider, interaction, client ){
         let str = '<head>';
         str += '<meta http-equiv="X-UA-Compatible" content="IE=edge">';
         str += '<meta charset="utf-8">';
         str += '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">';
         // may be 'consent' or 'login'
-        const title = pwixI18n.label( I18N, 'auth.interactions.'+interaction.prompt.name+'_title', this.iRequestServer().organization().record.label );
-        str += '<title>'+title+'</title>';
+        if( interaction ){
+            const title = pwixI18n.label( I18N, 'auth.interactions.'+interaction.prompt.name+'_title', this.iRequestServer().organization().record.label );
+            str += '<title>'+title+'</title>';
+        }
         str += '<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">';
         str += '<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">'
         str += '<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>'
@@ -214,15 +232,19 @@ export const IOIDInteractions = DeclareMixin(( superclass ) => class extends sup
             +'    height: 100%;'
             +'  }'
             +'  img.logo { width: 10em; }'
+            +'  .preamble div.logo { margin: 1em; }'
+            +'  .preamble div.text { margin: 1em; }'
             +'  .preamble .text p { font-size: 1.75em; }'
             +'  form { display: flex; margin-top: 2em; }'
             +'  tr:not(:first-child) td { padding-top: 1em; }'
-            +'  td.ui-w40 { width: 40%; }'
+            +'  td.ui-w40 { width: 40%; }'  
             +'  td.ui-w60 { width: 60%; }'
             +'  td.ui-center { text-align: center; }'
             +'  td.ui-right { text-align: right; }'
             +'  p.label { margin: 0 0.5em 0 0; white-space: nowrap; }'
             +'  .no-grant { display: flex; align-items: center; justify-content: center; }'
+            +'  .error { display: flex; flex-direction: column; font-size: 2em; align-items: center; justify-content: space-evenly; }'
+            +'  .iziam { font-size: 3em; font-weight: bold; }'
             +'</style>';
         str += '</head>';
         return str;
@@ -246,16 +268,20 @@ export const IOIDInteractions = DeclareMixin(( superclass ) => class extends sup
         return str;
     }
 
-    // Display the clietn logo, or the organization logo, or the izIAM logo
+    // Display the client logo, or the organization logo, or the izIAM logo
     async _renderPreambleText( interaction, client ){
-        switch( interaction.prompt.name ){
-            case 'login':
-                return pwixI18n.label( I18N, 'auth.interactions.login_preamble', client.record.label );
-            case 'consent':
-                return pwixI18n.label( I18N, 'auth.interactions.consent_preamble', client.record.label );
-            default:
-                res.status( 501 ).send( 'Not implemented.' );
+        if( interaction ){
+            switch( interaction.prompt.name ){
+                case 'login':
+                    return pwixI18n.label( I18N, 'auth.interactions.login_preamble', client.record.label );
+                case 'consent':
+                    return pwixI18n.label( I18N, 'auth.interactions.consent_preamble', client.record.label );
+                default:
+                    console.warn( '_renderPreambleText', interaction.prompt.name, 'Not implemented.' );
+            }
         }
+        // when rendering an error
+        return '<span class="iziam">izIAM</span>';
     }
 
     /**
@@ -291,7 +317,7 @@ export const IOIDInteractions = DeclareMixin(( superclass ) => class extends sup
                 error: 'request_cancelled',
                 error_description: 'End-User cancelled interaction',
             };
-            await provider.interactionFinished(req, res, result, { mergeWithLastSubmission: false });
+            await provider.interactionFinished( req, res, result, { mergeWithLastSubmission: false });
 
         } catch( err ){
             console.error( 'err', err );
@@ -386,15 +412,22 @@ export const IOIDInteractions = DeclareMixin(( superclass ) => class extends sup
         try {
             //console.debug( 'interactionPostLogin provider', provider );
             assert( req.body && req.body.prompt === 'login', 'expects "login" prompt name, got '+req.body.prompt );
-            const account = await this.iRequestServer().identityServer().findByLogin( req.body.login );
+            const account = await this.iRequestServer().identityServer().findByLogin( this.iRequestServer().organization(), req.body.login, req.body.password );
             if( account ){
+                console.debug( 'account', account );
+                console.debug( 'req.body', req.body );
                 const result = {
                     login: {
-                        accountId: account.login,
+                        //accountId: account.login,
+                        accountId: req.body.login,
                         acr: Meteor.APP.C.oidcEndUserPasswordAcr
                     },
                 };
                 await provider.interactionFinished( req, res, result, { mergeWithLastSubmission: false });
+
+            } else {
+                const html = await this._renderError( pwixI18n.label( I18N, 'auth.interactions.user_unauthenticated' ));
+                return res.send( html );
             }
 
         } catch( err ){

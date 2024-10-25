@@ -8,14 +8,14 @@
 
 import _ from 'lodash';
 const assert = require( 'assert' ).strict; // up to nodejs v16.x
+import crypto from 'crypto';
 import mix from '@vestergaard-company/js-mixin';
-
-import { AccountsHub } from 'meteor/pwix:accounts-hub';
-import { AccountsManager } from 'meteor/pwix:accounts-manager';
 
 import { izObject } from '/imports/common/classes/iz-object.class.js';
 
 import { Identities } from '/imports/common/collections/identities/index.js';
+
+import { IdentityAuthPasswordProvider } from '/imports/common/providers/identity-auth-password-provider.class.js';
 
 import { RequestServer } from '/imports/server/classes/request-server.class.js';
 
@@ -92,15 +92,28 @@ export class IdentityServer extends mix( izObject ).with( IRequested ){
 
     /**
      * @param {String} login
+     * @param {String} password
      * @return {Object} the found identity
      *  https://github.com/panva/node-oidc-provider/blob/v7.14.3/docs/README.md#accounts
      *  This is only used from the interaction '/interaction/:uid/login' route
      */
-    async findByLogin( login ){
-        console.debug( 'findByLogin', arguments );
-        return {
-            login: login
-        };
+    async findByLogin( organization, login, password ){
+        //console.debug( 'findByLogin', arguments );
+        let identity = await Identities.s.findById( organization, login );
+        if( identity ){
+            if( identity.password ){
+                const p = IdentityAuthPasswordProvider.parms();
+                const hashedPassword = crypto.pbkdf2Sync( password, Buffer.from( identity.password.salt, 'hex' ), p.iterations, p.keylen, p.digest );
+                if( !crypto.timingSafeEqual( Buffer.from( identity.password.hashed, 'hex' ), hashedPassword )){
+                    console.warn( 'invalid password' );
+                    identity = null;
+                }
+            } else {
+                console.warn( 'identity doesn\'t any password' );
+                identity = null;
+            }
+        }
+        return identity;
     }
 
     /**

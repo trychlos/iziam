@@ -61,7 +61,7 @@ Template.identity_profile_pane.onCreated( function(){
             },
             website_url: {
                 js: '.js-website'
-            },
+            }
         },
         // the Form.Checker instance for this panel
         checker: new ReactiveVar( null ),

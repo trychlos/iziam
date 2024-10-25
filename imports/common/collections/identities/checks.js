@@ -9,6 +9,7 @@ const assert = require( 'assert' ).strict; // up to nodejs v16.x
 import validator from 'email-validator';
 import validUrl from 'valid-url';
 
+import { AccountsHub } from 'meteor/pwix:accounts-hub';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { TM } from 'meteor/pwix:typed-message';
@@ -118,6 +119,16 @@ Identities.checks = {
         return haveIdentifier ? null : new TM.TypedMessage({
             level: TM.MessageLevel.C.ERROR,
             message: pwixI18n.label( I18N, 'identities.checks.identifier_missing' )
+        });
+    },
+
+    // crossh check on the two clear versions of the password
+    async crossPasswords( data, opts ){
+        _assert_cross_data_content( 'Identities.checks.crossPasswords()', data );
+        const item = data.item.get();
+        return item.password?.UI?.clear1 === item.password?.UI?.clear2 ? null : new TM.TypedMessage({
+            level: TM.MessageLevel.C.ERROR,
+            message: pwixI18n.label( I18N, 'identities.checks.passwords_different' )
         });
     },
 
@@ -579,6 +590,68 @@ Identities.checks = {
             data.item.set( item );
         }
         return null;
+    },
+
+    // the clear password
+    async password_clear1( value, data, opts ){
+        _assert_data_content( 'Identities.checks.password_clear1()', data );
+        let item = data.item.get();
+        if( opts.update !== false ){
+            item.password = item.password || {};
+            item.password.UI = item.password.UI || {};
+            item.password.UI.clear1 = value;
+            data.item.set( item );
+        }
+        // if this field mandatory (if never set) or optional (just allow for reset) ?
+        // doesn't rely on the UI setup to be able to answer to REST requests
+        //const type = opts.checker.panel().byName( 'password.UI.clear1' ).iSpecType();
+        const mandatory = !Boolean( item.password?.hashed );
+        if( value ){
+            const result = await data.amInstance.checkPassword( value );
+            item.password = item.password || {};
+            item.password.UI = item.password.UI || {};
+            item.password.UI.check = result;
+            if( result.ok ){
+                return null;
+            }
+            let res = [];
+            result.errors.forEach(( it ) => {
+                res.push( new TM.TypedMessage({
+                    level: TM.MessageLevel.C.ERROR,
+                    message: it
+                }));
+            });
+            return res;
+        }
+        return mandatory ? new TM.TypedMessage({
+            level: TM.MessageLevel.C.ERROR,
+            message: pwixI18n.label( I18N, 'identities.checks.password_unset' )
+        }) : null;
+    },
+
+    async password_clear2( value, data, opts ){
+        _assert_data_content( 'Identities.checks.password_clear2()', data );
+        let item = data.item.get();
+        if( opts.update !== false ){
+            item.password = item.password || {};
+            item.password.UI = item.password.UI || {};
+            item.password.UI.clear2 = value;
+            data.item.set( item );
+        }
+        const mandatory = !Boolean( item.password?.hashed );
+        if( value ){
+            // this is the same than the cross check on passwords
+            // but this one is only triggered on field input
+            // + returning an error message let the field be marked as bad
+            return item.password?.UI?.clear1 === item.password?.UI?.clear2 ? null : new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'identities.checks.passwords_different' )
+            });
+        }
+        return mandatory ? new TM.TypedMessage({
+            level: TM.MessageLevel.C.ERROR,
+            message: pwixI18n.label( I18N, 'identities.checks.password_unset' )
+        }) : null;
     },
 
     async phone_label( value, data, opts={} ){

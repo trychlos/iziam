@@ -37,6 +37,7 @@ Meteor.APP.i18n = {
                 interactions: {
                     cancel_button: 'Cancel',
                     claims_title: 'Claims :',
+                    close_button: 'Close',
                     consent_button: 'Authorize',
                     consent_preamble: '<p>The client application <b>%s</b> asks for your following informations:</p>',
                     consent_title: 'Authorize',
@@ -51,7 +52,8 @@ Meteor.APP.i18n = {
                     password_label: 'Your password :',
                     password_ph: 'xxxxxxxx',
                     scopes_title: 'Scopes :',
-                    rar_title: 'Authorization details :'
+                    rar_title: 'Authorization details :',
+                    user_unauthenticated: 'User is not identified or not authenticated.<br />Cancelling the connexion attempt...'
                 },
                 logout: {
                     cancel_button: 'Cancel',
@@ -814,6 +816,16 @@ Meteor.APP.i18n = {
                     region_th: 'Region',
                     remove_title: 'Remove this "%s" address'
                 },
+                authenticate: {
+                    password_label: 'Password :',
+                    password_preamble: 'Set or reset the identity password.<br />'
+                        +'Depending of the organization configuration, this may require a minimal length and/or a minimal complexity.',
+                    password1_ph: 'Enter the password',
+                    password1_title: 'Enter a password',
+                    password2_ph: 'Re-enter the password',
+                    password2_title: 'Re-enter the same password',
+                    strength_label: 'Strength'
+                },
                 checks: {
                     address_preferred_count: 'You have more than one preferred postal address, but should have at most one',
                     address_preferred_invalid: 'The postal address preferred value is invalid, must be \'true\' or \'false\'',
@@ -836,6 +848,8 @@ Meteor.APP.i18n = {
                     middle_name_set: 'Entering a middle name is exclusive from setting full name',
                     name_others_set: 'Entering a full name is exclusive from setting given, middle or family names',
                     name_others_unset: 'None of the name parts is set, but you should choose a way to identify the person',
+                    password_unset: 'The password is not set',
+                    passwords_different: 'The passwords are different',
                     phone_number_unset: 'The phone number is not set',
                     phone_preferred_count: 'You have more than one preferred phone, but should have at most one',
                     phone_preferred_invalid: 'The phone preferred value is invalid, must be \'true\' or \'false\'',
@@ -854,9 +868,11 @@ Meteor.APP.i18n = {
                 },
                 edit: {
                     addresses_tab_title: 'Addresses',
+                    authenticate_tab_title: 'Authenticate',
                     dialog_title: 'Editing the "%s" identity',
                     emails_tab_title: 'Email addresses',
                     groups_tab_title: 'Groups',
+                    password_tab_title: 'Password',
                     phones_tab_title: 'Phones',
                     profile_tab_title: 'Identity',
                     usernames_tab_title: 'Usernames'

@@ -5,6 +5,7 @@
 import { Providers } from '/imports/common/tables/providers/index.js';
 
 import { DeviceProvider } from '/imports/common/providers/device-provider.class.js';
+import { IdentityAuthPasswordProvider } from '/imports/common/providers/identity-auth-password-provider.class.js';
 import { IdentityScopesProvider } from '/imports/common/providers/identity-scopes-provider.class.js';
 import { JwtBearerProvider } from '/imports/common/providers/jwt-bearer-provider.class.js';
 import { JwtProfileProvider } from '/imports/common/providers/jwt-profile-provider.class.js';
@@ -16,6 +17,7 @@ import { PkceProvider } from '/imports/common/providers/pkce-provider.class.js';
 import { RefreshProvider } from '/imports/common/providers/refresh-provider.class.js';
 
 Providers.register( new DeviceProvider());
+Providers.register( new IdentityAuthPasswordProvider());
 Providers.register( new IdentityScopesProvider());
 Providers.register( new JwtBearerProvider());
 Providers.register( new JwtProfileProvider());

@@ -7,7 +7,7 @@
  * 
  * Each organization has its own accounts entity, named as 'identities_<organization_id>'. Rationale is multiple:
  * - a confidentiality reason: there is no mix possible in accounts from two tenants
- * - management: tenants may have same accounts; in other words, someone with an email address may be registered with two tenants
+ * - management: tenants may have same accounts; in other words, someone with an email address may be registered within two tenants
  * - export per organization is more easy
  * 
  * See:

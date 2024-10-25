@@ -74,6 +74,9 @@ Meteor.APP.C = {
     secretDefSize: 64,
     secretMinSize: 32,
 
+    // when hashing the identity password
+    identitySaltSize: 32
+
     // OpenID
     // the minimal length of tokens (when the spec allows to choose it)
     //tokenMinLength: 32,

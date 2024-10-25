@@ -25,6 +25,8 @@
  *                      |
  *                      +- identity_groups_pane
  *                      |
+ *                      +- identity_password_pane
+ *                      |
  *                      +- identity_no_pane
  *
  * Parms:
@@ -40,6 +42,7 @@ import { ReactiveVar } from 'meteor/reactive-var';
 import { Identities } from '/imports/common/collections/identities/index.js';
 
 import '/imports/client/components/identity_addresses_pane/identity_addresses_pane.js';
+import '/imports/client/components/identity_authenticate_pane/identity_authenticate_pane.js';
 import '/imports/client/components/identity_emails_pane/identity_emails_pane.js';
 import '/imports/client/components/identity_groups_pane/identity_groups_pane.js';
 import '/imports/client/components/identity_no_pane/identity_no_pane.js';
@@ -86,6 +89,11 @@ Template.organization_identities_pane.onCreated( function(){
                 name: 'identity_groups_tab',
                 navLabel: pwixI18n.label( I18N, 'identities.edit.groups_tab_title' ),
                 paneTemplate: 'identity_groups_pane'
+            },
+            {
+                name: 'identity_authenticate_tab',
+                navLabel: pwixI18n.label( I18N, 'identities.edit.authenticate_tab_title' ),
+                paneTemplate: 'identity_authenticate_pane'
             },
             {
                 name: 'identity_no_tab',

@@ -4,11 +4,14 @@
 
 import _ from 'lodash';
 const assert = require( 'assert' ).strict; // up to nodejs v16.x
+import crypto from 'crypto';
 
 import { AccountsHub } from 'meteor/pwix:accounts-hub';
 import { AccountsManager } from 'meteor/pwix:accounts-manager';
 
 import { Groups } from '/imports/common/collections/groups/index.js';
+
+import { IdentityAuthPasswordProvider } from '/imports/common/providers/identity-auth-password-provider.class.js';
 
 import { Identities } from '../index.js';
 
@@ -104,7 +107,7 @@ Identities.s = {
     },
 
     // Identity update
-    // this is an event handler after AccountsManagher has already updated the accounts collection
+    // this is an event handler after AccountsManager has already updated the accounts collection
     // args: an object with following keys:
     // - amInstance: the instance name
     // - item
@@ -121,7 +124,7 @@ Identities.s = {
     },
 
     // @returns {Object} the upsert result
-    // this is called on new identity
+    // this is called both on create and update
     async upsert( item, args, userId ){
         //console.debug( 'Identities.s.upsert', item, args );
         const collection = Identities.s.collection( args.organization._id );
@@ -143,6 +146,21 @@ Identities.s = {
             if( !item.usernames?.length ){
                 delete item.usernames;
             }
+            // manage the password - preserving the UI sub-object
+            // note that this should depend of the selected providers and the identities configuration of the organization
+            let UI = null;
+            if( item.password ){
+                UI = item.password.UI || null;
+                delete item.password.UI;
+                if( UI.clear1 ){
+                    const salt = crypto.randomBytes( Meteor.APP.C.identitySaltSize );
+                    const p = IdentityAuthPasswordProvider.parms();
+                    const hashedPassword = crypto.pbkdf2Sync( UI.clear1, salt, p.iterations, p.keylen, p.digest );
+                    item.password.hashed = hashedPassword.toString( 'hex' );
+                    item.password.salt = salt.toString( 'hex' );
+                }
+            }
+            console.debug( 'item', item );
             res = await collection.upsertAsync({ _id: item._id }, { $set: item });
             await Groups.s.updateMemberships( args.organization._id, item._id, DYN.memberOf, userId );
             // get the newly inserted id
@@ -153,6 +171,9 @@ Identities.s = {
             //    Memberships.s.upsertByIdent( item.organization, item._id, groups, userId );
             //}
             item.DYN = DYN;
+            if( UI ){
+                item.password.UI = UI;
+            }
         }
         console.debug( 'Identities.s.upsert', res );
         return res;

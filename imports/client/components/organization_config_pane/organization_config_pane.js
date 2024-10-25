@@ -18,9 +18,11 @@ Template.organization_config_pane.helpers({
             dataContext: this,
             tabs: [
                 {
+                    // the only field of the REST config pane is the baseUrl which is made available in the mandatory pane
                     name: 'organization_config_rest_tab',
                     navLabel: pwixI18n.label( I18N, 'organizations.edit.rest_config_tab_title' ),
-                    paneTemplate: 'organization_config_rest_pane'
+                    paneTemplate: 'organization_config_rest_pane',
+                    shown: false
                 },
                 {
                     name: 'organization_config_oauth_tab',

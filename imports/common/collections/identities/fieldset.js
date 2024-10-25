@@ -512,6 +512,41 @@ Identities.fieldsDef = function(){
                     'profile'
                 ]
             }
+        },
+        // the hashed password and its salt
+        // see https://www.passportjs.org/tutorials/password/signup/
+        {
+            name: 'password',
+            type: Object,
+            optional: true
+        },
+        {
+            name: 'password.hashed',
+            type: String
+        },
+        {
+            name: 'password.salt',
+            type: String
+        },
+        {
+            name: 'password.UI',
+            schema: false
+        },
+        {
+            name: 'password.UI.clear1',
+            schema: false,
+            form_check: Identities.checks.password_clear1,
+            form_type: Forms.FieldType.C.OPTIONAL
+        },
+        {
+            name: 'password.UI.clear2',
+            schema: false,
+            form_check: Identities.checks.password_clear2,
+            form_type: Forms.FieldType.C.OPTIONAL
+        },
+        {
+            name: 'password.UI.check',
+            schema: false
         }
     ];
     return columns;

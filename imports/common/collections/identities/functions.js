@@ -165,24 +165,34 @@ Identities.fn = {
      * @returns {Boolean} whether this identity has the identifier required by the organization configuration
      */
     async hasIdentifier( organization, identity ){
-        let haveIdentifier = false;
+        const identifier = await Identities.fn.identifier( organization, identity );
+        return identifier !== null;
+    },
+
+    /**
+     * @param {Object} organization an organization entity or an organization { entity, record }
+     * @param {Object|String} identity an identity identifier or an identity object
+     * @returns {String} at least an identifier for this identity
+     */
+    async identifier( organization, identity ){
+        let identifier = null;
         const org = Validity.getEntityRecord( organization );
         let ident = await Identities.fn.identity( org.entity._id, identity );
-        if( !haveIdentifier && organization.record.identitiesEmailAddressesIdentifier ){
+        if( !identifier && org.record.identitiesEmailAddressesIdentifier ){
             if( ident.emails?.length > 0 ){
                 if( ident.emails[0].address ){
-                    haveIdentifier = true;
+                    identifier = ident.emails[0].address;
                 }
             }
         }
-        if (!haveIdentifier && organization.record.identitiesUsernamesIdentifier ){
+        if (!identifier && org.record.identitiesUsernamesIdentifier ){
             if( ident.usernames?.length > 0 ){
                 if( ident.usernames[0].username ){
-                    haveIdentifier = true;
+                    identifier = ident.usernames[0].username;
                 }
             }
         }
-        return haveIdentifier;
+        return identifier;
     },
 
     /**
@@ -190,7 +200,7 @@ Identities.fn = {
      * @param {Object|String} identity an identity identifier or an identity object
      * @returns {Object} the identity object
      */
-    async identity( organization, identity ){
+    async identity( organizationId, identity ){
         let ident = null;
         if( _.isString( identity )){
             const array = await( Meteor.isClient ? Meteor.callAsync( 'identities.getBy', organizationId, { _id: identity }) : Identities.s.getBy( organizationId, { _id: identity }));
@@ -234,14 +244,25 @@ Identities.fn = {
     },
 
     /**
-     * @locus Anywhere
+     * @locus Client
      * @param {Identity} identity
      * @param {Object} args an object with following keys:
      *  - organization the full organization entity with its DYN sub-object
      * @return {Boolean} whether the new identity has been successfully created
      */
-    async new( identity, args ){
+    async clientNew( identity, args=null ){
         identity.organization = args.organization._id;
+        return Meteor.isClient ? await Meteor.callAsync( 'identity.upsert', identity, args ) : await Identities.s.upsert( identity, args );
+    },
+
+    /**
+     * @locus Client
+     * @param {Identity} identity
+     * @param {Object} args an object with following keys:
+     *  - organization the full organization entity with its DYN sub-object
+     * @return {Boolean} whether the identity has been successfully updated
+     */
+    async clientUpdate( identity, args=null ){
         return Meteor.isClient ? await Meteor.callAsync( 'identity.upsert', identity, args ) : await Identities.s.upsert( identity, args );
     },
 
