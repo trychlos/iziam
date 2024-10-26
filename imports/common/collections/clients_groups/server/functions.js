@@ -61,11 +61,13 @@ ClientsGroups.s = _.merge( ClientsGroups.s, {
     // @returns {Object} the upsert result
     async upsert_tree( organizationId, groups, userId ){
         let res = [];
+        console.debug( 'groups', groups );
         // first delete the previous organization groups tree
         res.push( await ClientsGroups.collection( organizationId ).removeAsync({ organization: organizationId }));
         // then insert the new groups hierarchy
         if( groups && _.isArray( groups )){
             const flat = ClientsGroups.fn.tree2flat( organizationId, groups );
+            console.debug( 'flat', flat );
             for( const it of flat ){
                 res.push( await ClientsGroups.collection( organizationId ).upsertAsync({ _id: it._id }, { $set: it }));
             }

@@ -5,17 +5,17 @@
  * 
  * +- <this>
  *     |
- *     +- group_new_button
+ *     +- client_group_new_button
  *     |   |
- *     |   +-> trigger group_edit_dialog
+ *     |   +-> trigger client_group_edit_dialog
  *     |
- *     +- groups_panel
+ *     +- clients_groups_tree_view
  *         |
  *         +- groups_tree
  *         |
  *         +- groups_buttons
  *         |
- *         +-> trigger groups_edit_dialog
+ *         +-> trigger clients_groups_edit_dialog
  *
  * Parms:
  * - item: a ReactiveVar which contains the Organization as an entity with its DYN.records array
@@ -26,8 +26,8 @@
 
 import { pwixI18n } from 'meteor/pwix:i18n';
 
-import '/imports/client/components/group_new_button/group_new_button.js';
-import '/imports/client/components/groups_panel/groups_panel.js';
+import '/imports/client/components/client_group_new_button/client_group_new_button.js';
+import '/imports/client/components/clients_groups_tree_view/clients_groups_tree_view.js';
 
 import './organization_clients_groups_pane.html';
 

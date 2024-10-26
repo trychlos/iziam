@@ -1,5 +1,5 @@
 /*
- * /imports/group/components/group_edit_dialog/group_edit_dialog.js
+ * /imports/group/components/client_group_edit_dialog/client_group_edit_dialog.js
  *
  * Let the organization manager define a new group.
  * Can be called:
@@ -28,13 +28,13 @@ import { ReactiveVar } from 'meteor/reactive-var';
 import { Tabbed } from 'meteor/pwix:tabbed';
 import { Tolert } from 'meteor/pwix:tolert';
 
-import { Groups } from '/imports/common/collections/groups/index.js';
+import { ClientsGroups } from '/imports/common/collections/clients_groups/index.js';
 
-import '/imports/client/components/group_properties_pane/group_properties_pane.js';
+import '/imports/client/components/client_group_properties_pane/client_group_properties_pane.js';
 
-import './group_edit_dialog.html';
+import './client_group_edit_dialog.html';
 
-Template.group_edit_dialog.onCreated( function(){
+Template.client_group_edit_dialog.onCreated( function(){
     const self = this;
     //console.debug( this );
 
@@ -50,7 +50,7 @@ Template.group_edit_dialog.onCreated( function(){
         // whether we are running inside of a Modal
         isModal: new ReactiveVar( false ),
         // the entity tabbed
-        tabbed: new Tabbed.Instance( self, { name: 'group_edit_dialog' })
+        tabbed: new Tabbed.Instance( self, { name: 'client_group_edit_dialog' })
     };
 
     // keep the initial 'new' state
@@ -75,13 +75,13 @@ Template.group_edit_dialog.onCreated( function(){
         item: self.APP.item,
         checker: self.APP.checker
     };
-    const notesField = Groups.fieldSet.get().byName( 'notes' );
+    const notesField = ClientsGroups.fieldSet.get().byName( 'notes' );
     self.APP.tabbed.setTabbedParms({
         tabs: [
             {
-                name: 'group_properties_tab',
+                name: 'client_group_properties_tab',
                 navLabel: pwixI18n.label( I18N, 'groups.edit.properties_tab_title' ),
-                paneTemplate: 'group_properties_pane',
+                paneTemplate: 'client_group_properties_pane',
                 paneData: paneData
             },
             {
@@ -97,19 +97,19 @@ Template.group_edit_dialog.onCreated( function(){
     });
 });
 
-Template.group_edit_dialog.onRendered( function(){
+Template.client_group_edit_dialog.onRendered( function(){
     const self = this;
 
     // whether we are running inside of a Modal
     self.autorun(() => {
-        self.APP.isModal.set( self.$( '.c-group-edit-dialog' ).parent().hasClass( 'modal-body' ));
+        self.APP.isModal.set( self.$( '.c-client-group-edit-dialog' ).parent().hasClass( 'modal-body' ));
     });
 
     // set the modal target
     self.autorun(() => {
         if( self.APP.isModal.get()){
             Modal.set({
-                target: self.$( '.c-group-edit-dialog' )
+                target: self.$( '.c-client-group-edit-dialog' )
             });
         }
     });
@@ -125,7 +125,7 @@ Template.group_edit_dialog.onRendered( function(){
     }));
 });
 
-Template.group_edit_dialog.helpers({
+Template.client_group_edit_dialog.helpers({
     // parms to FormsMessager
     parmsMessager(){
         return {
@@ -134,10 +134,10 @@ Template.group_edit_dialog.helpers({
     }
 });
 
-Template.group_edit_dialog.events({
+Template.client_group_edit_dialog.events({
     // submit
     //  event triggered in case of a modal
-    'md-click .c-group-edit-dialog'( event, instance, data ){
+    'md-click .c-client-group-edit-dialog'( event, instance, data ){
         //console.debug( event, data );
         if( data.button.id === Modal.C.Button.OK ){
             instance.$( event.currentTarget ).trigger( 'iz-submit' );
@@ -145,19 +145,19 @@ Template.group_edit_dialog.events({
     },
 
     // submit
-    'iz-submit .c-group-edit-dialog'( event, instance ){
+    'iz-submit .c-client-group-edit-dialog'( event, instance ){
         //console.debug( event, instance );
         const item = instance.APP.item.get();
         const closeFn = function(){
             if( instance.APP.isModal.get()){
                 Modal.close();
             } else {
-                instance.$( '.c-group-properties-panel' ).trigger( 'iz-clear-panel' );
+                instance.$( '.c-client-group-properties-panel' ).trigger( 'iz-clear-panel' );
                 instance.$( '.NotesEdit' ).trigger( 'iz-clear-panel' );
             }
         };
         if( this.targetDatabase !== false ){
-            Meteor.callAsync( 'groups.upsert_item', this.organization._id, item )
+            Meteor.callAsync( 'clients_groups.upsert_item', this.organization._id, item )
                 .then(() => {
                     Tolert.success( pwixI18n.label( I18N, instance.APP.isNew.get() ? 'groups.edit.group_new_success' : 'groups.edit.group_edit_success', item.label ));
                     closeFn();

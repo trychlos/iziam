@@ -1,5 +1,5 @@
 /*
- * /imports/client/components/group_properties_pane/group_properties_pane.js
+ * /imports/client/components/identity_group_properties_pane/identity_group_properties_pane.js
  *
  * Group properties pane.
  * 
@@ -17,11 +17,11 @@ import { Forms } from 'meteor/pwix:forms';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 
-import { Groups } from '/imports/common/collections/groups/index.js';
+import { IdentitiesGroups } from '/imports/common/collections/identities_groups/index.js';
 
-import './group_properties_pane.html';
+import './identity_group_properties_pane.html';
 
-Template.group_properties_pane.onCreated( function(){
+Template.identity_group_properties_pane.onCreated( function(){
     const self = this;
     //console.debug( this );
 
@@ -36,7 +36,7 @@ Template.group_properties_pane.onCreated( function(){
     };
 });
 
-Template.group_properties_pane.onRendered( function(){
+Template.identity_group_properties_pane.onRendered( function(){
     const self = this;
 
     // initialize the Checker for this panel as soon as we get the parent Checker
@@ -47,9 +47,9 @@ Template.group_properties_pane.onRendered( function(){
             const enabled = Template.currentData().enableChecks !== false;
             const item = Template.currentData().item.get();
             self.APP.checker.set( new Forms.Checker( self, {
-                name: 'group_properties_pane',
+                name: 'identity_group_properties_pane',
                 parent: parentChecker,
-                panel: new Forms.Panel( self.APP.fields, Groups.fieldSet.get()),
+                panel: new Forms.Panel( self.APP.fields, IdentitiesGroups.fieldSet.get()),
                 data: {
                     item: Template.currentData().item,
                     organization: Template.currentData().organization,
@@ -62,14 +62,14 @@ Template.group_properties_pane.onRendered( function(){
     });
 });
 
-Template.group_properties_pane.helpers({
+Template.identity_group_properties_pane.helpers({
     // string translation
     i18n( arg ){
         return pwixI18n.label( I18N, arg.hash.key );
     },
 });
 
-Template.group_properties_pane.events({
+Template.identity_group_properties_pane.events({
     // ask for clear the panel
     'iz-clear-panel .c-group-properties-panel'( event, instance ){
         instance.APP.checker.get().clearPanel();

@@ -9,7 +9,7 @@ import crypto from 'crypto';
 import { AccountsHub } from 'meteor/pwix:accounts-hub';
 import { AccountsManager } from 'meteor/pwix:accounts-manager';
 
-import { Groups } from '/imports/common/collections/groups/index.js';
+import { IdentitiesGroups } from '/imports/common/collections/identities_groups/index.js';
 
 import { IdentityAuthPasswordProvider } from '/imports/common/providers/identity-auth-password-provider.class.js';
 
@@ -70,13 +70,13 @@ Identities.s = {
             if( parentId ){
                 hash[parentId] = true;
                 all[parentId] = true;
-                const written = await Groups.s.getBy( organizationId, { type: 'G', _id: parentId }, userId );
+                const written = await IdentitiesGroups.s.getBy( organizationId, { type: 'G', _id: parentId }, userId );
                 for( const it of written ){
                     await parentsFn( it.parent, all );
                 };
             }
         };
-        const written = await Groups.s.getBy( organizationId, { type: 'I', identity: item._id }, userId );
+        const written = await IdentitiesGroups.s.getBy( organizationId, { type: 'I', identity: item._id }, userId );
         for( const it of written ){
             await parentsFn( it.parent, direct );
         };
@@ -117,7 +117,7 @@ Identities.s = {
         if( amInstance ){
             assert( amInstance instanceof AccountsManager.amClass, 'expects an instance of AccountsManager.amClass, got'+amInstance );
             const organizationId = Identities.scope( args.amInstance );
-            res = await Groups.s.updateMemberships( organizationId, args.item._id, args.item.DYN.memberOf, args.userId );
+            res = await IdentitiesGroups.s.updateMemberships( organizationId, args.item._id, args.item.DYN.memberOf, args.userId );
         }
         console.debug( 'Identities.s.onUpdate', res );
         return res;
@@ -162,7 +162,7 @@ Identities.s = {
             }
             console.debug( 'item', item );
             res = await collection.upsertAsync({ _id: item._id }, { $set: item });
-            await Groups.s.updateMemberships( args.organization._id, item._id, DYN.memberOf, userId );
+            await IdentitiesGroups.s.updateMemberships( args.organization._id, item._id, DYN.memberOf, userId );
             // get the newly inserted id
             if( res.insertedId ){
                 item._id = res.insertedId;

@@ -13,6 +13,7 @@
  * - withCheckboxes: whether the tree has checkboxes, defaulting to true
  * - withIdentities: whether to display the identities, defaulting to true
  * - selected: an array of the checkboxes to check, only considered if withCheckboxes is truethy
+ * - noDataText: the text to be displayed when there is no data, defaulting to "There is not yet any group defined for the organization. Please edit the groups hierarchy tree."
  */
 
 import _ from 'lodash';
@@ -216,6 +217,7 @@ Template.groups_tree.onCreated( function(){
         // dnd stop: open the (new) parent
         tree_dnd_stop( event, data ){
             const $tree = self.APP.$tree.get();
+            console.debug( '$tree.jstree( true )', $tree.jstree( true ));
             const moved = $tree.jstree( true ).get_node( data.element );
             const closest = data.event.target.closest( 'a.jstree-anchor' );
             //const target_node = $tree.jstree( true ).get_node( closest ); // works but useless
@@ -425,14 +427,14 @@ Template.groups_tree.onRendered( function(){
             // keep the tree data
             self.APP.prevData = _.cloneDeep( groups );
             // reset the tree
-            //console.debug( 'reset the tree' );
+            console.debug( 'reset the tree' );
             $tree.jstree( true ).delete_node( Object.values( self.APP.tree_nodes_created ));
             self.APP.tree_nodes_asked = {};
             self.APP.tree_nodes_created = {};
             self.APP.tree_nodes_waiting = {};
             self.APP.tree_populated( false );
             // and rebuild it
-            //console.debug( 'rebuild the tree' );
+            console.debug( 'rebuild the tree' );
             let promises = [];
             // display the group/identity item, attaching it to its parent
             groups.forEach( async ( it ) => {
@@ -495,6 +497,11 @@ Template.groups_tree.helpers({
     // string translation
     i18n( arg ){
         return pwixI18n.label( I18N, arg.hash.key );
+    },
+
+    // text when there is no data
+    noDataContent(){
+        return this.noDataText || pwixI18n.label( I18N, 'groups.tree.no_data_one' );
     },
 
     // whether the open_all button is enabled ?

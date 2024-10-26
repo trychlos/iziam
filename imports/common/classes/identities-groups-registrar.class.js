@@ -13,7 +13,7 @@
 import { ReactiveVar } from 'meteor/reactive-var';
 import { Tracker } from 'meteor/tracker';
 
-import { Groups } from '/imports/common/collections/groups/index.js';
+import { IdentitiesGroups } from '/imports/common/collections/identities_groups/index.js';
 
 import { izRegistrar } from './iz-registrar.class.js';
 
@@ -119,13 +119,13 @@ export class IdentitiesGroupsRegistrar extends izRegistrar {
     groupsLoad(){
         if( Meteor.isClient && !this.#clientInitialized ){
             const self = this;
-            this.#handle.set( Meteor.subscribe( 'groups.listAll', this.#organization._id ));
+            this.#handle.set( Meteor.subscribe( 'identities_groups.listAll', this.#organization._id ));
     
             // get the list of groups
             // each group is published as an object with DYN sub-object
             Tracker.autorun(() => {
                 if( self.#handle.get()?.ready()){
-                    Groups.collection( self.#organization._id ).find({ organization: self.#organization._id }).fetchAsync().then(( fetched ) => {
+                    IdentitiesGroups.collection( self.#organization._id ).find({ organization: self.#organization._id }).fetchAsync().then(( fetched ) => {
                         console.debug( 'fetched', fetched );
                         self.#list.set( fetched );
                     });

@@ -21,7 +21,7 @@ Template.clients_groups_count_badge.helpers({
     // the count
     count(){
         const saved = TenantsManager.list.byEntity( this.item.get()._id );
-        //console.debug( 'saved', saved, saved.DYN.groupsCount );
-        return saved ? saved.DYN.groupsCount : '(?)';
+        //console.debug( 'saved', saved, saved.DYN.clientsGroupsCount );
+        return saved ? saved.DYN.clientsGroupsCount : '(?)';
     }
 });

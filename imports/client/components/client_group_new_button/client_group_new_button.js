@@ -1,5 +1,5 @@
 /*
- * /imports/group/components/group_new_button/group_new_button.js
+ * /imports/group/components/client_group_new_button/client_group_new_button.js
  *
  * Let the organization manager define a new group.
  *
@@ -15,11 +15,11 @@ import { Permissions } from 'meteor/pwix:permissions';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 
-import '/imports/client/components/group_edit_dialog/group_edit_dialog.js';
+import '/imports/client/components/client_group_edit_dialog/client_group_edit_dialog.js';
 
-import './group_new_button.html';
+import './client_group_new_button.html';
 
-Template.group_new_button.onCreated( function(){
+Template.client_group_new_button.onCreated( function(){
     const self = this;
     //console.debug( this );
 
@@ -30,7 +30,7 @@ Template.group_new_button.onCreated( function(){
 
     // check the creation permission
     self.autorun( async () => {
-        self.APP.allowed.set( await Permissions.isAllowed( 'feat.groups.create', Meteor.userId(), Template.currentData().item.get()._id ));
+        self.APP.allowed.set( await Permissions.isAllowed( 'feat.clients_groups.create', Meteor.userId(), Template.currentData().item.get()._id ));
     });
 
     // enable the PlusButton
@@ -39,7 +39,7 @@ Template.group_new_button.onCreated( function(){
     });
 });
 
-Template.group_new_button.helpers({
+Template.client_group_new_button.helpers({
     // group new button parameters
     parmsPlusButton(){
         return {
@@ -52,7 +52,7 @@ Template.group_new_button.helpers({
     },
 });
 
-Template.group_new_button.events({
+Template.client_group_new_button.events({
     'click .plusButton'( event, instance ){
         let dc = { ...this };
         delete dc.entityTabs;
@@ -63,7 +63,7 @@ Template.group_new_button.events({
         Modal.run({
             ...dc,
             organization: this.item.get(),
-            mdBody: 'group_edit_dialog',
+            mdBody: 'client_group_edit_dialog',
             mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
             mdClasses: 'modal-lg',
             mdClassesContent: Meteor.APP.runContext.pageUIClasses().join( ' ' ),

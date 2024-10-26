@@ -11,8 +11,9 @@ import { TenantsManager } from 'meteor/pwix:tenants-manager';
 
 import { Authorizations } from '/imports/common/collections/authorizations/index.js';
 import { ClientsEntities } from '/imports/common/collections/clients_entities/index.js';
-import { Groups } from '/imports/common/collections/groups/index.js';
+import { ClientsGroups } from '/imports/common/collections/clients_groups/index.js';
 import { Identities } from '/imports/common/collections/identities/index.js';
+import { IdentitiesGroups } from '/imports/common/collections/identities_groups/index.js';
 import { Resources } from '/imports/common/collections/resources/index.js';
 
 import { Organizations } from '../index.js';
@@ -64,7 +65,8 @@ Organizations.s = {
         item.clientsCount = await ClientsEntities.collection.countDocuments({ organization: item.entity });
         // count groups
         // there is one groups collection common to all organizations
-        item.groupsCount = await Groups.collection( item.entity ).countDocuments({ organization: item.entity });
+        item.clientsGroupsCount = await ClientsGroups.collection( item.entity ).countDocuments({ organization: item.entity });
+        item.identitiesGroupsCount = await IdentitiesGroups.collection( item.entity ).countDocuments({ organization: item.entity });
         // count identities
         // there is one dedicated identities collection per organization 
         const instanceName = Identities.instanceName( item.entity );
@@ -94,7 +96,8 @@ Organizations.s = {
         item.DYN.clientsCount = await ClientsEntities.collection.countDocuments({ organization: item._id });
         // count groups
         // there is one groups collection common to all organizations
-        item.DYN.groupsCount = await Groups.collection( item._id ).countDocuments({ organization: item._id });
+        item.DYN.clientsGroupsCount = await ClientsGroups.collection( item._id ).countDocuments({ organization: item._id });
+        item.DYN.identitiesGroupsCount = await IdentitiesGroups.collection( item._id ).countDocuments({ organization: item._id });
         // count identities
         // there is one dedicated identities collection per organization 
         const instanceName = Identities.instanceName( item._id );

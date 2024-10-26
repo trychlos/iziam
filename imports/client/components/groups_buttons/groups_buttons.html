@@ -7,7 +7,12 @@
                 <button class="btn btn-sm btn-outline-primary ui-mb05 js-new-item">{{ i18n key="groups.tabular.new_item_button" }}</button>
                 <button class="btn btn-sm btn-outline-primary ui-mb05 js-edit-item" {{ editDisabled }}>{{ i18n key="groups.tabular.edit_item_button" }}</button>
                 <button class="btn btn-sm btn-outline-primary ui-mb05 js-remove-item" {{ removeDisabled }}>{{ i18n key="groups.tabular.remove_item_button" }}</button>
-                <button class="btn btn-sm btn-outline-primary ui-mb05 js-identities" {{ identitiesEnabled }}>{{ i18n key="groups.tabular.identities_button" }}</button>
+                {{#if withIdentities }}
+                    <button class="btn btn-sm btn-outline-primary ui-mb05 js-identities" {{ identitiesDisabled }}>{{ i18n key="groups.tabular.identities_button" }}</button>
+                {{/if}}
+                {{#if withClients }}
+                    <button class="btn btn-sm btn-outline-primary ui-mb05 js-clients" {{ clientsDisabled }}>{{ i18n key="groups.tabular.clients_button" }}</button>
+                {{/if}}
             </div>
 
         {{else}}

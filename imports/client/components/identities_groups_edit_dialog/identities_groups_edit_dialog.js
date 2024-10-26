@@ -1,5 +1,5 @@
 /*
- * /imports/client/components/groups_edit_dialog/groups_edit_dialog.js
+ * /imports/client/components/identities_groups_edit_dialog/identities_groups_edit_dialog.js
  *
  * Display the groups tree as an editable component with dnD and delete features.
  * 
@@ -24,15 +24,13 @@ import { Modal } from 'meteor/pwix:modal';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 
-import { Groups } from '/imports/common/collections/groups/index.js';
-
 import '/imports/client/components/groups_buttons/groups_buttons.js';
-import '/imports/client/components/groups_hierarchy_pane/groups_hierarchy_pane.js';
 import '/imports/client/components/groups_tree/groups_tree.js';
+import '/imports/client/components/identities_groups_hierarchy_pane/identities_groups_hierarchy_pane.js';
 
-import './groups_edit_dialog.html';
+import './identities_groups_edit_dialog.html';
 
-Template.groups_edit_dialog.onCreated( function(){
+Template.identities_groups_edit_dialog.onCreated( function(){
     const self = this;
 
     self.APP = {
@@ -41,7 +39,7 @@ Template.groups_edit_dialog.onCreated( function(){
         // a deep copy of the organization groups
         groups: new ReactiveVar( [] ),
         // the entity tabbed
-        tabbed: new Tabbed.Instance( self, { name: 'groups_edit_dialog' }),
+        tabbed: new Tabbed.Instance( self, { name: 'identities_groups_edit_dialog' }),
         // a function to get the tree content
         tree_getfn: new ReactiveVar( null ),
 
@@ -63,7 +61,7 @@ Template.groups_edit_dialog.onCreated( function(){
         const item = Template.currentData().item.get();
         const organization = TenantsManager.list.byEntity( item._id );
         if( organization ){
-            self.APP.groups.set( _.cloneDeep( organization.DYN.groups.get()));
+            self.APP.groups.set( _.cloneDeep( organization.DYN.identities_groups.get()));
         }
     });
 
@@ -75,41 +73,41 @@ Template.groups_edit_dialog.onCreated( function(){
     self.APP.tabbed.setTabbedParms({
         tabs: [
             {
-                name: 'groups_hierarchy_tab',
+                name: 'identities_groups_hierarchy_tab',
                 navLabel: pwixI18n.label( I18N, 'groups.edit.hierarchy_tab_title' ),
-                paneTemplate: 'groups_hierarchy_pane',
+                paneTemplate: 'identities_groups_hierarchy_pane',
                 paneData: paneData
             }
         ]
     });
 });
 
-Template.groups_edit_dialog.onRendered( function(){
+Template.identities_groups_edit_dialog.onRendered( function(){
     const self = this;
 
     // whether we are running inside of a Modal
     self.autorun(() => {
-        self.APP.isModal.set( self.$( '.c-groups-edit-dialog' ).parent().hasClass( 'modal-body' ));
+        self.APP.isModal.set( self.$( '.c-identities-groups-edit-dialog' ).parent().hasClass( 'modal-body' ));
     });
 
     // set the modal target
     self.autorun(() => {
         if( self.APP.isModal.get()){
             Modal.set({
-                target: self.$( '.c-groups-edit-dialog' )
+                target: self.$( '.c-identities-groups-edit-dialog' )
             });
         }
     });
 });
 
-Template.groups_edit_dialog.events({
-    'tree-fns .c-groups-hierarchy-pane'( event, instance, data ){
+Template.identities_groups_edit_dialog.events({
+    'tree-fns .c-identities-groups-hierarchy-pane'( event, instance, data ){
         instance.APP.tree_getfn.set( data.fnGet );
     },
 
     // submit
     //  event triggered in case of a modal
-    'md-click .c-groups-edit-dialog'( event, instance, data ){
+    'md-click .c-identities-groups-edit-dialog'( event, instance, data ){
         //console.debug( event, data );
         if( data.button.id === Modal.C.Button.OK ){
             instance.$( event.currentTarget ).trigger( 'iz-submit' );
@@ -118,7 +116,7 @@ Template.groups_edit_dialog.events({
 
     // submit
     // rewrite the full tree
-    'iz-submit .c-groups-edit-dialog'( event, instance ){
+    'iz-submit .c-identities-groups-edit-dialog'( event, instance ){
         const groups = instance.APP.getTree();
         const organizationId = this.item.get()._id;
         const closeFn = function(){
@@ -128,7 +126,7 @@ Template.groups_edit_dialog.events({
                 instance.$( '.NotesEdit' ).trigger( 'iz-clear-panel' );
             }
         }
-        Meteor.callAsync( 'groups.upsert_tree', organizationId, groups )
+        Meteor.callAsync( 'identities_groups.upsert_tree', organizationId, groups )
             .then(() => {
                 Tolert.success( pwixI18n.label( I18N, 'groups.edit.tree_edit_success' ));
                 closeFn();

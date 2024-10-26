@@ -760,9 +760,11 @@ Meteor.APP.i18n = {
                 new: {
                     button_label: 'New group',
                     button_title: 'Define a new group',
-                    dialog_title: 'Defining a new group'
+                    client_dialog_title: 'Defining a new clients group',
+                    identity_dialog_title: 'Defining a new identities group'
                 },
                 tabular: {
+                    clients_button: 'Add clients',
                     count_badge: 'Count of defined groups',
                     edit_item_button: 'Edit group',
                     edit_tree_button: 'Edit the groups tree',
@@ -772,8 +774,9 @@ Meteor.APP.i18n = {
                 },
                 tree: {
                     close_all_button: 'Close all',
-                    no_data: 'There is not yet any group defined for the organization.<br />'
-                        +'Please click "New group" above, or edit the groups hierarchy.',    
+                    no_data_one: 'There is not yet any group defined for the organization.<br />'
+                        +'Please edit the groups hierarchy tree.',    
+                    no_data_two: 'Try the "New group" button besides.',    
                     open_all_button: 'Open all',
                     show_identities_button: 'Show identities'
                 }

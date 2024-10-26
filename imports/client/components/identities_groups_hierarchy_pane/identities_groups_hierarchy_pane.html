@@ -1,21 +1,18 @@
-<template name="groups_panel">
-    <div class="c-groups-panel ui-h100">
-        <div class="panel-content ui-h100">
+<template name="identities_groups_hierarchy_pane">
+    <div class="c-identities-groups-hierarchy-pane">
+        <div class="panel-content">
 
             <div class="panel-header">
             </div>
 
-            <div class="panel-body flex-grow-1">
-                <div class="groups-body d-flex ui-h100">
+            <div class="panel-body">
+                <div class="groups-body d-flex">
                     
                     {{> groups_tree (parmsTree) }}
                     
                     {{> groups_buttons (parmsButtons) }}
 
                 </div>
-            </div>
-
-            <div class="panel-footer">
             </div>
 
         </div>

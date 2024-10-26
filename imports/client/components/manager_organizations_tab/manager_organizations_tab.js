@@ -16,6 +16,8 @@ import '/imports/client/components/organization_authorizations_load/organization
 import '/imports/client/components/organization_authorizations_pane/organization_authorizations_pane.js';
 import '/imports/client/components/organization_clients_load/organization_clients_load.js';
 import '/imports/client/components/organization_clients_pane/organization_clients_pane.js';
+import '/imports/client/components/organization_clients_groups_load/organization_clients_groups_load.js';
+import '/imports/client/components/organization_clients_groups_pane/organization_clients_groups_pane.js';
 import '/imports/client/components/organization_config_dynregistration_pane/organization_config_dynregistration_pane.js';
 import '/imports/client/components/organization_config_ident_pane/organization_config_ident_pane.js';
 import '/imports/client/components/organization_config_oauth_pane/organization_config_oauth_pane.js';
@@ -134,11 +136,15 @@ Template.manager_organizations_tab.onCreated( function(){
                 shown: false
             },
             {
-                paneTemplate: 'organization_identities_groups_load',
+                paneTemplate: 'organization_clients_groups_load',
                 shown: false
             },
             {
                 paneTemplate: 'organization_identities_load',
+                shown: false
+            },
+            {
+                paneTemplate: 'organization_identities_groups_load',
                 shown: false
             },
             {

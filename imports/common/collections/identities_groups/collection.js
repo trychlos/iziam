@@ -31,13 +31,13 @@ export const IdentitiesGroups = {
         return IdentitiesGroups.collections[organizationId];
     },
     collectionName( organizationId ){
-        return 'groups_'+organizationId;
+        return 'identities_groups_'+organizationId;
     },
     isGroups( name ){
-        return name.startsWith( 'groups_' );
+        return name.startsWith( 'identities_groups_' );
     },
     scope( name ){
-        return name.replace( /^groups_/, '' );
+        return name.replace( /^identities_groups_/, '' );
     },
     fieldSet: new ReactiveVar( null )
 };

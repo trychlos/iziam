@@ -8,12 +8,12 @@ import { IdentitiesGroups } from '../index.js';
 
 // returns the list of known groups for a given organization
 //  the list of (direct) members as an array of <IdentitiesGroups> objects
-Meteor.publish( 'groups.listAll', async function( organizationId ){
+Meteor.publish( 'identities_groups.listAll', async function( organizationId ){
     if( !organizationId ){
         this.ready();
         return [];
     }
-    if( !await Permissions.isAllowed( 'feat.groups.list', this.userId, organizationId )){
+    if( !await Permissions.isAllowed( 'feat.identities_groups.list', this.userId, organizationId )){
         this.ready();
         return false;
     }

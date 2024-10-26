@@ -1,11 +1,11 @@
 /*
- * /imports/common/classes/identities-groups-registrar.class.js
+ * /imports/common/classes/clients-groups-registrar.class.js
  *
  * A registration of groups attached to an organization.
  * This is needed so that we are able to manage groups instances from common code.
  * Relies on OrganizationsRegistrar.
  * 
- * The GroupsRegistrar is instanciated once per organization, when the user is about to edit it.
+ * The ClientsGroupsRegistrar is instanciated once per organization, when the user is about to edit it.
  * The instance is available as <organization>.DYN.groups
  * It maintains a full list of the groups of an organization both on client and server sides.
  */
@@ -13,11 +13,11 @@
 import { ReactiveVar } from 'meteor/reactive-var';
 import { Tracker } from 'meteor/tracker';
 
-import { Groups } from '/imports/common/collections/groups/index.js';
+import { ClientsGroups } from '/imports/common/collections/clients_groups/index.js';
 
 import { izRegistrar } from './iz-registrar.class.js';
 
-export class GroupsRegistrar extends izRegistrar {
+export class ClientsGroupsRegistrar extends izRegistrar {
 
     // static data
 
@@ -32,8 +32,8 @@ export class GroupsRegistrar extends izRegistrar {
      * @returns {izRegistrar} the required instance, or null
      */
     static getRegistered( organization ){
-        //console.debug( 'GroupsRegistrar.getRegistered: organization', organization, 'registry', GroupsRegistrar.#registry );
-        return GroupsRegistrar.#registry[organization._id] || null;
+        //console.debug( 'ClientsGroupsRegistrar.getRegistered: organization', organization, 'registry', ClientsGroupsRegistrar.#registry );
+        return ClientsGroupsRegistrar.#registry[organization._id] || null;
     }
 
     // private data
@@ -57,16 +57,16 @@ export class GroupsRegistrar extends izRegistrar {
     /**
      * Constructor
      * @param {<Organization>} organization the full organization entity with its DYN sub-object
-     * @returns {GroupsRegistrar}
+     * @returns {ClientsGroupsRegistrar}
      */
     constructor( organization ){
         super( ...arguments );
-        //console.debug( 'instanciating GroupsRegistrar', organization );
+        //console.debug( 'instanciating ClientsGroupsRegistrar', organization );
         const self = this;
 
         // common code
         this.#organization = organization;
-        GroupsRegistrar.#registry[organization._id] = this;
+        ClientsGroupsRegistrar.#registry[organization._id] = this;
 
         return this;
     }
@@ -119,13 +119,13 @@ export class GroupsRegistrar extends izRegistrar {
     groupsLoad(){
         if( Meteor.isClient && !this.#clientInitialized ){
             const self = this;
-            this.#handle.set( Meteor.subscribe( 'groups.listAll', this.#organization._id ));
+            this.#handle.set( Meteor.subscribe( 'clients_groups.listAll', this.#organization._id ));
     
             // get the list of groups
             // each group is published as an object with DYN sub-object
             Tracker.autorun(() => {
                 if( self.#handle.get()?.ready()){
-                    Groups.collection( self.#organization._id ).find({ organization: self.#organization._id }).fetchAsync().then(( fetched ) => {
+                    ClientsGroups.collection( self.#organization._id ).find({ organization: self.#organization._id }).fetchAsync().then(( fetched ) => {
                         console.debug( 'fetched', fetched );
                         self.#list.set( fetched );
                     });
