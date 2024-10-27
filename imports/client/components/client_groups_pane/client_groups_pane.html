@@ -1,15 +1,15 @@
-<template name="identity_groups_pane">
-    <div class="x-tab c-identity-groups-pane">
+<template name="client_groups_pane">
+    <div class="x-tab c-client-groups-pane">
         <div class="panel-content">
 
             <div class="panel-header">
                 <div class="panel-preamble">
-                    {{{ i18n key="identities.groups.preamble" }}}
+                    {{{ i18n key="clients.groups.preamble" }}}
                 </div>
             </div>
 
             <div class="panel-body">
-                {{> identity_groups_select_tree (parmsGroupsSelect) }}
+                {{> client_groups_select_tree (parmsGroupsSelect) }}
             </div>
 
         </div>

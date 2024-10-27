@@ -8,10 +8,11 @@ import { Validity } from 'meteor/pwix:validity';
 
 import { Clients } from '../index.js';
 
-import { ClientsEntities} from '/imports/common/collections/clients_entities/index.js';
-import { ClientsRecords} from '/imports/common/collections/clients_records/index.js';
+import { ClientsEntities } from '/imports/common/collections/clients_entities/index.js';
+import { ClientsGroups } from '/imports/common/collections/clients_groups/index.js';
+import { ClientsRecords } from '/imports/common/collections/clients_records/index.js';
 
-import { ClientSecrets} from '/imports/common/tables/client_secrets/index.js';
+import { ClientSecrets } from '/imports/common/tables/client_secrets/index.js';
 
 Clients.s = Clients.s || {};
 
@@ -83,6 +84,30 @@ Clients.s.getByEntity = async function( organizationId, entityId, userId ){
     return res && res.length ? await Clients.s.transform( res[0] ) : null;
 };
 
+// returns the full list of groups this identity is member of
+// if set, an identity is necessarily inside of a group
+//  maybe this group is itself inside of another group and so on
+// returns an object { all: [], direct: [] }
+Clients.s.memberOf = async function( organizationId, item, userId ){
+    let all = {};
+    let direct = {};
+    const parentsFn = async function( parentId, hash ){
+        if( parentId ){
+            hash[parentId] = true;
+            all[parentId] = true;
+            const written = await ClientsGroups.s.getBy( organizationId, { type: 'G', _id: parentId }, userId );
+            for( const it of written ){
+                await parentsFn( it.parent, all );
+            };
+        }
+    };
+    const written = await ClientsGroups.s.getBy( organizationId, { type: 'C', client: item._id }, userId );
+    for( const it of written ){
+        await parentsFn( it.parent, direct );
+    };
+    return { all: Object.keys( all ), direct: Object.keys( direct )};
+};
+
 // returns the registered client metadata
 // client: an { entity, record } object
 Clients.s.registeredMetadata = async function( client ){
@@ -107,7 +132,7 @@ Clients.s.registeredMetadata = async function( client ){
 };
 
 // add to the entity item the DYN sub-object { records, closest }
-Clients.s.transform = async function( item ){
+Clients.s.transform = async function( item, userId ){
     item.DYN = item.DYN || {};
     item.DYN.managers = [];
     let promises = [];
@@ -125,6 +150,7 @@ Clients.s.transform = async function( item ){
         return true;
     }));
     */
+    item.DYN.memberOf = await Clients.s.memberOf( item.organization, item, userId );
     promises.push( ClientsRecords.collection.find({ entity: item._id }).fetchAsync().then(( fetched ) => {
         item.DYN.records = fetched;
         item.DYN.closest = Validity.closestByRecords( fetched ).record;

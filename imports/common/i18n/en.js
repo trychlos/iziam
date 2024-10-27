@@ -178,6 +178,7 @@ Meteor.APP.i18n = {
                     entity_properties_tab_title: 'Common properties',
                     entity_validities_tab_title: 'By validity period(s)',
                     error: 'Unfortunately, an error has been detected./ Please retry later',
+                    groups_tab_title: 'Groups',
                     home_label: 'Home page URI :',
                     home_ph: 'https://my.example.com/',
                     home_title: 'The URI of a web site',
@@ -220,6 +221,9 @@ Meteor.APP.i18n = {
                     tos_ph: 'https://my.example.com/tos',
                     tos_title: 'The URI of a page which describes the terms of service of the client'
                 },
+                groups: {
+                    preamble: 'The groups this client is member of.<br />'
+                        +'When attributing (checking) a group, the client becomes also a member of all parents of this checked group.',                },
                 jwks: {
                     preamble: 'The JSON Web Key Set (JWKS) is a set of keys containing the public keys used to sign and encrypt any JSON Web Token (JWT) '
                         +'issued by the client.<br />'
@@ -904,9 +908,7 @@ Meteor.APP.i18n = {
                     verified_th: 'Verified'
                 },
                 groups: {
-                    clients_preamble: 'The groups this client is member of.<br />'
-                        +'When attributing (checking) a group, the client becomes also a member of all parents of this checked group.',
-                    identities_preamble: 'The groups this identity is member of.<br />'
+                    preamble: 'The groups this identity is member of.<br />'
                         +'When attributing (checking) a group, the identity becomes also a member of all parents of this checked group.'
                 },
                 list: {

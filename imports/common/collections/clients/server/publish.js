@@ -30,12 +30,13 @@ Meteor.publish( Meteor.APP.C.pub.clientsAll.publish, async function( organizatio
         return false;
     }
     const self = this;
+    const userId = this.userId;
     let initializing = true;
     const collectionName = Meteor.APP.C.pub.clientsAll.collection;
     
     // find ORG_SCOPED_MANAGER allowed users, and add to each entity the list of its records
     const f_entityTransform = async function( item ){
-        await Clients.s.transform( item );
+        await Clients.s.transform( item, userId );
         // make sure that each defined field appears in the returned item
         // happens that clearing notes on server side does not publish the field 'notes' and seems that the previously 'notes' on the client is kept
         // while publishing 'notes' as undefined rightly override (and erase) the previous notes on the client

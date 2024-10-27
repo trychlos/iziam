@@ -15,7 +15,9 @@
 import strftime from 'strftime';
 
 import { Forms } from 'meteor/pwix:forms';
+import { Notes } from 'meteor/pwix:notes';
 import SimpleSchema from 'meteor/aldeed:simple-schema';
+import { Timestampable } from 'meteor/pwix:collection-timestampable';
 
 import { Identities } from './index.js';
 
@@ -547,7 +549,9 @@ Identities.fieldsDef = function(){
         {
             name: 'password.UI.check',
             schema: false
-        }
+        },
+        Notes.fieldDef(),
+        Timestampable.fieldDef()
     ];
     return columns;
 };
