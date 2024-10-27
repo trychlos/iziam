@@ -12,6 +12,8 @@ import { Modal } from 'meteor/pwix:modal';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { TenantsManager } from 'meteor/pwix:tenants-manager';
 
+import { ClientGroupType } from '/imports/common/definitions/client-group-type.def.js';
+
 import '/imports/client/components/clients_groups_edit_dialog/clients_groups_edit_dialog.js';
 import '/imports/client/components/groups_buttons/groups_buttons.js';
 import '/imports/client/components/groups_tree/groups_tree.js';
@@ -46,6 +48,7 @@ Template.clients_groups_tree_view.helpers({
             item: this.item,
             checker: this.checker,
             groups: Template.instance().APP.organization.get().DYN.clients_groups.get(),
+            groupTypeDef: ClientGroupType,
             editable: false,
             withCheckboxes: false
         };

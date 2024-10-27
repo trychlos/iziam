@@ -70,7 +70,7 @@ Clients.s.delete = async function( entityId, userId ){
 };
 
 // Find and returns the client entity with its DYN records
-// @returns {Object} with full result
+// @returns {Object} with { entities, records, closest } keys
 // @throws {Error}
 Clients.s.getByEntity = async function( organizationId, entityId, userId ){
     check( organizationId, String );
@@ -79,15 +79,8 @@ Clients.s.getByEntity = async function( organizationId, entityId, userId ){
     //if( !await TenantsManager.isAllowed( 'pwix.tenants_manager.feat.delete', userId, entity )){
     //    return null;
     //}
-    // get the entity
-    let entitiesRes = await ClientsEntities.s.getBy({ _id: entityId }, userId );
-    // and get all the Records
-    let recordsRes = await ClientsRecords.s.getBy({ entity: entityId }, userId );
-
-    return {
-        entities: entitiesRes,
-        records: recordsRes
-    }
+    const res = await ClientsEntities.s.getBy({ _id: entityId }, userId );
+    return res && res.length ? await Clients.s.transform( res[0] ) : null;
 };
 
 // returns the registered client metadata
@@ -111,6 +104,34 @@ Clients.s.registeredMetadata = async function( client ){
         }
     }
     return data;
+};
+
+// add to the entity item the DYN sub-object { records, closest }
+Clients.s.transform = async function( item ){
+    item.DYN = item.DYN || {};
+    item.DYN.managers = [];
+    let promises = [];
+    /*
+    promises.push( Meteor.roleAssignment.find({ 'role._id': 'ORG_SCOPED_MANAGER', scope: item._id }).fetchAsync().then(( fetched ) => {
+        fetched.forEach(( it ) => {
+            Meteor.users.findOneAsync({ _id: it.user._id }).then(( user ) => {
+                if( user ){
+                    item.DYN.managers.push( user );
+                } else {
+                    console.warn( 'user not found, but allowed by an assigned scoped role', it.user._id );
+                }
+            });
+        });
+        return true;
+    }));
+    */
+    promises.push( ClientsRecords.collection.find({ entity: item._id }).fetchAsync().then(( fetched ) => {
+        item.DYN.records = fetched;
+        item.DYN.closest = Validity.closestByRecords( fetched ).record;
+        return true;
+    }));
+    await Promise.allSettled( promises );
+    return item; // even if useless
 };
 
 // entity is the client entity with a DYN.records array of ReactiveVar's

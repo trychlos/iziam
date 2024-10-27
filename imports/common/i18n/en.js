@@ -414,6 +414,10 @@ Meteor.APP.i18n = {
                     url_ph: 'https://myapp/redirect?q=a',
                     url_th: 'URL'
                 },
+                select: {
+                    dialog_title: 'Select clients',
+                    select_text: 'Select clients'
+                },
                 secrets: {
                     checks: {
                         secret_alg_invalid: 'The secret algorithm is invalid',
@@ -542,6 +546,11 @@ Meteor.APP.i18n = {
                     identities_label: 'Identities',
                     select_text: 'Select the authorization subject type'
                 },
+                client_group_type: {
+                    group_label: 'Group',
+                    client_label: 'Client',
+                    select_text: 'Select the desired client group type'
+                },
                 client_profile: {
                     confidential_label: 'Trusted user-oriented',
                     confidential_description: 'Your client application requires user authentication and needs user consent, but runs on a trusted server.',
@@ -607,11 +616,6 @@ Meteor.APP.i18n = {
                     reftoken_label: 'Refresh token grant',
                     select_text: 'Select the grant type your client will use at the token endpoint'
                 },
-                group_type: {
-                    group_label: 'Group',
-                    identity_label: 'Identity',
-                    select_text: 'Select the desired group type'
-                },
                 hmac_alg: {
                     blake2b512_label: 'Blake2b 512',
                     blake2s256_label: 'Blake2s 256',
@@ -656,6 +660,11 @@ Meteor.APP.i18n = {
                     most_label: 'At most',
                     nospec_label: 'Not specified',
                     select_text: 'Select how you want count'
+                },
+                identity_group_type: {
+                    group_label: 'Group',
+                    identity_label: 'Identity',
+                    select_text: 'Select the desired identity group type'
                 },
                 jwa_alg: {
                     a128cbc_hs256_label: 'AES_128_CBC_HMAC_SHA_256 authenticated encryption algorithm',

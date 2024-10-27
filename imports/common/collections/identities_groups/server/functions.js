@@ -52,9 +52,7 @@ IdentitiesGroups.s = _.merge( IdentitiesGroups.s, {
     async updateMemberships( organizationId, identityId, memberOf, userId ){
         let res = [];
         // first delete the previous organization records
-        //await IdentitiesGroups.s.dump( organizationId );
         res.push( await IdentitiesGroups.collection( organizationId ).removeAsync({ organization: organizationId, type: 'I', identity: identityId }));
-        //await IdentitiesGroups.s.dump( organizationId );
         // then insert the new memberships
         if( memberOf && memberOf.direct ){
             for await ( const it of ( memberOf.direct || [] )){
@@ -62,8 +60,7 @@ IdentitiesGroups.s = _.merge( IdentitiesGroups.s, {
             }
         }
         IdentitiesGroups.s.eventEmitter.emit( 'upsert', { organizationId: organizationId, userId: userId });
-        //await IdentitiesGroups.s.dump( organizationId );
-        //console.debug( 'IdentitiesGroups.s.updateMemberships', res );
+        console.debug( 'IdentitiesGroups.s.updateMemberships', res );
         return res;
     },
 
@@ -76,21 +73,13 @@ IdentitiesGroups.s = _.merge( IdentitiesGroups.s, {
         if( groups && _.isArray( groups )){
             const flat = IdentitiesGroups.fn.tree2flat( organizationId, groups );
             for( const it of flat ){
-                /*
-                const orig = await IdentitiesGroups.collection( organizationId ).findOneAsync({ _id: it._id });
-                if( orig ){
-                    res.push( await IdentitiesGroups.collection( organizationId ).updateAsync({ _id: it._id }, { $set: it }));
-                } else {
-                    res.push( await IdentitiesGroups.collection( organizationId ).insertAsync( it ));
-                }
-                    */
                 res.push( await IdentitiesGroups.collection( organizationId ).upsertAsync({ _id: it._id }, { $set: it }));
             }
             IdentitiesGroups.s.eventEmitter.emit( 'upsert', { organizationId: organizationId, userId: userId });
         } else {
             console.warn( 'IdentitiesGroups.s.upsert_tree() expects an array of groups, got '+groups );
         }
-        console.debug( 'res', res );
+        console.debug( 'IdentitiesGroups.s.upsert_tree', res );
         return res;
     }
 });

@@ -25,9 +25,9 @@ Meteor.publish( 'clients_groups.listAll', async function( organizationId ){
         item.DYN = item.DYN || {};
         // set the name if the item is a client
         if( item.type === 'C' ){
-            const clients = await Clients.s.getByEntity( item.organization, item.client, self.userId );
-            if( clients && clients.length ){
-                item.DYN.label = clients[0].DYN.closest.label;
+            const client = await Clients.s.getByEntity( item.organization, item.client, self.userId );
+            if( client ){
+                item.DYN.label = client.DYN.closest.label;
             } else {
                 item.DYN.label = '<client \''+item.client+'\' not found>';
             }

@@ -35,39 +35,12 @@ Meteor.publish( Meteor.APP.C.pub.clientsAll.publish, async function( organizatio
     
     // find ORG_SCOPED_MANAGER allowed users, and add to each entity the list of its records
     const f_entityTransform = async function( item ){
-        item.DYN = {
-            managers: [],
-            records: [],
-            closest: null
-        };
-        let promises = [];
-        /*
-        promises.push( Meteor.roleAssignment.find({ 'role._id': 'ORG_SCOPED_MANAGER', scope: item._id }).fetchAsync().then(( fetched ) => {
-            fetched.forEach(( it ) => {
-                Meteor.users.findOneAsync({ _id: it.user._id }).then(( user ) => {
-                    if( user ){
-                        item.DYN.managers.push( user );
-                    } else {
-                        console.warn( 'user not found, but allowed by an assigned scoped role', it.user._id );
-                    }
-                });
-            });
-            return true;
-        }));
-        */
-        promises.push( ClientsRecords.collection.find({ entity: item._id }).fetchAsync().then(( fetched ) => {
-            item.DYN.records = fetched;
-            item.DYN.closest = Validity.closestByRecords( fetched ).record;
-            return true;
-        }));
-        return Promise.allSettled( promises ).then(() => {
-            // make sure that each defined field appears in the returned item
-            // happens that clearing notes on server side does not publish the field 'notes' and seems that the previously 'notes' on the client is kept
-            // while publishing 'notes' as undefined rightly override (and erase) the previous notes on the client
-            ClientsEntities.s.addUndef( item );
-            //console.debug( 'list_all', collectionName, item._id );
-            return item;
-        });
+        await Clients.s.transform( item );
+        // make sure that each defined field appears in the returned item
+        // happens that clearing notes on server side does not publish the field 'notes' and seems that the previously 'notes' on the client is kept
+        // while publishing 'notes' as undefined rightly override (and erase) the previous notes on the client
+        ClientsEntities.s.addUndef( item );
+        return item;
     };
 
     const entitiesObserver = ClientsEntities.collection.find( Meteor.APP.C.pub.clientsAll.query( organization )).observeAsync({

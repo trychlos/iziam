@@ -1,7 +1,9 @@
 /*
- * /imports/common/definitions/group-type.def.js
+ * /imports/common/definitions/client-group-type.def.js
  *
  * Whether the group item is a group or an identity.
+ * 
+ * Maintainer note: take care of keeping the same interface than identity-group-type.def.js
  */
 
 import _ from 'lodash';
@@ -9,17 +11,17 @@ const assert = require( 'assert' ).strict;
 
 import { pwixI18n } from 'meteor/pwix:i18n';
 
-export const GroupType = {
+export const ClientGroupType = {
    C: [
         {
             id: 'G',
-            label: 'definitions.group_type.group_label',
-            icon: 'type-group fa-solid fa-people-group'
+            label: 'definitions.client_group_type.group_label',
+            icon: 'type-group fa-solid fa-object-group'
         },
         {
-            id: 'I',
-            label: 'definitions.group_type.identity_label',
-            icon: 'type-identity fa-solid fa-user'
+            id: 'C',
+            label: 'definitions.client_group_type.client_label',
+            icon: 'type-client fa-solid fa-file'
         }
     ],
 
@@ -39,14 +41,14 @@ export const GroupType = {
             return found === null;
         });
         if( !found && !this.warnedById[id] ){
-            console.warn( 'group type not found', id );
-            GroupType.warnedById[id] = true;
+            console.warn( 'client group type not found', id );
+            ClientGroupType.warnedById[id] = true;
         }
         return found;
     },
 
     /**
-     * @param {Object} def the definition as returned by GroupType.Knowns()
+     * @param {Object} def the definition as returned by ClientGroupType.Knowns()
      * @returns {String} the icon name associated to this group type
      */
     icon( def ){
@@ -54,7 +56,7 @@ export const GroupType = {
     },
 
     /**
-     * @param {Object} def the definition as returned by GroupType.Knowns()
+     * @param {Object} def the definition as returned by ClientGroupType.Knowns()
      * @returns {String} the identifier associated to this group type
      */
     id( def ){
@@ -69,7 +71,7 @@ export const GroupType = {
     },
 
     /**
-     * @param {Object} def the definition as returned by GroupType.Knowns()
+     * @param {Object} def the definition as returned by ClientGroupType.Knowns()
      * @returns {String} the label associated to this group type
      */
     label( def ){

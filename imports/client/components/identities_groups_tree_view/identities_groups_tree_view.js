@@ -12,6 +12,8 @@ import { Modal } from 'meteor/pwix:modal';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { TenantsManager } from 'meteor/pwix:tenants-manager';
 
+import { IdentityGroupType } from '/imports/common/definitions/identity-group-type.def.js';
+
 import '/imports/client/components/groups_buttons/groups_buttons.js';
 import '/imports/client/components/groups_tree/groups_tree.js';
 import '/imports/client/components/identities_groups_edit_dialog/identities_groups_edit_dialog.js';
@@ -46,6 +48,7 @@ Template.identities_groups_tree_view.helpers({
             item: this.item,
             checker: this.checker,
             groups: Template.instance().APP.organization.get().DYN.identities_groups.get(),
+            groupTypeDef: IdentityGroupType,
             editable: false,
             withCheckboxes: false
         };

@@ -13,6 +13,8 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 
 import { IdentitiesGroups } from '/imports/common/collections/identities_groups/index.js';
 
+import { IdentityGroupType } from '/imports/common/definitions/identity-group-type.def.js';
+
 import '/imports/client/components/groups_buttons/groups_buttons.js';
 import '/imports/client/components/groups_tree/groups_tree.js';
 import '/imports/client/components/identities_select_dialog/identities_select_dialog.js';
@@ -104,6 +106,7 @@ Template.identities_groups_hierarchy_pane.helpers({
         return {
             ...this,
             groups: this.groups.get(),
+            groupTypeDef: IdentityGroupType,
             withCheckboxes: false,
             noDataText: pwixI18n.label( I18N, 'groups.tree.no_data_two' )
         };

@@ -308,8 +308,10 @@ body {
     }
 }
 
+.c-client-groups-select-tree,
 .c-clients-groups-hierarchy-pane,
 .c-identities-groups-hierarchy-pane,
+.c-identity-groups-select-tree,
 .c-organization-clients-groups-pane,
 .c-organization-identities-groups-pane {
     .groups-body,
@@ -341,6 +343,7 @@ body {
                 height: 1em;
                 color: var( --bs-primary );
             }
+            li.jstree-node svg.type-client,
             li.jstree-node svg.type-identity {
                 height: 1em;
                 color: var( --bs-info );
@@ -355,6 +358,7 @@ body {
 }
 
 // multiple-select adjustements
+.c-clients-select,
 .c-identities-select {
     height: 20em;
     .multiple-select {

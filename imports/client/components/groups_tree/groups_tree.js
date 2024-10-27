@@ -8,10 +8,12 @@
  * - item: a ReactiveVar which contains the Organization as an entity with its DYN.records array
  * - checker: a ReactiveVar which contains the parent Forms.Checker
  * - groups: the groups of the organization
+ * - groupTypeDef: the definition of the target group type
  * - editable: whether the tree is editable, defaulting to true
  *   here, 'editable' means that we allow dnd, so change the tree
  * - withCheckboxes: whether the tree has checkboxes, defaulting to true
  * - withIdentities: whether to display the identities, defaulting to true
+ * - withClients: whether to display the clients, defaulting to true
  * - selected: an array of the checkboxes to check, only considered if withCheckboxes is truethy
  * - noDataText: the text to be displayed when there is no data, defaulting to "There is not yet any group defined for the organization. Please edit the groups hierarchy tree."
  */
@@ -20,8 +22,6 @@ import _ from 'lodash';
 
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
-
-import { GroupType } from '/imports/common/definitions/group-type.def.js';
 
 import './groups_tree.html';
 
@@ -36,6 +36,7 @@ Template.groups_tree.onCreated( function(){
         tree_nodes_asked: {},
         tree_nodes_created: {},
         tree_nodes_waiting: {},
+        tree_initialized_rv: new ReactiveVar( false ),
         tree_populated_rv: new ReactiveVar( false ),
         tree_checked_rv: new ReactiveVar( false ),
 
@@ -43,6 +44,8 @@ Template.groups_tree.onCreated( function(){
         editable: new ReactiveVar( true ),
         // whether the tree has checkboxes
         withCheckboxes: new ReactiveVar( true ),
+        // whether to display the clients
+        withClients: new ReactiveVar( true ),
         // whether to display the identities
         withIdentities: new ReactiveVar( true ),
 
@@ -181,7 +184,7 @@ Template.groups_tree.onCreated( function(){
         // create a new node
         //  the caller has made sure the parent is available if not null
         tree_create_node( group, parent=null ){
-            if( group.type !== 'I' || self.APP.withIdentities.get()){
+            if( group.type === 'G' || ( group.type === 'I' && self.APP.withIdentities.get()) || ( group.type === 'C' && self.APP.withClients.get())){
                 self.APP.tree_nodes_asked[group._id] = group;
                 const parent_node = parent ? self.APP.tree_nodes_created[ parent ] : null;
                 const $tree = self.APP.$tree.get();
@@ -224,20 +227,20 @@ Template.groups_tree.onCreated( function(){
             $tree.jstree( true ).open_node( closest );
         },
 
-        // getter/setter: whether the creation of the tree is done
-        tree_built( done ){
-            if( done === true || done === false ){
-                self.APP.tree_built_rv.set( done );
-            }
-            return self.APP.tree_built_rv.get();
-        },
-
         // getter/setter: whether the initial checkboxes have been checked
         tree_checked( done ){
             if( done === true || done === false ){
                 self.APP.tree_checked_rv.set( done );
             }
             return self.APP.tree_checked_rv.get();
+        },
+
+        // getter/setter: whether the tree has been initialized
+        tree_initialized( done ){
+            if( done === true || done === false ){
+                self.APP.tree_initialized_rv.set( done );
+            }
+            return self.APP.tree_initialized_rv.get();
         },
 
         // getter/setter: whether the tree has been populated
@@ -275,14 +278,15 @@ Template.groups_tree.onCreated( function(){
         self.APP.withIdentities.set( withIdentities );
     });
 
+    // whether to display the clients, defaulting to true
+    self.autorun(() => {
+        const withClients = Template.currentData().withClients !== false;
+        self.APP.withClients.set( withClients );
+    });
+
     // track the ready status
     self.autorun(() => {
         //console.debug( 'tree_ready', self.APP.tree_ready());
-    });
-
-    // track the built status
-    self.autorun(() => {
-        //console.debug( 'tree_built', self.APP.tree_built());
     });
 
     // track the populated status
@@ -311,11 +315,12 @@ Template.groups_tree.onRendered( function(){
     // and build the tree
     self.autorun(() => {
         const $tree = self.APP.$tree.get();
-        if( $tree ){
+        const groupTypeDef = Template.currentData().groupTypeDef;
+        if( $tree && groupTypeDef && !self.APP.tree_initialized()){
             let typesDefs = {};
-            GroupType.Knowns().forEach(( it ) => {
-                typesDefs[GroupType.id( it )] = {
-                    icon: GroupType.icon( it )
+            groupTypeDef.Knowns().forEach(( it ) => {
+                typesDefs[groupTypeDef.id( it )] = {
+                    icon: groupTypeDef.icon( it )
                 };
             });
             let plugins = [
@@ -406,6 +411,7 @@ Template.groups_tree.onRendered( function(){
                 console.debug( event.type );
                 self.$( '.c-groups-tree' ).trigger( 'tree-rowselect', { node: null });
             });
+            self.APP.tree_initialized( true );
         }
     });
     // dnd events are only triggered on the document
@@ -427,7 +433,7 @@ Template.groups_tree.onRendered( function(){
             // keep the tree data
             self.APP.prevData = _.cloneDeep( groups );
             // reset the tree
-            console.debug( 'reset the tree' );
+            //console.debug( 'reset the tree' );
             $tree.jstree( true ).delete_node( Object.values( self.APP.tree_nodes_created ));
             self.APP.tree_nodes_asked = {};
             self.APP.tree_nodes_created = {};

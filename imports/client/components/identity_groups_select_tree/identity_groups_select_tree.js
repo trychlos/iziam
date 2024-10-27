@@ -1,5 +1,5 @@
 /*
- * /imports/client/components/groups_select_tree/groups_select_tree.js
+ * /imports/client/components/identity_groups_select_tree/identity_groups_select_tree.js
  *
  * Select zero to n groups in the hierarchic tree.
  * 
@@ -17,9 +17,11 @@
 
 import _ from 'lodash';
 
-import './groups_select_tree.html';
+import { IdentityGroupType } from '/imports/common/definitions/identity-group-type.def.js';
 
-Template.groups_select_tree.onCreated( function(){
+import './identity_groups_select_tree.html';
+
+Template.identity_groups_select_tree.onCreated( function(){
     const self = this;
     //console.debug( this );
     
@@ -36,12 +38,13 @@ Template.groups_select_tree.onCreated( function(){
     });
 });
 
-Template.groups_select_tree.helpers({
+Template.identity_groups_select_tree.helpers({
     // parms for the groups_tree component
     parmsTree(){
         //console.debug( 'groups', Template.instance().APP.organization.get().DYN.groups.get());
         return {
-            groups: Template.instance().APP.organization.get().DYN.groups.get(),
+            groups: Template.instance().APP.organization.get().DYN.identities_groups.get(),
+            groupTypeDef: IdentityGroupType,
             editable: false,
             withIdentities: false,
             selected: this.item.get().DYN?.memberOf?.direct || []
@@ -49,14 +52,14 @@ Template.groups_select_tree.helpers({
     }
 });
 
-Template.groups_select_tree.events({
+Template.identity_groups_select_tree.events({
     // functions advertising
-    'tree-fns .c-groups-select'( event, instance, data ){
+    'tree-fns .c-identity-groups-select-tree'( event, instance, data ){
         instance.APP.fnGet = data.fnGet;
     },
 
     // the user has checked/unchecked a group
-    'tree-check .c-groups-select'( event, instance ){
+    'tree-check .c-identity-groups-select-tree'( event, instance ){
         if( instance.APP.fnGet ){
             let direct = [];
             let all = [];

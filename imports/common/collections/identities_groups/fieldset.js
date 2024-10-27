@@ -31,7 +31,7 @@ const _defaultFieldDef = function(){
             form_check: IdentitiesGroups.checks.label,
             form_type: Forms.FieldType.C.MANDATORY
         },
-        // the parent identifier, necessarily a group if set
+        // the parent identifier, necessarily an identity group if set
         {
             name: 'parent',
             type: String,

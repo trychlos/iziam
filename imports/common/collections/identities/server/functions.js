@@ -100,7 +100,7 @@ Identities.s = {
         return true;
     },
 
-    // try to find an identiy with a username or an email address
+    // try to find an identity with a username or an email address
     tryWith( id ){
         let res = Identities.find({ $or: [{ 'emails.address': id }, { 'usernames.username': id }]}).fetch();
         return res;
@@ -150,7 +150,7 @@ Identities.s = {
             // note that this should depend of the selected providers and the identities configuration of the organization
             let UI = null;
             if( item.password ){
-                UI = item.password.UI || null;
+                UI = item.password.UI || {};
                 delete item.password.UI;
                 if( UI.clear1 ){
                     const salt = crypto.randomBytes( Meteor.APP.C.identitySaltSize );
@@ -160,16 +160,11 @@ Identities.s = {
                     item.password.salt = salt.toString( 'hex' );
                 }
             }
-            console.debug( 'item', item );
+            const itemId = item._id;
             res = await collection.upsertAsync({ _id: item._id }, { $set: item });
-            await IdentitiesGroups.s.updateMemberships( args.organization._id, item._id, DYN.memberOf, userId );
             // get the newly inserted id
-            if( res.insertedId ){
-                item._id = res.insertedId;
-            }
-            //if( res.numberAffected ){
-            //    Memberships.s.upsertByIdent( item.organization, item._id, groups, userId );
-            //}
+            item._id = res.insertedId || itemId;
+            await IdentitiesGroups.s.updateMemberships( args.organization._id, item._id, DYN.memberOf, userId );
             item.DYN = DYN;
             if( UI ){
                 item.password.UI = UI;

@@ -13,6 +13,8 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 
 import { ClientsGroups } from '/imports/common/collections/clients_groups/index.js';
 
+import { ClientGroupType } from '/imports/common/definitions/client-group-type.def.js';
+
 import '/imports/client/components/groups_buttons/groups_buttons.js';
 import '/imports/client/components/groups_tree/groups_tree.js';
 import '/imports/client/components/clients_select_dialog/clients_select_dialog.js';
@@ -53,7 +55,7 @@ Template.clients_groups_hierarchy_pane.onCreated( function(){
                 });
                 // re-attach new clients
                 selected.forEach(( it ) => {
-                    newgroups.push({ type: 'C', client: it._id, parent: selectedGroupNode.id, DYN: { label: it.DYN?.label }});
+                    newgroups.push({ type: 'C', client: it._id, parent: selectedGroupNode.id, DYN: { label: it.DYN.closest.label }});
                 });
                 // and set new groups
                 dc.groups.set( newgroups );
@@ -72,7 +74,7 @@ Template.clients_groups_hierarchy_pane.onCreated( function(){
 
     // track the groups
     self.autorun(() => {
-        console.debug( 'groups', Template.currentData().groups.get());
+        //console.debug( 'groups', Template.currentData().groups.get());
     });
 
     // track the clients which are members of currently selected group
@@ -86,7 +88,7 @@ Template.clients_groups_hierarchy_pane.onCreated( function(){
             });
         }
         self.APP.groupClients.set( clients );
-        console.debug( 'group', group, 'clients', self.APP.groupClients.get());
+        //console.debug( 'group', group, 'clients', self.APP.groupClients.get());
     });
 });
 
@@ -104,6 +106,7 @@ Template.clients_groups_hierarchy_pane.helpers({
         return {
             ...this,
             groups: this.groups.get(),
+            groupTypeDef: ClientGroupType,
             withCheckboxes: false,
             noDataText: pwixI18n.label( I18N, 'groups.tree.no_data_two' )
         };
@@ -123,7 +126,7 @@ Template.clients_groups_hierarchy_pane.events({
         Modal.run({
             ...this,
             organization: this.item.get(),
-            selected: instance.APP.groupIdentities.get(),
+            selected: instance.APP.groupClients.get(),
             selectTarget: instance.$( '.c-clients-groups-hierarchy-pane' ),
             mdBody: 'clients_select_dialog',
             mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],

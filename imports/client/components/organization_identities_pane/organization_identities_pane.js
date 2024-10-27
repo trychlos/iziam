@@ -86,14 +86,14 @@ Template.organization_identities_pane.onCreated( function(){
                 paneTemplate: 'identity_phones_pane'
             },
             {
-                name: 'identity_groups_tab',
-                navLabel: pwixI18n.label( I18N, 'identities.edit.groups_tab_title' ),
-                paneTemplate: 'identity_groups_pane'
-            },
-            {
                 name: 'identity_authenticate_tab',
                 navLabel: pwixI18n.label( I18N, 'identities.edit.authenticate_tab_title' ),
                 paneTemplate: 'identity_authenticate_pane'
+            },
+            {
+                name: 'identity_groups_tab',
+                navLabel: pwixI18n.label( I18N, 'identities.edit.groups_tab_title' ),
+                paneTemplate: 'identity_groups_pane'
             },
             {
                 name: 'identity_no_tab',

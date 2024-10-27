@@ -14,7 +14,7 @@ import _ from 'lodash';
 
 import { pwixI18n } from 'meteor/pwix:i18n';
 
-import '/imports/client/components/groups_select_tree/groups_select_tree.js';
+import '/imports/client/components/identity_groups_select_tree/identity_groups_select_tree.js';
 
 import './identity_groups_pane.html';
 

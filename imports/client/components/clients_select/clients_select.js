@@ -109,14 +109,14 @@ Template.clients_select.helpers({
         return this.disabled === true ? 'disabled' : '';
     },
 
-    // return the item identifier
+    // return the item identifier (the client entity)
     itId( it ){
         return it._id;
     },
 
     // return the item label
     itLabel( it ){
-        return it.DYN.label;
+        return it.DYN.closest.label;
     },
 
     // return the list of known clients

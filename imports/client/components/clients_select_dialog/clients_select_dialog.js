@@ -22,8 +22,6 @@ import { Modal } from 'meteor/pwix:modal';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { TenantsManager } from 'meteor/pwix:tenants-manager';
 
-import { Clients } from '/imports/common/collections/clients/index.js';
-
 import '/imports/client/components/clients_select/clients_select.js';
 
 import './clients_select_dialog.html';
@@ -55,13 +53,9 @@ Template.clients_select_dialog.onCreated( function(){
         const registrar = self.APP.clientsRegistrar.get();
         if( registrar ){
             const clients = registrar.get().sort(( a, b ) => {
-                if( !a.DYN.label ){
-                    a.DYN.label = Identities.fn.bestLabel( a );
-                }
-                if( !b.DYN.label ){
-                    b.DYN.label = Identities.fn.bestLabel( b );
-                }
-                return a.DYN.label > b.DYN.label ? 1 : ( a.DYN.label < b.DYN.label ? -1 : 0 );
+                const label_a = a.DYN.closest.label;
+                const label_b = b.DYN.closest.label;
+                return label_a > label_b ? 1 : ( label_a < label_b ? -1 : 0 );
             });
             const hash = {};
             clients.map(( it ) => {
@@ -74,6 +68,11 @@ Template.clients_select_dialog.onCreated( function(){
     // get an additional target (if any)
     self.autorun(() => {
         self.APP.$target.set( Template.currentData().selectTarget );
+    });
+
+    // track the clients list
+    self.autorun(() => {
+        //console.debug( 'clients', self.APP.clients.get());
     });
 });
 
@@ -97,7 +96,7 @@ Template.clients_select_dialog.onRendered( function(){
 
 Template.clients_select_dialog.helpers({
     // parms for the clients_select component
-    parmsIdentitiesSelect(){
+    parmsClientsSelect(){
         return {
             organization: this.organization,
             clients: Object.values( Template.instance().APP.clients.get()),

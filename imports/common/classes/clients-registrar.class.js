@@ -121,9 +121,16 @@ export class ClientsRegistrar extends izRegistrar {
     }
 
     /**
-     * @returns {integer} the current clients count
+     * @returns {Integer} the current clients count
      */
     count(){
         return this.#list.get().length;
+    }
+
+    /**
+     * @returns {Array} the clients list
+     */
+    get(){
+        return this.#list.get();
     }
 }
