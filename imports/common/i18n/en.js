@@ -893,6 +893,7 @@ Meteor.APP.i18n = {
                     dialog_title: 'Editing the "%s" identity',
                     emails_tab_title: 'Email addresses',
                     groups_tab_title: 'Groups',
+                    notes_tab_title: 'Notes',
                     password_tab_title: 'Password',
                     phones_tab_title: 'Phones',
                     profile_tab_title: 'Identity',

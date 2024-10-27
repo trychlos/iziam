@@ -46,6 +46,7 @@ import '/imports/client/components/identity_authenticate_pane/identity_authentic
 import '/imports/client/components/identity_emails_pane/identity_emails_pane.js';
 import '/imports/client/components/identity_groups_pane/identity_groups_pane.js';
 import '/imports/client/components/identity_no_pane/identity_no_pane.js';
+import '/imports/client/components/identity_notes_pane/identity_notes_pane.js';
 import '/imports/client/components/identity_phones_pane/identity_phones_pane.js';
 import '/imports/client/components/identity_profile_pane/identity_profile_pane.js';
 import '/imports/client/components/identity_usernames_pane/identity_usernames_pane.js';
@@ -89,6 +90,11 @@ Template.organization_identities_pane.onCreated( function(){
                 name: 'identity_authenticate_tab',
                 navLabel: pwixI18n.label( I18N, 'identities.edit.authenticate_tab_title' ),
                 paneTemplate: 'identity_authenticate_pane'
+            },
+            {
+                name: 'identity_notes_tab',
+                navLabel: pwixI18n.label( I18N, 'identities.edit.notes_tab_title' ),
+                paneTemplate: 'identity_notes_pane'
             },
             {
                 name: 'identity_groups_tab',
