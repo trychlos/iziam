@@ -111,6 +111,7 @@ export class ClientsRegistrar extends izRegistrar {
             Tracker.autorun(() => {
                 if( self.#handle.get()?.ready()){
                     Meteor.APP.Collections.get( Meteor.APP.C.pub.clientsAll.collection ).find( Meteor.APP.C.pub.clientsAll.query( self.#organization )).fetchAsync().then(( fetched ) => {
+                        console.debug( 'fetched', fetched );
                         self.#list.set( fetched );
                     });
                 }

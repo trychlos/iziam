@@ -43,9 +43,7 @@ ClientsGroups.s = _.merge( ClientsGroups.s, {
     async updateMemberships( organizationId, clientId, memberOf, userId ){
         let res = [];
         // first delete the previous organization records
-        //await ClientsGroups.s.dump( organizationId );
         res.push( await ClientsGroups.collection( organizationId ).removeAsync({ organization: organizationId, type: 'C', client: clientId }));
-        //await ClientsGroups.s.dump( organizationId );
         // then insert the new memberships
         if( memberOf && memberOf.direct ){
             for await ( const it of ( memberOf.direct || [] )){
@@ -53,8 +51,7 @@ ClientsGroups.s = _.merge( ClientsGroups.s, {
             }
         }
         ClientsGroups.s.eventEmitter.emit( 'upsert', { organizationId: organizationId, userId: userId });
-        //await ClientsGroups.s.dump( organizationId );
-        //console.debug( 'ClientsGroups.s.updateMemberships', res );
+        console.debug( 'ClientsGroups.s.updateMemberships', res );
         return res;
     },
 

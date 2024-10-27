@@ -180,6 +180,9 @@ Clients.s.upsert = async function( entity, userId ){
     // and asks the Records to do the rest
     let recordsRes = await ClientsRecords.s.upsert( entity, userId );
 
+    // update memberships
+    await ClientsGroups.s.updateMemberships( entity.organization, entity._id, entity.DYN.memberOf, userId );
+
     Clients.s.eventEmitter.emit( 'upsert', { entity: entity });
 
     return {
