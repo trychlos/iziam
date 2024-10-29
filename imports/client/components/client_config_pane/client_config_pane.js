@@ -11,6 +11,8 @@
 import { pwixI18n } from 'meteor/pwix:i18n';
 
 import '/imports/client/components/client_authorizations_panel/client_authorizations_panel.js';
+import '/imports/client/components/client_identities_access_pane/client_identities_access_pane.js';
+import '/imports/client/components/client_identities_auth_pane/client_identities_auth_pane.js';
 import '/imports/client/components/client_scopes_panel/client_scopes_panel.js';
 import '/imports/client/components/client_token_extensions_panel/client_token_extensions_panel.js';
 
@@ -26,6 +28,16 @@ Template.client_config_pane.helpers({
                     name: 'client_token_extensions_tab',
                     navLabel: pwixI18n.label( I18N, 'clients.edit.token_extensions_tab_title' ),
                     paneTemplate: 'client_token_extensions_panel'
+                },
+                {
+                    name: 'client_identities_auth_tab',
+                    navLabel: pwixI18n.label( I18N, 'clients.edit.identities_auth_tab_title' ),
+                    paneTemplate: 'client_identities_auth_pane'
+                },
+                {
+                    name: 'client_identities_access_tab',
+                    navLabel: pwixI18n.label( I18N, 'clients.edit.identities_access_tab_title' ),
+                    paneTemplate: 'client_identities_access_pane'
                 },
                 {
                     name: 'client_scopes_tab',

@@ -401,6 +401,22 @@ const _defaultFieldDef = function(){
         },
         // post_logout_redirect_uris (yes this is an array according to node-oidc-provider)
         */
+        // whether the client wants authenticated identities
+        {
+            name: 'identity_auth_mode',
+            type: String,
+            defaultValue: 'auth',
+            form_check: ClientsRecords.checks.identity_auth_mode,
+            form_type: Forms.FieldType.C.OPTIONAL
+        },
+        // how the client does accept new identities
+        {
+            name: 'identity_access_mode',
+            type: String,
+            defaultValue: 'auth',
+            form_check: ClientsRecords.checks.identity_access_mode,
+            form_type: Forms.FieldType.C.OPTIONAL
+        },
         // client secrets
         ClientSecrets.recordFieldDef(),
         // --

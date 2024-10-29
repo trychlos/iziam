@@ -158,6 +158,10 @@ Meteor.APP.i18n = {
                     home_invalid: 'The home URI is not valid',
                     grant_types_invalid: 'The current authorization flow and grant types selection is not valid',
                     grant_types_unset: 'The current authorization flow and grant types selection is not set',
+                    identity_access_mode_invalid: 'The identity access mode is not valid',
+                    identity_access_mode_unset: 'The identity access mode is not set',
+                    identity_auth_mode_invalid: 'The identity authentication mode is not valid',
+                    identity_auth_mode_unset: 'The identity authentication mode is not set',
                     label_exists: 'The label is already used by another client',
                     label_unset: 'The label is not set',
                     logo_host: 'The logo URI wants a hostname',
@@ -215,6 +219,10 @@ Meteor.APP.i18n = {
                     home_title: 'The URI of a web site',
                     id_label: 'Identifier :',
                     id_title: 'The client unique identifier to present to the OAuth server',
+                    identities_access_preamble: 'How this client does manage the new identities ?',
+                    identities_access_tab_title: 'New identity access',
+                    identities_auth_preamble: 'Whether this client requires authenticated identities ?',
+                    identities_auth_tab_title: 'Identities authentication',
                     jwks_tab_title: 'JSON Web Key Set',
                     label_label: 'Label :',
                     label_ph: 'My unique label',
@@ -703,6 +711,41 @@ Meteor.APP.i18n = {
                     most_label: 'At most',
                     nospec_label: 'Not specified',
                     select_text: 'Select how you want count'
+                },
+                identity_access_mode: {
+                    all_short: 'All',
+                    all_label: 'All new identities',
+                    all_desc: 'All new identities are allowed to access the client application.<br />'
+                        +'The client application must be able to define its own new account when receiving a new identity.<br />'
+                        +'No authorization is checked.',
+                    authorized_short: 'Authorized',
+                    authorized_label: 'Only authorized identities',
+                    authorized_desc: 'Only authorized identities are allowed to access the client application.<br />'
+                        +'The client application must be able to define its own new account when receiving a new identity.<br />'
+                        +'The Authorization Server takes care of only allowing authorized identities.',
+                    auth_pre_short: 'Authorized + pre-registered',
+                    auth_pre_label: 'Only authorized + pre-registered identities',
+                    auth_pre_desc: 'Only authorized identities are allowed to access the client application '
+                        +'if and only if the corresponding account has been pre-registered in the client application.<br />'
+                        +'The application doesn\'t need to define a new account when receiving a new identity, but must nonetheless manage its accounts itself.',
+                    pre_short: 'Preregistered',
+                    pre_label: 'All pre-registered identities',
+                    pre_desc: 'All pre-registered identities are allowed to access the client application, whatever be their authorizations state.<br />'
+                        +'The client application must manage its own accounts.<br />'
+                        +'No authorization is checked here.'
+                },
+                identity_auth_mode: {
+                    none_short: 'None',
+                    none_label: 'No authentication',
+                    none_desc: 'The client application doesn\'t require the identities to be authenticated.<br />'
+                        +'Take care that the client application will have no way to verify the izIAM-provided identities. '
+                        +'This should be strictly reserved to development environments.',
+                    auth_short: 'Authenticated',
+                    auth_label: 'Authenticated',
+                    auth_desc: 'The client application requires identities to be authenticated.<br />'
+                        +'It is the responsability of the organization manager to select providers which are able to authenticate identities as, '
+                        +'for example, an Password Authenticator.<br />'
+                        +'The Identity Server will use any selected provider able to serve this feature, and will advertise the exact authentication used mode.'
                 },
                 identity_group_type: {
                     group_label: 'Group',

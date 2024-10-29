@@ -121,7 +121,7 @@ Meteor.publish( Meteor.APP.C.pub.clientsTabularOne.publish, async function( orga
     let initializing = true;
     const observer = ClientsEntities.collection.find( Meteor.APP.C.pub.clientsTabularOne.query( organization )).observeAsync({
         added: function( item ){
-            self.added( Meteor.APP.C.pub.clientsTabularOne.collection, item._id );
+            self.added( Meteor.APP.C.pub.clientsTabularOne.collection, item._id, item );
         },
         removed: function( item ){
             self.removed( Meteor.APP.C.pub.clientsTabularOne.collection, item._id );
@@ -171,12 +171,12 @@ Meteor.publish( Meteor.APP.C.pub.clientsTabularTwo.publish, async function( orga
                             self.removed( Meteor.APP.C.pub.clientsTabularTwo.collection, prev_closest );
                             entities[entity_id] = closest._id;
                             //console.debug( 'adding', closest );
-                            self.added( Meteor.APP.C.pub.clientsTabularTwo.collection, closest._id );
+                            self.added( Meteor.APP.C.pub.clientsTabularTwo.collection, closest._id, closest );
                         }
                     } else {
                         entities[entity_id] = closest._id;
                         //console.debug( 'adding', closest );
-                        self.added( Meteor.APP.C.pub.clientsTabularTwo.collection, closest._id );
+                        self.added( Meteor.APP.C.pub.clientsTabularTwo.collection, closest._id, closest );
                     }
                 } else {
                     console.warn( 'unable to compute a closest for', fetched );

@@ -17,6 +17,8 @@ import { ApplicationType } from '/imports/common/definitions/application-type.de
 import { ClientProfile } from '/imports/common/definitions/client-profile.def.js';
 import { ClientType } from '/imports/common/definitions/client-type.def.js';
 import { GrantType } from '/imports/common/definitions/grant-type.def.js';
+import { IdentityAccessMode } from '/imports/common/definitions/identity-access-mode.def.js';
+import { IdentityAuthMode } from '/imports/common/definitions/identity-auth-mode.def.js';
 //import { ResponseType } from '/imports/common/definitions/response-type.def.js';
 
 import { ClientsRecords } from './index.js';
@@ -323,6 +325,48 @@ ClientsRecords.checks = {
             level: TM.MessageLevel.C.ERROR,
             message: pwixI18n.label( I18N, 'clients.checks.grant_types_unset' )
         });
+    },
+
+    // identity access mode
+    async identity_access_mode( value, data, opts ){
+        _assert_data_content( 'ClientsRecords.checks.identity_access_mode()', data );
+        let item = data.entity.get().DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.identity_access_mode = value;
+        }
+        if( value ){
+            const def = IdentityAccessMode.byId( value );
+            return def ? null : new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'clients.checks.identity_access_mode_invalid' )
+            });
+        } else {
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'clients.checks.identity_access_mode_unset' )
+            });
+        }
+    },
+
+    // identity auth mode
+    async identity_auth_mode( value, data, opts ){
+        _assert_data_content( 'ClientsRecords.checks.identity_auth_mode()', data );
+        let item = data.entity.get().DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.identity_access_mode = value;
+        }
+        if( value ){
+            const def = IdentityAuthMode.byId( value );
+            return def ? null : new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'clients.checks.identity_auth_mode_invalid' )
+            });
+        } else {
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'clients.checks.identity_auth_mode_unset' )
+            });
+        }
     },
 
     // the label must be set, and must identify the client entity
