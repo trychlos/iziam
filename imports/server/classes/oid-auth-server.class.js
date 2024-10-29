@@ -138,6 +138,16 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
         // error rendering
         conf.renderError = this._errorRender;
 
+        // TTLs
+        conf.ttl = {
+            AccessToken: organization.record.ttl_AccessToken || Meteor.APP.C.ttl_AccessToken,
+            ClientCredentials: organization.record.ttl_ClientCredentials || Meteor.APP.C.ttl_ClientCredentials,
+            Grant: organization.record.ttl_Grant || Meteor.APP.C.ttl_Grant,
+            IdToken: organization.record.ttl_IdToken || Meteor.APP.C.ttl_IdToken,
+            Interaction: organization.record.ttl_Interaction || Meteor.APP.C.ttl_Interaction,
+            Session: organization.record.ttl_Session || Meteor.APP.C.ttl_Session
+        };
+
         // unfortunately, the node-oidc-provider is written so that the configuration set at instanciation time is not modifiable
         //  have to find a way to reset it...
         return conf;
