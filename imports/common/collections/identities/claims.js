@@ -127,7 +127,7 @@ Identities.claims = {
                     if( claim.isForUse( use ) && claim.isForScopes( scope )){
                         const name = claim.name();
                         const opts = claim.opts();
-                        console.debug( 'name', name );
+                        //console.debug( 'name', name );
                         // the claim value, either computed, or from the identity
                         //  note that array-ed fields value must be computed
                         let value = undefined;
@@ -144,7 +144,7 @@ Identities.claims = {
                                 value = identity[fieldName];
                             }
                         }
-                        console.debug( 'value', value );
+                        //console.debug( 'value', value );
                         // if the claim has been explicitely refused ?
                         if( rejected && rejected.includes( name )){
                             name = undefined;

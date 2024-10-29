@@ -12,36 +12,19 @@
 | ---: | :---       | :---                       |
 |    6 | 2023- 9- 6 | feat: have a default tenant |
 |    7 | 2023- 9- 6 | feat: have a demo tenant |
-|    8 | 2023- 9- 6 | feat: manage authentification providers |
-|    9 | 2023- 9- 6 | feat: manage authorization providers |
 |   17 | 2023-11-30 | have user settings |
-|   26 | 2023-12-20 | oidc-provider NOTICE: default ttl.ClientCredentials function called, you SHOULD change it in order to define the expiration for ClientCredentials artifacts |
-|   28 | 2024- 1- 4 | have optional      endpoint and only enable instospection if this endpoint is set |
-|   29 | 2024- 1- 4 | have end_session_endpoint |
-|      | 2024- 1-11 | defined and editable as logoutEndpoint, not used at the moment |
 |   33 | 2024- 1- 5 | have a waiting cursor when calling a server method |
 |   38 | 2024- 1- 5 | Have a way to provide values to user-defined resources/scopes/claims (or only claims ?) |
-|   39 | 2024- 1- 5 | default renderError function called, you SHOULD change it in order to customize the look of the error page. |
-|   40 | 2024- 1- 5 | default ttl.AccessToken function called, you SHOULD change it in order to define the expiration for AccessToken artifacts |
-|   41 | 2024- 1- 5 | default ttl.Grant function called, you SHOULD change it in order to define the expiration for Grant artifacts. |
-|   42 | 2024- 1- 5 | default ttl.IdToken function called, you SHOULD change it in order to define the expiration for IdToken artifacts. |
-|   43 | 2024- 1- 5 | default ttl.Interaction function called, you SHOULD change it in order to define the expiration for Interaction artifacts. |
-|   44 | 2024- 1- 5 | default ttl.Session function called, you SHOULD change it in order to define the expiration for Session artifacts |
+|      | 2024-10-29 | resources are user-defined, while scopes and claims need code - so needs to let the user define some code + have hook points |
 |   45 | 2024- 1- 5 | default features.introspection.allowedPolicy function called, you SHOULD change it in order to to check whether the caller is authorized to receive the introspection response. |
-|   46 | 2024- 1- 5 | Build oidc interaction |
-|   47 | 2024- 1- 5 | Build oidc adapter |
 |   49 | 2024- 1- 6 | on all methods/publications on server-side, have to re-check the user permissions vs his roles |
 |      | 2024- 1-10 | see also #60 to throw our own exceptions |
 |      | 2024- 9-13 | architecture is done with pwix:permissions - Have to distinguish client/user-capable callable code to the code stricyly usable by our server |
-|   54 | 2024- 1- 7 | in group_edit modal, replace two tabs groups_panel and identities_panel with a tab members_panel with two subtabs groups and identities |
-|   55 | 2024- 1- 8 | Identities.name should have an extension which includes the preferred email address (to distinguish homonymous) |
-|   56 | 2024- 1- 8 | membership.hierarchy: have a right-click context menu with new/insert group/identity |
-|   59 | 2024- 1- 9 | resources, scopes and claims should not be identified by their label, but with an identifier (for example a random id) |
 |   61 | 2024- 1-10 | identities: add titre, titre post-nominal |
 |   64 | 2024- 1-10 | display the picture in organizations list, identities list |
 |   66 | 2024- 1-11 | auth server: have a button to display the .well-known/openid-configuration |
+|      | 2024-10-29 | same for client: be able to display the metadata |
 |   77 | 2024- 1-12 | multiple-select: review the select box size to align with standard bootstrap select boxes |
-|   81 | 2024- 1-12 | providers_tab: display available resources and scopes when isAdmin |
 |   86 | 2024- 1-13 | keygrip_secret: ask for user confirmation when removing an item and also when validating the dialog |
 |   89 | 2024- 1-14 | have a tool to identify unused strings from i18n/en.js |
 |   96 | 2024- 1-17 | client_new_assistant: implement JWT authentification per private key |
@@ -50,6 +33,7 @@
 |  105 | 2024- 1-18 | client_new_assistant: have client shared secret when needed one the done page |
 |  106 | 2024- 1-18 | client_new_assistant: have scopes |
 |  109 | 2024- 1-20 | set removeUnsetValues be a collection behavior (item timestampable) |
+|      | 2024-10-29 | removeUnsetValues is no more used - but setUndef values is needed for Notes |
 |  112 | 2024- 6-24 | customize the new account mail to verify the address |
 |  115 | 2024- 9-22 | move Jwks.fn.generateKeys() to server-side, using a method to address it from the client |
 |      | 2024- 9-24 | nb: jose doesn't provide the same data when executed server-side so maybe have to change the library ? |
@@ -58,10 +42,13 @@
 |  118 | 2024-10- 9 | clients should be able to provide some javascript/ejs to display in interactions dialogs |
 |  119 | 2024-10-16 | BUG: when updating groups of an identity, the client groupsRegistrar content is badly updated (publication is fine, but subcription only receives a part) |
 |  120 | 2024-10-16 | input placeholders are too close of black - have a lighter gray and italics |
-|  121 | 2025-10-18 | token extensions: the organization should be able to make mandatory all token extensions provided by the selected providers |
+|  121 | 2024-10-18 | token extensions: the organization should be able to make mandatory all token extensions provided by the selected providers |
 |      |            | this implies having a small companion collection with a row per available token extension or an array inside of the current schema |
 |      |            | + update Organizations.fn.wantsTokenExtension() |
-|  122 |  |  |
+|  122 | 2024-10-29 | IdentityServer findByLogin() should authenticate the identity based on selected authentication providers, and return the used authentication provider |
+|      | 2024-10-29 | see also #117 |
+|  123 | 2024-10-29 | authorizations let an identity group be allowed to a client - this should be a client configuration option to use that to allow an identity |
+|  124 |  |  |
 
 ---
 ## Done
@@ -79,6 +66,10 @@
 |      | 2023-11-30 | done |
 |    5 | 2023- 9- 6 | improvement: have a better site logo |
 |      | 2023-11-30 | done |
+|    8 | 2023- 9- 6 | feat: manage authentication providers |
+|      | 2024-10-29 | have architecture - ok |
+|    9 | 2023- 9- 6 | feat: manage authorization providers |
+|      | 2024-10-29 | have architecture - ok |
 |   10 | 2023- 9- 6 | feat: accounts provisionning |
 |      | 2024- 1- 4 | done (began at least) |
 |   11 | 2023- 9- 6 | feat: account management |
@@ -114,8 +105,15 @@
 |      | 2024- 1- 8 | field_type_indicator is removed |
 |   25 | 2023-12-19 | different panes (e.g. clients management) are not reactive between them, but should |
 |      | 2024- 9-14 | dohne with pwix:tabbed |
+|   26 | 2023-12-20 | oidc-provider NOTICE: default ttl.ClientCredentials function called, you SHOULD change it in order to define the expiration for ClientCredentials artifacts |
+|      | 2023-10-29 | done |
 |   27 | 2024- 1- 4 | have an option to restart the OIDC server (reload the updated clients) |
 |      | 2024-10-16 | obsolete as clients are no more statically defined |
+|   28 | 2024- 1- 4 | have optional endpoint and only enable introspection if this endpoint is set |
+|      | 2024-10-29 | done |
+|   29 | 2024- 1- 4 | have end_session_endpoint |
+|      | 2024- 1-11 | defined and editable as logoutEndpoint, not used at the moment |
+|      | 2024-10-29 | done |
 |   29 | 2024- 1- 4 | have a client option to authorize to issue a refresh_token when asked scope has offline_access |
 |      | 2024- 1-18 | this is the role of the refresh token grant type |
 |   30 | 2024- 1- 4 | FormChecker error when updating client grant types (multiple select) |
@@ -132,6 +130,22 @@
 |      | 2024- 1- 6 | done |
 |   37 | 2024- 1- 5 | resources_tab should be renamed resources_management_tabbed |
 |      | 2024- 1- 8 | done |
+|   39 | 2024- 1- 5 | default renderError function called, you SHOULD change it in order to customize the look of the error page. |
+|      | 2024-10-29 | done with OIDErrors class |
+|   40 | 2024- 1- 5 | default ttl.AccessToken function called, you SHOULD change it in order to define the expiration for AccessToken artifacts |
+|      | 2023-10-29 | done |
+|   41 | 2024- 1- 5 | default ttl.Grant function called, you SHOULD change it in order to define the expiration for Grant artifacts. |
+|      | 2023-10-29 | done |
+|   42 | 2024- 1- 5 | default ttl.IdToken function called, you SHOULD change it in order to define the expiration for IdToken artifacts. |
+|      | 2023-10-29 | done |
+|   43 | 2024- 1- 5 | default ttl.Interaction function called, you SHOULD change it in order to define the expiration for Interaction artifacts. |
+|      | 2023-10-29 | done |
+|   44 | 2024- 1- 5 | default ttl.Session function called, you SHOULD change it in order to define the expiration for Session artifacts |
+|      | 2023-10-29 | done |
+|   46 | 2024- 1- 5 | Build oidc interaction |
+|      | 2024-10-29 | done with IOIDInteraction interface |
+|   47 | 2024- 1- 5 | Build oidc adapter |
+|      | 2024-10-29 | Done with OIDMongoAdapter class |
 |   48 | 2024- 1- 6 | Have groups hierarchy |
 |      | 2024- 1- 7 | Memberships collection is defined, and can be updated - so fine |
 |   50 | 2024- 1- 7 | Review membership tree and its reactivity (happens that children is undefined on the client) |
@@ -143,8 +157,16 @@
 |      | 2024- 1- 8 | closed as duplicate of #9 |
 |   53 | 2024- 1- 7 | Have user authentification (password) |
 |      | 2024- 1- 8 | closed as duplicate of #8 |
+|   54 | 2024- 1- 7 | in group_edit modal, replace two tabs groups_panel and identities_panel with a tab members_panel with two subtabs groups and identities |
+|      | 2024-10-29 | IdentitiesGroups and ClientsGroups are defined and separately editable |
+|   55 | 2024- 1- 8 | Identities.name should have an extension which includes the preferred email address (to distinguish homonymous) |
+|      | 2024-10-29 | No more understand the use case - cancelling |
+|   56 | 2024- 1- 8 | membership.hierarchy: have a right-click context menu with new/insert group/identity |
+|      | 2024-10-29 | at the moment, get stuck with web usage and do NOT use right click - this hould be reserved to an electron-version desktop application |
 |   57 | 2024- 1- 8 | review the select components naming: singular when select is single, plural when select is (resp. can be) multiple |
 |      | 2024- 1-19 | done |
+|   59 | 2024- 1- 9 | resources, scopes and claims should not be identified by their label, but with an identifier (for example a random id) |
+|      | 2024-10-29 | done, though the label keeps to be a public identifier |
 |   60 | 2024- 1-10 | have a Error-derived class to throw our own exceptions |
 |      | 2024- 6-24 | what is the added value or the use case ? |
 |      | 2024- 9-22 | none: cancelled |
@@ -185,6 +207,8 @@
 |      | 2024- 1-18 | not at all: if the client wants authentify with a JWT, it will provide its own public key or will share a secret with the server |
 |      |            | organizations have JWKS for being able to handle customers requests to receive JWT |
 |      | 2024- 9-22 | done: both clients and organizations have their own jwks |
+|   81 | 2024- 1-12 | providers_tab: display available resources and scopes when isAdmin |
+|      | 2024-10-29 | at the moment, the providers tab no more displays the scope - this is a particular type and this no more makes sense here |
 |   82 | 2024- 1-12 | resource_props_panel should be renamed resource_properties_panel |
 |      | 2024- 1-19 | done |
 |   83 | 2024- 1-12 | clients_management_tabbed should be renamed clients_tabbed (or renamed accordingly identities_tabbed, authorizations__tabbed, resources_tabbed) |

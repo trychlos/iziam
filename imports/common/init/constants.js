@@ -77,11 +77,19 @@ Meteor.APP.C = {
     secretMinSize: 32,
 
     // when hashing the identity password
-    identitySaltSize: 32
+    identitySaltSize: 32,
 
     // OpenID
     // the minimal length of tokens (when the spec allows to choose it)
     //tokenMinLength: 32,
+
+    // default TTLs
+    ttl_AccessToken: 24*60*60*1000,     // 24 h.
+    ttl_ClientCredentials: 60*60*1000,  // 1 mn.
+    ttl_Grant: 24*60*60*1000,           // 24 h.
+    ttl_IdToken: 24*60*60*1000,         // 24 h.
+    ttl_Interaction: 60*60*1000,        // 1 mn.
+    ttl_Session: 24*60*60*1000,         // 24 h.
 }
 
 I18N = 'izIAM.Internationalization';

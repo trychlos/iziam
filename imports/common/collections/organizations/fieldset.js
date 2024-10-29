@@ -201,19 +201,6 @@ Organizations.recordFieldset = function(){
                     form_check: Organizations.checks.registration_endpoint,
                     form_type: Forms.FieldType.C.OPTIONAL
                 },
-                /*
-                // array containing a list of the OAuth 2.0 [RFC6749] "scope" values that this authorization server supports
-                //  Authorization Server Metadata defines that as a JSON array
-                {
-                    name: 'scopes_supported',
-                    type: Array,
-                    optional: true
-                },
-                {
-                    name: 'scopes_supported.$',
-                    type: String
-                },
-                */
                 // array containing a list of the OAuth 2.0 "response_type" values that this authorization server supports
                 //  Authorization Server Metadata defines that as a JSON array
                 {
@@ -366,6 +353,49 @@ Organizations.recordFieldset = function(){
                     type: String,
                     optional: true,
                     form_check: Organizations.checks.userinfo_endpoint,
+                    form_type: Forms.FieldType.C.OPTIONAL
+                },
+                // TTL required by oidc-provider
+                {
+                    name: 'ttl_AccessToken',
+                    type: SimpleSchema.Integer,
+                    defaultValue: Meteor.APP.C.ttl_AccessToken,
+                    form_check: Organizations.checks.ttl_AccessToken,
+                    form_type: Forms.FieldType.C.OPTIONAL
+                },
+                {
+                    name: 'ttl_ClientCredentials',
+                    type: SimpleSchema.Integer,
+                    defaultValue: Meteor.APP.C.ttl_ClientCredentials,
+                    form_check: Organizations.checks.ttl_ClientCredentials,
+                    form_type: Forms.FieldType.C.OPTIONAL
+                },
+                {
+                    name: 'ttl_Grant',
+                    type: SimpleSchema.Integer,
+                    defaultValue: Meteor.APP.C.ttl_Grant,
+                    form_check: Organizations.checks.ttl_Grant,
+                    form_type: Forms.FieldType.C.OPTIONAL
+                },
+                {
+                    name: 'ttl_IdToken',
+                    type: SimpleSchema.Integer,
+                    defaultValue: Meteor.APP.C.ttl_IdToken,
+                    form_check: Organizations.checks.ttl_IdToken,
+                    form_type: Forms.FieldType.C.OPTIONAL
+                },
+                {
+                    name: 'ttl_Interaction',
+                    type: SimpleSchema.Integer,
+                    defaultValue: Meteor.APP.C.ttl_Interaction,
+                    form_check: Organizations.checks.ttl_Interaction,
+                    form_type: Forms.FieldType.C.OPTIONAL
+                },
+                {
+                    name: 'ttl_Session',
+                    type: SimpleSchema.Integer,
+                    defaultValue: Meteor.APP.C.ttl_Session,
+                    form_check: Organizations.checks.ttl_Session,
                     form_type: Forms.FieldType.C.OPTIONAL
                 }
             ]

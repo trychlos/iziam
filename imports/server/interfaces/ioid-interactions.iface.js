@@ -412,6 +412,9 @@ export const IOIDInteractions = DeclareMixin(( superclass ) => class extends sup
         try {
             //console.debug( 'interactionPostLogin provider', provider );
             assert( req.body && req.body.prompt === 'login', 'expects "login" prompt name, got '+req.body.prompt );
+            const interaction = await provider.interactionDetails( req, res );
+            //console.debug( 'interaction.params', interaction.params );
+            // interaction.params.client_id
             const account = await this.iRequestServer().identityServer().findByLogin( this.iRequestServer().organization(), req.body.login, req.body.password );
             if( account ){
                 console.debug( 'account', account );

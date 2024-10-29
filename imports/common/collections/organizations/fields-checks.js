@@ -702,6 +702,126 @@ Organizations.checks = {
         return null;
     },
 
+    // ttl_AccessToken
+    async ttl_AccessToken( value, data, opts ){
+        _assert_data_entityrv( 'Organizations.checks.ttl_AccessToken()', data );
+        let entity = data.entity.get();
+        let item = entity.DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.ttl_AccessToken = parseInt( value );
+            data.entity.set( entity );
+        }
+        value = parseInt( value );
+        if( Number.isInteger( value ) && value >= 0 ){
+            return null;
+        } else {
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'organizations.checks.ttl_access_invalid' )
+            });
+        }
+    },
+
+    // ttl_ClientCredentials
+    async ttl_ClientCredentials( value, data, opts ){
+        _assert_data_entityrv( 'Organizations.checks.ttl_ClientCredentials()', data );
+        let entity = data.entity.get();
+        let item = entity.DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.ttl_ClientCredentials = parseInt( value );
+            data.entity.set( entity );
+        }
+        value = parseInt( value );
+        if( Number.isInteger( value ) && value >= 0 ){
+            return null;
+        } else {
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'organizations.checks.ttl_client_invalid' )
+            });
+        }
+    },
+
+    // ttl_Grant
+    async ttl_Grant( value, data, opts ){
+        _assert_data_entityrv( 'Organizations.checks.ttl_Grant()', data );
+        let entity = data.entity.get();
+        let item = entity.DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.ttl_Grant = parseInt( value );
+            data.entity.set( entity );
+        }
+        value = parseInt( value );
+        if( Number.isInteger( value ) && value >= 0 ){
+            return null;
+        } else {
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'organizations.checks.ttl_grant_invalid' )
+            });
+        }
+    },
+
+    // ttl_IdToken
+    async ttl_IdToken( value, data, opts ){
+        _assert_data_entityrv( 'Organizations.checks.ttl_IdToken()', data );
+        let entity = data.entity.get();
+        let item = entity.DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.ttl_IdToken = parseInt( value );
+            data.entity.set( entity );
+        }
+        value = parseInt( value );
+        if( Number.isInteger( value ) && value >= 0 ){
+            return null;
+        } else {
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'organizations.checks.ttl_idtoken_invalid' )
+            });
+        }
+    },
+
+    // ttl_Interaction
+    async ttl_Interaction( value, data, opts ){
+        _assert_data_entityrv( 'Organizations.checks.ttl_Interaction()', data );
+        let entity = data.entity.get();
+        let item = entity.DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.ttl_Interaction = parseInt( value );
+            data.entity.set( entity );
+        }
+        value = parseInt( value );
+        if( Number.isInteger( value ) && value >= 0 ){
+            return null;
+        } else {
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'organizations.checks.ttl_interaction_invalid' )
+            });
+        }
+    },
+
+    // ttl_Session
+    async ttl_Session( value, data, opts ){
+        _assert_data_entityrv( 'Organizations.checks.ttl_Session()', data );
+        let entity = data.entity.get();
+        let item = entity.DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.ttl_Interaction = parseInt( value );
+            data.entity.set( entity );
+        }
+        value = parseInt( value );
+        if( Number.isInteger( value ) && value >= 0 ){
+            return null;
+        } else {
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'organizations.checks.ttl_session_invalid' )
+            });
+        }
+    },
+
     // openid: userinfo endpoint
     // must be provided as an absolute path
     async userinfo_endpoint( value, data, opts ){

@@ -38,6 +38,11 @@ Template.organization_config_pane.helpers({
                     name: 'organization_config_dynregistration_tab',
                     navLabel: pwixI18n.label( I18N, 'organizations.edit.dynregistration_tab_title' ),
                     paneTemplate: 'organization_config_dynregistration_pane'
+                },
+                {
+                    name: 'organization_config_ttls_tab',
+                    navLabel: pwixI18n.label( I18N, 'organizations.edit.ttls_config_tab_title' ),
+                    paneTemplate: 'organization_config_ttls_pane'
                 }
             ]
         };

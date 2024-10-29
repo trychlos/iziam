@@ -109,7 +109,7 @@ export class IdentityServer extends mix( izObject ).with( IRequested ){
                     identity = null;
                 }
             } else {
-                console.warn( 'identity doesn\'t any password' );
+                console.warn( 'identity doesn\'t exhibit any password' );
                 identity = null;
             }
         }

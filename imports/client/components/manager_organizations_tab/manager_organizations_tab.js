@@ -23,6 +23,7 @@ import '/imports/client/components/organization_config_ident_pane/organization_c
 import '/imports/client/components/organization_config_oauth_pane/organization_config_oauth_pane.js';
 import '/imports/client/components/organization_config_pane/organization_config_pane.js';
 import '/imports/client/components/organization_config_rest_pane/organization_config_rest_pane.js';
+import '/imports/client/components/organization_config_ttls_pane/organization_config_ttls_pane.js';
 import '/imports/client/components/organization_endpoints_pane/organization_endpoints_pane.js';
 import '/imports/client/components/organization_identities_groups_load/organization_identities_groups_load.js';
 import '/imports/client/components/organization_identities_groups_pane/organization_identities_groups_pane.js';

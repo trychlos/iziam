@@ -843,6 +843,14 @@ Meteor.APP.i18n = {
                 },
                 my_roles: 'My roles'
             },
+            helpers: {
+                ms_to_sample: {
+                    day_abbr: 'day(s)',
+                    hour_abbr: 'h.',
+                    minute_abbr: 'min.',
+                    second_abbr: 'sec.'
+                }
+            },
             home: {
                 hero: {
                     iziam: ''
@@ -1238,6 +1246,12 @@ Meteor.APP.i18n = {
                     revocation_absolute: 'The revocation endpoint must be provided as an absolute path',
                     token_absolute: 'The token endpoint must be provided as an absolute path',
                     token_unset: 'The token endpoint is not set',
+                    ttl_access_invalid: 'The Access Token TTL is not valid',
+                    ttl_client_invalid: 'The Client Credentials TTL is not valid',
+                    ttl_grant_invalid: 'The Grant TTL is not valid',
+                    ttl_idtoken_invalid: 'The ID Token TTL is not valid',
+                    ttl_interaction_invalid: 'The Interaction TTL is not valid',
+                    ttl_session_invalid: 'The Session TTL is not valid',
                     userinfo_absolute: 'The userinfo endpoint must be provided as an absolute path',
                     userinfo_unset: 'The userinfo endpoint is not set',
                     username_identifier_invalid: 'The username identifier flag is invalid',
@@ -1292,7 +1306,7 @@ Meteor.APP.i18n = {
                         +'This configuration will be read-only as soon as you will have defined a first identity, as we do not know at the moment how handle'
                         +'the configuration updates here without some sort of hard dedicated work.',
                     ident_config_tab_title: 'Identities',
-                    ident_disabled: 'The configuration of identities is now disabled as you have already defined identities.',
+                    ident_disabled: '<span class="warning">The configuration of identities is now disabled as you have already defined at least one identity.</span>',
                     ident_enabled: 'The configuration of identities is only possible while you do not have defined any identity.',
                     ident_email_address: 'email address(es)',
                     ident_email_identifier: 'Make each email address an identifier of the identity',
@@ -1349,6 +1363,27 @@ Meteor.APP.i18n = {
                     token_label: 'Token endpoint :',
                     token_ph: '/token',
                     token_title: 'The endpoint path used to build the Access Token Server URL, to which the clients must address their authorization grants in order to get their access tokens.',
+                    ttl_access_label: 'Access token :',
+                    ttl_access_ph: '0',
+                    ttl_access_title: 'Access token time-to-live',
+                    ttl_client_label: 'Client credentials :',
+                    ttl_client_ph: '0',
+                    ttl_client_title: 'Client credentials time-to-live',
+                    ttl_grant_label: 'Grant :',
+                    ttl_grant_ph: '0',
+                    ttl_grant_title: 'Grant time-to-live',
+                    ttl_idtoken_label: 'ID token :',
+                    ttl_idtoken_ph: '0',
+                    ttl_idtoken_title: 'ID token time-to-live',
+                    ttl_interaction_label: 'Interaction :',
+                    ttl_interaction_ph: '0',
+                    ttl_interaction_title: 'Interaction time-to-live',
+                    ttl_session_label: 'Session :',
+                    ttl_session_ph: '0',
+                    ttl_session_title: 'Session time-to-live',
+                    ttls_config_preamble: 'Configure The Time-to-Live of the published tokens and the various interactions.<br />'
+                        +'Provided default values should be suitable for the most common use cases, but you can adjust them here for your own requisites.',
+                    ttls_config_tab_title: 'TTLs',
                     userinfo_example: 'User informations URL: &laquo; %s &raquo;',
                     userinfo_label: 'Userinfo endpoint :',
                     userinfo_ph: '/userinfo',
