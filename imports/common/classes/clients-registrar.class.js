@@ -9,18 +9,21 @@
  * It maintains a full list of the clients of an organization both on client and server sides.
  */
 
-import { ReactiveVar } from 'meteor/reactive-var';
+import mix from '@vestergaard-company/js-mixin';
+
 import { Tracker } from 'meteor/tracker';
 
 import { Clients } from '/imports/common/collections/clients/index.js';
 
+import { ISearchableLabel } from '/imports/common/interfaces/isearchable-label.iface.js';
+
 import { izRegistrar } from './iz-registrar.class.js';
 
-export class ClientsRegistrar extends izRegistrar {
+export class ClientsRegistrar extends mix( izRegistrar ).with( ISearchableLabel ){
 
     // static data
 
-    // the registry of clients registars per organization
+    // the registry
     static #registry = {};
 
     // static methods
@@ -31,23 +34,13 @@ export class ClientsRegistrar extends izRegistrar {
      * @returns {izRegistrar} the required instance, or null
      */
     static getRegistered( organization ){
-        //console.debug( 'ClientsRegistrar.getRegistered: organization', organization, 'registry', this.#registry );
         return ClientsRegistrar.#registry[organization._id] || null;
     }
 
     // private data
 
-    // client-side: is initialized ?
-    #clientInitialized = false;
-    // client-side: the subscription handle
-    #handle = new ReactiveVar( null );
-
-    // common: the clients of the organization
-    #organization = null;
-    #list = new ReactiveVar( [] );
-
-    // server-side: is initialized ?
-    #serverInitialized = false;
+    // client-side
+    #handle = null;
 
     // private methods
 
@@ -60,15 +53,13 @@ export class ClientsRegistrar extends izRegistrar {
      */
     constructor( organization ){
         super( ...arguments );
-        //console.debug( 'instanciating ClientsRegistrar', organization._id );
         const self = this;
 
         // common code
-        this.#organization = organization;
         ClientsRegistrar.#registry[organization._id] = this;
 
         Tracker.autorun(() => {
-            self.#list.get().forEach(( it ) => {
+            self.get().forEach(( it ) => {
                 Clients.setupOperational( it );
             });
         });
@@ -77,22 +68,11 @@ export class ClientsRegistrar extends izRegistrar {
     }
 
     /**
-     * @param {String} clientId the client Mongo entity identifier
-     * @returns {<Client>}
+     * @param {Object} item a client entity
+     * @returns {String} the object (unique) label from the closest record
      */
-    byId( clientId ){
-        let found = null;
-        this.#list.get().every(( it ) => {
-            if( it._id === clientId ){
-                found = it;
-            }
-            return !found;
-        });
-        // this may be normal just after having deleted an item - so better to not warn
-        if( !found ){
-            console.debug( 'unable to find client', clientId );
-        }
-        return found;
+    label( item ){
+        return item.DYN.closest.label;
     }
 
     /**
@@ -102,36 +82,23 @@ export class ClientsRegistrar extends izRegistrar {
      *  This is run the first time we try to edit an organization
      *  (because we are a multi-tenants application, we do not want load at startup all clients of all organizations)
      */
-    clientsLoad(){
-        if( Meteor.isClient && !this.#clientInitialized ){
-            this.#handle.set( Meteor.subscribe( Meteor.APP.C.pub.clientsAll.publish, this.#organization ));
+    clientLoad(){
+        if( Meteor.isClient && !this.clientInitialized()){
+            const self = this;
+            self.#handle = Meteor.subscribe( Meteor.APP.C.pub.clientsAll.publish, self.organization());
+
             // get the list of clients
             // each client is published as an entity object with DYN { managers, records, closest } sub-object
-            const self = this;
             Tracker.autorun(() => {
-                if( self.#handle.get()?.ready()){
-                    Meteor.APP.Collections.get( Meteor.APP.C.pub.clientsAll.collection ).find( Meteor.APP.C.pub.clientsAll.query( self.#organization )).fetchAsync().then(( fetched ) => {
+                if( self.#handle.ready()){
+                    Meteor.APP.Collections.get( Meteor.APP.C.pub.clientsAll.collection ).find( Meteor.APP.C.pub.clientsAll.query( self.organization())).fetchAsync().then(( fetched ) => {
                         console.debug( 'fetched', fetched );
-                        self.#list.set( fetched );
+                        self.set( fetched );
                     });
                 }
             });
     
-            this.#clientInitialized = true;
+            this.clientInitialized( true );
         }
-    }
-
-    /**
-     * @returns {Integer} the current clients count
-     */
-    count(){
-        return this.#list.get().length;
-    }
-
-    /**
-     * @returns {Array} the clients list
-     */
-    get(){
-        return this.#list.get();
     }
 }

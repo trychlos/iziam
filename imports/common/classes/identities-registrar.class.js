@@ -13,7 +13,6 @@
 import { AccountsManager } from 'meteor/pwix:accounts-manager';
 import { Field } from 'meteor/pwix:field';
 import { Permissions } from 'meteor/pwix:permissions';
-import { ReactiveVar } from 'meteor/reactive-var';
 import { Tracker } from 'meteor/tracker';
 
 import { Identities } from '/imports/common/collections/identities/index.js';
@@ -24,7 +23,7 @@ export class IdentitiesRegistrar extends izRegistrar {
 
     // static data
 
-    // the registry of clients registars per organization
+    // the registry
     static #registry = {};
 
     // static methods
@@ -35,24 +34,16 @@ export class IdentitiesRegistrar extends izRegistrar {
      * @returns {izRegistrar} the required instance, or null
      */
     static getRegistered( organization ){
-        //console.debug( 'IdentitiesRegistrar.getRegistered: organization', organization, 'registry', AccountsHub.instances );
         return IdentitiesRegistrar.#registry[organization._id] || null;
     }
 
     // private data
 
-    // client-side: is initialized ?
-    #clientInitialized = false;
     // client-side
-    #handle = new ReactiveVar( null );
+    #handle = null;
 
     // common
-    #organization = null;
     #amInstance = null;
-    #list = new ReactiveVar( [] );
-
-    // server-side: is initialized ?
-    #serverInitialized = false;
 
     // private methods
 
@@ -65,9 +56,9 @@ export class IdentitiesRegistrar extends izRegistrar {
      */
     constructor( organization ){
         super( ...arguments );
-        //console.debug( 'instanciating IdentitiesRegistrar', organization._id );
         const self = this;
 
+        // common code
         this.#amInstance = new AccountsManager.amClass({
             name: Identities.instanceName( organization._id ),
             baseFieldset: new Field.Set( Identities.fieldsDef()),
@@ -90,66 +81,32 @@ export class IdentitiesRegistrar extends izRegistrar {
         });
 
         // common code
-        this.#organization = organization;
         IdentitiesRegistrar.#registry[organization._id] = this;
 
         return this;
     }
 
     /**
-     * @param {String} identityId the identity identifier
-     * @returns {Object} the found identity, with its DYN object, or null
-     */
-    byId( identityId ){
-        let found = null;
-        Meteor.APP.Identities._identities.get().every(( it ) => {
-            if( it._id === identityId ){
-                found = it;
-            }
-            return !found;
-        });
-        // this may be normal just after having deleted an item - so better to not warn
-        if( !found ){
-            console.debug( 'unable to find identity', identityId );
-        }
-        return found;
-    }
-
-    /**
-     * @returns {Array} the loaded identities
-     */
-    get(){
-        return this.#list.get();
-    }
-
-    /**
      * @summary Initialize client side
      *  - subscribe and receive the full list of the identities of the organization
      */
-    identitiesLoad(){
-        if( Meteor.isClient && !this.#clientInitialized ){
+    clientLoad(){
+        if( Meteor.isClient && !this.clientInitialized()){
             const self = this;
             //console.debug( 'subscribing to', self.#amInstance.name());
-            this.#handle.set( Meteor.subscribe( 'pwix_accounts_manager_accounts_list_all', self.#amInstance.name()));
-    
+            self.#handle = Meteor.subscribe( 'pwix_accounts_manager_accounts_list_all', self.#amInstance.name());
+
             // get the list of identities
             // each identity is published as an object with DYN sub-object
             Tracker.autorun(() => {
-                if( self.#handle.get()?.ready()){
-                    self.#amInstance.collection().find( Meteor.APP.C.pub.identitiesAll.query( self.#organization )).fetchAsync().then(( fetched ) => {
+                if( self.#handle.ready()){
+                    self.#amInstance.collection().find( Meteor.APP.C.pub.identitiesAll.query( self.organization())).fetchAsync().then(( fetched ) => {
                         console.debug( 'fetched', fetched );
-                        self.#list.set( fetched );
+                        self.set( fetched );
                     });
                 }
             });
-            this.#clientInitialized = true;
+            this.clientInitialized( true );
         }
-    }
-
-    /**
-     * @returns {integer} the current identities count
-     */
-    count(){
-        return this.#list.get().length;
     }
 }

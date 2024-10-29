@@ -45,8 +45,8 @@ Template.authorizations_list.events({
     // delete a authorization
     'tabular-delete-event .c-authorizations-list'( event, instance, data ){
         console.debug( 'this', this, 'data', data );
-        const label = data.item.label;
-        Meteor.callAsync( 'authorizations.removeById', this.item.get()._id, data.item.entity._id )
+        const label = data.item.label || data.item.computed_label || data.item._id;
+        Meteor.callAsync( 'authorizations.removeById', this.item.get()._id, data.item._id )
             .then(( res ) => {
                 Tolert.success( pwixI18n.label( I18N, 'authorizations.tabular.delete_success', label ));
             })
@@ -59,7 +59,7 @@ Template.authorizations_list.events({
     // edit a authorization
     //  the buttons from tabular provide the entity document
     'tabular-edit-event .c-authorizations-list'( event, instance, data ){
-        console.debug( 'this', this, 'data', data );
+        //console.debug( 'this', this, 'data', data );
         let dc = { ...this };
         delete dc.entityTabs;
         delete dc.entityTabsAfter;
@@ -75,9 +75,9 @@ Template.authorizations_list.events({
                 item,
                 mdBody: 'authorization_edit_dialog',
                 mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
-                mdClasses: 'modal-xxl',
+                mdClasses: 'modal-lg',
                 //mdClassesContent: Meteor.APP.runContext.pageUIClasses().join( ' ' ),
-                mdTitle: pwixI18n.label( I18N, 'authorizations.edit.modal_title', item.DYN.closest.label )
+                mdTitle: pwixI18n.label( I18N, 'authorizations.edit.edit_dialog_title', item.label || item.computed_label )
             });
         }
         return false;

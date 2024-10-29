@@ -5,16 +5,16 @@
  * NB: while Roles tree are driven by children, this one is driven by parent. This is slightly different in the final code.
  *
  * Parms:
- * - item: a ReactiveVar which contains the Organization as an entity with its DYN.records array
- * - checker: a ReactiveVar which contains the parent Forms.Checker
  * - groups: the groups of the organization
  * - groupTypeDef: the definition of the target group type
  * - editable: whether the tree is editable, defaulting to true
  *   here, 'editable' means that we allow dnd, so change the tree
+ * - selectable: whether the tree is selectable, defaulting to true
  * - withCheckboxes: whether the tree has checkboxes, defaulting to true
  * - withIdentities: whether to display the identities, defaulting to true
  * - withClients: whether to display the clients, defaulting to true
- * - selected: an array of the checkboxes to check, only considered if withCheckboxes is truethy
+ * - checked: an array of the checkboxes to check, only considered if withCheckboxes is truethy
+ * - selected: the initial row selection, only considered if selectable is truethy
  * - noDataText: the text to be displayed when there is no data, defaulting to "There is not yet any group defined for the organization. Please edit the groups hierarchy tree."
  */
 
@@ -42,6 +42,8 @@ Template.groups_tree.onCreated( function(){
 
         // whether the tree is readonly
         editable: new ReactiveVar( true ),
+        // whether the tree is selectable
+        selectable: new ReactiveVar( true ),
         // whether the tree has checkboxes
         withCheckboxes: new ReactiveVar( true ),
         // whether to display the clients
@@ -266,6 +268,12 @@ Template.groups_tree.onCreated( function(){
         self.APP.editable.set( editable );
     });
 
+    // whether the tree is selectable, defaulting to true
+    self.autorun(() => {
+        const selectable = Template.currentData().selectable !== false;
+        self.APP.selectable.set( selectable );
+    });
+
     // whether the tree has checkboxes, defaulting to true
     self.autorun(() => {
         const withCheckboxes = Template.currentData().withCheckboxes !== false;
@@ -357,7 +365,7 @@ Template.groups_tree.onRendered( function(){
                     tie_selection: false
                 },
                 conditionalselect( node, event ){
-                    return self.APP.editable.get();
+                    return self.APP.selectable.get();
                 },
                 dnd: {
                     copy: false,
@@ -465,9 +473,9 @@ Template.groups_tree.onRendered( function(){
 
     // if we have checkboxes, then check them
     self.autorun(() => {
-        //console.debug( 'populated', self.APP.tree_populated(), 'withCheckboxes', self.APP.withCheckboxes.get(), 'checked', self.APP.tree_checked(), 'selected', Template.currentData().selected );
+        //console.debug( 'populated', self.APP.tree_populated(), 'withCheckboxes', self.APP.withCheckboxes.get(), 'checked', self.APP.tree_checked(), 'checked', Template.currentData().checked );
         if( self.APP.tree_populated() && self.APP.withCheckboxes.get() && !self.APP.tree_checked()){
-            ( Template.currentData().selected || [] ).forEach(( it ) => {
+            ( Template.currentData().checked || [] ).forEach(( it ) => {
                 self.APP.$tree.get().jstree( true ).check_node( it );
             });
         }

@@ -50,6 +50,7 @@ Template.clients_groups_tree_view.helpers({
             groups: Template.instance().APP.organization.get().DYN.clients_groups.get(),
             groupTypeDef: ClientGroupType,
             editable: false,
+            selectable: false,
             withCheckboxes: false
         };
     }

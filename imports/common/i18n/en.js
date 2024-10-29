@@ -65,32 +65,60 @@ Meteor.APP.i18n = {
             authorizations: {
                 checks: {
                     ending_invalid: 'Ending date is not valid',
-                    group_unknown: 'The group is not known',
-                    group_unset: 'The group is not set',
+                    object_id_unknown: 'The object identifier is not known',
+                    object_id_unset: 'The object identifier is not set',
+                    object_label_unknown: 'The object label is not known',
+                    object_label_unset: 'The object label is not set',
+                    object_type_unknown: 'The object type is not known',
+                    object_type_unset: 'The object type is not set',
+                    permission_exists: 'The permission already exists',
+                    permission_unset: 'The permission is not set',
                     starting_ending: 'Starting date should be lesser than or equal to ending date',
                     starting_invalid: 'Starting date is not valid',
-                    type_unknown: 'The target type is not known',
-                    type_unset: 'The target type is not set'
+                    subject_id_unknown: 'The subject identifier is not known',
+                    subject_id_unset: 'The subject identifier is not set',
+                    subject_label_unknown: 'The subject label is not known',
+                    subject_label_unset: 'The subject label is not set',
+                    subject_type_unknown: 'The subject type is not known',
+                    subject_type_unset: 'The subject type is not set',
+                    unknown_error: 'unknown (but most probably code) error'
                 },
                 edit: {
+                    edit_dialog_title: 'Editing the "%s" authorization',
                     edit_success: 'The authorization "%s" has been successfully updated',
                     error: 'An error has been unfortunately detected. Please retry later',
                     ending_label: 'Ending on :',
                     ending_ph: 'yyyy-mm-dd',
                     ending_title: 'An optional date of the authorization activation end',
-                    group_label: 'Group :',
-                    group_title: 'Choose the group which holds this permission',
                     label_label: 'Label :',
+                    label_ph: 'A descriptive authorization label',
                     label_title: 'Have an optional label',
                     new_button_label: 'New authorization',
                     new_button_title: 'Define a new authorization',
                     new_dialog_title: 'Defining a new authorization',
                     new_success: 'The authorization "%s" has been successfully created',
                     notes_tab_title: 'Notes',
+                    object_id_label: 'Object target :',
+                    object_id_ph: 'An object target depending of the object type',
+                    object_id_title: 'The object is the target which takes advantage of this authorization',
+                    object_type_label: 'Object type :',
+                    permissions_preamble: 'Permissions are a way to add some mudularity to authorizations. They are freely labelled, and submitted as-is to the object target.',
+                    permissions_tab_title: 'Permissions',
+                    properties_preamble: 'Each individual authorization is a definition of which identities or clients subject group is allowed to access which client or resource object.',
                     properties_tab_title: 'Properties',
                     starting_label: 'Starting on :',
                     starting_ph: 'yyyy-mm-dd',
                     starting_title: 'An optional date of the authorization activation start',
+                    subject_id_label: 'Subject group :',
+                    subject_id_ph: 'A subject group dependeing of the subject type',
+                    subject_id_title: 'The subject is first chosen by its type, and then inside of one of available groups',
+                    subject_type_label: 'Subject type :',
+                },
+                permissions: {
+                    add_title: 'Add a new permission',
+                    permission_ph: 'A free permission name',
+                    permission_th: 'Permission',
+                    remove_title: 'Removing this permission'
                 },
                 tabular: {
                     count_badge: 'Count of defined authorizations',
@@ -105,9 +133,12 @@ Meteor.APP.i18n = {
                     group_th: 'Group',
                     info_title: 'Informations about the "%s" authorization',
                     label_th: 'Label',
+                    object_label_th: 'Object Label',
+                    object_type_th: 'Object Type',
+                    permissions_th: 'Permissions',
                     starting_on_th: 'Starting on',
-                    targets_th: 'Targets',
-                    type_th: 'Type'
+                    subject_label_th: 'Subject Label',
+                    subject_type_th: 'Subject Type'
                 }
             },
             clients: {
@@ -420,7 +451,8 @@ Meteor.APP.i18n = {
                 },
                 select: {
                     dialog_title: 'Select clients',
-                    select_text: 'Select clients'
+                    select_text: 'Select clients',
+                    select_text_single: 'Select a client'
                 },
                 secrets: {
                     checks: {
@@ -501,6 +533,13 @@ Meteor.APP.i18n = {
                     label_th: 'Label',
                     operational_invalid_title: 'The client is not operational! Please fix that',
                     operational_valid_title: 'The client is fully operational'
+                }
+            },
+            clients_groups: {
+                select: {
+                    dialog_title: 'Select a client group',
+                    input_ph: 'Group label',
+                    input_title: 'Select or enter a clients group'
                 }
             },
             definitions: {
@@ -986,6 +1025,13 @@ Meteor.APP.i18n = {
                     remove_title: 'Remove this "%s" username',
                 }
             },
+            identities_groups: {
+                select: {
+                    dialog_title: 'Select an identity group',
+                    input_ph: 'Group label',
+                    input_title: 'Select or enter an identities group'
+                }
+            },
             jwks: {
                 checks: {
                     jwk_alg_invalid: 'JWK algorithm "%s" is not valid',
@@ -1392,6 +1438,9 @@ Meteor.APP.i18n = {
                     starting_label: 'Starting on :',
                     starting_ph: 'yyyy-mm-dd',
                     starting_title: 'An optional date of the resource activation start',
+                },
+                select: {
+                    select_text: 'Select a resource'
                 },
                 tabular: {
                     count_badge: 'Count of defined resources',

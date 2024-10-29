@@ -50,6 +50,7 @@ Template.identities_groups_tree_view.helpers({
             groups: Template.instance().APP.organization.get().DYN.identities_groups.get(),
             groupTypeDef: IdentityGroupType,
             editable: false,
+            selectable: false,
             withCheckboxes: false
         };
     }

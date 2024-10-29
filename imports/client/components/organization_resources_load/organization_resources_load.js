@@ -22,7 +22,7 @@ Template.organization_resources_load.onCreated( function(){
         const edited = Template.currentData().item.get();
         const organization = TenantsManager.list.byEntity( edited._id );
         if( organization && organization.DYN.resources ){
-            organization.DYN.resources.resourcesLoad();
+            organization.DYN.resources.clientLoad();
         }
     });
 });

@@ -8,19 +8,62 @@
             <div class="panel-body">
                 <table class="form-table ui-w100">
                     <tr>
-                        <td class="ui-w20 label"><label class="form-label" for="authorization-label">{{ i18n key="authorizations.edit.label_label" }}</label></td>
+                        <td></td>
                         <td class="ui-w100">
-                            <input class="form-control flex-grow-1 js-label" type="text" id="authorization-label" placeholder="{{ i18n key="authorizations.edit.label_ph" }}" title="{{ i18n key="authorizations.edit.label_title" }}" />
+                            <p class="ui-mt05 ui-mb05">{{ i18n key="authorizations.edit.properties_preamble" }}</p>
                         </td>
                     </tr>
                     <tr>
-                        <td class="ui-w20 label"><label class="form-label">{{ i18n key="authorizations.edit.group_label" }}</label></td>
+                        <td class="ui-w20 label"><label class="form-label" for="authorization-label">{{ i18n key="authorizations.edit.label_label" }}</label></td>
                         <td class="ui-w100">
-                            <div class="d-flex ui-w100 js-group">
-                                <input class="form-control flex-grow-1" type="text" id="authorization-name" placeholder="{{ i18n key="authorizations.edit.name_ph" }}" title="{{ i18n key="authorizations.edit.name_title" }}" />
-                                <button class="btn btn-sm btn-outline-secondary ui-ml025 js-tree">
-                                    <span class="fa-solid fa-folder-tree"></span>
-                                </button>
+                            <input class="form-control js-label" type="text" id="authorization-label" placeholder="{{ labelPlaceholder }}" title="{{ i18n key="authorizations.edit.label_title" }}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="ui-w20 label"><label class="form-label" for="authorization-subject-type">{{ i18n key="authorizations.edit.subject_type_label" }}</label></td>
+                        <td class="ui-w100">
+                            <div class="ui-w100 js-subject-type">
+                                {{> auth_subject_select (parmsAuthSubject) }}
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="ui-w20 label"><label class="form-label">{{ i18n key="authorizations.edit.subject_id_label" }}</label></td>
+                        <td class="ui-w100">
+                            <div class="d-flex ui-w100 js-subject-label">
+                                {{#if subjectClients }}
+                                    {{> clients_group_select (parmsClientsGroupSelect) }}
+                                {{/if}}
+                                {{#if subjectIdentities }}
+                                    {{> identities_group_select (parmsIdentitiesGroupSelect) }}
+                                {{/if}}
+                                {{#if subjectNone }}
+                                    <input class="form-control" type="text" placeholder="{{ i18n key="authorizations.edit.subject_id_ph" }}" title="{{ i18n key="authorizations.edit.subject_id_title" }}" disabled readonly />
+                                {{/if}}
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="ui-w20 label"><label class="form-label" for="authorization-object-type">{{ i18n key="authorizations.edit.object_type_label" }}</label></td>
+                        <td class="ui-w100">
+                            <div class="ui-w100 js-object-type">
+                                {{> auth_object_select (parmsAuthObject) }}
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="ui-w20 label"><label class="form-label">{{ i18n key="authorizations.edit.object_id_label" }}</label></td>
+                        <td class="ui-w100">
+                            <div class="d-flex ui-w100 js-object-id">
+                                {{#if objectClient }}
+                                    {{> client_select (parmsClientSelect) }}
+                                {{/if}}
+                                {{#if objectResource }}
+                                    {{> resource_select (parmsResourceSelect) }}
+                                {{/if}}
+                                {{#if objectNone }}
+                                    <input class="form-control" type="text" placeholder="{{ i18n key="authorizations.edit.object_id_ph" }}" title="{{ i18n key="authorizations.edit.object_id_title" }}" disabled readonly />
+                                {{/if}}
                             </div>
                         </td>
                     </tr>

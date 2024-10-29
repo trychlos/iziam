@@ -10,18 +10,21 @@
  * It maintains a full list of the resources of an organization both on client and server sides.
  */
 
-import { ReactiveVar } from 'meteor/reactive-var';
+import mix from '@vestergaard-company/js-mixin';
+
 import { Tracker } from 'meteor/tracker';
 
 import { Resources } from '/imports/common/collections/resources/index.js';
 
+import { ISearchableLabel } from '/imports/common/interfaces/isearchable-label.iface.js';
+
 import { izRegistrar } from './iz-registrar.class.js';
 
-export class ResourcesRegistrar extends izRegistrar {
+export class ResourcesRegistrar extends mix( izRegistrar ).with( ISearchableLabel ){
 
     // static data
 
-    // the registry of clients registars per organization
+    // the registry
     static #registry = {};
 
     // static methods
@@ -32,23 +35,13 @@ export class ResourcesRegistrar extends izRegistrar {
      * @returns {izRegistrar} the required instance, or null
      */
     static getRegistered( organization ){
-        //console.debug( 'ResourcesRegistrar.getRegistered: organization', organization, 'registry', AccountsHub.instances );
         return ResourcesRegistrar.#registry[organization._id] || null;
     }
 
     // private data
 
-    // client-side: is initialized ?
-    #clientInitialized = false;
     // client-side
-    #handle = new ReactiveVar( null );
-
-    // common
-    #organization = null;
-    #list = new ReactiveVar( [] );
-
-    // server-side: is initialized ?
-    #serverInitialized = false;
+    #handle = null;
 
     // private methods
 
@@ -61,11 +54,9 @@ export class ResourcesRegistrar extends izRegistrar {
      */
     constructor( organization ){
         super( ...arguments );
-        //console.debug( 'instanciating ResourcesRegistrar', organization._id );
         const self = this;
 
         // common code
-        this.#organization = organization;
         ResourcesRegistrar.#registry[organization._id] = this;
         Resources.getTabular( organization._id );
 
@@ -73,58 +64,33 @@ export class ResourcesRegistrar extends izRegistrar {
     }
 
     /**
-     * @param {String} resourceId the resource identifier
-     * @returns {Object} the found resource, with its DYN object, or null
+     * @param {Object} item a resource object
+     * @returns {String} the object (unique) label
      */
-    byId( resourceId ){
-        let found = null;
-        Meteor.APP.Resources._resources.get().every(( it ) => {
-            if( it._id === resourceId ){
-                found = it;
-            }
-            return !found;
-        });
-        // this may be normal just after having deleted an item - so better to not warn
-        if( !found ){
-            console.debug( 'unable to find resource', resourceId );
-        }
-        return found;
-    }
-
-    /**
-     * @returns {Array} the loaded resources
-     */
-    get(){
-        return this.#list.get();
+    label( item ){
+        return item.name;
     }
 
     /**
      * @summary Initialize client side
      *  - subscribe and receive the full list of the resources of the organization
      */
-    resourcesLoad(){
-        if( Meteor.isClient && !this.#clientInitialized ){
+    clientLoad(){
+        if( Meteor.isClient && !this.clientInitialized()){
             const self = this;
-            //console.debug( 'subscribing to', self.#amInstance.name());
-            this.#handle.set( Meteor.subscribe( 'resources_list_all', self.#organization._id ));
-    
+            const organizationId = self.organization()._id;
+            self.#handle = Meteor.subscribe( 'resources_list_all', organizationId );
+
             // get the list of resources
             Tracker.autorun(() => {
-                if( self.#handle.get()?.ready()){
-                    Resources.collection( self.#organization._id ).find({ organization: self.#organization._id }).fetchAsync().then(( fetched ) => {
+                if( self.#handle.ready()){
+                    Resources.collection( organizationId ).find({ organization: organizationId }).fetchAsync().then(( fetched ) => {
                         console.debug( 'fetched', fetched );
-                        self.#list.set( fetched );
+                        self.set( fetched );
                     });
                 }
             });
-            this.#clientInitialized = true;
+            this.clientInitialized( true );
         }
-    }
-
-    /**
-     * @returns {integer} the current resources count
-     */
-    count(){
-        return this.#list.get().length;
     }
 }

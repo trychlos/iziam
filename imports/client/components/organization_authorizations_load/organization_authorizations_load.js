@@ -22,7 +22,7 @@ Template.organization_authorizations_load.onCreated( function(){
         const edited = Template.currentData().item.get();
         const organization = TenantsManager.list.byEntity( edited._id );
         if( organization && organization.DYN.authorizations ){
-            organization.DYN.authorizations.authorizationsLoad();
+            organization.DYN.authorizations.clientLoad();
         }
     });
 });

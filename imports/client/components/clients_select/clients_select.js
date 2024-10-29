@@ -40,10 +40,10 @@ Template.clients_select.onCreated( function(){
             let items = [];
             selected.forEach(( it ) => {
                 let found = false;
-                dc.clients.every(( identity ) => {
-                    if( identity._id === it ){
+                dc.clients.every(( client ) => {
+                    if( client._id === it ){
                         found = true;
-                        items.push( identity );
+                        items.push( client );
                     }
                     return !found;
                 });
@@ -52,13 +52,13 @@ Template.clients_select.onCreated( function(){
         }
     };
 
-    // convert the selected identites as group items to an array of clients ids
+    // convert the selected clients as group items to an array of clients ids
     self.autorun(() => {
         let ids = [];
         const selected = Template.currentData().selected;
         selected.forEach(( it ) => {
-            if( it.type === 'I' ){
-                ids.push( it.identity );
+            if( it.type === 'C' ){
+                ids.push( it.client );
             } else {
                 console.warn( 'unexpected group item type', it );
             }

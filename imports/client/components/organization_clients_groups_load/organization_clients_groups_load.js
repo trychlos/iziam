@@ -24,7 +24,7 @@ Template.organization_clients_groups_load.onCreated( function(){
         const edited = Template.currentData().item.get();
         const organization = TenantsManager.list.byEntity( edited._id );
         if( organization && organization.DYN.clients_groups ){
-            organization.DYN.clients_groups.groupsLoad();
+            organization.DYN.clients_groups.clientLoad();
         }
     });
 });

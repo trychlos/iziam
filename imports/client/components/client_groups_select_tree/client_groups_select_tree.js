@@ -47,7 +47,7 @@ Template.client_groups_select_tree.helpers({
             groupTypeDef: ClientGroupType,
             editable: false,
             withClients: false,
-            selected: this.entity.get().DYN.memberOf?.direct || []
+            checked: this.entity.get().DYN.memberOf?.direct || []
         };
     }
 });

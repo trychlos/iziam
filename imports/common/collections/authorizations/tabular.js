@@ -21,23 +21,23 @@ Authorizations.getTabular = function( organizationId ){
             columns: Authorizations.fieldSet.get().toTabular(),
             tabular: {
                 async infoButtonTitle( it ){
-                    return pwixI18n.label( I18N, 'authorizations.tabular.info_title', it.label || it.name );
+                    return pwixI18n.label( I18N, 'authorizations.tabular.info_title', it.label || it.computed_label || it._id );
                 },
                 async deleteButtonTitle( it ){
-                    return pwixI18n.label( I18N, 'authorizations.tabular.delete_title', it.label || it.name );
+                    return pwixI18n.label( I18N, 'authorizations.tabular.delete_title', it.label || it.computed_label || it._id );
                 },
                 async deleteConfirmationText( it ){
-                    return pwixI18n.label( I18N, 'authorizations.tabular.delete_confirm_text', it.label || it.name );
+                    return pwixI18n.label( I18N, 'authorizations.tabular.delete_confirm_text', it.label || it.computed_label || it._id );
                 },
                 async deleteConfirmationTitle( it ){
-                    return pwixI18n.label( I18N, 'authorizations.tabular.delete_confirm_title', it.label || it.name );
+                    return pwixI18n.label( I18N, 'authorizations.tabular.delete_confirm_title', it.label || it.computed_label || it._id );
                 },
                 async editButtonTitle( it ){
-                    return pwixI18n.label( I18N, 'authorizations.tabular.edit_title', it.label || it.name );
+                    return pwixI18n.label( I18N, 'authorizations.tabular.edit_title', it.label || it.computed_label || it._id );
                 },
             },
             destroy: true,
-            order: [[ Authorizations.fieldSet.get().indexByName( 'name' ), 'asc' ]],
+            order: [[ Authorizations.fieldSet.get().indexByName( 'computed_label' ), 'asc' ]],
         });
         Authorizations.tabulars[organizationId] = c;
     }

@@ -1,0 +1,33 @@
+<template name="authorization_permissions_pane">
+    <div class="c-authorization-permissions-pane">
+        <div class="panel-content">
+
+            <div class="panel-header">
+                <div class="panel-preamble">
+                    {{{ i18n key="authorizations.edit.permissions_preamble" }}}
+                </div>
+            </div>
+
+            <div class="panel-body">
+                <table class="form-table subtable">
+                    <thead>
+                        <tr>
+                            <th class="ui-w100">{{ i18n key="authorizations.permissions.permission_th" }}</th>
+                            <th>
+                                <button class="btn btn-sm btn-outline-primary ui-ml025 js-plus" title="{{ i18n key="authorizations.permissions.add_title" }}" {{ plusDisabled }}>
+                                    <span class="fa-solid fa-fw fa-plus"></span>
+                                </button>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each it in itemsList }}
+                            {{> authorization_permission_row (parmsPermissionRow it) }}
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</template>

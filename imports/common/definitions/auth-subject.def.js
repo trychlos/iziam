@@ -13,16 +13,31 @@ export const AuthSubject = {
    C: [
         {
             id: 'C',
-            label: 'definitions.auth_subject.clients_label'
+            label: 'definitions.auth_subject.clients_label',
+            allowedObjects: [
+                'R'
+            ]
         },
         {
             id: 'I',
-            label: 'definitions.auth_subject.identities_label'
+            label: 'definitions.auth_subject.identities_label',
+            allowedObjects: [
+                'C',
+                'R'
+            ]
         }
     ],
 
     // only warn once when byId() doesn't find the item
     warnedById: {},
+
+    /**
+     * @param {Object} def the definition as returned by AuthSubject.Knowns()
+     * @returns {Array<String>} the array of allowed object identifiers
+     */
+    allowedObjects( def ){
+        return def.allowedObjects || [];
+    },
 
     /**
      * @param {String} id a group type identifier
@@ -37,7 +52,7 @@ export const AuthSubject = {
             return found === null;
         });
         if( !found && !this.warnedById[id] ){
-            console.warn( 'auth type not found', id );
+            console.warn( 'auth subject type not found', id );
             AuthSubject.warnedById[id] = true;
         }
         return found;

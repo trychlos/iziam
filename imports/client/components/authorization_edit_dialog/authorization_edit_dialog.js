@@ -20,13 +20,14 @@ import { Tolert } from 'meteor/pwix:tolert';
 
 import { Authorizations } from '/imports/common/collections/authorizations/index.js';
 
+import '/imports/client/components/authorization_permissions_pane/authorization_permissions_pane.js';
 import '/imports/client/components/authorization_properties_pane/authorization_properties_pane.js';
 
 import './authorization_edit_dialog.html';
 
 Template.authorization_edit_dialog.onCreated( function(){
     const self = this;
-    console.debug( this );
+    //console.debug( this );
 
     self.APP = {
         // the Form.Checker instance for this dialog
@@ -73,6 +74,11 @@ Template.authorization_edit_dialog.onCreated( function(){
                 paneTemplate: 'authorization_properties_pane'
             },
             {
+                name: 'authorization_permissions_tab',
+                navLabel: pwixI18n.label( I18N, 'authorizations.edit.permissions_tab_title' ),
+                paneTemplate: 'authorization_permissions_pane'
+            },
+            {
                 name: 'authorization_notes_tab',
                 navLabel: pwixI18n.label( I18N, 'authorizations.edit.notes_tab_title' ),
                 paneTemplate: 'NotesEdit',
@@ -114,6 +120,11 @@ Template.authorization_edit_dialog.onRendered( function(){
             }
         }
     }));
+
+    // track the item content
+    self.autorun(() => {
+        console.debug( 'item', self.APP.item.get());
+    });
 });
 
 Template.authorization_edit_dialog.helpers({
@@ -150,19 +161,17 @@ Template.authorization_edit_dialog.events({
     // the user may have already generated its keys - if not, we compute them here
     'iz-submit .c-authorization-edit-dialog'( event, instance ){
         const item = instance.APP.item.get();
-        // a bad hack for tests
-        item.type = 'C';
         const closeFn = function(){
             if( instance.APP.isModal.get()){
                 Modal.close();
             } else {
-                instance.$( '.c-authorization-properties-panel' ).trigger( 'iz-clear-panel' );
+                instance.$( '.c-authorization-properties-pane' ).trigger( 'iz-clear-panel' );
                 instance.$( '.NotesEdit' ).trigger( 'iz-clear-panel' );
             }
         };
         Meteor.callAsync( 'authorizations.upsert', this.entity._id, item )
             .then(() => {
-                Tolert.success( pwixI18n.label( I18N, instance.APP.isNew.get() ? 'authorizations.edit.new_success' : 'authorizations.edit.edit_success', item.label || item.name ));
+                Tolert.success( pwixI18n.label( I18N, instance.APP.isNew.get() ? 'authorizations.edit.new_success' : 'authorizations.edit.edit_success', item.label || item._id ));
                 closeFn();
             })
             .catch(( e ) => {

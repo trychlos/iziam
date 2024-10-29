@@ -1,0 +1,12 @@
+<template name="authorization_permission_row">
+
+    <tr class="c-authorization-permission-row" data-item-id="{{ this.it._id }}">
+        <td><input class="form-control js-permission" type="text" placeholder="{{ i18n key="authorizations.permissions.permission_ph" }}" /></td>
+        <td>
+            <button class="btn btn-sm btn-outline-primary ui-ml025 js-minus" title="{{ i18n key="authorizations.permissions.remove_title" }}" {{ minusEnabled }} >
+                <span class="fa-solid fa-fw fa-minus"></span>
+            </button>
+        </td>
+    </tr>
+
+</template>

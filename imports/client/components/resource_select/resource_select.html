@@ -1,0 +1,14 @@
+<template name="resource_select">
+    <div class="c-resource-select ui-w100">
+
+        <select class="form-select js-resource" {{ isDisabled }}>
+            {{#unless hasCurrent }}
+                <option value="" selected disabled>{{ i18n key="resources.select.select_text" }}</option>
+            {{/unless}}
+            {{#each it in itemsList }}
+                <option value="{{ itId it }}" {{ itSelected it }}>{{ itLabel it }}</option>
+            {{/each}}
+        </select>
+
+    </div>
+</template>

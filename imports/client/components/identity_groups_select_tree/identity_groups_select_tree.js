@@ -47,7 +47,7 @@ Template.identity_groups_select_tree.helpers({
             groupTypeDef: IdentityGroupType,
             editable: false,
             withIdentities: false,
-            selected: this.item.get().DYN?.memberOf?.direct || []
+            checked: this.item.get().DYN?.memberOf?.direct || []
         };
     }
 });
