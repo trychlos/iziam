@@ -19,8 +19,7 @@ Identities.s = {
 
     // extend the AccountsManager All publication
     async allExtend( instanceName, item, userId ){
-        item.DYN.memberOf = await Identities.s.memberOf( Identities.scope( instanceName ), item, userId );
-        item.DYN.label = await Identities.fn.bestLabel( item );
+        await Identities.s.transform( instanceName, item, userId );
     },
 
     // return the collection for the identities of the organization
@@ -50,7 +49,8 @@ Identities.s = {
         if( organization.record.identitiesUsernamesIdentifier === true ){
             res = res.concat( await Identities.s.getBy( organization.entity._id, { 'usernames.username': id }));
         }
-        return res.length === 1 ? res[0] : null;
+        const item = ( res.length === 1 ) ? res[0] : null;
+        return item ? await Identities.s.transform( Identities.instanceName( organization.entity._id ), item, item._id ) : null;
     },
 
     // returns the queried items
@@ -98,6 +98,14 @@ Identities.s = {
             item.preferredUsername = username.username;
         }
         return true;
+    },
+
+    // record transformation
+    async transform( instanceName, item, userId ){
+        item.DYN = item.DYN || {};
+        item.DYN.memberOf = await Identities.s.memberOf( Identities.scope( instanceName ), item, userId );
+        item.DYN.label = await Identities.fn.bestLabel( item );
+        return item;
     },
 
     // try to find an identity with a username or an email address

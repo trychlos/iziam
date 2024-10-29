@@ -26,6 +26,8 @@ Meteor.publish( 'authorizations_list_all', async function( organizationId ){
     let initializing = true;
 
     // have labels for subject and object
+    // have a computed label
+    // have permissions labels
     const f_transform = async function( item ){
         item.DYN = item.DYN || {};
         if( item.subject_type === 'C' ){
@@ -43,7 +45,7 @@ Meteor.publish( 'authorizations_list_all', async function( organizationId ){
         if( item.object_type === 'C' ){
             const object = await Clients.s.getByEntity( organizationId, item.object_id, userId );
             if( object ){
-                item.DYN.object_label = object.closest.label;
+                item.DYN.object_label = object.DYN.closest.label;
             }
         }
         if( item.object_type === 'R' ){
@@ -52,12 +54,13 @@ Meteor.publish( 'authorizations_list_all', async function( organizationId ){
                 item.DYN.object_label = object[0].name;
             }
         }
+        // have a computed label
         item.computed_label = [ item.subject_type, item.DYN.subject_label, item.object_type, item.DYN.object_label ].join( '-' );
-        let permissions = [];
+        // have permissions labels
+        item.DYN.permissions = [];
         ( item.permissions || [] ).forEach(( it ) => {
-            permissions.push( it.label );
+            item.DYN.permissions.push( it.label );
         });
-        item.DYN.permissions = permissions.join( ', ' );
         return item;
     };
 

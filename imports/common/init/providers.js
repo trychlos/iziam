@@ -4,6 +4,7 @@
 
 import { Providers } from '/imports/common/tables/providers/index.js';
 
+//import { AuthorizationScopesProvider } from '/imports/common/providers/authorization-scopes-provider.class.js';
 import { DeviceProvider } from '/imports/common/providers/device-provider.class.js';
 import { IdentityAuthPasswordProvider } from '/imports/common/providers/identity-auth-password-provider.class.js';
 import { IdentityScopesProvider } from '/imports/common/providers/identity-scopes-provider.class.js';
@@ -16,6 +17,7 @@ import { OpenIDProvider } from '/imports/common/providers/openid-provider.class.
 import { PkceProvider } from '/imports/common/providers/pkce-provider.class.js';
 import { RefreshProvider } from '/imports/common/providers/refresh-provider.class.js';
 
+//Providers.register( new AuthorizationScopesProvider());
 Providers.register( new DeviceProvider());
 Providers.register( new IdentityAuthPasswordProvider());
 Providers.register( new IdentityScopesProvider());

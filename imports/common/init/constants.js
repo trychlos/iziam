@@ -58,7 +58,9 @@ Meteor.APP.C = {
     // the interaction path used by the node-oidc-provider package
     oidcInteractionPath: '/interaction',
     // a common prefix to all our dedicated data
-    oidcUrn: 'urn:org.trychlos.iziam:',
+    // Meteor OAuth doesn't want '.' in the names
+    // Error in OAuth Server: Key urn:org.trychlos.iziam:identity:claim:groups must not contain '.'
+    oidcUrn: 'urn:org-trychlos-iziam:',
 
     // a standard acr when authenticating an end-user with its password
     oidcEndUserPasswordAcr: 'urn:iziam:password:0',

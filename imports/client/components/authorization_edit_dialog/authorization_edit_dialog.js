@@ -53,11 +53,6 @@ Template.authorization_edit_dialog.onCreated( function(){
         self.APP.isNew.set( dcItem === null );
     });
 
-    // track the item content
-    self.autorun(() => {
-        //console.debug( 'item', self.APP.item.get());
-    });
-
     // initialize the named Tabbed
     const item = self.APP.item.get();
     self.APP.tabbed.setTabbedParms({ 
@@ -123,7 +118,7 @@ Template.authorization_edit_dialog.onRendered( function(){
 
     // track the item content
     self.autorun(() => {
-        console.debug( 'item', self.APP.item.get());
+        //console.debug( 'item', self.APP.item.get());
     });
 });
 

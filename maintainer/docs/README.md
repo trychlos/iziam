@@ -189,4 +189,4 @@ Use case 1
 ## Counts
 
 [pierre@slim14 iziam] $ typeset -i c=0; for f in $(find ./imports/ -type f); do c+=$(wc -l "$f" | cut -d' ' -f1); done; echo $c
-32544
+45053

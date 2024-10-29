@@ -8,8 +8,9 @@ const assert = require( 'assert' ).strict; // up to nodejs v16.x
 import { Field } from 'meteor/pwix:field';
 
 import { Claim } from '/imports/common/classes/claim.class.js';
-import { OAuth2 } from '/imports/common/classes/oauth2.class.js';
 import { Scope } from '/imports/common/classes/scope.class.js';
+
+import { IdentitiesGroups } from '/imports/common/collections/identities_groups/index.js';
 
 import { Identities } from './index.js';
 
@@ -28,7 +29,7 @@ Identities.claims = {
         return def.def().oid.name || def.name();
     },
 
-    // called once at IdentiyScopesProvider instanciation
+    // called once at IdentityScopesProvider instanciation
     //  register all the provided claims now
     defineClaims(){
         // claims directly derived from fieldset
@@ -52,13 +53,42 @@ Identities.claims = {
             Identities.claims._defineClaim( name, opts );
         });
         // other claims
-        Identities.claims._defineClaim( Meteor.APP.C.oidcUrn+'identity:claim:groups', {
-            fn( identity ){
-                return identity.DYN.groups;
+        Identities.claims._defineClaim( Meteor.APP.C.oidcUrn+'identity:claim:groups/all', {
+            async fn( identity ){
+                let groups = [];
+                for await( const it of identity.DYN.memberOf.all ){
+                    const group = await IdentitiesGroups.s.getBy( identity.organization, { _id: it }, identity._id );
+                    if( group && group.length ){
+                        groups.push( group[0].label );
+                    }
+                }
+                return groups;
             },
             scopes: [
                 Meteor.APP.C.oidcUrn+'identity:scope:profile',
                 Meteor.APP.C.oidcUrn+'identity:scope:groups',
+            ],
+            use: [
+                'userinfo'
+            ]
+        });
+        Identities.claims._defineClaim( Meteor.APP.C.oidcUrn+'identity:claim:groups/direct', {
+            async fn( identity ){
+                let groups = [];
+                for await( const it of identity.DYN.memberOf.direct ){
+                    const group = await IdentitiesGroups.s.getBy( identity.organization, { _id: it }, identity._id );
+                    if( group && group.length ){
+                        groups.push( group[0].label );
+                    }
+                }
+                return groups;
+            },
+            scopes: [
+                Meteor.APP.C.oidcUrn+'identity:scope:profile',
+                Meteor.APP.C.oidcUrn+'identity:scope:groups',
+            ],
+            use: [
+                'userinfo'
             ]
         });
     },
@@ -97,6 +127,7 @@ Identities.claims = {
                     if( claim.isForUse( use ) && claim.isForScopes( scope )){
                         const name = claim.name();
                         const opts = claim.opts();
+                        console.debug( 'name', name );
                         // the claim value, either computed, or from the identity
                         //  note that array-ed fields value must be computed
                         let value = undefined;
@@ -113,6 +144,7 @@ Identities.claims = {
                                 value = identity[fieldName];
                             }
                         }
+                        console.debug( 'value', value );
                         // if the claim has been explicitely refused ?
                         if( rejected && rejected.includes( name )){
                             name = undefined;
