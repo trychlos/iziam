@@ -166,7 +166,7 @@ Template.authorization_edit_dialog.events({
         };
         Meteor.callAsync( 'authorizations.upsert', this.entity._id, item )
             .then(() => {
-                Tolert.success( pwixI18n.label( I18N, instance.APP.isNew.get() ? 'authorizations.edit.new_success' : 'authorizations.edit.edit_success', item.label || item._id ));
+                Tolert.success( pwixI18n.label( I18N, instance.APP.isNew.get() ? 'authorizations.edit.new_success' : 'authorizations.edit.edit_success', item.label || item.DYN.computed_label || item._id ));
                 closeFn();
             })
             .catch(( e ) => {

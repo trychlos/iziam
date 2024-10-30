@@ -53,7 +53,7 @@ Meteor.APP.i18n = {
                     password_ph: 'xxxxxxxx',
                     scopes_title: 'Scopes :',
                     rar_title: 'Authorization details :',
-                    user_unauthenticated: 'User is not identified or not authenticated.<br />Cancelling the connexion attempt...'
+                    user_unauthenticated: 'User is not identified, not authenticated or not authorized.<br />Cancelling the connexion attempt...'
                 },
                 logout: {
                     cancel_button: 'Cancel',
@@ -714,25 +714,13 @@ Meteor.APP.i18n = {
                 },
                 identity_access_mode: {
                     all_short: 'All',
-                    all_label: 'All new identities',
-                    all_desc: 'All new identities are allowed to access the client application.<br />'
-                        +'The client application must be able to define its own new account when receiving a new identity.<br />'
+                    all_label: 'All identities',
+                    all_desc: 'All identities are allowed to access the client application.<br />'
                         +'No authorization is checked.',
                     authorized_short: 'Authorized',
                     authorized_label: 'Only authorized identities',
                     authorized_desc: 'Only authorized identities are allowed to access the client application.<br />'
-                        +'The client application must be able to define its own new account when receiving a new identity.<br />'
                         +'The Authorization Server takes care of only allowing authorized identities.',
-                    auth_pre_short: 'Authorized + pre-registered',
-                    auth_pre_label: 'Only authorized + pre-registered identities',
-                    auth_pre_desc: 'Only authorized identities are allowed to access the client application '
-                        +'if and only if the corresponding account has been pre-registered in the client application.<br />'
-                        +'The application doesn\'t need to define a new account when receiving a new identity, but must nonetheless manage its accounts itself.',
-                    pre_short: 'Preregistered',
-                    pre_label: 'All pre-registered identities',
-                    pre_desc: 'All pre-registered identities are allowed to access the client application, whatever be their authorizations state.<br />'
-                        +'The client application must manage its own accounts.<br />'
-                        +'No authorization is checked here.'
                 },
                 identity_auth_mode: {
                     none_short: 'None',

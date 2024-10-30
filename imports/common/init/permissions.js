@@ -49,7 +49,7 @@ Permissions.set({
                 return await Roles.userIsInRoles( user, 'CLIENTS_MANAGER' ) || await Roles.userIsInRoles( user, 'SCOPED_CLIENT_EDIT', { scope: scope });
             },
             async list( user, scope ){
-                return await Roles.userIsInRoles( user, 'CLIENTS_MANAGER' ) || await Roles.userIsInRoles( user, 'SCOPED_CLIENTS_LIST', { scope: scope });
+                return await Roles.userIsInRoles( user, 'CLIENTS_MANAGER' ) || await Roles.userIsInRoles( user, 'SCOPED_CLIENTS_LIST', { scope: scope }) || true;
             }
         },
         clients_groups: {

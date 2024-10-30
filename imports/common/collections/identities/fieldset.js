@@ -109,7 +109,7 @@ Identities.fieldsDef = function(){
             form: false,
             oid: {
                 name: Meteor.APP.C.oidcUrn+'identity:claim:best_label',
-                async fn( identity ){
+                async fn( identity, client ){
                     return await Identities.fn.bestLabel( identity );
                 },
                 scopes: [
@@ -221,7 +221,7 @@ Identities.fieldsDef = function(){
             form_type: Forms.FieldType.C.OPTIONAL,
             oid: {
                 name: Meteor.APP.C.oidcUrn+'identity:claim:birthday',
-                async fn( identity ){
+                async fn( identity, client ){
                     return strftime( '%Y-%m-%d %H:%M:%S', identity.birthday );
                 },
                 scopes: [
@@ -304,7 +304,7 @@ Identities.fieldsDef = function(){
             form: false,
             oid: {
                 name: 'email',
-                async fn( identity ){
+                async fn( identity, client ){
                     return await Identities.fn.emailPreferred( identity )?.address;
                 },
                 scopes: [
@@ -318,7 +318,7 @@ Identities.fieldsDef = function(){
             form: false,
             oid: {
                 name: 'email_verified',
-                async fn( identity ){
+                async fn( identity, client ){
                     return await Identities.fn.emailPreferred( identity )?.verified;
                 },
                 scopes: [
@@ -490,7 +490,7 @@ Identities.fieldsDef = function(){
             form: false,
             oid: {
                 name: 'preferred_username',
-                async fn( identity ){
+                async fn( identity, client ){
                     return await Identities.fn.usernamePreferred( identity )?.username;
                 },
                 scopes: [
@@ -507,7 +507,7 @@ Identities.fieldsDef = function(){
             form: false,
             oid: {
                 name: 'updated_at',
-                fn( identity ){
+                fn( identity, client ){
                     return strftime( '%Y-%m-%d %H:%M:%S', identity.updatedAt || identity.createdAt );
                 },
                 scopes: [

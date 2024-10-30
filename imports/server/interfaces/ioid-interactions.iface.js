@@ -413,20 +413,19 @@ export const IOIDInteractions = DeclareMixin(( superclass ) => class extends sup
             //console.debug( 'interactionPostLogin provider', provider );
             assert( req.body && req.body.prompt === 'login', 'expects "login" prompt name, got '+req.body.prompt );
             const interaction = await provider.interactionDetails( req, res );
-            //console.debug( 'interaction.params', interaction.params );
-            // interaction.params.client_id
-            const account = await this.iRequestServer().identityServer().findByLogin( this.iRequestServer().organization(), req.body.login, req.body.password );
-            if( account ){
-                console.debug( 'account', account );
-                console.debug( 'req.body', req.body );
-                const result = {
+            const identityServer = this.iRequestServer().identityServer();
+            const organization = this.iRequestServer().organization();
+            const result = await identityServer.findByLogin( organization, req.body.login, req.body.password, interaction.params.client_id );
+            console.debug( 'result', result );
+            if( result.canContinue ){
+                const o = {
                     login: {
                         //accountId: account.login,
                         accountId: req.body.login,
-                        acr: Meteor.APP.C.oidcEndUserPasswordAcr
+                        acr: res.acr
                     },
                 };
-                await provider.interactionFinished( req, res, result, { mergeWithLastSubmission: false });
+                await provider.interactionFinished( req, res, o, { mergeWithLastSubmission: false });
 
             } else {
                 const html = await this._renderError( pwixI18n.label( I18N, 'auth.interactions.user_unauthenticated' ));

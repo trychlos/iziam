@@ -31,7 +31,7 @@ const _defaultFieldDef = function(){
             optional: true,
             dt_title: pwixI18n.label( I18N, 'authorizations.tabular.label_th' ),
             dt_render( data, type, rowData ){
-                return rowData.label || '<span class="computed-label">'+rowData.computed_label+'</span>';
+                return rowData.label || '<span class="computed-label">'+rowData.DYN.computed_label+'</span>';
             },
             form_check: Authorizations.checks.label,
             form_type: Forms.FieldType.C.OPTIONAL
@@ -52,7 +52,7 @@ const _defaultFieldDef = function(){
         {
             name: 'subject_id',
             type: String,
-            tabular: false,
+            dt_visible: false,
             form_check: Authorizations.checks.subject_id
         },
         {
@@ -82,7 +82,7 @@ const _defaultFieldDef = function(){
         {
             name: 'object_id',
             type: String,
-            tabular: false,
+            dt_visible: false,
             form_check: Authorizations.checks.object_id,
             form_type: Forms.FieldType.C.MANDATORY
         },
@@ -166,12 +166,6 @@ const _defaultFieldDef = function(){
                     ahUserId: rowData.updatedAt ? rowData.updatedBy : rowData.createdBy
                 };
             }
-        },
-        // a computed label to be used when the label is not set
-        {
-            name: 'computed_label',
-            schema: false,
-            dt_visible: false
         },
         // Have access to DYN data from the tabular display
         {

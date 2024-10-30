@@ -12,7 +12,7 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 export const IdentityAccessMode = {
     C: [
         {
-            // all new identities can access the client
+            // all identities can access the client
             id: 'all',
             short: 'definitions.identity_access_mode.all_short',
             label: 'definitions.identity_access_mode.all_label',
@@ -24,20 +24,6 @@ export const IdentityAccessMode = {
             short: 'definitions.identity_access_mode.authorized_short',
             label: 'definitions.identity_access_mode.authorized_label',
             description: 'definitions.identity_access_mode.authorized_desc'
-        },
-        {
-            // only authorized + pre-registered client accounts can access the client
-            id: 'auth_pre',
-            short: 'definitions.identity_access_mode.auth_pre_short',
-            label: 'definitions.identity_access_mode.auth_pre_label',
-            description: 'definitions.identity_access_mode.auth_pre_desc'
-        },
-        {
-            // it is enough to be pre-registered in the client for an identity access the client
-            id: 'pre',
-            short: 'definitions.identity_access_mode.pre_short',
-            label: 'definitions.identity_access_mode.pre_label',
-            description: 'definitions.identity_access_mode.pre_desc'
         }
     ],
 

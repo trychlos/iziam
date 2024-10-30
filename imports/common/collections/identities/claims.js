@@ -10,6 +10,7 @@ import { Field } from 'meteor/pwix:field';
 import { Claim } from '/imports/common/classes/claim.class.js';
 import { Scope } from '/imports/common/classes/scope.class.js';
 
+import { Authorizations } from '/imports/common/collections/authorizations/index.js';
 import { IdentitiesGroups } from '/imports/common/collections/identities_groups/index.js';
 
 import { Identities } from './index.js';
@@ -53,8 +54,9 @@ Identities.claims = {
             Identities.claims._defineClaim( name, opts );
         });
         // other claims
+        // all (identities) groups the identity is member of
         Identities.claims._defineClaim( Meteor.APP.C.oidcUrn+'identity:claim:groups/all', {
-            async fn( identity ){
+            async fn( identity, client ){
                 let groups = [];
                 for await( const it of identity.DYN.memberOf.all ){
                     const group = await IdentitiesGroups.s.getBy( identity.organization, { _id: it }, identity._id );
@@ -72,8 +74,9 @@ Identities.claims = {
                 'userinfo'
             ]
         });
+        // the (identities) groups the identity is directly member of
         Identities.claims._defineClaim( Meteor.APP.C.oidcUrn+'identity:claim:groups/direct', {
-            async fn( identity ){
+            async fn( identity, client ){
                 let groups = [];
                 for await( const it of identity.DYN.memberOf.direct ){
                     const group = await IdentitiesGroups.s.getBy( identity.organization, { _id: it }, identity._id );
@@ -86,6 +89,39 @@ Identities.claims = {
             scopes: [
                 Meteor.APP.C.oidcUrn+'identity:scope:profile',
                 Meteor.APP.C.oidcUrn+'identity:scope:groups',
+            ],
+            use: [
+                'userinfo'
+            ]
+        });
+        // the authorizations (and the permissions) the identity is provided for the client
+        Identities.claims._defineClaim( Meteor.APP.C.oidcUrn+'identity:claim:authorizations', {
+            async fn( identity, client ){
+                //console.debug( 'identity:claim:authorizations: identity', identity, 'client', client );
+                let authorizations = [];
+                if( client ){
+                    const query = {
+                        subject_type: 'I',
+                        subject_id: { $in: identity.DYN.memberOf.all || [] },
+                        object_type: 'C',
+                        object_id: client.entity._id
+                    };
+                    const fetched = await Authorizations.s.transformedGetBy( identity.organization, query, identity._id );
+                    for await( const it of fetched ){
+                        let perm = {
+                            label: it.label || it.DYN.computed_label,
+                        };
+                        if( it.DYN.permissions && it.DYN.permissions.length ){
+                            perm.permissions = it.DYN.permissions;
+                        }
+                        authorizations.push( perm );
+                    }
+                }
+                //console.debug( 'authorizations', authorizations );
+                return authorizations;
+            },
+            scopes: [
+                Meteor.APP.C.oidcUrn+'identity:scope:authorizations'
             ],
             use: [
                 'userinfo'
@@ -112,10 +148,12 @@ Identities.claims = {
      *   "id_token" or "userinfo" (depends on the "use" param)
      * @param rejected {Array[String]} - claim names that were rejected by the end-user, you might
      *   want to skip loading some claims from external resources or through db projection
+     * @param client {Object} an { entity, record } object
+     *  Note that client may be null when findAccount() is first triggered from GET /auth route
      * @return {Object} the claims for this identity
      */
-    async oidcRequest( organization, identity, subject, use, scope, claims, rejected ){
-        console.debug( 'oidcRequest', arguments );
+    async oidcRequest( organization, identity, subject, use, scope, claims, rejected, client ){
+        //console.debug( 'oidcRequest', arguments );
         // must return as least a sub (subject)
         let result = {
             sub: subject
@@ -133,7 +171,7 @@ Identities.claims = {
                         let value = undefined;
                         if( opts.fn ){
                             if( typeof opts.fn === 'function' ){
-                                value = await opts.fn( identity );
+                                value = await opts.fn( identity, client );
                             } else {
                                 console.warn( 'expects fn be a function', opts );
                             }
@@ -157,7 +195,7 @@ Identities.claims = {
                 }
             break;
         }
-        console.debug( 'oidcRequest result', use, result );
+        //console.debug( 'oidcRequest result', use, result );
         return result;
     },
 

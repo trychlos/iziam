@@ -15,7 +15,6 @@
 export { Authorizations } from './collection.js';
 
 import './checks.js';
-import './claims.js';
 import './fieldset.js';
 import './functions.js';
 import './tabular.js';

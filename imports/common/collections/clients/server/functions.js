@@ -157,7 +157,7 @@ Clients.s.transform = async function( item, userId ){
         return true;
     }));
     await Promise.allSettled( promises );
-    return item; // even if useless
+    return item;
 };
 
 // entity is the client entity with a DYN.records array of ReactiveVar's

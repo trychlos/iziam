@@ -207,7 +207,7 @@ Providers.getClaims = async function( ctx, token, use, scope, claims, rejected, 
 /**
  * @locus Anywhere
  * @param {String} type the searched type (e.g. IIdent)
- * @returns {Array} the list of providers which implement this type, which may be empty
+ * @returns {Array<izProvider>} the list of providers which implement this type, which may be empty
  */
 Providers.getInstancesOf = function( type ){
     let res = [];

@@ -90,6 +90,15 @@ Meteor.APP.C = {
     ttl_IdToken: 24*60*60*1000,         // 24 h.
     ttl_Interaction: 60*60*1000,        // 1 mn.
     ttl_Session: 24*60*60*1000,         // 24 h.
+
+    // some conditions we want be testable in the code
+    IDENTITY_ACCESS_MODE_ALL:           'client_identity_access_mode_all',
+    IDENTITY_AUTH_MODE_NONE:            'client_identity_auth_mode_none',
+    IDENTITY_NO_PASSWORD:               'identity_without_password',
+    IDENTITY_WRONG_PASSWORD:            'identity_wrong_password',
+    NO_AUTHENTICATION_PROVIDER:         'no_authentication_provider',
+    NO_WILLING_TO_PROVIDER:             'no_willing_to_provider',
+    NOT_AUTHORIZED:                     'not_authorized'
 }
 
 I18N = 'izIAM.Internationalization';
