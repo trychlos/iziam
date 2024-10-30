@@ -58,12 +58,8 @@ Meteor.APP.C = {
     // the interaction path used by the node-oidc-provider package
     oidcInteractionPath: '/interaction',
     // a common prefix to all our dedicated data
-    // Meteor OAuth doesn't want '.' in the names
-    // Error in OAuth Server: Key urn:org.trychlos.iziam:identity:claim:groups must not contain '.'
+    // Meteor OAuth doesn't want '.' in the names: "Error in OAuth Server: Key urn:org.trychlos.iziam:identity:claim:groups must not contain '.'"
     oidcUrn: 'urn:org-trychlos-iziam:',
-
-    // a standard acr when authenticating an end-user with its password
-    oidcEndUserPasswordAcr: 'urn:iziam:password:0',
 
     // when generating a cookie keygrip key secret, the used defaults
     keygripDefAlg: 'SHA512',
@@ -85,10 +81,10 @@ Meteor.APP.C = {
 
     // default TTLs
     ttl_AccessToken: 24*60*60*1000,     // 24 h.
-    ttl_ClientCredentials: 60*60*1000,  // 1 mn.
+    ttl_ClientCredentials: 60*60*1000,  //  1 mn.
     ttl_Grant: 24*60*60*1000,           // 24 h.
     ttl_IdToken: 24*60*60*1000,         // 24 h.
-    ttl_Interaction: 60*60*1000,        // 1 mn.
+    ttl_Interaction: 60*60*1000,        //  1 mn.
     ttl_Session: 24*60*60*1000,         // 24 h.
 
     // some conditions we want be testable in the code

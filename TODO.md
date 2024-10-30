@@ -18,10 +18,6 @@
 |      | 2024-10-29 | resources are user-defined: fine |
 |      | 2024-10-29 | scopes and claims need code - so needs to let the user define some code + have hook points |
 |   45 | 2024- 1- 5 | default features.introspection.allowedPolicy function called, you SHOULD change it in order to to check whether the caller is authorized to receive the introspection response. |
-|   49 | 2024- 1- 6 | on all methods/publications on server-side, have to re-check the user permissions vs his roles |
-|      | 2024- 1-10 | see also #60 to throw our own exceptions |
-|      | 2024- 9-13 | architecture is done with pwix:permissions - Have to distinguish client/user-capable callable code to the code stricyly usable by our server |
-|      | 2024-10-30 | permissions must be distinguished between izIAM accounts which have roles, and identities which only have scopes |
 |   61 | 2024- 1-10 | identities: add titre, titre post-nominal |
 |   64 | 2024- 1-10 | display the picture in organizations list, identities list |
 |   66 | 2024- 1-11 | auth server: have a button to display the .well-known/openid-configuration |
@@ -147,6 +143,11 @@
 |      | 2024-10-29 | Done with OIDMongoAdapter class |
 |   48 | 2024- 1- 6 | Have groups hierarchy |
 |      | 2024- 1- 7 | Memberships collection is defined, and can be updated - so fine |
+|   49 | 2024- 1- 6 | on all methods/publications on server-side, have to re-check the user permissions vs his roles |
+|      | 2024- 1-10 | see also #60 to throw our own exceptions |
+|      | 2024- 9-13 | architecture is done with pwix:permissions - Have to distinguish client/user-capable callable code to the code stricyly usable by our server |
+|      | 2024-10-30 | permissions must be distinguished between izIAM accounts which have roles, and identities which only have scopes |
+|      | 2024-10-30 | should be OK now - though probably to be reviewed when building the manager UI |
 |   50 | 2024- 1- 7 | Review membership tree and its reactivity (happens that children is undefined on the client) |
 |      | 2024- 1- 8 | membership.hierarchy is displayed but has fake items (exactly twice) |
 |      | 2024- 1- 8 | fixed |
