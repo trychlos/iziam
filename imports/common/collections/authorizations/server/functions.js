@@ -16,7 +16,11 @@ import { Authorizations } from '../index.js';
 Authorizations.s = _.merge( Authorizations.s, {
 
     // returns the queried items
-    async getBy( organizationId, query, userId ){
+    // when dealing from an external identity, we expect userId=null and opts.from=<organizationId>
+    async getBy( organizationId, query, userId, opts={} ){
+        if( !await Permissions.isAllowed( 'feat.authorizations.list', userId, organizationId, opts )){
+            return [];
+        }
         return await Authorizations.collection( organizationId ).find( query ).fetchAsync();
     },
 
@@ -31,22 +35,22 @@ Authorizations.s = _.merge( Authorizations.s, {
     },
 
     // transform the published/returned document
-    async transform( organizationId, item, userId ){
+    async transform( organizationId, item, userId, opts={} ){
         item.DYN = item.DYN || {};
         if( item.subject_type === 'C' ){
-            const subject = await ClientsGroups.s.getBy( organizationId, { _id: item.subject_id }, userId );
+            const subject = await ClientsGroups.s.getBy( organizationId, { _id: item.subject_id }, userId, opts );
             if( subject && subject.length ){
                 item.DYN.subject_label = subject[0].label;
             }
         }
         if( item.subject_type === 'I' ){
-            const subject = await IdentitiesGroups.s.getBy( organizationId, { _id: item.subject_id }, userId );
+            const subject = await IdentitiesGroups.s.getBy( organizationId, { _id: item.subject_id }, userId, opts );
             if( subject && subject.length ){
                 item.DYN.subject_label = subject[0].label;
             }
         }
         if( item.object_type === 'C' ){
-            const object = await Clients.s.getByEntity( organizationId, item.object_id, userId );
+            const object = await Clients.s.getByEntity( organizationId, item.object_id, userId, opts );
             if( object ){
                 item.DYN.object_label = object.DYN.closest.label;
             } else {
@@ -54,7 +58,7 @@ Authorizations.s = _.merge( Authorizations.s, {
             }
         }
         if( item.object_type === 'R' ){
-            const object = await Resources.s.getBy( organizationId, { _id: item.object_id }, userId );
+            const object = await Resources.s.getBy( organizationId, { _id: item.object_id }, userId, opts );
             if( object && object.length ){
                 item.DYN.object_label = object[0].name;
             }
@@ -70,11 +74,12 @@ Authorizations.s = _.merge( Authorizations.s, {
     },
 
     // returns the queried items
-    async transformedGetBy( organizationId, query, userId ){
+    // when dealing from an external identity, we expect userId=null and opts.from=<organizationId>
+    async transformedGetBy( organizationId, query, userId, opts={} ){
         let gots = [];
-        const fetched = await Authorizations.s.getBy( organizationId, query, userId );
+        const fetched = await Authorizations.s.getBy( organizationId, query, userId, opts );
         for await( const it of fetched ){
-            const transformed = await Authorizations.s.transform( organizationId, it, userId );
+            const transformed = await Authorizations.s.transform( organizationId, it, userId, opts );
             gots.push( transformed );
         }
         return gots;

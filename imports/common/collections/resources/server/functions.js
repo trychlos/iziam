@@ -10,8 +10,12 @@ import { Resources } from '../index.js';
 
 Resources.s = _.merge( Resources.s, {
 
+    // when dealing from an external identity, we expect userId=null and opts.from=<organizationId>
     // returns the queried items
-    async getBy( organizationId, query ){
+    async getBy( organizationId, query, userId, opts={} ){
+        if( !await Permissions.isAllowed( 'feat.resources.list', userId, organizationId, opts )){
+            return [];
+        }
         return await Resources.collection( organizationId ).find( query ).fetchAsync();
     },
 

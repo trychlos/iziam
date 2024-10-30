@@ -26,13 +26,14 @@ ClientsEntities.s = {
     /*
      * @param {Object} selector
      * @param {String} userId
+     * @param {Object} opts an optional options object with following keys:
+     *  - from: the organization identifier for an external identity
      * @returns {Array} may be empty
      */
-    async getBy( selector, userId ){
-        check( selector, Object );
-        check( userId, String );
-        let scope;
-        if( !await Permissions.isAllowed( 'feat.clients.list', userId, scope )){
+    async getBy( organizationId, selector, userId, opts={} ){
+        assert( selector && _.isObject( selector ), 'expects an object, got '+selector );
+        assert( !userId || _.isString( userId ), 'expects a string or null, got '+userId );
+        if( !await Permissions.isAllowed( 'feat.clients.list', userId, organizationId, opts )){
             return null;
         }
         const res = await ClientsEntities.collection.find( selector ).fetchAsync();
@@ -46,8 +47,8 @@ ClientsEntities.s = {
      * @returns {Integer} count of deleted
      */
     async delete( entityId, userId ){
-        check( entityId, String );
-        check( userId, String );
+        assert( entityId && _.isString( entityId ), 'expects a string, got '+entityId );
+        assert( !userId || _.isString( userId ), 'expects a string or null, got '+userId );
         //let scope;
         //if( !await Permissions.isAllowed( 'feat.clients.delete', userId, scope )){
         //    return null;
@@ -78,7 +79,7 @@ ClientsEntities.s = {
      *  izIAM: 7a15a901ade649a2af1cbd06a97df4eb
      *@returns {String} a new identifier
      */
-     newId(){
+    newId(){
         return uuidv4().replace( /-/g, '' );
     },
 

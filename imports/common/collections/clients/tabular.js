@@ -20,7 +20,9 @@ import { ClientsRecords } from '/imports/common/collections/clients_records/inde
 import { Clients } from './index.js';
 
 const _entity = async function( data ){
-    const entity = Meteor.isClient ? await Meteor.callAsync( 'clients_entities_getBy', { _id: data.entity }) : await ClientsEntities.s.getBy({ _id: data.entity }, Meteor.userId());
+    console.debug( 'data', data );
+    const entity = Meteor.isClient ?
+        await Meteor.callAsync( 'clients_entities_getBy', data.DYN.entity.organization, { _id: data.entity }) : await ClientsEntities.s.getBy( data.DYN.entity.organization, { _id: data.entity });
     return entity[0];
 };
 

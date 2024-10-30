@@ -39,7 +39,7 @@ ClientsGroups.checks = {
             } else {
                 array = await ( Meteor.isClient ? 
                     Meteor.callAsync( 'groups.getBy', data.organization._id, { organization: data.organization._id, label: value }) :
-                    ClientsGroups.s.getBy( data.organization._id, { organization: data.organization._id, label: value }));
+                    ClientsGroups.s.getBy( data.organization._id, { organization: data.organization._id, label: value }, null, { from: data.organization._id }));
             }
             let found = false;
             array.every(( it ) => {

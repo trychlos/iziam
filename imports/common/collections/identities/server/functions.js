@@ -19,7 +19,7 @@ Identities.s = {
 
     // extend the AccountsManager All publication
     async allExtend( instanceName, item, userId ){
-        await Identities.s.transform( instanceName, item, userId );
+        await Identities.s.transform( instanceName, item, userId, { from: Identities.scope( instanceName )});
     },
 
     // return the collection for the identities of the organization
@@ -36,25 +36,30 @@ Identities.s = {
     // from an OAuth identity server, get an identity by its id, whatever means an 'id'
     // organization is an { entity, record } object
     // id is an email or a username ?
+    // when dealing from an external identity, we expect userId=null and opts.from=<organizationId>
     // returns either a unique identity, or null
-    async findById( organization, id ){
+    async findById( organization, id, opts={} ){
         let res = [];
         // try with the internal immutable identifier
-        res = res.concat( await Identities.s.getBy( organization.entity._id, { _id: id }));
+        res = res.concat( await Identities.s.getBy( organization.entity._id, { _id: id }, null, opts ));
         // try with email addresses if allowed to
         if( organization.record.identitiesEmailAddressesIdentifier === true ){
-            res = res.concat( await Identities.s.getBy( organization.entity._id, { 'emails.address': id }));
+            res = res.concat( await Identities.s.getBy( organization.entity._id, { 'emails.address': id }, null, opts ));
         }
         // try with usernames if allowed to
         if( organization.record.identitiesUsernamesIdentifier === true ){
-            res = res.concat( await Identities.s.getBy( organization.entity._id, { 'usernames.username': id }));
+            res = res.concat( await Identities.s.getBy( organization.entity._id, { 'usernames.username': id }, null, opts ));
         }
         const item = ( res.length === 1 ) ? res[0] : null;
-        return item ? await Identities.s.transform( Identities.instanceName( organization.entity._id ), item, item._id ) : null;
+        return item ? await Identities.s.transform( Identities.instanceName( organization.entity._id ), item, null, opts ) : null;
     },
 
     // returns the queried items
-    async getBy( organizationId, query, userId ){
+    // when dealing from an external identity, we expect userId=null and opts.from=<organizationId>
+    async getBy( organizationId, query, userId, opts={} ){
+        if( !await Permissions.isAllowed( 'feat.identities.list', userId, organizationId, opts )){
+            return [];
+        }
         const instanceName = Identities.instanceName( organizationId );
         return await AccountsManager.s.getBy( instanceName, query, userId );
     },
@@ -63,20 +68,20 @@ Identities.s = {
     // if set, an identity is necessarily inside of a group
     //  maybe this group is itself inside of another group and so on
     // returns an object { all: [], direct: [] }
-    async memberOf( organizationId, item, userId ){
+    async memberOf( organizationId, item, userId, opts={} ){
         let all = {};
         let direct = {};
         const parentsFn = async function( parentId, hash ){
             if( parentId ){
                 hash[parentId] = true;
                 all[parentId] = true;
-                const written = await IdentitiesGroups.s.getBy( organizationId, { type: 'G', _id: parentId }, userId );
+                const written = await IdentitiesGroups.s.getBy( organizationId, { type: 'G', _id: parentId }, userId, opts );
                 for( const it of written ){
                     await parentsFn( it.parent, all );
                 };
             }
         };
-        const written = await IdentitiesGroups.s.getBy( organizationId, { type: 'I', identity: item._id }, userId );
+        const written = await IdentitiesGroups.s.getBy( organizationId, { type: 'I', identity: item._id }, userId, opts );
         for( const it of written ){
             await parentsFn( it.parent, direct );
         };
@@ -101,9 +106,9 @@ Identities.s = {
     },
 
     // record transformation
-    async transform( instanceName, item, userId ){
+    async transform( instanceName, item, userId, opts={} ){
         item.DYN = item.DYN || {};
-        item.DYN.memberOf = await Identities.s.memberOf( Identities.scope( instanceName ), item, userId );
+        item.DYN.memberOf = await Identities.s.memberOf( Identities.scope( instanceName ), item, userId, opts );
         item.DYN.label = await Identities.fn.bestLabel( item );
         return item;
     },

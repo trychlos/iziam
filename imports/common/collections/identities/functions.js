@@ -172,6 +172,7 @@ Identities.fn = {
     /**
      * @param {Object} organization an organization entity or an organization { entity, record }
      * @param {Object|String} identity an identity identifier or an identity object
+     * @param {String} userId
      * @returns {String} at least an identifier for this identity
      */
     async identifier( organization, identity ){
@@ -203,7 +204,11 @@ Identities.fn = {
     async identity( organizationId, identity ){
         let ident = null;
         if( _.isString( identity )){
-            const array = await( Meteor.isClient ? Meteor.callAsync( 'identities.getBy', organizationId, { _id: identity }) : Identities.s.getBy( organizationId, { _id: identity }));
+            const array = await(
+                Meteor.isClient ?
+                    Meteor.callAsync( 'identities.getBy', organizationId, { _id: identity }) :
+                    Identities.s.getBy( organizationId, { _id: identity }, null, { from: organizationId })
+            );
             ident = array && array.length && array[0];
         } else {
             ident = identity;

@@ -3,6 +3,7 @@
  */
 
 import _ from 'lodash';
+const assert = require( 'assert' ).strict;
 
 import { Validity } from 'meteor/pwix:validity';
 
@@ -32,6 +33,7 @@ Clients.s.addUndef = function( item ){
 
 // return a client by its oauth client_id
 // returns a { entity, record } client object valid at date, or null
+// Note: no permission can be checked here as this function is the first of the authentication exchanges: everybody can ask for a clientId
 Clients.s.byClientIdAtDate = async function( clientId ){
     let result = null;
     const entities = await ClientsEntities.collection.find({ clientId: clientId }).fetchAsync();
@@ -71,37 +73,39 @@ Clients.s.delete = async function( entityId, userId ){
 };
 
 // Find and returns the client entity with its DYN records
+// when dealing from an external identity, we expect userId=null and opts.from=<organizationId>
 // @returns {Object} with { entities, records, closest } keys
 // @throws {Error}
-Clients.s.getByEntity = async function( organizationId, entityId, userId ){
-    check( organizationId, String );
-    check( entityId, String );
-    check( userId, String );
-    //if( !await TenantsManager.isAllowed( 'pwix.tenants_manager.feat.delete', userId, entity )){
-    //    return null;
-    //}
-    const res = await ClientsEntities.s.getBy({ _id: entityId }, userId );
-    return res && res.length ? await Clients.s.transform( res[0] ) : null;
+Clients.s.getByEntity = async function( organizationId, entityId, userId, opts={} ){
+    assert( organizationId && _.isString( organizationId ), 'expects a string, got '+organizationId );
+    assert( entityId && _.isString( entityId ), 'expects a string, got '+entityId );
+    assert( !userId || _.isString( userId ), 'expects a string or null, got '+userId );
+    if( !await Permissions.isAllowed( 'feat.clients.list', userId, organizationId, opts )){
+        return false;
+    }
+    const res = await ClientsEntities.s.getBy( organizationId, { _id: entityId }, userId, opts );
+    return res && res.length ? await Clients.s.transform( res[0], userId, opts ) : null;
 };
 
 // returns the full list of groups this identity is member of
 // if set, an identity is necessarily inside of a group
 //  maybe this group is itself inside of another group and so on
+// when dealing from an external identity, we expect userId=null and opts.from=<organizationId>
 // returns an object { all: [], direct: [] }
-Clients.s.memberOf = async function( organizationId, item, userId ){
+Clients.s.memberOf = async function( organizationId, item, userId, opts={} ){
     let all = {};
     let direct = {};
     const parentsFn = async function( parentId, hash ){
         if( parentId ){
             hash[parentId] = true;
             all[parentId] = true;
-            const written = await ClientsGroups.s.getBy( organizationId, { type: 'G', _id: parentId }, userId );
+            const written = await ClientsGroups.s.getBy( organizationId, { type: 'G', _id: parentId }, userId, opts );
             for( const it of written ){
                 await parentsFn( it.parent, all );
             };
         }
     };
-    const written = await ClientsGroups.s.getBy( organizationId, { type: 'C', client: item._id }, userId );
+    const written = await ClientsGroups.s.getBy( organizationId, { type: 'C', client: item._id }, userId, opts );
     for( const it of written ){
         await parentsFn( it.parent, direct );
     };
@@ -132,7 +136,8 @@ Clients.s.registeredMetadata = async function( client ){
 };
 
 // add to the entity item the DYN sub-object { records, closest }
-Clients.s.transform = async function( item, userId ){
+// when dealing from an external identity, we expect userId=null and opts.from=<organizationId>
+Clients.s.transform = async function( item, userId, opts ){
     item.DYN = item.DYN || {};
     item.DYN.managers = [];
     let promises = [];
@@ -150,7 +155,7 @@ Clients.s.transform = async function( item, userId ){
         return true;
     }));
     */
-    item.DYN.memberOf = await Clients.s.memberOf( item.organization, item, userId );
+    item.DYN.memberOf = await Clients.s.memberOf( item.organization, item, userId, opts );
     promises.push( ClientsRecords.collection.find({ entity: item._id }).fetchAsync().then(( fetched ) => {
         item.DYN.records = fetched;
         item.DYN.closest = Validity.closestByRecords( fetched ).record;

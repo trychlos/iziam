@@ -45,7 +45,11 @@ ClientsGroups.fn = {
     async group( organizationId, group ){
         let groupObject = null;
         if( _.isString( group )){
-            const array = await( Meteor.isClient ? Meteor.callAsync( 'clients_groups.getBy', organizationId, { _id: group }) : ClientsGroups.s.getBy( organizationId, { _id: group }));
+            const array = await(
+                Meteor.isClient ?
+                    Meteor.callAsync( 'clients_groups.getBy', organizationId, { _id: group }) :
+                    ClientsGroups.s.getBy( organizationId, { _id: group }, null, { from: organizationId })
+            );
             groupObject = array && array.length && array[0];
         } else {
             groupObject = group;

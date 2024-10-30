@@ -17,8 +17,12 @@ IdentitiesGroups.s = _.merge( IdentitiesGroups.s, {
         return res;
     },
 
+    // when dealing from an external identity, we expect userId=null and opts.from=<organizationId>
     // returns the queried items
-    async getBy( organizationId, query, userId ){
+    async getBy( organizationId, query, userId, opts={} ){
+        if( !await Permissions.isAllowed( 'feat.identities_groups.list', userId, organizationId, opts )){
+            return [];
+        }
         const res = await IdentitiesGroups.collection( organizationId ).find( query ).fetchAsync();
         return res;
     },

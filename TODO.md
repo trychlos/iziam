@@ -15,11 +15,13 @@
 |   17 | 2023-11-30 | have user settings |
 |   33 | 2024- 1- 5 | have a waiting cursor when calling a server method |
 |   38 | 2024- 1- 5 | Have a way to provide values to user-defined resources/scopes/claims (or only claims ?) |
-|      | 2024-10-29 | resources are user-defined, while scopes and claims need code - so needs to let the user define some code + have hook points |
+|      | 2024-10-29 | resources are user-defined: fine |
+|      | 2024-10-29 | scopes and claims need code - so needs to let the user define some code + have hook points |
 |   45 | 2024- 1- 5 | default features.introspection.allowedPolicy function called, you SHOULD change it in order to to check whether the caller is authorized to receive the introspection response. |
 |   49 | 2024- 1- 6 | on all methods/publications on server-side, have to re-check the user permissions vs his roles |
 |      | 2024- 1-10 | see also #60 to throw our own exceptions |
 |      | 2024- 9-13 | architecture is done with pwix:permissions - Have to distinguish client/user-capable callable code to the code stricyly usable by our server |
+|      | 2024-10-30 | permissions must be distinguished between izIAM accounts which have roles, and identities which only have scopes |
 |   61 | 2024- 1-10 | identities: add titre, titre post-nominal |
 |   64 | 2024- 1-10 | display the picture in organizations list, identities list |
 |   66 | 2024- 1-11 | auth server: have a button to display the .well-known/openid-configuration |
@@ -31,24 +33,21 @@
 |   97 | 2024- 1-17 | client_new_assistant: implement JWT authentification per shared secret |
 |   99 | 2024- 1-18 | organization_edit / edit managers: the list of accounts doesnt show and so no available selection |
 |  105 | 2024- 1-18 | client_new_assistant: have client shared secret when needed one the done page |
-|  106 | 2024- 1-18 | client_new_assistant: have scopes |
+|  106 | 2024- 1-18 | client_new_assistant: have allowed scopes |
 |  109 | 2024- 1-20 | set removeUnsetValues be a collection behavior (item timestampable) |
 |      | 2024-10-29 | removeUnsetValues is no more used - but setUndef values is needed for Notes |
 |  112 | 2024- 6-24 | customize the new account mail to verify the address |
 |  115 | 2024- 9-22 | move Jwks.fn.generateKeys() to server-side, using a method to address it from the client |
 |      | 2024- 9-24 | nb: jose doesn't provide the same data when executed server-side so maybe have to change the library ? |
-|  116 | 2024- 9-24 | clientAll and identitiesAll publications: should only publish the data the user is allowed to both from scope and privacy point of view |
-|  117 | 2024-10- 9 | should define a policy for acr values (see Meteor.APP.C.oidcEndUserPasswordAcr) |
 |  118 | 2024-10- 9 | clients should be able to provide some javascript/ejs to display in interactions dialogs |
+|      | 2024-10-30 | see also #38 for a use case |
 |  119 | 2024-10-16 | BUG: when updating groups of an identity, the client groupsRegistrar content is badly updated (publication is fine, but subcription only receives a part) |
 |  120 | 2024-10-16 | input placeholders are too close of black - have a lighter gray and italics |
 |  121 | 2024-10-18 | token extensions: the organization should be able to make mandatory all token extensions provided by the selected providers |
 |      |            | this implies having a small companion collection with a row per available token extension or an array inside of the current schema |
 |      |            | + update Organizations.fn.wantsTokenExtension() |
-|  122 | 2024-10-29 | IdentityServer findByLogin() should authenticate the identity based on selected authentication providers, and return the used authentication provider |
-|      | 2024-10-29 | see also #117 |
-|  123 | 2024-10-29 | authorizations let an identity group be allowed to a client - this should be a client configuration option to use that to allow an identity |
-|  124 |  |  |
+|  124 | 2024-10-30 | Review client configuration for identities: have a single pane with two fieldsets + have assistant pane |
+|  125 |  |  |
 
 ---
 ## Done
@@ -270,6 +269,15 @@
 |      | 2024- 9-13 | fixed |
 |  114 | 2024- 9-22 | weird bug jwk_new_button on checker instanciation - see comment in code |
 |      | 2024- 9-22 | not reproductible after some changes :( |
+|  116 | 2024- 9-24 | clientAll and identitiesAll publications: should only publish the data the user is allowed to both from scope and privacy point of view |
+|      | 2024-10-30 | yes but everybody inside of an organization must be allowed to read all |
+|  117 | 2024-10- 9 | should define a policy for acr values (see Meteor.APP.C.oidcEndUserPasswordAcr) |
+|      | 2024-10-30 | acr value is now answered from the IIdentityAuth provider |
+|  122 | 2024-10-29 | IdentityServer findByLogin() should authenticate the identity based on selected authentication providers, and return the used authentication provider |
+|      | 2024-10-29 | see also #117 |
+|      | 2024-10-30 | done |
+|  123 | 2024-10-29 | authorizations let an identity group be allowed to a client - this should be a client configuration option to use that to allow an identity |
+|      | 2024-10-30 | done |
 
 ---
 P. Wieser

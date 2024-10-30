@@ -143,7 +143,7 @@ export const IOIDInteractions = DeclareMixin(( superclass ) => class extends sup
 
     async _renderBodyLogin( req, res, provider, interaction, client ){
         console.debug( 'interaction', interaction );
-        console.debug( 'client', client );
+        //console.debug( 'client', client );
         let route, cancel;
         try {
             const url = new URL( interaction.returnTo );

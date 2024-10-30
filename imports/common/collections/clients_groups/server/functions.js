@@ -17,8 +17,15 @@ ClientsGroups.s = _.merge( ClientsGroups.s, {
         return res;
     },
 
+    // when dealing from an external identity, we expect userId=null and opts.from=<organizationId>
     // returns the queried items
-    async getBy( organizationId, query, userId ){
+    async getBy( organizationId, query, userId, opts={} ){
+        if( !await Permissions.isAllowed( 'feat.clients_groups.list', userId, organizationId, opts )){
+            if( !userId ){
+                console.trace( 'here' );
+            }
+            return [];
+        }
         const res = await ClientsGroups.collection( organizationId ).find( query ).fetchAsync();
         return res;
     },

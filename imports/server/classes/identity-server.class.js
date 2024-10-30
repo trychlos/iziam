@@ -135,7 +135,7 @@ export class IdentityServer extends mix( izObject ).with( IRequested ){
                 object_type: 'C',
                 object_id: client.entity._id
             };
-            const authorizations = await Authorizations.s.getBy( organization.entity._id, query, identity._id );
+            const authorizations = await Authorizations.s.transformedGetBy( organization.entity._id, query, null, { from: identity.organization });
             if( authorizations.length ){
                 res.authorized = true;
                 res.authorizations = authorizations;
@@ -184,9 +184,9 @@ export class IdentityServer extends mix( izObject ).with( IRequested ){
      */
     async findAccount( organization, ctx, id, token ){
         //console.debug( 'findAccount()', arguments );
-        const identity = await Identities.s.findById( organization, id );
+        const identity = await Identities.s.findById( organization, id, { from: organization.entity._id });
         //console.debug( 'identity', identity );
-        const client = token && token.clientId ? await Clients.s.byClientIdAtDate( token.clientId ) : null;
+        const client = token && token.clientId ? await Clients.s.byClientIdAtDate( token.clientId, { from: organization.entity._id }) : null;
         // seems that oidc-provider doesn't accept another subject that the provided id
         const subject = id;
         //const subject = identity ? this.subject( identity ) : null;
@@ -199,7 +199,7 @@ export class IdentityServer extends mix( izObject ).with( IRequested ){
     }
 
     /**
-     * @param {Object} organization
+     * @param {Object} organization an { entity, record } object
      * @param {String} login
      * @param {String} password
      * @param {String} clientId
@@ -226,7 +226,7 @@ export class IdentityServer extends mix( izObject ).with( IRequested ){
             authorizations: null,
             canContinue: false
         };
-        result.identity = await Identities.s.findById( organization, login );
+        result.identity = await Identities.s.findById( organization, login, { from: organization.entity._id });
         if( result.identity ){
             const client = await Clients.s.byClientIdAtDate( clientId );
             let res = await this.authenticate( result.identity, password, client );

@@ -59,7 +59,7 @@ Identities.claims = {
             async fn( identity, client ){
                 let groups = [];
                 for await( const it of identity.DYN.memberOf.all ){
-                    const group = await IdentitiesGroups.s.getBy( identity.organization, { _id: it }, identity._id );
+                    const group = await IdentitiesGroups.s.getBy( identity.organization, { _id: it }, null, { from: identity.organization });
                     if( group && group.length ){
                         groups.push( group[0].label );
                     }
@@ -79,7 +79,7 @@ Identities.claims = {
             async fn( identity, client ){
                 let groups = [];
                 for await( const it of identity.DYN.memberOf.direct ){
-                    const group = await IdentitiesGroups.s.getBy( identity.organization, { _id: it }, identity._id );
+                    const group = await IdentitiesGroups.s.getBy( identity.organization, { _id: it }, null, { from: identity.organization });
                     if( group && group.length ){
                         groups.push( group[0].label );
                     }
@@ -106,7 +106,7 @@ Identities.claims = {
                         object_type: 'C',
                         object_id: client.entity._id
                     };
-                    const fetched = await Authorizations.s.transformedGetBy( identity.organization, query, identity._id );
+                    const fetched = await Authorizations.s.transformedGetBy( identity.organization, query, null, { from: identity.organization });
                     for await( const it of fetched ){
                         let perm = {
                             label: it.label || it.DYN.computed_label,

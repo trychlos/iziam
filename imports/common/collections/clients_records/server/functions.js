@@ -27,13 +27,15 @@ ClientsRecords.s = {
     /*
     * @param {Object} selector
     * @param {String} userId
+     * @param {Object} opts an optional options object with following keys:
+     *  - from: the organization identifier for an external identity
     * @returns {Array} may be empty
     */
-    async getBy( selector, userId ){
-        check( selector, Object );
-        check( userId, String );
+    async getBy( selector, userId, opts={} ){
+        assert( selector && _.isObject( selector ), 'expects an object, got '+selector );
+        assert( !userId || _.isString( userId ), 'expects a string or null, got '+userId );
         let scope;
-        if( !await Permissions.isAllowed( 'feat.clients.list', userId, scope )){
+        if( !await Permissions.isAllowed( 'feat.clients.list', userId, scope, opts )){
             return null;
         }
         const res = await ClientsRecords.collection.find( selector ).fetchAsync();
@@ -68,7 +70,7 @@ ClientsRecords.s = {
     */
     async upsert( entity, userId ){
         check( entity, Object );
-        check( userId, String );
+        check( userId, oneOf( String, null ));
         //if( !await TenantsManager.isAllowed( 'pwix.tenants_manager.records.fn.upsert', userId, entity )){
         //    return null;
         //}
