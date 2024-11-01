@@ -159,6 +159,7 @@ Clients.s.transform = async function( item, userId, opts ){
     promises.push( ClientsRecords.collection.find({ entity: item._id }).fetchAsync().then(( fetched ) => {
         item.DYN.records = fetched;
         item.DYN.closest = Validity.closestByRecords( fetched ).record;
+        //console.debug( 'fetched', fetched );
         return true;
     }));
     await Promise.allSettled( promises );
