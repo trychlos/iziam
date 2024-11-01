@@ -123,6 +123,11 @@ Meteor.publish( Meteor.APP.C.pub.clientsTabularOne.publish, async function( orga
         added: function( item ){
             self.added( Meteor.APP.C.pub.clientsTabularOne.collection, item._id, item );
         },
+        changed: function( newItem, oldItem ){
+            if( !initializing ){
+                self.changed( Meteor.APP.C.pub.clientsTabularOne.collection, newItem._id, newItem );
+            }
+        },
         removed: function( item ){
             self.removed( Meteor.APP.C.pub.clientsTabularOne.collection, item._id );
         }
@@ -264,7 +269,7 @@ Meteor.publish( 'clientsTabularLast', async function( tableName, ids, fields ){
     // - entity_notes
     // - a DYN object which contains:
     //   > analyze: the result of the analyze, i.e. the list of fields which are different among this client records
-    //   > count: the count of records for this client
+    //   > records: the validity records for this client
     // - authorization flow is computed from the defined grant types
     // - start and end effect dates are modified with the englobing period of the entity
     const f_transform = async function( item ){
@@ -312,6 +317,7 @@ Meteor.publish( 'clientsTabularLast', async function( tableName, ids, fields ){
             const transformed = await f_transform( item );
             entities[item.entity] = transformed;
             self.added( collectionName, item._id, transformed );
+            //console.debug( 'adding', transformed );
         },
         changed: async function( newItem, oldItem ){
             if( !initializing ){
@@ -321,7 +327,8 @@ Meteor.publish( 'clientsTabularLast', async function( tableName, ids, fields ){
             }
         },
         removed: async function( oldItem ){
-            self.removed( collectionName, oldItem._id);
+            self.removed( collectionName, oldItem._id );
+            //console.debug( 'removing', oldItem._id );
         }
     });
 
