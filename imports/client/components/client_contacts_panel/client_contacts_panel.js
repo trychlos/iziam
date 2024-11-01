@@ -72,7 +72,7 @@ Template.client_contacts_panel.onRendered( function(){
         }
     });
 
-    // advertize of the status of this checker to the (maybe) englobing assistant
+    // advertise of the status of this checker to the (maybe) englobing assistant
     self.autorun(() => {
         const checker = self.APP.checker.get();
         if( checker ){

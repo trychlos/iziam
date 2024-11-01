@@ -51,7 +51,7 @@ Template.organization_mandatory_pane.onRendered( function(){
         }
     });
 
-    // advertize the assistant of the status of this panel
+    // advertise the assistant of the status of this panel
     self.autorun(() => {
         const checker = self.APP.checker.get();
         if( checker ){

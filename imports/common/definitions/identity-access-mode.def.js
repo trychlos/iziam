@@ -19,11 +19,11 @@ export const IdentityAccessMode = {
             description: 'definitions.identity_access_mode.all_desc'
         },
         {
-            // all authorized identities can access the client
-            id: 'authorized',
-            short: 'definitions.identity_access_mode.authorized_short',
-            label: 'definitions.identity_access_mode.authorized_label',
-            description: 'definitions.identity_access_mode.authorized_desc'
+            // only authorized identities can access the client
+            id: 'auth',
+            short: 'definitions.identity_access_mode.auth_short',
+            label: 'definitions.identity_access_mode.auth_label',
+            description: 'definitions.identity_access_mode.auth_desc'
         }
     ],
 

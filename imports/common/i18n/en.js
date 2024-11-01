@@ -219,8 +219,8 @@ Meteor.APP.i18n = {
                     home_title: 'The URI of a web site',
                     id_label: 'Identifier :',
                     id_title: 'The client unique identifier to present to the OAuth server',
-                    identities_access_preamble: 'How this client does manage the new identities ?',
-                    identities_access_tab_title: 'New identity access',
+                    identities_access_preamble: 'How this client does want izIAM manage the identities authorizations ?',
+                    identities_access_tab_title: 'Identities authorization',
                     identities_auth_preamble: 'Whether this client requires authenticated identities ?',
                     identities_auth_tab_title: 'Identities authentication',
                     jwks_tab_title: 'JSON Web Key Set',
@@ -237,7 +237,7 @@ Meteor.APP.i18n = {
                     privacy_label: 'Privacy policy page URI :',
                     privacy_ph: 'https://my.example.com/privacy',
                     privacy_title: 'The URI of a page which describes the privacy policy of the client',
-                    profile_label: 'Profile :',
+                    profile_label: 'Application profile :',
                     properties_preamble: 'The mandatory label below will take place as the unique <code>client_name</code> OAuth Client Metadata.<br />'
                         +'Take care that all these below properties may be displayed to the end-user during login interactions.',
                     properties_tab_title: 'Properties',
@@ -399,6 +399,8 @@ Meteor.APP.i18n = {
                     auth_method_choose_text: 'Please choose below your desired authentication method.',
                     auth_method_confidential_text: 'Confidential clients must authenticate against the Authorization Server token endpoint.',
                     auth_method_public_text: 'Public clients are not expected to be able to authenticate.',
+                    authentication_nav: 'Identities authentication',
+                    authorization_nav: 'Identities authorization',
                     client_nav: 'Client type',
                     client_text: 'The client type, in the sense of OAuth specifications, is automatically determined from your chosen client profile. '
                         +'You shouldn\'t need to change it, unless you are really sure of what you are doing, but just in case...',
@@ -426,6 +428,8 @@ Meteor.APP.i18n = {
                         +'Your new client has been successfully created.',
                     summary_application_label: 'Application type :',
                     summary_auth_label: 'Authentication method :',
+                    summary_authentication_label: 'Identities authentication :',
+                    summary_authorization_label: 'Identities authorization :',
                     summary_client_label: 'Client type :',
                     summary_contacts_label: 'Contacts :',
                     summary_contacts_none: 'None',
@@ -715,11 +719,11 @@ Meteor.APP.i18n = {
                 identity_access_mode: {
                     all_short: 'All',
                     all_label: 'All identities',
-                    all_desc: 'All identities are allowed to access the client application.<br />'
+                    all_desc: 'All identities are allowed to access the client application. '
                         +'No authorization is checked.',
-                    authorized_short: 'Authorized',
-                    authorized_label: 'Only authorized identities',
-                    authorized_desc: 'Only authorized identities are allowed to access the client application.<br />'
+                    auth_short: 'Authorized',
+                    auth_label: 'Only authorized identities',
+                    auth_desc: 'Only authorized identities are allowed to access the client application. '
                         +'The Authorization Server takes care of only allowing authorized identities.',
                 },
                 identity_auth_mode: {
@@ -732,8 +736,9 @@ Meteor.APP.i18n = {
                     auth_label: 'Authenticated',
                     auth_desc: 'The client application requires identities to be authenticated.<br />'
                         +'It is the responsability of the organization manager to select providers which are able to authenticate identities as, '
-                        +'for example, an Password Authenticator.<br />'
-                        +'The Identity Server will use any selected provider able to serve this feature, and will advertise the exact authentication used mode.'
+                        +'for example, a Password Authenticator.<br />'
+                        +'The Identity Server will use any selected provider able to serve this feature, '
+                        +'and will advertise the exact used authentication mode as an Access Context class Reference (<code>acr</code>).'
                 },
                 identity_group_type: {
                     group_label: 'Group',

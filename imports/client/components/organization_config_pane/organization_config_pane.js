@@ -14,7 +14,7 @@ import './organization_config_pane.html';
 Template.organization_config_pane.helpers({
     parmsTabbed(){
         return {
-            name: 'organization.config',
+            name: 'organization.config_'+this.index,
             dataContext: this,
             tabs: [
                 {

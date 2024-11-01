@@ -3,6 +3,7 @@
  */
 
 import _ from 'lodash';
+import assert from 'node:assert/strict';
 
 import { check } from 'meteor/check';
 import { Permissions } from 'meteor/pwix:permissions';
@@ -69,8 +70,8 @@ ClientsRecords.s = {
     * @returns {Object} with following keys:
     */
     async upsert( entity, userId ){
-        check( entity, Object );
-        check( userId, oneOf( String, null ));
+        assert( entity && _.isObject( entity ), 'expect an object, got '+entity );
+        assert( !userId || _.isString( userId ), 'expect a string or null, got '+userId );
         //if( !await TenantsManager.isAllowed( 'pwix.tenants_manager.records.fn.upsert', userId, entity )){
         //    return null;
         //}

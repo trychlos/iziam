@@ -14,6 +14,8 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 import { AuthMethod } from '/imports/common/definitions/auth-method.def.js';
 import { ClientProfile } from '/imports/common/definitions/client-profile.def.js';
 import { GrantType } from '/imports/common/definitions/grant-type.def.js';
+import { IdentityAuthMode } from '/imports/common/definitions/identity-auth-mode.def.js';
+import { IdentityAccessMode } from '/imports/common/definitions/identity-access-mode.def.js';
 import { TokenExtension } from '/imports/common/definitions/token-extension.def.js';
 
 import { Jwks } from '/imports/common/tables/jwks/index.js';
@@ -50,6 +52,20 @@ Template.client_new_assistant_current.helpers({
         const authMethod = this.parentAPP.entity.get().DYN.records[0].get().token_endpoint_auth_method;
         const def = authMethod ? AuthMethod.byId( authMethod ) : null;
         return def ? AuthMethod.label( def ) : '';
+    },
+
+    // identities authentification
+    authenticationText(){
+        const mode = this.parentAPP.entity.get().DYN.records[0].get().identity_auth_mode;
+        const def = mode ? IdentityAuthMode.byId( mode ) : null;
+        return def ? IdentityAuthMode.label( def ) : '';
+    },
+
+    // identities authorization
+    authorizationText(){
+        const mode = this.parentAPP.entity.get().DYN.records[0].get().identity_access_mode;
+        const def = mode ? IdentityAccessMode.byId( mode ) : null;
+        return def ? IdentityAccessMode.label( def ) : '';
     },
 
     // client type

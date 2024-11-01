@@ -1,7 +1,7 @@
 /*
  * /imports/common/definitions/auth-flow.def.js
  * 
- * We consider there is a one-to-one relation between the defined Authorization Grant Flows and the below grant types with an 'access' nature.
+ * We consider there is a one-to-one relation between the defined Authorization Grant Flows and the Grant Types with an 'access' nature.
  * But this definition let us separate the relative labels.
  * 
  * Use cases:

@@ -20,7 +20,6 @@ import { ClientsRecords } from '/imports/common/collections/clients_records/inde
 import { Clients } from './index.js';
 
 const _entity = async function( data ){
-    console.debug( 'data', data );
     const entity = Meteor.isClient ?
         await Meteor.callAsync( 'clients_entities_getBy', data.DYN.entity.organization, { _id: data.entity }) : await ClientsEntities.s.getBy( data.DYN.entity.organization, { _id: data.entity });
     return entity[0];
@@ -104,9 +103,13 @@ Tracker.autorun(() => {
             //console.debug( 'data', data, 'columns', columns );
             // set a different display when a value changes between validity records
             data.DYN.analyze.diffs.forEach(( it ) => {
-                const def = columns[it].def;
-                if( def && def.tabular !== false && def.dt_visible !== false ){
-                    $( cells[columns[it].index] ).addClass( 'dt-different' );   
+                if( columns[it] ){
+                    const def = columns[it].def;
+                    if( def && def.tabular !== false && def.dt_visible !== false ){
+                        $( cells[columns[it].index] ).addClass( 'dt-different' );   
+                    }
+                } else {
+                    // a column has changed but is not displayed in the tabular
                 }
             });
         }

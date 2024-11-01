@@ -26,18 +26,19 @@ import '/imports/client/components/client_new_assistant_client_type/client_new_a
 import '/imports/client/components/client_new_assistant_contacts/client_new_assistant_contacts.js';
 import '/imports/client/components/client_new_assistant_current/client_new_assistant_current.js';
 import '/imports/client/components/client_new_assistant_done/client_new_assistant_done.js';
-import '/imports/client/components/client_new_assistant_redirects/client_new_assistant_redirects.js';
 import '/imports/client/components/client_new_assistant_grant_types/client_new_assistant_grant_types.js';
+import '/imports/client/components/client_new_assistant_identities_authentication/client_new_assistant_identities_authentication.js';
+import '/imports/client/components/client_new_assistant_identities_authorization/client_new_assistant_identities_authorization.js';
+import '/imports/client/components/client_new_assistant_introduction/client_new_assistant_introduction.js';
 import '/imports/client/components/client_new_assistant_jwks/client_new_assistant_jwks.js';
 //import '/imports/client/components/client_new_assistant_jwt/client_new_assistant_jwt.js';
-import '/imports/client/components/client_new_assistant_introduction/client_new_assistant_introduction.js';
 import '/imports/client/components/client_new_assistant_profile/client_new_assistant_profile.js';
 import '/imports/client/components/client_new_assistant_properties/client_new_assistant_properties.js';
 import '/imports/client/components/client_new_assistant_providers/client_new_assistant_providers.js';
+import '/imports/client/components/client_new_assistant_redirects/client_new_assistant_redirects.js';
 import '/imports/client/components/client_new_assistant_secrets/client_new_assistant_secrets.js';
 import '/imports/client/components/client_new_assistant_summary/client_new_assistant_summary.js';
 import '/imports/client/components/client_new_assistant_token_extensions/client_new_assistant_token_extensions.js';
-//import '/imports/client/components/jwt_private_select/jwt_private_select.js';
 
 import './client_new_assistant.html';
 import { Clients } from '../../../common/collections/clients';
@@ -137,6 +138,16 @@ Template.client_new_assistant.onCreated( function(){
                     enabled: false
                 },
                 */
+                {
+                    name: 'authentication',
+                    template: 'client_new_assistant_identities_authentication',
+                    label: pwixI18n.label( I18N, 'clients.new_assistant.authentication_nav' )
+                },
+                {
+                    name: 'authorization',
+                    template: 'client_new_assistant_identities_authorization',
+                    label: pwixI18n.label( I18N, 'clients.new_assistant.authorization_nav' )
+                },
                 {
                     name: 'contacts',
                     template: 'client_new_assistant_contacts',
@@ -273,7 +284,7 @@ Template.client_new_assistant.helpers({
 });
 
 Template.client_new_assistant.events({
-    // advertize of the assistant activation (panes shouldn't do anything before that)
+    // advertise of the assistant activation (panes shouldn't do anything before that)
     'assistant-activated .c-client-new-assistant'( event, instance, data ){
         if( data.name === instance.APP.myName ){
             instance.APP.assistantStatus.set( 'activated', true );

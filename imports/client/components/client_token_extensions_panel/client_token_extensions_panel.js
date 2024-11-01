@@ -111,7 +111,7 @@ Template.client_token_extensions_panel.events({
         let record = this.entity.get().DYN.records[this.index].get();
         record.token_extensions = selected;
         this.entity.get().DYN.records[this.index].set( record );
-        // advertize the eventual caller (e.g. the client_new_assistant) of the new selected extensions
+        // advertise the eventual caller (e.g. the client_new_assistant) of the new selected extensions
         instance.$( '.c-client-token-extensions-panel' ).trigger( 'iz-token-extensions', { token_extensions: selected });
     }
 });

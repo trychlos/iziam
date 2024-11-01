@@ -76,7 +76,8 @@ export const GrantType = {
             auth_flow: 'client_credentials',
             image: '/images/grant-type.svg',
             nature: 'access',
-            useTokenEndpoint: true
+            useTokenEndpoint: true,
+            haveResourceOwner: false
         },
         {
             // hybrid authorization flow for OpenID Connect
@@ -196,6 +197,30 @@ export const GrantType = {
             console.warn( 'unknown grant type', id );
             return false;
         }
+    },
+
+    /**
+     * @param {Array<String>} selected a list of grant types identifiers
+     * @returns {Boolean} whether at least one of the selected grant types makes use of a resource owner
+     */
+    hasResourceOwner( selected ){
+        let res = false;
+        selected.every(( it ) => {
+            const def = GrantType.byId( it );
+            if( def ){
+                res = GrantType.haveResourceOwner( def );
+            }
+            return res === false;
+        });
+        return res;
+    },
+
+    /**
+     * @param {Object} def a GrantType definition as returned by GrantType.Knowns()
+     * @returns {Boolean} whether this grant type relies on a resource owner, defaulting to true
+     */
+    haveResourceOwner( def ){
+        return def.haveResourceOwner !== false;
     },
 
     /**

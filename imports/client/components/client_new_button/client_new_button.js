@@ -45,6 +45,12 @@ Template.client_new_button.onCreated( function(){
     self.autorun(() => {
         self.APP.enabled.set( self.APP.allowed.get() && self.APP.haveProviders.get());
     });
+
+    // track the enabled status
+    self.autorun(() => {
+        //console.debug( 'allowed', self.APP.allowed.get());
+        //console.debug( 'haveProviders', self.APP.haveProviders.get());
+    });
 });
 
 Template.client_new_button.helpers({

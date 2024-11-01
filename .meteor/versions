@@ -2,8 +2,8 @@ accounts-base@3.0.3
 accounts-password@3.0.2
 alanning:roles@4.0.0
 aldeed:collection2@4.0.3
-aldeed:schema-deny@4.0.1
-aldeed:simple-schema@1.13.1
+aldeed:schema-deny@4.0.2
+aldeed:simple-schema@2.0.0
 aldeed:tabular@3.0.0-rc.0
 allow-deny@2.0.0
 autoupdate@2.0.0

@@ -72,7 +72,7 @@ Template.client_new_assistant_redirects.events({
         instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'prev', enable: true });
         instance.$( '.c-client-redirects-panel' ).trigger( 'iz-enable-checks', true );
     },
-    // an event sent by client_redirects_panel to advertize of its status
+    // an event sent by client_redirects_panel to advertise of its status
     'iz-checker .c-client-new-assistant-redirects'( event, instance, data ){
         if( this.parentAPP.assistantStatus.get( 'activePane' ) === 'redirects' ){
             instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'next', enable: data.validity });

@@ -79,7 +79,7 @@ Template.client_new_assistant_auth_method.events({
     'assistant-pane-shown .c-client-new-assistant-auth-method'( event, instance, data ){
         instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'prev', enable: true });
     },
-    // the panel advertizes of its current selection
+    // the panel advertises of its current selection
     'iz-auth-method .c-client-new-assistant-auth-method'( event, instance, data ){
         this.parentAPP.assistantStatus.set( 'token_endpoint_auth_method', data.auth_method );
     }

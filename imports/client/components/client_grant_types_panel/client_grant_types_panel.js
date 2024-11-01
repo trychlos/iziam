@@ -69,7 +69,7 @@ Template.client_grant_types_panel.onRendered( function(){
     const self = this;
     //console.debug( this );
 
-    // advertize of the selectables list
+    // advertise of the selectables list
     self.autorun(() => {
         self.$( '.c-client-grant-types-panel' ).trigger( 'iz-selectables', { selectables: self.APP.selectables.get() });
     });
@@ -218,7 +218,7 @@ Template.client_grant_types_panel.events({
                 }
             });
         }
-        // last, advertize the eventual caller (e.g. the client_new_assistant) of the new auth flow
+        // last, advertise the eventual caller (e.g. the client_new_assistant) of the new auth flow
         instance.$( '.c-client-grant-types-panel' ).trigger( 'iz-grant-types', { grant_types: selected });
     }
 });

@@ -55,7 +55,7 @@ Template.providers_list.events({
         } else {
             this.selectedProvidersRemoveFn( this.args, this.item.id );
         }
-        // advertize of the change
+        // advertise of the change
         instance.$( '.c-providers-list' ).trigger( 'iz-providers', { providers: this.selectedProvidersGetFn( this.args ) });
     }
 });

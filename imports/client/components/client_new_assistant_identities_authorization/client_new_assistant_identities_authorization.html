@@ -1,0 +1,15 @@
+<template name="client_new_assistant_identities_authorization">
+    <div class="c-client-new-assistant-identities-authorization">
+
+        {{> client_new_assistant_current }}
+
+        <div class="content">
+            <div class="text">
+                {{{ i18n key="clients.new_assistant.authorization_text" }}}
+            </div>
+
+            {{> client_identity_access_mode_panel (parmsAuthorizationPanel) }}
+        </div>
+
+    </div>
+</template>

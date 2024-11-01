@@ -45,6 +45,16 @@ Template.client_identity_access_mode_panel.onCreated( function(){
     self.autorun(() => {
         self.APP.selectables.set( IdentityAccessMode.Knowns());
     });
+
+    // make sure we have a default value
+    self.autorun(() => {
+        const recordRv = Template.currentData().entity.get().DYN.records[Template.currentData().index];
+        let record = recordRv.get();
+        if( !record.identity_access_mode ){
+            record.identity_access_mode = 'auth';
+            recordRv.set( record);
+        }
+    });
 });
 
 Template.client_identity_access_mode_panel.helpers({
@@ -100,7 +110,7 @@ Template.client_identity_access_mode_panel.events({
         let record = this.entity.get().DYN.records[this.index].get();
         record.identity_access_mode = id;
         this.entity.get().DYN.records[this.index].set( record );
-        // advertize the eventual caller (e.g. the client_new_assistant) of the new auth method
+        // advertise the eventual caller (e.g. the client_new_assistant) of the new auth method
         instance.$( '.c-client-identity-access-mode-panel' ).trigger( 'iz-access-mode', { access_mode: id });
     }
 });

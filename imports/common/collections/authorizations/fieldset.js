@@ -60,7 +60,6 @@ const _defaultFieldDef = function(){
             schema: false,
             dt_title: pwixI18n.label( I18N, 'authorizations.tabular.subject_label_th' ),
             dt_render( data, type, rowData ){
-                console.debug( 'rowData', rowData );
                 return rowData.DYN.subject_label;
             },
             form_check: Authorizations.checks.subject_label,

@@ -5,9 +5,9 @@
  * 
  * Each provider:
  * - is identified both with a machine identifier and a human readable string, through IIdent interface
- * - should advertize of its features, through the IFeatured interface
+ * - should advertise of its features, through the IFeatured interface
  * - may require some features provided by another provider
- * - should advertize of its claims and scopes.
+ * - should advertise of its claims and scopes.
  * 
  * All providers are registered in common/providers as a 'Providers' pseudo-collection.
  * 
