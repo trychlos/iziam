@@ -6,8 +6,9 @@
  * 
  * Note: on a small-size display, this menu also embeds login items.
  */
+
 import _ from 'lodash';
-const assert = require( 'assert' ).strict;
+import { strict as assert } from 'node:assert';
 
 import { AccountsUI } from 'meteor/pwix:accounts-ui';
 import { Permissions } from 'meteor/pwix:permissions';

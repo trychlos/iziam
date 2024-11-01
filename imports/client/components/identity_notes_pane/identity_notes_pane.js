@@ -10,6 +10,9 @@
  * - organization: the Organization as an entity with its DYN.records array
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import './identity_notes_pane.html';
 
 Template.identity_notes_pane.helpers({

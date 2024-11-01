@@ -2,6 +2,9 @@
  * /imports/client/components/app_footer/app_footer.js
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import '/imports/client/components/powered_by/powered_by.js';
 import '/imports/client/components/site_copyright/site_copyright.js';
 

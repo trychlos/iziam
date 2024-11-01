@@ -2,6 +2,9 @@
  * /imports/client/init/run-context.js
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { RunContext } from '../classes/run-context.class';
 
 Meteor.APP.runContext = new RunContext();

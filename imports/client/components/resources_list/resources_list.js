@@ -10,6 +10,9 @@
  * - recordTabs
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { Permissions } from 'meteor/pwix:permissions';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { TenantsManager } from 'meteor/pwix:tenants-manager';

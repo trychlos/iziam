@@ -4,6 +4,9 @@
  * A base class for all the objects.
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 export class izObject {
 
     // static data

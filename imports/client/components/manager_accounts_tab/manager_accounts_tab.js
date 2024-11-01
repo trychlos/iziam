@@ -6,6 +6,9 @@
  * Because the application aims to be an identity manager, most of the persons who are referenced as an 'identified' person are not actual izIAM users, but rather organizations users.
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { PlusButton } from 'meteor/pwix:plus-button';
 import { pwixI18n } from 'meteor/pwix:i18n';
 

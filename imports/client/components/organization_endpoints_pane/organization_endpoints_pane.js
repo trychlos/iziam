@@ -5,6 +5,9 @@
  * - see README
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { Forms } from 'meteor/pwix:forms';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';

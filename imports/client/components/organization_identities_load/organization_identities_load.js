@@ -12,9 +12,10 @@
  * - recordTabs
  */
 
-import { TenantsManager } from 'meteor/pwix:tenants-manager';
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
 
-import { IdentitiesRegistrar } from '/imports/common/classes/identities-registrar.class.js';
+import { TenantsManager } from 'meteor/pwix:tenants-manager';
 
 import './organization_identities_load.html';
 

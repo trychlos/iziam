@@ -6,6 +6,9 @@
  * - wantEditionRoles: whether the user is allowed to edit the current page documents
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { AppEdit } from 'meteor/pwix:app-edit';
 import { Permissions } from 'meteor/pwix:permissions';
 import { Roles } from 'meteor/pwix:roles';

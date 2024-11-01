@@ -17,6 +17,7 @@
  */
 
 import _ from 'lodash';
+import { strict as assert } from 'node:assert';
 
 import { ClientGroupType } from '/imports/common/definitions/client-group-type.def.js';
 

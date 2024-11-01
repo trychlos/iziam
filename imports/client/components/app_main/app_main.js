@@ -21,6 +21,9 @@
  *          +- app_footer
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import '/imports/client/components/app_layout/app_layout.js';
 
 import './app_main.html';

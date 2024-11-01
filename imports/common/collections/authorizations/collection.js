@@ -2,6 +2,9 @@
  * /imports/common/collections/authorizations/collection.js
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { Mongo } from 'meteor/mongo';
 import { ReactiveVar } from 'meteor/reactive-var';
 import SimpleSchema from 'meteor/aldeed:simple-schema';

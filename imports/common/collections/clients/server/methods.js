@@ -2,6 +2,9 @@
  * /imports/common/collections/clients/server/methods.js
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { Clients } from '../index.js';
 
 Meteor.methods({

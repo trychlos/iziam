@@ -4,6 +4,9 @@
  * Code executed on server at startup
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 // examine some variables
 Meteor.startup(() => {
     console.debug( '/imports/server/init/startup.js' );

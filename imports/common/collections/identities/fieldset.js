@@ -12,6 +12,8 @@
  * - scopes: the list of the scopes which include this claim
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
 import strftime from 'strftime';
 
 import { Forms } from 'meteor/pwix:forms';

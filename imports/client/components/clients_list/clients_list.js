@@ -10,13 +10,14 @@
  * - recordTabs
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { Permissions } from 'meteor/pwix:permissions';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { TenantsManager } from 'meteor/pwix:tenants-manager';
 import { Tolert } from 'meteor/pwix:tolert';
-
-import { Clients } from '/imports/common/collections/clients/index.js';
 
 import '/imports/client/components/client_edit_dialog/client_edit_dialog.js';
 

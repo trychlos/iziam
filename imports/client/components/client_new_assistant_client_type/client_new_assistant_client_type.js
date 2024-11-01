@@ -5,10 +5,11 @@
  * The assistant lets the user changes it if needed
  *
  * Parms:
-* - parentAPP: the assistant APP whole object
-*/
+ * - parentAPP: the assistant APP whole object
+ */
 
 import _ from 'lodash';
+import { strict as assert } from 'node:assert';
 
 import { pwixI18n } from 'meteor/pwix:i18n';
 

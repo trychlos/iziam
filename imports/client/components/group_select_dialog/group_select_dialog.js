@@ -10,6 +10,7 @@
  */
 
 import _ from 'lodash';
+import { strict as assert } from 'node:assert';
 
 import '/imports/client/components/group_hierarchy_pane/group_hierarchy_pane.js';
 

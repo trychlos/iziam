@@ -2,6 +2,9 @@
  * /imports/common/init/env-settings.js
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { EnvSettings } from 'meteor/pwix:env-settings';
 
 EnvSettings.configure({

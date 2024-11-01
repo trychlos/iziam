@@ -4,7 +4,9 @@
  * This fieldset fully overrides the default tabular fieldset defined by AccountsManager.
  */
 
-import { Forms } from 'meteor/pwix:forms';
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { pwixI18n } from 'meteor/pwix:i18n';
 
 import { Identities } from './index.js';

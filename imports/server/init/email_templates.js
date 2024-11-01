@@ -2,6 +2,9 @@
  * /imports/server/init/email_templates.js
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { Accounts } from 'meteor/accounts-base';
 
 if( Accounts.emailTemplates ){

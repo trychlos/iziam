@@ -10,6 +10,9 @@
  * It maintains a full list of the identities of an organization both on client and server sides.
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { AccountsManager } from 'meteor/pwix:accounts-manager';
 import { Field } from 'meteor/pwix:field';
 import { Permissions } from 'meteor/pwix:permissions';

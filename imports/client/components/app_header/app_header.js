@@ -4,6 +4,9 @@
  *  Manage here the events of the menu button and of the menu header
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { AccountsUI } from 'meteor/pwix:accounts-ui';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { UILayout } from 'meteor/pwix:ui-layout';

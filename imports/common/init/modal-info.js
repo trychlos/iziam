@@ -2,6 +2,9 @@
  * /imports/common/init/modal-info.js
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { ModalInfo } from 'meteor/pwix:modal-info';
 
 ModalInfo.configure({

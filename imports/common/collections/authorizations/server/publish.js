@@ -2,6 +2,9 @@
  * /imports/common/collections/authorizations/server/publish.js
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { Permissions } from 'meteor/pwix:permissions';
 
 import { Authorizations } from '../index.js';

@@ -15,6 +15,9 @@
  *  - https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/oauth2/core/oidc/StandardClaimNames.html
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 export { Identities } from './collection.js';
 
 import './checks.js';

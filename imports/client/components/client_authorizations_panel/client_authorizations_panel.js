@@ -17,12 +17,6 @@
  */
 
 import _ from 'lodash';
-
-import { pwixI18n } from 'meteor/pwix:i18n';
-import { ReactiveVar } from 'meteor/reactive-var';
-
-import { Organizations } from '/imports/common/collections/organizations/index.js';
-
-import { TokenExtension } from '/imports/common/definitions/token-extension.def.js';
+import { strict as assert } from 'node:assert';
 
 import './client_authorizations_panel.html';

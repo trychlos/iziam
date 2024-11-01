@@ -4,6 +4,8 @@
  * A class to provide an error page..
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
 import formPost from 'oidc-provider/lib/response_modes/form_post.js';
 import instance from 'oidc-provider/lib/helpers/weak_cache.js';
 import redirectUri from 'oidc-provider/lib/helpers/redirect_uri.js';

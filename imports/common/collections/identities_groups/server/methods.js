@@ -2,6 +2,9 @@
  * /imports/common/collections/identities_groups/server/methods.js
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { IdentitiesGroups } from '../index.js';
 
 Meteor.methods({

@@ -4,6 +4,9 @@
  * Define here the fields to be published and/or rendered in the tabular display.
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { Field } from 'meteor/pwix:field';
 import { Notes } from 'meteor/pwix:notes';
 import { pwixI18n } from 'meteor/pwix:i18n';

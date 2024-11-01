@@ -2,6 +2,9 @@
  * /imports/common/collections/clients_groups/server/publish.js
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { Clients } from '/imports/common/collections/clients/index.js';
 
 import { ClientsGroups } from '../index.js';

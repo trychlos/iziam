@@ -2,6 +2,9 @@
  * /imports/client/classes/run-context.class.js
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { CoreApp } from 'meteor/pwix:core-app';
 import { EnvSettings } from 'meteor/pwix:env-settings';
 import { ReactiveVar } from 'meteor/reactive-var';

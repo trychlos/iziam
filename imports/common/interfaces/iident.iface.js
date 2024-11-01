@@ -6,7 +6,7 @@
  */
 
 import _ from 'lodash';
-const assert = require( 'assert' ).strict;
+import { strict as assert } from 'node:assert';
 import { DeclareMixin } from '@vestergaard-company/js-mixin';
 
 export const IIdent = DeclareMixin(( superclass ) => class extends superclass {

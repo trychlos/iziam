@@ -3,7 +3,7 @@
  */
 
 import _ from 'lodash';
-import assert from 'node:assert/strict';
+import { strict as assert } from 'node:assert';
 
 import { check } from 'meteor/check';
 import { Permissions } from 'meteor/pwix:permissions';

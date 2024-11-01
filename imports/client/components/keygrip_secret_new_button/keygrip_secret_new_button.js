@@ -12,6 +12,7 @@
  */
 
 import _ from 'lodash';
+import { strict as assert } from 'node:assert';
 
 import { Modal } from 'meteor/pwix:modal';
 import { Permissions } from 'meteor/pwix:permissions';

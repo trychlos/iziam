@@ -7,6 +7,9 @@
  * - organization: the Organization as an entity with its DYN.records array
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import '/imports/client/components/operational_panel/operational_panel.js';
 
 import './client_status_pane.html';

@@ -7,7 +7,7 @@
  */
 
 import _ from 'lodash';
-const assert = require( 'assert' ).strict; // up to nodejs v16.x
+import { strict as assert } from 'node:assert';
 import mix from '@vestergaard-company/js-mixin';
 
 import { Clients } from '/imports/common/collections/clients/index.js';

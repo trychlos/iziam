@@ -2,6 +2,8 @@
  * /import/common/tables/keygrips/tabular.js
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
 import strftime from 'strftime';
 
 import { DateJs } from 'meteor/pwix:date';

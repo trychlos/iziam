@@ -2,7 +2,8 @@
  * /import/common/collections/accounts/checks.js
  */
 
-const assert = require( 'assert' ).strict;
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
 
 import { Accounts } from './index.js';
 

@@ -2,6 +2,9 @@
  * /imports/common/init/providers.js
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { Providers } from '/imports/common/tables/providers/index.js';
 
 //import { AuthorizationScopesProvider } from '/imports/common/providers/authorization-scopes-provider.class.js';

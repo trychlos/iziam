@@ -2,6 +2,9 @@
  * /import/common/tables/providers/tabular.js
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { Field } from 'meteor/pwix:field';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { Tabular } from 'meteor/pwix:tabular';

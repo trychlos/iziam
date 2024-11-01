@@ -8,6 +8,9 @@
  * - checker: a ReactiveVar which contains the parent checker
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import '/imports/client/components/operational_panel/operational_panel.js';
 
 import './organization_status_pane.html';

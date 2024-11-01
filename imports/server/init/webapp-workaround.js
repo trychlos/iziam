@@ -2,6 +2,9 @@
  * /imports/server/init/webapp-workaround.js
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { WebApp } from 'meteor/webapp';
 
 // returns true if the url has been redirected (so it is no worth to try other redirectors)

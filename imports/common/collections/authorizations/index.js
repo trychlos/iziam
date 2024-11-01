@@ -12,6 +12,9 @@
  * As identities, groups and resources, there is one collection per organization.
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 export { Authorizations } from './collection.js';
 
 import './checks.js';

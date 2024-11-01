@@ -5,6 +5,9 @@
  * And this common code begins by creating the APP global object.
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 Meteor.APP = {
     name: 'izIAM',
 };

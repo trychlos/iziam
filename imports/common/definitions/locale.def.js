@@ -3,7 +3,7 @@
  */
 
 import _ from 'lodash';
-const assert = require( 'assert' ).strict;
+import { strict as assert } from 'node:assert';
 
 export const Locale = {
     C: [

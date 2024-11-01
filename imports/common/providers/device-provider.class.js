@@ -11,7 +11,7 @@
  */
 
 import _ from 'lodash';
-const assert = require( 'assert' ).strict;
+import { strict as assert } from 'node:assert';
 import mix from '@vestergaard-company/js-mixin';
 
 import { izProvider } from '/imports/common/classes/iz-provider.class.js';

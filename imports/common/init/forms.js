@@ -2,6 +2,9 @@
  * /imports/common/init/forms.js
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { Forms } from 'meteor/pwix:forms';
 
 Forms.configure({

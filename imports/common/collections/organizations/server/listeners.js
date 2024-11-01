@@ -4,7 +4,8 @@
  * Connect on AccountsManager.s.eventEmitter and Clients.s.eventEmitter to update the witness timestamp.
  */
 
-const assert = require( 'assert' ).strict; // up to nodejs v16.x
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
 
 import { AccountsManager } from 'meteor/pwix:accounts-manager';
 

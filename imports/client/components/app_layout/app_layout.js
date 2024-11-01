@@ -12,6 +12,7 @@
  */
 
 import _ from 'lodash';
+import { strict as assert } from 'node:assert';
 
 import { FlowRouter } from 'meteor/ostrio:flow-router-extra';
 import { Modal } from 'meteor/pwix:modal';

@@ -9,6 +9,7 @@
  */
 
 import _ from 'lodash';
+import { strict as assert } from 'node:assert';
 
 import '/imports/client/components/identity_password_pane/identity_password_pane.js';
 

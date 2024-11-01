@@ -16,6 +16,9 @@
  * - organization: the Organization as an entity with its DYN.records array
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import '/imports/client/components/client_identity_auth_mode_panel/client_identity_auth_mode_panel.js';
 
 import './client_identities_auth_pane.html';

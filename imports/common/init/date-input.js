@@ -2,6 +2,9 @@
  * /imports/common/init/date-input.js
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { DateInput } from 'meteor/pwix:date-input';
 
 DateInput.configure({

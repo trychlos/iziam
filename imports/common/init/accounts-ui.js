@@ -2,6 +2,9 @@
  * /imports/common/init/accounts-ui.js
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { AccountsUI } from 'meteor/pwix:accounts-ui';
 import { pwixI18n } from 'meteor/pwix:i18n';
 

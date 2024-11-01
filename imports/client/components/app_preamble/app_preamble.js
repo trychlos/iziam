@@ -8,4 +8,7 @@
  * - template: the template rendered in the bottom-right
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import './app_preamble.html';

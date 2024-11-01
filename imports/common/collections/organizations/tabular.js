@@ -4,6 +4,9 @@
  * Extends the TenantsManager tabular fieldset.
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { Organizations } from './index.js';
 
 Organizations.tabularFieldset = function(){

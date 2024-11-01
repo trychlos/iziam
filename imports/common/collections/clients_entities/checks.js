@@ -5,7 +5,7 @@
  */
 
 import _ from 'lodash';
-const assert = require( 'assert' ).strict; // up to nodejs v16.x
+import { strict as assert } from 'node:assert';
 
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { TM } from 'meteor/pwix:typed-message';

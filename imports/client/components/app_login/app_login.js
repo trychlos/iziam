@@ -2,6 +2,9 @@
  * /imports/client/components/app_login/app_login.js
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { AccountsUI } from 'meteor/pwix:accounts-ui';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { UIU } from 'meteor/pwix:ui-utils';

@@ -7,6 +7,9 @@
  * - userId: the user whose preferred label is to be displayed
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { AccountsTools } from 'meteor/pwix:accounts-tools';
 
 import './user_preferred_async.html';

@@ -4,6 +4,9 @@
  * Used both by organization and client.
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { Field } from 'meteor/pwix:field';
 import { Forms } from 'meteor/pwix:forms';
 

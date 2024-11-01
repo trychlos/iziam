@@ -2,6 +2,9 @@
  * /imports/common/init/collections-get.js
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { Mongo } from 'meteor/mongo';
 
 Meteor.APP.Collections = {

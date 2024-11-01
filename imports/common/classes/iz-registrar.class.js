@@ -11,6 +11,8 @@
  * it implements the IRegistrar interface.
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
 import mix from '@vestergaard-company/js-mixin';
 
 import { IRegistrar } from '/imports/common/interfaces/iregistrar.iface.js';

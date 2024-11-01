@@ -17,6 +17,7 @@
  */
 
 import _ from 'lodash';
+import { strict as assert } from 'node:assert';
 import 'multiple-select';
 import 'multiple-select/dist/multiple-select.min.css';
 

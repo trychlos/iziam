@@ -2,6 +2,9 @@
  * /imports/common/collections/clients_groups/fieldset.js
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { Field } from 'meteor/pwix:field';
 import { Notes } from 'meteor/pwix:notes';
 import { Timestampable } from 'meteor/pwix:collection-timestampable';

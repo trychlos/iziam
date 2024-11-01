@@ -2,6 +2,9 @@
  * /imports/common/collections/identities_groups/server/publish.js
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { Identities } from '/imports/common/collections/identities/index.js';
 
 import { IdentitiesGroups } from '../index.js';

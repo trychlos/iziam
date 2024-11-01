@@ -4,6 +4,9 @@
  * Imported both from the client and the server, this is our first executed code, and is common to the two sides.
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { Meteor } from 'meteor/meteor';
 
 if( false ){

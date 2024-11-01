@@ -8,6 +8,9 @@
  * - selectedRv: a ReactiveVar to get/set the current selection
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { pwixI18n } from 'meteor/pwix:i18n';
 
 import '/imports/client/components/groups_tree/groups_tree.js';

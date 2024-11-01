@@ -3,7 +3,7 @@
  */
 
 import _ from 'lodash';
-const assert = require( 'assert' ).strict;
+import { strict as assert } from 'node:assert';
 import { createHash, randomBytes } from 'crypto';
 
 import { KeygripSecrets } from '../index.js';

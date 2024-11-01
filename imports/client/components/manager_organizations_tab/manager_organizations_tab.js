@@ -4,6 +4,9 @@
  * Organizations management.
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { PlusButton } from 'meteor/pwix:plus-button';
 import { pwixI18n } from 'meteor/pwix:i18n';
 

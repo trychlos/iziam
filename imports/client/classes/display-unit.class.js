@@ -2,6 +2,9 @@
  * /imports/client/classes/display-unit.class.js
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { AppPages } from 'meteor/pwix:app-pages';
 
 export class DisplayUnit extends AppPages.DisplayUnit {

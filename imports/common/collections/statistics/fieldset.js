@@ -4,6 +4,9 @@
  * Statistics from the REST API.
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { Field } from 'meteor/pwix:field';
 import SimpleSchema from 'meteor/aldeed:simple-schema';
 import { Tracker } from 'meteor/tracker';

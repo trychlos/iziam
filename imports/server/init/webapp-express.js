@@ -4,6 +4,9 @@
  * Instanciates the express application.
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { WebApp } from 'meteor/webapp';
 
 Meteor.APP.express = WebApp.express();

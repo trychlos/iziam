@@ -6,11 +6,9 @@
  */
 
 import _ from 'lodash';
-import validator from 'email-validator';
+import { strict as assert } from 'node:assert';
 
 import { pwixI18n } from 'meteor/pwix:i18n';
-
-import { JwtPrivate } from '/imports/common/definitions/jwt-private.def.js';
 
 import './client_new_assistant_jwt.html';
 

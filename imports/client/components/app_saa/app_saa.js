@@ -4,6 +4,9 @@
  * Manage startup-app-admin workflow if package is present
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import './app_saa.html';
 
 Template.app_saa.onCreated( function(){

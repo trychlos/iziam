@@ -7,6 +7,7 @@
  */
 
 import _ from 'lodash';
+import { strict as assert } from 'node:assert';
 
 import { izObject } from './iz-object.class.js';
 import { Scope } from './scope.class.js';

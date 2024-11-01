@@ -10,6 +10,9 @@
  * The main component is providers_list which calls the tabular() function to initialize.
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 export { Providers } from './object.js';
 
 import './functions.js';

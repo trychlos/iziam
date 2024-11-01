@@ -12,14 +12,13 @@
  */
 
 import _ from 'lodash';
+import { strict as assert } from 'node:assert';
 
 import { Forms } from 'meteor/pwix:forms';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { TenantsManager } from 'meteor/pwix:tenants-manager';
 
 import { HmacEncoding } from '/imports/common/definitions/hmac-encoding.def.js';
-
-import { KeygripSecrets } from '/imports/common/tables/keygrip_secrets/index.js';
 
 import '/imports/client/components/hmac_alg_select/hmac_alg_select.js';
 import '/imports/client/components/hmac_encoding_select/hmac_encoding_select.js';

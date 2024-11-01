@@ -8,6 +8,9 @@
  * - checker: a ReactiveVar which contains the parent Forms.Checker
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { Modal } from 'meteor/pwix:modal';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { TenantsManager } from 'meteor/pwix:tenants-manager';

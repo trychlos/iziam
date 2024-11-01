@@ -12,6 +12,7 @@
  */
 
 import _ from 'lodash';
+import { strict as assert } from 'node:assert';
 
 import { Identities } from '/imports/common/collections/identities/index.js';
 import { Organizations } from '/imports/common/collections/organizations/index.js';

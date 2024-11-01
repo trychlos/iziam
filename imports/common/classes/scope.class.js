@@ -4,6 +4,9 @@
  * A scope, with its handling function and its claims.
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { izObject } from './iz-object.class.js';
 
 export class Scope extends izObject {

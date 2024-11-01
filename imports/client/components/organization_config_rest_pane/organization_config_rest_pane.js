@@ -7,12 +7,13 @@
  * - index: the index of the current record
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { Forms } from 'meteor/pwix:forms';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { TenantsManager } from 'meteor/pwix:tenants-manager';
-
-import { Organizations } from '/imports/common/collections/organizations/index.js';
 
 import './organization_config_rest_pane.html';
 

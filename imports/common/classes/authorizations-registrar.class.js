@@ -10,6 +10,8 @@
  * It maintains a full list of the authorizations of an organization both on client and server sides.
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
 import mix from '@vestergaard-company/js-mixin';
 
 import { ReactiveVar } from 'meteor/reactive-var';

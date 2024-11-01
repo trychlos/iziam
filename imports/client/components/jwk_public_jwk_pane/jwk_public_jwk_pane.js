@@ -10,6 +10,7 @@
  */
 
 import _ from 'lodash';
+import { strict as assert } from 'node:assert';
 import treeify from 'treeify';
 
 import './jwk_public_jwk_pane.html';

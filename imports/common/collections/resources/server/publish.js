@@ -2,6 +2,9 @@
  * /imports/common/collections/resources/server/publish.js
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { Resources } from '../index.js';
 
 // returns the list of known resources for a given organization

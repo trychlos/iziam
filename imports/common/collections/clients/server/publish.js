@@ -2,6 +2,9 @@
  * /imports/common/collections/clients/server/publish.js
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { Permissions } from 'meteor/pwix:permissions';
 import { Validity } from 'meteor/pwix:validity';
 
@@ -85,7 +88,7 @@ Meteor.publish( Meteor.APP.C.pub.clientsAll.publish, async function( organizatio
                 });
             }
         },
-        // remind that records are deleted after entity when deleting a tenant
+        // remind that records are deleted after entity when deleting a client
         removed: async function( oldItem ){
             ClientsEntities.collection.findOneAsync({ _id: oldItem.entity }).then( async ( entity ) => {
                 if( entity ){

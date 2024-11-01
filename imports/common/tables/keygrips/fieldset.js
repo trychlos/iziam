@@ -2,6 +2,9 @@
  * /import/common/tables/keygrips/fieldset.js
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { Field } from 'meteor/pwix:field';
 import { Forms } from 'meteor/pwix:forms';
 import SimpleSchema from 'meteor/aldeed:simple-schema';

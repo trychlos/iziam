@@ -8,6 +8,9 @@
  * As a consequence, all organizations share these two  same clients collections.
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 export { Clients } from './collection.js';
 
 import './fieldset.js';

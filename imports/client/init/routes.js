@@ -5,6 +5,9 @@
  * We define here these configured routes againts our router.
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { BlazeLayout } from 'meteor/pwix:blaze-layout';
 import { FlowRouter } from 'meteor/ostrio:flow-router-extra';
 import { Permissions } from 'meteor/pwix:permissions';

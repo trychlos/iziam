@@ -9,6 +9,9 @@
  * - groups: a ReactiveVar which contains a deep copy of the groups of the organization, to be edited
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { pwixI18n } from 'meteor/pwix:i18n';
 
 import { IdentitiesGroups } from '/imports/common/collections/identities_groups/index.js';

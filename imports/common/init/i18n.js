@@ -2,6 +2,9 @@
  * /imports/common/init/i18n.js
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { pwixI18n } from 'meteor/pwix:i18n';
 
 // note that imports are executed first, and pwixI18n.namespace() is only called after that

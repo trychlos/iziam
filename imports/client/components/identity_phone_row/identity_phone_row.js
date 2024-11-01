@@ -12,8 +12,8 @@
  */
 
 import _ from 'lodash';
+import { strict as assert } from 'node:assert';
 
-import { AccountsHub } from 'meteor/pwix:accounts-hub';
 import { Forms } from 'meteor/pwix:forms';
 import { pwixI18n } from 'meteor/pwix:i18n';
 

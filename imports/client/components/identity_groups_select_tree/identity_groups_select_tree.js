@@ -16,6 +16,7 @@
  */
 
 import _ from 'lodash';
+import { strict as assert } from 'node:assert';
 
 import { IdentityGroupType } from '/imports/common/definitions/identity-group-type.def.js';
 

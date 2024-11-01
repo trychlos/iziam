@@ -5,6 +5,9 @@
  * They are nonetheless instanciated in client side only.
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 Meteor.APP.displayUnits = {
     contact: {
         route: '/pub/contact',

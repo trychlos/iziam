@@ -10,6 +10,7 @@
  */
 
 import _ from 'lodash';
+import { strict as assert } from 'node:assert';
 
 import './jwk_public_spki_pane.html';
 

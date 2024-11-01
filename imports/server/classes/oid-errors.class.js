@@ -4,6 +4,8 @@
  * A class to provide an error page..
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
 import htmlSafe from 'oidc-provider/lib/helpers/html_safe.js';
 
 import { pwixI18n } from 'meteor/pwix:i18n';

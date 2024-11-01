@@ -2,6 +2,9 @@
  * /imports/common/collections/authorizations/server/methods.js
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { Authorizations } from '../index.js';
 
 Meteor.methods({

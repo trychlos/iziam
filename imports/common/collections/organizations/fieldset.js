@@ -4,6 +4,9 @@
  * The fields to be added to the Tenant's entity and to the Tenant's record.
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { Forms } from 'meteor/pwix:forms';
 import SimpleSchema from 'meteor/aldeed:simple-schema';
 

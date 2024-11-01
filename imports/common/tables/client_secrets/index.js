@@ -11,6 +11,9 @@
  * See https://www.oauth.com/oauth2-servers/client-registration/client-id-secret/
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 export { ClientSecrets } from './object.js';
 
 import './checks.js';

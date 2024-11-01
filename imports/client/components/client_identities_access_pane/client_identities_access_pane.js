@@ -17,6 +17,7 @@
  */
 
 import _ from 'lodash';
+import { strict as assert } from 'node:assert';
 
 import '/imports/client/components/client_identity_access_mode_panel/client_identity_access_mode_panel.js';
 

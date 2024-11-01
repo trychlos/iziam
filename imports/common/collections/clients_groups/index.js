@@ -9,6 +9,9 @@
  * This is a tree where each group can have only one parent.
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 export { ClientsGroups } from './collection.js';
 
 import './checks.js';

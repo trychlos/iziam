@@ -8,6 +8,9 @@
  * - the providers_list data context (including 'withConstraints' set in providers_list)
  */
 
+import _ from 'lodash';
+import { strict as assert } from 'node:assert';
+
 import { Providers } from '/imports/common/tables/providers/index.js';
 
 import './provider_selection_checkbox.html';
