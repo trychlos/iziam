@@ -69,5 +69,9 @@ Template.organization_mandatory_pane.helpers({
     // string translation
     i18n( arg ){
         return pwixI18n.label( I18N, arg.hash.key );
-    }
+    },
+    // for label
+    itFor( label ){
+        return 'organization_mandatory_'+label+'_'+this.index;
+    },
 });

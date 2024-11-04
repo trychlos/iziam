@@ -22,28 +22,28 @@ Template.organization_config_pane.helpers({
             tabs: [
                 {
                     // the only field of the REST config pane is the baseUrl which is made available in the mandatory pane
-                    name: 'organization_config_rest_tab',
+                    name: 'organization_config_rest_tab_'+this.index,
                     navLabel: pwixI18n.label( I18N, 'organizations.edit.rest_config_tab_title' ),
                     paneTemplate: 'organization_config_rest_pane',
                     shown: false
                 },
                 {
-                    name: 'organization_config_oauth_tab',
+                    name: 'organization_config_oauth_tab_'+this.index,
                     navLabel: pwixI18n.label( I18N, 'organizations.edit.oauth_config_tab_title' ),
                     paneTemplate: 'organization_config_oauth_pane'
                 },
                 {
-                    name: 'organization_config_ident_tab',
+                    name: 'organization_config_ident_tab_'+this.index,
                     navLabel: pwixI18n.label( I18N, 'organizations.edit.ident_config_tab_title' ),
                     paneTemplate: 'organization_config_ident_pane'
                 },
                 {
-                    name: 'organization_config_dynregistration_tab',
+                    name: 'organization_config_dynregistration_tab_'+this.index,
                     navLabel: pwixI18n.label( I18N, 'organizations.edit.dynregistration_tab_title' ),
                     paneTemplate: 'organization_config_dynregistration_pane'
                 },
                 {
-                    name: 'organization_config_ttls_tab',
+                    name: 'organization_config_ttls_tab_'+this.index,
                     navLabel: pwixI18n.label( I18N, 'organizations.edit.ttls_config_tab_title' ),
                     paneTemplate: 'organization_config_ttls_pane'
                 }

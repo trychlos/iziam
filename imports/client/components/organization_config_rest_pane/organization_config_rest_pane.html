@@ -11,9 +11,9 @@
             <div class="panel-body">
                 <table class="form-table ui-w100">
                     <tr>
-                        <td class="ui-w15 label"><label class="form-label" for="config-baseurl-label">{{ i18n key="organizations.edit.baseurl_label" }}</label></td>
+                        <td class="ui-w15 label"><label class="form-label" for="{{ itFor "url" }}">{{ i18n key="organizations.edit.baseurl_label" }}</label></td>
                         <td class="ui-w100">
-                            <input class="form-control flex-grow-1 js-baseurl" type="text" id="config-baseurl-label" placeholder="{{ i18n key="organizations.edit.baseurl_ph" }}" title="{{ i18n key="organizations.edit.baseurl_title" }}" />
+                            <input class="form-control flex-grow-1 js-baseurl" type="text" id="{{ itFor "url" }}" placeholder="{{ i18n key="organizations.edit.baseurl_ph" }}" title="{{ i18n key="organizations.edit.baseurl_title" }}" />
                         </td>
                     </tr>
                 </table>

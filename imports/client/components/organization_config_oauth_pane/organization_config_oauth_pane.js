@@ -90,6 +90,10 @@ Template.organization_config_oauth_pane.helpers({
     i18n( arg ){
         return pwixI18n.label( I18N, arg.hash.key );
     },
+    // for label
+    itFor( label ){
+        return 'organization_config_oauth_'+label+'_'+this.index;
+    },
     // an example of the issuer value
     // using the well-known server discovery url
     issuer_example(){

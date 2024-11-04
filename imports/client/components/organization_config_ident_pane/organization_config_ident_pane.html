@@ -39,8 +39,8 @@
                                     <tr>
                                         <td colspan="5"> 
                                             <div class="form-check js-email-identifier ui-mt05">
-                                                <input class="form-check-input" type="checkbox" id="organization-edit-ident-email-identifier" {{ emailIdentifierDisabled }} />
-                                                <label class="form-check-label" for="organization-edit-ident-email-identifier">{{ i18n key="organizations.edit.ident_email_identifier" }}</label>
+                                                <input class="form-check-input" type="checkbox" id="{{ itFor "email_identifier" }}" {{ emailIdentifierDisabled }} />
+                                                <label class="form-check-label" for="{{ itFor "email_identifier" }}">{{ i18n key="organizations.edit.ident_email_identifier" }}</label>
                                             </div>
                                         </td>
                                     </tr>
@@ -74,8 +74,8 @@
                                     <tr>
                                         <td colspan="5">
                                             <div class="form-check js-username-identifier ui-mt05">
-                                                <input class="form-check-input" type="checkbox" id="organization-edit-ident-username-identifier" {{ usernameIdentifierDisabled }} />
-                                                <label class="form-check-label" for="organization-edit-ident-username-identifier">{{ i18n key="organizations.edit.ident_username_identifier" }}</label>
+                                                <input class="form-check-input" type="checkbox" id="{{ itFor "username_identifier" }}" {{ usernameIdentifierDisabled }} />
+                                                <label class="form-check-label" for="{{ itFor "username_identifier" }}">{{ i18n key="organizations.edit.ident_username_identifier" }}</label>
                                             </div>
                                         </td>
                                     </tr>

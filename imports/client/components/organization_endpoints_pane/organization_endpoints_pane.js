@@ -110,6 +110,10 @@ Template.organization_endpoints_pane.helpers({
     i18n( arg ){
         return pwixI18n.label( I18N, arg.hash.key );
     },
+    // for label
+    itFor( label ){
+        return 'organization_endpoints_'+label+'_'+this.index;
+    },
     // the full introspection endpoint url
     introspection_example(){
         const endpoint = Template.instance().APP.organization.get().record.introspection_endpoint;

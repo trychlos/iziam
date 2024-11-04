@@ -11,9 +11,9 @@
             <div class="panel-body">
                 <table class="form-table ui-w100">
                     <tr>
-                        <td class="ui-w15 label ui-vatop"><label class="form-label ui-mt05" for="issuer-label">{{ i18n key="organizations.edit.issuer_label" }}</label></td>
+                        <td class="ui-w15 label ui-vatop"><label class="form-label ui-mt05" for="{{ itFor "label" }}">{{ i18n key="organizations.edit.issuer_label" }}</label></td>
                         <td class="ui-w100">
-                            <input class="form-control flex-grow-1 js-issuer" type="text" id="issuer-label" placeholder="{{ i18n key="organizations.edit.issuer_ph" }}" title="{{ i18n key="organizations.edit.issuer_title" }}" />
+                            <input class="form-control flex-grow-1 js-issuer" type="text" id="{{ itFor "label" }}" placeholder="{{ i18n key="organizations.edit.issuer_ph" }}" title="{{ i18n key="organizations.edit.issuer_title" }}" />
                             <p class="form-subtext">{{{ issuer_example }}}</p>
                         </td>
                     </tr>
@@ -22,12 +22,12 @@
                         <td class="ui-w100">
                             <div class="js-pkce">
                                 <div class="form-check ui-mt05" title="{{ i18n key="organizations.edit.pkce_title" }}">
-                                    <input class="form-check-input" type="checkbox" id="pkce" />
-                                    <label class="form-check-label" for="pkce">{{ i18n key="organizations.edit.pkce_label" }}</label>
+                                    <input class="form-check-input" type="checkbox" id="{{ itFor "pkce" }}" />
+                                    <label class="form-check-label" for="{{ itFor "pkce" }}">{{ i18n key="organizations.edit.pkce_label" }}</label>
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input ui-hidden" type="checkbox"/>
-                                    <label class="form-check-label" for="pkce">{{{ i18n key="organizations.edit.pkce_description" }}}</label>
+                                    <label class="form-check-label" for="{{ itFor "pkce" }}">{{{ i18n key="organizations.edit.pkce_description" }}}</label>
                                 </div>
                             </div>
                         </td>

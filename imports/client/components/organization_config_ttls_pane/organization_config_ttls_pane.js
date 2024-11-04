@@ -119,6 +119,11 @@ Template.organization_config_ttls_pane.helpers({
         return pwixI18n.label( I18N, arg.hash.key );
     },
 
+    // for label
+    itFor( label ){
+        return 'organization_config_ttls_'+label+'_'+this.index;
+    },
+    
     // access token ttl
     ttlAccess(){
         return msToSample( this.entity.get().DYN.records[this.index].get().ttl_AccessToken );

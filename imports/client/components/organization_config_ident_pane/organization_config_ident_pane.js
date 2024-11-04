@@ -175,6 +175,10 @@ Template.organization_config_ident_pane.helpers({
     i18n( arg ){
         return pwixI18n.label( I18N, arg.hash.key );
     },
+    // for label
+    itFor( label ){
+        return 'organization_config_ident_'+label+'_'+this.index;
+    },
     // parms for email max how count
     parmsEmailMaxHow(){
         return {

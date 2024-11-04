@@ -11,55 +11,55 @@
             <div class="panel-body">
                 <table class="form-table ui-w100">
                     <tr>
-                        <td class="ui-w15 label ui-vatop"><label class="form-label ui-mt05" for="access-label">{{ i18n key="organizations.edit.ttl_access_label" }}</label></td>
+                        <td class="ui-w15 label ui-vatop"><label class="form-label ui-mt05" for="{{ itFor "access" }}">{{ i18n key="organizations.edit.ttl_access_label" }}</label></td>
                         <td class="">
                             <div class="ui-w33 d-flex align-items-center js-access">
-                                <input class="form-control ui-w50" type="number" id="access-label" min="0" pattern="\d*" placeholder="{{ i18n key="organizations.edit.ttl_access_ph" }}" title="{{ i18n key="organizations.edit.ttl_access_title" }}" />
+                                <input class="form-control ui-w50" type="number" id="{{ itFor "access" }}" min="0" pattern="\d*" placeholder="{{ i18n key="organizations.edit.ttl_access_ph" }}" title="{{ i18n key="organizations.edit.ttl_access_title" }}" />
                                 <span class="form-sample ms-auto ui-mr05">{{ ttlAccess }}</span>
                             </div>
                         </td>
                     </tr>
                     <tr>
-                        <td class="ui-w15 label ui-vatop"><label class="form-label ui-mt05" for="client-label">{{ i18n key="organizations.edit.ttl_client_label" }}</label></td>
+                        <td class="ui-w15 label ui-vatop"><label class="form-label ui-mt05" for="{{ itFor "client" }}">{{ i18n key="organizations.edit.ttl_client_label" }}</label></td>
                         <td class="">
                             <div class="ui-w33 d-flex align-items-center js-client">
-                                <input class="form-control ui-w50" type="number" id="client-label" min="0" pattern="\d*" placeholder="{{ i18n key="organizations.edit.ttl_client_ph" }}" title="{{ i18n key="organizations.edit.ttl_client_title" }}" />
+                                <input class="form-control ui-w50" type="number" id="{{ itFor "client" }}" min="0" pattern="\d*" placeholder="{{ i18n key="organizations.edit.ttl_client_ph" }}" title="{{ i18n key="organizations.edit.ttl_client_title" }}" />
                                 <span class="form-sample ms-auto ui-mr05">{{ ttlClient }}</span>
                             </div>
                         </td>
                     </tr>
                     <tr>
-                        <td class="ui-w15 label ui-vatop"><label class="form-label ui-mt05" for="grant-label">{{ i18n key="organizations.edit.ttl_grant_label" }}</label></td>
+                        <td class="ui-w15 label ui-vatop"><label class="form-label ui-mt05" for="{{ itFor "grant" }}">{{ i18n key="organizations.edit.ttl_grant_label" }}</label></td>
                         <td class="">
                             <div class="ui-w33 d-flex align-items-center js-grant">
-                                <input class="form-control ui-w50" type="number" id="grant-label" min="0" pattern="\d*" placeholder="{{ i18n key="organizations.edit.ttl_grant_ph" }}" title="{{ i18n key="organizations.edit.ttl_grant_title" }}" />
+                                <input class="form-control ui-w50" type="number" id="{{ itFor "grant" }}" min="0" pattern="\d*" placeholder="{{ i18n key="organizations.edit.ttl_grant_ph" }}" title="{{ i18n key="organizations.edit.ttl_grant_title" }}" />
                                 <span class="form-sample ms-auto ui-mr05">{{ ttlGrant }}</span>
                             </div>
                         </td>
                     </tr>
                     <tr>
-                        <td class="ui-w15 label ui-vatop"><label class="form-label ui-mt05" for="idtoken-label">{{ i18n key="organizations.edit.ttl_idtoken_label" }}</label></td>
+                        <td class="ui-w15 label ui-vatop"><label class="form-label ui-mt05" for="{{ itFor "idtoken" }}">{{ i18n key="organizations.edit.ttl_idtoken_label" }}</label></td>
                         <td class="">
                             <div class="ui-w33 d-flex align-items-center js-idtoken">
-                                <input class="form-control ui-w50" type="number" id="idtoken-label" min="0" pattern="\d*" placeholder="{{ i18n key="organizations.edit.ttl_idtoken_ph" }}" title="{{ i18n key="organizations.edit.ttl_idtoken_title" }}" />
+                                <input class="form-control ui-w50" type="number" id="{{ itFor "idtoken" }}" min="0" pattern="\d*" placeholder="{{ i18n key="organizations.edit.ttl_idtoken_ph" }}" title="{{ i18n key="organizations.edit.ttl_idtoken_title" }}" />
                                 <span class="form-sample ms-auto ui-mr05">{{ ttlIdToken }}</span>
                             </div>
                         </td>
                     </tr>
                     <tr>
-                        <td class="ui-w15 label ui-vatop"><label class="form-label ui-mt05" for="interaction-label">{{ i18n key="organizations.edit.ttl_interaction_label" }}</label></td>
+                        <td class="ui-w15 label ui-vatop"><label class="form-label ui-mt05" for="{{ itFor "interaction" }}">{{ i18n key="organizations.edit.ttl_interaction_label" }}</label></td>
                         <td class="">
                             <div class="ui-w33 d-flex align-items-center js-interaction">
-                                <input class="form-control ui-w50" type="number" id="interaction-label" min="0" pattern="\d*" placeholder="{{ i18n key="organizations.edit.ttl_interaction_ph" }}" title="{{ i18n key="organizations.edit.ttl_interaction_title" }}" />
+                                <input class="form-control ui-w50" type="number" id="{{ itFor "interaction" }}" min="0" pattern="\d*" placeholder="{{ i18n key="organizations.edit.ttl_interaction_ph" }}" title="{{ i18n key="organizations.edit.ttl_interaction_title" }}" />
                                 <span class="form-sample ms-auto ui-mr05">{{ ttlInteraction }}</span>
                             </div>
                         </td>
                     </tr>
                     <tr>
-                        <td class="ui-w15 label ui-vatop"><label class="form-label ui-mt05" for="session-label">{{ i18n key="organizations.edit.ttl_session_label" }}</label></td>
+                        <td class="ui-w15 label ui-vatop"><label class="form-label ui-mt05" for="{{ itFor "session" }}">{{ i18n key="organizations.edit.ttl_session_label" }}</label></td>
                         <td class="">
                         <div class="ui-w33 d-flex align-items-center js-session">
-                                <input class="form-control ui-w50" type="number" id="session-label" min="0" pattern="\d*" placeholder="{{ i18n key="organizations.edit.ttl_session_ph" }}" title="{{ i18n key="organizations.edit.ttl_session_title" }}" />
+                                <input class="form-control ui-w50" type="number" id="{{ itFor "session" }}" min="0" pattern="\d*" placeholder="{{ i18n key="organizations.edit.ttl_session_ph" }}" title="{{ i18n key="organizations.edit.ttl_session_title" }}" />
                                 <span class="form-sample ms-auto ui-mr05">{{ ttlSession }}</span>
                             </div>
                         </td>

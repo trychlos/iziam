@@ -8,58 +8,58 @@
             <div class="panel-body">
                 <table class="form-table ui-w100">
                     <tr>
-                        <td class="ui-w20 label ui-vatop"><label class="form-label ui-mt05" for="authorization-label">{{ i18n key="organizations.edit.authorization_label" }}</label></td>
+                        <td class="ui-w20 label ui-vatop"><label class="form-label ui-mt05" for="{{ itFor "authorization" }}">{{ i18n key="organizations.edit.authorization_label" }}</label></td>
                         <td class="ui-w100">
-                            <input class="form-control flex-grow-1 js-authorization" type="text" id="authorization-label" placeholder="{{ i18n key="organizations.edit.authorization_ph" }}" title="{{ i18n key="organizations.edit.authorization_title" }}" />
+                            <input class="form-control flex-grow-1 js-authorization" type="text" id="{{ itFor "authorization" }}" placeholder="{{ i18n key="organizations.edit.authorization_ph" }}" title="{{ i18n key="organizations.edit.authorization_title" }}" />
                             <p class="form-subtext">{{{ authorization_example }}}</p>
                         </td>
                     </tr>
                     <tr>
-                        <td class="ui-w20 label ui-vatop"><label class="form-label ui-mt05" for="token-label">{{ i18n key="organizations.edit.token_label" }}</label></td>
+                        <td class="ui-w20 label ui-vatop"><label class="form-label ui-mt05" for="{{ itFor "token" }}">{{ i18n key="organizations.edit.token_label" }}</label></td>
                         <td class="ui-w100">
-                            <input class="form-control flex-grow-1 js-token" type="text" id="token-label" placeholder="{{ i18n key="organizations.edit.token_ph" }}" title="{{ i18n key="organizations.edit.token_title" }}" />
+                            <input class="form-control flex-grow-1 js-token" type="text" id="{{ itFor "token" }}" placeholder="{{ i18n key="organizations.edit.token_ph" }}" title="{{ i18n key="organizations.edit.token_title" }}" />
                             <p class="form-subtext">{{{ token_example }}}</p>
                         </td>
                     </tr>
                     <tr>
-                        <td class="ui-w20 label ui-vatop"><label class="form-label ui-mt05" for="dynamic-label">{{ i18n key="organizations.edit.dynamic_label" }}</label></td>
+                        <td class="ui-w20 label ui-vatop"><label class="form-label ui-mt05" for="{{ itFor "dynamic" }}">{{ i18n key="organizations.edit.dynamic_label" }}</label></td>
                         <td class="ui-w100">
-                            <input class="form-control flex-grow-1 js-dynamic" type="text" id="dynamic-label" placeholder="{{ i18n key="organizations.edit.dynamic_ph" }}" title="{{ i18n key="organizations.edit.dynamic_title" }}" />
+                            <input class="form-control flex-grow-1 js-dynamic" type="text" id="{{ itFor "dynamic" }}" placeholder="{{ i18n key="organizations.edit.dynamic_ph" }}" title="{{ i18n key="organizations.edit.dynamic_title" }}" />
                             <p class="form-subtext">{{{ dynamic_example }}}</p>
                         </td>
                     </tr>
                     <tr>
-                        <td class="ui-w20 label ui-vatop"><label class="form-label ui-mt05" for="jwks-label">{{ i18n key="organizations.edit.jwks_label" }}</label></td>
+                        <td class="ui-w20 label ui-vatop"><label class="form-label ui-mt05" for="{{ itFor "jwks" }}">{{ i18n key="organizations.edit.jwks_label" }}</label></td>
                         <td class="ui-w100">
-                            <input class="form-control flex-grow-1 js-jwks" type="text" id="jwks-label" placeholder="{{ i18n key="organizations.edit.jwks_ph" }}" title="{{ i18n key="organizations.edit.jwks_title" }}" />
+                            <input class="form-control flex-grow-1 js-jwks" type="text" id="{{ itFor "jwks" }}" placeholder="{{ i18n key="organizations.edit.jwks_ph" }}" title="{{ i18n key="organizations.edit.jwks_title" }}" />
                             <p class="form-subtext">{{{ jwks_example }}}</p>
                         </td>
                     </tr>
                     <tr>
-                        <td class="ui-w20 label ui-vatop"><label class="form-label ui-mt05" for="userinfo-label">{{ i18n key="organizations.edit.userinfo_label" }}</label></td>
+                        <td class="ui-w20 label ui-vatop"><label class="form-label ui-mt05" for="{{ itFor "userinfo" }}">{{ i18n key="organizations.edit.userinfo_label" }}</label></td>
                         <td class="ui-w100">
-                            <input class="form-control flex-grow-1 js-userinfo" type="text" id="userinfo-label" placeholder="{{ i18n key="organizations.edit.userinfo_ph" }}" title="{{ i18n key="organizations.edit.userinfo_title" }}" />
+                            <input class="form-control flex-grow-1 js-userinfo" type="text" id="{{ itFor "userinfo" }}" placeholder="{{ i18n key="organizations.edit.userinfo_ph" }}" title="{{ i18n key="organizations.edit.userinfo_title" }}" />
                             <p class="form-subtext">{{{ userinfo_example }}}</p>
                         </td>
                     </tr>
                     <tr>
-                        <td class="ui-w20 label ui-vatop"><label class="form-label ui-mt05" for="endsession-label">{{ i18n key="organizations.edit.endsession_label" }}</label></td>
+                        <td class="ui-w20 label ui-vatop"><label class="form-label ui-mt05" for="{{ itFor "endsession" }}">{{ i18n key="organizations.edit.endsession_label" }}</label></td>
                         <td class="ui-w100">
-                            <input class="form-control flex-grow-1 js-endsession" type="text" id="endsession-label" placeholder="{{ i18n key="organizations.edit.endsession_ph" }}" title="{{ i18n key="organizations.edit.endsession_title" }}" />
+                            <input class="form-control flex-grow-1 js-endsession" type="text" id="{{ itFor "endsession" }}" placeholder="{{ i18n key="organizations.edit.endsession_ph" }}" title="{{ i18n key="organizations.edit.endsession_title" }}" />
                             <p class="form-subtext">{{{ endsession_example }}}</p>
                         </td>
                     </tr>
                     <tr>
-                        <td class="ui-w20 label ui-vatop"><label class="form-label ui-mt05" for="revocation-label">{{ i18n key="organizations.edit.revocation_label" }}</label></td>
+                        <td class="ui-w20 label ui-vatop"><label class="form-label ui-mt05" for="{{ itFor "revocation" }}">{{ i18n key="organizations.edit.revocation_label" }}</label></td>
                         <td class="ui-w100">
-                            <input class="form-control flex-grow-1 js-revocation" type="text" id="revocation-label" placeholder="{{ i18n key="organizations.edit.revocation_ph" }}" title="{{ i18n key="organizations.edit.revocation_title" }}" />
+                            <input class="form-control flex-grow-1 js-revocation" type="text" id="{{ itFor "revocation" }}" placeholder="{{ i18n key="organizations.edit.revocation_ph" }}" title="{{ i18n key="organizations.edit.revocation_title" }}" />
                             <p class="form-subtext">{{{ revocation_example }}}</p>
                         </td>
                     </tr>
                     <tr>
-                        <td class="ui-w20 label ui-vatop"><label class="form-label ui-mt05" for="introspection-label">{{ i18n key="organizations.edit.introspection_label" }}</label></td>
+                        <td class="ui-w20 label ui-vatop"><label class="form-label ui-mt05" for="{{ itFor "introspection" }}">{{ i18n key="organizations.edit.introspection_label" }}</label></td>
                         <td class="ui-w100">
-                            <input class="form-control flex-grow-1 js-introspection" type="text" id="introspection-label" placeholder="{{ i18n key="organizations.edit.introspection_ph" }}" title="{{ i18n key="organizations.edit.introspection_title" }}" />
+                            <input class="form-control flex-grow-1 js-introspection" type="text" id="{{ itFor "introspection" }}" placeholder="{{ i18n key="organizations.edit.introspection_ph" }}" title="{{ i18n key="organizations.edit.introspection_title" }}" />
                             <p class="form-subtext">{{{ introspection_example }}}</p>
                         </td>
                     </tr>
