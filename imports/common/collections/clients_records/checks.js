@@ -13,7 +13,7 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 import { TM } from 'meteor/pwix:typed-message';
 
 import { ApplicationType } from '/imports/common/definitions/application-type.def.js';
-//import { AuthMethod } from '/imports/common/definitions/auth-method.def.js';
+import { AuthMethod } from '/imports/common/definitions/auth-method.def.js';
 import { ClientProfile } from '/imports/common/definitions/client-profile.def.js';
 import { ClientType } from '/imports/common/definitions/client-type.def.js';
 import { GrantType } from '/imports/common/definitions/grant-type.def.js';
@@ -155,31 +155,6 @@ const _validUrl = function( value, opts ){
 
 ClientsRecords.checks = {
     /*
-    // the authentification method againt the token endpoint
-    async token_endpoint_auth_method( value, data, coreApp={} ){
-        _assert_data_itemrv( 'ClientsRecords.check_authMethod()', data );
-        const item = data.item.get();
-        return Promise.resolve( null )
-            .then(() => {
-                if( coreApp.update !== false ){
-                    item.token_endpoint_auth_method = value || null;
-                    data.item.set( item );
-                }
-                if( value ){
-                    const def = AuthMethod.byId( value );
-                    return def ? null : new CoreApp.TypedMessage({
-                        type: CoreApp.MessageType.C.WARNING,
-                        message: pwixI18n.label( I18N, 'clients.check.authmethod_invalid' )
-                    });
-                } else {
-                    return new CoreApp.TypedMessage({
-                        type: CoreApp.MessageType.C.WARNING,
-                        message: pwixI18n.label( I18N, 'clients.check.authmethod_unset' )
-                    });
-                }
-            });
-    },
-
     async clientSecrets( value, data, coreApp={} ){
         _assert_data_itemrv( 'ClientsRecords.check_clientSecrets()', data );
         const item = data.item.get();
@@ -333,6 +308,7 @@ ClientsRecords.checks = {
         let item = data.entity.get().DYN.records[data.index].get();
         if( opts.update !== false ){
             item.identity_access_mode = value;
+            data.entity.get().DYN.records[data.index].set( item );
         }
         if( value ){
             const def = IdentityAccessMode.byId( value );
@@ -353,7 +329,8 @@ ClientsRecords.checks = {
         _assert_data_content( 'ClientsRecords.checks.identity_auth_mode()', data );
         let item = data.entity.get().DYN.records[data.index].get();
         if( opts.update !== false ){
-            item.identity_access_mode = value;
+            item.identity_auth_mode = value;
+            data.entity.get().DYN.records[data.index].set( item );
         }
         if( value ){
             const def = IdentityAuthMode.byId( value );
@@ -509,6 +486,27 @@ ClientsRecords.checks = {
             item.software_version = value;
         }
         return null;
+    },
+
+    // the authentification method againt the token endpoint
+    async token_endpoint_auth_method( value, data, opts ){
+        _assert_data_content( 'ClientsRecords.checks.token_endpoint_auth_method()', data );
+        let item = data.entity.get().DYN.records[data.index].get();
+        if( opts.update !== false ){
+            item.token_endpoint_auth_method = value;
+            data.entity.get().DYN.records[data.index].set( item );
+        }
+        if( value ){
+            const def = AuthMethod.byId( value );
+            return def ? null : TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'clients.checks.authmethod_invalid' )
+            });
+        }
+        new TM.TypedMessage({
+            level: TM.MessageLevel.C.ERROR,
+            message: pwixI18n.label( I18N, 'clients.checks.authmethod_unset' )
+        });
     },
 
     async tos_uri( value, data, opts ){

@@ -10,14 +10,14 @@
                     {{#each nature in naturesList }}
                         <p class="nature-header ui-mt05 ui-fwbold">{{{ natureHeader nature }}}</p>
                         {{#each it in itemsList nature }}
-                            <div class="by-item {{ itSelected nature it }}" data-item-id="{{ it }}">
+                            <div class="by-item {{ itSelected nature it }}" data-item-id="{{ itId nature it }}">
                                 <div class="form-check">
-                                    <input class="form-check-input ui-mr025" id="{{ it }}" type="{{ itInputType nature it }}" name="nature-{{ nature }}" {{ itChecked nature it }} {{ itDisabled nature it }} />
-                                    <label class="form-check-label" for="{{ it }}">{{ itLabel nature it }}</label>
+                                    <input class="form-check-input ui-mr025" id="{{ itFor nature it }}" type="{{ itInputType nature it }}" name="{{ itName nature it }}" {{ itChecked nature it }} {{ itDisabled nature it }} />
+                                    <label class="form-check-label form-label-title" for="{{ itFor nature it }}">{{ itLabel nature it }}</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input ui-hidden" type="{{ itInputType nature it }}" name="nature-{{ nature }}" {{ itDisabled nature it }} />
-                                    <label class="form-check-label" for="{{ it }}">{{{ itDescription nature it }}}</label>
+                                    <input class="form-check-input ui-hidden" type="{{ itInputType nature it }}" name="{{ itName nature it }}" {{ itDisabled nature it }} />
+                                    <label class="form-check-label form-label-description" for="{{ itFor nature it }}">{{{ itDescription nature it }}}</label>
                                 </div>
                             </div>
                         {{/each}}

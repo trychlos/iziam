@@ -43,94 +43,97 @@ Template.client_record_tabbed.onCreated( function(){
         },
         // the Checker instance
         checker: new ReactiveVar( null ),
-        // the tabs for this record
-        parmsRecord: new ReactiveVar( null ),
+        // the Tabbed parameters
+        tabs: new ReactiveVar( null ),
         // the ValidityFieldset parameters
         parmsValidity: new ReactiveVar( null )
     };
 
-    // prepare the record tabbed parms
-    self.autorun(() => {
-        const dataContext = Template.currentData();
-        if( dataContext.index < dataContext.entity.get().DYN.records.length ){
-            const notes = ClientsRecords.fieldSet.get().byName( 'notes' );
-            const paneData = {
-                entity: dataContext.entity,
-                index: dataContext.index,
-                checker: dataContext.checker,
-                organization: dataContext.organization
-            };
-            let tabs = [
-                {
-                    navLabel: pwixI18n.label( I18N, 'clients.edit.properties_tab_title' ),
-                    paneTemplate: 'client_properties_panel',
-                    paneData: {
-                        ...paneData,
-                        withApplicationType: true,
-                        withEnabled: true,
-                        withProfile: true,
-                        withClientType: true
-                    }
-                },
-                {
-                    navLabel: pwixI18n.label( I18N, 'clients.edit.auth_flow_tab_title' ),
-                    paneTemplate: 'client_grant_types_panel',
-                    paneData: paneData
-                },
-                {
-                    navLabel: pwixI18n.label( I18N, 'clients.edit.auth_method_tab_title' ),
-                    paneTemplate: 'client_auth_method_panel',
-                    paneData: paneData
-                },
-                {
-                    navLabel: pwixI18n.label( I18N, 'clients.edit.config_tab_title' ),
-                    paneTemplate: 'client_config_pane',
-                    paneData: paneData
-                },
-                {
-                    navLabel: pwixI18n.label( I18N, 'clients.edit.redirects_tab_title' ),
-                    paneTemplate: 'client_redirects_panel',
-                    paneData: {
-                        ...paneData,
-                        haveOne: false
-                    }
-                },
-                {
-                    navLabel: pwixI18n.label( I18N, 'clients.edit.jwks_tab_title' ),
-                    paneTemplate: 'client_jwks_panel',
-                    paneData: paneData
-                },
-                {
-                    navLabel: pwixI18n.label( I18N, 'clients.edit.secrets_tab_title' ),
-                    paneTemplate: 'client_secrets_panel',
-                    paneData: paneData
-                },
-                {
-                    navLabel: pwixI18n.label( I18N, 'clients.edit.contacts_tab_title' ),
-                    paneTemplate: 'client_contacts_panel',
-                    paneData: {
-                        ...paneData,
-                        haveOne: false
-                    }
-                },
-                {
-                    name: 'record_notes_tab',
-                    navLabel: pwixI18n.label( I18N, 'clients.edit.record_notes_tab_title' ),
-                    paneTemplate: 'NotesEdit',
-                    paneData: {
-                        item: dataContext.entity.get().DYN.records[dataContext.index].get(),
-                        field: notes
-                    }
-                }
-            ];
-            self.APP.parmsRecord.set({
-                name: 'client_record_tabbed',
-                tabs: tabs
-            });
-        } else {
-            self.APP.parmsRecord.set( null );
+    // define the tabs
+    //  we should be reactive to data context changes only as the tabs population is fixed
+    const dataContext = Template.currentData();
+    if( dataContext.index >= dataContext.entity.get().DYN.records.length ){
+        dataContext.index = dataContext.entity.get().DYN.records.length - 1;
+    }
+    const notes = ClientsRecords.fieldSet.get().byName( 'notes' );
+    const paneData = {
+        entity: dataContext.entity,
+        index: dataContext.index,
+        checker: dataContext.checker,
+        organization: dataContext.organization
+    };
+    self.APP.tabs.set([
+        {
+            name: 'client_properties_tab_'+dataContext.index,
+            navLabel: pwixI18n.label( I18N, 'clients.edit.properties_tab_title' ),
+            paneTemplate: 'client_properties_panel',
+            paneData: {
+                ...paneData,
+                withApplicationType: true,
+                withEnabled: true,
+                withProfile: true,
+                withClientType: true
+            }
+        },
+        {
+            name: 'client_grant_types_tab_'+dataContext.index,
+            navLabel: pwixI18n.label( I18N, 'clients.edit.auth_flow_tab_title' ),
+            paneTemplate: 'client_grant_types_panel',
+            paneData: paneData
+        },
+        {
+            name: 'client_auth_method_tab_'+dataContext.index,
+            navLabel: pwixI18n.label( I18N, 'clients.edit.auth_method_tab_title' ),
+            paneTemplate: 'client_auth_method_panel',
+            paneData: paneData
+        },
+        {
+            name: 'client_config_tab_'+dataContext.index,
+            navLabel: pwixI18n.label( I18N, 'clients.edit.config_tab_title' ),
+            paneTemplate: 'client_config_pane',
+            paneData: paneData
+        },
+        {
+            name: 'client_redirects_tab_'+dataContext.index,
+            navLabel: pwixI18n.label( I18N, 'clients.edit.redirects_tab_title' ),
+            paneTemplate: 'client_redirects_panel',
+            paneData: {
+                ...paneData,
+                haveOne: false
+            }
+        },
+        {
+            name: 'client_jwks_tab_'+dataContext.index,
+            navLabel: pwixI18n.label( I18N, 'clients.edit.jwks_tab_title' ),
+            paneTemplate: 'client_jwks_panel',
+            paneData: paneData
+        },
+        {
+            name: 'client_secrets_tab_'+dataContext.index,
+            navLabel: pwixI18n.label( I18N, 'clients.edit.secrets_tab_title' ),
+            paneTemplate: 'client_secrets_panel',
+            paneData: paneData
+        },
+        {
+            name: 'client_contacts_tab_'+dataContext.index,
+            navLabel: pwixI18n.label( I18N, 'clients.edit.contacts_tab_title' ),
+            paneTemplate: 'client_contacts_panel',
+            paneData: {
+                ...paneData,
+                haveOne: false
+            }
+        },
+        {
+            name: 'client_notes_tab_'+dataContext.index,
+            name: 'record_notes_tab',
+            navLabel: pwixI18n.label( I18N, 'clients.edit.record_notes_tab_title' ),
+            paneTemplate: 'NotesEdit',
+            paneData: {
+                item: dataContext.entity.get().DYN.records[dataContext.index].get(),
+                field: notes
+            }
         }
-    });
+    ]);
 
     // prepare the validity fieldset parms
     self.autorun(() => {
@@ -173,9 +176,12 @@ Template.client_record_tabbed.onRendered( function(){
 });
 
 Template.client_record_tabbed.helpers({
-    // data context for the record tabbed panes
-    parmsRecord(){
-        return Template.instance().APP.parmsRecord.get();
+    // data context for Tabbed
+    parmsTabbed(){
+        return {
+            name: 'client_record_tabbed_'+this.index,
+            tabs: Template.instance().APP.tabs.get()
+        }
     },
 
     // data context for ValidityFieldset

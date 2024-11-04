@@ -150,6 +150,8 @@ Meteor.APP.i18n = {
                     atdate_closest_done: 'The closest record seems OK. You may want change its validity period to make it actually operational',
                     atdate_none: 'No validity period is valid at date',
                     atdate_next: 'Other checks will be done on the closest record',
+                    authmethod_invalid: 'The token endpoint Authentication Method is not valid',
+                    authmethod_unset: 'The token endpoint Authentication Method is not set',
                     client_type_invalid: 'The client type is unknown or not valid',
                     client_type_unset: 'The client type is not set',
                     clientid_unset: 'The client identifier is not set',
@@ -236,7 +238,7 @@ Meteor.APP.i18n = {
                     modal_title: 'Edit the "%s" client',
                     new_success: 'The client "%s" has been successfully created',
                     no_token_extension: 'There is no available token extension.<br />'
-                        +'Most probaly, you want select the providers able to give you the needed features.',
+                        +'Most probably, you want select the providers able to give you the needed features.',
                     privacy_label: 'Privacy policy page URI :',
                     privacy_ph: 'https://my.example.com/privacy',
                     privacy_title: 'The URI of a page which describes the privacy policy of the client',
@@ -722,7 +724,7 @@ Meteor.APP.i18n = {
                 identity_access_mode: {
                     all_short: 'All',
                     all_label: 'All identities',
-                    all_desc: 'All identities are allowed to access the client application. '
+                    all_desc: 'All (authenticated) identities are allowed to access the client application. '
                         +'No authorization is checked.',
                     auth_short: 'Authorized',
                     auth_label: 'Only authorized identities',
@@ -740,8 +742,8 @@ Meteor.APP.i18n = {
                     auth_desc: 'The client application requires identities to be authenticated.<br />'
                         +'It is the responsability of the organization manager to select providers which are able to authenticate identities as, '
                         +'for example, a Password Authenticator.<br />'
-                        +'The Identity Server will use any selected provider able to serve this feature, '
-                        +'and will advertise the exact used authentication mode as an Access Context class Reference (<code>acr</code>).'
+                        +'The Identity Server will use the first selected provider able to serve this feature, '
+                        +'and will advertise the exact used authentication mode as an <code>acr</code> Access Context class Reference.'
                 },
                 identity_group_type: {
                     group_label: 'Group',

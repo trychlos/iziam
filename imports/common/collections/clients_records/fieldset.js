@@ -119,7 +119,6 @@ const _defaultFieldDef = function(){
             type: String,
             optional: true,
             form_check: ClientsRecords.checks.token_endpoint_auth_method,
-            form_type: Forms.FieldType.C.OPTIONAL,
             help_tooltip: pwixI18n.label( I18N, 'clients.metadata.token_endpoint_auth_method' )
         },
         // selected grant types that the client can use against token endpoint

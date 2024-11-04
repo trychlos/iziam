@@ -9,14 +9,14 @@
                 {{#if haveItems }}
                     <div class="chooser">
                         {{#each it in itemsList }}
-                            <div class="by-item" data-item-id="{{ it }}">
+                            <div class="by-item" data-item-id="{{ itId it }}">
                                 <div class="form-check">
-                                    <input class="form-check-input ui-mr025" id="{{ it }}" type="checkbox" {{ itChecked it }} {{ itDisabled it }} />
-                                    <label class="form-check-label" for="{{ it }}">{{ itLabel it }}</label>
+                                    <input class="form-check-input ui-mr025" id="{{ itFor it }}" type="checkbox" {{ itChecked it }} {{ itDisabled it }} />
+                                    <label class="form-check-label" for="{{ itFor it }}">{{ itLabel it }}</label>
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input ui-hidden" type="checkbox" {{ itDisabled it }} />
-                                    <label class="form-check-label" for="{{ it }}">{{{ itDescription it }}}</label>
+                                    <label class="form-check-label" for="{{ itFor it }}">{{{ itDescription it }}}</label>
                                 </div>
                             </div>
                         {{/each}}

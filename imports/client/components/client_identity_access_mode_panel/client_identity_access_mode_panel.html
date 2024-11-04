@@ -9,16 +9,16 @@
             </div>
 
             <div class="panel-body">
-                <div class="chooser">
+                <div class="chooser ui-w100 js-check">
                     {{#each it in itemsList }}
-                        <div class="by-item {{ itSelected it }}" data-item-id="{{ itId it }}">
+                        <div class="by-item {{ itSelected it }}">
                             <div class="form-check">
-                                <input class="form-check-input js-check" id="{{ itId it }}" type="radio" name="access-mode" {{ itChecked it }} />
-                                <em><label class="form-check-label" for="{{ itId it }}">{{ itLabel it }}</label></em>
+                                <input class="form-check-input" id="{{ itFor it }}" type="radio" name="{{ itName it }}" value="{{ itValue it }}" {{ itChecked it }} />
+                                <label class="form-check-label form-label-title" for="{{ itFor it }}">{{ itLabel it }}</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input ui-hidden" type="radio" name="access-mode" />
-                                <label class="form-check-label" for="{{ itId it }}">{{{ itDescription it }}}</label>
+                                <input class="form-check-input ui-hidden" type="radio" name="{{ itName it }}" value="{{ itValue it }}" />
+                                <label class="form-check-label form-label-description" for="{{ itFor it }}">{{{ itDescription it }}}</label>
                             </div>
                         </div>
                     {{/each}}

@@ -14,7 +14,7 @@
  * - organization: the Organization as an entity with its DYN.records array
  * - enableChecks: whether the checks should be enabled at startup, defaulting to true
  * 
- * Forms.Checker doesn't manage well radio buttons: do not use here.
+ * We use here a dynamic layout of checkout and radio buttons. Forms.Checker is not suitable for this particular use case.
  */
 
 import _ from 'lodash';
@@ -50,7 +50,9 @@ Template.client_grant_types_panel.onCreated( function(){
 
         // whether this item is selected
         isSelected( dataContext, nature, it ){
-            const selected = ( Template.currentData().entity.get().DYN.records[Template.currentData().index].get().grant_types || [] ).includes( it );
+            const records = dataContext.entity.get().DYN.records;
+            const record = dataContext.index >= records.length ? null : records[dataContext.index].get();
+            const selected = record ? (( record.grant_types || [] ).includes( it )) : false;
             return selected;
         }
     };
@@ -127,6 +129,8 @@ Template.client_grant_types_panel.onRendered( function(){
         if( parentChecker && !checker ){
             self.APP.checker.set( new Forms.Checker( self, {
                 parent: parentChecker,
+                //fieldTypeShow: Forms.FieldType.C.NONE,
+                //fieldStatusShow: Forms.C.ShowStatus.NONE,
                 enabled: Template.currentData().enableChecks !== false
             }));
         }
@@ -155,6 +159,16 @@ Template.client_grant_types_panel.helpers({
     itDisabled( nature, it ){
     },
 
+    // for label
+    itFor( nature, it ){
+        return 'grant_type_'+this.index+'_'+nature+'_'+it;
+    },
+
+    // item identifier
+    itId( nature, it ){
+        return it;
+    },
+
     // whether this input element is a checkbox or a radio button ?
     itInputType( nature, it ){
         return Template.instance().APP.isRadio( this, nature, it ) ? 'radio' : 'checkbox';
@@ -164,6 +178,11 @@ Template.client_grant_types_panel.helpers({
     itLabel( nature, it ){
         const selectables = Template.instance().APP.selectables.get();
         return selectables[nature] && selectables[nature].types[it] ? GrantType.label( selectables[nature].types[it] ) : '';
+    },
+
+    // group name
+    itName( nature, it ){
+        return 'grant_type_'+this.index+'_'+nature;
     },
 
     // whether this item is selected ?

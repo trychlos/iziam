@@ -12,14 +12,18 @@
  * - index: the index of the currently edited Client record
  * - checker: the Forms.Checker which manages the parent component as a ReactiveVar
  * - organization: the Organization as an entity with its DYN.records array
+ * - enableChecks: whether the checks should be enabled at startup, defaulting to true
  * - isAssistant: whether we are running inside of the new client assistant, defaulting to false
  */
 
 import _ from 'lodash';
 import { strict as assert } from 'node:assert';
 
+import { Forms } from 'meteor/pwix:forms';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
+
+import { ClientsRecords } from '/imports/common/collections/clients_records/index.js';
 
 import { IdentityAccessMode } from '/imports/common/definitions/identity-access-mode.def.js';
 
@@ -32,12 +36,24 @@ Template.client_identity_access_mode_panel.onCreated( function(){
     self.APP = {
         // the list of allowed auth methods definitions
         selectables: new ReactiveVar( [] ),
+        fields: {
+            identity_access_mode: {
+                js: '.js-check',
+                form_type: Forms.FieldType.C.NONE,
+                form_status: Forms.C.ShowStatus.NONE,
+            }
+        },
+        // the Forms.Checker instance
+        checker: new ReactiveVar( null ),
 
         // returns true if the definition is the current selection
         isSelected( dataContext, def ){
             const id = IdentityAccessMode.id( def );
-            const record = dataContext.entity.get().DYN.records[dataContext.index].get();
-            return record.identity_access_mode === id;
+            const records = dataContext.entity.get().DYN.records;
+            const record = dataContext.index >= records.length ? null : records[dataContext.index].get();
+            const selected = record ? ( record.identity_access_mode === id ) : false;
+            //console.debug( 'record', record.effectStart, record.effectEnd, record.identity_access_mode, 'id', id, 'selected', selected );
+            return selected;
         }
     };
 
@@ -54,6 +70,29 @@ Template.client_identity_access_mode_panel.onCreated( function(){
         if( !record.identity_access_mode ){
             record.identity_access_mode = 'auth';
             recordRv.set( record);
+        }
+    });
+});
+
+Template.client_identity_access_mode_panel.onRendered( function(){
+    const self = this;
+
+    // initialize the Checker for this panel as soon as we get the parent Checker
+    self.autorun(() => {
+        const parentChecker = Template.currentData().checker?.get();
+        const checker = self.APP.checker.get();
+        if( parentChecker && !checker ){
+            const enabled = Template.currentData().enableChecks !== false;
+            const record = Template.currentData().entity.get().DYN.records[Template.currentData().index].get();
+            self.APP.checker.set( new Forms.Checker( self, {
+                parent: parentChecker,
+                panel: new Forms.Panel( self.APP.fields, ClientsRecords.fieldSet.get()),
+                data: {
+                    entity: Template.currentData().entity,
+                    index: Template.currentData().index
+                },
+                enabled: enabled
+            }));
         }
     });
 });
@@ -79,9 +118,9 @@ Template.client_identity_access_mode_panel.helpers({
         return IdentityAccessMode.description( it );
     },
 
-    // identifier
-    itId( it ){
-        return IdentityAccessMode.id( it );
+    // for label
+    itFor( it ){
+        return 'identity_access_'+this.index+'_'+IdentityAccessMode.id( it );
     },
 
     // label
@@ -89,9 +128,19 @@ Template.client_identity_access_mode_panel.helpers({
         return IdentityAccessMode.label( it );
     },
 
+    // have a different name for each validity record
+    itName( it ){
+        return 'access_mode_'+this.index;
+    },
+
     // whether this item is selected ?
     itSelected( it ){
         return Template.instance().APP.isSelected( this, it ) ? 'selected' : '';
+    },
+
+    // the item's value
+    itValue( it ){
+        return IdentityAccessMode.id( it );
     },
 
     // items list: a list of allowed auth methods definitions
@@ -103,15 +152,5 @@ Template.client_identity_access_mode_panel.helpers({
 Template.client_identity_access_mode_panel.events({
     // ask for clear the panel
     'iz-clear-panel .c-client-auth-method-panel'( event, instance ){
-    },
-    // auth method selection
-    // reactively set the record to trigger UI updates
-    'click .by-item'( event, instance ){
-        const id = instance.$( event.currentTarget ).data( 'item-id' );
-        let record = this.entity.get().DYN.records[this.index].get();
-        record.identity_access_mode = id;
-        this.entity.get().DYN.records[this.index].set( record );
-        // advertise the eventual caller (e.g. the client_new_assistant) of the new auth method
-        instance.$( '.c-client-identity-access-mode-panel' ).trigger( 'iz-access-mode', { access_mode: id });
     }
 });

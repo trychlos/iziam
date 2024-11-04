@@ -131,8 +131,10 @@ Template.client_properties_panel.onRendered( function(){
 
 Template.client_properties_panel.helpers({
     // whether the client is enabled ?
+    // NB: when removing a validity period, we may have a round where index === length
     enabledChecked(){
-        return this.entity.get().DYN.records[this.index].get().enabled ? 'checked' : '';
+        const records = this.entity.get().DYN.records;
+        return this.index >= records.length ? '' : ( records[this.index].get().enabled ? 'checked' : '' );
     },
 
     // whether enabling the client is disabled ?
@@ -145,23 +147,31 @@ Template.client_properties_panel.helpers({
         return pwixI18n.label( I18N, arg.hash.key );
     },
 
+    // for label
+    itFor( label ){
+        return 'client_properties_'+label+'_'+this.index;
+    },
+
     // parms for application type select
     parmsApplicationTypeSelect(){
-        return {
-            selected: this.entity.get().DYN.records[this.index].get().application_type
+        const records = this.entity.get().DYN.records;
+        return this.index >= records.length ? null : {
+            selected: records[this.index].get().application_type
         };
     },
 
     // parms for client type select
     parmsClientTypeSelect(){
-        return {
+        const records = this.entity.get().DYN.records;
+        return this.index >= records.length ? null : {
             selected: this.entity.get().DYN.records[this.index].get().client_type
         };
     },
 
     // parms for ImageIncluder
     parmsImage(){
-        return {
+        const records = this.entity.get().DYN.records;
+        return this.index >= records.length ? null : {
             imageUrl: this.entity.get().DYN.records[this.index].get().logo_uri,
             imageWidth: '9em',
             imageHeight: '9em'  // 4 rows -> 4x2.5em -> 10em
@@ -170,7 +180,8 @@ Template.client_properties_panel.helpers({
 
     // parms for profile select
     parmsProfileSelect(){
-        return {
+        const records = this.entity.get().DYN.records;
+        return this.index >= records.length ? null : {
             selected: this.entity.get().DYN.records[this.index].get().profile
         };
     },

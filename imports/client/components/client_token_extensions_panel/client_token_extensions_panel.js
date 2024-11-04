@@ -90,6 +90,16 @@ Template.client_token_extensions_panel.helpers({
         return Organizations.fn.wantsTokenExtension( this.organization, it ) ? 'disabled' : '';
     },
 
+    // for label
+    itFor( it ){
+        return 'clident_token_ext_'+TokenExtension.id( it )+'_'+this.index;
+    },
+
+    // identifier
+    itId( it ){
+        return it ? TokenExtension.id( it ) : null;
+    },
+
     // label
     itLabel( it ){
         return it ? TokenExtension.label( it ) : null;

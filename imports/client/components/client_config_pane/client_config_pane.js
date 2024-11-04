@@ -24,31 +24,31 @@ import './client_config_pane.html';
 Template.client_config_pane.helpers({
     parmsTabbed(){
         return {
-            name: 'client.config',
+            name: 'client.config_'+this.index,
             dataContext: this,
             tabs: [
                 {
-                    name: 'client_token_extensions_tab',
+                    name: 'client_token_extensions_tab_'+this.index,
                     navLabel: pwixI18n.label( I18N, 'clients.edit.token_extensions_tab_title' ),
                     paneTemplate: 'client_token_extensions_panel'
                 },
                 {
-                    name: 'client_identities_auth_tab',
+                    name: 'client_identities_auth_tab_'+this.index,
                     navLabel: pwixI18n.label( I18N, 'clients.edit.identities_auth_tab_title' ),
                     paneTemplate: 'client_identities_auth_pane'
                 },
                 {
-                    name: 'client_identities_access_tab',
+                    name: 'client_identities_access_tab_'+this.index,
                     navLabel: pwixI18n.label( I18N, 'clients.edit.identities_access_tab_title' ),
                     paneTemplate: 'client_identities_access_pane'
                 },
                 {
-                    name: 'client_scopes_tab',
+                    name: 'client_scopes_tab_'+this.index,
                     navLabel: pwixI18n.label( I18N, 'clients.edit.scopes_tab_title' ),
                     paneTemplate: 'client_scopes_panel'
                 },
                 {
-                    name: 'client_authorizations_tab',
+                    name: 'client_authorizations_tab_'+this.index,
                     navLabel: pwixI18n.label( I18N, 'clients.edit.authorizations_tab_title' ),
                     paneTemplate: 'client_authorizations_panel'
                 }

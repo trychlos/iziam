@@ -21,8 +21,6 @@ body {
         font-style: italic;
         margin-right: 0.5em;
     }
-    .label {
-    }
 }
 
 // this makes the app-content fill all the vertical space
@@ -200,9 +198,9 @@ body {
         padding: 0.5em;
         border: 1px solid transparent;
     }
-    .by-item:hover {
-        cursor: pointer;
-    }
+    //.by-item:hover {
+    //    cursor: pointer;
+    //}
     .by-item.selected {
         border: 1px solid gray;
         border-radius: 0.5em;
@@ -387,6 +385,14 @@ body {
     }
 }
 
+// rows needs a small adjustement
+.c-client-redirect-row,
+.c-client-contact-row {
+    .FormsStatusIndicator {
+        margin-right: 0.25em;
+    }
+}
+
 .c-identity-password-pane {
     .pane-preamble {
         margin-top: 0.5em;
@@ -474,12 +480,6 @@ body {
     flex-direction: column;
     margin-left: 1em;
 }
-.x-tab .title:first-child {
-    //padding: 0.5em 0 0 0.5em;
-}
-.x-tab .title:not( :first-child ){
-    //padding: 0.5em 1em 0 1em;
-}
 .x-tab .content {
     height: 100%;
     display: flex;
@@ -538,6 +538,11 @@ body {
         font-style: italic;
         color: gray;
     }
+}
+//.form-label-title {
+//}
+.form-label-description {
+    font-style: italic;
 }
 
 // most of the panels have a text preamble above

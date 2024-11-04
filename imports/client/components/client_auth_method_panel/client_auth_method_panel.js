@@ -12,16 +12,18 @@
  * - index: the index of the currently edited Client record
  * - checker: the Forms.Checker which manages the parent component as a ReactiveVar
  * - organization: the Organization as an entity with its DYN.records array
+ * - enableChecks: whether the checks should be enabled at startup, defaulting to true
  * - isAssistant: whether we are running inside of the new client assistant, defaulting to false
- * 
- * Forms.Checker doesn't manage well radio buttons: do not use here.
  */
 
 import _ from 'lodash';
 import { strict as assert } from 'node:assert';
 
+import { Forms } from 'meteor/pwix:forms';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
+
+import { ClientsRecords } from '/imports/common/collections/clients_records/index.js';
 
 import { AuthMethod } from '/imports/common/definitions/auth-method.def.js';
 import { ClientProfile } from '/imports/common/definitions/client-profile.def.js';
@@ -36,12 +38,23 @@ Template.client_auth_method_panel.onCreated( function(){
     self.APP = {
         // the list of allowed auth methods definitions
         selectables: new ReactiveVar( [] ),
+        fields: {
+            token_endpoint_auth_method: {
+                js: '.js-check',
+                form_type: Forms.FieldType.C.NONE,
+                form_status: Forms.C.ShowStatus.NONE,
+            }
+        },
+        // the Forms.Checker instance
+        checker: new ReactiveVar( null ),
 
         // returns true if the definition is the current selection
         isSelected( dataContext, def ){
             const id = AuthMethod.id( def );
-            const record = dataContext.entity.get().DYN.records[dataContext.index].get();
-            return record.token_endpoint_auth_method === id;
+            const records = dataContext.entity.get().DYN.records;
+            const record = dataContext.index >= records.length ? null : records[dataContext.index].get();
+            const selected = record ? ( record.token_endpoint_auth_method === id ) : false;
+            return selected;
         }
     };
 
@@ -99,12 +112,39 @@ Template.client_auth_method_panel.onCreated( function(){
     });
 });
 
+Template.client_auth_method_panel.onRendered( function(){
+    const self = this;
+
+    // initialize the Checker for this panel as soon as we get the parent Checker
+    self.autorun(() => {
+        const parentChecker = Template.currentData().checker?.get();
+        const checker = self.APP.checker.get();
+        if( parentChecker && !checker ){
+            const enabled = Template.currentData().enableChecks !== false;
+            const record = Template.currentData().entity.get().DYN.records[Template.currentData().index].get();
+            self.APP.checker.set( new Forms.Checker( self, {
+                parent: parentChecker,
+                panel: new Forms.Panel( self.APP.fields, ClientsRecords.fieldSet.get()),
+                data: {
+                    entity: Template.currentData().entity,
+                    index: Template.currentData().index
+                },
+                enabled: enabled
+            }));
+        }
+    });
+});
+
 Template.client_auth_method_panel.helpers({
     // the context text depends of the current client_type
     // if the chosen profile is 'Generic' then display the two texts
     content_text(){
-        const clientProfile = this.entity.get().DYN.records[this.index].get().profile;
-        const clientType = this.entity.get().DYN.records[this.index].get().client_type;
+        const records = this.entity.get().DYN.records;
+        if( this.index >= records. length ){
+            return '';
+        }
+        const clientProfile = records[this.index].get().profile;
+        const clientType = records[this.index].get().client_type;
         let text = '';
         if( clientProfile === 'generic' ){
             text = pwixI18n.label( I18N, 'clients.new_assistant.auth_method_confidential_text' )
@@ -137,9 +177,9 @@ Template.client_auth_method_panel.helpers({
         return AuthMethod.description( it );
     },
 
-    // identifier
-    itId( it ){
-        return AuthMethod.id( it );
+    // for label
+    itFor( it ){
+        return 'auth_method_'+this.index+'_'+AuthMethod.id( it );
     },
 
     // label
@@ -147,9 +187,19 @@ Template.client_auth_method_panel.helpers({
         return AuthMethod.label( it );
     },
 
+    // name
+    itName( it ){
+        return 'auth_method_'+this.index;
+    },
+
     // whether this item is selected ?
     itSelected( it ){
         return Template.instance().APP.isSelected( this, it ) ? 'selected' : '';
+    },
+
+    // item's value
+    itValue( it ){
+        return AuthMethod.id( it );
     },
 
     // items list: a list of allowed auth methods definitions
@@ -161,15 +211,5 @@ Template.client_auth_method_panel.helpers({
 Template.client_auth_method_panel.events({
     // ask for clear the panel
     'iz-clear-panel .c-client-auth-method-panel'( event, instance ){
-    },
-    // auth method selection
-    // reactively set the record to trigger UI updates
-    'click .by-item'( event, instance ){
-        const id = instance.$( event.currentTarget ).data( 'item-id' );
-        let record = this.entity.get().DYN.records[this.index].get();
-        record.token_endpoint_auth_method = id;
-        this.entity.get().DYN.records[this.index].set( record );
-        // advertise the eventual caller (e.g. the client_new_assistant) of the new auth method
-        instance.$( '.c-client-auth-method-panel' ).trigger( 'iz-auth-method', { auth_method: id });
     }
 });
