@@ -141,6 +141,7 @@ Template.client_edit_dialog.onCreated( function(){
                 paneTemplate: 'NotesEdit',
                 paneData: {
                     ...paneData,
+                    item: self.APP.item,
                     field: notesField
                 }
             },
@@ -219,7 +220,7 @@ Template.client_edit_dialog.events({
                 if( instance.APP.isModal.get()){
                     Modal.close();
                 } else {
-                    instance.$( '.c-client-properties-panel' ).trigger( 'iz-clear-panel' );
+                    instance.$( '.c-client-record-tabbed' ).trigger( 'iz-clear-panel' );
                     instance.$( '.NotesEdit' ).trigger( 'iz-clear-panel' );
                 }
             })

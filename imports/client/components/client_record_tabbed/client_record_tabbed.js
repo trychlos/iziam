@@ -64,7 +64,7 @@ Template.client_record_tabbed.onCreated( function(){
     };
     self.APP.tabs.set([
         {
-            name: 'client_properties_tab_'+dataContext.index,
+            name: 'client_properties_tab',
             navLabel: pwixI18n.label( I18N, 'clients.edit.properties_tab_title' ),
             paneTemplate: 'client_properties_panel',
             paneData: {
@@ -76,25 +76,25 @@ Template.client_record_tabbed.onCreated( function(){
             }
         },
         {
-            name: 'client_grant_types_tab_'+dataContext.index,
+            name: 'client_grant_types_tab',
             navLabel: pwixI18n.label( I18N, 'clients.edit.auth_flow_tab_title' ),
             paneTemplate: 'client_grant_types_panel',
             paneData: paneData
         },
         {
-            name: 'client_auth_method_tab_'+dataContext.index,
+            name: 'client_auth_method_tab',
             navLabel: pwixI18n.label( I18N, 'clients.edit.auth_method_tab_title' ),
             paneTemplate: 'client_auth_method_panel',
             paneData: paneData
         },
         {
-            name: 'client_config_tab_'+dataContext.index,
+            name: 'client_config_tab',
             navLabel: pwixI18n.label( I18N, 'clients.edit.config_tab_title' ),
             paneTemplate: 'client_config_pane',
             paneData: paneData
         },
         {
-            name: 'client_redirects_tab_'+dataContext.index,
+            name: 'client_redirects_tab',
             navLabel: pwixI18n.label( I18N, 'clients.edit.redirects_tab_title' ),
             paneTemplate: 'client_redirects_panel',
             paneData: {
@@ -103,19 +103,19 @@ Template.client_record_tabbed.onCreated( function(){
             }
         },
         {
-            name: 'client_jwks_tab_'+dataContext.index,
+            name: 'client_jwks_tab',
             navLabel: pwixI18n.label( I18N, 'clients.edit.jwks_tab_title' ),
             paneTemplate: 'client_jwks_panel',
             paneData: paneData
         },
         {
-            name: 'client_secrets_tab_'+dataContext.index,
+            name: 'client_secrets_tab',
             navLabel: pwixI18n.label( I18N, 'clients.edit.secrets_tab_title' ),
             paneTemplate: 'client_secrets_panel',
             paneData: paneData
         },
         {
-            name: 'client_contacts_tab_'+dataContext.index,
+            name: 'client_contacts_tab',
             navLabel: pwixI18n.label( I18N, 'clients.edit.contacts_tab_title' ),
             paneTemplate: 'client_contacts_panel',
             paneData: {
@@ -124,7 +124,7 @@ Template.client_record_tabbed.onCreated( function(){
             }
         },
         {
-            name: 'client_notes_tab_'+dataContext.index,
+            name: 'client_notes_tab',
             name: 'record_notes_tab',
             navLabel: pwixI18n.label( I18N, 'clients.edit.record_notes_tab_title' ),
             paneTemplate: 'NotesEdit',

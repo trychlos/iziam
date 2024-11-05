@@ -36,8 +36,25 @@ Meteor.publish( Meteor.APP.C.pub.clientsAll.publish, async function( organizatio
     const userId = this.userId;
     let initializing = true;
     const collectionName = Meteor.APP.C.pub.clientsAll.collection;
-    
-    // find ORG_SCOPED_MANAGER allowed users, and add to each entity the list of its records
+
+    const f_entityChangeById = function( entityId ){
+        ClientsEntities.collection.findOneAsync({ _id: entityId }).then(( entity ) => {
+            if( entity && entity.organization === organization._id ){
+                f_entityTransform( entity ).then(( transformed ) => {
+                    try {
+                        self.changed( collectionName, entity._id, transformed );
+                    } catch( e ){
+                        // on HMR, happens that Error: Could not find element with id wx8rdvSdJfP6fCDTy to change
+                        self.added( collectionName, entity._id, transformed );
+                        //console.debug( e, 'ignored' );
+                    }
+                });
+            }
+        });
+    };
+
+    // find ORG_SCOPED_MANAGER allowed users
+    //  add to each entity the list of its records
     const f_entityTransform = async function( item ){
         await Clients.s.transform( item, userId );
         // make sure that each defined field appears in the returned item
@@ -48,53 +65,35 @@ Meteor.publish( Meteor.APP.C.pub.clientsAll.publish, async function( organizatio
     };
 
     const entitiesObserver = ClientsEntities.collection.find( Meteor.APP.C.pub.clientsAll.query( organization )).observeAsync({
-        added: async function( item ){
-            self.added( collectionName, item._id, await f_entityTransform( item ));
+        added( item ){
+            f_entityTransform( item ).then(( transformed ) => {
+                self.added( collectionName, item._id, transformed );
+            });
         },
-        changed: async function( newItem, oldItem ){
+        changed( newItem, oldItem ){
             if( !initializing ){
-                self.changed( collectionName, newItem._id, await f_entityTransform( newItem ));
+                f_entityTransform( newItem ).then(( transformed ) => {
+                    self.changed( collectionName, newItem._id, transformed );
+                });
             }
         },
-        removed: async function( oldItem ){
+        removed( oldItem ){
             self.removed( collectionName, oldItem._id );
         }
     });
 
-    const recordsObserver = ClientsRecords.collection.find({}).observeAsync({
-        added: async function( item ){
-            ClientsEntities.collection.findOneAsync({ _id: item.entity }).then( async ( entity ) => {
-                if( entity ){
-                    try {
-                        self.changed( collectionName, entity._id, await f_entityTransform( entity ));
-                    } catch( e ){
-                        // on HMR, happens that Error: Could not find element with id wx8rdvSdJfP6fCDTy to change
-                        self.added( collectionName, entity._id, await f_entityTransform( entity ));
-                        //console.debug( e, 'ignored' );
-                    }
-                } else {
-                    console.warn( 'added: entity not found', item.entity );
-                }
-            });
+    const recordsObserver = ClientsRecords.collection.find().observeAsync({
+        added( item ){
+            f_entityChangeById( item.entity );
         },
-        changed: async function( newItem, oldItem ){
+        changed( newItem, oldItem ){
             if( !initializing ){
-                ClientsEntities.collection.findOneAsync({ _id: newItem.entity }).then( async ( entity ) => {
-                    if( entity ){
-                        self.changed( collectionName, entity._id, await f_entityTransform( entity ));
-                    } else {
-                        console.warn( 'changed: entity not found', newItem.entity );
-                    }
-                });
+                f_entityChangeById( newItem.entity );
             }
         },
         // remind that records are deleted after entity when deleting a client
-        removed: async function( oldItem ){
-            ClientsEntities.collection.findOneAsync({ _id: oldItem.entity }).then( async ( entity ) => {
-                if( entity ){
-                    self.changed( collectionName, oldItem.entity, await f_entityTransform( entity ));
-                }
-            });
+        removed( oldItem ){
+            f_entityChangeById( oldItem.entity );
         }
     });
 

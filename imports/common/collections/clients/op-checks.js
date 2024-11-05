@@ -27,10 +27,10 @@ Clients.isOperational = async function( entity, record ){
  * @summary Maintain the 'operational' status of each client
  *  When the clients change, update their status
  *  We add (or update) here a DYN.status object
- * @param {Object} client as a full entity object with its DYN sub-object
+ * @param {Object} item as a full entity object with its DYN sub-object
  */
 Clients.setupOperational = async function( item ){
-    //console.debug( 'Clients.setupOperational' );
+    console.debug( 'Clients.setupOperational', item );
     const atdate = Validity.atDateByRecords( item.DYN.records );
     if( !item.DYN.operational ){
         item.DYN.operational = {

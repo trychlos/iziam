@@ -131,7 +131,7 @@ Template.client_properties_panel.onRendered( function(){
 
 Template.client_properties_panel.helpers({
     // whether the client is enabled ?
-    // NB: when removing a validity period, we may have a round where index === length
+    // NB: when removing a validity period, we may have a round-trip where index === length
     enabledChecked(){
         const records = this.entity.get().DYN.records;
         return this.index >= records.length ? '' : ( records[this.index].get().enabled ? 'checked' : '' );

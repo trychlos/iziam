@@ -5,6 +5,7 @@
 import _ from 'lodash';
 import { strict as assert } from 'node:assert';
 
+import { Permissions } from 'meteor/pwix:permissions';
 import { Validity } from 'meteor/pwix:validity';
 
 import { Clients } from '../index.js';
@@ -139,7 +140,7 @@ Clients.s.registeredMetadata = async function( client ){
 // when dealing from an external identity, we expect userId=null and opts.from=<organizationId>
 Clients.s.transform = async function( item, userId, opts ){
     item.DYN = item.DYN || {};
-    item.DYN.managers = [];
+    item.DYN.managers = item.DYN.managers || [];
     let promises = [];
     /*
     promises.push( Meteor.roleAssignment.find({ 'role._id': 'ORG_SCOPED_MANAGER', scope: item._id }).fetchAsync().then(( fetched ) => {
@@ -155,11 +156,10 @@ Clients.s.transform = async function( item, userId, opts ){
         return true;
     }));
     */
-    item.DYN.memberOf = await Clients.s.memberOf( item.organization, item, userId, opts );
+    item.DYN.memberOf = item.DYN.memberOf || await Clients.s.memberOf( item.organization, item, userId, opts );
     promises.push( ClientsRecords.collection.find({ entity: item._id }).fetchAsync().then(( fetched ) => {
         item.DYN.records = fetched;
         item.DYN.closest = Validity.closestByRecords( fetched ).record;
-        //console.debug( 'fetched', fetched );
         return true;
     }));
     await Promise.allSettled( promises );
@@ -171,11 +171,11 @@ Clients.s.transform = async function( item, userId, opts ){
 // @returns {Object} with full result
 // @throws {Error}
 Clients.s.upsert = async function( entity, userId ){
-    check( entity, Object );
-    check( userId, String );
-    //if( !await TenantsManager.isAllowed( 'pwix.tenants_manager.fn.upsert', userId, entity )){
-    //    return null;
-    //}
+    assert( entity && _.isObject( entity ), 'expect an entity object, got '+entity );
+    assert( userId && _.isString( userId ), 'expect a non-null string, got '+userId );
+    if( !await Permissions.isAllowed( 'feat.clients.create', userId, entity )){
+        return null;
+    }
     //console.debug( 'Clients.s.upsert()', entity );
 
     // upsert the entity

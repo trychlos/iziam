@@ -94,39 +94,42 @@ ClientsEntities.s = {
     *  - orig, the value before upsert
     */
     async upsert( entity, userId ){
-        check( entity, Object );
-        check( userId, String );
-        //if( !await TenantsManager.isAllowed( 'pwix.tenants_manager.entities.fn.upsert', userId, entity )){
-        //    return null;
-        //}
-        let result = {
-            orig: null
-        };
-        let selector = {};
-        let item = _.cloneDeep( entity );
-        delete item.DYN;
-        delete item._id;
-        //console.debug( 'item', item );
-        // tries to work around "Error: Failed validation Upsert failed after 3 tries."
-        if( entity._id ){
-            assert( entity.clientId, 'while the client entity exists, it doesn\'have any clientId' );
-            result.orig = await ClientsEntities.collection.findOneAsync({ _id: entity._id });
-            selector = { _id: entity._id };
-            //console.debug( 'selector', selector );
-            // Error: After filtering out keys not in the schema, your modifier is now empty
-            //  this is normal as long as we do not set any data in the document
-            //  so at least set updatedAt here (and even if this will be set another time by timestampable behaviour)
-            //item.updatedBy = userId;
-            result.numberAfftected = await ClientsEntities.collection.updateAsync( selector, { $set: item }, { filter: false });
+        assert( entity && _.isObject( entity ), 'expect an entity object, got '+entity );
+        assert( userId && _.isString( userId ), 'expect a non-null string, got '+userId );
+        if( !await Permissions.isAllowed( 'feat.clients.create', userId, entity )){
+            return null;
+        }
+        let result = {};
+        result.orig = null;
+        const entityId = entity._id;
+        if( entityId ){
+            result.orig = await ClientsEntities.collection.findOneAsync({ _id: entityId });
+        }
+        const DYN = entity.DYN;
+        delete entity.DYN;
+        if( !entity.clientId ){
+            entity.clientId = ClientsEntities.s.newId();
+            result.clientId = entity.clientId;
+        }
+        if( entityId ){
+            result.numberAffected = await ClientsEntities.collection.updateAsync({ _id: entityId }, { $set: entity });
+            entity._id = entityId;
+            // what happens if we force a date update (aka a witness stamp ) ? -> not better
+            //const res = await ClientsEntities.collection.updateAsync({ _id: entityId }, { $set: { updatedAt: new Date() }});
+            //console.debug( 'res', res );
         } else {
-            assert( !item.clientId, 'while the client entity doesn\'t exist, it does have a non null clientId: '+item.clientId );
-            item.clientId = ClientsEntities.s.newId();
-            result.insertedId = await ClientsEntities.collection.insertAsync( item );
+            result.insertedId = await ClientsEntities.collection.insertAsync( entity );
             result.numberAffected = 1;
-            entity.clientId = item.clientId;
-            result.clientId = item.clientId;
             entity._id = result.insertedId;
         }
+        //const res = await ClientsEntities.collection.upsertAsync({ _id: entity._id }, { $set: entity });
+        entity.DYN = DYN;
+        //if( res.insertedId ){
+        //    result.insertedId = res.insertedId;
+        //    entity._id = res.insertedId;
+        //}
+        //result.numberAffected = res.numberAffected;
+        //console.debug( 'ClientsEntities res', res, 'entity', entity );
         console.debug( 'ClientsEntities result', result );
         return result;
     }

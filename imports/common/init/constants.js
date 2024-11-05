@@ -27,7 +27,7 @@ Meteor.APP.C = {
     layoutTheme: 't-default-layout',
     useBootstrapValidationClasses: true,
 
-    // some publication which have a special target collection
+    // some publications which have a special target collection
     pub: {
         clientsAll: {
             collection: 'clients_all_collection',

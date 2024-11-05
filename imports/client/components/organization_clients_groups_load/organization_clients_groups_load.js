@@ -22,12 +22,9 @@ import { TenantsManager } from 'meteor/pwix:tenants-manager';
 import './organization_clients_groups_load.html';
 
 Template.organization_clients_groups_load.onCreated( function(){
-    //console.debug( this );
-    this.autorun(() => {
-        const edited = Template.currentData().item.get();
-        const organization = TenantsManager.list.byEntity( edited._id );
-        if( organization && organization.DYN.clients_groups ){
-            organization.DYN.clients_groups.clientLoad();
-        }
-    });
+    const edited = Template.currentData().item.get();
+    const organization = TenantsManager.list.byEntity( edited._id );
+    if( organization && organization.DYN.clients_groups ){
+        organization.DYN.clients_groups.clientLoad();
+    }
 });

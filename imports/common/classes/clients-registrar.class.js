@@ -60,12 +60,6 @@ export class ClientsRegistrar extends mix( izRegistrar ).with( ISearchableLabel 
         // common code
         ClientsRegistrar.#registry[organization._id] = this;
 
-        Tracker.autorun(() => {
-            self.get().forEach(( it ) => {
-                Clients.setupOperational( it );
-            });
-        });
-
         return this;
     }
 
@@ -81,7 +75,7 @@ export class ClientsRegistrar extends mix( izRegistrar ).with( ISearchableLabel 
      * @locus Client
      * @summary Initialize client side
      *  - subscribe and receive the full list of the clients of the organization
-     *  This is run the first time we try to edit an organization
+     *  This is run each time we try to edit an organization
      *  (because we are a multi-tenants application, we do not want load at startup all clients of all organizations)
      */
     clientLoad(){
@@ -98,6 +92,13 @@ export class ClientsRegistrar extends mix( izRegistrar ).with( ISearchableLabel 
                         self.set( fetched );
                     });
                 }
+            });
+    
+            // install the auto operational check on client side
+            Tracker.autorun(() => {
+                self.get().forEach(( it ) => {
+                    Clients.setupOperational( it );
+                });
             });
     
             this.clientInitialized( true );

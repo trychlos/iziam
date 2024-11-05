@@ -41,7 +41,7 @@ const _defaultFieldDef = function(){
             schema: false,
             dt_title: pwixI18n.label( I18N, 'clients.tabular.entity_notes_th' ),
             dt_className: 'dt-center',
-            dt_template: Meteor.isClient && Template.dt_entity_notes
+            dt_template: Meteor.isClient && Template.client_entity_notes_dt
         },
         // client type
         {

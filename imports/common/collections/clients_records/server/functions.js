@@ -107,6 +107,7 @@ ClientsRecords.s = {
             if( _.isEqual( record, origIds[record._id] )){
                 result.unchanged.push( record );
             } else {
+                console.debug( 'orig', origIds[record._id], 'different.from', record );
                 updatableIds[record._id] = record;
             }
         }
@@ -115,6 +116,7 @@ ClientsRecords.s = {
         let promises = [];
         Object.keys( updatableIds ).forEach(( id ) => {
             const record = updatableIds[id];
+            const recordId = record._id;
             if( record._id ){
                 record.updatedBy = userId;
                 record.updatedAt = new Date();
@@ -123,9 +125,9 @@ ClientsRecords.s = {
             // debug the record content
             //ClientsRecords.collection.upsertAsync({ _id: record._id }, { $set: record });
             promises.push( ClientsRecords.collection.upsertAsync({ _id: record._id }, { $set: record }).then(( res ) => {
-                //console.debug( 'upsertAsync', record, 'res', res );
+                console.debug( 'upsertAsync', record, 'res', res );
                 if( res.numberAffected > 0 ){
-                    if( record._id ){
+                    if( recordId ){
                         result.updated += 1;
                     } else if( res.insertedId ){
                         result.inserted += 1;
