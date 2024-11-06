@@ -84,6 +84,7 @@ Identities.tabularFieldsDef = function( organization ){
             dt_type: 'string',
             dt_title: pwixI18n.label( I18N, 'identities.list.locale_th' )
         },
+        Notes.fieldDef(),
         // a preferred email address
         {
             name: 'preferredEmailAddress',

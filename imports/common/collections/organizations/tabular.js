@@ -25,7 +25,7 @@ Organizations.tabularFieldset = function(){
             before: 'effectStart',
             fields: [
                 {
-                    name: 'groupsCount',
+                    name: 'identitiesGroupsCount',
                     schema: false,
                     dt_visible: false
                 },
@@ -39,6 +39,11 @@ Organizations.tabularFieldset = function(){
                     }
                 },
                 {
+                    name: 'clientsGroupsCount',
+                    schema: false,
+                    dt_visible: false
+                },
+                {
                     name: 'clientsCount',
                     schema: false,
                     dt_className: 'ui-center',
@@ -50,12 +55,20 @@ Organizations.tabularFieldset = function(){
                 {
                     name: 'resourcesCount',
                     schema: false,
-                    dt_visible: false
+                    dt_className: 'ui-center',
+                    dt_title: pwixI18n.label( I18N, 'organizations.tabular.resources_th' ),
+                    dt_render( foo, type, rowData, columnDef ){
+                        return rowData.resourcesCount ? '<div class="dt-badge">'+rowData.resourcesCount+'</div>' : '';
+                    }
                 },
                 {
                     name: 'authorizationsCount',
                     schema: false,
-                    dt_visible: false
+                    dt_className: 'ui-center',
+                    dt_title: pwixI18n.label( I18N, 'organizations.tabular.authorizations_th' ),
+                    dt_render( foo, type, rowData, columnDef ){
+                        return rowData.authorizationsCount ? '<div class="dt-badge">'+rowData.authorizationsCount+'</div>' : '';
+                    }
                 }
             ]
         }

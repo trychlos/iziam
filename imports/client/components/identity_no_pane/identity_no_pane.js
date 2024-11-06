@@ -39,6 +39,7 @@ Template.identity_no_pane.onRendered( function(){
             enabled: have
         });
         have = Organizations.fn.haveAtLeastOneUsername( organization );
+        //console.debug( 'organization', organization, 'username', have );
         self.$( '.c-identity-no-pane' ).trigger( 'tabbed-do-enable', {
             tabbedId: Template.currentData().tabbedId,
             name: 'identity_usernames_tab',

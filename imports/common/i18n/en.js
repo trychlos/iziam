@@ -952,7 +952,7 @@ Meteor.APP.i18n = {
                     given_name_set: 'Both name and given name are set, but you should choose a unique way of naming the person',
                     given_expects_family: 'Though not mandatory, you should better qualify the person by attributing a family name',
                     given_wants_name: 'If not setting the given nor the family names, you should enter a full name',
-                    identifier_missing: 'An identifier is missing, but is mandatory',
+                    identifier_missing: 'An identifier is missing, but should be mandatory',
                     locale_invalid: 'The locale is not valid',
                     middle_name_set: 'Entering a middle name is exclusive from setting full name',
                     name_others_set: 'Entering a full name is exclusive from setting given, middle or family names',
@@ -1344,7 +1344,7 @@ Meteor.APP.i18n = {
                     endsession_title: 'The endpoint path used to end a client session and/or to logout a connected user.',
                     ident_config_preamble: 'Configure the way your identities are managed.<br />'
                         +'Make sure you configure at least one identifier per identity.<br />'
-                        +'This configuration will be read-only as soon as you will have defined a first identity, as we do not know at the moment how handle'
+                        +'This configuration will be read-only as soon as you will have defined a first identity, as we do not know at the moment how handle '
                         +'the configuration updates here without some sort of hard dedicated work.',
                     ident_config_tab_title: 'Identities',
                     ident_disabled: '<span class="warning">The configuration of identities is now disabled as you have already defined at least one identity.</span>',
@@ -1471,11 +1471,13 @@ Meteor.APP.i18n = {
                         +'So better to not modify it once it is widely advertised.'
                 },
                 tabular: {
+                    authorizations_th: 'Authorizations',
                     identities_th: 'Identities',
                     baseurl_th: 'Base URL',
                     clients_th: 'Clients',
                     operational_invalid_title: 'The organization is not operational! Please fix that',
-                    operational_valid_title: 'The organization is fully operational'
+                    operational_valid_title: 'The organization is fully operational',
+                    resources_th: 'Resources'
                 }
             },
             powered_by: {

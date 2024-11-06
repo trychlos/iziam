@@ -117,7 +117,7 @@ Identities.checks = {
         const item = data.item.get();
         const haveIdentifier = await Identities.fn.hasIdentifier( data.organization, item );
         return haveIdentifier ? null : new TM.TypedMessage({
-            level: TM.MessageLevel.C.ERROR,
+            level: TM.MessageLevel.C.WARNING,
             message: pwixI18n.label( I18N, 'identities.checks.identifier_missing' )
         });
     },
@@ -126,6 +126,9 @@ Identities.checks = {
     async crossPasswords( data, opts ){
         _assert_cross_data_content( 'Identities.checks.crossPasswords()', data );
         const item = data.item.get();
+        if( !item.password?.UI?.clear1 ){
+            return null;
+        }
         return item.password?.UI?.clear1 === item.password?.UI?.clear2 ? null : new TM.TypedMessage({
             level: TM.MessageLevel.C.ERROR,
             message: pwixI18n.label( I18N, 'identities.checks.passwords_different' )
@@ -624,7 +627,7 @@ Identities.checks = {
             return res;
         }
         return mandatory ? new TM.TypedMessage({
-            level: TM.MessageLevel.C.ERROR,
+            level: TM.MessageLevel.C.WARNING,
             message: pwixI18n.label( I18N, 'identities.checks.password_unset' )
         }) : null;
     },
@@ -649,7 +652,7 @@ Identities.checks = {
             });
         }
         return mandatory ? new TM.TypedMessage({
-            level: TM.MessageLevel.C.ERROR,
+            level: TM.MessageLevel.C.WARNING,
             message: pwixI18n.label( I18N, 'identities.checks.password_unset' )
         }) : null;
     },

@@ -40,9 +40,9 @@ Resources.s = _.merge( Resources.s, {
         if( !res ){
             return false;
         }
-        res = Resources.collection( organizationId ).removAsync({ _id: itemId });
+        res = await Resources.collection( organizationId ).removeAsync({ _id: itemId });
         Resources.s.eventEmitter.emit( 'delete', { organizationId: organizationId, userId: userId });
-        console.debug( 'Authorizations.removeById', res );
+        console.debug( 'Resources.removeById', res );
         return res;
     },
 
@@ -66,13 +66,13 @@ Resources.s = _.merge( Resources.s, {
         if( item.createdAt ){
             res.updated = await Resources.collection( organizationId ).updateAsync({ _id: itemId }, { $set: item });
         } else {
-            itemId = Resources.collection( organizationId ).insertAsync( item );
+            itemId = await Resources.collection( organizationId ).insertAsync( item );
             res.inserted = 1;
         }
         Resources.s.eventEmitter.emit( 'upsert', { organizationId: organizationId, userId: userId });
         item.DYN = DYN || {};
         item._id = itemId;
-        //console.debug( 'Resources.s.upsert() res', res );
+        console.debug( 'Resources.s.upsert() res', res );
         return res;
     }
 });

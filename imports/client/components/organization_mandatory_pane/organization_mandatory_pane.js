@@ -31,6 +31,12 @@ Template.organization_mandatory_pane.onCreated( function(){
         // the Forms.Checker instance
         checker: new ReactiveVar( null )
     };
+
+    // track the entity content
+    self.autorun(() => {
+        const dc = Template.currentData();
+        console.debug( 'record', dc.entity.get().DYN.records[dc.index].get());
+    });
 });
 
 Template.organization_mandatory_pane.onRendered( function(){

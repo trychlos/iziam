@@ -16,7 +16,7 @@ import { IdentityAuthPasswordProvider } from '/imports/common/providers/identity
 import { Identities } from '../index.js';
 
 Identities.s = {
-
+    
     // extend the AccountsManager All publication
     async allExtend( instanceName, item, userId ){
         await Identities.s.transform( instanceName, item, userId, { from: Identities.scope( instanceName )});
@@ -88,6 +88,23 @@ Identities.s = {
         return { all: Object.keys( all ), direct: Object.keys( direct )};
     },
 
+    // Identity update
+    // this is an event handler after AccountsManager has already updated the accounts collection
+    // args: an object with following keys:
+    // - amInstance: the instance name
+    // - item
+    async onUpdate( args ){
+        const amInstance = args.amInstance ? AccountsHub.instances[args.amInstance  ] : null;
+        let res = false;
+        if( amInstance ){
+            assert( amInstance instanceof AccountsManager.amClass, 'expects an instance of AccountsManager.amClass, got'+amInstance );
+            const organizationId = Identities.scope( args.amInstance );
+            res = await IdentitiesGroups.s.updateMemberships( organizationId, args.item._id, args.item.DYN.memberOf, args.userId );
+        }
+        console.debug( 'Identities.s.onUpdate', res );
+        return res;
+    },
+
     // extend the AccountsManager tabular publish function
     // provide a tabular_name, preferred email and username
     // tabular_name: a tabular column to display a full name *without* modifying the record
@@ -119,29 +136,17 @@ Identities.s = {
         return res;
     },
 
-    // Identity update
-    // this is an event handler after AccountsManager has already updated the accounts collection
-    // args: an object with following keys:
-    // - amInstance: the instance name
-    // - item
-    async onUpdate( args ){
-        const amInstance = args.amInstance ? AccountsHub.instances[args.amInstance  ] : null;
-        let res = false;
-        if( amInstance ){
-            assert( amInstance instanceof AccountsManager.amClass, 'expects an instance of AccountsManager.amClass, got'+amInstance );
-            const organizationId = Identities.scope( args.amInstance );
-            res = await IdentitiesGroups.s.updateMemberships( organizationId, args.item._id, args.item.DYN.memberOf, args.userId );
-        }
-        console.debug( 'Identities.s.onUpdate', res );
-        return res;
-    },
-
-    // @returns {Object} the upsert result
+    // @returns {Object} the upsert result:
+    //  - updated: the count of updated documents
+    //  - inserted: the count of inserted documents
     // this is called both on create and update
     async upsert( item, args, userId ){
-        //console.debug( 'Identities.s.upsert', item, args );
+        console.debug( 'Identities.s.upsert', item, args );
         const collection = Identities.s.collection( args.organization._id );
-        let res = false;
+        let res = {
+            updated: 0,
+            inserted: 0
+        };
         if( collection ){
             // save the DYN sub-object to restore it later, but not be written in dbms
             const DYN = item.DYN;
@@ -173,17 +178,26 @@ Identities.s = {
                     item.password.salt = salt.toString( 'hex' );
                 }
             }
-            const itemId = item._id;
-            res = await collection.upsertAsync({ _id: item._id }, { $set: item });
-            // get the newly inserted id
-            item._id = res.insertedId || itemId;
-            await IdentitiesGroups.s.updateMemberships( args.organization._id, item._id, DYN.memberOf, userId );
+            // make sure fields which are not specified in the item are unset
+            const $unset = AccountsManager.s.addUnset( Identities.instanceName( args.organization._id), item );
+            let itemId = item._id;
+            if( itemId ){
+                console.debug( 'updating', item, $unset );
+                res.updated = await collection.updateAsync({ _id: itemId }, { $set: item, $unset: $unset });
+            } else {
+                itemId = await collection.insertAsync( item );
+                res.inserted = 1;
+            }
+            // restore the initial data
+            item._id = itemId;
             item.DYN = DYN;
             if( UI ){
                 item.password.UI = UI;
             }
+            // trigger the update event
+            AccountsManager.s.eventEmitter.emit( 'update', { amInstance: Identities.instanceName( args.organization._id), item: item });
         }
-        console.debug( 'Identities.s.upsert', res );
+        console.debug( 'Identities.s.upsert res', res );
         return res;
     }
 };

@@ -94,23 +94,19 @@ export class IdentitiesRegistrar extends izRegistrar {
      *  - subscribe and receive the full list of the identities of the organization
      */
     clientLoad(){
-        if( Meteor.isClient );
+        assert( Meteor.isClient );
         const self = this;
-        //console.debug( 'subscribing to', self.#amInstance.name());
         self.#handle = Meteor.subscribe( 'pwix_accounts_manager_accounts_list_all', self.#amInstance.name());
 
-        if( !this.clientInitialized()){
-            // get the list of identities
-            // each identity is published as an object with DYN sub-object
-            Tracker.autorun(() => {
-                if( self.#handle.ready()){
-                    self.#amInstance.collection().find( Meteor.APP.C.pub.identitiesAll.query( self.organization())).fetchAsync().then(( fetched ) => {
-                        console.debug( 'fetched', fetched );
-                        self.set( fetched );
-                    });
-                }
-            });
-            this.clientInitialized( true );
-        }
+        // get the list of identities
+        // each identity is published as an object with DYN sub-object
+        Tracker.autorun(() => {
+            if( self.#handle.ready()){
+                self.#amInstance.collection().find( Meteor.APP.C.pub.identitiesAll.query( self.organization())).fetchAsync().then(( fetched ) => {
+                    console.debug( 'fetched', fetched );
+                    self.set( fetched );
+                });
+            }
+        });
     }
 }

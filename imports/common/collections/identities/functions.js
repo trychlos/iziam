@@ -104,6 +104,29 @@ Identities.fn = {
     },
 
     /**
+     * @locus Client
+     * @param {Identity} identity
+     * @param {Object} args an object with following keys:
+     *  - organization the full organization entity with its DYN sub-object
+     * @return {Boolean} whether the new identity has been successfully created
+     */
+    async clientNew( identity, args=null ){
+        identity.organization = args.organization._id;
+        return Meteor.isClient ? await Meteor.callAsync( 'identity.upsert', identity, args ) : await Identities.s.upsert( identity, args );
+    },
+
+    /**
+     * @locus Client
+     * @param {Identity} identity
+     * @param {Object} args an object with following keys:
+     *  - organization the full organization entity with its DYN sub-object
+     * @return {Boolean} whether the identity has been successfully updated
+     */
+    async clientUpdate( identity, args=null ){
+        return Meteor.isClient ? await Meteor.callAsync( 'identity.upsert', identity, args ) : await Identities.s.upsert( identity, args );
+    },
+
+    /**
      * @param {Identity} identity
      * @param {String} id
      * @return {Object} the email object which holds this id, or null
@@ -246,29 +269,6 @@ Identities.fn = {
             }
         }
         return name;
-    },
-
-    /**
-     * @locus Client
-     * @param {Identity} identity
-     * @param {Object} args an object with following keys:
-     *  - organization the full organization entity with its DYN sub-object
-     * @return {Boolean} whether the new identity has been successfully created
-     */
-    async clientNew( identity, args=null ){
-        identity.organization = args.organization._id;
-        return Meteor.isClient ? await Meteor.callAsync( 'identity.upsert', identity, args ) : await Identities.s.upsert( identity, args );
-    },
-
-    /**
-     * @locus Client
-     * @param {Identity} identity
-     * @param {Object} args an object with following keys:
-     *  - organization the full organization entity with its DYN sub-object
-     * @return {Boolean} whether the identity has been successfully updated
-     */
-    async clientUpdate( identity, args=null ){
-        return Meteor.isClient ? await Meteor.callAsync( 'identity.upsert', identity, args ) : await Identities.s.upsert( identity, args );
     },
 
     /**

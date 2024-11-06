@@ -48,7 +48,7 @@ Template.resources_list.events({
     // delete a resource - this will delete all the validity records too
     'tabular-delete-event .c-resources-list'( event, instance, data ){
         const label = data.item.label || data.item.name;
-        Meteor.callAsync( 'resources.removeById', this.item.get()._id, data.item.entity._id )
+        Meteor.callAsync( 'resources.removeById', this.item.get()._id, data.item._id )
             .then(( res ) => {
                 Tolert.success( pwixI18n.label( I18N, 'resources.tabular.delete_success', label ));
             })
