@@ -78,21 +78,19 @@ export class ResourcesRegistrar extends mix( izRegistrar ).with( ISearchableLabe
      *  - subscribe and receive the full list of the resources of the organization
      */
     clientLoad(){
-        if( Meteor.isClient && !this.clientInitialized()){
-            const self = this;
-            const organizationId = self.organization()._id;
-            self.#handle = Meteor.subscribe( 'resources_list_all', organizationId );
+        assert( Meteor.isClient );
+        const self = this;
+        const organizationId = self.organization()._id;
+        self.#handle = Meteor.subscribe( 'resources_list_all', organizationId );
 
-            // get the list of resources
-            Tracker.autorun(() => {
-                if( self.#handle.ready()){
-                    Resources.collection( organizationId ).find({ organization: organizationId }).fetchAsync().then(( fetched ) => {
-                        console.debug( 'fetched', fetched );
-                        self.set( fetched );
-                    });
-                }
-            });
-            this.clientInitialized( true );
-        }
+        // get the list of resources
+        Tracker.autorun(() => {
+            if( self.#handle.ready()){
+                Resources.collection( organizationId ).find({ organization: organizationId }).fetchAsync().then(( fetched ) => {
+                    console.debug( 'fetched', fetched );
+                    self.set( fetched );
+                });
+            }
+        });
     }
 }

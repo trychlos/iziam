@@ -1503,6 +1503,7 @@ Meteor.APP.i18n = {
                     ending_title: 'An optional date of the resource activation end',
                     label_label: 'Label :',
                     label_title: 'Have an optional label',
+                    modal_title: 'Editing the "%s" resource',
                     name_label: 'Name :',
                     name_title: 'Name the resource, must be unique, should be considered immutable',
                     new_button_label: 'New resource',

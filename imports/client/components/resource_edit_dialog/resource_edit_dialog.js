@@ -27,7 +27,7 @@ import './resource_edit_dialog.html';
 
 Template.resource_edit_dialog.onCreated( function(){
     const self = this;
-    console.debug( this );
+    //console.debug( this );
 
     self.APP = {
         // the Form.Checker instance for this dialog
@@ -82,8 +82,7 @@ Template.resource_edit_dialog.onCreated( function(){
                     field: Resources.fieldSet.get().byName( 'notes' )
                 }
             }
-        ],
-        activateLastTab: false
+        ]
     });
 });
 

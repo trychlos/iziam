@@ -69,11 +69,12 @@ export class AuthorizationsRegistrar extends mix( izRegistrar ).with(){
      *  - subscribe and receive the full list of the authorizations of the organization
      */
     clientLoad(){
-        if( Meteor.isClient && !this.clientInitialized()){
-            const self = this;
-            const organizationId = self.organization()._id;
-            this.#handle = Meteor.subscribe( 'authorizations_list_all', organizationId );
-    
+        assert( Meteor.isClient );
+        const self = this;
+        const organizationId = self.organization()._id;
+        this.#handle = Meteor.subscribe( 'authorizations_list_all', organizationId );
+
+        if( !this.clientInitialized()){
             // get the list of authorizations
             Tracker.autorun(() => {
                 if( self.#handle.ready()){

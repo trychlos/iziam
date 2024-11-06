@@ -68,7 +68,7 @@ const _defaultFieldDef = function(){
         Notes.fieldDef(),
         Timestampable.fieldDef(),
         {
-            name: 'lastUpdateddAt',
+            name: 'lastUpdatedAt',
             schema: false,
             dt_type: 'string',
             dt_title: pwixI18n.label( I18N, 'resources.tabular.created_at_th' ),

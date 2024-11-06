@@ -77,11 +77,12 @@ export class ClientsGroupsRegistrar extends mix( izRegistrar ).with( ISearchable
      *  - subscribe and receive the full list of the groups of the organization
      */
     clientLoad(){
-        if( Meteor.isClient && !this.clientInitialized()){
-            const self = this;
-            const organizationId = self.organization()._id;
-            self.#handle = Meteor.subscribe( 'clients_groups.listAll', organizationId );
+        assert( Meteor.isClient );
+        const self = this;
+        const organizationId = self.organization()._id;
+        self.#handle = Meteor.subscribe( 'clients_groups.listAll', organizationId );
 
+        if( !this.clientInitialized()){
             // get the list of groups
             // each group is published as an object with DYN sub-object
             Tracker.autorun(() => {
@@ -93,7 +94,6 @@ export class ClientsGroupsRegistrar extends mix( izRegistrar ).with( ISearchable
                     });
                 }
             });
-
             this.clientInitialized( true );
         }
     }

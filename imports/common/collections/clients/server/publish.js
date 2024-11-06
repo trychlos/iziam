@@ -99,6 +99,7 @@ Meteor.publish( Meteor.APP.C.pub.clientsAll.publish, async function( organizatio
 
     initializing = false;
     self.onStop( function(){
+        console.debug( 'stopping' );
         entitiesObserver.then(( handle ) => { handle.stop(); });
         recordsObserver.then(( handle ) => { handle.stop(); });
     });

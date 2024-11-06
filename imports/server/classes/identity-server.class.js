@@ -125,7 +125,7 @@ export class IdentityServer extends mix( izObject ).with( IRequested ){
             canContinue: true
         };
         // first check for identity access mode configured by the client
-        if( client.record.identity_access_mode === 'authorized' ){
+        if( client.record.identity_access_mode === 'auth' ){
             // then search for authorizations where subject is one of the identity groups, and object this client
             const organization = this.iRequestServer().organization();
             const memberOf = identity.DYN.memberOf.all || [];

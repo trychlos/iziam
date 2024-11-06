@@ -106,6 +106,7 @@ Permissions.set({
 
 Tracker.autorun(() => {
     TenantsManager.list.get().forEach(( it ) => {
+        it.DYN = it.DYN || {};
         // maintain the operational status of the organizations
         if( Meteor.isClient ){
             Organizations.setupOperational( it );

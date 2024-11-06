@@ -47,7 +47,7 @@ Template.resources_list.helpers({
 Template.resources_list.events({
     // delete a resource - this will delete all the validity records too
     'tabular-delete-event .c-resources-list'( event, instance, data ){
-        const label = data.item.label;
+        const label = data.item.label || data.item.name;
         Meteor.callAsync( 'resources.removeById', this.item.get()._id, data.item.entity._id )
             .then(( res ) => {
                 Tolert.success( pwixI18n.label( I18N, 'resources.tabular.delete_success', label ));
@@ -76,9 +76,9 @@ Template.resources_list.events({
                 item,
                 mdBody: 'resource_edit_dialog',
                 mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
-                mdClasses: 'modal-xxl',
-                //mdClassesContent: Meteor.APP.runContext.pageUIClasses().join( ' ' ),
-                mdTitle: pwixI18n.label( I18N, 'resources.edit.modal_title', item.DYN.closest.label )
+                mdClasses: 'modal-lg',
+                mdClassesContent: Meteor.APP.runContext.pageUIClasses().join( ' ' ),
+                mdTitle: pwixI18n.label( I18N, 'resources.edit.modal_title', item.label || item.name )
             });
         }
         return false;

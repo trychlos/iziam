@@ -79,10 +79,12 @@ export class ClientsRegistrar extends mix( izRegistrar ).with( ISearchableLabel 
      *  (because we are a multi-tenants application, we do not want load at startup all clients of all organizations)
      */
     clientLoad(){
-        if( Meteor.isClient && !this.clientInitialized()){
-            const self = this;
-            self.#handle = Meteor.subscribe( Meteor.APP.C.pub.clientsAll.publish, self.organization());
+        assert( Meteor.isClient );
+        const self = this;
+        console.debug( 'subscribing' );
+        self.#handle = Meteor.subscribe( Meteor.APP.C.pub.clientsAll.publish, self.organization());
 
+        if( !this.clientInitialized()){
             // get the list of clients
             // each client is published as an entity object with DYN { managers, records, closest } sub-object
             Tracker.autorun(() => {
@@ -99,8 +101,7 @@ export class ClientsRegistrar extends mix( izRegistrar ).with( ISearchableLabel 
                 self.get().forEach(( it ) => {
                     Clients.setupOperational( it );
                 });
-            });
-    
+            });    
             this.clientInitialized( true );
         }
     }

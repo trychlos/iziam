@@ -1,0 +1,225 @@
+
+## Dashboard
+
+- Applications: Manage your applications, APIs, and single sign-on (SSO) integrations.
+
+    - Applications: For each of your apps for which you want to authenticate users with Auth0, register an application.
+    - APIs: For each of your APIs that you want to secure with Auth0, register an API. Create new APIs and manage existing ones.
+    - SSO Integrations: View and enable external services for SSO. Create new SSO integrations and configure, review, and manage integration settings.
+
+- Authentication: Manage the identity providers through which you allow users to authenticate to your apps.
+
+    - Database: Securely store and manage username/password credentials either in an Auth0 datastore or in your own database. Connect to existing databases using template-based JavaScript scripts that run on Auth0's server during every authentication. Gradually migrate an existing database of legacy credentials to Auth0 as users authenticate (no password reset required).
+    - Social: Configure social identity providers (such as Facebook, Twitter, and Github) through which your users can log in.
+    - Enterprise: Configure enterprise identity providers (such as Active Directory, SAML, and Office 365) through which your users can log in using their enterprise credentials.
+    - Passwordless: Allow your users to sign up and log in using one-time passcodes (delivered by email or SMS) or one-click links, instead of passwords.
+
+_- Organizations: Manage the organizations you do business with, and customize the experience their users have when accessing your applications._
+
+- User Management: Manage your users' identities and permissions.
+
+    - Users: View and create user profiles, perform password resets, block and delete users, and more.
+    - Roles: Create and manage roles for your apps. Roles contain collections of permissions and can be assigned to users.
+
+- Branding:
+
+    - Universal Login: Create and customize a login page to which you can direct users to authenticate.
+    - Custom Domains: Create a custom domain to maintain a consistent experience for your users.
+    - Email Templates: Use templates to create welcome, password reset, and account verification email-based workflows.
+    - Email Provider: Designate and configure your custom email provider information.
+
+- Security: Configure extra layers of security by enabling shields that protect your users against different types of attacks and user access anomalies.
+
+    - Attack Protection: Manage settings for bot, IP throttling, brute-force, and breached password attacks.
+    - Multi-factor Auth: Require additional factors during the login process to prevent unauthorized access.
+    - Monitoring: Monitor threat intelligence events with one of our data visualization and alerting integrations.
+
+- Actions: Configure flows such as login, machine-to-machine, user registration, and password resets. Create and manage customized actions used in flows.
+
+- Auth Pipeline:
+
+	- Rules: Configure custom JavaScript snippets that are executed in Auth0 as part of each user authentication transaction. You can call external APIs, filter which users can log in to your application, use an AllowList, configure geolocated access, and so on.
+    - Hooks: Customize the behavior of Auth0 when you use Database Connections by configuring Node.js code that is executed against extensibility points (which are comparable to webhooks that come with a server).
+
+- Monitoring:
+
+    - Logs: View log data of actions taken in the dashboard by administrators and user logins.
+    - Streams: Create and manage log event streaming to external data analysis services.
+
+- Marketplace: Explore integrations that help your business do more with Auth0.
+- Extensions: Extend the Auth0 platform with official and third-party add-ons.
+- Settings: Configure your tenants, manage your Auth0 subscription and payment options, control your tenant administrators and other user roles. Manage other tenant settings related to your custom domains, signing keys, and other advanced settings.
+- Get Support: Go to our Support Center. If your plan does not have access to support services, see the Auth0 Community.
+
+## Organizations
+
+Tenants in izIAM are named 'Organizations'. Each organization may have one to many non-overlapping validity periods.
+
+### Creating a new organization
+
+To act as the organization manager of your own organization, it is enough for you to:
+
+- first, signup with izIAM,
+- second, on whatever order is most easy for you:
+
+    a. make your email address verified,
+    b. create a new organization template.
+
+As the creator, you will be automagically enroled as this new organization manager, with all capabilities that this role gives.
+
+The newly created organization holds very suitable default value for the main aspects of an OpenID/OAuth-compatible identity provider. But you still have to:
+
+- name it, giving it a label which uniquely distinguish it,
+- set up your base root URL, which must also be unique.
+
+Both these two values, the name and the base root URL, are identifiers or your organization. From a human point of view, the name is like the brand of an enterprise, and it must be clear for your end-user who you are when izIAM presents a dialog on behalf your organization with this name. From machine and application clients point of view, the base root URL directly points to your own organization.
+
+Though those two values may both be modified later, we want advise you to be very cautionous with that as changing a widely distributed identifier is never a very good idea, and must be driven with great caution.
+
+### Setting up an organization
+
+An organization is build around:
+
+- an OAuth server configuration
+- authorized client applications
+- registered identities
+
+### Managing several organizations
+
+izIAM let you create as many organizations as you are able to manage. A frequent use case is to have a production organization, and some other smaller ones for development, tests and pre-production environments.
+
+Actually izIAM team advises and encourages you to do so in order not to mix production and non-production data in a same environment.
+
+## Clients
+
+A client in izIAM can be a native app that executes on a mobile device, a single-page web app that executes on a browser, or a regular web application that executes on a server, as well as an API you are developing and you want make its use more secure.
+
+When you create a client in your izIAM Dashboard, a client ID as an alphanumeric string is automatically issued for this client in this organization. This is the unique identifier for your client. You will use this ID in your application or API code when you call izIAM APIs. This identifier is not modifiable, not secret.
+
+Another important piece of information is the client secret. It must be kept confidential at all times. If anyone gains access to your client secret, then they can impersonate your application and access protected resources. It is important that you select the correct client type to help izIAM check for certain security risks.
+
+### Identities
+
+Identities for each organization are stored in a accounts-like collection: 'identities'
+
+### Authentification providers
+
+### Authorization providers
+
+The roles-based authorization provider stores its data in 'authorizations'.
+
+## Miscellaneous
+
+2023- 9- 7 ChatGPT
+
+Hi,
+What are the features I can expect from an identity manager?
+
+Identity managers, also known as Identity and Access Management (IAM) systems, are crucial tools for managing user identities and their access to resources within an organization's network or system. The specific features of an identity manager can vary depending on the software or service provider, but here are some common features and functionalities you can expect:
+
+User Authentication:
+
+Single Sign-On (SSO): Allows users to access multiple applications and services with a single set of credentials.
+Multi-factor Authentication (MFA): Enhances security by requiring multiple methods of identity verification (e.g., password + token, fingerprint, or SMS code).
+User Provisioning and Deprovisioning:
+
+Automate the creation, modification, and deletion of user accounts.
+Ensure that users have the right level of access permissions based on their roles.
+Role-Based Access Control (RBAC):
+
+Assign and manage user permissions based on their roles or job functions.
+Simplify access management by grouping users with similar access needs.
+Access Requests and Approval Workflows:
+
+Allow users to request access to specific resources or roles.
+Implement approval workflows for access requests to ensure proper authorization.
+Password Management:
+
+Enable users to reset or change passwords.
+Set password policies, such as complexity requirements and expiration periods.
+Directory Services Integration:
+
+Connect to and synchronize with external directory services like LDAP or Active Directory.
+Centralize user identity information.
+Audit and Compliance:
+
+Keep detailed logs of user activities and access changes for auditing purposes.
+Assist with regulatory compliance requirements (e.g., GDPR, HIPAA).
+Self-Service Portals:
+
+Empower users to manage their own profiles, passwords, and access requests.
+Reduce the burden on IT helpdesk for routine tasks.
+Access Control Policies:
+
+Define and enforce access policies based on various attributes (time, location, device).
+Implement fine-grained access controls.
+Reporting and Analytics:
+
+Generate reports on user access, authentication events, and compliance.
+Gain insights into user behavior and security events.
+Integration and Federation:
+
+Support integration with various identity providers, including cloud-based services.
+Implement identity federation for cross-organization authentication.
+Security Features:
+
+Monitor for suspicious activity and security threats.
+Implement security measures like session management and password policies.
+Scalability and High Availability:
+
+Ensure the system can handle a growing number of users and resources.
+Provide redundancy and failover capabilities for high availability.
+APIs and Customization:
+
+Offer APIs for integration with custom applications.
+Allow for customization of user interfaces and workflows.
+Mobile Device Management (MDM):
+
+Manage and secure mobile device access to corporate resources.
+Enforce policies on mobile devices.
+User Lifecycle Management:
+
+Streamline the onboarding and offboarding of employees and contractors.
+Ensure access is revoked promptly when users leave the organization.
+Passwordless Authentication:
+
+Support modern authentication methods like biometrics or hardware tokens.
+Reduce reliance on traditional passwords.
+Identity Governance and Administration (IGA):
+
+Facilitate identity lifecycle management, role management, and access certifications.
+Enforce compliance and governance policies.
+Remember that the specific features and capabilities of an identity manager may vary depending on the vendor or solution you choose. It's important to evaluate your organization's unique needs and requirements when selecting an identity manager to ensure it meets your security, compliance, and usability goals.
+
+what is a user identification service?
+ChatGPT
+A User Identification Service, often referred to as a User ID service or simply a User Service, is a component of identity and access management (IAM) systems or platforms. Its primary function is to manage and maintain information about user identities within an organization's IT infrastructure. This service plays a fundamental role in ensuring that users can securely and efficiently access the resources and systems they need while maintaining appropriate security measures.
+
+Key aspects and functionalities of a User Identification Service typically include:
+
+User Identity Management: This service stores and manages user profiles and their associated attributes, including usernames, email addresses, contact information, and other relevant details. It serves as a centralized repository for user data.
+
+Authentication: User Identification Services often include authentication mechanisms to verify the identity of users when they attempt to access systems, applications, or resources. This may involve username and password authentication, multi-factor authentication (MFA), biometric authentication, or other methods.
+
+User Provisioning: User IDs are created, modified, and deactivated through user provisioning processes. When new employees join an organization or when employees change roles, the User Identification Service helps automate the provisioning and deprovisioning of user accounts and access permissions.
+
+User Self-Service: Many User Identification Services offer self-service features, allowing users to manage their own profiles, reset passwords, update contact information, and sometimes request additional access permissions without IT assistance.
+
+User Roles and Permissions: These services often support role-based access control (RBAC), which allows organizations to define roles with specific sets of permissions. Users are assigned to roles, simplifying access management.
+
+Directory Integration: Integration with directories like LDAP (Lightweight Directory Access Protocol) or Microsoft Active Directory is common. This ensures that user information is synchronized across systems and maintained consistently.
+
+Access Control: The service may enforce access control policies, ensuring that users only access resources and applications for which they are authorized. It may also enforce security policies, such as password complexity requirements and expiration rules.
+
+Auditing and Logging: User Identification Services often maintain logs and audit trails of user activities, authentication events, and access changes. These logs are critical for security monitoring and compliance.
+
+Scalability and High Availability: To support organizations of varying sizes, these services must be scalable and designed for high availability to minimize downtime.
+
+Security: Security measures such as encryption, secure communication protocols, and protection against unauthorized access are essential components of User Identification Services.
+
+APIs and Integration: Many User Identification Services offer APIs and connectors that allow integration with other applications and systems, enabling organizations to build custom solutions and workflows.
+
+Compliance and Governance: These services may provide tools and features to help organizations meet regulatory compliance requirements by enforcing access controls, permissions, and audit capabilities.
+
+Overall, a User Identification Service is a critical component within an organization's identity and access management infrastructure, enabling the secure and efficient management of user identities, access permissions, and authentication processes across various systems and resources.
+

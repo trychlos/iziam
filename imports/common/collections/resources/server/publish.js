@@ -22,22 +22,21 @@ Meteor.publish( 'resources_list_all', async function( organizationId ){
 
     const f_transform = async function( item ){
         item.DYN = item.DYN || {};
+        Resources.s.addUndef( item );
         return item;
     };
 
-    // in order the same query may be applied on client side, we have to add to item required fields
     const observer = Resources.collection( organizationId ).find({ organization: organizationId }).observeAsync({
         added: async function( item ){
             self.added( Resources.collectionName( organizationId ), item._id, await f_transform( item ));
-            //console.debug( 'added', item._id );
         },
         changed: async function( newItem, oldItem ){
-            self.changed( Resources.collectionName( organizationId ), newItem._id, await f_transform( newItem ));
-            //console.debug( 'changed', newItem._id );
+            if( !initializing ){
+                self.changed( Resources.collectionName( organizationId ), newItem._id, await f_transform( newItem ));
+            }
         },
         removed: function( oldItem ){
-            self.removed( Resources.collectionName( organizationId ), oldItem._id, oldItem );
-            //console.debug( 'removed', oldItem._id );
+            self.removed( Resources.collectionName( organizationId ), oldItem._id );
         }
     });
 
