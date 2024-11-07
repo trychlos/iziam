@@ -94,16 +94,6 @@ Template.client_redirects_panel.onRendered( function(){
         }
     });
 
-    // advertise of the status of this checker to the (maybe) englobing assistant
-    self.autorun(() => {
-        const checker = self.APP.checker.get();
-        if( checker ){
-            const status = checker.iStatusableStatus();
-            const validity = checker.iStatusableValidity();
-            self.$( '.c-client-redirects-panel' ).trigger( 'iz-checker', { status: status, validity: validity });
-        }
-    });
-
     // if no redirect url yet, and not configured to not to, have an empty row
     // if no more redirect url (and already added if asked for), send a warning
     self.autorun(() => {

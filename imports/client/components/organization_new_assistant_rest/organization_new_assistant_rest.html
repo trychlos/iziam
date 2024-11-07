@@ -1,0 +1,14 @@
+<template name="organization_new_assistant_rest">
+    <div class="c-organization-new-assistant-rest">
+
+        {{> organization_new_assistant_current }}
+
+        <div class="content">
+            <div class="text ui-mb1">
+                {{{ i18n key="organizations.new_assistant.rest_text" }}}
+            </div>
+            {{> organization_config_rest_pane (parmsRestPanel) }}
+        </div>
+
+    </div>
+</template>

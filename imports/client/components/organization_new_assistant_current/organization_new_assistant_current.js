@@ -128,35 +128,60 @@ Template.organization_new_assistant_current.helpers({
         const def = id ? ClientProfile.byId( id ) : null;
         return def ? ClientProfile.label( def ) : '';
     },
+    */
 
-    // organization description
-    propDescription(){
-        return this.parentAPP.entity.get().DYN.records[0].get().description || '';
+    // organization contact email
+    propContactEmail(){
+        return this.parentAPP.entity.get().DYN.records[0].get().contactEmail || '';
     },
 
-    // organization name
-    propName(){
+    // organization contact url
+    propContactUrl(){
+        return this.parentAPP.entity.get().DYN.records[0].get().contactUrl || '';
+    },
+
+    // organization general terms of use
+    propGtu(){
+        return this.parentAPP.entity.get().DYN.records[0].get().gtuUrl || '';
+    },
+
+    // organization home page
+    propHome(){
+        return this.parentAPP.entity.get().DYN.records[0].get().homeUrl || '';
+    },
+
+    // organization unique label
+    propLabel(){
         return this.parentAPP.entity.get().DYN.records[0].get().label || '';
     },
 
-    // organization software description
-    propSoftware(){
-        const softid = this.parentAPP.entity.get().DYN.records[0].get().software_id;
-        const softver = this.parentAPP.entity.get().DYN.records[0].get().software_version;
-        return softid || softver ? ( softid || '' ) + ' ' + ( softver || '' ) : '';
+    // organization legal conditions
+    propLegals(){
+        return this.parentAPP.entity.get().DYN.records[0].get().legalsUrl || '';
     },
 
-    // selected providers - which may be none
-    providersText(){
-        const selected = this.parentAPP.entity.get().DYN.records[0].get().selectedProviders;
-        return selected.join( ', ' ) || pwixI18n.label( I18N, 'organizations.new_assistant.summary_providers_none' );
+    // organization logo url
+    propLogo(){
+        return this.parentAPP.entity.get().DYN.records[0].get().logoUrl || '';
     },
 
-    // registered redirect URLs
-    redirectsText(){
-        const redirect_uris = this.parentAPP.entity.get().DYN.records[0].get().redirect_uris || [];
-        const urls = redirect_uris.length ? redirect_uris.map(( it ) => { return it.url; }) : null;
-        return urls ? urls.join( ', ' ) : pwixI18n.label( I18N, 'organizations.new_assistant.summary_redirects_none' );
+    // organization personal data management page
+    propPdmp(){
+        return this.parentAPP.entity.get().DYN.records[0].get().pdmpUrl || '';
+    },
+
+    // organization support email
+    propSupportEmail(){
+        return this.parentAPP.entity.get().DYN.records[0].get().supportEmail || '';
+    },
+
+    // organization support url
+    propSupportUrl(){
+        return this.parentAPP.entity.get().DYN.records[0].get().supportUrl || '';
+    },
+
+    // REST API base path
+    restText(){
+        return this.parentAPP.entity.get().DYN.records[0].get().baseUrl || '';
     }
-        */
 });

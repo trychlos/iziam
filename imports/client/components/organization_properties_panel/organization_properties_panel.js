@@ -9,12 +9,7 @@
 import _ from 'lodash';
 import { strict as assert } from 'node:assert';
 
-import { Forms } from 'meteor/pwix:forms';
 import { pwixI18n } from 'meteor/pwix:i18n';
-import { ReactiveVar } from 'meteor/reactive-var';
-import { TenantsManager } from 'meteor/pwix:tenants-manager';
-
-import { Organizations } from '/imports/common/collections/organizations/index.js';
 
 import './organization_properties_panel.html';
 
@@ -37,7 +32,6 @@ Template.organization_properties_panel.events({
     },
     // ask for enabling the checker (when this panel is used inside of an assistant)
     'iz-enable-checks .c-organization-properties-panel'( event, instance, enabled ){
-        console.debug( 'forwarding to TenantRecordPropertiesPanel' );
         instance.$( '.TenantRecordPropertiesPanel' ).trigger( event.type, enabled );
         return false;
     }

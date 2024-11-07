@@ -30,10 +30,11 @@ Template.client_new_assistant_identities_authentication.onRendered( function(){
     // tracks the current record to enable/disable the Next button when the pane is active
     self.autorun(() => {
         const dataDict = Template.currentData().parentAPP.assistantStatus;
-        const entity = Template.currentData().parentAPP.entity.get();
-        const record = entity.DYN.records[0].get();
         if( dataDict.get( 'activePane' ) === 'authentication' ){
-            self.$( '.c-client-new-assistant-identities-authentication' ).trigger( 'assistant-do-action-set', { action: 'next', enable: Boolean( record.identity_auth_mode )});
+            const entity = Template.currentData().parentAPP.entity.get();
+            const record = entity.DYN.records[0].get();
+            const validity = Template.currentData().checker.get().validity();
+            self.$( '.c-client-new-assistant-identities-authentication' ).trigger( 'assistant-do-action-set', { action: 'next', enable: Boolean( record.identity_auth_mode ) && validity });
         }
     });
 });
@@ -64,11 +65,5 @@ Template.client_new_assistant_identities_authentication.events({
     'assistant-pane-shown .c-client-new-assistant-identities-authentication'( event, instance, data ){
         instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'prev', enable: true });
         instance.$( '.c-client-properties-panel' ).trigger( 'iz-enable-checks', true );
-    },
-    // get the status of the panel checker
-    'iz-checker .c-client-new-assistant-identities-authentication'( event, instance, data ){
-        if( this.parentAPP.assistantStatus.get( 'activePane' ) === 'properties' ){
-            instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'next', enable: data.validity });
-        }
     }
 });

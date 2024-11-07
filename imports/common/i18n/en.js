@@ -1474,10 +1474,13 @@ Meteor.APP.i18n = {
                     properties_nav: 'Properties',
                     properties_text: 'The descriptive organization properties.<br />'
                         +'In particular, the label is used as an identifier, and let you easily identiy this organization in a list. It must be unique.',
+                    rest_nav: 'REST API',
                     success_label: 'Congratulations !<br />'
                         +'Your new organization has been successfully created.',
+                    summary_label_label: 'Label :',
                     summary_legend: 'Summary',
                     summary_nav: 'Summary',
+                    summary_rest_label: 'REST base path :',
                     summary_text: 'You have successfully completed this assistant, at least enough to actually create a new organization.<br />'
                         +'The organization will be created when you will click on the "Next" button below.'
                 },

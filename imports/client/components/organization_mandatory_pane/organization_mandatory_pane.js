@@ -59,16 +59,6 @@ Template.organization_mandatory_pane.onRendered( function(){
             }));
         }
     });
-
-    // advertise the assistant of the status of this panel
-    self.autorun(() => {
-        const checker = self.APP.checker.get();
-        if( checker ){
-            const status = checker.status();
-            const validity = checker.validity();
-            self.$( '.c-client-properties-panel' ).trigger( 'iz-checker', { status: status, validity: validity });
-        }
-    });
 });
 
 Template.organization_mandatory_pane.helpers({

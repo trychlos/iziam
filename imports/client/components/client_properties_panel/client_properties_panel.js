@@ -117,16 +117,6 @@ Template.client_properties_panel.onRendered( function(){
             }));
         }
     });
-
-    // advertise the assistant of the status of this panel
-    self.autorun(() => {
-        const checker = self.APP.checker.get();
-        if( checker ){
-            const status = checker.status();
-            const validity = checker.validity();
-            self.$( '.c-client-properties-panel' ).trigger( 'iz-checker', { status: status, validity: validity });
-        }
-    });
 });
 
 Template.client_properties_panel.helpers({

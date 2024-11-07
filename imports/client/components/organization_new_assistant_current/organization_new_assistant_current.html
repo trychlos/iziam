@@ -6,25 +6,32 @@
                 <legend>{{ i18n key="organizations.new_assistant.summary_legend" }}</legend>
                 <div class="recap">
                     <table class="form-table">
-                        <!--
                         {{#if havePane "properties" }}
                             <tr>
-                                <td class="label ui-vatop">{{ i18n key="organizations.new_assistant.summary_name_label" }}</td>
+                                <td class="label ui-vatop">{{ i18n key="organizations.new_assistant.summary_label_label" }}</td>
                                 <td class="ui-w100">
-                                    <p class="text">{{ propName }}</p>
-                                    <p class="text2">{{{ propDescription }}}</p>
-                                    <p class="text2">{{ propSoftware }}</p>
+                                    <p class="text">{{ propLabel }}</p>
+                                    <p class="text2">{{ propHome }}</p>
+                                    <p class="text2">{{{ propPdmp }}}</p>
+                                    <p class="text2">{{ propGtu }}</p>
+                                    <p class="text2">{{ propLegals }}</p>
+                                    <p class="text2">{{ propLogo }}</p>
+                                    <p class="text2">{{ propContactUrl }}</p>
+                                    <p class="text2">{{ propContactEmail }}</p>
+                                    <p class="text2">{{ propSupportUrl }}</p>
+                                    <p class="text2">{{ propSupportEmail }}</p>
                                 </td>
                             </tr>
                         {{/if}}
-                        {{#if havePane "profile" }}
+                        {{#if havePane "rest" }}
                             <tr>
-                                <td class="label ui-vatop">{{ i18n key="organizations.new_assistant.summary_profile_label" }}</td>
+                                <td class="label ui-vatop">{{ i18n key="organizations.new_assistant.summary_rest_label" }}</td>
                                 <td>
-                                    <p class="text">{{ profileText }}</p>
+                                    <p class="text">{{ restText }}</p>
                                 </td>
                             </tr>
                         {{/if}}
+                        <!--
                         {{#if havePane "organization" }}
                             <tr>
                                 <td class="label ui-vatop">{{ i18n key="organizations.new_assistant.summary_organization_label" }}</td>

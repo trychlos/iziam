@@ -22,8 +22,8 @@ Template.organization_new_assistant_properties.onRendered( function(){
     self.autorun(() => {
         const dataDict = Template.currentData().parentAPP.assistantStatus;
         if( dataDict.get( 'activePane' ) === 'properties' ){
-            const label = Template.currentData().parentAPP.entity.get().DYN.records[0].label;
-            self.$( '.c-organization-new-assistant-properties' ).trigger( 'assistant-do-action-set', { action: 'next',  enable: Boolean( label )});
+            const validity = Template.currentData().checker.get().validity();
+            self.$( '.c-organization-new-assistant-properties' ).trigger( 'assistant-do-action-set', { action: 'next',  enable: validity });
         }
     });
 });
@@ -53,13 +53,6 @@ Template.organization_new_assistant_properties.events({
     },
     'assistant-pane-shown .c-organization-new-assistant-properties'( event, instance, data ){
         instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'prev', enable: true });
-        console.debug( 'triggering iz-enable-checks' );
         instance.$( '.c-organization-properties-panel' ).trigger( 'iz-enable-checks', true );
-    },
-    // get the status of the panel checker
-    'iz-checker .c-organization-new-assistant-properties'( event, instance, data ){
-        if( this.parentAPP.assistantStatus.get( 'activePane' ) === 'properties' ){
-            instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'next', enable: data.validity });
-        }
     }
 });

@@ -24,6 +24,7 @@ import '/imports/client/components/organization_new_assistant_current/organizati
 import '/imports/client/components/organization_new_assistant_done/organization_new_assistant_done.js';
 import '/imports/client/components/organization_new_assistant_introduction/organization_new_assistant_introduction.js';
 import '/imports/client/components/organization_new_assistant_properties/organization_new_assistant_properties.js';
+import '/imports/client/components/organization_new_assistant_rest/organization_new_assistant_rest.js';
 import '/imports/client/components/organization_new_assistant_summary/organization_new_assistant_summary.js';
 
 import './organization_new_assistant.html';
@@ -59,6 +60,11 @@ Template.organization_new_assistant.onCreated( function(){
                     name: 'properties',
                     template: 'organization_new_assistant_properties',
                     label: pwixI18n.label( I18N, 'organizations.new_assistant.properties_nav' )
+                },
+                {
+                    name: 'rest',
+                    template: 'organization_new_assistant_rest',
+                    label: pwixI18n.label( I18N, 'organizations.new_assistant.rest_nav' )
                 },
                 {
                     name: 'summary',

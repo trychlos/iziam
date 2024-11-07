@@ -5,6 +5,7 @@
  * - checker: a ReactiveVar which contains the current Forms.Checker
  * - entity: a ReactiveVar which contains the Organization entity
  * - index: the index of the current record
+ * - enableChecks: when inside of an assistant, defaulting to true
  */
 
 import _ from 'lodash';
@@ -33,13 +34,13 @@ Template.organization_config_rest_pane.onCreated( function(){
 
 Template.organization_config_rest_pane.onRendered( function(){
     const self = this;
-    const dataContext = Template.currentData();
 
     // initialize the Checker for this panel as soon as we get the parent Checker
     self.autorun(() => {
         const parentChecker = Template.currentData().checker?.get();
         const checker = self.APP.checker.get();
         if( parentChecker && !checker ){
+            const enabled = Template.currentData().enableChecks !== false;
             self.APP.checker.set( new Forms.Checker( self, {
                 parent: parentChecker,
                 panel: new Forms.Panel( self.APP.fields, TenantsManager.Records.fieldSet.get()),
@@ -47,7 +48,8 @@ Template.organization_config_rest_pane.onRendered( function(){
                     entity: Template.currentData().entity,
                     index: Template.currentData().index
                 },
-                setForm: Template.currentData().entity.get().DYN.records[Template.currentData().index].get()
+                setForm: Template.currentData().entity.get().DYN.records[Template.currentData().index].get(),
+                enabled: enabled
             }));
         }
     });
@@ -62,4 +64,22 @@ Template.organization_config_rest_pane.helpers({
     itFor( label ){
         return 'organization_config_rest_'+label+'_'+this.index;
     },
+});
+
+Template.organization_config_rest_pane.events({
+    // ask for clear the panel
+    'iz-clear-panel .c-organization-config-rest-pane'( event, instance ){
+        instance.APP.checker.get().clear();
+    },
+    // ask for enabling the checker (when this panel is used inside of an assistant)
+    'iz-enable-checks .c-organization-config-rest-pane'( event, instance, enabled ){
+        const checker = instance.APP.checker.get();
+        if( checker ){
+            checker.enabled( enabled );
+            if( enabled ){
+                checker.check({ update: false });
+            }
+        }
+        return false;
+    }
 });

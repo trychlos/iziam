@@ -16,6 +16,20 @@ import '/imports/client/components/client_contacts_panel/client_contacts_panel.j
 
 import './client_new_assistant_contacts.html';
 
+Template.client_new_assistant_contacts.onRendered( function(){
+    const self = this;
+
+    // tracks the selection to enable/disable the Next button when the pane is active
+    //  selection is not mandatory here
+    self.autorun(() => {
+        const dataDict = Template.currentData().parentAPP.assistantStatus;
+        if( dataDict.get( 'activePane' ) === 'contacts' ){
+            const validity = Template.currentData().checker.get().validity();
+            self.$( '.c-client-new-assistant-contacts' ).trigger( 'assistant-do-action-set', { action: 'next',  enable: validity });
+        }
+    });
+});
+
 Template.client_new_assistant_contacts.helpers({
     // internationalization
     i18n( arg ){
@@ -42,12 +56,5 @@ Template.client_new_assistant_contacts.events({
     'assistant-pane-shown .c-client-new-assistant-contacts'( event, instance, data ){
         instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'prev', enable: true });
         instance.$( '.c-client-contacts-panel' ).trigger( 'iz-enable-checks', true );
-    },
-    // an event sent by client_contacts_panel to advertise of its status
-    'iz-checker .c-client-new-assistant-contacts'( event, instance, data ){
-        if( this.parentAPP.assistantStatus.get( 'activePane' ) === 'contacts' ){
-            console.debug( data );
-            self.$( '.c-client-new-assistant-contacts' ).trigger( 'assistant-do-action-set', { action: 'next',  enable: data.validity });
-        }
     }
 });
