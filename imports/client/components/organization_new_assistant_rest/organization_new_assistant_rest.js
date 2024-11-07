@@ -10,7 +10,7 @@ import { strict as assert } from 'node:assert';
 
 import { pwixI18n } from 'meteor/pwix:i18n';
 
-import '/imports/client/components/organization_config_rest_pane/organization_config_rest_pane.js';
+import '/imports/client/components/organization_rest_panel/organization_rest_panel.js';
 
 import './organization_new_assistant_rest.html';
 
@@ -39,7 +39,7 @@ Template.organization_new_assistant_rest.events({
     },
     'assistant-pane-shown .c-organization-new-assistant-rest'( event, instance, data ){
         instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'prev', enable: true });
-        instance.$( '.c-organization-config-rest-pane' ).trigger( 'iz-enable-checks', true );
+        instance.$( '.c-organization-config-rest-panel' ).trigger( 'iz-enable-checks', true );
     },
     // get the status of the panel checker
     'iz-checker .c-organization-new-assistant-rest'( event, instance, data ){

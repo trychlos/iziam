@@ -1,5 +1,5 @@
 /*
- * /imports/client/components/organization_config_rest_pane/organization_config_rest_pane.js
+ * /imports/client/components/organization_rest_panel/organization_rest_panel.js
  *
  * Parms:
  * - checker: a ReactiveVar which contains the current Forms.Checker
@@ -16,9 +16,9 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { TenantsManager } from 'meteor/pwix:tenants-manager';
 
-import './organization_config_rest_pane.html';
+import './organization_rest_panel.html';
 
-Template.organization_config_rest_pane.onCreated( function(){
+Template.organization_rest_panel.onCreated( function(){
     const self = this;
 
     self.APP = {
@@ -32,7 +32,7 @@ Template.organization_config_rest_pane.onCreated( function(){
     };
 });
 
-Template.organization_config_rest_pane.onRendered( function(){
+Template.organization_rest_panel.onRendered( function(){
     const self = this;
 
     // initialize the Checker for this panel as soon as we get the parent Checker
@@ -65,7 +65,7 @@ Template.organization_config_rest_pane.onRendered( function(){
     });
 });
 
-Template.organization_config_rest_pane.helpers({
+Template.organization_rest_panel.helpers({
     // string translation
     i18n( arg ){
         return pwixI18n.label( I18N, arg.hash.key );
@@ -76,13 +76,13 @@ Template.organization_config_rest_pane.helpers({
     },
 });
 
-Template.organization_config_rest_pane.events({
+Template.organization_rest_panel.events({
     // ask for clear the panel
-    'iz-clear-panel .c-organization-config-rest-pane'( event, instance ){
+    'iz-clear-panel .c-organization-rest-panel'( event, instance ){
         instance.APP.checker.get().clear();
     },
     // ask for enabling the checker (when this panel is used inside of an assistant)
-    'iz-enable-checks .c-organization-config-rest-pane'( event, instance, enabled ){
+    'iz-enable-checks .c-organization-rest-panel'( event, instance, enabled ){
         const checker = instance.APP.checker.get();
         if( checker ){
             checker.enabled( enabled );

@@ -25,7 +25,7 @@ import '/imports/client/components/organization_config_dynregistration_pane/orga
 import '/imports/client/components/organization_config_ident_pane/organization_config_ident_pane.js';
 import '/imports/client/components/organization_config_oauth_pane/organization_config_oauth_pane.js';
 import '/imports/client/components/organization_config_pane/organization_config_pane.js';
-import '/imports/client/components/organization_config_rest_pane/organization_config_rest_pane.js';
+import '/imports/client/components/organization_rest_pane/organization_rest_pane.js';
 import '/imports/client/components/organization_config_ttls_pane/organization_config_ttls_pane.js';
 import '/imports/client/components/organization_endpoints_pane/organization_endpoints_pane.js';
 import '/imports/client/components/organization_identities_groups_load/organization_identities_groups_load.js';
@@ -39,6 +39,7 @@ import '/imports/client/components/organization_new_button/organization_new_butt
 import '/imports/client/components/organization_providers_pane/organization_providers_pane.js';
 import '/imports/client/components/organization_resources_load/organization_resources_load.js';
 import '/imports/client/components/organization_resources_pane/organization_resources_pane.js';
+import '/imports/client/components/organization_rest_pane/organization_rest_pane.js';
 import '/imports/client/components/organization_status_pane/organization_status_pane.js';
 import '/imports/client/components/resources_count_badge/resources_count_badge.js';
 
@@ -158,17 +159,12 @@ Template.manager_organizations_tab.onCreated( function(){
             }
         ],
         recordTabsBefore: [
-            {
-                name: 'organization_mandatory_tab',
-                navLabel: pwixI18n.label( I18N, 'organizations.edit.mandatory_tab_title' ),
-                paneTemplate: 'organization_mandatory_pane'
-            }
         ],
         recordTabs: [
             {
-                name: 'organization_config_tab',
-                navLabel: pwixI18n.label( I18N, 'organizations.edit.config_tab_title' ),
-                paneTemplate: 'organization_config_pane'
+                name: 'organization_rest_tab',
+                navLabel: pwixI18n.label( I18N, 'organizations.edit.rest_tab_title' ),
+                paneTemplate: 'organization_rest_pane'
             },
             {
                 name: 'organization_endpoints_tab',
@@ -189,6 +185,11 @@ Template.manager_organizations_tab.onCreated( function(){
                 name: 'organization_keygrips_tab',
                 navLabel: pwixI18n.label( I18N, 'organizations.keygrips.tab_title' ),
                 paneTemplate: 'organization_keygrips_pane'
+            },
+            {
+                name: 'organization_config_tab',
+                navLabel: pwixI18n.label( I18N, 'organizations.edit.config_tab_title' ),
+                paneTemplate: 'organization_config_pane'
             }
         ]
     };

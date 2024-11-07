@@ -14,7 +14,6 @@ import _ from 'lodash';
 import { strict as assert } from 'node:assert';
 import mix from '@vestergaard-company/js-mixin';
 
-import { ReactiveVar } from 'meteor/reactive-var';
 import { Tracker } from 'meteor/tracker';
 
 import { Authorizations } from '/imports/common/collections/authorizations/index.js';
@@ -74,17 +73,14 @@ export class AuthorizationsRegistrar extends mix( izRegistrar ).with(){
         const organizationId = self.organization()._id;
         this.#handle = Meteor.subscribe( 'authorizations_list_all', organizationId );
 
-        if( !this.clientInitialized()){
-            // get the list of authorizations
-            Tracker.autorun(() => {
-                if( self.#handle.ready()){
-                    Authorizations.collection( organizationId ).find({ organization: organizationId }).fetchAsync().then(( fetched ) => {
-                        console.debug( 'fetched', fetched );
-                        self.set( fetched );
-                    });
-                }
-            });
-            this.clientInitialized( true );
-        }
+        // get the list of authorizations
+        Tracker.autorun(() => {
+            if( self.#handle.ready()){
+                Authorizations.collection( organizationId ).find({ organization: organizationId }).fetchAsync().then(( fetched ) => {
+                    console.debug( 'fetched', fetched );
+                    self.set( fetched );
+                });
+            }
+        });
     }
 }

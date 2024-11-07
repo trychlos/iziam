@@ -39,6 +39,7 @@ Template.organization_new_assistant_properties.events({
     },
     'assistant-pane-shown .c-organization-new-assistant-properties'( event, instance, data ){
         instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'prev', enable: true });
+        console.debug( 'triggering iz-enable-checks' );
         instance.$( '.c-organization-properties-panel' ).trigger( 'iz-enable-checks', true );
     },
     // get the status of the panel checker

@@ -1394,7 +1394,7 @@ Meteor.APP.i18n = {
                     resources_tab_title: 'Resources',
                     rest_config_preamble: 'Configure the behaviour of your REST API.<br />'
                         +'At least, a unique base URL is mandatory here.',
-                    rest_config_tab_title: 'REST API',
+                    rest_tab_title: 'REST API',
                     revocation_example: 'Revocation endpoint URL: &laquo; %s &raquo;',
                     revocation_label: 'Revocation endpoint :',
                     revocation_ph: '/revocation',

@@ -16,6 +16,18 @@ import { Authorizations } from '../index.js';
 
 Authorizations.s = _.merge( Authorizations.s, {
 
+    // @summary Make sure all the fields of the fieldset are set in the item, even if undefined
+    // @param {Object} item
+    // @returns {Object} item
+    addUndef( item ){
+        Authorizations.fieldSet.get().names().forEach(( it ) => {
+            if( it.indexOf( '.' ) === -1 && !Object.keys( item ).includes( it )){
+                item[it] = undefined;
+            }
+        });
+        return item;
+    },
+
     // returns the queried items
     // when dealing from an external identity, we expect userId=null and opts.from=<organizationId>
     async getBy( organizationId, query, userId, opts={} ){
@@ -30,7 +42,7 @@ Authorizations.s = _.merge( Authorizations.s, {
         if( !await Permissions.isAllowed( 'feat.authorizations.delete', userId, organizationId )){
             return false;
         }
-        const res = await Authorizations.collection( organizationId ).removAsync({ _id: id });
+        const res = await Authorizations.collection( organizationId ).removeAsync({ _id: id });
         console.debug( 'Authorizations.removeById', res );
         return res;
     },
@@ -86,18 +98,31 @@ Authorizations.s = _.merge( Authorizations.s, {
         return gots;
     },
 
-    // @returns {Object} the upsert result
+    // @returns {Object} the upsert result with:
+    //  - updated: the count of updated documents
+    //  - inserted: the count od inserted documents
     async upsert( organizationId, item, userId ){
         if( !await Permissions.isAllowed( 'feat.authorizations.create', userId, organizationId )){
             return false;
         }
+        let res = {
+            updated: 0,
+            inserted: 0
+        };
         const DYN = item.DYN;
         delete item.DYN;
-        const res = await Authorizations.collection( organizationId ).upsertAsync({ _id: item._id }, { $set: item });
-        item.DYN = DYN || {};
-        if( res.insertedId ){
-            item._id = res.insertedId;
+        let itemId = item._id;
+        if( item.createdAt ){
+            const foo = await Authorizations.collection( organizationId ).updateAsync({ _id: item._id }, { $set: item });
+            console.debug( 'foo', foo );
+            res.updated = foo.numberAffected;
+        } else {
+            const foo = await Authorizations.collection( organizationId ).insertAsync( item );
+            res.inserted += 1;
+            itemId = foo.insertedId;
         }
+        item.DYN = DYN || {};
+        item._id = itemId;
         console.debug( 'Authorizations.upsert', res );
         return res;
     }

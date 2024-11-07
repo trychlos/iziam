@@ -49,7 +49,11 @@ Template.authorization_edit_dialog.onCreated( function(){
     // it will be saved into the current organization only if the user validates this dialog box
     self.autorun(() => {
         const dcItem = Template.currentData().item;
-        let item = dcItem ? _.cloneDeep( dcItem ) : { organization: Template.currentData().entity._id, _id: Random.id() };
+        let item = dcItem ? _.cloneDeep( dcItem ) : {
+            organization: Template.currentData().entity._id,
+            _id: Random.id(),
+            DYN: {}
+        };
         self.APP.item.set( item );
         self.APP.isNew.set( dcItem === null );
     });
@@ -83,8 +87,7 @@ Template.authorization_edit_dialog.onCreated( function(){
                     field: Authorizations.fieldSet.get().byName( 'notes' )
                 }
             }
-        ],
-        activateLastTab: false
+        ]
     });
 });
 
@@ -146,7 +149,6 @@ Template.authorization_edit_dialog.events({
     // submit
     //  event triggered in case of a modal
     'md-click .c-authorization-edit-dialog'( event, instance, data ){
-        //console.debug( event, data );
         if( data.button.id === Modal.C.Button.OK ){
             instance.$( event.currentTarget ).trigger( 'iz-submit' );
         }
@@ -167,7 +169,9 @@ Template.authorization_edit_dialog.events({
         };
         Meteor.callAsync( 'authorizations.upsert', this.entity._id, item )
             .then(() => {
-                Tolert.success( pwixI18n.label( I18N, instance.APP.isNew.get() ? 'authorizations.edit.new_success' : 'authorizations.edit.edit_success', item.label || item.DYN.computed_label || item._id ));
+                Tolert.success(
+                    pwixI18n.label( I18N, instance.APP.isNew.get() ? 'authorizations.edit.new_success' : 'authorizations.edit.edit_success',
+                        item.label || item.DYN?.computed_label || Authorizations.fn.label( item ) || item._id ));
                 closeFn();
             })
             .catch(( e ) => {

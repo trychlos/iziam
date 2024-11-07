@@ -58,7 +58,15 @@ Template.client_select.helpers({
 
 Template.client_select.events({
     'change .c-client-select'( event, instance ){
-        instance.$( '.c-client-select' ).trigger( 'client-selected', { selected: instance.$(  '.c-client-select select option:selected' ).val() });
+        let found = null;
+        const selectedId = instance.$( '.c-client-select select option:selected' ).val();
+        this.list.every(( it ) => {
+            if( it._id === selectedId ){
+                found = it;
+            }
+            return !found;
+        });
+        instance.$( '.c-client-select' ).trigger( 'client-selected', { selected: selectedId, label: found ? found.DYN.closest.label : '' });
     },
 
     // we are asked to clear the selection

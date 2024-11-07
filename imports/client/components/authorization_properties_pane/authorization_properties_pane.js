@@ -83,6 +83,7 @@ Template.authorization_properties_pane.onCreated( function(){
             if( type !== self.APP.prev_subject_type ){
                 item.subject_id = null;
                 item.subject_label = null;
+                item.DYN.subject_label = null;
             }
         }
         self.APP.prev_subject_type = type;
@@ -96,6 +97,7 @@ Template.authorization_properties_pane.onCreated( function(){
             if( type !== self.APP.prev_object_type ){
                 item.object_id = null;
                 item.object_label = null;
+                item.DYN.object_label = null;
             }
         }
         self.APP.prev_object_type = type;
@@ -252,11 +254,17 @@ Template.authorization_properties_pane.events({
         instance.APP.subject_type.set( AuthSubject.byId( data.selected ));
     },
 
+    'client-selected .c-authorization-properties-pane'( event, instance, data ){
+        const item = this.item.get();
+        item.DYN.object_label = data.label || null;
+    },
+
     'clients-group-selected .c-authorization-properties-pane'( event, instance, data ){
         if( data.selected ){
             const item = this.item.get();
             item.subject_id = data.selected._id;
             item.subject_label = data.selected.label;
+            item.DYN.subject_label = data.selected.label;
             const checker = instance.APP.checker.get();
             if( checker ){
                 checker.setForm( item );
@@ -270,11 +278,17 @@ Template.authorization_properties_pane.events({
             const item = this.item.get();
             item.subject_id = data.selected._id;
             item.subject_label = data.selected.label;
+            item.DYN.subject_label = data.selected.label;
             const checker = instance.APP.checker.get();
             if( checker ){
                 checker.setForm( item );
                 checker.check({ update: false });
             }
         }
+    },
+
+    'resource-selected .c-authorization-properties-pane'( event, instance, data ){
+        const item = this.item.get();
+        item.DYN.object_label = data.label || null;
     }
 });

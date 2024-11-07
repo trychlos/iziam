@@ -19,6 +19,7 @@ Meteor.publish( 'authorizations_list_all', async function( organizationId ){
         this.ready();
         return false;
     }
+    console.debug( 'authorizations publish' );
     const self = this;
     const userId = this.userId;
     let initializing = true;
@@ -27,7 +28,9 @@ Meteor.publish( 'authorizations_list_all', async function( organizationId ){
     // have a computed label
     // have permissions labels
     const f_transform = async function( item ){
-        return await Authorizations.s.transform( organizationId, item, userId );
+        await Authorizations.s.transform( organizationId, item, userId );
+        Authorizations.s.addUndef( item );
+        return item;
     };
 
     // in order the same query may be applied on client side, we have to add to item required fields
@@ -39,12 +42,13 @@ Meteor.publish( 'authorizations_list_all', async function( organizationId ){
             self.changed( Authorizations.collectionName( organizationId ), newItem._id, await f_transform( newItem ));
         },
         removed: function( oldItem ){
-            self.removed( Authorizations.collectionName( organizationId ), oldItem._id, oldItem );
+            self.removed( Authorizations.collectionName( organizationId ), oldItem._id );
         }
     });
 
     initializing = false;
     self.onStop( function(){
+        console.debug( 'AUTHORIZATIONS STOPPING' );
         observer.then(( handle ) => { handle.stop(); });
     });
     self.ready();

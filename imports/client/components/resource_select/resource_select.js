@@ -58,7 +58,15 @@ Template.resource_select.helpers({
 
 Template.resource_select.events({
     'change .c-resource-select'( event, instance ){
-        instance.$( '.c-resource-select' ).trigger( 'resource-selected', { selected: instance.$(  '.c-resource-select select option:selected' ).val() });
+        let found = null;
+        const selectedId = instance.$( '.c-resource-select select option:selected' ).val();
+        this.list.every(( it ) => {
+            if( it._id === selectedId ){
+                found = it;
+            }
+            return !found;
+        });
+        instance.$( '.c-resource-select' ).trigger( 'resource-selected', { selected: selectedId, label: found ? found.name : '' });
     },
 
     // we are asked to clear the selection

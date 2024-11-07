@@ -47,7 +47,6 @@ Template.authorizations_list.helpers({
 Template.authorizations_list.events({
     // delete a authorization
     'tabular-delete-event .c-authorizations-list'( event, instance, data ){
-        console.debug( 'this', this, 'data', data );
         const label = data.item.label || data.item.DYN.computed_label || data.item._id;
         Meteor.callAsync( 'authorizations.removeById', this.item.get()._id, data.item._id )
             .then(( res ) => {
