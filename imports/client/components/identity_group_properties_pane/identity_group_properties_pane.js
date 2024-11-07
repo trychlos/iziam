@@ -81,5 +81,6 @@ Template.identity_group_properties_pane.events({
         if( enabled ){
             instance.APP.checker.get().check({ update: false });
         }
+        return false;
     }
 });

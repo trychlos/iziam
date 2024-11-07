@@ -35,6 +35,7 @@ import '/imports/client/components/organization_identities_pane/organization_ide
 import '/imports/client/components/organization_jwks_pane/organization_jwks_pane.js';
 import '/imports/client/components/organization_keygrips_pane/organization_keygrips_pane.js';
 import '/imports/client/components/organization_mandatory_pane/organization_mandatory_pane.js';
+import '/imports/client/components/organization_new_button/organization_new_button.js';
 import '/imports/client/components/organization_providers_pane/organization_providers_pane.js';
 import '/imports/client/components/organization_resources_load/organization_resources_load.js';
 import '/imports/client/components/organization_resources_pane/organization_resources_pane.js';

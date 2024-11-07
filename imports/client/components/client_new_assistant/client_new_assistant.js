@@ -21,6 +21,8 @@ import { Modal } from 'meteor/pwix:modal';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 
+import { Clients } from '/imports/common/collections/clients/index.js';
+
 import '/imports/client/components/client_new_assistant_application_type/client_new_assistant_application_type.js';
 import '/imports/client/components/client_new_assistant_auth_method/client_new_assistant_auth_method.js';
 import '/imports/client/components/client_new_assistant_client_type/client_new_assistant_client_type.js';
@@ -42,7 +44,6 @@ import '/imports/client/components/client_new_assistant_summary/client_new_assis
 import '/imports/client/components/client_new_assistant_token_extensions/client_new_assistant_token_extensions.js';
 
 import './client_new_assistant.html';
-import { Clients } from '../../../common/collections/clients';
 
 Template.client_new_assistant.onCreated( function(){
     const self = this;
@@ -222,7 +223,7 @@ Template.client_new_assistant.onRendered( function(){
 
     // whether we are running inside of a Modal
     self.autorun(() => {
-        self.APP.isModal.set( self.$( '.c-new-client-assistant' ).parent().hasClass( 'modal-body' ));
+        self.APP.isModal.set( self.$( '.c-client-new-assistant' ).parent().hasClass( 'modal-body' ));
     });
 
     // set the modal title

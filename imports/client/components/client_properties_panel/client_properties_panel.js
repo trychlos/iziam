@@ -218,5 +218,6 @@ Template.client_properties_panel.events({
         if( enabled ){
             instance.APP.checker.get().check({ update: false });
         }
+        return false;
     }
 });

@@ -163,6 +163,7 @@ Template.client_redirects_panel.events({
         if( enabled ){
             instance.APP.checker.get().check({ update: false });
         }
+        return false;
     },
     'click .c-client-redirects-panel .js-plus'( event, instance ){
         instance.APP.addOne( this );

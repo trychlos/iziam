@@ -1,0 +1,18 @@
+<template name="organization_new_assistant_done">
+    <div class="c-organization-new-assistant-done">
+
+        {{> organization_new_assistant_current }}
+
+        <div class="content">
+            {{#if haveError }}
+                <p class="error">Error: {{{ error }}}</p>
+            {{else}}
+                <div>
+                    <p class="success">{{{ success }}}</p>
+                    <p class="sub-success">{{{ sub_success }}}</p>
+                </div>
+            {{/if}}
+        </div>
+
+    </div>
+</template>

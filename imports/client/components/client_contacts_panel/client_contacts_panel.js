@@ -129,6 +129,7 @@ Template.client_contacts_panel.events({
         if( enabled ){
             instance.APP.checker.get().check({ update: false });
         }
+        return false;
     },
     'click .c-client-contacts-panel .js-plus'( event, instance ){
         instance.APP.addOne( this );

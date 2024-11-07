@@ -1458,7 +1458,29 @@ Meteor.APP.i18n = {
                         +'As a keygrip is characterized by its algorithm, encoding and list of secrets, we manage here a set of keygrips to let you change your algorithm '
                         +'and/or your encoding at your convenience.',
                     tab_title: 'Keygrips'
-                    },
+                },
+                new: {
+                    assistant_title: 'Defining a new organization',
+                    button_label: 'New organization',
+                    button_title: 'Define a new organization'
+                },
+                new_assistant: {
+                    assistant_title: 'Defining a new organization',
+                    done_nav: 'Done',
+                    introduction_nav: 'Introduction',
+                    introduction_text: 'This assistant will guide you through the process of defining a new organization.<br/><br />'
+                        +'Please be beware that, to make your life easier, this assistant will let you define an organization which may be not fully operational. '
+                        +'Nonetheless, you always be able to update it later.',
+                    properties_nav: 'Properties',
+                    properties_text: 'The descriptive organization properties.<br />'
+                        +'In particular, the label is used as an identifier, and let you easily identiy this organization in a list. It must be unique.',
+                    success_label: 'Congratulations !<br />'
+                        +'Your new organization has been successfully created.',
+                    summary_legend: 'Summary',
+                    summary_nav: 'Summary',
+                    summary_text: 'You have successfully completed this assistant, at least enough to actually create a new organization.<br />'
+                        +'The organization will be created when you will click on the "Next" button below.'
+                },
                 providers: {
                     preamble: 'Select here, among all registered providers, those that your organization is willing to manage. <br />'
                         +'Selecting providers is the same as saying which protocol(s) and which feature(s) you want your Authorization Server exhibit, '

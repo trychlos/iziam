@@ -218,6 +218,7 @@ Template.client_grant_types_panel.events({
         if( enabled ){
             instance.APP.checker.get().check({ update: false });
         }
+        return false;
     },
     // grant type selection
     // reactively reset the full list of selected grant types in the record to let the UI auto-update

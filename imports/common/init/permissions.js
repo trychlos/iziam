@@ -148,7 +148,7 @@ Permissions.set({
                     await Roles.userIsInRoles( user, 'TENANT_EDIT' ) || await Roles.userIsInRoles( user, 'SCOPED_TENANT_EDIT', { scope: scope }) :
                     false;
             },
-            async new( user, scope, opts={} ){
+            async create( user, scope, opts={} ){
                 return user ?
                     await Roles.userIsInRoles( user, 'TENANT_CREATE' ) :
                     false;
