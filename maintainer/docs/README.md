@@ -161,30 +161,45 @@ As of 2024-09-16, latest oidc-provider is 8.5.1
 Use case 1
 
     An application delegates its users management to izIAM.
-    The application is the client.
-    Users are registered at the organization level as identities.
+    Wants the user be authenticated by izIAM, and be authorized to use the application.
 
-    We so must have a link identity <-> client.
+    A- izIAM configuration:
 
-    We use groups of identities to group identities.
-    The above assertion can be rewritten as a link group <-> client
+        1. Define the client
+            Grant flow: authorization code
+            Token endpoint authentication method: shared code secret
+            Define a client secret
 
-    With OpenID:
-    - the client connects and authenticates itself, then asks for a user permission
-    - OpenID asks the user who authenticates and gives the permissions he wishes
-    - Among the available scopes, we define 'org.trychlos.iziam:groups' which contains the list of groups of the (authenticated) identity
-      Note that there is here some sort of leak of informations as the client application will then get the list of all groups of the user, even it does need only some of them.
+        2. Define the user as an identity
 
-    Two ways of doing that:
-    1. Associates a group (or a list of groups) to the client
-    2. Delegates to the client the task of accepting or refusing this identity
+        3. Define an identities groups which will give access to the client
+            Include the identity into the identities group
 
-    This may be a client configuration option for this authentication grant flow which involves a user authentication:
-    - application is allowed to asks for a list of scopes to be defined at the client level
+        4. Define an authorization
+            Subject: the identities group above
+            Object: the client application
+        
+        5. The organization must have selected providers as:
+            OAuth 2.0 or OAuth 2.1
+            OpenID Connect
+            Password authentication
 
-    - the application decides to accept or deny an identity when it gets the identity 'org.trychlos.iziam:groups' groups list
-    - the application wants only receive the identities which are member of such or such group(s)
-      it may still (and always) deny or refuse the access
+    B- The client application must be prepared to host a new user:
+```js
+    // in order to be compatible with other Meteor accounts package, we create an emails array
+    AccountsManager.onCreateUser(( opts, user ) => {
+        if( user && user.services && user.services.iziam ){
+            if( !user.emails ){
+                user.emails = [{
+                    address: user.services.iziam.email,
+                    verified: user.services.iziam.email_verified,
+                    _id: Random.id()
+                }];
+            }
+        }
+        return user;
+    });
+```
 
 ## Counts
 
