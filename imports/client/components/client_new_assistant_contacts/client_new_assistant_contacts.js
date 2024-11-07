@@ -56,5 +56,12 @@ Template.client_new_assistant_contacts.events({
     'assistant-pane-shown .c-client-new-assistant-contacts'( event, instance, data ){
         instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'prev', enable: true });
         instance.$( '.c-client-contacts-panel' ).trigger( 'iz-enable-checks', true );
+    },
+    // an event sent by client_contacts_panel to advertise of its status
+    'iz-checker .c-client-new-assistant-contacts'( event, instance, data ){
+        if( this.parentAPP.assistantStatus.get( 'activePane' ) === 'contacts' ){
+            console.debug( data );
+            self.$( '.c-client-new-assistant-contacts' ).trigger( 'assistant-do-action-set', { action: 'next',  enable: data.validity });
+        }
     }
 });

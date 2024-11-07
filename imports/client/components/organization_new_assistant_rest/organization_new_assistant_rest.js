@@ -14,20 +14,6 @@ import '/imports/client/components/organization_config_rest_pane/organization_co
 
 import './organization_new_assistant_rest.html';
 
-Template.organization_new_assistant_rest.onRendered( function(){
-    const self = this;
-
-    // tracks the selection to enable/disable the Next button when the pane is active
-    //  selection is not mandatory here
-    self.autorun(() => {
-        const dataDict = Template.currentData().parentAPP.assistantStatus;
-        if( dataDict.get( 'activePane' ) === 'rest' ){
-            const validity = Template.currentData().checker.get().validity();
-            self.$( '.c-organization-new-assistant-rest' ).trigger( 'assistant-do-action-set', { action: 'next',  enable: validity });
-        }
-    });
-});
-
 Template.organization_new_assistant_rest.helpers({
     // internationalization
     i18n( arg ){
@@ -54,5 +40,14 @@ Template.organization_new_assistant_rest.events({
     'assistant-pane-shown .c-organization-new-assistant-rest'( event, instance, data ){
         instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'prev', enable: true });
         instance.$( '.c-organization-config-rest-pane' ).trigger( 'iz-enable-checks', true );
+    },
+    // get the status of the panel checker
+    'iz-checker .c-organization-new-assistant-rest'( event, instance, data ){
+        console.debug( event.type, data );
+        if( this.parentAPP.assistantStatus.get( 'activePane' ) === 'rest' ){
+            instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'next', enable: data.validity });
+        } else {
+            console.debug( 'not the rest pane' );
+        }
     }
 });

@@ -53,6 +53,16 @@ Template.organization_config_rest_pane.onRendered( function(){
             }));
         }
     });
+
+    // advertise the assistant of the status of this panel
+    self.autorun(() => {
+        const checker = self.APP.checker.get();
+        if( checker ){
+            const status = checker.status();
+            const validity = checker.validity();
+            self.$( '.c-organization-config-rest-pane' ).trigger( 'iz-checker', { status: status, validity: validity });
+        }
+    });
 });
 
 Template.organization_config_rest_pane.helpers({

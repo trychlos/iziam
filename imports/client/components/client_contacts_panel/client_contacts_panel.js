@@ -73,6 +73,16 @@ Template.client_contacts_panel.onRendered( function(){
         }
     });
 
+    // advertise of the status of this checker to the (maybe) englobing assistant
+    self.autorun(() => {
+        const checker = self.APP.checker.get();
+        if( checker ){
+            const status = checker.iStatusableStatus();
+            const validity = checker.iStatusableValidity();
+            self.$( '.c-client-contacts-panel' ).trigger( 'iz-checker', { status: status, validity: validity });
+        }
+    });
+
     // if no contact yet, and not configured to not to, have an empty row
     self.autorun(() => {
         if( !self.APP.count.get()){

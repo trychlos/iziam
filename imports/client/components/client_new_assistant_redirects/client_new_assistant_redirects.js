@@ -43,16 +43,6 @@ Template.client_new_assistant_redirects.onRendered( function(){
         const dataDict = Template.currentData().parentAPP.assistantStatus;
         self.$( '.c-client-new-assistant-redirects' ).trigger( 'assistant-do-enable-tab', { name: 'redirects',  enabled: self.APP.enabled.get() });
     });
-
-    // tracks the selection to enable/disable the Next button when the pane is active
-    //  selection is not mandatory here
-    self.autorun(() => {
-        const dataDict = Template.currentData().parentAPP.assistantStatus;
-        if( dataDict.get( 'activePane' ) === 'redirects' ){
-            const validity = Template.currentData().checker.get().validity();
-            self.$( '.c-client-new-assistant-redirects' ).trigger( 'assistant-do-action-set', { action: 'next',  enable: validity });
-        }
-    });
 });
 
 Template.client_new_assistant_redirects.helpers({
@@ -82,5 +72,11 @@ Template.client_new_assistant_redirects.events({
     'assistant-pane-shown .c-client-new-assistant-redirects'( event, instance, data ){
         instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'prev', enable: true });
         instance.$( '.c-client-redirects-panel' ).trigger( 'iz-enable-checks', true );
+    },
+    // an event sent by client_redirects_panel to advertise of its status
+    'iz-checker .c-client-new-assistant-redirects'( event, instance, data ){
+        if( this.parentAPP.assistantStatus.get( 'activePane' ) === 'redirects' ){
+            instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'next', enable: data.validity });
+        }
     }
 });

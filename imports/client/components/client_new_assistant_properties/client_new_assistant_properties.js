@@ -14,20 +14,6 @@ import '/imports/client/components/client_properties_panel/client_properties_pan
 
 import './client_new_assistant_properties.html';
 
-Template.client_new_assistant_properties.onRendered( function(){
-    const self = this;
-
-    // tracks the selection to enable/disable the Next button when the pane is active
-    //  selection is not mandatory here
-    self.autorun(() => {
-        const dataDict = Template.currentData().parentAPP.assistantStatus;
-        if( dataDict.get( 'activePane' ) === 'properties' ){
-            const validity = Template.currentData().checker.get().validity();
-            self.$( '.c-client-new-assistant-properties' ).trigger( 'assistant-do-action-set', { action: 'next',  enable: validity });
-        }
-    });
-});
-
 Template.client_new_assistant_properties.helpers({
     // internationalization
     i18n( arg ){
@@ -54,5 +40,11 @@ Template.client_new_assistant_properties.events({
     'assistant-pane-shown .c-client-new-assistant-properties'( event, instance, data ){
         instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'prev', enable: true });
         instance.$( '.c-client-properties-panel' ).trigger( 'iz-enable-checks', true );
+    },
+    // get the status of the panel checker
+    'iz-checker .c-client-new-assistant-properties'( event, instance, data ){
+        if( this.parentAPP.assistantStatus.get( 'activePane' ) === 'properties' ){
+            instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'next', enable: data.validity });
+        }
     }
 });
