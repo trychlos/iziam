@@ -5,6 +5,7 @@
  * NB: while Roles tree are driven by children, this one is driven by parent. This is slightly different in the final code.
  *
  * Parms:
+ * - treeName: an optional name to be displayed in debug messages
  * - groupsRv: a ReactiveVar which contains the groups of the organization
  * - groupsDef: the definition of the target group type
  * - editable: whether the tree is editable, defaulting to true
@@ -304,7 +305,7 @@ Template.groups_tree.onCreated( function(){
 
     // track the ready status
     self.autorun(() => {
-        //console.debug( 'tree_ready', self.APP.tree_ready());
+        console.debug( 'tree_ready', self.APP.tree_ready(), Template.currentData().treeName );
     });
 
     // track the populated status
@@ -459,7 +460,7 @@ Template.groups_tree.onRendered( function(){
             self.APP.tree_nodes_waiting = {};
             self.APP.tree_populated( false );
             // and rebuild it
-            console.debug( 'rebuild the tree' );
+            console.debug( 'rebuild the tree', Template.currentData().treeName );
             // display the group/identity item, attaching it to its parent
             groups.forEach( async ( it ) => {
                 self.APP.tree_create_ask.bind( self )( it, it.parent );

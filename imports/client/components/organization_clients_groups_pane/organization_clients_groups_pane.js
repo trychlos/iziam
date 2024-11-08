@@ -5,11 +5,7 @@
  * 
  * +- <this>
  *     |
- *     +- client_group_new_button
- *     |   |
- *     |   +-> trigger client_group_edit_dialog
- *     |
- *     +- clients_groups_tree_view
+ *     +- groups_tree_view
  *         |
  *         +- groups_tree
  *         |
@@ -33,6 +29,7 @@ import { TenantsManager } from 'meteor/pwix:tenants-manager';
 
 import { ClientGroupType } from '/imports/common/definitions/client-group-type.def.js';
 
+import '/imports/client/components/clients_groups_edit_dialog/clients_groups_edit_dialog.js';
 import '/imports/client/components/groups_tree_view/groups_tree_view.js';
 
 import './organization_clients_groups_pane.html';
@@ -70,8 +67,23 @@ Template.organization_clients_groups_pane.helpers({
         return {
             item: this.item,
             checker: this.checker,
+            treeName: 'organization_clients_groups_pane',
             groupsRv: Template.instance().APP.groups,
             groupsDef: ClientGroupType,
         };
+    }
+});
+
+Template.organization_clients_groups_pane.events({
+    'click .c-groups-buttons .js-edit-tree'( event, instance ){
+       Modal.run({
+            item: this.item,
+            checker: this.checker,
+            mdBody: 'clients_groups_edit_dialog',
+            mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
+            mdClasses: 'modal-lg',
+            mdClassesContent: Meteor.APP.runContext.pageUIClasses().join( ' ' ),
+            mdTitle: pwixI18n.label( I18N, 'groups.edit.clients_groups_dialog_title' )
+        });
     }
 });
