@@ -84,25 +84,22 @@ export class ClientsRegistrar extends mix( izRegistrar ).with( ISearchableLabel 
         console.debug( 'subscribing' );
         self.#handle = Meteor.subscribe( Meteor.APP.C.pub.clientsAll.publish, self.organization());
 
-        if( !this.clientInitialized()){
-            // get the list of clients
-            // each client is published as an entity object with DYN { managers, records, closest } sub-object
-            Tracker.autorun(() => {
-                if( self.#handle.ready()){
-                    Meteor.APP.Collections.get( Meteor.APP.C.pub.clientsAll.collection ).find( Meteor.APP.C.pub.clientsAll.query( self.organization())).fetchAsync().then(( fetched ) => {
-                        console.debug( 'fetched', fetched );
-                        self.set( fetched );
-                    });
-                }
-            });
-    
-            // install the auto operational check on client side
-            Tracker.autorun(() => {
-                self.get().forEach(( it ) => {
-                    Clients.setupOperational( it );
+        // get the list of clients
+        // each client is published as an entity object with DYN { managers, records, closest } sub-object
+        Tracker.autorun(() => {
+            if( self.#handle.ready()){
+                Meteor.APP.Collections.get( Meteor.APP.C.pub.clientsAll.collection ).find( Meteor.APP.C.pub.clientsAll.query( self.organization())).fetchAsync().then(( fetched ) => {
+                    console.debug( 'fetched', fetched );
+                    self.set( fetched );
                 });
-            });    
-            this.clientInitialized( true );
-        }
+            }
+        });
+
+        // install the auto operational check on client side
+        Tracker.autorun(() => {
+            self.get().forEach(( it ) => {
+                Clients.setupOperational( it );
+            });
+        });    
     }
 }
