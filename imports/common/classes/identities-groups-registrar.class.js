@@ -82,18 +82,15 @@ export class IdentitiesGroupsRegistrar extends mix( izRegistrar ).with( ISearcha
         const organizationId = self.organization()._id;
         self.#handle = Meteor.subscribe( 'identities_groups.listAll', organizationId );
 
-        if( !this.clientInitialized()){
-            // get the list of groups
-            // each group is published as an object with DYN sub-object
-            Tracker.autorun(() => {
-                if( self.#handle.ready()){
-                    IdentitiesGroups.collection( organizationId ).find({ organization: organizationId }).fetchAsync().then(( fetched ) => {
-                        console.debug( 'fetched', fetched );
-                        self.set( fetched );
-                    });
-                }
-            });
-            this.clientInitialized( true );
-        }
+        // get the list of groups
+        // each group is published as an object with DYN sub-object
+        Tracker.autorun(() => {
+            if( self.#handle.ready()){
+                IdentitiesGroups.collection( organizationId ).find({ organization: organizationId }).fetchAsync().then(( fetched ) => {
+                    console.debug( 'fetched', fetched );
+                    self.set( fetched );
+                });
+            }
+        });
     }
 }

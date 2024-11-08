@@ -1,7 +1,7 @@
 /*
  * /imports/client/components/clients_groups_hierarchy_pane/clients_groups_hierarchy_pane.js
  *
- * Display the groups.
+ * Edit the clients groups hierarchy.
  *
  * Parms:
  * - item: a ReactiveVar which contains the Organization as an entity with its DYN.records array
@@ -37,6 +37,8 @@ Template.clients_groups_hierarchy_pane.onCreated( function(){
         editEnabled: new ReactiveVar( false ),
         removeEnabled: new ReactiveVar( false ),
         clientsEnabled: new ReactiveVar( false ),
+        // a function to get the current tree content
+        fnGet: null,
 
         // return the selected item
         selectedItem(){
@@ -45,18 +47,19 @@ Template.clients_groups_hierarchy_pane.onCreated( function(){
         },
 
         // set the clients attached to the current group
+        // selected: an array of selected clients with their DYN sub-object
         setClients( selected, dc ){
             const selectedGroupNode = self.APP.tree_selected.get();
-            if( selectedGroupNode ){
+            if( selectedGroupNode && self.APP.fnGet ){
                 let newgroups = [];
-                let found = false;
+                const flat = ClientsGroups.fn.tree2flat( dc.item.get()._id, self.APP.fnGet());
                 // remove clients attached to the selected group
-                dc.groups.get().forEach(( it ) => {
+                flat.forEach(( it ) => {
                     if( it.type !== 'C' || it.parent !== selectedGroupNode.id ){
                         newgroups.push( it );
                     }
                 });
-                // re-attach new clients
+                // re-attach newly selected clients
                 selected.forEach(( it ) => {
                     newgroups.push({ type: 'C', client: it._id, parent: selectedGroupNode.id, DYN: { label: it.DYN.closest.label }});
                 });
@@ -117,6 +120,10 @@ Template.clients_groups_hierarchy_pane.helpers({
 });
 
 Template.clients_groups_hierarchy_pane.events({
+    'tree-fns .c-clients-groups-hierarchy-pane'( event, instance, data ){
+        instance.APP.fnGet = data.fnGet;
+    },
+
     'tree-rowselect .c-clients-groups-hierarchy-pane'( event, instance, data ){
         instance.APP.tree_selected.set( data.node );
     },
@@ -167,7 +174,7 @@ Template.clients_groups_hierarchy_pane.events({
             mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
             mdClasses: 'modal-lg',
             mdClassesContent: Meteor.APP.runContext.pageUIClasses().join( ' ' ),
-            mdTitle: pwixI18n.label( I18N, 'groups.edit.dialog_title' ),
+            mdTitle: pwixI18n.label( I18N, 'groups.edit.client_dialog_title', item.label ),
             item: item
         });
     },

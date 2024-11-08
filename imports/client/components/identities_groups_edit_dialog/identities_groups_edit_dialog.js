@@ -44,6 +44,14 @@ Template.identities_groups_edit_dialog.onCreated( function(){
         tabbed: new Tabbed.Instance( self, { name: 'identities_groups_edit_dialog' }),
         // a function to get the tree content
         tree_getfn: new ReactiveVar( null ),
+        // the tabs
+        tabs: [
+            {
+                name: 'identities_groups_hierarchy_tab',
+                navLabel: pwixI18n.label( I18N, 'groups.edit.hierarchy_tab_title' ),
+                paneTemplate: 'identities_groups_hierarchy_pane'
+            }
+        ],
 
         // return the tree of nodes
         getTree(){
@@ -68,19 +76,13 @@ Template.identities_groups_edit_dialog.onCreated( function(){
     });
 
     // initialize the Tabbed.Instance
-    const paneData = {
+    const dataContext = {
         ...Template.currentData(),
         groups: self.APP.groups
     };
     self.APP.tabbed.setTabbedParms({
-        tabs: [
-            {
-                name: 'identities_groups_hierarchy_tab',
-                navLabel: pwixI18n.label( I18N, 'groups.edit.hierarchy_tab_title' ),
-                paneTemplate: 'identities_groups_hierarchy_pane',
-                paneData: paneData
-            }
-        ]
+        dataContext: dataContext,
+        tabs: self.APP.tabs
     });
 });
 

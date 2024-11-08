@@ -222,12 +222,12 @@ Template.groups_tree.onCreated( function(){
 
         // dnd stop: open the (new) parent
         tree_dnd_stop( event, data ){
-            const $tree = self.APP.$tree.get();
-            console.debug( '$tree.jstree( true )', $tree.jstree( true ));
-            const moved = $tree.jstree( true ).get_node( data.element );
-            const closest = data.event.target.closest( 'a.jstree-anchor' );
-            //const target_node = $tree.jstree( true ).get_node( closest ); // works but useless
-            $tree.jstree( true ).open_node( closest );
+            const $tree = self.APP.$tree.get().jstree( true );
+            console.debug( '$tree', $tree );
+            if( $tree ){
+                const closest = data.event.target.closest( 'a.jstree-anchor' );
+                $tree.open_node( closest );
+            }
         },
 
         // getter/setter: whether the initial checkboxes have been checked

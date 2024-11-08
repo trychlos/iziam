@@ -68,7 +68,7 @@ Template.identities_groups_tree_view.events({
             mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
             mdClasses: 'modal-lg',
             mdClassesContent: Meteor.APP.runContext.pageUIClasses().join( ' ' ),
-            mdTitle: pwixI18n.label( I18N, 'groups.edit.dialog_title' )
+            mdTitle: pwixI18n.label( I18N, 'groups.edit.identities_groups_dialog_title' )
         });
     }
 });

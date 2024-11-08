@@ -82,19 +82,16 @@ export class ClientsGroupsRegistrar extends mix( izRegistrar ).with( ISearchable
         const organizationId = self.organization()._id;
         self.#handle = Meteor.subscribe( 'clients_groups.listAll', organizationId );
 
-        if( !this.clientInitialized()){
-            // get the list of groups
-            // each group is published as an object with DYN sub-object
-            Tracker.autorun(() => {
-                //console.debug( 'self', self, self.#handle.get(), self.#handle.get().ready());
-                if( self.#handle.ready()){
-                    ClientsGroups.collection( organizationId ).find({ organization: organizationId }).fetchAsync().then(( fetched ) => {
-                        console.debug( 'fetched', fetched );
-                        self.set( fetched );
-                    });
-                }
-            });
-            this.clientInitialized( true );
-        }
+        // get the list of groups
+        // each group is published as an object with DYN sub-object
+        Tracker.autorun(() => {
+            //console.debug( 'self', self, self.#handle.get(), self.#handle.get().ready());
+            if( self.#handle.ready()){
+                ClientsGroups.collection( organizationId ).find({ organization: organizationId }).fetchAsync().then(( fetched ) => {
+                    console.debug( 'fetched', fetched );
+                    self.set( fetched );
+                });
+            }
+        });
     }
 }

@@ -37,6 +37,8 @@ Template.identities_groups_hierarchy_pane.onCreated( function(){
         editEnabled: new ReactiveVar( false ),
         removeEnabled: new ReactiveVar( false ),
         identitiesEnabled: new ReactiveVar( false ),
+        // a function to get the current tree content
+        fnGet: null,
 
         // return the selected item
         selectedItem(){
@@ -45,18 +47,19 @@ Template.identities_groups_hierarchy_pane.onCreated( function(){
         },
 
         // set the identities attached to the current group
+        // selected: an array of selected identities
         setIdentities( selected, dc ){
             const selectedGroupNode = self.APP.tree_selected.get();
-            if( selectedGroupNode ){
+            if( selectedGroupNode && self.APP.fnGet ){
                 let newgroups = [];
-                let found = false;
+                const flat = IdentitiesGroups.fn.tree2flat( dc.item.get()._id, self.APP.fnGet());
                 // remove identities attached to the selected group
-                dc.groups.get().forEach(( it ) => {
+                flat.forEach(( it ) => {
                     if( it.type !== 'I' || it.parent !== selectedGroupNode.id ){
                         newgroups.push( it );
                     }
                 });
-                // re-attach new identities
+                // re-attach newly selected identities
                 selected.forEach(( it ) => {
                     newgroups.push({ type: 'I', identity: it._id, parent: selectedGroupNode.id, DYN: { label: it.DYN?.label }});
                 });
@@ -117,6 +120,10 @@ Template.identities_groups_hierarchy_pane.helpers({
 });
 
 Template.identities_groups_hierarchy_pane.events({
+    'tree-fns .c-identities-groups-hierarchy-pane'( event, instance, data ){
+        instance.APP.fnGet = data.fnGet;
+    },
+
     'tree-rowselect .c-identities-groups-hierarchy-pane'( event, instance, data ){
         instance.APP.tree_selected.set( data.node );
     },
@@ -167,7 +174,7 @@ Template.identities_groups_hierarchy_pane.events({
             mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
             mdClasses: 'modal-lg',
             mdClassesContent: Meteor.APP.runContext.pageUIClasses().join( ' ' ),
-            mdTitle: pwixI18n.label( I18N, 'groups.edit.dialog_title' ),
+            mdTitle: pwixI18n.label( I18N, 'groups.edit.identity_dialog_title', item.label ),
             item: item
         });
     },

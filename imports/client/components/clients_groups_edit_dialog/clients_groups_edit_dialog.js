@@ -30,6 +30,7 @@ import '/imports/client/components/groups_buttons/groups_buttons.js';
 import '/imports/client/components/groups_tree/groups_tree.js';
 
 import './clients_groups_edit_dialog.html';
+import { data } from 'jquery';
 
 Template.clients_groups_edit_dialog.onCreated( function(){
     const self = this;
@@ -43,6 +44,14 @@ Template.clients_groups_edit_dialog.onCreated( function(){
         tabbed: new Tabbed.Instance( self, { name: 'clients_groups_edit_dialog' }),
         // a function to get the tree content
         tree_getfn: new ReactiveVar( null ),
+        // the tabs
+        tabs: [
+            {
+                name: 'clients_groups_hierarchy_tab',
+                navLabel: pwixI18n.label( I18N, 'groups.edit.hierarchy_tab_title' ),
+                paneTemplate: 'clients_groups_hierarchy_pane'
+            }
+        ],
 
         // return the tree of nodes
         getTree(){
@@ -67,19 +76,13 @@ Template.clients_groups_edit_dialog.onCreated( function(){
     });
 
     // initialize the Tabbed.Instance
-    const paneData = {
+    const dataContext = {
         ...Template.currentData(),
         groups: self.APP.groups
     };
     self.APP.tabbed.setTabbedParms({
-        tabs: [
-            {
-                name: 'clients_groups_hierarchy_tab',
-                navLabel: pwixI18n.label( I18N, 'groups.edit.hierarchy_tab_title' ),
-                paneTemplate: 'clients_groups_hierarchy_pane',
-                paneData: paneData
-            }
-        ]
+        dataContext: dataContext,
+        tabs: self.APP.tabs
     });
 });
 

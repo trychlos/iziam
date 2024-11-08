@@ -20,9 +20,13 @@ import { TenantsManager } from 'meteor/pwix:tenants-manager';
 import './organization_resources_load.html';
 
 Template.organization_resources_load.onCreated( function(){
-    const edited = Template.currentData().item.get();
-    const organization = TenantsManager.list.byEntity( edited._id );
-    if( organization && organization.DYN.resources ){
-        organization.DYN.resources.clientLoad();
-    }
+    const self = this;
+
+    self.autorun(() => {
+        const edited = Template.currentData().item.get();
+        const organization = TenantsManager.list.byEntity( edited._id );
+        if( organization && organization.DYN.resources ){
+            organization.DYN.resources.clientLoad();
+        }
+    });
 });
