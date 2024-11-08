@@ -19,7 +19,6 @@ Meteor.publish( 'authorizations_list_all', async function( organizationId ){
         this.ready();
         return false;
     }
-    console.debug( 'authorizations publish' );
     const self = this;
     const userId = this.userId;
     let initializing = true;
@@ -48,7 +47,6 @@ Meteor.publish( 'authorizations_list_all', async function( organizationId ){
 
     initializing = false;
     self.onStop( function(){
-        console.debug( 'AUTHORIZATIONS STOPPING' );
         observer.then(( handle ) => { handle.stop(); });
     });
     self.ready();
