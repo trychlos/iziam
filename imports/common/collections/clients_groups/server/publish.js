@@ -4,6 +4,9 @@
 
 import _ from 'lodash';
 import { strict as assert } from 'node:assert';
+import strftime from 'strftime';
+
+import { AccountsHub } from 'meteor/pwix:accounts-hub';
 
 import { Clients } from '/imports/common/collections/clients/index.js';
 
@@ -35,7 +38,10 @@ Meteor.publish( 'clients_groups.listAll', async function( organizationId ){
                 item.DYN.label = '<client \''+item.client+'\' not found>';
             }
         }
-        //console.debug( 'item', item );
+        item.DYN.updatedAt = strftime( '%Y-%m-%d %H:%M:%S', item.updatedAt || item.createdAt );
+        const ahInstance = AccountsHub.instances['users'];
+        const preferred = await ahInstance.preferredLabel( item.updatedBy || item.createdBy );
+        item.DYN.updatedBy = preferred.label;
         return item;
     };
 
