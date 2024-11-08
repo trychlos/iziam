@@ -224,9 +224,11 @@ Template.groups_tree.onCreated( function(){
         },
 
         // dnd stop: open the (new) parent
+        //  sometimes, we get jstree( true ) === false ! so protect against that
+        //  probably a bug from mine, but where...!?
+        //  happens that this protection doesn't prevent the dnd usage: fine
         tree_dnd_stop( event, data ){
             const $tree = self.APP.$tree.get().jstree( true );
-            console.debug( '$tree', $tree );
             if( $tree ){
                 const closest = data.event.target.closest( 'a.jstree-anchor' );
                 $tree.open_node( closest );

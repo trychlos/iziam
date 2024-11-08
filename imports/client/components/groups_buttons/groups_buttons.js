@@ -10,9 +10,8 @@
  * - editEnabled: the enable/disable state of the Edit button, defaulting to true
  * - removeEnabled: the enable/disable state of the Delete button, defaulting to true
  * - withIdentities: whether to display the 'Add identities' button, defaulting to false
- * - identitiesEnabled: the enable/disable state of the Add identities button, defaulting to true
  * - withClients: whether to display the 'Add clients' button, defaulting to false
- * - groupsEnabled: the enable/disable state of the Add clients button, defaulting to true
+ * - leafEnabled: the enable/disable state of the Add identities/clients buttons, defaulting to true
  */
 
 import _ from 'lodash';
@@ -28,16 +27,6 @@ Template.groups_buttons.onCreated( function(){
 });
 
 Template.groups_buttons.helpers({
-    // whether the Add clients button is enabled ?
-    clientsDisabled(){
-        return this.clientsEnabled !== false ? '' : 'disabled';
-    },
-
-    // whether the Add identities button is enabled ?
-    identitiesDisabled(){
-        return this.identitiesEnabled !== false ? '' : 'disabled';
-    },
-
     // whether the Delete button is enabled ?
     deleteDisabled(){
         return this.deleteEnabled !== false ? '' : 'disabled';
@@ -56,6 +45,11 @@ Template.groups_buttons.helpers({
     // whether the tree is editable
     isEditable(){
         return this.editable !== false;
+    },
+
+    // whether the Add clients/identities buttons are enabled (when shown) ?
+    leafDisabled(){
+        return this.leafEnabled !== false ? '' : 'disabled';
     },
 
     // whether the Remove button is enabled ?

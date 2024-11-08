@@ -18,8 +18,7 @@ import { ClientsGroups } from '/imports/common/collections/clients_groups/index.
 
 import { ClientGroupType } from '/imports/common/definitions/client-group-type.def.js';
 
-import '/imports/client/components/groups_buttons/groups_buttons.js';
-import '/imports/client/components/groups_tree/groups_tree.js';
+import '/imports/client/components/groups_tree_edit/groups_tree_edit.js';
 import '/imports/client/components/clients_select_dialog/clients_select_dialog.js';
 
 import './clients_groups_hierarchy_pane.html';
@@ -33,10 +32,6 @@ Template.clients_groups_hierarchy_pane.onCreated( function(){
         tree_selected: new ReactiveVar( null ),
         // the clients ids which are members of currently selected group
         groupClients: new ReactiveVar( [] ),
-        // whether the buttons can be enabled
-        editEnabled: new ReactiveVar( false ),
-        removeEnabled: new ReactiveVar( false ),
-        clientsEnabled: new ReactiveVar( false ),
         // a function to get the current tree content
         fnGet: null,
 
@@ -69,20 +64,6 @@ Template.clients_groups_hierarchy_pane.onCreated( function(){
         }
     };
 
-    // enable/disable the buttons
-    self.autorun(() => {
-        const node = self.APP.tree_selected.get();
-        const type = node && node.type ? node.type : null
-        self.APP.editEnabled.set( type === 'G' );
-        self.APP.removeEnabled.set( Boolean( type ));
-        self.APP.clientsEnabled.set( type === 'G' );
-    });
-
-    // track the groups
-    self.autorun(() => {
-        //console.debug( 'groups', Template.currentData().groups.get());
-    });
-
     // track the clients which are members of currently selected group
     self.autorun(() => {
         const node = self.APP.tree_selected.get();
@@ -99,23 +80,15 @@ Template.clients_groups_hierarchy_pane.onCreated( function(){
 });
 
 Template.clients_groups_hierarchy_pane.helpers({
-    parmsButtons(){
+    // parms for groups_tree_edit
+    parmsTreeEdit(){
         return {
             ...this,
-           editEnabled: Boolean( Template.instance().APP.editEnabled.get()),
-           removeEnabled: Boolean( Template.instance().APP.removeEnabled.get()),
-           clientsEnabled: Boolean( Template.instance().APP.clientsEnabled.get()),
-           withClients: true
-        };
-    },
-    parmsTree(){
-        return {
-            ...this,
-            groups: this.groups.get(),
-            groupTypeDef: ClientGroupType,
-            withCheckboxes: false,
-            noDataText: pwixI18n.label( I18N, 'groups.tree.no_data_two' )
-        };
+            treeName: 'clients_groups_hierarchy_pane',
+            groupsRv: this.groups,
+            groupsDef: ClientGroupType,
+            withClients: true
+         };
     }
 });
 
@@ -177,10 +150,5 @@ Template.clients_groups_hierarchy_pane.events({
             mdTitle: pwixI18n.label( I18N, 'groups.edit.client_dialog_title', item.label ),
             item: item
         });
-    },
-
-    'click .js-remove-item'( event, instance ){
-        instance.$( '.c-groups-tree' ).trigger( 'tree-remove-node', { node: instance.APP.selectedItem() });
-        instance.$( '.c-groups-tree' ).trigger( 'tree-rowselect', { node: null });
     }
 });
