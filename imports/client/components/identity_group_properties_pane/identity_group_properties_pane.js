@@ -24,7 +24,6 @@ import './identity_group_properties_pane.html';
 
 Template.identity_group_properties_pane.onCreated( function(){
     const self = this;
-    //console.debug( this );
 
     self.APP = {
         fields: {

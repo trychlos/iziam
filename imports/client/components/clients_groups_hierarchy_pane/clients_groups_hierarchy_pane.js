@@ -18,8 +18,9 @@ import { ClientsGroups } from '/imports/common/collections/clients_groups/index.
 
 import { ClientGroupType } from '/imports/common/definitions/client-group-type.def.js';
 
-import '/imports/client/components/groups_tree_edit/groups_tree_edit.js';
+import '/imports/client/components/client_group_edit_dialog/client_group_edit_dialog.js';
 import '/imports/client/components/clients_select_dialog/clients_select_dialog.js';
+import '/imports/client/components/groups_tree_edit/groups_tree_edit.js';
 
 import './clients_groups_hierarchy_pane.html';
 
@@ -30,6 +31,8 @@ Template.clients_groups_hierarchy_pane.onCreated( function(){
     self.APP = {
         // the current tree selected node
         tree_selected: new ReactiveVar( null ),
+        // keep the groups ReactiveVar from the initial data context in case it would change
+        groupsRv: null,
         // the clients ids which are members of currently selected group
         groupClients: new ReactiveVar( [] ),
         // a function to get the current tree content
@@ -77,6 +80,11 @@ Template.clients_groups_hierarchy_pane.onCreated( function(){
         self.APP.groupClients.set( clients );
         //console.debug( 'group', group, 'clients', self.APP.groupClients.get());
     });
+
+    // keep the groups ReactiveVar
+    self.autorun(() => {
+        self.APP.groupsRv = Template.currentData().groups;
+    });
 });
 
 Template.clients_groups_hierarchy_pane.helpers({
@@ -85,10 +93,10 @@ Template.clients_groups_hierarchy_pane.helpers({
         return {
             ...this,
             treeName: 'clients_groups_hierarchy_pane',
-            groupsRv: this.groups,
+            groupsRv: Template.instance().APP.groupsRv,
             groupsDef: ClientGroupType,
             withClients: true
-         };
+        };
     }
 });
 
@@ -125,7 +133,7 @@ Template.clients_groups_hierarchy_pane.events({
             ...this,
             organization: this.item.get(),
             targetDatabase: false,
-            groupsRv: this.groups,
+            groupsRv: Template.instance().APP.groupsRv,
             mdBody: 'client_group_edit_dialog',
             mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
             mdClasses: 'modal-lg',
@@ -142,7 +150,7 @@ Template.clients_groups_hierarchy_pane.events({
             ...this,
             organization: this.item.get(),
             targetDatabase: false,
-            groupsRv: this.groups,
+            groupsRv: Template.instance().APP.groupsRv,
             mdBody: 'client_group_edit_dialog',
             mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
             mdClasses: 'modal-lg',

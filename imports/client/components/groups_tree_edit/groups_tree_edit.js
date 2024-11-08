@@ -4,7 +4,7 @@
  * Display the groups tree as a full editable component, and CRUD buttons.
  * 
  * - input is the registrar content
- * - display the whole groups tree
+ * - let the whole groups tree be edited
  * - display the clients/identities leaves
  * - have CRUD buttons: new, edit, remove, add leave
  * - allow DnD

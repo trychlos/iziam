@@ -8,11 +8,11 @@
  * 
  * +- <this>
  *     |
- *     +- group_properties_pane
+ *     +- client_group_properties_pane
+ *     +- notes
  *
  * Parms:
  * - item: the group to be edited, or null
- * - checker: a ReactiveVar which contains the parent Forms.Checker
  * - organization: the full organization entity with its DYN sub-object
  * - targetDatabase: whether the new group is to be storfed in the database, defaulting to true
  * - groupsRv: when targetDatabase is false, a ReactiveVar which contains the groups where the group item is to be pushed if new, or changed

@@ -20,16 +20,18 @@ import { IdentityGroupType } from '/imports/common/definitions/identity-group-ty
 
 import '/imports/client/components/groups_tree_edit/groups_tree_edit.js';
 import '/imports/client/components/identities_select_dialog/identities_select_dialog.js';
+import '/imports/client/components/identity_group_edit_dialog/identity_group_edit_dialog.js';
 
 import './identities_groups_hierarchy_pane.html';
 
 Template.identities_groups_hierarchy_pane.onCreated( function(){
     const self = this;
-    //console.debug( this );
 
     self.APP = {
         // the current tree selected node
         tree_selected: new ReactiveVar( null ),
+        // keep the groups ReactiveVar from the initial data context in case it would change
+        groupsRv: null,
         // the identities ids which are members of currently selected group
         groupIdentities: new ReactiveVar( [] ),
         // a function to get the current tree content
@@ -77,6 +79,11 @@ Template.identities_groups_hierarchy_pane.onCreated( function(){
         self.APP.groupIdentities.set( identities );
         //console.debug( 'group', group, 'identities', self.APP.identities.get());
     });
+
+    // keep the groups ReactiveVar
+    self.autorun(() => {
+        self.APP.groupsRv = Template.currentData().groups;
+    });
 });
 
 Template.identities_groups_hierarchy_pane.helpers({
@@ -86,10 +93,10 @@ Template.identities_groups_hierarchy_pane.helpers({
             item: this.item,
             checker: this.checker,
             treeName: 'identities_groups_hierarchy_pane',
-            groupsRv: this.groups,
+            groupsRv: Template.instance().APP.groupsRv,
             groupsDef: IdentityGroupType,
             withIdentities: true
-         };
+        };
     }
 });
 
@@ -126,7 +133,7 @@ Template.identities_groups_hierarchy_pane.events({
             ...this,
             organization: this.item.get(),
             targetDatabase: false,
-            groupsRv: this.groups,
+            groupsRv: instance.APP.groupsRv,
             mdBody: 'identity_group_edit_dialog',
             mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
             mdClasses: 'modal-lg',
@@ -143,7 +150,7 @@ Template.identities_groups_hierarchy_pane.events({
             ...this,
             organization: this.item.get(),
             targetDatabase: false,
-            groupsRv: this.groups,
+            groupsRv: instance.APP.groupsRv,
             mdBody: 'identity_group_edit_dialog',
             mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
             mdClasses: 'modal-lg',

@@ -9,10 +9,10 @@
  * +- <this>
  *     |
  *     +- identity_group_properties_pane
+ *     +- notes
  *
  * Parms:
  * - item: the group to be edited, or null
- * - checker: a ReactiveVar which contains the parent Forms.Checker
  * - organization: the full organization entity with its DYN sub-object
  * - targetDatabase: whether the new group is to be storfed in the database, defaulting to true
  * - groupsRv: when targetDatabase is false, a ReactiveVar which contains the groups where the group item is to be pushed if new, or changed
@@ -51,7 +51,20 @@ Template.identity_group_edit_dialog.onCreated( function(){
         // whether we are running inside of a Modal
         isModal: new ReactiveVar( false ),
         // the entity tabbed
-        tabbed: new Tabbed.Instance( self, { name: 'identity_group_edit_dialog' })
+        tabbed: new Tabbed.Instance( self, { name: 'identity_group_edit_dialog' }),
+        // the tabs
+        tabs: [
+            {
+                name: 'identity_group_properties_tab',
+                navLabel: pwixI18n.label( I18N, 'groups.edit.properties_tab_title' ),
+                paneTemplate: 'identity_group_properties_pane'
+            },
+            {
+                name: 'group_notes_tab',
+                navLabel: pwixI18n.label( I18N, 'groups.edit.notes_tab_title' ),
+                paneTemplate: 'NotesEdit'
+            }
+        ]
     };
 
     // keep the initial 'new' state
@@ -71,30 +84,16 @@ Template.identity_group_edit_dialog.onCreated( function(){
     });
 
     // initialize the Tabbed.Instance
-    const paneData = {
+    const notesField = IdentitiesGroups.fieldSet.get().byName( 'notes' );
+    const dataContext = {
         ...Template.currentData(),
         item: self.APP.item,
-        checker: self.APP.checker
+        checker: self.APP.checker,
+        field: notesField
     };
-    const notesField = IdentitiesGroups.fieldSet.get().byName( 'notes' );
     self.APP.tabbed.setTabbedParms({
-        tabs: [
-            {
-                name: 'identity_group_properties_tab',
-                navLabel: pwixI18n.label( I18N, 'groups.edit.properties_tab_title' ),
-                paneTemplate: 'identity_group_properties_pane',
-                paneData: paneData
-            },
-            {
-                name: 'group_notes_tab',
-                navLabel: pwixI18n.label( I18N, 'groups.edit.notes_tab_title' ),
-                paneTemplate: 'NotesEdit',
-                paneData: {
-                    ...paneData,
-                    field: notesField
-                }
-            }
-        ]
+        dataContext: dataContext,
+        tabs: self.APP.tabs
     });
 });
 
