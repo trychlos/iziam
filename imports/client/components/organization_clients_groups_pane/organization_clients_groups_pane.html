@@ -6,13 +6,10 @@
                 <div class="panel-preamble">
                     {{{ i18n key="organizations.groups.clients_list_preamble" }}}
                 </div>
-                <!--
-                {{> client_group_new_button }}
-                -->
             </div>
 
             <div class="panel-body">
-                {{> clients_groups_tree_view }}
+                {{> groups_tree_view (parmsTreeView) }}
             </div>
 
         </div>

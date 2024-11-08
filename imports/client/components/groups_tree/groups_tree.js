@@ -6,7 +6,7 @@
  *
  * Parms:
  * - groupsRv: a ReactiveVar which contains the groups of the organization
- * - groupTypeDef: the definition of the target group type
+ * - groupsDef: the definition of the target group type
  * - editable: whether the tree is editable, defaulting to true
  *   here, 'editable' means that we allow dnd, so change the tree
  * - selectable: whether the tree is selectable, defaulting to true
@@ -333,12 +333,12 @@ Template.groups_tree.onRendered( function(){
     // and build the tree
     self.autorun(() => {
         const $tree = self.APP.$tree.get();
-        const groupTypeDef = Template.currentData().groupTypeDef;
-        if( $tree && groupTypeDef && !self.APP.tree_initialized()){
+        const groupsDef = Template.currentData().groupsDef;
+        if( $tree && groupsDef && !self.APP.tree_initialized()){
             let typesDefs = {};
-            groupTypeDef.Knowns().forEach(( it ) => {
-                typesDefs[groupTypeDef.id( it )] = {
-                    icon: groupTypeDef.icon( it )
+            groupsDef.Knowns().forEach(( it ) => {
+                typesDefs[groupsDef.id( it )] = {
+                    icon: groupsDef.icon( it )
                 };
             });
             let plugins = [
