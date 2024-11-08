@@ -179,7 +179,7 @@ Identities.s = {
                 }
             }
             // make sure fields which are not specified in the item are unset
-            const $unset = AccountsManager.s.addUnset( Identities.instanceName( args.organization._id), item );
+            const $unset = AccountsManager.s.addUnset( Identities.instanceName( args.organization._id ), item );
             let itemId = item._id;
             if( itemId ){
                 console.debug( 'updating', item, $unset );

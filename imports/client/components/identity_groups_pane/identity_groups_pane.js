@@ -15,9 +15,33 @@ import { strict as assert } from 'node:assert';
 
 import { pwixI18n } from 'meteor/pwix:i18n';
 
-import '/imports/client/components/identity_groups_select_tree/identity_groups_select_tree.js';
+import { IdentityGroupType } from '/imports/common/definitions/identity-group-type.def.js';
+
+import '/imports/client/components/groups_tree_select/groups_tree_select.js';
 
 import './identity_groups_pane.html';
+
+Template.identity_groups_pane.onCreated( function(){
+    const self = this;
+    
+    self.APP = {
+        // address the *saved* organization entity
+        organization: new ReactiveVar( [] ),
+        // the groups
+        groups: new ReactiveVar( [] )
+    };
+
+    // address the organization entity
+    self.autorun(() => {
+        const item = Template.currentData().organization;
+        self.APP.organization.set( TenantsManager.list.byEntity( item._id ));
+    });
+
+    // address the groups
+    self.autorun(() => {
+        self.APP.groups.set( self.APP.organization.get().DYN.identities_groups.get());
+    });
+});
 
 Template.identity_groups_pane.helpers({
     // string translation
@@ -25,8 +49,20 @@ Template.identity_groups_pane.helpers({
         return pwixI18n.label( I18N, arg.hash.key );
     },
 
-    // groups list
-    parmsGroupsSelect(){
-        return this;
+    // parms for groups_tree_select
+    parmsTreeSelect(){
+        return {
+            groupsRv: Template.instance().APP.groups,
+            groupsDef: IdentityGroupType,
+            editable: false,
+            withIdentities: false,
+            memberOf: this.item.get().DYN.memberOf
+        };
+    }
+});
+
+Template.identity_groups_pane.events({
+    'groups-selected .c-identity-groups-pane'( event, instance, data ){
+        this.item.get().DYN.memberOf = data.memberOf;
     }
 });

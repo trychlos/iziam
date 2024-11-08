@@ -307,7 +307,7 @@ Template.groups_tree.onCreated( function(){
 
     // track the ready status
     self.autorun(() => {
-        console.debug( 'tree_ready', self.APP.tree_ready(), Template.currentData().treeName );
+        //console.debug( 'tree_ready', self.APP.tree_ready(), Template.currentData().treeName );
     });
 
     // track the populated status
