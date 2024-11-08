@@ -450,10 +450,9 @@ Template.groups_tree.onRendered( function(){
             self.APP.tree_populated( false );
             // and rebuild it
             console.debug( 'rebuild the tree' );
-            let promises = [];
             // display the group/identity item, attaching it to its parent
             groups.forEach( async ( it ) => {
-                promises.push( self.APP.tree_create_ask.bind( self )( it, it.parent ));
+                self.APP.tree_create_ask.bind( self )( it, it.parent );
             });
         }
     });
