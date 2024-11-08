@@ -5,7 +5,7 @@
  * NB: while Roles tree are driven by children, this one is driven by parent. This is slightly different in the final code.
  *
  * Parms:
- * - groups: the groups of the organization
+ * - groupsRv: a ReactiveVar which contains the groups of the organization
  * - groupTypeDef: the definition of the target group type
  * - editable: whether the tree is editable, defaulting to true
  *   here, 'editable' means that we allow dnd, so change the tree
@@ -51,6 +51,8 @@ Template.groups_tree.onCreated( function(){
         withClients: new ReactiveVar( true ),
         // whether to display the identities
         withIdentities: new ReactiveVar( true ),
+        // whether the tree is empty or not
+        haveData: new ReactiveVar( false ),
 
         // the previous version of tree data
         prevData: null,
@@ -293,6 +295,13 @@ Template.groups_tree.onCreated( function(){
         self.APP.withClients.set( withClients );
     });
 
+    // whether we have some data in the tree ?
+    self.autorun(() => {
+        const groupsRv = Template.currentData().groupsRv;
+        const groups = groupsRv && groupsRv instanceof ReactiveVar ? groupsRv.get() : [];
+        self.APP.haveData.set( Boolean( groups && groups.length ));
+    });
+
     // track the ready status
     self.autorun(() => {
         //console.debug( 'tree_ready', self.APP.tree_ready());
@@ -305,7 +314,7 @@ Template.groups_tree.onCreated( function(){
 
     // track the groups list
     self.autorun(() => {
-        //console.debug( 'groups', Template.currentData().groups );
+        //console.debug( 'groups', Template.currentData().groupsRv.get());
     });
 });
 
@@ -437,7 +446,8 @@ Template.groups_tree.onRendered( function(){
     //  displaying the groups hierarchy
     self.autorun(() => {
         const $tree = self.APP.$tree.get();
-        const groups = Template.currentData().groups;
+        const groupsRv = Template.currentData().groupsRv;
+        const groups = groupsRv && groupsRv instanceof ReactiveVar ? groupsRv.get() : [];
         if( !_.isEqual( groups, self.APP.prevData) && $tree && self.APP.tree_ready()){
             // keep the tree data
             self.APP.prevData = _.cloneDeep( groups );
@@ -485,17 +495,17 @@ Template.groups_tree.onRendered( function(){
 Template.groups_tree.helpers({
     // whether the close_all button is enabled ?
     closeButtonDisabled(){
-        return this.groups && this.groups.length > 0 ? '' : 'disabled';
+        return Template.instance().APP.haveData.get() ? '' : 'disabled';
     },
 
     // show when there is data
     showIfData(){
-        return this.groups && this.groups.length > 0 ? 'ui-dblock' : 'ui-dnone';
+        return Template.instance().APP.haveData.get() ? 'ui-dblock' : 'ui-dnone';
     },
 
     // show when there is no data
     showIfEmpty(){
-        return this.groups && this.groups.length > 0 ? 'ui-dnone' : 'ui-dblock';
+        return Template.instance().APP.haveData.get() ? 'ui-dnone' : 'ui-dblock';
     },
 
     // whether the user may choose to show identities ?
@@ -505,7 +515,7 @@ Template.groups_tree.helpers({
 
     // whether the identities chooser is enabled ?
     identitiesButtonDisabled(){
-        return this.groups && this.groups.length > 0 ? '' : 'disabled';
+        return Template.instance().APP.haveData.get() ? '' : 'disabled';
     },
 
     // string translation
@@ -520,7 +530,7 @@ Template.groups_tree.helpers({
 
     // whether the open_all button is enabled ?
     openButtonDisabled(){
-        return this.groups && this.groups.length > 0 ? '' : 'disabled';
+        return Template.instance().APP.haveData.get() ? '' : 'disabled';
     },
 });
 

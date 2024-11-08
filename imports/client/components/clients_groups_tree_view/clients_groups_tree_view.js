@@ -28,13 +28,20 @@ Template.clients_groups_tree_view.onCreated( function(){
 
     self.APP = {
         // address the *saved* organization entity
-        organization: new ReactiveVar( [] )
+        organization: new ReactiveVar( [] ),
+        // the groups
+        groups: new ReactiveVar( [] )
     };
 
-    // address the groups from the organization entity
+    // address the organization entity
     self.autorun(() => {
         const item = Template.currentData().item.get();
         self.APP.organization.set( TenantsManager.list.byEntity( item._id ));
+    });
+
+    // address the groups
+    self.autorun(() => {
+        self.APP.groups.set( self.APP.organization.get().DYN.clients_groups.get());
     });
 });
 
@@ -50,7 +57,7 @@ Template.clients_groups_tree_view.helpers({
         return {
             item: this.item,
             checker: this.checker,
-            groups: Template.instance().APP.organization.get().DYN.clients_groups.get(),
+            groupsRv: Template.instance().APP.groups,
             groupTypeDef: ClientGroupType,
             editable: false,
             selectable: false,
