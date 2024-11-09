@@ -297,10 +297,17 @@ Organizations.fn = {
      */
     supportedResponseTypes( organization ){
         let supported = [];
-        GrantType.Knowns().forEach(( it ) => {
-            const rt = GrantType.responseTypes( it );
-            if( rt ){
-                supported = supported.concat( rt );
+        const providers = Organizations.fn.selectedProviders( organization );
+        Object.keys( providers ).forEach(( it ) => {
+            const p = providers[it].provider;
+            if( p instanceof IGrantType ){
+                p.grant_types().forEach(( grant ) => {
+                    const def = GrantType.byId( grant );
+                    const rt = def ? GrantType.responseTypes( def ) : null;
+                    if( rt ){
+                        supported = supported.concat( rt );
+                    }
+                });
             }
         });
         return [ ...new Set( supported )];

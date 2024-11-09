@@ -41,6 +41,7 @@ export const _oauth2_fn = {
      * @returns {Object} the public OAuth metadata document as for [RFC 8414](https://datatracker.ietf.org/doc/html/rfc8414)
      */
     metadata( organization ){
+        /*
         console.debug( 'OAuth2 metadata' );
         let data = {
             // always set because we have a default value in settings
@@ -53,8 +54,8 @@ export const _oauth2_fn = {
             }
         };
         _.merge( data, OAuth2.fn.endpoints( organization ));
-        data.grant_types_supported = Organizations.fn.supportedGrantTypes( organization );
-        data.token_endpoint_auth_methods_supported = Organizations.fn.supportedAuthMethods( organization );
+        //data.grant_types_supported = Organizations.fn.supportedGrantTypes( organization );
+        //data.token_endpoint_auth_methods_supported = Organizations.fn.supportedAuthMethods( organization );
         // scopes_supported
         // response_types_supported
         // response_modes_supported
@@ -75,5 +76,6 @@ export const _oauth2_fn = {
         // OpenID server metadata
         data.id_token_signing_alg_values_supported = [ 'RS256', 'PS256', 'ES256', 'EdDSA' ];
         return data;
+        */
     }
 };

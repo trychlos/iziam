@@ -65,6 +65,9 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
 
         // conf.features
         conf.features = {
+            clientCredentials: {
+                enabled: true
+            },
             devInteractions: {
                 enabled: false
             },
@@ -82,6 +85,14 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
             const organization = self.iRequestServer().organization();
             return await identityServer.findAccount( organization, ctx, id, token );
         };
+
+        // conf.grantTypes provides grant_types_supported metadata
+        // ChatGPT: the grant_types_supported field is a deduplicated union of all grantTypes values across all clients
+        //  When no static clients are defined, grant_types_supported is inferred from the provider-level capabilities. For example:
+        //  - Authorization Code Flow: Enabled if the responseTypes include code.
+        //  - Implicit Flow: Enabled if the responseTypes include id_token or token.
+        //  - Refresh Token: Enabled if the features.refreshToken is set to true or if any response type implies the issuance of a refresh token (e.g., scopes like offline_access).
+        //  - Client Credentials: Enabled if features.clientCredentials is set to true.
 
         // https://github.com/panva/node-oidc-provider/blob/v7.14.3/docs/README.md#interactionsurl
         // make sure our interactions url is prefixed with our base url
