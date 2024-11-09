@@ -58,10 +58,7 @@ export const GrantType = {
             useAuthorizationEndpoint: true,
             useTokenEndpoint: true,
             response_types: [
-                'code',
-                'code id_token',
-                'code id_token token',
-                'code token'
+                'code'
             ]
         },
         {
@@ -86,7 +83,12 @@ export const GrantType = {
             description: 'definitions.grant_type.hybrid_description',
             auth_flow: 'hybrid',
             image: '/images/grant-type.svg',
-            nature: 'access'
+            nature: 'access',
+            response_types: [
+                'code id_token',
+                'code token',
+                'code id_token token'
+            ]
         },
         {
             // implicit grant - oauth 2.0 ONLY
@@ -101,9 +103,6 @@ export const GrantType = {
             useAuthorizationEndpoint: true,
             deprecated: true,
             response_types: [
-                'code id_token',
-                'code id_token token',
-                'code token',
                 'id_token',
                 'id_token token'
             ]

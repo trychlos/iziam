@@ -204,28 +204,6 @@ Organizations.recordFieldset = function(){
                     form_check: Organizations.checks.registration_endpoint,
                     form_type: Forms.FieldType.C.OPTIONAL
                 },
-                // array containing a list of the OAuth 2.0 "response_type" values that this authorization server supports
-                //  Authorization Server Metadata defines that as a JSON array
-                {
-                    name: 'response_types_supported',
-                    type: Array,
-                    optional: true
-                },
-                {
-                    name: 'response_types_supported.$',
-                    type: String
-                },
-                // array containing a list of the OAuth 2.0 "response_mode" values that this authorization server supports
-                //  Authorization Server Metadata defines that as a JSON array
-                {
-                    name: 'response_modes_supported',
-                    type: Array,
-                    optional: true
-                },
-                {
-                    name: 'response_modes_supported.$',
-                    type: String
-                },
                 // array containing a list of the JSON Web Signature (JWS) signing algorithms ("alg" values) supported by the token endpoint
                 {
                     name: 'token_endpoint_auth_signing_alg_values_supported',

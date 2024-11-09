@@ -180,11 +180,11 @@ Providers.forGrantType = function( grant ){
      * @param {Object} identity the identity object as found by the IdentityServer
      * @returns {Promise} which eventually will resolve to a claims object
      */
+        /*
 Providers.getClaims = async function( ctx, token, use, scope, claims, rejected, oidc, identity ){
     if( Meteor.isServer ){
         let claimsResult = {};
         let promises = [];
-        /*
         ( oidc.atDate.selectedProviders || [] ).every(( id ) => {
             const p = Meteor.APP.Providers.byId( id );
             if( p && p instanceof IResource ){
@@ -200,9 +200,9 @@ Providers.getClaims = async function( ctx, token, use, scope, claims, rejected, 
             });
             return claimsResult;
         });
-            */
     }
 };
+            */
 
 /**
  * @locus Anywhere

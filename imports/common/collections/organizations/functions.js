@@ -11,6 +11,7 @@ import { Validity } from 'meteor/pwix:validity';
 import { izProvider } from '/imports/common/classes/iz-provider.class.js';
 
 import { AuthMethod } from '/imports/common/definitions/auth-method.def.js';
+import { GrantType } from '/imports/common/definitions/grant-type.def.js';
 import { TokenExtension } from '/imports/common/definitions/token-extension.def.js';
 
 import { IFeatured } from '/imports/common/interfaces/ifeatured.iface.js';
@@ -287,7 +288,24 @@ Organizations.fn = {
         });
         return [ ...new Set( supported )];
     },
-    
+
+    /**
+     * @summary The Authorization Server is expected to be able to advertise its configuration
+     *  Supported values mainly depend of the providers selected at the organization level.
+     * @param {Object} organization
+     * @returns {Array<String>} the supported response types (all)
+     */
+    supportedResponseTypes( organization ){
+        let supported = [];
+        GrantType.Knowns().forEach(( it ) => {
+            const rt = GrantType.responseTypes( it );
+            if( rt ){
+                supported = supported.concat( rt );
+            }
+        });
+        return [ ...new Set( supported )];
+    },
+
     /**
      * @locus Anywhere
      * @param {Object} organization

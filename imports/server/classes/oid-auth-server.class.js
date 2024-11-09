@@ -46,38 +46,62 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
      */
     async _config( organization ){
         const self = this;
-        let conf = {
-            features: {
-                devInteractions: {
-                    enabled: false
-                },
-                rpInitiatedLogout: {
-                    enabled: true,
-                    logoutSource: this._logoutSource
-                }
+        let conf = {};
+
+        // supported claims
+        //  'openid' and 'offline_access' are set by default, but adding scopes removes 'offline_access', leaving only 'openid' plus additional scopes
+        conf.claims = Claim.claimList();
+
+        // conf.cookies
+        conf.cookies = {
+            keys: Keygrips.fn.authKeys( organization ),
+            long: {
+                signed: true
+            },
+            short: {
+                signed: true
             }
         };
-        // organization OIDC Provider setup
-        conf.jwks = Jwks.fn.authKeys( organization );
-        _.merge( conf, {
-            cookies: {
-                keys: Keygrips.fn.authKeys( organization ),
-                long: {
-                    signed: true
-                },
-                short: {
-                    signed: true
-                }
+
+        // conf.features
+        conf.features = {
+            devInteractions: {
+                enabled: false
             },
-            ttl: {
-                Session: 60000, // not sure if unit to be used is ms ?
-                Interaction: 60000
+            rpInitiatedLogout: {
+                enabled: true,
+                logoutSource: this._logoutSource
             }
-        });
-        // provide routes endpoints
+        };
+
+        // https://github.com/panva/node-oidc-provider/blob/v7.14.3/docs/README.md#accounts
+        // define IdentityServer
+        //conf.findAccount = this.iRequestServer().identityServer().findAccount;
+        conf.findAccount = async ( ctx, id, token ) => {
+            const identityServer = self.iRequestServer().identityServer();
+            const organization = self.iRequestServer().organization();
+            return await identityServer.findAccount( organization, ctx, id, token );
+        };
+
+        // https://github.com/panva/node-oidc-provider/blob/v7.14.3/docs/README.md#interactionsurl
+        // make sure our interactions url is prefixed with our base url
+        conf.interactions = {
+            async url( ctx, interaction ){
+                return organization.record.baseUrl + Meteor.APP.C.oidcInteractionPath + '/' + interaction.uid;
+            }
+        };
+
+        // conf.jwks
+        conf.jwks = Jwks.fn.authKeys( organization );
+
+        // conf.responseTypes provides response_types_supported metadata
+        // depends of the selected providers
+        conf.responseTypes = Organizations.fn.supportedResponseTypes( organization );
+
+        // conf.routes provide routes endpoints
         //  NB: they must be provided without the baseUrl as node-oidc-provider will prefix these with the mount path
-        let endpoints = OpenID.fn.endpoints( organization );
         conf.routes = {};
+        let endpoints = OpenID.fn.endpoints( organization );
         Object.keys( endpoints ).forEach(( it ) => {
             const key = it.replace( /_endpoint$|_uri$/, '' );
             try {
@@ -99,27 +123,6 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
         // supported scopes
         //  'openid' and 'offline_access' are set by default, but adding scopes removes 'offline_access', leaving only 'openid' plus additional scopes
         conf.scopes = Scope.scopeList();
-
-        // supported claims
-        //  'openid' and 'offline_access' are set by default, but adding scopes removes 'offline_access', leaving only 'openid' plus additional scopes
-        conf.claims = Claim.claimList();
-
-        // https://github.com/panva/node-oidc-provider/blob/v7.14.3/docs/README.md#accounts
-        // define IdentityServer
-        //conf.findAccount = this.iRequestServer().identityServer().findAccount;
-        conf.findAccount = async ( ctx, id, token ) => {
-            const identityServer = self.iRequestServer().identityServer();
-            const organization = self.iRequestServer().organization();
-            return await identityServer.findAccount( organization, ctx, id, token );
-        };
-
-        // https://github.com/panva/node-oidc-provider/blob/v7.14.3/docs/README.md#interactionsurl
-        // make sure our interactions url is prefixed with our base url
-        conf.interactions = {
-            async url( ctx, interaction ){
-                return organization.record.baseUrl + Meteor.APP.C.oidcInteractionPath + '/' + interaction.uid;
-            }
-        };
 
         // https://github.com/panva/node-oidc-provider/blob/410bdaa88342da8a75b6cfd08d51d218acd23bbe/lib/helpers/defaults.js#L650
         // description: Default client metadata to be assigned when unspecified by the client metadata,

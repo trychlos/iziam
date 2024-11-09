@@ -77,8 +77,6 @@ Organizations.isOperational = async function( organization ){
     // keygrips.$.size
     promises.push( fnCheck( 'registration_endpoint', organization.record.registration_endpoint ));
     // request_object_signing_alg_values_supported
-    // response_modes_supported
-    // response_types_supported
     promises.push( fnCheck( 'revocation_endpoint', organization.record.revocation_endpoint ));
     // revocation_endpoint_auth_methods_supported
     // revocation_endpoint_auth_signing_alg_values_supported
