@@ -462,7 +462,7 @@ Template.groups_tree.onRendered( function(){
             self.APP.tree_nodes_waiting = {};
             self.APP.tree_populated( false );
             // and rebuild it
-            console.debug( 'rebuild the tree', Template.currentData().treeName );
+            //console.debug( 'rebuild the tree', Template.currentData().treeName );
             // display the group/identity item, attaching it to its parent
             groups.forEach( async ( it ) => {
                 self.APP.tree_create_ask.bind( self )( it, it.parent );

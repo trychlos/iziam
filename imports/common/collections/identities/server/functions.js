@@ -141,7 +141,7 @@ Identities.s = {
     //  - inserted: the count of inserted documents
     // this is called both on create and update
     async upsert( item, args, userId ){
-        console.debug( 'Identities.s.upsert', item, args );
+        console.debug( 'item.notes', item.notes );
         const collection = Identities.s.collection( args.organization._id );
         let res = {
             updated: 0,
@@ -178,12 +178,11 @@ Identities.s = {
                     item.password.salt = salt.toString( 'hex' );
                 }
             }
-            // make sure fields which are not specified in the item are unset
-            const $unset = AccountsManager.s.addUnset( Identities.instanceName( args.organization._id ), item );
+            // make sure fields which are not specified in the item are unset (else only specified fields are modified)
+            //const $unset = AccountsManager.s.addUnset( Identities.instanceName( args.organization._id ), item );
             let itemId = item._id;
             if( itemId ){
-                console.debug( 'updating', item, $unset );
-                res.updated = await collection.updateAsync({ _id: itemId }, { $set: item, $unset: $unset });
+                res.updated = await collection.updateAsync({ _id: itemId }, { $set: item });
             } else {
                 itemId = await collection.insertAsync( item );
                 res.inserted = 1;

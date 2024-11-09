@@ -41,6 +41,13 @@ Template.identity_groups_pane.onCreated( function(){
     self.autorun(() => {
         self.APP.groups.set( self.APP.organization.get().DYN.identities_groups.get());
     });
+
+    // protect new identity
+    self.autorun(() => {
+        const item = Template.currentData().item.get();
+        item.DYN = item.DYN || {};
+        item.DYN.memberOf = item.DYN.memberOf || { all: [], direct: [] };
+    });
 });
 
 Template.identity_groups_pane.helpers({

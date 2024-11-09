@@ -18,7 +18,7 @@ import { Clients } from './index.js';
  * @returns {}
  */
 Clients.isOperational = async function( entity, record ){
-    Meteor.isClient && console.debug( 'Clients.isOperational', entity, record );
+    //Meteor.isClient && console.debug( 'Clients.isOperational', entity, record );
     return null;
 };
 
@@ -30,7 +30,7 @@ Clients.isOperational = async function( entity, record ){
  * @param {Object} item as a full entity object with its DYN sub-object
  */
 Clients.setupOperational = async function( item ){
-    console.debug( 'Clients.setupOperational', item );
+    //console.debug( 'Clients.setupOperational', item );
     const atdate = Validity.atDateByRecords( item.DYN.records );
     if( !item.DYN.operational ){
         item.DYN.operational = {

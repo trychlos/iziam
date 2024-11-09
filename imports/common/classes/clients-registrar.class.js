@@ -81,7 +81,6 @@ export class ClientsRegistrar extends mix( izRegistrar ).with( ISearchableLabel 
     clientLoad(){
         assert( Meteor.isClient );
         const self = this;
-        console.debug( 'subscribing' );
         self.#handle = Meteor.subscribe( Meteor.APP.C.pub.clientsAll.publish, self.organization());
 
         // get the list of clients

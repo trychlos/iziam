@@ -60,6 +60,7 @@ export class IdentitiesRegistrar extends izRegistrar {
     constructor( organization ){
         super( ...arguments );
         const self = this;
+        //console.debug( 'instanciating', this );
 
         // common code
         this.#amInstance = new AccountsManager.amClass({
@@ -73,6 +74,7 @@ export class IdentitiesRegistrar extends izRegistrar {
             clientUpdateArgs: {
                 organization: organization
             },
+            feedNow: false,
             haveIdent: false,
             haveRoles: false,
             allowFn: Permissions.isAllowed,
@@ -91,22 +93,25 @@ export class IdentitiesRegistrar extends izRegistrar {
 
     /**
      * @summary Initialize client side
-     *  - subscribe and receive the full list of the identities of the organization
+     *  - subscribe and receive the full list of the resources of the organization
      */
     clientLoad(){
         assert( Meteor.isClient );
         const self = this;
-        self.#handle = Meteor.subscribe( 'pwix_accounts_manager_accounts_list_all', self.#amInstance.name());
 
-        // get the list of identities
-        // each identity is published as an object with DYN sub-object
+        this.#amInstance.feedList();
+
+        // track the identities reactivity
         Tracker.autorun(() => {
-            if( self.#handle.ready()){
-                self.#amInstance.collection().find( Meteor.APP.C.pub.identitiesAll.query( self.organization())).fetchAsync().then(( fetched ) => {
-                    console.debug( 'fetched', fetched );
-                    self.set( fetched );
-                });
-            }
+            //console.debug( 'identities', self.get());
         });
+    }
+
+    /**
+     * @returns {Array} the array of identities
+     */
+    get(){
+        assert( Meteor.isClient );
+        return this.#amInstance.get();
     }
 }
