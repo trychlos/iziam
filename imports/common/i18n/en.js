@@ -761,6 +761,8 @@ Meteor.APP.i18n = {
                     ecdh_192kw_label: 'ECDH-ES using Concat KDF and CEK wrapped with 192 bits AES Key Wrap',
                     ecdh_256kw_label: 'ECDH-ES using Concat KDF and CEK wrapped with 256 bits AES Key Wrap',
                     ecdh_es_label: 'Elliptic Curve Diffie-Hellman Ephemeral Static',
+                    ed25519_label: 'Ed25519 signature algorithm key pairs',
+                    ed448_label: 'Ed448 signature algorithm key pairs',
                     es256_label: 'ECDSA using P-256 and SHA-256',
                     es384_label: 'ECDSA using P-384 and SHA-384',
                     es512_label: 'ECDSA using P-521 and SHA-512',
@@ -777,11 +779,13 @@ Meteor.APP.i18n = {
                     rsa_oaep256_label: 'RSAES OAEP using SHA-256 and MGF1 with SHA-256',
                     rsa_oaep384_label: 'RSAES OAEP using SHA-384 and MGF1 with SHA-384',
                     rsa_oaep512_label: 'RSAES OAEP using SHA-512 and MGF1 with SHA-512',
+                    x25519_label: 'X25519 function key pairs',
+                    x448_label: 'X448 function key pairs',
                     select_text: 'Select the JSON Web Algorithm (JWA)'
                 },
                 jwk_kty: {
                     ec_label: 'Elliptic Curve (asymmetric)',
-                    oct_label: 'Octets Sequence (symmetric)',
+                    okp_label: 'Octet string key pairs (asymmetric)',
                     rsa_label: 'RSA (asymmetric)',
                     select_text: 'Select the JWK crypto family'
                 },

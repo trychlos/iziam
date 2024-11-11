@@ -59,6 +59,14 @@ export const JwaAlg = {
             label: 'definitions.jwa_alg.ecdh_256kw_label'
         },
         {
+            id: 'Ed25519',
+            label: 'definitions.jwa_alg.ed25519_label'
+        },
+        {
+            id: 'Ed448',
+            label: 'definitions.jwa_alg.ed448_label'
+        },
+        {
             id: 'ES256',
             label: 'definitions.jwa_alg.es256_label'
         },
@@ -124,6 +132,14 @@ export const JwaAlg = {
         {
             id: 'RSA-OAEP-512',
             label: 'definitions.jwa_alg.rsa_oaep512_label'
+        },
+        {
+            id: 'X25519',
+            label: 'definitions.jwa_alg.x25519_label'
+        },
+        {
+            id: 'X448',
+            label: 'definitions.jwa_alg.x448_label'
         }
     ],
 

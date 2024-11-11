@@ -19,13 +19,13 @@ export const JwkKty = {
             id: 'EC',
             label: 'definitions.jwk_kty.ec_label',
             alg: {
-                'enc': [
+                enc: [
                     'ECDH-ES',
                     'ECDH-ES+A128KW',
                     'ECDH-ES+A192KW',
                     'ECDH-ES+A256KW'
                 ],
-                'sig':  [
+                sig:  [
                     'ES256',
                     'ES384',
                     'ES512',
@@ -37,13 +37,13 @@ export const JwkKty = {
             id: 'RSA',
             label: 'definitions.jwk_kty.rsa_label',
             alg: {
-                'enc': [
+                enc: [
                     'RSA-OAEP',
                     'RSA-OAEP-256',
                     'RSA-OAEP-384',
                     'RSA-OAEP-512'
                 ],
-                'sig': [
+                sig: [
                     'RS256',
                     'RS384',
                     'RS512',
@@ -54,21 +54,16 @@ export const JwkKty = {
             }
         },
         {
-            id: 'oct',
-            label: 'definitions.jwk_kty.oct_label',
+            id: 'OKP',
+            label: 'definitions.jwk_kty.okp_label',
             alg: {
-                'enc': [
-                    'A128GCM',
-                    'A192GCM',
-                    'A256GCM',
-                    'A128CBC-HS256',
-                    'A192CBC-HS384',
-                    'A256CBC-HS512'
+                enc: [
+                    'X25519',
+                    'X448'
                 ],
-                'sig': [
-                    'HS256',
-                    'HS384',
-                    'HS512'
+                sig: [
+                    'Ed25519',
+                    'Ed448'
                 ]
             }
         }
@@ -80,11 +75,11 @@ export const JwkKty = {
     /**
      * @param {Object} def a JwkKty definition as returned by JwkKty.Knowns()
      * @param {String} use the JWK use identifier
-     * @returns {Array<String>} the list of known algorithms to be used in this situation, or null if use is not known
+     * @returns {Array<String>} the list of known algorithms to be used in this situation, or []
      */
     availableAlgorithms( def, use ){
-        let algs = def.alg[use] || null;
-        if( algs ){
+        let algs = def.alg ? def.alg[use] || [] : [];
+        if( algs && algs.length ){
             let array = algs;
             algs = array.length ? [] : null;
             array.forEach(( id ) => {

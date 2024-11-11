@@ -53,6 +53,7 @@ In order an organization be operational, the current record, i.e. the record at 
 - [OAuth 2.0 Dynamic Client Registration Management Protocol](https://datatracker.ietf.org/doc/html/rfc7592)
 - [Proof Key for Code Exchange by OAuth Public Clients](https://datatracker.ietf.org/doc/html/rfc7636)
 - [OAuth 2.0 Token Introspection](https://datatracker.ietf.org/doc/html/rfc7662)
+- [CFRG Elliptic Curve Diffie-Hellman (ECDH) and Signatures in JSON Object Signing and Encryption (JOSE)](https://datatracker.ietf.org/doc/html/rfc8037)
 - [OAuth 2.0 for Native Apps](https://datatracker.ietf.org/doc/html/rfc8252)
 - [OAuth 2.0 Authorization Server Metadata](https://datatracker.ietf.org/doc/html/rfc8414)
 - [OAuth 2.0 Device Authorization Grant](https://datatracker.ietf.org/doc/rfc8628/)

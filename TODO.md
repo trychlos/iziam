@@ -17,7 +17,6 @@
 |   38 | 2024- 1- 5 | Have a way to provide values to user-defined resources/scopes/claims (or only claims ?) |
 |      | 2024-10-29 | resources are user-defined: fine |
 |      | 2024-10-29 | scopes and claims need code - so needs to let the user define some code + have hook points |
-|   45 | 2024- 1- 5 | default features.introspection.allowedPolicy function called, you SHOULD change it in order to to check whether the caller is authorized to receive the introspection response. |
 |   61 | 2024- 1-10 | identities: add titre, titre post-nominal |
 |   64 | 2024- 1-10 | display the picture in organizations list, identities list |
 |   66 | 2024- 1-11 | auth server: have a button to display the .well-known/openid-configuration |
@@ -137,6 +136,8 @@
 |      | 2023-10-29 | done |
 |   44 | 2024- 1- 5 | default ttl.Session function called, you SHOULD change it in order to define the expiration for Session artifacts |
 |      | 2023-10-29 | done |
+|   45 | 2024- 1- 5 | default features.introspection.allowedPolicy function called, you SHOULD change it in order to to check whether the caller is authorized to receive the introspection response. |
+|      | 2024-11-11 | id_token is not part of introspectable https://github.com/panva/node-oidc-provider/blob/main/lib/actions/introspection.js#10 |
 |   46 | 2024- 1- 5 | Build oidc interaction |
 |      | 2024-10-29 | done with IOIDInteraction interface |
 |   47 | 2024- 1- 5 | Build oidc adapter |

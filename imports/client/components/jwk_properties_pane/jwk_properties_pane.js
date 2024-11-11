@@ -145,9 +145,11 @@ Template.jwk_properties_pane.helpers({
         const ktyId = this.item.get().kty;
         const ktyDef = ktyId ? JwkKty.byId( ktyId ) : null;
         const useId = this.item.get().use;
+        //console.debug( 'kty', ktyDef, 'use', useId );
+        const availableAlgs = ktyDef && useId ? JwkKty.availableAlgorithms( ktyDef, useId ) : null;
         return {
             ...this,
-            list: ktyDef && useId ? JwaAlg.byIds( JwkKty.availableAlgorithms( ktyDef, useId )) : null,
+            list: availableAlgs ? JwaAlg.byIds( availableAlgs ) : null,
             selected: this.item.get().alg || null,
             disabled: !( ktyId && useId && this.isNew.get())
         };

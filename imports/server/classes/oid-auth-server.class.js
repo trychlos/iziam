@@ -201,10 +201,10 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
         if( conf.routes.introspection ){
             conf.features.introspection = {
                 enabled: true,
-                //allowedPolicy: async ( ctx, token ) => {
-                    // Allow introspection for both ID Tokens and Access Tokens
-                //    return token.kind === 'AccessToken' || token.kind === 'IdToken';
-                //}
+                async allowedPolicy(){
+                    console.debug( 'allowedPolicy', arguments );
+                    return true;
+                }
             };
         }
         // enable the token userinfo if we have a configured endpoint for that
