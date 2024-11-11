@@ -199,7 +199,7 @@ Organizations.recordFieldset = function(){
                 // URL of the authorization server's OAuth 2.0 Dynamic Client Registration endpoint
                 {
                     name: 'registration_endpoint',
-                    type: String,
+                    type: String,   
                     optional: true,
                     form_check: Organizations.checks.registration_endpoint,
                     form_type: Forms.FieldType.C.OPTIONAL

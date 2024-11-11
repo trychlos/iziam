@@ -17,6 +17,8 @@ import { Scope } from '/imports/common/classes/scope.class.js';
 
 import { Organizations } from '/imports/common/collections/organizations/index.js';
 
+import { CommonAlgs } from '/imports/common/definitions/common-algs.def.js';
+
 import { Jwks } from '/imports/common/tables/jwks/index.js';
 import { Keygrips } from '/imports/common/tables/keygrips/index.js';
 
@@ -48,9 +50,35 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
         const self = this;
         let conf = {};
 
+        // have a Mongo adapter for storing issued tokens, codes, user sessions, dynamically registered clients, etc.
+        await OIDMongoAdapter.connect( 'oidc_' );
+        conf.adapter = OIDMongoAdapter;
+
+        // configure signing algorithms for Authorization endpoint
+        // accepted but not considered as of oidc-provider v7
+        conf.authorizationSigningAlgValues = CommonAlgs.authorizationSigningAlgValues();
+
+        // configure encryption algorithms for Authorization endpoint
+        // accepted but not considered as of oidc-provider v7
+        conf.authorizationEncryptionAlgValues = CommonAlgs.authorizationEncryptionAlgValues();
+
+        // configure encryption encoding for Authorization endpoint
+        // accepted but not considered as of oidc-provider v7
+        conf.authorizationEncryptionEncValues = CommonAlgs.authorizationEncryptionEncValues();
+
         // supported claims
         //  'openid' and 'offline_access' are set by default, but adding scopes removes 'offline_access', leaving only 'openid' plus additional scopes
         conf.claims = Claim.claimList();
+
+        // https://github.com/panva/node-oidc-provider/blob/410bdaa88342da8a75b6cfd08d51d218acd23bbe/lib/helpers/defaults.js#L650
+        // description: Default client metadata to be assigned when unspecified by the client metadata,
+        // e.g. during Dynamic Client Registration or for statically configured clients.
+        //conf.clientDefaults = {
+        //    grant_types: ['authorization_code'],
+        //    id_token_signed_response_alg: 'RS256',
+        //    response_types: ['code'],
+        //    token_endpoint_auth_method: 'client_secret_basic',
+        //},
 
         // conf.cookies
         conf.cookies = {
@@ -94,6 +122,18 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
         //  - Refresh Token: Enabled if the features.refreshToken is set to true or if any response type implies the issuance of a refresh token (e.g., scopes like offline_access).
         //  - Client Credentials: Enabled if features.clientCredentials is set to true.
 
+        // configure signing algorithms for ID Tokens
+        // accepted but not considered as of oidc-provider v7
+        conf.idTokenSigningAlgValues = CommonAlgs.idTokenSigningAlgValues();
+
+        // configure encryption algorithms for ID Tokens
+        // accepted but not considered as of oidc-provider v7
+        conf.idTokenEncryptionAlgValues = CommonAlgs.idTokenEncryptionAlgValues();
+
+        // configure encryption encoding for ID Tokens
+        // accepted but not considered as of oidc-provider v7
+        conf.idTokenEncryptionEncValues = CommonAlgs.idTokenEncryptionEncValues();
+
         // https://github.com/panva/node-oidc-provider/blob/v7.14.3/docs/README.md#interactionsurl
         // make sure our interactions url is prefixed with our base url
         conf.interactions = {
@@ -102,8 +142,43 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
             }
         };
 
+        // configure signing algorithms for Introspection endpoint
+        // accepted but not considered as of oidc-provider v7
+        conf.introspectionSigningAlgValues = CommonAlgs.introspectionSigningAlgValues();
+
+        // configure encryption algorithms for Introspection endpoint
+        // accepted but not considered as of oidc-provider v7
+        conf.introspectionEncryptionAlgValues = CommonAlgs.introspectionEncryptionAlgValues();
+
+        // configure encryption encoding for Introspection endpoint
+        // accepted but not considered as of oidc-provider v7
+        conf.introspectionEncryptionEncValues = CommonAlgs.introspectionEncryptionEncValues();
+
+        conf.introspectionEndpointAuthSigningAlgValues = CommonAlgs.introspectionSigningAlgValues();
+        conf.introspectionEndpointAuthEncryptionAlgValues = CommonAlgs.introspectionEncryptionAlgValues();
+        conf.introspectionEndpointAuthEncryptionEncValues = CommonAlgs.introspectionEncryptionEncValues();
+
         // conf.jwks
         conf.jwks = Jwks.fn.authKeys( organization );
+
+        // configure signing algorithms for PAR
+        // accepted but not considered as of oidc-provider v7
+        conf.pushedAuthorizationRequestSigningAlgValues = CommonAlgs.pushedAuthorizationRequestSigningAlgValues();
+
+        // error rendering
+        conf.renderError = this._errorRender;
+
+        // configure signing algorithms for Request object
+        // accepted but not considered as of oidc-provider v7
+        conf.requestObjectSigningAlgValues = CommonAlgs.requestObjectSigningAlgValues();
+
+        // configure encryption algorithms for Request object
+        // accepted but not considered as of oidc-provider v7
+        conf.requestObjectEncryptionAlgValues = CommonAlgs.requestObjectEncryptionAlgValues();
+
+        // configure encryption encoding for Request object
+        // accepted but not considered as of oidc-provider v7
+        conf.requestObjectEncryptionEncValues = CommonAlgs.requestObjectEncryptionEncValues();
 
         // conf.responseTypes provides response_types_supported metadata
         // depends of the selected providers
@@ -124,7 +199,13 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
         });
         // enable the token introspection if we have a configured endpoint for that
         if( conf.routes.introspection ){
-            conf.features.introspection = { enabled: true };
+            conf.features.introspection = {
+                enabled: true,
+                //allowedPolicy: async ( ctx, token ) => {
+                    // Allow introspection for both ID Tokens and Access Tokens
+                //    return token.kind === 'AccessToken' || token.kind === 'IdToken';
+                //}
+            };
         }
         // enable the token userinfo if we have a configured endpoint for that
         if( conf.routes.userinfo ){
@@ -135,22 +216,9 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
         //  'openid' and 'offline_access' are set by default, but adding scopes removes 'offline_access', leaving only 'openid' plus additional scopes
         conf.scopes = Scope.scopeList();
 
-        // https://github.com/panva/node-oidc-provider/blob/410bdaa88342da8a75b6cfd08d51d218acd23bbe/lib/helpers/defaults.js#L650
-        // description: Default client metadata to be assigned when unspecified by the client metadata,
-        // e.g. during Dynamic Client Registration or for statically configured clients.
-        //conf.clientDefaults = {
-        //    grant_types: ['authorization_code'],
-        //    id_token_signed_response_alg: 'RS256',
-        //    response_types: ['code'],
-        //    token_endpoint_auth_method: 'client_secret_basic',
-        //},
-
-        // have a Mongo adapter for storing issued tokens, codes, user sessions, dynamically registered clients, etc.
-        await OIDMongoAdapter.connect( 'oidc_' );
-        conf.adapter = OIDMongoAdapter;
-
-        // error rendering
-        conf.renderError = this._errorRender;
+        // configure signing algorithms for Authorization Token endpoint
+        // accepted but not considered as of oidc-provider v7
+        conf.tokenEndpointAuthSigningAlgValues = CommonAlgs.tokenEndpointAuthSigningAlgValues();
 
         // TTLs
         conf.ttl = {
@@ -161,6 +229,18 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
             Interaction: organization.record.ttl_Interaction || Meteor.APP.C.ttl_Interaction,
             Session: organization.record.ttl_Session || Meteor.APP.C.ttl_Session
         };
+
+        // Configure signing algorithms for UserInfo responses
+        // accepted but not considered as of oidc-provider v7
+        conf.userinfoSigningAlgValues = CommonAlgs.userinfoSigningAlgValues();
+
+        // Configure encryption algorithms for UserInfo responses
+        // accepted but not considered as of oidc-provider v7
+        conf.userinfoEncryptionAlgValues = CommonAlgs.userinfoEncryptionAlgValues();
+
+        // Configure encryption encoding for UserInfo responses
+        // accepted but not considered as of oidc-provider v7
+        conf.userinfoEncryptionEncValues = CommonAlgs.userinfoEncryptionEncValues();
 
         // unfortunately, the node-oidc-provider is written so that the configuration set at instanciation time is not modifiable
         //  have to find a way to reset it...
