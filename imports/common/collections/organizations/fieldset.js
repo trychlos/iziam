@@ -204,32 +204,12 @@ Organizations.recordFieldset = function(){
                     form_check: Organizations.checks.registration_endpoint,
                     form_type: Forms.FieldType.C.OPTIONAL
                 },
-                // array containing a list of the JSON Web Signature (JWS) signing algorithms ("alg" values) supported by the token endpoint
-                {
-                    name: 'token_endpoint_auth_signing_alg_values_supported',
-                    type: Array,
-                    optional: true
-                },
-                {
-                    name: 'token_endpoint_auth_signing_alg_values_supported.$',
-                    type: String
-                },
                 // URL of a page containing human-readable information that developers might want or need to know when using the
                 // authorization server
                 {
                     name: 'service_documentation',
                     type: String,
                     optional: true
-                },
-                // Languages and scripts supported for the user interface
-                {
-                    name: 'ui_locales_supported',
-                    type: Array,
-                    optional: true
-                },
-                {
-                    name: 'ui_locales_supported.$',
-                    type: String
                 },
                 // URL of the authorization server's OAuth 2.0 revocation endpoint
                 {
@@ -248,6 +228,7 @@ Organizations.recordFieldset = function(){
                     form_type: Forms.FieldType.C.OPTIONAL
                 },
                 // array containing a list of client authentication methods supported by this revocation endpoint
+                /*
                 {
                     name: 'revocation_endpoint_auth_methods_supported',
                     type: Array,
@@ -257,16 +238,7 @@ Organizations.recordFieldset = function(){
                     name: 'revocation_endpoint_auth_methods_supported.$',
                     type: String
                 },
-                // array containing a list of the JWS signing algorithms ("alg" values) supported by the revocation endpoint
-                {
-                    name: 'revocation_endpoint_auth_signing_alg_values_supported',
-                    type: Array,
-                    optional: true
-                },
-                {
-                    name: 'revocation_endpoint_auth_signing_alg_values_supported.$',
-                    type: String
-                },
+                */
                 // URL of the authorization server's OAuth 2.0 introspection endpoint
                 {
                     name: 'introspection_endpoint',
@@ -285,30 +257,9 @@ Organizations.recordFieldset = function(){
                     name: 'introspection_endpoint_auth_methods_supported.$',
                     type: String
                 },
-                // array containing a list of the JWS signing algorithms ("alg" values) supported by the introspection endpoint
-                {
-                    name: 'introspection_endpoint_auth_signing_alg_values_supported',
-                    type: Array,
-                    optional: true
-                },
-                {
-                    name: 'introspection_endpoint_auth_signing_alg_values_supported.$',
-                    type: String
-                },
-                // array containing a list of the signing algorithms ("alg" values) supported by request_object_signing (?)
-                // found as an issuer metadata in openid-client doc
-                // https://github.com/panva/node-openid-client/blob/main/docs/README.md#new-issuermetadata
-                {
-                    name: 'request_object_signing_alg_values_supported',
-                    type: Array,
-                    optional: true
-                },
-                {
-                    name: 'request_object_signing_alg_values_supported.$',
-                    type: String
-                },
                 // array containing a list of Proof Key for Code Exchange (PKCE) [RFC7636] code challenge methods supported by this
                 // authorization server
+                /*
                 {
                     name: 'code_challenge_methods_supported',
                     type: Array,
@@ -318,12 +269,15 @@ Organizations.recordFieldset = function(){
                     name: 'code_challenge_methods_supported.$',
                     type: String
                 },
+                */
                 // A JWT containing metadata values about the authorization server as claims
+                /*
                 {
                     name: 'signed_metadata',
                     type: String,
                     optional: true
                 },
+                */
                 // -- the JSON Web Key Set
                 Jwks.recordFieldDef(),
                 // -- Keygrips (used for cookies.keys)

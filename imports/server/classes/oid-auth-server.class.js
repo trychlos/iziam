@@ -230,6 +230,10 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
             Session: organization.record.ttl_Session || Meteor.APP.C.ttl_Session
         };
 
+        // ui_locales supported
+        // accepted but not considered as of oidc-provider v7
+        conf.uiLocales = pwixI18n.configure().managed;
+
         // Configure signing algorithms for UserInfo responses
         // accepted but not considered as of oidc-provider v7
         conf.userinfoSigningAlgValues = CommonAlgs.userinfoSigningAlgValues();
