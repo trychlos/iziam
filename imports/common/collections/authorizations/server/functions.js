@@ -113,9 +113,7 @@ Authorizations.s = _.merge( Authorizations.s, {
         delete item.DYN;
         let itemId = item._id;
         if( item.createdAt ){
-            const foo = await Authorizations.collection( organizationId ).updateAsync({ _id: item._id }, { $set: item });
-            console.debug( 'foo', foo );
-            res.updated = foo.numberAffected;
+            res.updated = await Authorizations.collection( organizationId ).updateAsync({ _id: item._id }, { $set: item });
         } else {
             const foo = await Authorizations.collection( organizationId ).insertAsync( item );
             res.inserted += 1;

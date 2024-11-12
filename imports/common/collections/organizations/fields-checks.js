@@ -268,11 +268,13 @@ Organizations.checks = {
         value = parseInt( value );
         if( Number.isInteger( value ) && value >= 0 ){
             return null;
-        } else {
+        } else if( item.identitiesEmailAddressesMaxHow && item.identitiesEmailAddressesMaxHow !== 'nospec' ){
             return new TM.TypedMessage({
                 level: TM.MessageLevel.C.ERROR,
                 message: pwixI18n.label( I18N, 'organizations.checks.email_max_count_invalid' )
             });
+        } else {
+            return null;
         }
     },
 
@@ -316,11 +318,13 @@ Organizations.checks = {
         value = parseInt( value );
         if( Number.isInteger( value ) && value >= 0 ){
             return null;
-        } else {
+        } else if( item.identitiesEmailAddressesMinHow && item.identitiesEmailAddressesMinHow !== 'nospec' ){
             return new TM.TypedMessage({
                 level: TM.MessageLevel.C.ERROR,
                 message: pwixI18n.label( I18N, 'organizations.checks.email_min_count_invalid' )
             });
+        } else {
+            return null;
         }
     },
 
@@ -404,11 +408,13 @@ Organizations.checks = {
         value = parseInt( value );
         if( Number.isInteger( value ) && value >= 0 ){
             return null;
-        } else {
+        } else if( item.identitiesUsernamesMaxHow && item.identitiesUsernamesMaxHow !== 'nospec' ){
             return new TM.TypedMessage({
                 level: TM.MessageLevel.C.ERROR,
                 message: pwixI18n.label( I18N, 'organizations.checks.username_max_count_invalid' )
             });
+        } else {
+            return null;
         }
     },
 
@@ -452,11 +458,13 @@ Organizations.checks = {
         value = parseInt( value );
         if( Number.isInteger( value ) && value >= 0 ){
             return null;
-        } else {
+        } else if( item.identitiesUsernamesMinHow && item.identitiesUsernamesMinHow !== 'nospec' ){
             return new TM.TypedMessage({
                 level: TM.MessageLevel.C.ERROR,
                 message: pwixI18n.label( I18N, 'organizations.checks.username_min_count_invalid' )
             });
+        } else {
+            return null;
         }
     },
 

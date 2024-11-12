@@ -30,13 +30,19 @@ Template.organization_config_ident_pane.onCreated( function(){
                 js: '.js-email-min-how'
             },
             identitiesEmailAddressesMinCount: {
-                js: '.js-email-min-count'
+                js: '.js-email-min-count',
+                formTo( $node, item ){
+                    $node.val( item.identitiesEmailAddressesMinHow === 'nospec' ? '' : item.identitiesEmailAddressesMinCount );
+                }
             },
             identitiesEmailAddressesMaxHow: {
                 js: '.js-email-max-how'
             },
             identitiesEmailAddressesMaxCount: {
-                js: '.js-email-max-count'
+                js: '.js-email-max-count',
+                formTo( $node, item ){
+                    $node.val( item.identitiesEmailAddressesMaxHow === 'nospec' ? '' : item.identitiesEmailAddressesMaxCount );
+                }
             },
             identitiesEmailAddressesIdentifier: {
                 js: '.js-email-identifier'
@@ -45,13 +51,19 @@ Template.organization_config_ident_pane.onCreated( function(){
                 js: '.js-username-min-how'
             },
             identitiesUsernamesMinCount: {
-                js: '.js-username-min-count'
+                js: '.js-username-min-count',
+                formTo( $node, item ){
+                    $node.val( item.identitiesUsernamesMinHow === 'nospec' ? '' : item.identitiesUsernamesMinCount );
+                }
             },
             identitiesUsernamesMaxHow: {
                 js: '.js-username-max-how'
             },
             identitiesUsernamesMaxCount: {
-                js: '.js-username-max-count'
+                js: '.js-username-max-count',
+                formTo( $node, item ){
+                    $node.val( item.identitiesUsernamesMaxHow === 'nospec' ? '' : item.identitiesUsernamesMaxCount );
+                }
             },
             identitiesUsernamesIdentifier: {
                 js: '.js-username-identifier'
