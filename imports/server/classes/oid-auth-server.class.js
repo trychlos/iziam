@@ -91,13 +91,16 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
             }
         };
 
-        // conf.features
+        // standard conf.features for all providers
         conf.features = {
             clientCredentials: {
                 enabled: true
             },
             devInteractions: {
                 enabled: false
+            },
+            jwtIntrospection: {
+                enabled: true
             },
             rpInitiatedLogout: {
                 enabled: true,

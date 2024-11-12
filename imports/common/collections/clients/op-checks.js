@@ -8,6 +8,7 @@ import { strict as assert } from 'node:assert';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { TM } from 'meteor/pwix:typed-message';
+import { Validity } from 'meteor/pwix:validity';
 
 import { ClientsEntities } from '/imports/common/collections/clients_entities/index.js';
 import { ClientsRecords } from '/imports/common/collections/clients_records/index.js';

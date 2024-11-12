@@ -42,7 +42,10 @@
 |      |            | this implies having a small companion collection with a row per available token extension or an array inside of the current schema |
 |      |            | + update Organizations.fn.wantsTokenExtension() |
 |  124 | 2024-10-30 | Review client configuration for identities: have a single pane with two fieldsets + have assistant pane |
-|  125 |  |  |
+|  125 | 2024-11-12 | implement Private Key JWT Client Authentication auth method |
+|  126 | 2024-11-12 | implement Shared secret JWT Client Authentication auth method |
+|  127 | 2024-11-12 | complete organization new assistant |
+|  128 |  |  |
 
 ---
 ## Done

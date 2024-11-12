@@ -551,6 +551,7 @@ Meteor.APP.i18n = {
                     info_button_title: 'Informations about the "%s" client',
                     info_modal_title: 'Informations about the "%s" client',
                     label_th: 'Label',
+                    operational_dialog_title: 'Operational status',
                     operational_invalid_title: 'The client is not operational! Please fix that',
                     operational_valid_title: 'The client is fully operational'
                 }
@@ -1522,6 +1523,7 @@ Meteor.APP.i18n = {
                     identities_th: 'Identities',
                     baseurl_th: 'Base URL',
                     clients_th: 'Clients',
+                    operational_dialog_title: 'Operational status',
                     operational_invalid_title: 'The organization is not operational! Please fix that',
                     operational_valid_title: 'The organization is fully operational',
                     resources_th: 'Resources'
