@@ -26,14 +26,25 @@ export const _oauth2_fn = {
                 result[name] = fullBaseUrl+foo;
             }
         };
-        set( 'authorization_endpoint' );
-        set( 'end_session_endpoint' );
-        set( 'introspection_endpoint' );
-        set( 'jwks_uri' );
-        set( 'revocation_endpoint' );
-        set( 'registration_endpoint' );
-        set( 'token_endpoint' );
+        _oauth2_fn.endpointNames().forEach(( it ) => {
+            set( it );
+        });
         return result;
+    },
+
+    /**
+     * @returns {Array} the list of configurable endpoints
+     */
+    endpointNames(){
+        return [
+            'authorization_endpoint',
+            'end_session_endpoint',
+            'introspection_endpoint',
+            'jwks_uri',
+            'revocation_endpoint',
+            'registration_endpoint',
+            'token_endpoint'
+        ];
     },
 
     /**

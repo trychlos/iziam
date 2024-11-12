@@ -8,6 +8,8 @@ import { strict as assert } from 'node:assert';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { TM } from 'meteor/pwix:typed-message';
 
+import { OpenID } from '/imports/common/classes/openid.class.js';
+
 import { JwaAlg } from '/imports/common/definitions/jwa-alg.def.js';
 import { JwkKty } from '/imports/common/definitions/jwk-kty.def.js';
 import { JwkUse } from '/imports/common/definitions/jwk-use.def.js';
@@ -46,6 +48,30 @@ const _assert_data_entityrv = function( caller, data ){
 const _assert_data_itemrv = function( caller, data ){
     assert.ok( data, caller+' data is required' );
     assert.ok( data.item && data.item instanceof ReactiveVar, caller+' data.item is expected to be set as a ReactiveVar, got '+data.item );
+}
+
+// check that the provided endpoint is unique
+//  opts:
+//  - prefix, the prefix of the i18n label, defaulting to 'endpoint'
+//  - field: the name of the field
+//  - record: the organization record to be checked in
+// returns a Promise or null
+const _check_endpoint = function( value, opts={} ){
+    const prefix = opts.prefix || 'endpoint';
+    const field = opts.field || '';
+    let res = null;
+    OpenID.fn.endpointAllNames().every(( it ) => {
+        if( it !== field ){
+            if( opts.record[it] === value ){
+                res = new TM.TypedMessage({
+                    level: TM.MessageLevel.C.ERROR,
+                    message: pwixI18n.label( I18N, 'organizations.checks.'+prefix+'_exists', it )
+                });
+            }
+        }
+        return !res;
+    });
+    return res;
 }
 
 // check a server url
@@ -111,6 +137,8 @@ Organizations.checks = {
                     level: TM.MessageLevel.C.ERROR,
                     message: pwixI18n.label( I18N, 'organizations.checks.authorization_absolute' )
                 });
+            } else {
+                return _check_endpoint( value, { prefix: 'authorization', field: 'authorization_endpoint', record: item });
             }
         // value is optional in the UI, but must be set for the organization be operational
         } else {
@@ -232,6 +260,8 @@ Organizations.checks = {
                     level: TM.MessageLevel.C.ERROR,
                     message: pwixI18n.label( I18N, 'organizations.checks.end_session_absolute' )
                 });
+            } else {
+                return _check_endpoint( value, { prefix: 'end_session', field: 'end_session_endpoint', record: item });
             }
         }
         return null;
@@ -518,6 +548,8 @@ Organizations.checks = {
                     level: TM.MessageLevel.C.ERROR,
                     message: pwixI18n.label( I18N, 'organizations.checks.introspection_absolute' )
                 });
+            } else {
+                return _check_endpoint( value, { prefix: 'introspection', field: 'introspection_endpoint', record: item });
             }
         }
         return null;
@@ -525,7 +557,7 @@ Organizations.checks = {
 
     // the issuer this organization may wants identify itself
     async issuer( value, data, opts ){
-        //console.debug( 'checks.issuer_endpoint' );
+        //console.debug( 'checks.issuer' );
         _assert_data_entityrv( 'Organizations.checks.issuer()', data );
         let entity = data.entity.get();
         let item = entity.DYN.records[data.index].get();
@@ -599,6 +631,8 @@ Organizations.checks = {
                     level: TM.MessageLevel.C.WARNING,
                     message: pwixI18n.label( I18N, 'organizations.checks.jwks_uri_wo_jwk' )
                 });
+            } else {
+                return _check_endpoint( value, { prefix: 'jwks', field: 'jwks_uri', record: item });
             }
         } else if( item.jwks && item.jwks.length ){
             return new TM.TypedMessage({
@@ -625,6 +659,8 @@ Organizations.checks = {
                     level: TM.MessageLevel.C.ERROR,
                     message: pwixI18n.label( I18N, 'organizations.checks.registration_absolute' )
                 });
+            } else {
+                return _check_endpoint( value, { prefix: 'registration', field: 'registration_endpoint', record: item });
             }
         }
         return null;
@@ -647,6 +683,8 @@ Organizations.checks = {
                     level: TM.MessageLevel.C.ERROR,
                     message: pwixI18n.label( I18N, 'organizations.checks.revocation_absolute' )
                 });
+            } else {
+                return _check_endpoint( value, { prefix: 'revocation', field: 'revocation_endpoint', record: item });
             }
         }
         return null;
@@ -699,6 +737,8 @@ Organizations.checks = {
                     level: TM.MessageLevel.C.ERROR,
                     message: pwixI18n.label( I18N, 'organizations.checks.token_absolute' )
                 });
+            } else {
+                return _check_endpoint( value, { prefix: 'token', field: 'token_endpoint', record: item });
             }
         // value is optional in the UI, but must be set for the organization be operational
         } else {
@@ -846,6 +886,8 @@ Organizations.checks = {
                     level: TM.MessageLevel.C.ERROR,
                     message: pwixI18n.label( I18N, 'organizations.checks.userinfo_absolute' )
                 });
+            } else {
+                return _check_endpoint( value, { prefix: 'userinfo', field: 'userinfo_endpoint', record: item });
             }
         }
         return null;

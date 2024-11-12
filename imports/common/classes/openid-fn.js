@@ -29,8 +29,27 @@ export const _openid_fn = {
                 result[name] = fullBaseUrl+foo;
             }
         };
-        set( 'userinfo_endpoint' );
+        _openid_fn.endpointNames().forEach(( it ) => {
+            set( it );
+        });
         return result;
+    },
+
+    /**
+     * @returns {Array} the list of configurable endpoints
+     */
+    endpointAllNames(){
+        const oauth = OAuth2.fn.endpointNames();
+        return oauth.concat( _openid_fn.endpointNames());
+    },
+
+    /**
+     * @returns {Array} the list of configurable endpoints
+     */
+    endpointNames(){
+        return [
+            'userinfo_endpoint'
+        ];
     },
 
     /**
