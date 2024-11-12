@@ -10,6 +10,9 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { Validity } from 'meteor/pwix:validity';
 
+import { Jwks } from '/imports/common/tables/jwks/index.js';
+import { Keygrips } from '/imports/common/tables/keygrips/index.js';
+
 import { Organizations } from './index.js';
 
 /**
@@ -33,6 +36,50 @@ Organizations.isOperational = async function( organization ){
                 errors = errors.concat( errs );
             }
         });
+    };
+    const jwkCheck = async function( name, item, fldName ){
+        const itemrv = new ReactiveVar( item );
+        const jwkData = {
+            ...data,
+            item: itemrv
+        }
+        // field check
+        if( fldName ){
+            return Jwks.checks[name]( item[fldName], jwkData, { update: false, opCheck: true }).then(( errs ) => {
+                if( errs ){
+                    errors = errors.concat( errs );
+                }
+            });
+        // cross checks
+        } else {
+            return Jwks.checks[name]( data, { update: false, opCheck: true }).then(( errs ) => {
+                if( errs ){
+                    errors = errors.concat( errs );
+                }
+            });
+        }
+    };
+    const keygripCheck = async function( name, item, fldName ){
+        const itemrv = new ReactiveVar( item );
+        const keygripData = {
+            ...data,
+            item: itemrv
+        }
+        // field check
+        if( fldName ){
+            return Keygrips.checks[name]( item[fldName], keygripData, { update: false, opCheck: true }).then(( errs ) => {
+                if( errs ){
+                    errors = errors.concat( errs );
+                }
+            });
+        // cross checks
+        } else {
+            return Keygrips.checks[name]( data, { update: false, opCheck: true }).then(( errs ) => {
+                if( errs ){
+                    errors = errors.concat( errs );
+                }
+            });
+        }
     }
     // check all organization datas
     let promises = [];
@@ -59,22 +106,48 @@ Organizations.isOperational = async function( organization ){
     // introspection_endpoint_auth_signing_alg_values_supported
     promises.push( fnCheck( 'issuer', organization.record.issuer ));
     promises.push( fnCheck( 'jwks_uri', organization.record.jwks_uri ));
-    // jwks.$.alg
-    // jwks.$.endingAt
-    // jwks.$.id
-    // jwks.$.kid
-    // jwks.$.kty
-    // jwks.$.label
-    // jwks.$.startingAt
-    // jwks.$.use
-    // keygrips.$.alg
-    // keygrips.$.encoding
-    // keygrips.$.id
-    // keygrips.$.keylist.$.endingAt
-    // keygrips.$.keylist.$.label
-    // keygrips.$.keylist.$.startingAt
-    // keygrips.$.label
-    // keygrips.$.size
+    // JSON Web Key Set is an optional feature
+    const jwks = Jwks.fn.activeKeys( organization );
+    if( jwks.length ){
+        for( const it of jwks ){
+            promises.push( jwkCheck( 'jwk_alg', it, 'alg' ));
+            promises.push( jwkCheck( 'jwk_endingAt', it, 'endingAt' ));
+            promises.push( jwkCheck( 'jwk_kid', it, 'kid' ));
+            promises.push( jwkCheck( 'jwk_kty', it, 'kty' ));
+            promises.push( jwkCheck( 'jwk_label', it, 'label' ));
+            promises.push( jwkCheck( 'jwk_startingAt', it, 'startingAt' ));
+            promises.push( jwkCheck( 'jwk_use', it, 'use' ));
+            promises.push( jwkCheck( 'crossCheckProperties', it ));
+        }
+    } else {
+        errors.push( new TM.TypedMessage({
+            level: TM.MessageLevel.C.WARNING,
+            message: pwixI18n.label( I18N, 'organizations.checks.jwks_unset' )
+        }));
+    }
+    // though keygrips is theorically optional, we make it mandatory to help to prevent a security hole
+    const keygrips = Keygrips.fn.activeKeys( organization );
+    if( keygrips.length ){
+        for( const it of keygrips ){
+            promises.push( keygripCheck( 'keygrip_alg', it, 'alg' ));
+            promises.push( keygripCheck( 'keygrip_encoding', it, 'encoding' ));
+            promises.push( keygripCheck( 'keygrip_label', it, 'label' ));
+            promises.push( keygripCheck( 'keygrip_size', it, 'size' ));
+            for( const secret in keygrips.keylist ){
+                promises.push( keygripCheck( 'keygrip_secret_endingAt', secret, 'endingAt' ));
+                promises.push( keygripCheck( 'keygrip_secret_hash', secret, 'hash' ));
+                promises.push( keygripCheck( 'keygrip_secret_label', secret, 'label' ));
+                promises.push( keygripCheck( 'keygrip_secret_secret', secret, 'secret' ));
+                promises.push( keygripCheck( 'keygrip_secret_startingAt', secret, 'startingAt' ));
+                promises.push( keygripCheck( 'crossCheckSecretProperties', secret ));
+            }
+        }
+    } else {
+        errors.push( new TM.TypedMessage({
+            level: TM.MessageLevel.C.WARNING,
+            message: pwixI18n.label( I18N, 'organizations.checks.keygrips_unset' )
+        }));
+    }
     promises.push( fnCheck( 'registration_endpoint', organization.record.registration_endpoint ));
     // request_object_signing_alg_values_supported
     promises.push( fnCheck( 'revocation_endpoint', organization.record.revocation_endpoint ));
@@ -85,6 +158,12 @@ Organizations.isOperational = async function( organization ){
     // signed_metadata
     promises.push( fnCheck( 'token_endpoint', organization.record.token_endpoint ));
     // token_endpoint_auth_signing_alg_values_supported
+    promises.push( fnCheck( 'ttl_AccessToken', organization.record.ttl_AccessToken ));
+    promises.push( fnCheck( 'ttl_ClientCredentials', organization.record.ttl_ClientCredentials ));
+    promises.push( fnCheck( 'ttl_Grant', organization.record.ttl_Grant ));
+    promises.push( fnCheck( 'ttl_IdToken', organization.record.ttl_IdToken ));
+    promises.push( fnCheck( 'ttl_Interaction', organization.record.ttl_Interaction ));
+    promises.push( fnCheck( 'ttl_Session', organization.record.ttl_Session ));
     // ui_locales_supported
     promises.push( fnCheck( 'userinfo_endpoint', organization.record.userinfo_endpoint ));
     promises.push( fnCheck( 'wantsPkce', organization.record.wantsPkce ));

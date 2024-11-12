@@ -131,23 +131,6 @@ Keygrips.checks = {
         return null;
     },
 
-    // keygrip secret optional starting date
-    async keygrip_secret_startingAt( value, data, opts ){
-        _assert_data_itemrv( 'Keygrips.checks.keygrip_secret_startingAt()', data );
-        let item = data.item.get();
-        if( opts.update !== false ){
-            item.startingAt = value ? new Date( value ) : null;
-            data.item.set( item );
-        }
-        if( value ){
-            return DateJs.isValid( value ) ? null : new TM.TypedMessage({
-                level: TM.MessageLevel.C.ERROR,
-                message: pwixI18n.label( I18N, 'keygrips.checks.keygrip_starting_invalid' )
-            });
-        }
-        return null;
-    },
-
     // keygrip secret hash
     async keygrip_secret_hash( value, data, opts ){
         _assert_data_itemrv( 'Keygrips.checks.keygrip_secret_hash()', data );
@@ -177,6 +160,23 @@ Keygrips.checks = {
         if( opts.update !== false ){
             item.secret = value;
             data.item.set( item );
+        }
+        return null;
+    },
+
+    // keygrip secret optional starting date
+    async keygrip_secret_startingAt( value, data, opts ){
+        _assert_data_itemrv( 'Keygrips.checks.keygrip_secret_startingAt()', data );
+        let item = data.item.get();
+        if( opts.update !== false ){
+            item.startingAt = value ? new Date( value ) : null;
+            data.item.set( item );
+        }
+        if( value ){
+            return DateJs.isValid( value ) ? null : new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'keygrips.checks.keygrip_starting_invalid' )
+            });
         }
         return null;
     },

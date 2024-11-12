@@ -856,7 +856,7 @@ Organizations.checks = {
         let entity = data.entity.get();
         let item = entity.DYN.records[data.index].get();
         if( opts.update !== false ){
-            item.ttl_Interaction = parseInt( value );
+            item.ttl_Session = parseInt( value );
             data.entity.set( entity );
         }
         value = parseInt( value );
