@@ -17,7 +17,7 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 
 import { IdentityGroupType } from '/imports/common/definitions/identity-group-type.def.js';
 
-import '/imports/client/components/groups_tree_select/groups_tree_select.js';
+import '/imports/client/components/groups_tree_checked/groups_tree_checked.js';
 
 import './identity_groups_pane.html';
 
@@ -56,8 +56,8 @@ Template.identity_groups_pane.helpers({
         return pwixI18n.label( I18N, arg.hash.key );
     },
 
-    // parms for groups_tree_select
-    parmsTreeSelect(){
+    // parms for groups_tree_checked
+    parmsTreeChecked(){
         return {
             groupsRv: Template.instance().APP.groups,
             groupsDef: IdentityGroupType,
@@ -69,7 +69,7 @@ Template.identity_groups_pane.helpers({
 });
 
 Template.identity_groups_pane.events({
-    'groups-selected .c-identity-groups-pane'( event, instance, data ){
+    'groups-checked .c-identity-groups-pane'( event, instance, data ){
         this.item.get().DYN.memberOf = data.memberOf;
     }
 });

@@ -6,8 +6,8 @@
  * - or with a selection tree
  * 
  * Parms:
+ * - inputId: the identitifier to be set on INPUT field, or none
  * - organization: an entity with its DYN sub-object
- * - groups: the groups
  * - selected: the currently selected (identities) group id
  * - disabled: whether this component should be disabled, defaulting to false
  * 
@@ -32,8 +32,35 @@ Template.identities_group_select.onCreated( function(){
     const self = this;
 
     self.APP = {
+        organization: new ReactiveVar( null ),
+        groups: new ReactiveVar( null ),
         selected: new ReactiveVar( null )
     };
+
+    // address the organization saved entity
+    self.autorun(() => {
+        const entity = Template.currentData().organization;
+        if( entity ){
+            self.APP.organization.set( TenantsManager.list.byEntity( entity._id ));
+        }
+    });
+
+    // address the identities groups
+    self.autorun(() => {
+        const organization = self.APP.organization.get();
+        if( organization ){
+            self.APP.groups.set( organization.DYN.identities_groups.get());
+        }
+    });
+
+    // have the initial selection (if any)
+    self.autorun(() => {
+        const organization = self.APP.organization.get();
+        const selectedId = Template.currentData().selected;
+        if( organization && selectedId ){
+            self.APP.selected.set( organization.DYN.identities_groups.byId( selectedId ));
+        }
+    });
 });
 
 Template.identities_group_select.onRendered( function(){
@@ -43,20 +70,6 @@ Template.identities_group_select.onRendered( function(){
     self.autorun(() => {
         const selected = self.APP.selected.get();
         self.$( '.c-identities-group-select' ).trigger( 'identities-group-selected', { selected: selected });
-    });
-
-    // setup the selected label (if any)
-    self.autorun(() => {
-        const selected = Template.currentData().selected;
-        if( selected ){
-            Meteor.callAsync( 'identities_groups.getBy', Template.currentData().organization._id, { _id: selected }).then(( res ) => {
-                if( res && res.length ){
-                    self.APP.selected.set( res[0] );
-                } else {
-                    console.warn( 'IdentitiesGroups not found', selected );
-                }
-            });
-        }
     });
 });
 
@@ -80,9 +93,8 @@ Template.identities_group_select.helpers({
 Template.identities_group_select.events({
     'click .js-tree'( event, instance ){
         Modal.run({
-            ...this,
-            groupTypeDef: IdentityGroupType,
-            withIdentities: false,
+            groupsRv: instance.APP.groups,
+            groupsDef: IdentityGroupType,
             selectedRv: instance.APP.selected,
             mdBody: 'group_select_dialog',
             mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],

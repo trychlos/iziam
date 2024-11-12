@@ -13,17 +13,15 @@ import { strict as assert } from 'node:assert';
 
 import { pwixI18n } from 'meteor/pwix:i18n';
 
-import '/imports/client/components/groups_tree/groups_tree.js';
+import '/imports/client/components/groups_tree_select/groups_tree_select.js';
 
 import './group_hierarchy_pane.html';
 
 Template.group_hierarchy_pane.helpers({
-    parmsTree(){
+    parmsTreeSelect(){
         return {
             ...this,
-            editable: false,
-            withCheckboxes: false,
-            selected: this.selectedRv.get(),
+            selected: this.selectedRv.get()?._id,
             noDataText: pwixI18n.label( I18N, 'groups.tree.no_data_two' )
         };
     }

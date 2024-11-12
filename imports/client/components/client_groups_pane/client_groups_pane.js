@@ -18,7 +18,7 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 
 import { ClientGroupType } from '/imports/common/definitions/client-group-type.def.js';
 
-import '/imports/client/components/groups_tree_select/groups_tree_select.js';
+import '/imports/client/components/groups_tree_checked/groups_tree_checked.js';
 
 import './client_groups_pane.html';
 
@@ -50,8 +50,8 @@ Template.client_groups_pane.helpers({
         return pwixI18n.label( I18N, arg.hash.key );
     },
 
-    // parms for groups_tree_select
-    parmsTreeSelect(){
+    // parms for groups_tree_checked
+    parmsTreeChecked(){
         return {
             groupsRv: Template.instance().APP.groups,
             groupsDef: ClientGroupType,
@@ -63,7 +63,7 @@ Template.client_groups_pane.helpers({
 });
 
 Template.client_groups_pane.events({
-    'groups-selected .c-client-groups-pane'( event, instance, data ){
+    'groups-checked .c-client-groups-pane'( event, instance, data ){
         this.entity.get().DYN.memberOf = data.memberOf;
     }
 });

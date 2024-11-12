@@ -20,6 +20,8 @@ import { TenantsManager } from 'meteor/pwix:tenants-manager';
 
 import { HmacEncoding } from '/imports/common/definitions/hmac-encoding.def.js';
 
+import { Keygrips } from '/imports/common/tables/keygrips/index.js';
+
 import '/imports/client/components/hmac_alg_select/hmac_alg_select.js';
 import '/imports/client/components/hmac_encoding_select/hmac_encoding_select.js';
 import '/imports/client/components/keygrip_secret_new_button/keygrip_secret_new_button.js';
@@ -32,29 +34,25 @@ Template.keygrip_secret_properties_pane.onCreated( function(){
     //console.debug( this );
 
     self.APP = {
+        fields: {
+            'keygrips.$.keylist.$.label': {
+                js: '.js-label',
+                formTo( $node, item ){
+                    $node.val( item.label );
+                }
+            },
+            'keygrips.$.keylist.$.startingAt': {
+                js: '.js-starting'
+            },
+            'keygrips.$.keylist.$.endingAt': {
+                js: '.js-ending'
+            }
+        },
         // the Form.Checker instance for this panel
         checker: new ReactiveVar( null ),
         // the generated { secret, hash }
         result: new ReactiveVar( null )
     };
-
-    /*
-    // generate a new secret and its hash
-    self.autorun(() => {
-        const keygrip = Template.currentData().keygripRv.get();
-        KeygripSecrets.fn.generateSecret( keygrip ).then(( res ) => {
-            self.APP.result.set( res );
-        });
-    });
-
-    // update the item accordingly
-    self.autorun(() => {
-        const res = self.APP.result.get();
-        let item = Template.currentData().item.get();
-        item.secret = res.secret;
-        item.hash = res.hash;
-    });
-    */
 });
 
 Template.keygrip_secret_properties_pane.onRendered( function(){
@@ -70,46 +68,14 @@ Template.keygrip_secret_properties_pane.onRendered( function(){
             const itemRv = Template.currentData().item;
             self.APP.checker.set( new Forms.Checker( self, {
                 parent: parentChecker,
-                panel: new Forms.Panel({
-                    'keygrips.$.keylist.$.label': {
-                        js: '.js-label',
-                        formTo( $node, item ){
-                            $node.val( item.label );
-                        }
-                    },
-                    'keygrips.$.keylist.$.startingAt': {
-                        js: '.js-starting',
-                        formTo( $node, item ){
-                            $node.val( item.startingAt );
-                        }
-                    },
-                    'keygrips.$.keylist.$.endingAt': {
-                        js: '.js-ending',
-                        formTo( $node, item ){
-                            $node.val( item.endingAt );
-                        }
-                        /*
-                    },
-                    'keygrips.$.keylist.$.secret': {
-                        js: '.js-secret',
-                        formTo( $node, item ){
-                            $node.val( item.secret );
-                        }
-                    },
-                    'keygrips.$.keylist.$.hash': {
-                        js: '.js-hash',
-                        formTo( $node, item ){
-                            $node.val( item.hash );
-                        }
-                            */
-                    }
-                }, TenantsManager.Records.fieldSet.get()),
+                panel: new Forms.Panel( self.APP.fields, TenantsManager.Records.fieldSet.get()),
                 data: {
                     container: Template.currentData().container,
                     item: itemRv,
                     keygripRv: Template.currentData().keygripRv
                 },
-                setForm: itemRv.get()
+                setForm: itemRv.get(),
+                crossCheckFn: Keygrips.checks.crossCheckSecretProperties
             }));
         }
     });
@@ -132,6 +98,8 @@ Template.keygrip_secret_properties_pane.helpers({
     // parms for the DateInput
     parmsEndingDate(){
         return {
+            id: 'keygrip-secret-ending',
+            value: this.item.get().endingAt,
             placeholder: pwixI18n.label( I18N, 'keygrips.edit.ending_ph' ),
             withHelp: true
         };
@@ -140,6 +108,8 @@ Template.keygrip_secret_properties_pane.helpers({
     // parms for the DateInput
     parmsStartingDate(){
         return {
+            id: 'keygrip-secret-starting',
+            value: this.item.get().startingAt,
             placeholder: pwixI18n.label( I18N, 'keygrips.edit.starting_ph' ),
             withHelp: true
         };

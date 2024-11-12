@@ -65,7 +65,8 @@ Template.resource_properties_pane.onRendered( function(){
                     entity: Template.currentData().entity,
                     item: itemRv
                 },
-                setForm: itemRv.get()
+                setForm: itemRv.get(),
+                crossCheckFn: Resources.checks.crossCheckProperties
             }));
         }
     });
@@ -80,6 +81,8 @@ Template.resource_properties_pane.helpers({
     // parms for the DateInput
     parmsEndDate(){
         return {
+            id: 'resource-ending',
+            value: this.item.get().endingAt,
             placeholder: pwixI18n.label( I18N, 'resources.edit.ending_ph' ),
             withHelp: true
         };
@@ -88,6 +91,8 @@ Template.resource_properties_pane.helpers({
     // parms for the DateInput
     parmsStartDate(){
         return {
+            id: 'resource-starting',
+            value: this.item.get().startingAt,
             placeholder: pwixI18n.label( I18N, 'resources.edit.starting_ph' ),
             withHelp: true
         };
@@ -95,12 +100,6 @@ Template.resource_properties_pane.helpers({
 });
 
 Template.resource_properties_pane.events({
-    /*
-    // generate the resource
-    'click .js-generate'( event, instance ){
-        instance.APP.generate( this.item );
-    },
-    */
     // reset the algorithm on any change on usage or crypto family
     'resource-use-selected .c-resource-properties-pane'( event, instance, data ){
         instance.APP.resetAlg( this.item.get());

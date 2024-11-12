@@ -113,8 +113,6 @@ Template.authorization_properties_pane.onRendered( function(){
     const self = this;
 
     // initialize the Checker for this panel as soon as we get the parent Checker
-    // NB: cannot use Forms.FormField defaults as the schema name addresses the full Organization record
-    //  while this panel only addresses a single JWK
     self.autorun(() => {
         const parentChecker = Template.currentData().checker?.get();
         const checker = self.APP.checker.get();
@@ -148,18 +146,18 @@ Template.authorization_properties_pane.helpers({
 
     // whether the object type is a client ?
     objectClient(){
-        return this.item.get().object_type === 'C';
+        return Boolean( this.item.get().object_type === 'C' );
     },
 
     // whether the object type is neither a client nor a resource ?
     objectNone(){
         const type = this.item.get().object_type;
-        return type !== 'C' && type !== 'R';
+        return Boolean( type !== 'C' && type !== 'R' );
     },
 
     // whether the object type is a resource ?
     objectResource(){
-        return this.item.get().object_type === 'R';
+        return Boolean( this.item.get().object_type === 'R' );
     },
 
     // parms for the AuthObject type selection box
@@ -183,7 +181,7 @@ Template.authorization_properties_pane.helpers({
     // parms for the client selection box
     parmsClientSelect(){
         return {
-            ...this,
+            organization: this.entity,
             list: Template.instance().APP.organization.get().DYN.clients.get(),
             selected: this.item.get().object_id
         };
@@ -192,8 +190,8 @@ Template.authorization_properties_pane.helpers({
     // parms for the clientsGroups selection box
     parmsClientsGroupSelect(){
         return {
+            inputId: 'authorization-subject-id',
             organization: this.entity,
-            groups: Template.instance().APP.organization.get().DYN.clients_groups.get(),
             selected: this.item.get().subject_id
         };
     },
@@ -201,6 +199,8 @@ Template.authorization_properties_pane.helpers({
     // parms for the DateInput
     parmsEndDate(){
         return {
+            id: 'authorization-ending',
+            value: this.item.get().endingAt,
             placeholder: pwixI18n.label( I18N, 'authorizations.edit.ending_ph' ),
             withHelp: true
         };
@@ -209,8 +209,8 @@ Template.authorization_properties_pane.helpers({
     // parms for the identitiesGroups selection box
     parmsIdentitiesGroupSelect(){
         return {
+            inputId: 'authorization-subject-id',
             organization: this.entity,
-            groups: Template.instance().APP.organization.get().DYN.identities_groups.get(),
             selected: this.item.get().subject_id
         };
     },
@@ -227,6 +227,8 @@ Template.authorization_properties_pane.helpers({
     // parms for the DateInput
     parmsStartDate(){
         return {
+            id: 'authorization-starting',
+            value: this.item.get().startingAt,
             placeholder: pwixI18n.label( I18N, 'authorizations.edit.starting_ph' ),
             withHelp: true
         };
@@ -234,18 +236,18 @@ Template.authorization_properties_pane.helpers({
 
     // whether the authorization subject is clients groups ?
     subjectClients(){
-        return this.item.get().subject_type === 'C';
+        return Boolean( this.item.get().subject_type === 'C' );
     },
 
     // whether the authorization subject is identities groups ?
     subjectIdentities(){
-        return this.item.get().subject_type === 'I';
+        return Boolean( this.item.get().subject_type === 'I' );
     },
 
     // have a disabled input field while no subject type is selected
     subjectNone(){
         const type = this.item.get().subject_type;
-        return type !== 'I' && type !== 'C';
+        return Boolean( type !== 'I' && type !== 'C' );
     }
 });
 

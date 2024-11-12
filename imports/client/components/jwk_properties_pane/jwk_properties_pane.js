@@ -69,16 +69,10 @@ Template.jwk_properties_pane.onCreated( function(){
                 }
             },
             'jwks.$.startingAt': {
-                js: '.js-starting',
-                formTo( $node, item ){
-                    $node.val( item.expireAt );
-                }
+                js: '.js-starting'
             },
             'jwks.$.endingAt': {
-                js: '.js-ending',
-                formTo( $node, item ){
-                    $node.val( item.expireAt );
-                }
+                js: '.js-ending'
             }
         },
 
@@ -120,7 +114,8 @@ Template.jwk_properties_pane.onRendered( function(){
                     container: Template.currentData().container,
                     item: itemRv
                 },
-                setForm: itemRv.get()
+                setForm: itemRv.get(),
+                crossCheckFn: Jwks.checks.crossCheckProperties
             }));
         }
     });
@@ -135,6 +130,8 @@ Template.jwk_properties_pane.helpers({
     // parms for the DateInput
     parmsEndDate(){
         return {
+            id: 'jwk-ending',
+            value: this.item.get().endingAt,
             placeholder: pwixI18n.label( I18N, 'jwks.edit.ending_ph' ),
             withHelp: true
         };
@@ -176,6 +173,8 @@ Template.jwk_properties_pane.helpers({
     // parms for the DateInput
     parmsStartDate(){
         return {
+            id: 'jwk-starting',
+            value: this.item.get().startingAt,
             placeholder: pwixI18n.label( I18N, 'jwks.edit.starting_ph' ),
             withHelp: true
         };

@@ -7,7 +7,7 @@
  * Parms:
  * - container: an { entity, record } client object
  * - checker: a ReactiveVar which holds the parent Checker
- * - item: a ReactiveVar which contains the keygrip item to be edited here
+ * - item: a ReactiveVar which contains the secret item to be edited here
  * - isNew: a ReactiveVar which contains a boolean 'isNew' flag
  */
 
@@ -18,6 +18,8 @@ import { Forms } from 'meteor/pwix:forms';
 import { pwixI18n } from 'meteor/pwix:i18n';
 
 import { ClientsRecords } from '/imports/common/collections/clients_records/index.js';
+
+import { ClientSecrets } from '/imports/common/tables/client_secrets/index.js';
 
 import '/imports/client/components/secret_encoding_select/secret_encoding_select.js';
 
@@ -83,23 +85,18 @@ Template.client_secret_properties_pane.onRendered( function(){
                         }
                     },
                     'secrets.$.startingAt': {
-                        js: '.js-starting',
-                        formTo( $node, item ){
-                            $node.val( item.startingAt );
-                        }
+                        js: '.js-starting'
                     },
                     'secrets.$.endingAt': {
-                        js: '.js-ending',
-                        formTo( $node, item ){
-                            $node.val( item.endingAt );
-                        }
+                        js: '.js-ending'
                     }
                 }, ClientsRecords.fieldSet.get()),
                 data: {
                     container: Template.currentData().container,
                     item: itemRv
                 },
-                setForm: itemRv.get()
+                setForm: itemRv.get(),
+                crossCheckFn: ClientSecrets.checks.crossCheckProperties
             }));
         }
     });
@@ -114,6 +111,8 @@ Template.client_secret_properties_pane.helpers({
     // parms for the ending DateInput
     parmsEndingDate(){
         return {
+            id: 'secret-ending',
+            value: this.item.get().endingAt,
             placeholder: pwixI18n.label( I18N, 'clients.secrets.edit.ending_ph' ),
             withHelp: true
         };
@@ -132,6 +131,8 @@ Template.client_secret_properties_pane.helpers({
     // parms for the starting DateInput
     parmsStartingDate(){
         return {
+            id: 'secret-starting',
+            value: this.item.get().startingAt,
             placeholder: pwixI18n.label( I18N, 'clients.secrets.edit.starting_ph' ),
             withHelp: true
         };

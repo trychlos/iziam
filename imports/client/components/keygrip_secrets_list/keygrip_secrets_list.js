@@ -61,7 +61,7 @@ Template.keygrip_secrets_list.events({
 
     // edit a key (i.e. label and expiration)
     'tabular-edit-event .c-keygrip-secrets-list'( event, instance, data ){
-        console.debug( this );
+        //console.debug( this );
         Modal.run({
             ...this,
             mdBody: 'keygrip_secret_edit_dialog',

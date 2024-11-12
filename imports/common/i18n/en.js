@@ -71,7 +71,7 @@ Meteor.APP.i18n = {
                     object_id_unknown: 'The object identifier is not known',
                     object_id_unset: 'The object identifier is not set',
                     object_label_unknown: 'The object label is not known',
-                    object_label_unset: 'The object label is not set',
+                    object_label_unset: 'The object is not set',
                     object_type_unknown: 'The object type is not known',
                     object_type_unset: 'The object type is not set',
                     permission_exists: 'The permission already exists',
@@ -81,7 +81,7 @@ Meteor.APP.i18n = {
                     subject_id_unknown: 'The subject identifier is not known',
                     subject_id_unset: 'The subject identifier is not set',
                     subject_label_unknown: 'The subject label is not known',
-                    subject_label_unset: 'The subject label is not set',
+                    subject_label_unset: 'The subject is not set',
                     subject_type_unknown: 'The subject type is not known',
                     subject_type_unset: 'The subject type is not set',
                     unknown_error: 'unknown (but most probably code) error'
@@ -473,15 +473,16 @@ Meteor.APP.i18n = {
                 },
                 secrets: {
                     checks: {
+                        ending_invalid: 'Ending date is not valid',
                         secret_alg_invalid: 'The secret algorithm is invalid',
                         secret_alg_unset: 'The secret algorithm is not set',
                         secret_encoding_invalid: 'The secret encoding is invalid',
                         secret_encoding_unset: 'The secret encoding is not set',
-                        ending_before: 'Ending date must be equal or after starting date',
                         secret_size_invalid: 'The secret size is invalid (must be a positive integer)',
                         secret_size_mini: 'The secret size must be greater than %s',
                         secret_size_unset: 'The secret size is not set',
-                        starting_after: 'Starting date must be equal or before ending date'
+                        starting_ending: 'Starting date should be lesser than or equal to ending date',
+                        starting_invalid: 'Starting date is not valid'
                     },
                     edit: {
                         alg_label: 'Algorithm :',
@@ -1090,19 +1091,20 @@ Meteor.APP.i18n = {
             },
             jwks: {
                 checks: {
+                    ending_invalid: 'Ending date is not valid',
                     jwk_alg_invalid: 'JWK algorithm "%s" is not valid',
                     jwk_alg_unset: 'JWK algorithm is not set',
-                    jwk_ending_before: 'Ending date must be equal or after starting date',
                     jwk_kid_empty: 'An existing JSON Web Key without Key Identifier prevents from being able to create a new key',
                     jwk_kid_exists: 'The Key identifier already exists',
                     jwk_kid_unset: 'The Key identifier is not set. This is only accepted as long as your set has a single key',
                     jwk_kty_invalid: 'JWK type "%s" is not valid',
                     jwk_kty_unset: 'JWK type is not set',
                     jwk_not_permitted: 'Creating a new JSON Web Key is not allowed. Please contact your administrator',
-                    jwk_starting_after: 'Starting date must be equal or before ending date',
                     jwk_use_invalid: 'JWK usage "%s" is not valid',
-                    jwk_use_unset: 'JWK usage is not set'
-                },
+                    jwk_use_unset: 'JWK usage is not set',
+                    starting_ending: 'Starting date should be lesser than or equal to ending date',
+                    starting_invalid: 'Starting date is not valid'
+            },
                 edit: {
                     alg_label: 'Algorithm :',
                     alg_title: 'The algorithm to be chosen to sign or encrypt the key',
@@ -1163,11 +1165,12 @@ Meteor.APP.i18n = {
                     keygrip_alg_unset: 'The keygrip algorithm is not set',
                     keygrip_encoding_invalid: 'The keygrip encoding is invalid',
                     keygrip_encoding_unset: 'The keygrip encoding is not set',
-                    keygrip_ending_before: 'Ending date must be equal or after starting date',
+                    keygrip_ending_invalid: 'Ending date is not valid',
                     keygrip_size_invalid: 'The keygrip secret size is invalid (must be a positive integer)',
                     keygrip_size_mini: 'The keygrip secret size must be greater than %s',
                     keygrip_size_unset: 'The keygrip secret size is not set',
-                    keygrip_starting_after: 'Starting date must be equal or before ending date'
+                    keygrip_starting_ending: 'Starting date should be lesser than or equal to ending date',
+                    keygrip_starting_invalid: 'Starting date is not valid'
                 },
                 edit: {
                     alg_label: 'Algorithm :',
@@ -1526,8 +1529,11 @@ Meteor.APP.i18n = {
             },
             resources: {
                 checks: {
+                    ending_invalid: 'Ending date is not valid',
                     name_exists: 'The resource name already exists',
-                    name_unset: 'The resource name is not set'
+                    name_unset: 'The resource name is not set',
+                    starting_ending: 'Starting date should be lesser than or equal to ending date',
+                    starting_invalid: 'Starting date is not valid'
                 },
                 edit: {
                     edit_success: 'The resource "%s" has been successfully updated',

@@ -4,9 +4,10 @@
  * Acts as a standard select box, letting the user select a single (group) item of the tree.
  * 
  * Parms:
- * - organization: the Organization as an entity with its DYN.records array
- * - groups: the groups from the registrar
- * - selectedRv: a ReactiveVar where to get/set the newly selected group identifier
+ * - treeName: an optional name to be displayed in debug messages
+ * - groupsRv: a ReactiveVar which contains the groups of the organization
+ * - groupsDef: the definition of the target groups type
+ * - selectedRv: a ReactiveVar where to get/set the newly selected group
  */
 
 import _ from 'lodash';
@@ -25,14 +26,8 @@ Template.group_select_dialog.onCreated( function(){
         isModal: new ReactiveVar( false ),
         // the entity tabbed
         tabbed: new Tabbed.Instance( self, { name: 'group_select_dialog' }),
-        // the current tree selected node
-        tree_selected: new ReactiveVar( null ),
-
-        // return the selected item
-        selectedItem(){
-            const node = self.APP.tree_selected.get();
-            return node ? node.original.doc : null;
-        }
+        // the current selected group
+        selected: new ReactiveVar( null )
     };
 
     // initialize the Tabbed.Instance
@@ -86,7 +81,7 @@ Template.group_select_dialog.events({
     'iz-submit .c-group-select-dialog'( event, instance ){
         const rv = this.selectedRv;
         if( rv ){
-            rv.set( instance.APP.selectedItem());
+            rv.set( instance.APP.selected.get());
         }
         const closeFn = function(){
             if( instance.APP.isModal.get()){
@@ -98,7 +93,7 @@ Template.group_select_dialog.events({
         closeFn();
     },
 
-    'tree-rowselect .c-group-select-dialog'( event, instance, data ){
-        instance.APP.tree_selected.set( data.node );
+    'group-selected .c-group-select-dialog'( event, instance, data ){
+        instance.APP.selected.set( data.selected );
     }
 });

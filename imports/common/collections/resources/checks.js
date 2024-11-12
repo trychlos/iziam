@@ -5,6 +5,7 @@
 import _ from 'lodash';
 import { strict as assert } from 'node:assert';
 
+import { DateJs } from 'meteor/pwix:date';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { TM } from 'meteor/pwix:typed-message';
@@ -19,6 +20,34 @@ const _assert_data_itemrv = function( caller, data ){
 };
 
 Resources.checks = {
+
+    // cross checks
+    async crossCheckProperties( data, opts={} ){
+        let result = [];
+        const _check = async function( fn ){
+            let res = await fn( data, opts );
+            if( res ){
+                res = _.isArray( res ) ? res : [ res ];
+                result = result.concat( res );
+            }
+        };
+        await _check( Resources.checks.crossCheckStartingEnding );
+        return result.length ? result : null;
+    },
+
+    // compare starting vs ending secret dates
+    async crossCheckStartingEnding( data, opts={} ){
+        const item = data.item.get()
+        if( item.startingAt && item.endingAt ){
+            const cmp = DateJs.compare( item.startingAt, item.endingAt );
+            return cmp <= 0 ? null : new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'resources.checks.starting_ending' )
+            });
+        }
+        return null;
+    },
+
     // an optional label
     async label( value, data, opts={} ){
         _assert_data_itemrv( 'Resources.checks.label()', data );
@@ -68,10 +97,14 @@ Resources.checks = {
         _assert_data_itemrv( 'Resources.checks.endingAt()', data );
         let item = data.item.get();
         if( opts.update !== false ){
-            item.endingAt = new Date( value );
+            item.endingAt = value ? new Date( value ) : null;
             data.item.set( item );
         }
         if( value ){
+            return DateJs.isValid( value ) ? null : new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'resources.checks.ending_invalid' )
+            });
         }
         return null;
     },
@@ -82,10 +115,14 @@ Resources.checks = {
         _assert_data_itemrv( 'Resources.checks.startingAt()', data );
         let item = data.item.get();
         if( opts.update !== false ){
-            item.startingAt = new Date( value );
+            item.startingAt = value ? new Date( value ) : null;
             data.item.set( item );
         }
         if( value ){
+            return DateJs.isValid( value ) ? null : new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'resources.checks.starting_invalid' )
+            });
         }
         return null;
     }

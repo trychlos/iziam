@@ -31,6 +31,33 @@ const _assert_data_itemrv = function( caller, data ){
 
 ClientSecrets.checks = {
 
+    // cross checks
+    async crossCheckProperties( data, opts={} ){
+        let result = [];
+        const _check = async function( fn ){
+            let res = await fn( data, opts );
+            if( res ){
+                res = _.isArray( res ) ? res : [ res ];
+                result = result.concat( res );
+            }
+        };
+        await _check( ClientSecrets.checks.crossCheckStartingEnding );
+        return result.length ? result : null;
+    },
+
+    // compare starting vs ending secret dates
+    async crossCheckStartingEnding( data, opts={} ){
+        const item = data.item.get()
+        if( item.startingAt && item.endingAt ){
+            const cmp = DateJs.compare( item.startingAt, item.endingAt );
+            return cmp <= 0 ? null : new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'clients.secrets.checks.starting_ending' )
+            });
+        }
+        return null;
+    },
+
     /*
     // secret algorithm
     async secret_alg( value, data, opts ){
@@ -85,10 +112,10 @@ ClientSecrets.checks = {
             item.endingAt = value ? new Date( value ) : null;
             data.item.set( item );
         }
-        if( value && item.startingAt ){
-            return DateJs.compare( item.startingAt, item.endingAt ) <= 0 ? null : new TM.TypedMessage({
+        if( value ){
+            return DateJs.isValid( value ) ? null : new TM.TypedMessage({
                 level: TM.MessageLevel.C.ERROR,
-                message: pwixI18n.label( I18N, 'clients.secrets.checks.ending_before' )
+                message: pwixI18n.label( I18N, 'clients.secrets.checks.ending_invalid' )
             });
         }
         return null;
@@ -163,10 +190,10 @@ ClientSecrets.checks = {
             item.startingAt = value ? new Date( value ) : null;
             data.item.set( item );
         }
-        if( value && item.endingAt ){
-            return DateJs.compare( item.startingAt, item.endingAt ) <= 0 ? null : new TM.TypedMessage({
+        if( value ){
+            return DateJs.isValid( value ) ? null : new TM.TypedMessage({
                 level: TM.MessageLevel.C.ERROR,
-                message: pwixI18n.label( I18N, 'clients.secrets.checks.starting_after' )
+                message: pwixI18n.label( I18N, 'clients.secrets.checks.starting_invalid' )
             });
         }
         return null;

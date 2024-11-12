@@ -470,6 +470,11 @@ Template.groups_tree.onRendered( function(){
         }
     });
 
+    // advertise of the tree readyness
+    self.autorun(() => {
+        self.$( '.c-groups-tree' ).trigger( 'tree-ready', { ready: self.APP.tree_ready() });
+    });
+
     // when the tree is ready, advertise of the get function
     self.autorun(() => {
         if( self.APP.tree_ready()){
@@ -559,5 +564,10 @@ Template.groups_tree.events({
     // the parent panel relays that by triggering this event
     'tree-remove-node .c-groups-tree'( event, instance, data ){
         instance.APP.$tree.get().jstree( true ).delete_node( data.node._id );
+    },
+
+    // initial selection by id
+    'tree-select-node .c-groups-tree'( event, instance, data ){
+        instance.APP.$tree.get().jstree( true ).select_node( data.id );
     }
 });

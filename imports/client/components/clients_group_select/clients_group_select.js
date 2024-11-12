@@ -7,7 +7,6 @@
  * 
  * Parms:
  * - organization: an entity with its DYN sub-object
- * - groups: the groups
  * - selected: the currently selected (clients) group id
  * - disabled: whether this component should be disabled, defaulting to false
  * 
@@ -21,6 +20,7 @@ import { strict as assert } from 'node:assert';
 import { Modal } from 'meteor/pwix:modal';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
+import { TenantsManager } from 'meteor/pwix:tenants-manager';
 
 import { ClientGroupType } from '/imports/common/definitions/client-group-type.def.js';
 
@@ -32,8 +32,35 @@ Template.clients_group_select.onCreated( function(){
     const self = this;
 
     self.APP = {
+        organization: new ReactiveVar( null ),
+        groups: new ReactiveVar( null ),
         selected: new ReactiveVar( null )
     };
+
+    // address the organization saved entity
+    self.autorun(() => {
+        const entity = Template.currentData().organization;
+        if( entity ){
+            self.APP.organization.set( TenantsManager.list.byEntity( entity._id ));
+        }
+    });
+
+    // address the identities groups
+    self.autorun(() => {
+        const organization = self.APP.organization.get();
+        if( organization ){
+            self.APP.groups.set( organization.DYN.clients_groups.get());
+        }
+    });
+
+    // have the initial selection (if any)
+    self.autorun(() => {
+        const organization = self.APP.organization.get();
+        const selectedId = Template.currentData().selected;
+        if( organization && selectedId ){
+            self.APP.selected.set( organization.DYN.clients_groups.byId( selectedId ));
+        }
+    });
 });
 
 Template.clients_group_select.onRendered( function(){
@@ -43,20 +70,6 @@ Template.clients_group_select.onRendered( function(){
     self.autorun(() => {
         const selected = self.APP.selected.get();
         self.$( '.c-clients-group-select' ).trigger( 'clients-group-selected', { selected: selected });
-    });
-
-    // setup the selected label (if any)
-    self.autorun(() => {
-        const selected = Template.currentData().selected;
-        if( selected ){
-            Meteor.callAsync( 'clients_groups.getBy', Template.currentData().organization._id, { _id: selected }).then(( res ) => {
-                if( res && res.length ){
-                    self.APP.selected.set( res[0] );
-                } else {
-                    console.warn( 'ClientsGroups not found', selected );
-                }
-            });
-        }
     });
 });
 
@@ -80,9 +93,8 @@ Template.clients_group_select.helpers({
 Template.clients_group_select.events({
     'click .js-tree'( event, instance ){
         Modal.run({
-            ...this,
-            groupTypeDef: ClientGroupType,
-            withClients: false,
+            groupsRv: instance.APP.groups,
+            groupsDef: ClientGroupType,
             selectedRv: instance.APP.selected,
             mdBody: 'group_select_dialog',
             mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],

@@ -7,6 +7,7 @@ import { strict as assert } from 'node:assert';
 
 import { DateJs } from 'meteor/pwix:date';
 import { pwixI18n } from 'meteor/pwix:i18n';
+import { ReactiveVar } from 'meteor/reactive-var';
 import { TM } from 'meteor/pwix:typed-message';
 
 import { HmacAlg } from '/imports/common/definitions/hmac-alg.def.js';
@@ -30,6 +31,33 @@ const _assert_data_itemrv = function( caller, data ){
 }
 
 Keygrips.checks = {
+
+    // cross checks
+    async crossCheckSecretProperties( data, opts={} ){
+        let result = [];
+        const _check = async function( fn ){
+            let res = await fn( data, opts );
+            if( res ){
+                res = _.isArray( res ) ? res : [ res ];
+                result = result.concat( res );
+            }
+        };
+        await _check( Keygrips.checks.crossCheckSecretStartingEnding );
+        return result.length ? result : null;
+    },
+
+    // compare starting vs ending secret dates
+    async crossCheckSecretStartingEnding( data, opts={} ){
+        const item = data.item.get()
+        if( item.startingAt && item.endingAt ){
+            const cmp = DateJs.compare( item.startingAt, item.endingAt );
+            return cmp <= 0 ? null : new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'keygrips.checks.keygrip_starting_ending' )
+            });
+        }
+        return null;
+    },
 
     // keygrip algorithm
     async keygrip_alg( value, data, opts ){
@@ -94,10 +122,10 @@ Keygrips.checks = {
             item.endingAt = value ? new Date( value ) : null;
             data.item.set( item );
         }
-        if( value && item.startingAt ){
-            return DateJs.compare( item.startingAt, item.endingAt ) <= 0 ? null : new TM.TypedMessage({
+        if( value ){
+            return DateJs.isValid( value ) ? null : new TM.TypedMessage({
                 level: TM.MessageLevel.C.ERROR,
-                message: pwixI18n.label( I18N, 'keygrips.checks.keygrip_ending_before' )
+                message: pwixI18n.label( I18N, 'keygrips.checks.keygrip_ending_invalid' )
             });
         }
         return null;
@@ -111,10 +139,10 @@ Keygrips.checks = {
             item.startingAt = value ? new Date( value ) : null;
             data.item.set( item );
         }
-        if( value && item.endingAt ){
-            return DateJs.compare( item.startingAt, item.endingAt ) <= 0 ? null : new TM.TypedMessage({
+        if( value ){
+            return DateJs.isValid( value ) ? null : new TM.TypedMessage({
                 level: TM.MessageLevel.C.ERROR,
-                message: pwixI18n.label( I18N, 'keygrips.checks.keygrip_starting_after' )
+                message: pwixI18n.label( I18N, 'keygrips.checks.keygrip_starting_invalid' )
             });
         }
         return null;
