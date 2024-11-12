@@ -6,15 +6,11 @@ import _ from 'lodash';
 import { strict as assert } from 'node:assert';
 
 import { pwixI18n } from 'meteor/pwix:i18n';
+import { ReactiveVar } from 'meteor/reactive-var';
 import { TM } from 'meteor/pwix:typed-message';
 
 import { OpenID } from '/imports/common/classes/openid.class.js';
 
-import { JwaAlg } from '/imports/common/definitions/jwa-alg.def.js';
-import { JwkKty } from '/imports/common/definitions/jwk-kty.def.js';
-import { JwkUse } from '/imports/common/definitions/jwk-use.def.js';
-import { HmacAlg } from '/imports/common/definitions/hmac-alg.def.js';
-import { HmacEncoding } from '/imports/common/definitions/hmac-encoding.def.js';
 import { HowCount } from '/imports/common/definitions/how-count.def.js';
 
 import { Providers } from '/imports/common/tables/providers/index.js';

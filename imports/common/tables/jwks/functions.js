@@ -23,10 +23,10 @@ Jwks.fn = {
         ( container.record.jwks || [] ).forEach(( jwk ) => {
             let active = true;
             if( active && jwk.startingAt ){
-                active = Boolean( DateJs.compare( jwk.startingAt, Date.now()) <= 0 );
+                active = Boolean( DateJs.compare( jwk.startingAt, new Date()) <= 0 );
             }
             if( active && jwk.endingAt ){
-                active = Boolean( DateJs.compare( jwk.endingAt, Date.now()) >= 0 );
+                active = Boolean( DateJs.compare( jwk.endingAt, new Date()) >= 0 );
             }
             if( active ){
                 result.push( jwk );

@@ -6,6 +6,7 @@ import _ from 'lodash';
 import { strict as assert } from 'node:assert';
 
 import { DateJs } from 'meteor/pwix:date';
+import { Validity } from 'meteor/pwix:validity';
 
 import { ClientSecrets } from './index.js';
 
@@ -18,6 +19,23 @@ ClientSecrets.fn = {
      */
     async generateSecret( item, userId ){
         return Meteor.isClient ? await Meteor.callAsync( 'client_generate_secret', item ) : await ClientSecrets.s.generateSecret( item, userId );
+    },
+
+    /**
+     * @summary Find the active secrets at date
+     * @param {Object} client
+     * @returns {Array<Secret>} the found secret, or an empty array
+     */
+    activeSecrets( client ){
+        const canonical = Validity.getEntityRecord( client );
+        let result = [];
+        const now = new Date();
+        ( canonical.record.secrets || [] ).forEach(( it ) => {
+            if( DateJs.compare( it.startingAt, now ) <= 0 && DateJs.compare( it.endingAt, now, { start: false }) >= 0 ){
+                result.push( it );
+            }
+        });
+        return result;
     },
 
     /**

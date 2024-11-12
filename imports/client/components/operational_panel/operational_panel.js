@@ -30,14 +30,22 @@ Template.operational_panel.onCreated( function(){
         const entityId = Template.currentData().entityId;
         const organization = Template.currentData().organization;
         if( organization ){
-            // handle the client case
+            const org = TenantsManager.list.byEntity( organization.entity._id );
+            if( org ){
+                const entity = org.DYN.clients.byId( entityId );
+                self.APP.entity.set( entity );
+            }
         } else {
             const org = TenantsManager.list.byEntity( entityId );
             if( org ){
                 self.APP.entity.set( org );
-                //console.debug( 'org', org );
             }
         }
+    });
+
+    // track entity
+    self.autorun(() => {
+        //console.debug( 'entity', self.APP.entity.get());
     });
 
     // complete the checks results with a conclusion, counting errors (or above) and warnings
@@ -45,7 +53,7 @@ Template.operational_panel.onCreated( function(){
         let errors = 0;
         let warnings = 0;
         const entity = self.APP.entity.get();
-        if( entity.DYN.operational.stats === false ){
+        if( entity && entity.DYN.operational.stats === false ){
             entity.DYN.operational.results.forEach(( it ) => {
                 // all critical, urgent and alerts are counted as errors
                 if( TM.LevelOrder.compare( it.iTypedMessageLevel(), TM.MessageLevel.C.ERROR ) <= 0 ){

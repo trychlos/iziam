@@ -22,10 +22,10 @@ Keygrips.fn = {
             keylist.forEach(( key ) => {
                 let active = true;
                 if( active && key.startingAt ){
-                    active = Boolean( DateJs.compare( key.startingAt, Date.now()) <= 0 );
+                    active = Boolean( DateJs.compare( key.startingAt, new Date()) <= 0 );
                 }
                 if( active && key.endingAt ){
-                    active = Boolean( DateJs.compare( key.endingAt, Date.now()) >= 0 );
+                    active = Boolean( DateJs.compare( key.endingAt, new Date()) >= 0 );
                 }
                 if( active ){
                     activeList.push( key );

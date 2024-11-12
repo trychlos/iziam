@@ -151,9 +151,9 @@ export const AuthMethod = {
 
     /**
      * @param {Object} def a AuthMethod definition as returned by AuthMethod.Knowns()
-     * @returns {Boolean} whether this authentification method makes use of a shared secret, defaulting to true
+     * @returns {Boolean} whether this authentification method needs a (shared) secret, defaulting to true
      */
-    haveSharedSecret( def ){
+    needsSecret( def ){
         return _.isBoolean( def.needsSecret ) ? def.needsSecret : true;
     },
 

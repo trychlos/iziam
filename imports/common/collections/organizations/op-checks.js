@@ -30,7 +30,7 @@ Organizations.isOperational = async function( organization ){
     data.entity.get().DYN = { records: [ new ReactiveVar( organization.record )] };
     // a generic function to call the check functions and get their result
     // the result is pushed as a Promise
-    const fnCheck = async function( name, value ){
+    const fnRecordCheck = async function( name, value ){
         return Organizations.checks[name]( value, data, { update: false, opCheck: true }).then(( errs ) => {
             if( errs ){
                 errors = errors.concat( errs );
@@ -83,29 +83,29 @@ Organizations.isOperational = async function( organization ){
     }
     // check all organization datas
     let promises = [];
-    promises.push( fnCheck( 'authorization_endpoint', organization.record.authorization_endpoint ));
-    promises.push( fnCheck( 'baseUrl', organization.record.baseUrl ));
+    promises.push( fnRecordCheck( 'authorization_endpoint', organization.record.authorization_endpoint ));
+    promises.push( fnRecordCheck( 'baseUrl', organization.record.baseUrl ));
     // code_challenge_methods_supported
-    promises.push( fnCheck( 'dynamicRegistrationByConfidential', organization.record.dynamicRegistrationByConfidential ));
-    promises.push( fnCheck( 'dynamicRegistrationByPublic', organization.record.dynamicRegistrationByPublic ));
-    promises.push( fnCheck( 'dynamicRegistrationByUser', organization.record.dynamicRegistrationByUser ));
-    promises.push( fnCheck( 'end_session_endpoint', organization.record.end_session_endpoint ));
-    promises.push( fnCheck( 'identitiesEmailAddressesIdentifier', organization.record.identitiesEmailAddressesIdentifier ));
-    promises.push( fnCheck( 'identitiesEmailAddressesMaxCount', organization.record.identitiesEmailAddressesMaxCount ));
-    promises.push( fnCheck( 'identitiesEmailAddressesMaxHow', organization.record.identitiesEmailAddressesMaxHow ));
-    promises.push( fnCheck( 'identitiesEmailAddressesMinCount', organization.record.identitiesEmailAddressesMinCount ));
-    promises.push( fnCheck( 'identitiesEmailAddressesMinHow', organization.record.identitiesEmailAddressesMinHow ));
-    promises.push( fnCheck( 'identitiesUsernamesIdentifier', organization.record.identitiesUsernamesIdentifier ));
-    promises.push( fnCheck( 'identitiesUsernamesMaxCount', organization.record.identitiesUsernamesMaxCount ));
-    promises.push( fnCheck( 'identitiesUsernamesMaxHow', organization.record.identitiesUsernamesMaxHow ));
-    promises.push( fnCheck( 'identitiesUsernamesMinCount', organization.record.identitiesUsernamesMinCount ));
-    promises.push( fnCheck( 'identitiesUsernamesMinHow', organization.record.identitiesUsernamesMinHow ));
-    promises.push( fnCheck( 'identitiesIdentifier' ));
-    promises.push( fnCheck( 'introspection_endpoint', organization.record.introspection_endpoint ));
+    promises.push( fnRecordCheck( 'dynamicRegistrationByConfidential', organization.record.dynamicRegistrationByConfidential ));
+    promises.push( fnRecordCheck( 'dynamicRegistrationByPublic', organization.record.dynamicRegistrationByPublic ));
+    promises.push( fnRecordCheck( 'dynamicRegistrationByUser', organization.record.dynamicRegistrationByUser ));
+    promises.push( fnRecordCheck( 'end_session_endpoint', organization.record.end_session_endpoint ));
+    promises.push( fnRecordCheck( 'identitiesEmailAddressesIdentifier', organization.record.identitiesEmailAddressesIdentifier ));
+    promises.push( fnRecordCheck( 'identitiesEmailAddressesMaxCount', organization.record.identitiesEmailAddressesMaxCount ));
+    promises.push( fnRecordCheck( 'identitiesEmailAddressesMaxHow', organization.record.identitiesEmailAddressesMaxHow ));
+    promises.push( fnRecordCheck( 'identitiesEmailAddressesMinCount', organization.record.identitiesEmailAddressesMinCount ));
+    promises.push( fnRecordCheck( 'identitiesEmailAddressesMinHow', organization.record.identitiesEmailAddressesMinHow ));
+    promises.push( fnRecordCheck( 'identitiesUsernamesIdentifier', organization.record.identitiesUsernamesIdentifier ));
+    promises.push( fnRecordCheck( 'identitiesUsernamesMaxCount', organization.record.identitiesUsernamesMaxCount ));
+    promises.push( fnRecordCheck( 'identitiesUsernamesMaxHow', organization.record.identitiesUsernamesMaxHow ));
+    promises.push( fnRecordCheck( 'identitiesUsernamesMinCount', organization.record.identitiesUsernamesMinCount ));
+    promises.push( fnRecordCheck( 'identitiesUsernamesMinHow', organization.record.identitiesUsernamesMinHow ));
+    promises.push( fnRecordCheck( 'identitiesIdentifier' ));
+    promises.push( fnRecordCheck( 'introspection_endpoint', organization.record.introspection_endpoint ));
     // introspection_endpoint_auth_methods_supported
     // introspection_endpoint_auth_signing_alg_values_supported
-    promises.push( fnCheck( 'issuer', organization.record.issuer ));
-    promises.push( fnCheck( 'jwks_uri', organization.record.jwks_uri ));
+    promises.push( fnRecordCheck( 'issuer', organization.record.issuer ));
+    promises.push( fnRecordCheck( 'jwks_uri', organization.record.jwks_uri ));
     // JSON Web Key Set is an optional feature
     const jwks = Jwks.fn.activeKeys( organization );
     if( jwks.length ){
@@ -148,25 +148,25 @@ Organizations.isOperational = async function( organization ){
             message: pwixI18n.label( I18N, 'organizations.checks.keygrips_unset' )
         }));
     }
-    promises.push( fnCheck( 'registration_endpoint', organization.record.registration_endpoint ));
+    promises.push( fnRecordCheck( 'registration_endpoint', organization.record.registration_endpoint ));
     // request_object_signing_alg_values_supported
-    promises.push( fnCheck( 'revocation_endpoint', organization.record.revocation_endpoint ));
+    promises.push( fnRecordCheck( 'revocation_endpoint', organization.record.revocation_endpoint ));
     // revocation_endpoint_auth_methods_supported
     // revocation_endpoint_auth_signing_alg_values_supported
-    promises.push( fnCheck( 'selectedProviders', organization.record.selectedProviders ));
+    promises.push( fnRecordCheck( 'selectedProviders', organization.record.selectedProviders ));
     // service_documentation
     // signed_metadata
-    promises.push( fnCheck( 'token_endpoint', organization.record.token_endpoint ));
+    promises.push( fnRecordCheck( 'token_endpoint', organization.record.token_endpoint ));
     // token_endpoint_auth_signing_alg_values_supported
-    promises.push( fnCheck( 'ttl_AccessToken', organization.record.ttl_AccessToken ));
-    promises.push( fnCheck( 'ttl_ClientCredentials', organization.record.ttl_ClientCredentials ));
-    promises.push( fnCheck( 'ttl_Grant', organization.record.ttl_Grant ));
-    promises.push( fnCheck( 'ttl_IdToken', organization.record.ttl_IdToken ));
-    promises.push( fnCheck( 'ttl_Interaction', organization.record.ttl_Interaction ));
-    promises.push( fnCheck( 'ttl_Session', organization.record.ttl_Session ));
+    promises.push( fnRecordCheck( 'ttl_AccessToken', organization.record.ttl_AccessToken ));
+    promises.push( fnRecordCheck( 'ttl_ClientCredentials', organization.record.ttl_ClientCredentials ));
+    promises.push( fnRecordCheck( 'ttl_Grant', organization.record.ttl_Grant ));
+    promises.push( fnRecordCheck( 'ttl_IdToken', organization.record.ttl_IdToken ));
+    promises.push( fnRecordCheck( 'ttl_Interaction', organization.record.ttl_Interaction ));
+    promises.push( fnRecordCheck( 'ttl_Session', organization.record.ttl_Session ));
     // ui_locales_supported
-    promises.push( fnCheck( 'userinfo_endpoint', organization.record.userinfo_endpoint ));
-    promises.push( fnCheck( 'wantsPkce', organization.record.wantsPkce ));
+    promises.push( fnRecordCheck( 'userinfo_endpoint', organization.record.userinfo_endpoint ));
+    promises.push( fnRecordCheck( 'wantsPkce', organization.record.wantsPkce ));
     await Promise.allSettled( promises );
     //console.debug( 'errors', errors );
     return errors.length ? errors : null;

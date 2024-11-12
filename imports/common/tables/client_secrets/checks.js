@@ -9,7 +9,6 @@ import { DateJs } from 'meteor/pwix:date';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { TM } from 'meteor/pwix:typed-message';
 
-import { HmacAlg } from '/imports/common/definitions/hmac-alg.def.js';
 import { HmacEncoding } from '/imports/common/definitions/hmac-encoding.def.js';
 
 import { ClientSecrets } from './index.js';
@@ -58,30 +57,6 @@ ClientSecrets.checks = {
         return null;
     },
 
-    /*
-    // secret algorithm
-    async secret_alg( value, data, opts ){
-        _assert_data_itemrv( 'ClientSecrets.checks.secret_alg()', data );
-        let item = data.item.get();
-        if( opts.update !== false ){
-            item.alg = value;
-            data.item.set( item );
-        }
-        if( value ){
-            const def = HmacAlg.byId( value );
-            return def ? null : new TM.TypedMessage({
-                level: TM.MessageLevel.C.ERROR,
-                message: pwixI18n.label( I18N, 'clients.secrets.checks.secret_alg_invalid', value )
-            });
-        } else {
-            return new TM.TypedMessage({
-                level: TM.MessageLevel.C.ERROR,
-                message: pwixI18n.label( I18N, 'clients.secrets.checks.secret_alg_unset' )
-            });
-        }
-    },
-    */
-
     // secret encoding
     async secret_encoding( value, data, opts ){
         _assert_data_itemrv( 'ClientSecrets.checks.secret_encoding()', data );
@@ -120,19 +95,6 @@ ClientSecrets.checks = {
         }
         return null;
     },
-
-    /*
-    // secret hash
-    async secret_hash( value, data, opts ){
-        _assert_data_itemrv( 'ClientSecrets.checks.secret_hash()', data );
-        let item = data.item.get();
-        if( opts.update !== false ){
-            item.hash = value;
-            data.item.set( item );
-        }
-        return null;
-    },
-    */
 
     // clear secret as an hex value
     async secret_hex( value, data, opts ){

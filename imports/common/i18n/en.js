@@ -167,6 +167,7 @@ Meteor.APP.i18n = {
                     identity_access_mode_unset: 'The identity access mode is not set',
                     identity_auth_mode_invalid: 'The identity authentication mode is not valid',
                     identity_auth_mode_unset: 'The identity authentication mode is not set',
+                    jwks_unset: 'No JSON Web Key Set is defined',
                     label_exists: 'The label is already used by another client',
                     label_unset: 'The label is not set',
                     logo_host: 'The logo URI wants a hostname',
@@ -182,6 +183,7 @@ Meteor.APP.i18n = {
                     redirect_invalid: 'The redirect URL is not a valid URI',
                     redirect_needed: 'The defined grant flow wants at least one redirection URI',
                     redirect_unset: 'The redirect URL is not set',
+                    secret_unset: 'The client needs a secret but not secret has been defined',
                     tos_host: 'The terms of service URI wants a hostname',
                     tos_https: 'The terms of service URI wants only HTTPS scheme',
                     tos_invalid: 'The terms of service URI is not valid'
