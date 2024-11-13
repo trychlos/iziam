@@ -25,7 +25,9 @@ export const IdentitiesGroups = {
             Tracker.autorun(() => {
                 const fieldSet = IdentitiesGroups.fieldSet.get();
                 if( fieldSet ){
+                    console.debug( 'IdentitiesGroups attaching schema' );
                     c.attachSchema( new SimpleSchema( fieldSet.toSchema()), { replace: true });
+                    console.debug( 'IdentitiesGroups schema attached' );
                     c.attachBehaviour( 'timestampable' );
                 }
             });

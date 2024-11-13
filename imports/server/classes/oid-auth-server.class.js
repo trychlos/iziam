@@ -99,9 +99,10 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
             devInteractions: {
                 enabled: false
             },
-            jwtIntrospection: {
-                enabled: true
-            },
+            // jwtIntrospection is only available in conjuction with introspection
+            //jwtIntrospection: {
+            //    enabled: true
+            //},
             rpInitiatedLogout: {
                 enabled: true,
                 logoutSource: this._logoutSource
