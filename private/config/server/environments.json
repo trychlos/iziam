@@ -16,7 +16,7 @@
                 "",
 				"Please note that the configuration from this folder is ONLY available on the server.",
                 "",
-				"For consistency reasons, the environment keys here should be the same than in maintainer/targets.json.",
+				"The environment keys here should be the same than in maintainer/targets.json.",
                 "",
 				"- uploadUrl: teEditor configuration",
 				"- editable: whether this environment let the user edit the documents through the teEditor, defaulting to false",
