@@ -13,7 +13,9 @@ import { ClientsRecords } from './index.js';
 Tracker.autorun(() => {
     const fieldSet = ClientsRecords.fieldSet?.get();
     if( fieldSet ){
+        console.debug( 'ClientsRecords attaching schema' );
         ClientsRecords.collection.attachSchema( new SimpleSchema( fieldSet.toSchema()), { replace: true });
+        console.debug( 'ClientsRecords schema attached' );
         ClientsRecords.collection.attachBehaviour( 'timestampable', { replace: true });
     }
 });
