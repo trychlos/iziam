@@ -163,7 +163,18 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
         conf.introspectionEndpointAuthEncryptionEncValues = CommonAlgs.introspectionEncryptionEncValues();
 
         // conf.jwks
+        //  enable encryption feature if at least one key is an encryption one
         conf.jwks = Jwks.fn.authKeys( organization );
+        let haveEncryption = false;
+        conf.jwks.keys.every(( it ) => {
+            if( it.use === 'enc' ){
+                haveEncryption = true;
+            }
+            return !haveEncryption;
+        });
+        if( haveEncryption ){
+            conf.features.encryption = { enabled: true };
+        }
 
         // configure signing algorithms for PAR
         // accepted but not considered as of oidc-provider v7
