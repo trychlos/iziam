@@ -9,6 +9,7 @@ import { strict as assert } from 'node:assert';
 import mix from '@vestergaard-company/js-mixin';
 import Provider from 'oidc-provider';
 
+import { EnvSettings } from 'meteor/pwix:env-settings';
 import { WebApp } from 'meteor/webapp';
 
 import { Claim } from '/imports/common/classes/claim.class.js';
@@ -417,6 +418,15 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
         await new OIDLogout( ctx, form ).render();
     }
 
+    // from https://github.com/panva/node-oidc-provider/blob/v7.14.3/docs/README.md#trusting-tls-offloading-proxies
+    // trust the proxy if the environment says so
+    async _trustProxy(){
+        const settings = EnvSettings.environmentSettings();
+        if( settings && settings.proxy === true ){
+            this.#oidc.proxy = true;
+        }
+}
+
     // public data
 
     /**
@@ -466,6 +476,8 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
                 await this._installBodyParser( router );
                 await this._installInteractions( router );
                 await this._installOIDCMiddleware();
+                // from https://github.com/panva/node-oidc-provider/blob/v7.14.3/docs/README.md#trusting-tls-offloading-proxies
+                await this._trustProxy();
                 // from https://github.com/panva/node-oidc-provider/blob/main/example/express.js
                 //  https://v3-migration-docs.meteor.com/breaking-changes/#webapp-switches-to-express
                 //  https://forums.meteor.com/t/what-is-the-meteor-3-express-replacement-for-picker-middleware/61616

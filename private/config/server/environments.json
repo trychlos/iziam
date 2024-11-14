@@ -45,7 +45,8 @@
                 "sender": "izIAM AppAdmin <noreply@trychlos.org",
                 "contact": "p.wieser@trychlos.org",
                 "title": "<span class=\"iziam\">izIAM</span> <i>[pre:0]</i>",
-                "issuer": "https://iziampre0.trychlos.org"
+                "issuer": "https://iziampre0.trychlos.org",
+                "proxy": true
             },
             "prod": {
                 "type": "production",
