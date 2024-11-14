@@ -45,7 +45,11 @@
 |  125 | 2024-11-12 | implement Private Key JWT Client Authentication auth method |
 |  126 | 2024-11-12 | implement Shared secret JWT Client Authentication auth method |
 |  127 | 2024-11-12 | complete organization new assistant |
-|  128 |  |  |
+|  128 | 2024-11-14 | clientId should be importable |
+|  129 | 2024-11-14 | client secrets should be importable / updatable |
+|  130 | 2024-11-14 | client public key should be importable |
+|  131 | 2024-11-14 | organization private/public keys should be importable |
+|  132 |  |  |
 
 ---
 ## Done
