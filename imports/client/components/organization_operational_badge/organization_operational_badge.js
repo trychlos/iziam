@@ -30,15 +30,18 @@ Template.organization_operational_badge.onCreated( function(){
         // - type: the FieldStatus status
         onClick(){
             const item = self.data.item;
-            console.debug( 'item', item );
-            Modal.run({
-                entityId: item.DYN.entity._id,
-                mdBody: 'operational_dialog',
-                mdButtons: [ Modal.C.Button.CLOSE ],
-                mdClasses: 'modal-lg',
-                mdClassesContent: Meteor.APP.runContext.pageUIClasses().join( ' ' ),
-                mdTitle: pwixI18n.label( I18N, 'organizations.tabular.operational_dialog_title' )
-            });
+            if( item.DYN && item.DYN.entity ){
+                Modal.run({
+                    entityId: item.DYN.entity._id,
+                    mdBody: 'operational_dialog',
+                    mdButtons: [ Modal.C.Button.CLOSE ],
+                    mdClasses: 'modal-lg',
+                    mdClassesContent: Meteor.APP.runContext.pageUIClasses().join( ' ' ),
+                    mdTitle: pwixI18n.label( I18N, 'organizations.tabular.operational_dialog_title' )
+                });
+            } else {
+                console.debug( 'no DYN or entity in tabular item', item );
+            }
         }
     };
 });

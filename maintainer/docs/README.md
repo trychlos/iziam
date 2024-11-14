@@ -206,3 +206,11 @@ Use case 1
 
 [pierre@slim14 iziam] $ typeset -i c=0; for f in $(find ./imports/ -type f); do c+=$(wc -l "$f" | cut -d' ' -f1); done; echo $c
 45053
+
+## Metadata
+
+curl --no-progress-meter --verbose http://localhost:3003/v1/ident | jq
+
+curl --no-progress-meter --verbose http://localhost:3003/iziam/openid-configuration | jq
+
+curl --no-progress-meter --verbose https://iziampre0.trychlos.org/devs/openid-configuration | jq

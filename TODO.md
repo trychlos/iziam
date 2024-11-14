@@ -44,7 +44,7 @@
 |  124 | 2024-10-30 | Review client configuration for identities: have a single pane with two fieldsets + have assistant pane |
 |  125 | 2024-11-12 | implement Private Key JWT Client Authentication auth method |
 |  126 | 2024-11-12 | implement Shared secret JWT Client Authentication auth method |
-|  127 | 2024-11-12 | complete organization new assistant |
+|  127 | 2024-11-12 | complete organization new assistant, first being the selected providers |
 |  128 | 2024-11-14 | clientId should be importable |
 |  129 | 2024-11-14 | client secrets should be importable / updatable |
 |  130 | 2024-11-14 | client public key should be importable |
