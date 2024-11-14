@@ -39,11 +39,10 @@ Template.organization_new_assistant_rest.events({
     },
     'assistant-pane-shown .c-organization-new-assistant-rest'( event, instance, data ){
         instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'prev', enable: true });
-        instance.$( '.c-organization-config-rest-panel' ).trigger( 'iz-enable-checks', true );
+        instance.$( '.c-organization-rest-panel' ).trigger( 'iz-enable-checks', true );
     },
     // get the status of the panel checker
     'iz-checker .c-organization-new-assistant-rest'( event, instance, data ){
-        console.debug( event.type, data );
         if( this.parentAPP.assistantStatus.get( 'activePane' ) === 'rest' ){
             instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'next', enable: data.validity });
         } else {

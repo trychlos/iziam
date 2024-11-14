@@ -157,50 +157,44 @@ Organizations.checks = {
             item.baseUrl = value;
             data.entity.set( entity );
         }
-        return Promise.resolve( null )
-            .then(() => {
-                return _check_url( value, { mandatory: true, prefix: 'baseurl' });
-            })
-            .then(( err ) => {
-                if( err ){
-                    return err;
-                } else {
-                    // must have only one level
-                    const idx = value.indexOf( '/', 1 );
-                    if( idx !== -1 ){
-                        return new TM.TypedMessage({
-                            level: TM.MessageLevel.C.ERROR,
-                            message: pwixI18n.label( I18N, 'organizations.checks.baseurl_onelevel' )
-                        });
-                    } else if( Meteor.APP.isReservedWord( value )){
-                        return new TM.TypedMessage({
-                            level: TM.MessageLevel.C.ERROR,
-                            message: pwixI18n.label( I18N, 'organizations.checks.baseurl_reserved' )
-                        });
-                    } else {
-                        const fn = function( result ){
-                            let ok = false;
-                            if( result.length ){
-                                // we have found an existing base url
-                                //  this is normal if the found entity is the same than ours
-                                const found_entity = result[0].entity;
-                                if( item.entity === found_entity ){
-                                    ok = true;
-                                }
-                            } else {
-                                ok = true;
-                            }
-                            return ok ? null : new TM.TypedMessage({
-                                level: TM.MessageLevel.C.ERROR,
-                                message: pwixI18n.label( I18N, 'organizations.checks.baseurl_exists' )
-                            });
-                        };
-                        return Meteor.isClient ?
-                            Meteor.callAsync( 'pwix_tenants_manager_records_getBy', { baseUrl: value }).then(( result ) => { return fn( result ); }) :
-                            fn( TenantsManager.Records.s.getBy({ baseUrl: value }));
-                    }
-                }
+        let res = await _check_url( value, { mandatory: true, prefix: 'baseurl' });
+        if( res ){
+            return res;
+        }
+        // must have only one level
+        const idx = value.indexOf( '/', 1 );
+        if( idx !== -1 ){
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'organizations.checks.baseurl_onelevel' )
             });
+        } else if( Meteor.APP.isReservedWord( value )){
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'organizations.checks.baseurl_reserved' )
+            });
+        } else {
+            const fn = function( result ){
+                let ok = false;
+                if( result.length ){
+                    // we have found an existing base url
+                    //  this is normal if the found entity is the same than ours
+                    const found_entity = result[0].entity;
+                    if( item.entity === found_entity ){
+                        ok = true;
+                    }
+                } else {
+                    ok = true;
+                }
+                return ok ? null : new TM.TypedMessage({
+                    level: TM.MessageLevel.C.ERROR,
+                    message: pwixI18n.label( I18N, 'organizations.checks.baseurl_exists' )
+                });
+            };
+            return Meteor.isClient ?
+                Meteor.callAsync( 'pwix_tenants_manager_records_getBy', { baseUrl: value }).then(( result ) => { return fn( result ); }) :
+                fn( TenantsManager.Records.s.getBy({ baseUrl: value }));
+        }
     },
 
     // whether the organization allow dynamic registration by confidential clients

@@ -65,7 +65,6 @@ Template.client_new_assistant_auth_method.helpers({
             ...this,
             entity: this.parentAPP.entity,
             index: 0,
-            checker: this.parentAPP.assistantCheckerRv,
             isAssistant: true
         };
     }

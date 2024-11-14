@@ -190,6 +190,11 @@ body {
 
 .c-client-new-assistant {
     display: flex;
+    .c-client-new-assistant-introduction .text,
+    .c-client-new-assistant-summary .content .text,
+    .c-client-new-assistant-done .content .text {
+        padding: 0 5em;
+    }
 }
 .c-client-edit-dialog,
 .c-client-new-assistant {
@@ -211,10 +216,6 @@ body {
     }
     .content .text {
         margin-bottom: 0.5em;
-    }
-    .c-client-new-assistant-introduction {
-        justify-content: center;
-        margin-right: 1em;
     }
     .c-client-new-assistant-profile {
         .chooser {
@@ -460,6 +461,11 @@ body {
 .c-organization-new-assistant {
     display: flex;
     min-height: 40em;
+    .c-organization-new-assistant-introduction .text,
+    .c-organization-new-assistant-summary .content .text,
+    .c-organization-new-assistant-done .content .text {
+        padding: 0 5em;
+    }
 }
 
 .tabular-dt-buttons {

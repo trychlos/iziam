@@ -28,7 +28,14 @@ Template.organization_rest_panel.onCreated( function(){
             }
         },
         // the Checker instance
-        checker: new ReactiveVar( null )
+        checker: new ReactiveVar( null ),
+
+        // advertise of the checker status
+        advertise( checker ){
+            const status = checker.status();
+            const validity = checker.validity();
+            self.$( '.c-organization-rest-panel' ).trigger( 'iz-checker', { status: status, validity: validity });
+        }
     };
 });
 
@@ -58,9 +65,7 @@ Template.organization_rest_panel.onRendered( function(){
     self.autorun(() => {
         const checker = self.APP.checker.get();
         if( checker ){
-            const status = checker.status();
-            const validity = checker.validity();
-            self.$( '.c-organization-config-rest-pane' ).trigger( 'iz-checker', { status: status, validity: validity });
+            self.APP.advertise( checker );
         }
     });
 });
@@ -87,7 +92,7 @@ Template.organization_rest_panel.events({
         if( checker ){
             checker.enabled( enabled );
             if( enabled ){
-                checker.check({ update: false });
+                checker.check({ update: false }).then(() => { instance.APP.advertise( checker ); });
             }
         }
         return false;

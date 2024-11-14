@@ -65,7 +65,14 @@ Template.client_properties_panel.onCreated( function(){
             }
         },
         // the Forms.Checker instance
-        checker: new ReactiveVar( null )
+        checker: new ReactiveVar( null ),
+
+        // advertise of the checker validity
+        advertise( checker ){
+            const status = checker.status();
+            const validity = checker.validity();
+            self.$( '.c-client-properties-panel' ).trigger( 'iz-checker', { status: status, validity: validity });
+        }
     };
 
     // update the Panel fields for edit_dialog
@@ -122,9 +129,7 @@ Template.client_properties_panel.onRendered( function(){
     self.autorun(() => {
         const checker = self.APP.checker.get();
         if( checker ){
-            const status = checker.status();
-            const validity = checker.validity();
-            self.$( '.c-client-properties-panel' ).trigger( 'iz-checker', { status: status, validity: validity });
+            self.APP.advertise( checker );
         }
     });
 });
@@ -214,9 +219,12 @@ Template.client_properties_panel.events({
     },
     // ask for enabling the checker (when this panel is used inside of an assistant)
     'iz-enable-checks .c-client-properties-panel'( event, instance, enabled ){
-        instance.APP.checker.get().enabled( enabled );
-        if( enabled ){
-            instance.APP.checker.get().check({ update: false });
+        const checker = instance.APP.checker.get();
+        if( checker ){
+            checker.enabled( enabled );
+            if( enabled ){
+                 checker.check({ update: false }).then(() => { instance.APP.advertise( checker ); });
+            }
         }
         return false;
     }

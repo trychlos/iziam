@@ -22,7 +22,7 @@ import { Organizations } from './index.js';
  * @returns {Array<TypedMessage>} or null
  */
 Organizations.isOperational = async function( organization ){
-    //Meteor.isClient && console.debug( 'Organizations.isOperational', organization );
+    Meteor.isClient && console.debug( 'Organizations.isOperational', organization );
     let errors = [];
     // prepare data for the checks functions
     const data = { entity: new ReactiveVar( null ), index: 0 };
@@ -180,14 +180,15 @@ Organizations.isOperational = async function( organization ){
  * @param {Object} organization as a full entity object with its DYN sub-object
  */
 Organizations.setupOperational = async function( item ){
-    //console.debug( 'Organizations.setupOperational', item );
-    const atdate = Validity.atDateByRecords( item.DYN.records );
+    //console.debug( 'Organizations.setupOperational', 'item', item );
     if( !item.DYN.operational ){
         item.DYN.operational = {
             results: [],
             status: new ReactiveVar( Forms.FieldStatus.C.NONE )
         };
     }
+    const atdate = Validity.atDateByRecords( item.DYN.records );
+    console.debug( 'Organizations.setupOperational', 'atdate', atdate );
     let entity = { ...item };
     delete entity.DYN;
     if( atdate ){
@@ -196,7 +197,7 @@ Organizations.setupOperational = async function( item ){
             item.DYN.operational.results = res || [];
             item.DYN.operational.status.set( res ? Forms.FieldStatus.C.UNCOMPLETE : Forms.FieldStatus.C.VALID );
         });
-    } else {
+    } else if( item.DYN.closest ){
         item.DYN.operational.results = [];
         item.DYN.operational.status.set( Forms.FieldStatus.C.INVALID );
         item.DYN.operational.results.push( new TM.TypedMessage({

@@ -43,19 +43,16 @@ Template.organization_new_assistant_done.onRendered( function(){
         if( dataDict.get( 'activePane' ) === 'done' ){
             //console.debug( 'dataContext', dataContext );
             $( 'body' ).css( 'cursor', 'progress' );
-            /*
-            Meteor.callAsync( 'org.upsert', dataContext.parentAPP.entity.get())
+            Meteor.callAsync( 'pwix_tenants_manager_tenants_upsert', dataContext.parentAPP.entity.get())
                 .then(( res ) => {
                     //console.debug( 'res', res );
                     //console.debug( 'entity', dataContext.parentAPP.entity.get());
-                    self.APP.clientId.set( res.entities.clientId );
                     self.APP.creationEnd();
                 })
                 .catch(( err ) => {
                     self.APP.error.set( err );
                     self.APP.creationEnd();
                 });
-                */
         }
     });
 

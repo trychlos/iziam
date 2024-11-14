@@ -161,13 +161,13 @@ Clients.isOperational = async function( client ){
  */
 Clients.setupOperational = async function( item ){
     //console.debug( 'Clients.setupOperational', item );
-    const atdate = Validity.atDateByRecords( item.DYN.records );
     if( !item.DYN.operational ){
         item.DYN.operational = {
             results: [],
             status: new ReactiveVar( Forms.FieldStatus.C.NONE )
         };
     }
+    const atdate = Validity.atDateByRecords( item.DYN.records );
     let entity = { ...item };
     delete entity.DYN;
     if( atdate ){
@@ -176,7 +176,7 @@ Clients.setupOperational = async function( item ){
             item.DYN.operational.results = res || [];
             item.DYN.operational.status.set( res ? Forms.FieldStatus.C.UNCOMPLETE : Forms.FieldStatus.C.VALID );
         });
-    } else {
+    } else if( item.DYN.closest ){
         item.DYN.operational.results = [];
         item.DYN.operational.status.set( Forms.FieldStatus.C.INVALID );
         item.DYN.operational.results.push( new TM.TypedMessage({

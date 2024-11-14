@@ -1,23 +1,27 @@
 <template name="client_new_assistant_done">
-    <div class="c-client-new-assistant-done">
+    <div class="c-client-new-assistant-done ui-h100 d-flex flex-column">
 
         {{> client_new_assistant_current }}
 
-        <div class="content">
-            {{#if haveError }}
-                <p class="error">Error: {{{ error }}}</p>
-            {{else}}
+        <div class="content flex-grow-1">
+            <div class="text app-vcenter">
                 <div>
-                    <p class="success">{{{ success }}}</p>
-                    <p class="sub-success">{{{ sub_success }}}</p>
+                    {{#if haveError }}
+                        <p class="error">Error: {{{ error }}}</p>
+                    {{else}}
+                        <div>
+                            <p class="success">{{{ success }}}</p>
+                            <p class="sub-success">{{{ sub_success }}}</p>
+                        </div>
+                        <table class="form-table ui-mt1">
+                            <tr>
+                                <td class="label"><label class="form-label">{{ i18n key="clients.new_assistant.clientid_label" }}</label></td>
+                                <td class="ui-w100"><p class="result">{{ clientId }}</p></td>
+                            </tr>
+                        </table>
+                    {{/if}}
                 </div>
-                <table class="form-table ui-mt1">
-                    <tr>
-                        <td class="label"><label class="form-label">{{ i18n key="clients.new_assistant.clientid_label" }}</label></td>
-                        <td class="ui-w100"><p class="result">{{ clientId }}</p></td>
-                    </tr>
-                </table>
-            {{/if}}
+            </div>
         </div>
 
     </div>

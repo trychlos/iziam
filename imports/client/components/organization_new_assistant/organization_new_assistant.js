@@ -31,7 +31,6 @@ import './organization_new_assistant.html';
 
 Template.organization_new_assistant.onCreated( function(){
     const self = this;
-    console.debug( this );
 
     self.APP = {
         // the global Checker for this modal
@@ -119,7 +118,7 @@ Template.organization_new_assistant.onCreated( function(){
 
     // track the content of the entity
     self.autorun(() => {
-        console.debug( 'clientEntity', self.APP.entity.get());
+        console.debug( 'organizationEntity', self.APP.entity.get());
     });
 
     // track the content of the record
@@ -155,8 +154,23 @@ Template.organization_new_assistant.onRendered( function(){
         }));
     });
 
+    // track the checker definition
+    self.autorun(() => {
+        //console.debug( self.APP.checker.get());
+    })
+
     // and clear the panels to prevent re-use of data of a previous session
     self.APP.checker.get().clearPanel({ propagateDown: true });
+
+    // make sure the 'summary' page has a confirm button
+    self.autorun(() => {
+        const isSummary = Boolean( self.APP.assistantStatus.get( 'activePane' ) === 'summary' );
+        self.$( '.Assistant' ).trigger( 'assistant-do-action-set', {
+            action: 'next',
+            html: pwixI18n.label( I18N, isSummary ? 'assistant.confirm_btn' : 'assistant.next_btn' ),
+            title: pwixI18n.label( I18N, isSummary ? 'assistant.confirm_title' : 'assistant.next_title' )
+        });
+    });
 });
 
 Template.organization_new_assistant.helpers({
@@ -170,24 +184,6 @@ Template.organization_new_assistant.helpers({
             name: APP.myName,
             assistantPages(){
                 return APP.pages()
-            },
-            assistantOnChange( prev, next ){
-                const pages = APP.pages();
-                if( pages[next].name === 'summary' ){
-                    self.$( '.Assistant' ).trigger( 'assistant-do-action-set', {
-                        action: 'next',
-                        html: pwixI18n.label( I18N, 'assistant.confirm_btn' ),
-                        title: pwixI18n.label( I18N, 'assistant.confirm_title' )
-                    });
-                }
-                if( pages[next].prev === 'summary' ){
-                    self.$( '.Assistant' ).trigger( 'assistant-do-action-set', {
-                        action: 'next',
-                        html: pwixI18n.label( I18N, 'assistant.next_btn' ),
-                        title: pwixI18n.label( I18N, 'assistant.next_title' )
-                    });
-                }
-                return true;
             },
             assistantConfirmOnClose: true,
             assistantWithParentChecker: true
