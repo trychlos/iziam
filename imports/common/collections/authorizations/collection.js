@@ -26,9 +26,7 @@ export const Authorizations = {
             Tracker.autorun(() => {
                 const fieldSet = Authorizations.fieldSet.get();
                 if( fieldSet ){
-                    console.debug( 'Authorizations attaching schema' );
                     c.attachSchema( new SimpleSchema( fieldSet.toSchema()), { replace: true });
-                    console.debug( 'Authorizations schema attached' );
                     c.attachBehaviour( 'timestampable' );
                 }
             });

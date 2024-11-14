@@ -14,10 +14,9 @@ import { Statistics } from './index.js';
 
 Tracker.autorun(() => {
     const fieldSet = Statistics.fieldSet?.get();
-    if( fieldSet ){
-        console.debug( 'Statistics attaching schema' );
+    if( fieldSet && !Statistics.schemaAttached ){
         Statistics.collection.attachSchema( new SimpleSchema( fieldSet.toSchema()), { replace: true });
-        console.debug( 'Statistics schema attached' );
         Statistics.collection.attachBehaviour( 'timestampable', { replace: true });
+        Statistics.schemaAttached = true;
     }
 });

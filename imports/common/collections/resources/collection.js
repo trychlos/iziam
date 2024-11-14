@@ -26,9 +26,7 @@ export const Resources = {
             Tracker.autorun(() => {
                 const fieldSet = Resources.fieldSet.get();
                 if( fieldSet ){
-                    console.debug( 'Resources attaching schema' );
                     c.attachSchema( new SimpleSchema( fieldSet.toSchema()), { replace: true });
-                    console.debug( 'Resources schema attached' );
                     c.attachBehaviour( 'timestampable' );
                 }
             });

@@ -25,9 +25,7 @@ export const ClientsGroups = {
             Tracker.autorun(() => {
                 const fieldSet = ClientsGroups.fieldSet.get();
                 if( fieldSet ){
-                    console.debug( 'ClientsGroups attaching schema' );
                     c.attachSchema( new SimpleSchema( fieldSet.toSchema()), { replace: true });
-                    console.debug( 'ClientsGroups schema attached' );
                     c.attachBehaviour( 'timestampable' );
                 }
             });

@@ -10,5 +10,6 @@ import { ReactiveVar } from 'meteor/reactive-var';
 
 export const ClientsEntities = {
     collection: new Mongo.Collection( 'clients_e' ),
-    fieldSet: new ReactiveVar( null )
+    fieldSet: new ReactiveVar( null ),
+    schemaAttached: false
 };

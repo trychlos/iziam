@@ -114,9 +114,6 @@ ClientsEntities.s = {
         if( entityId ){
             result.numberAffected = await ClientsEntities.collection.updateAsync({ _id: entityId }, { $set: entity });
             entity._id = entityId;
-            // what happens if we force a date update (aka a witness stamp ) ? -> not better
-            //const res = await ClientsEntities.collection.updateAsync({ _id: entityId }, { $set: { updatedAt: new Date() }});
-            //console.debug( 'res', res );
         } else {
             result.insertedId = await ClientsEntities.collection.insertAsync( entity );
             result.numberAffected = 1;

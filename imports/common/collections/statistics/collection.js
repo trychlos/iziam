@@ -13,7 +13,8 @@ import { ReactiveVar } from 'meteor/reactive-var';
 export const Statistics = {
     collectionName: 'statistics',
     collection: null,
-    fieldSet: new ReactiveVar( null )
+    fieldSet: new ReactiveVar( null ),
+    schemaAttached: false
 };
 
 Statistics.collection = new Mongo.Collection( Statistics.collectionName );
