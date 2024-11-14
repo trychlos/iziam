@@ -13,7 +13,7 @@ import { ClientsEntities } from './index.js';
 Tracker.autorun(() => {
     const fieldSet = ClientsEntities.fieldSet?.get();
     if( fieldSet ){
-        console.debug( 'ClientsEntities attaching schema' );
+        console.warn( 'ClientsEntities attaching schema' );
         ClientsEntities.collection.attachSchema( new SimpleSchema( fieldSet.toSchema()), { replace: true });
         console.debug( 'ClientsEntities schema attached' );
         ClientsEntities.collection.attachBehaviour( 'timestampable', { replace: true });
