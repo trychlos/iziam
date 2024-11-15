@@ -117,14 +117,14 @@ ClientsRecords.s = {
         Object.keys( updatableIds ).forEach(( id ) => {
             const record = updatableIds[id];
             const recordId = record._id;
-            if( record._id ){
+            if( recordId ){
                 record.updatedBy = userId;
                 record.updatedAt = new Date();
             }
             record.entity = entity._id;
             // debug the record content
-            //ClientsRecords.collection.upsertAsync({ _id: record._id }, { $set: record });
-            promises.push( ClientsRecords.collection.upsertAsync({ _id: record._id }, { $set: record }).then(( res ) => {
+            //ClientsRecords.collection.upsertAsync({ _id: recordId }, { $set: record }).then(( res ) => { console.debug( 'upsertAsync', res ); });
+            promises.push( ClientsRecords.collection.upsertAsync({ _id: recordId }, { $set: record }).then(( res ) => {
                 console.debug( 'upsertAsync', record, 'res', res );
                 if( res.numberAffected > 0 ){
                     if( recordId ){

@@ -121,6 +121,10 @@ Clients.s.registeredMetadata = async function( client ){
         grant_types: client.record.grant_types,
         token_endpoint_auth_method: client.record.token_endpoint_auth_method,
     };
+    if( client.record.post_logout_redirect_uris && client.record.post_logout_redirect_uris.length > 0 ){
+        data.post_logout_redirect_uris = [];
+        client.record.post_logout_redirect_uris.map( it => data.post_logout_redirect_uris.push( it.uri ));
+    }
     if( client.record.redirect_uris && client.record.redirect_uris.length > 0 ){
         data.redirect_uris = [];
         client.record.redirect_uris.map( it => data.redirect_uris.push( it.uri ));

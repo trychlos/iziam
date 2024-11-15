@@ -173,6 +173,26 @@ const _defaultFieldDef = function(){
             form_type: Forms.FieldType.C.OPTIONAL,
             help_tooltip: pwixI18n.label( I18N, 'clients.metadata.logo_uri' )
         },
+        // Array of request_uri values that are pre-registered by the RP for use at the OP
+        {
+            name: 'post_logout_redirect_uris',
+            type: Array,
+            optional: true,
+            help_tooltip: pwixI18n.label( I18N, 'clients.metadata.post_logout_redirect_uri' )
+        },
+        {
+            name: 'post_logout_redirect_uris.$',
+            type: Object
+        },
+        {
+            name: 'post_logout_redirect_uris.$.uri',
+            type: String,
+            form_check: ClientsRecords.checks.post_logout_redirect_uri
+        },
+        {
+            name: 'post_logout_redirect_uris.$._id',
+            type: String
+        },
         /*
         // the scope values that the client may use when requesting access tokens
         // OAuth 2 defines that as a single space-separated string said 'scope'
@@ -401,7 +421,6 @@ const _defaultFieldDef = function(){
             name: 'request_uris.$.id',
             type: String
         },
-        // post_logout_redirect_uris (yes this is an array according to node-oidc-provider)
         */
         // whether the client wants authenticated identities
         {

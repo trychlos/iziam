@@ -36,7 +36,6 @@
 |      | 2024- 9-24 | nb: jose doesn't provide the same data when executed server-side so maybe have to change the library ? |
 |  118 | 2024-10- 9 | clients should be able to provide some javascript/ejs to display in interactions dialogs |
 |      | 2024-10-30 | see also #38 for a use case |
-|  119 | 2024-10-16 | BUG: when updating groups of an identity, the client groupsRegistrar content is badly updated (publication is fine, but subcription only receives a part) |
 |  120 | 2024-10-16 | input placeholders are too close of black - have a lighter gray and italics |
 |  121 | 2024-10-18 | token extensions: the organization should be able to make mandatory all token extensions provided by the selected providers |
 |      |            | this implies having a small companion collection with a row per available token extension or an array inside of the current schema |
@@ -46,10 +45,13 @@
 |  126 | 2024-11-12 | implement Shared secret JWT Client Authentication auth method |
 |  127 | 2024-11-12 | complete organization new assistant, first being the selected providers |
 |  128 | 2024-11-14 | clientId should be importable |
-|  129 | 2024-11-14 | client secrets should be importable / updatable |
-|  130 | 2024-11-14 | client public key should be importable |
+|      | 2024-11-15 | should actually be a client import |
 |  131 | 2024-11-14 | organization private/public keys should be importable |
-|  132 |  |  |
+|      | 2024-11-15 | should actually be an organization import |
+|  132 | 2024-11-15 | export client |
+|  133 | 2024-11-15 | client configuration subtabs should be aligned with other tabs - no more special configuration tab |
+|  134 | 2024-11-15 | export organization |
+|  135 |  |  |
 
 ---
 ## Done
@@ -282,11 +284,17 @@
 |      | 2024-10-30 | yes but everybody inside of an organization must be allowed to read all |
 |  117 | 2024-10- 9 | should define a policy for acr values (see Meteor.APP.C.oidcEndUserPasswordAcr) |
 |      | 2024-10-30 | acr value is now answered from the IIdentityAuth provider |
+|  119 | 2024-10-16 | BUG: when updating groups of an identity, the client groupsRegistrar content is badly updated (publication is fine, but subcription only receives a part) |
+|      | 2024-11-15 | fixed |
 |  122 | 2024-10-29 | IdentityServer findByLogin() should authenticate the identity based on selected authentication providers, and return the used authentication provider |
 |      | 2024-10-29 | see also #117 |
 |      | 2024-10-30 | done |
 |  123 | 2024-10-29 | authorizations let an identity group be allowed to a client - this should be a client configuration option to use that to allow an identity |
 |      | 2024-10-30 | done |
+|  129 | 2024-11-14 | client secrets should be importable / updatable |
+|      | 2024-11-15 | obsoleted as client should be importable - see #128 |
+|  130 | 2024-11-14 | client public key should be importable |
+|      | 2024-11-15 | obsoleted as client should be importable - see #128 |
 
 ---
 P. Wieser

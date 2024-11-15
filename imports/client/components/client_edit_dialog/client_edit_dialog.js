@@ -27,6 +27,9 @@
  *     |           |       +- client_providers_panel
  *     |           |       +- client_auth_method_panel
  *     |           |       +- client_grant_types_panel
+ *     |           |       +- client_redirects_panel
+ *     |           |       +- client_logout_redirects_panel
+ *     |           |       +- client_contacts_panel
  *     |           |       +- NotesEdit                 record notes
  *     |           |
  *     |           +- ValidityFieldset
@@ -64,6 +67,7 @@ import '/imports/client/components/client_entity_validities_pane/client_entity_v
 import '/imports/client/components/client_grant_types_panel/client_grant_types_panel.js';
 import '/imports/client/components/client_groups_pane/client_groups_pane.js';
 import '/imports/client/components/client_jwks_panel/client_jwks_panel.js';
+import '/imports/client/components/client_logout_redirects_panel/client_logout_redirects_panel.js';
 import '/imports/client/components/client_profile_select/client_profile_select.js';
 import '/imports/client/components/client_properties_panel/client_properties_panel.js';
 import '/imports/client/components/client_record_tabbed/client_record_tabbed.js';

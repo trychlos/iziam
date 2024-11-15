@@ -398,6 +398,26 @@ ClientsRecords.checks = {
         return _validUrl( value, { prefix: 'clients.checks.privacy', acceptOthers: false });
     },
 
+    // post-logout redirect_uris, optional in the UI
+    // must be https unless a native client which may define its own applicative scheme (e.g. com.example.app:///auth)
+    // there must not be any fragment component
+    // when defining the client in izIAM, this is optional
+    // but the client itself can only specify a pre-registered URL
+    async post_logout_redirect_uri( value, data, opts ){
+        _assert_data_content( 'ClientsRecords.checks.post_logout_redirect_uri()', data );
+        let item = data.entity.get().DYN.records[data.index].get();
+        let index = opts.id ? _id2index( item.post_logout_redirect_uris, opts.id ) : -1;
+        if( opts.update !== false ){
+            if( index < 0 ){
+                item.post_logout_redirect_uris = item.post_logout_redirect_uris || [];
+                item.post_logout_redirect_uris.push({ _id: opts.id });
+                index = 0;
+            }
+            item.post_logout_redirect_uris[index].uri = value;
+        }
+        return _validUrl( value, { prefix: 'clients.checks.redirect', acceptUnset: false, acceptFragment: false });
+    },
+
     // client profile: optional, must exist
     async profile( value, data, opts ){
         _assert_data_content( 'ClientsRecords.checks.profile()', data );

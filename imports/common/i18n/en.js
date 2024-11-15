@@ -158,9 +158,9 @@ Meteor.APP.i18n = {
                     contact_invalid: 'The contact email address is not valid',
                     contact_unset: 'An email address must be provided',
                     enabled_invalid: 'The enabled status is invalid',
-                    home_host: 'The home URI wants a hostname',
-                    home_https: 'The home URI wants only HTTPS scheme',
-                    home_invalid: 'The home URI is not valid',
+                    home_host: 'The home URL wants a hostname',
+                    home_https: 'The home URL wants only HTTPS scheme',
+                    home_invalid: 'The home URL is not valid',
                     grant_types_invalid: 'The current authorization flow and grant types selection is not valid',
                     grant_types_unset: 'The current authorization flow and grant types selection is not set',
                     identity_access_mode_invalid: 'The identity access mode is not valid',
@@ -170,23 +170,23 @@ Meteor.APP.i18n = {
                     jwks_unset: 'No JSON Web Key Set is defined',
                     label_exists: 'The label is already used by another client',
                     label_unset: 'The label is not set',
-                    logo_host: 'The logo URI wants a hostname',
-                    logo_https: 'The logo URI wants only HTTPS scheme',
-                    logo_invalid: 'The logo URI is not valid',
-                    privacy_host: 'The privacy policy URI wants a hostname',
-                    privacy_https: 'The privacy policy URI wants only HTTPS scheme',
-                    privacy_invalid: 'The privacy policy URI is not valid',
+                    logo_host: 'The logo URL wants a hostname',
+                    logo_https: 'The logo URL wants only HTTPS scheme',
+                    logo_invalid: 'The logo URL is not valid',
+                    privacy_host: 'The privacy policy URL wants a hostname',
+                    privacy_https: 'The privacy policy URL wants only HTTPS scheme',
+                    privacy_invalid: 'The privacy policy URL is not valid',
                     profile_invalid: 'The chosen profile is unknown or not valid',
                     redirect_fragment: 'The redirect URL contains a fragment component, which is forbidden',
                     redirect_host: 'Redirect URLs want a hostname',
                     redirect_http: 'Redirect URLs cannot use HTTP scheme for security reasons',
-                    redirect_invalid: 'The redirect URL is not a valid URI',
-                    redirect_needed: 'The defined grant flow wants at least one redirection URI',
+                    redirect_invalid: 'The redirect URL is not a valid URL',
+                    redirect_needed: 'The defined grant flow wants at least one redirection URL',
                     redirect_unset: 'The redirect URL is not set',
                     secret_unset: 'The client needs a secret but not secret has been defined',
-                    tos_host: 'The terms of service URI wants a hostname',
-                    tos_https: 'The terms of service URI wants only HTTPS scheme',
-                    tos_invalid: 'The terms of service URI is not valid'
+                    tos_host: 'The terms of service URL wants a hostname',
+                    tos_https: 'The terms of service URL wants only HTTPS scheme',
+                    tos_invalid: 'The terms of service URL is not valid'
                 },
                 contacts: {
                     add_title: 'Add a new contact email address',
@@ -221,9 +221,9 @@ Meteor.APP.i18n = {
                     entity_validities_tab_title: 'By validity period(s)',
                     error: 'Unfortunately, an error has been detected./ Please retry later',
                     groups_tab_title: 'Groups',
-                    home_label: 'Home page URI :',
+                    home_label: 'Home page URL :',
                     home_ph: 'https://my.example.com/',
-                    home_title: 'The URI of a web site',
+                    home_title: 'The URL of a web site',
                     id_label: 'Identifier :',
                     id_title: 'The client unique identifier to present to the OAuth server',
                     identities_access_preamble: 'How this client does want izIAM manage the identities authorizations ?',
@@ -234,16 +234,18 @@ Meteor.APP.i18n = {
                     label_label: 'Label :',
                     label_ph: 'My unique label',
                     label_title: 'The mandatory, unique, name of your client application',
-                    logo_label: 'Logo URI :',
+                    logo_label: 'Logo URL :',
                     logo_ph: 'https://my.example.com/logo.png',
-                    logo_title: 'The URI of a logo displayable to an end-user',
+                    logo_title: 'The URL of a logo displayable to an end-user',
+                    logout_redirects_tab_title: 'Post-logout redirect URLs',
+                    logout_redirects_text: 'The URLs where the user should be redirected after log-out.',
                     modal_title: 'Edit the "%s" client',
                     new_success: 'The client "%s" has been successfully created',
                     no_token_extension: 'There is no available token extension.<br />'
                         +'Most probably, you want select the providers able to give you the needed features.',
-                    privacy_label: 'Privacy policy page URI :',
+                    privacy_label: 'Privacy policy page URL :',
                     privacy_ph: 'https://my.example.com/privacy',
-                    privacy_title: 'The URI of a page which describes the privacy policy of the client',
+                    privacy_title: 'The URL of a page which describes the privacy policy of the client',
                     profile_label: 'Application profile :',
                     properties_preamble: 'The mandatory label below will take place as the unique <code>client_name</code> OAuth Client Metadata.<br />'
                         +'Take care that all these below properties may be displayed to the end-user during login interactions.',
@@ -251,8 +253,8 @@ Meteor.APP.i18n = {
                     providers_tab_title: 'Providers',
                     record_notes_tab_title: 'Notes',
                     redirects_tab_title: 'Redirect URLs',
-                    redirects_text: 'The authorization flow you have chosen implies to predefine at least one redirection URI.<br />'
-                        +'The Authorization Server will restrict the grant flow redirections to one of below URIs.',
+                    redirects_text: 'The authorization flow you have chosen implies to predefine at least one redirection URL.<br />'
+                        +'The Authorization Server will restrict the grant flow redirections to one of below URLs.',
                     scopes_tab_title: 'Scopes',
                     secrets_tab_title: 'Secrets',
                     softid_label: 'Software identifier :',
@@ -263,9 +265,9 @@ Meteor.APP.i18n = {
                     softver_title: 'The client software version which distinguish it from other registered clients',
                     status_tab_title: 'Operational status',
                     token_extensions_tab_title: 'Token Extensions',
-                    tos_label: 'Terms of Service page URI :',
+                    tos_label: 'Terms of Service page URL :',
                     tos_ph: 'https://my.example.com/tos',
-                    tos_title: 'The URI of a page which describes the terms of service of the client'
+                    tos_title: 'The URL of a page which describes the terms of service of the client'
                 },
                 groups: {
                     preamble: 'The groups this client is member of.<br />'
@@ -348,6 +350,14 @@ Meteor.APP.i18n = {
                         +'<p class="text">URL string that points to a human-readable privacy policy document that describes how the deployment organization '
                         +'collects, uses, retains, and discloses personal data. The authorization server SHOULD display this URL to the end-user if it is provided.<br />'
                         +'The value of this field MUST point to a valid web page.</p>',
+                    post_logout_redirect_uri:'<p class="source">https://openid.net/specs/openid-connect-rpinitiated-1_0.html</p>'
+                        +'<p class="name">post_logout_redirect_uri</p>'
+                        +'<p class="text">OPTIONAL. URI to which the RP is requesting that the End-User\'s User Agent be redirected after a logout has been performed.'
+                        +'This URI SHOULD use the https scheme and MAY contain port, path, and query parameter components; however, it MAY use the http scheme, '
+                        +'provided that the Client Type is confidential, as defined in Section 2.1 of OAuth 2.0 [RFC6749], and provided the OP allows the use of '
+                        +'http RP URIs. The URI MAY use an alternate scheme, such as one that is intended to identify a callback into a native application. '
+                        +'The value MUST have been previously registered with the OP, either using the post_logout_redirect_uris Registration parameter or via '
+                        +'another mechanism. An id_token_hint is also RECOMMENDED when this parameter is included.</p>',
                     redirect_uris: '<p class="source">https://datatracker.ietf.org/doc/html/rfc7591</p>'
                         +'<p class="name">redirect_uris</p>'
                         +'<p class="text">Array of redirection URI strings for use in redirect-based flows such as the authorization code and implicit flows.<br />'
@@ -400,7 +410,7 @@ Meteor.APP.i18n = {
                 new_assistant: {
                     application_nav: 'Application type',
                     application_text: 'The application type is an optional parameter defined in the OpenID Connect 1.0 specification.<br />'
-                        +'At the moment, it is only used as a hint when checking the allowed redirect URIs.',
+                        +'At the moment, it is only used as a hint when checking the allowed redirect URLs.',
                     assistant_title: 'Defining a new client application',
                     auth_method_nav: 'Authentication method',
                     auth_method_choose_text: 'Please choose below your desired authentication method.',
@@ -422,6 +432,7 @@ Meteor.APP.i18n = {
                         +'Nonetheless, you always be able to update it later.',
                     jwks_nav: 'JWK Signature and Encryption',
                     jwks_text: 'Want sign and/or encrypt your JSON Web Tokens ? Define here the keys your client will need.',
+                    logout_nav: 'Post-logout redirect URLs',
                     profile_nav: 'Profile',
                     profile_text: 'Choose the application profile which corresponds best to your use case.<br />'
                         +'This will define many other parameters, but you still will be able to modify each of them at your convenience.<br />'
@@ -444,6 +455,7 @@ Meteor.APP.i18n = {
                     summary_grant_label: 'Grant types :',
                     summary_jwks_label: 'JSON Web Keys :',
                     summary_legend: 'Summary',
+                    summary_logout_label: 'Post-logout redirection URLs :',
                     summary_name_label: 'Label :',
                     summary_nav: 'Summary',
                     summary_profile_client_label: 'Suggested client type :',
@@ -451,7 +463,7 @@ Meteor.APP.i18n = {
                     summary_profile_label: 'Profile :',
                     summary_providers_label: 'Providers :',
                     summary_providers_none: 'None',
-                    summary_redirects_label: 'Redirection URIs :',
+                    summary_redirects_label: 'Redirection URLs :',
                     summary_redirects_none: 'None',
                     summary_text: 'You have successfully completed this assistant, at least enough to actually create a new client.<br />'
                         +'The client will be created when you will click on the "Next" button below.<br />'
@@ -565,11 +577,11 @@ Meteor.APP.i18n = {
             },
             definitions: {
                 application_type: {
-                    native_description: 'Native clients can only register redirect URIs using a custom or a http loopback scheme. '
+                    native_description: 'Native clients can only register redirect URLs using a custom or a http loopback scheme. '
                         +'This is most often only possible on mobile applications.',
                     native_label: 'A native application',
                     select_text: 'Select the application type',
-                    web_description: 'Web clients can only register redirect URIs using the https non-loopback scheme. '
+                    web_description: 'Web clients can only register redirect URLs using the https non-loopback scheme. '
                         +'This is the most common case, and the OpenID Connect 1.0 default.',
                     web_label: 'A web client, e.g. a Single Page Application'
                 },

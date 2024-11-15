@@ -117,6 +117,13 @@ Template.client_new_assistant_current.helpers({
         return Jwks.fn.joinedLabels( this.parentAPP.entity.get().DYN.records[0].get().jwks || [] );
     },
 
+    // registered post-logout redirect URLs
+    logoutText(){
+        const redirect_uris = this.parentAPP.entity.get().DYN.records[0].get().post_logout_redirect_uris || [];
+        const urls = redirect_uris.length ? redirect_uris.map(( it ) => { return it.url; }) : null;
+        return urls ? urls.join( ', ' ) : pwixI18n.label( I18N, 'clients.new_assistant.summary_redirects_none' );
+    },
+
     // client profile description
     profileDescription(){
         const id = this.parentAPP.entity.get().DYN.records[0].get().profile;

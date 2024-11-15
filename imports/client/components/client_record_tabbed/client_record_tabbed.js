@@ -115,6 +115,15 @@ Template.client_record_tabbed.onCreated( function(){
             paneData: paneData
         },
         {
+            name: 'client_logout_redirects_tab',
+            navLabel: pwixI18n.label( I18N, 'clients.edit.logout_redirects_tab_title' ),
+            paneTemplate: 'client_logout_redirects_panel',
+            paneData: {
+                ...paneData,
+                haveOne: false
+            }
+        },
+        {
             name: 'client_contacts_tab',
             navLabel: pwixI18n.label( I18N, 'clients.edit.contacts_tab_title' ),
             paneTemplate: 'client_contacts_panel',

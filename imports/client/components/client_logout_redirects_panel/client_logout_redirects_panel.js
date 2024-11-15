@@ -1,8 +1,7 @@
 /*
- * /imports/client/components/client_redirects_panel/client_redirects_panel.js
+ * /imports/client/components/client_logout_redirects_panel/client_logout_redirects_panel.js
  *
- * Manage the redirection URLs of the client.
- * Depending of the chosen authorization grant flow, there must be at least one for the client be operational, unless in the UI where we accept no redirect URL at all.
+ * Manage the post logout redirection URLs of the client.
  *
  * Parms:
  * - entity: the currently edited entity as a ReactiveVar
@@ -24,16 +23,14 @@ import { TM } from 'meteor/pwix:typed-message';
 
 import { GrantType } from '/imports/common/definitions/grant-type.def.js';
 
-import '/imports/client/components/client_redirect_row/client_redirect_row.js';
+import '/imports/client/components/client_logout_redirect_row/client_logout_redirect_row.js';
 
-import './client_redirects_panel.html';
+import './client_logout_redirects_panel.html';
 
-Template.client_redirects_panel.onCreated( function(){
+Template.client_logout_redirects_panel.onCreated( function(){
     const self = this;
 
     self.APP = {
-        // whether we want redirection uris
-        wantRedirects: new ReactiveVar( false ),
         // current count of redirect urls
         count: new ReactiveVar( 0 ),
         // the Form.Checker instance for this panel
@@ -47,8 +44,8 @@ Template.client_redirects_panel.onCreated( function(){
         addOne( dataContext ){
             const recordRv = dataContext.entity.get().DYN.records[dataContext.index];
             const item = recordRv.get();
-            item.redirect_uris = item.redirect_uris || [];
-            item.redirect_uris.push({
+            item.post_logout_redirect_uris = item.post_logout_redirect_uris || [];
+            item.post_logout_redirect_uris.push({
                 _id: Random.id()
             });
             recordRv.set( item );
@@ -59,32 +56,20 @@ Template.client_redirects_panel.onCreated( function(){
         advertise( checker ){
             const status = checker.status();
             const validity = checker.validity();
-            self.$( '.c-client-redirects-panel' ).trigger( 'iz-checker', { status: status, validity: validity });
+            self.$( '.c-client-logout-redirects-panel' ).trigger( 'iz-checker', { status: status, validity: validity });
         }
     };
-
-    // whether we want any redirection uris ?
-    self.autorun(() => {
-        const record = Template.currentData().entity.get().DYN.records[Template.currentData().index].get();
-        const grantTypes = record.grant_types || [];
-        self.APP.wantRedirects.set( GrantType.wantRedirects( grantTypes ));
-    });
 
     // keep the count of rows up to date
     self.autorun(() => {
         const entity = Template.currentData().entity.get();
         const index = Template.currentData().index;
         const record = entity.DYN.records[index].get();
-        self.APP.count.set(( record.redirect_uris || [] ).length );
-    });
-
-    // tracking the count of redirect urls
-    self.autorun(() => {
-        //console.debug( 'count', self.APP.count.get());
+        self.APP.count.set(( record.post_logout_redirect_uris || [] ).length );
     });
 });
 
-Template.client_redirects_panel.onRendered( function(){
+Template.client_logout_redirects_panel.onRendered( function(){
     const self = this;
 
     // initialize the Checker for this panel as soon as we get the parent Checker
@@ -94,7 +79,7 @@ Template.client_redirects_panel.onRendered( function(){
         if( parentChecker && !checker ){
             const enabled = Template.currentData().enableChecks !== false;
             self.APP.checker.set( new Forms.Checker( self, {
-                name: 'client_redirects_panel',
+                name: 'client_logout_redirects_panel',
                 parent: parentChecker,
                 enabled: enabled
             }));
@@ -116,8 +101,7 @@ Template.client_redirects_panel.onRendered( function(){
             self.APP.warnedNoRedirect = false;
         } else {
             const haveOne = Template.currentData().haveOne !== false;
-            const enabled = Template.currentData().enableChecks !== false;
-            if( haveOne && enabled && self.APP.wantRedirects.get() && !self.APP.haveAddedOne ){
+            if( haveOne && !self.APP.haveAddedOne ){
                 self.APP.addOne( Template.currentData());
             } else if( !self.APP.warnedNoRedirect ){
                 //console.warn( 'warning about no redirect');
@@ -134,7 +118,7 @@ Template.client_redirects_panel.onRendered( function(){
     });
 });
 
-Template.client_redirects_panel.helpers({
+Template.client_logout_redirects_panel.helpers({
     // string translation
     i18n( arg ){
         return pwixI18n.label( I18N, arg.hash.key );
@@ -143,7 +127,7 @@ Template.client_redirects_panel.helpers({
     // redirect urls list
     itemsList(){
         const count = Template.instance().APP.count.get();
-        return this.entity.get().DYN.records[this.index].get().redirect_uris || [];
+        return this.entity.get().DYN.records[this.index].get().post_logout_redirect_uris || [];
     },
 
     // passes the same data context, just replacing the parent checker by our own
@@ -162,9 +146,9 @@ Template.client_redirects_panel.helpers({
     }
 });
 
-Template.client_redirects_panel.events({
+Template.client_logout_redirects_panel.events({
     // ask for enabling the checker (when this panel is used inside of an assistant)
-    'iz-enable-checks .c-client-redirects-panel'( event, instance, enabled ){
+    'iz-enable-checks .c-client-logout-redirects-panel'( event, instance, enabled ){
         const checker = instance.APP.checker.get();
         if( checker ){
             checker.enabled( enabled );
@@ -174,7 +158,7 @@ Template.client_redirects_panel.events({
         }
         return false;
     },
-    'click .c-client-redirects-panel .js-plus'( event, instance ){
+    'click .c-client-logout-redirects-panel .js-plus'( event, instance ){
         instance.APP.addOne( this );
     }
 });

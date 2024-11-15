@@ -1,0 +1,33 @@
+<template name="client_logout_redirects_panel">
+    <div class="c-client-logout-redirects-panel">
+        <div class="panel-content">
+
+            <div class="panel-header">
+                <div class="panel-preamble">
+                    {{{ i18n key="clients.edit.logout_redirects_text" }}}
+                </div>
+            </div>
+
+            <div class="panel-body">
+                <table class="form-table subtable">
+                    <thead>
+                        <tr>
+                            <th class="ui-w100">{{ i18n key="clients.redirects.url_th" }}</th>
+                            <th>
+                                <button class="btn btn-sm btn-outline-primary js-plus" title="{{ i18n key="clients.redirects.add_title" }}" {{ plusDisabled }}>
+                                    <span class="fa-solid fa-fw fa-plus"></span>
+                                </button>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each it in itemsList }}
+                            {{> client_logout_redirect_row (parmsRedirectRow it) }}
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</template>

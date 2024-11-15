@@ -84,6 +84,12 @@
                                 <td><p class="text">{{{ authorizationText }}}</p></td>
                             </tr>
                         {{/if}}
+                        {{#if havePane "logout" }}
+                            <tr>
+                                <td class="label ui-vatop">{{ i18n key="clients.new_assistant.summary_logout_label" }}</td>
+                                <td><p class="text">{{{ logoutText }}}</p></td>
+                            </tr>
+                        {{/if}}
                         {{#if havePane "contacts" }}
                             <tr>
                                 <td class="label ui-vatop">{{ i18n key="clients.new_assistant.summary_contacts_label" }}</td>

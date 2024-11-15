@@ -1,0 +1,12 @@
+<template name="client_logout_redirect_row">
+
+    <tr class="c-client-logout-redirect-row" data-item-id="{{ this.it._id }}">
+        <td><input class="form-control js-url" type="url" placeholder="{{ i18n key="clients.redirects.url_ph" }}" /></td>
+        <td>
+            <button class="btn btn-sm btn-outline-primary js-minus" title="{{ i18n key="clients.redirects.remove_title" }}" {{ minusEnabled }} >
+                <span class="fa-solid fa-fw fa-minus"></span>
+            </button>
+        </td>
+    </tr>
+
+</template>

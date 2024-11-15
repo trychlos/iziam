@@ -392,11 +392,6 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
              */
             console.log( 'pre middleware', ctx.method, ctx.path );
 
-            // have to run the end of session ourselves as oidc-provider doesn't do it (or I don't understand how to) :(
-            if( ctx.method === 'GET' && ctx.path === '/logout' ){
-                return OIDLogout.endSession( self.#oidc, ctx, next );
-            }
-
             await next();
 
             /* post-processing
@@ -452,10 +447,8 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
     }
 
     // builds the HTML code to ask for user logout confirmation
+    // actually we consider that this is not the oidc-provider job and just confirm the logout
     async _logoutSource( ctx, form ){
-        //ctx.type = 'html';
-        //const html = new OIDLogout( ctx, form ).render();
-        //ctx.res.send( html );
         await new OIDLogout( ctx, form ).render();
     }
 

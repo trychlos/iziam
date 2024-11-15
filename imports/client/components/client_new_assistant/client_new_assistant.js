@@ -35,6 +35,7 @@ import '/imports/client/components/client_new_assistant_identities_authorization
 import '/imports/client/components/client_new_assistant_introduction/client_new_assistant_introduction.js';
 import '/imports/client/components/client_new_assistant_jwks/client_new_assistant_jwks.js';
 //import '/imports/client/components/client_new_assistant_jwt/client_new_assistant_jwt.js';
+import '/imports/client/components/client_new_assistant_logout/client_new_assistant_logout.js';
 import '/imports/client/components/client_new_assistant_profile/client_new_assistant_profile.js';
 import '/imports/client/components/client_new_assistant_properties/client_new_assistant_properties.js';
 import '/imports/client/components/client_new_assistant_providers/client_new_assistant_providers.js';
@@ -148,6 +149,11 @@ Template.client_new_assistant.onCreated( function(){
                     name: 'authorization',
                     template: 'client_new_assistant_identities_authorization',
                     label: pwixI18n.label( I18N, 'clients.new_assistant.authorization_nav' )
+                },
+                {
+                    name: 'logout',
+                    template: 'client_new_assistant_logout',
+                    label: pwixI18n.label( I18N, 'clients.new_assistant.logout_nav' )
                 },
                 {
                     name: 'contacts',
