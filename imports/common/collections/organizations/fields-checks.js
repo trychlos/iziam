@@ -116,6 +116,27 @@ const _id2index = function( array, id ){
 }
 
 Organizations.checks = {
+
+    // check the jwks_uri vs the jwks array
+    // data expects:
+    //  - entity: an { entity, record } organization
+    async crossCheckJwks( data, opts={} ){
+        const item = data.entity.get().DYN.records[data.index].get();
+        if( item.jwks_uri && ( !item.jwks || !item.jwks.length )){
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.WARNING,
+                message: pwixI18n.label( I18N, 'organizations.checks.jwks_uri_wo_jwk' )
+            });
+        }
+        if( !item.jwks_uri && item.jwks && item.jwks.length ){
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.WARNING,
+                message: pwixI18n.label( I18N, 'organizations.checks.jwks_no_but_jwk' )
+            });
+        }
+        return null;
+    },
+
     // authorization endpoint
     // must be provided as an absolute path
     async authorization_endpoint( value, data, opts ){
@@ -616,19 +637,9 @@ Organizations.checks = {
                     level: TM.MessageLevel.C.ERROR,
                     message: pwixI18n.label( I18N, 'organizations.checks.jwks_absolute' )
                 });
-            } else if( !item.jwks || !item.jwks.length ){
-                return new TM.TypedMessage({
-                    level: TM.MessageLevel.C.WARNING,
-                    message: pwixI18n.label( I18N, 'organizations.checks.jwks_uri_wo_jwk' )
-                });
             } else {
                 return _check_endpoint( value, { prefix: 'jwks', field: 'jwks_uri', record: item });
             }
-        } else if( item.jwks && item.jwks.length ){
-            return new TM.TypedMessage({
-                level: TM.MessageLevel.C.WARNING,
-                message: pwixI18n.label( I18N, 'organizations.checks.jwks_no_but_jwk' )
-            });
         }
         return null;
     },

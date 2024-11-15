@@ -31,11 +31,20 @@ Organizations.isOperational = async function( organization ){
     // a generic function to call the check functions and get their result
     // the result is pushed as a Promise
     const fnRecordCheck = async function( name, value ){
-        return Organizations.checks[name]( value, data, { update: false, opCheck: true }).then(( errs ) => {
-            if( errs ){
-                errors = errors.concat( errs );
-            }
-        });
+        if( arguments.length > 1 ){
+            return Organizations.checks[name]( value, data, { update: false, opCheck: true }).then(( errs ) => {
+                if( errs ){
+                    errors = errors.concat( errs );
+                }
+            });
+        // cross checks
+        } else {
+            return Organizations.checks[name]( data, { update: false, opCheck: true }).then(( errs ) => {
+                if( errs ){
+                    errors = errors.concat( errs );
+                }
+            });
+        }
     };
     const jwkCheck = async function( name, item, fldName ){
         const itemrv = new ReactiveVar( item );
@@ -106,6 +115,7 @@ Organizations.isOperational = async function( organization ){
     // introspection_endpoint_auth_signing_alg_values_supported
     promises.push( fnRecordCheck( 'issuer', organization.record.issuer ));
     promises.push( fnRecordCheck( 'jwks_uri', organization.record.jwks_uri ));
+    promises.push( fnRecordCheck( 'crossCheckJwks' ));
     // JSON Web Key Set is an optional feature
     //  but oidc-provider v7 wants a JWKS to be able to identify signing algorithms from signing JWK keys
     const jwks = Jwks.fn.activeKeys( organization );
@@ -122,7 +132,7 @@ Organizations.isOperational = async function( organization ){
         }
     } else {
         errors.push( new TM.TypedMessage({
-            level: TM.MessageLevel.C.WARNING,
+            level: TM.MessageLevel.C.ERROR,
             message: pwixI18n.label( I18N, 'organizations.checks.jwks_unset' )
         }));
     }
