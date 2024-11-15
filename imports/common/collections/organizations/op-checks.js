@@ -107,6 +107,7 @@ Organizations.isOperational = async function( organization ){
     promises.push( fnRecordCheck( 'issuer', organization.record.issuer ));
     promises.push( fnRecordCheck( 'jwks_uri', organization.record.jwks_uri ));
     // JSON Web Key Set is an optional feature
+    //  but oidc-provider v7 wants a JWKS to be able to identify signing algorithms from signing JWK keys
     const jwks = Jwks.fn.activeKeys( organization );
     if( jwks.length ){
         for( const it of jwks ){
@@ -125,7 +126,7 @@ Organizations.isOperational = async function( organization ){
             message: pwixI18n.label( I18N, 'organizations.checks.jwks_unset' )
         }));
     }
-    // though keygrips is theorically optional, we make it mandatory to help to prevent a security hole
+    // oidc-proivider: this option is critical to detect and ignore tampered cookies
     const keygrips = Keygrips.fn.activeKeys( organization );
     if( keygrips.length ){
         for( const it of keygrips ){

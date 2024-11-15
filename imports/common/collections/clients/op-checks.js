@@ -107,6 +107,7 @@ Clients.isOperational = async function( client ){
     promises.push( fnRecordCheck( 'identity_access_mode', client.record.identity_access_mode ));
     promises.push( fnRecordCheck( 'identity_auth_mode', client.record.identity_auth_mode ));
     // JSON Web Key Set is an optional feature
+    //  but oidc-provider v7 wants a JWKS to be able to identify signing algorithms from signing JWK keys
     const jwks = Jwks.fn.activeKeys( client );
     if( jwks.length ){
         for( const it of jwks ){

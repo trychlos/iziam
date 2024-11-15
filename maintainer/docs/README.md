@@ -222,3 +222,9 @@ curl --no-progress-meter --verbose http://localhost:3003/v1/ident | jq
 curl --no-progress-meter --verbose http://localhost:3003/dev/.well-known/openid-configuration | jq
 
 curl --no-progress-meter --verbose https://iziampre0.trychlos.org/devs/.well-known/openid-configuration | jq
+
+## OIDCProvider Errors
+
+### `id_token_signed_response_alg must not be provided (no values are allowed)`
+
+Is resolved by defining at least one signing JWK key for the organization and for the client.

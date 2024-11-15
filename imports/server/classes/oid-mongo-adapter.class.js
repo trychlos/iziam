@@ -104,18 +104,10 @@ export class OIDMongoAdapter extends izObject {
     // extends it to search also in our clients collection
     async find( _id ){
         console.debug( 'find', this.name, arguments );
-        //const result = await this.coll().find(
-        //    { _id },
-        //    { payload: 1 },
-        //).limit(1).next();
         let result = await this.coll().findOneAsync(
             { _id },
             { payload: 1 },
         );
-        // search in Interactions model
-        if( !result ){
-            result = await this.coll().findOneAsync({ _id: _id });
-        }
         // search in Clients model
         if( !result ){
             result = await OIDAuthServer.byClientId( _id );
@@ -127,10 +119,6 @@ export class OIDMongoAdapter extends izObject {
 
     async findByUserCode( userCode ){
         console.debug( 'findByUserCode', arguments );
-        //const result = await this.coll().find(
-        //    { 'payload.userCode': userCode },
-        //    { payload: 1 },
-        //).limit(1).next();
         const result = await this.coll().findOneAsync(
             { 'payload.userCode': userCode },
             { payload: 1 },
@@ -142,16 +130,20 @@ export class OIDMongoAdapter extends izObject {
 
     async findByUid( uid ){
         console.debug( 'findByUid', arguments );
-        //const result = await this.coll().find(
-        //    { 'payload.uid': uid },
-        //    { payload: 1 },
-        //).limit(1).next();
         const result = await this.coll().findOneAsync(
             { 'payload.uid': uid },
             { payload: 1 },
         );
         if( !result ) return undefined;
         return result.payload;
+    }
+
+    async consume( _id ){
+        console.debug( 'consume', arguments );
+        await this.coll().upsertAsync(
+            { _id },
+            { $set: { 'payload.consumed': Math.floor(Date.now() / 1000) } },
+        );
     }
 
     async destroy( _id ){
@@ -162,14 +154,6 @@ export class OIDMongoAdapter extends izObject {
     async revokeByGrantId( grantId ){
         console.debug( 'revokeByGrantId', arguments );
         await this.coll().removeAsync({ 'payload.grantId': grantId });
-    }
-
-    async consume( _id ){
-        console.debug( 'consume', arguments );
-        await this.coll().upsertAsync(
-            { _id },
-            { $set: { 'payload.consumed': Math.floor(Date.now() / 1000) } },
-        );
     }
 
     coll( name ){

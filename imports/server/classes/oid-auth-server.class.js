@@ -52,7 +52,7 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
         let conf = {};
 
         // have a Mongo adapter for storing issued tokens, codes, user sessions, dynamically registered clients, etc.
-        await OIDMongoAdapter.connect( 'oidc_' );
+        await OIDMongoAdapter.connect( 'oidc_'+organization.entity._id+'_' );
         conf.adapter = OIDMongoAdapter;
 
         // configure signing algorithms for Authorization endpoint
@@ -201,7 +201,7 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
         conf.responseTypes = Organizations.fn.supportedResponseTypes( organization );
 
         // conf.routes provide routes endpoints
-        //  NB: they must be provided without the baseUrl as node-oidc-provider will prefix these with the mount path
+        //  NB: they must be provided without the baseUrl as node-oidc-provider will prefix them with the mount path
         conf.routes = {};
         let endpoints = OpenID.fn.endpoints( organization );
         Object.keys( endpoints ).forEach(( it ) => {
@@ -214,10 +214,50 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
             };
         });
         // enable the token introspection if we have a configured endpoint for that
+        //  allowedPolicy [Arguments] {
+        //    '0': {
+        //      request: { method: 'POST', url: '/introspection', header: [Object] },
+        //      response: { status: 200, message: 'OK', header: [Object: null prototype] },
+        //      app: { subdomainOffset: 2, proxy: false, env: 'development' },
+        //      originalUrl: '/introspection',
+        //      req: '<original node req>',
+        //      res: '<original node res>',
+        //      socket: '<original node socket>'
+        //    },
+        //    '1': Client {
+        //      applicationType: 'web',
+        //      grantTypes: [ 'authorization_code' ],
+        //      idTokenSignedResponseAlg: 'RS256',
+        //      postLogoutRedirectUris: [],
+        //      requireAuthTime: false,
+        //      responseTypes: [ 'code' ],
+        //      subjectType: 'public',
+        //      tokenEndpointAuthMethod: 'client_secret_basic',
+        //      introspectionEndpointAuthMethod: 'client_secret_basic',
+        //      requireSignedRequestObject: false,
+        //      requestUris: [],
+        //      clientId: '3ea4e9a23b6f4d1e83a8a410fd4fa1dc',
+        //      clientSecret: '22a98fc8b89ae23c68dc0b686754f923416ce2cfd712ed5409ed8c8cb42417ce19c7d685df6a4d122e153b59d9392574b94e4a5f338ca90ffe34902fe080232f',
+        //      redirectUris: [ 'http://localhost:3000/_oauth/iziam' ]
+        //    },
+        //    '2': AccessToken {
+        //      iat: 1731667303,
+        //      exp: 1818067303,
+        //      accountId: 'test@test.te',
+        //      expiresWithSession: true,
+        //      grantId: 'HZgg8bjmxJmf9k1XmCNkcXh0UOrrm-Iv8KhgSwimWC4',
+        //      gty: 'authorization_code',
+        //      sessionUid: 'kL_1sYTBdR3uFX5gXg3V-',
+        //      clientId: '3ea4e9a23b6f4d1e83a8a410fd4fa1dc',
+        //      scope: 'openid email profile urn:org-trychlos-iziam:identity:scope:groups urn:org-trychlos-iziam:identity:scope:authorizations',
+        //      kind: 'AccessToken',
+        //      jti: 'ZwAAKKGTZJO0KeFOCrHsRz_b1vYbE-ear_q1G2yMl_n'
+        //    }
+        //  }
         if( conf.routes.introspection ){
             conf.features.introspection = {
                 enabled: true,
-                async allowedPolicy(){
+                async allowedPolicy( ctx, client, accessToken ){
                     console.debug( 'allowedPolicy', arguments );
                     return true;
                 }
@@ -270,6 +310,7 @@ export class OIDAuthServer extends mix( AuthServer ).with( IOIDInteractions ){
     // builds the HTML code used to render an error
     // this function is called outside of any class context, so this is not defined
     async _errorRender( ctx, out, error ){
+        console.debug( '_errorRender', ctx, out, error );
         ctx.type = 'html';
         ctx.body = new OIDErrors( out, error ).render();
     }

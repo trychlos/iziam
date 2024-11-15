@@ -124,6 +124,8 @@ Clients.s.registeredMetadata = async function( client ){
     if( client.record.redirect_uris && client.record.redirect_uris.length > 0 ){
         data.redirect_uris = [];
         client.record.redirect_uris.map( it => data.redirect_uris.push( it.uri ));
+    } else {
+        console.warn( 'no redirect_uri found at date' );
     }
     if( client.record.secrets && client.record.secrets.length ){
         const secret = ClientSecrets.fn.atDate( client.record.secrets );

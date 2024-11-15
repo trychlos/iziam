@@ -30,12 +30,14 @@ export class AuthServer extends mix( izObject ).with( IRequested ){
      */
     static async byClientId( clientId ){
         const client = await Clients.s.byClientIdAtDate( clientId );
+        //console.debug( 'client', client );
         let result = null;
         if( client && client.record.enabled ){
             result = {
                 payload: await Clients.s.registeredMetadata( client )
             }
         }
+        //console.debug( 'byClientId()', result );
         return result;
     }
 

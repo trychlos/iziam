@@ -78,15 +78,6 @@ export const _oauth2_fn = {
         // introspection_endpoint_auth_methods_supported
         // introspection_endpoint_auth_signing_alg_values_supported
         // code_challenge_methods_supported
-
-        // try to fix 'id_token_signed_response_alg must not be provided (no values are allowed)' error
-        //data.idTokenSigningAlgValues = [ 'RS256', 'PS256', 'ES256', 'EdDSA' ];
-        //data.idTokenSigningAlgValues = [ 'none', 'RS256', 'PS256', 'ES256', 'EdDSA' ];
-        //data.id_token_signing_alg_values = [ 'RS256', 'PS256', 'ES256', 'EdDSA' ];
-        // [OpenID Connect Discovery 1.0 incorporating errata set 2](https://openid.net/specs/openid-connect-discovery-1_0.html)
-        // OpenID server metadata
-        data.id_token_signing_alg_values_supported = [ 'RS256', 'PS256', 'ES256', 'EdDSA' ];
-        return data;
         */
     }
 };
