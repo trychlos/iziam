@@ -42,34 +42,6 @@ Template.operational_panel.onCreated( function(){
             }
         }
     });
-
-    // track entity
-    self.autorun(() => {
-        //console.debug( 'entity', self.APP.entity.get());
-    });
-
-    // complete the checks results with a conclusion, counting errors (or above) and warnings
-    self.autorun(() => {
-        let errors = 0;
-        let warnings = 0;
-        const entity = self.APP.entity.get();
-        if( entity && entity.DYN.operational.stats === false ){
-            entity.DYN.operational.results.forEach(( it ) => {
-                // all critical, urgent and alerts are counted as errors
-                if( TM.LevelOrder.compare( it.iTypedMessageLevel(), TM.MessageLevel.C.ERROR ) <= 0 ){
-                    errors += 1;
-                }
-                if( it.iTypedMessageLevel() === TM.MessageLevel.C.WARNING ){
-                    warnings += 1;
-                }
-            });
-            entity.DYN.operational.results.push( new TM.TypedMessage({
-                level: TM.MessageLevel.C.INFO,
-                message: pwixI18n.label( I18N, 'manager.checks.errors_count', errors, warnings )
-            }));
-            entity.DYN.operational.stats = true;
-        }
-    });
 });
 
 Template.operational_panel.helpers({

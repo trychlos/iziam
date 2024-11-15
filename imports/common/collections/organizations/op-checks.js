@@ -5,10 +5,8 @@
 import _ from 'lodash';
 import { strict as assert } from 'node:assert';
 
-import { Forms } from 'meteor/pwix:forms';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
-import { Validity } from 'meteor/pwix:validity';
 
 import { Jwks } from '/imports/common/tables/jwks/index.js';
 import { Keygrips } from '/imports/common/tables/keygrips/index.js';
@@ -182,54 +180,3 @@ Organizations.isOperational = async function( organization ){
     //console.debug( 'errors', errors );
     return errors.length ? errors : null;
 };
-
-/**
- * @locus Anywhere
- * @summary Maintain the 'operational' status of each organization
- *  When the organizations change, update their status
- *  We add (or update) here a DYN.status object
- * @param {Object} organization as a full entity object with its DYN sub-object
- */
-Organizations.setupOperational = async function( item ){
-    //console.debug( 'Organizations.setupOperational', 'item', item );
-    if( !item.DYN.operational ){
-        item.DYN.operational = {
-            results: [],
-            status: new ReactiveVar( Forms.FieldStatus.C.NONE )
-        };
-    }
-    const atdate = Validity.atDateByRecords( item.DYN.records );
-    //console.debug( 'Organizations.setupOperational', 'atdate', atdate );
-    let entity = { ...item };
-    delete entity.DYN;
-    if( atdate ){
-        Organizations.isOperational({ entity: entity, record: atdate }).then(( res ) => {
-            // null or a TM.TypedMessage or an array of TM.TypedMessage's
-            item.DYN.operational.results = res || [];
-            item.DYN.operational.status.set( res ? Forms.FieldStatus.C.UNCOMPLETE : Forms.FieldStatus.C.VALID );
-        });
-    } else if( item.DYN.closest ){
-        item.DYN.operational.results = [];
-        item.DYN.operational.status.set( Forms.FieldStatus.C.INVALID );
-        item.DYN.operational.results.push( new TM.TypedMessage({
-            level: TM.MessageLevel.C.ERROR,
-            message: pwixI18n.label( I18N, 'organizations.checks.atdate_none' )
-        }));
-        item.DYN.operational.results.push( new TM.TypedMessage({
-            level: TM.MessageLevel.C.INFO,
-            message: pwixI18n.label( I18N, 'organizations.checks.atdate_next' )
-        }));
-        Organizations.isOperational({ entity: entity, record: item.DYN.closest }).then(( res ) => {
-            if( res ){
-                item.DYN.operational.results = item.DYN.operational.results.concat( res );
-            } else {
-                item.DYN.operational.results.push( new TM.TypedMessage({
-                    level: TM.MessageLevel.C.INFO,
-                    message: pwixI18n.label( I18N, 'organizations.checks.atdate_closest_done' )
-                }));
-            }
-        });
-    }
-    item.DYN.operational.stats = false;
-};
-//

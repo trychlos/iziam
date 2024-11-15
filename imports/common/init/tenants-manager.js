@@ -19,6 +19,8 @@ import { ResourcesRegistrar } from '/imports/common/classes/resources-registrar.
 
 import { Organizations } from '/imports/common/collections/organizations/index.js';
 
+import { Operational } from '/imports/common/helpers/operational.js';
+
 TenantsManager.configure({
     allowFn: Permissions.isAllowed,
     //allowFn: null,
@@ -109,7 +111,7 @@ Tracker.autorun(() => {
         it.DYN = it.DYN || {};
         // maintain the operational status of the organizations
         if( Meteor.isClient ){
-            Organizations.setupOperational( it );
+            Operational.setup( it, Organizations.isOperational );
         }
         // instanciate a AuthorizationsRegistrar if needed
         if( !it.DYN.authorizations ){

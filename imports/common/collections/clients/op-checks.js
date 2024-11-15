@@ -8,7 +8,6 @@ import { strict as assert } from 'node:assert';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { TM } from 'meteor/pwix:typed-message';
-import { Validity } from 'meteor/pwix:validity';
 
 import { ClientsEntities } from '/imports/common/collections/clients_entities/index.js';
 import { ClientsRecords } from '/imports/common/collections/clients_records/index.js';
@@ -47,6 +46,16 @@ Clients.isOperational = async function( client ){
             }
         });
     };
+    const contactCheck = async function( name, item, fldName ){
+        // field check
+        if( fldName ){
+            return ClientsRecords.checks[name]( item[fldName], data, { id: item._id, update: false, opCheck: true }).then(( errs ) => {
+                if( errs ){
+                    errors = errors.concat( errs );
+                }
+            });
+        }
+    };
     const jwkCheck = async function( name, item, fldName ){
         const itemrv = new ReactiveVar( item );
         const jwkData = {
@@ -63,6 +72,26 @@ Clients.isOperational = async function( client ){
         // cross checks
         } else {
             return Jwks.checks[name]( data, { update: false, opCheck: true }).then(( errs ) => {
+                if( errs ){
+                    errors = errors.concat( errs );
+                }
+            });
+        }
+    };
+    const logoutCheck = async function( name, item, fldName ){
+        // field check
+        if( fldName ){
+            return ClientsRecords.checks[name]( item[fldName], data, { id: item._id, update: false, opCheck: true }).then(( errs ) => {
+                if( errs ){
+                    errors = errors.concat( errs );
+                }
+            });
+        }
+    };
+    const redirectCheck = async function( name, item, fldName ){
+        // field check
+        if( fldName ){
+            return ClientsRecords.checks[name]( item[fldName], data, { id: item._id, update: false, opCheck: true }).then(( errs ) => {
                 if( errs ){
                     errors = errors.concat( errs );
                 }
@@ -100,14 +129,18 @@ Clients.isOperational = async function( client ){
     promises.push( fnRecordCheck( 'author', client.record.author ));
     promises.push( fnRecordCheck( 'client_type', client.record.client_type ));
     promises.push( fnRecordCheck( 'client_uri', client.record.client_uri ));
-    //promises.push( fnRecordCheck( 'contact_email', client.record.contact_email ));
+    const contacts = client.record.contacts;
+    if( contacts.length ){
+        for( const it of contacts ){
+            promises.push( contactCheck( 'contact_email', it, 'email' ));
+        }
+    }
     promises.push( fnRecordCheck( 'description', client.record.description ));
     promises.push( fnRecordCheck( 'enabled', client.record.enabled ));
     promises.push( fnRecordCheck( 'grant_types', client.record.grant_types ));
     promises.push( fnRecordCheck( 'identity_access_mode', client.record.identity_access_mode ));
     promises.push( fnRecordCheck( 'identity_auth_mode', client.record.identity_auth_mode ));
-    // JSON Web Key Set is an optional feature
-    //  but oidc-provider v7 wants a JWKS to be able to identify signing algorithms from signing JWK keys
+    // JSON Web Key Set is an optional feature for the client
     const jwks = Jwks.fn.activeKeys( client );
     if( jwks.length ){
         for( const it of jwks ){
@@ -130,7 +163,18 @@ Clients.isOperational = async function( client ){
     promises.push( fnRecordCheck( 'logo_uri', client.record.logo_uri ));
     promises.push( fnRecordCheck( 'policy_uri', client.record.policy_uri ));
     promises.push( fnRecordCheck( 'profile', client.record.profile ));
-    //promises.push( fnRecordCheck( 'redirect_uri', client.record.redirect_uri ));
+    const logouts = client.record.post_logout_redirect_uris;
+    if( logouts.length ){
+        for( const it of logouts ){
+            promises.push( logoutCheck( 'post_logout_redirect_uri', it, 'uri' ));
+        }
+    }
+    const redirects = client.record.redirect_uris;
+    if( redirects.length ){
+        for( const it of redirects ){
+            promises.push( redirectCheck( 'redirect_uri', it, 'uri' ));
+        }
+    }
     // secrets
     const secrets = ClientSecrets.fn.activeSecrets( client );
     if( secrets.length ){
@@ -151,53 +195,4 @@ Clients.isOperational = async function( client ){
     await Promise.allSettled( promises );
     //console.debug( 'errors', errors );
     return errors.length ? errors : null;
-};
-
-/**
- * @locus Anywhere
- * @summary Maintain the 'operational' status of each client
- *  When the clients change, update their status
- *  We add (or update) here a DYN.status object
- * @param {Object} item as a full entity object with its DYN sub-object
- */
-Clients.setupOperational = async function( item ){
-    //console.debug( 'Clients.setupOperational', item );
-    if( !item.DYN.operational ){
-        item.DYN.operational = {
-            results: [],
-            status: new ReactiveVar( Forms.FieldStatus.C.NONE )
-        };
-    }
-    const atdate = Validity.atDateByRecords( item.DYN.records );
-    let entity = { ...item };
-    delete entity.DYN;
-    if( atdate ){
-        Clients.isOperational({ entity: entity, record: atdate }).then(( res ) => {
-            // null or a TM.TypedMessage or an array of TM.TypedMessage's
-            item.DYN.operational.results = res || [];
-            item.DYN.operational.status.set( res ? Forms.FieldStatus.C.UNCOMPLETE : Forms.FieldStatus.C.VALID );
-        });
-    } else if( item.DYN.closest ){
-        item.DYN.operational.results = [];
-        item.DYN.operational.status.set( Forms.FieldStatus.C.INVALID );
-        item.DYN.operational.results.push( new TM.TypedMessage({
-            level: TM.MessageLevel.C.ERROR,
-            message: pwixI18n.label( I18N, 'clients.checks.atdate_none' )
-        }));
-        item.DYN.operational.results.push( new TM.TypedMessage({
-            level: TM.MessageLevel.C.INFO,
-            message: pwixI18n.label( I18N, 'clients.checks.atdate_next' )
-        }));
-        Clients.isOperational({ entity: entity, record: item.DYN.closest }).then(( res ) => {
-            if( res ){
-                item.DYN.operational.results = item.DYN.operational.results.concat( res );
-            } else {
-                item.DYN.operational.results.push( new TM.TypedMessage({
-                    level: TM.MessageLevel.C.INFO,
-                    message: pwixI18n.label( I18N, 'clients.checks.atdate_closest_done' )
-                }));
-            }
-        });
-    }
-    item.DYN.operational.stats = false;
 };

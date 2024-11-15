@@ -192,7 +192,10 @@ ClientsRecords.checks = {
                 message: pwixI18n.label( I18N, 'clients.checks.application_type_invalid' )
             });
         }
-        return null;
+        return new TM.TypedMessage({
+            level: TM.MessageLevel.C.NOTICE,
+            message: pwixI18n.label( I18N, 'clients.checks.application_type_unset' )
+        });
     },
 
     async author( value, data, opts ){
@@ -201,7 +204,10 @@ ClientsRecords.checks = {
         if( opts.update !== false ){
             item.author = value;
         }
-        return null;
+        return value ? null : new TM.TypedMessage({
+            level: TM.MessageLevel.C.NOTICE,
+            message: pwixI18n.label( I18N, 'clients.checks.author_unset' )
+        });
     },
 
     // client type: mandatory, must exist
@@ -219,7 +225,7 @@ ClientsRecords.checks = {
             });
         } else {
             return new TM.TypedMessage({
-                level: TM.MessageLevel.C.ERROR,
+                level: TM.MessageLevel.C.WARNING,
                 message: pwixI18n.label( I18N, 'clients.checks.client_type_unset' )
             });
         }
@@ -256,7 +262,10 @@ ClientsRecords.checks = {
         if( opts.update !== false ){
             item.description = value;
         }
-        return null;
+        return value ? null : new TM.TypedMessage({
+            level: TM.MessageLevel.C.NOTICE,
+            message: pwixI18n.label( I18N, 'clients.checks.description_unset' )
+        });
     },
 
     async enabled( value, data, opts ){
@@ -265,15 +274,12 @@ ClientsRecords.checks = {
         if( opts.update !== false ){
             item.enabled = Boolean( value );
         }
-        if( value ){
-            if( value !== true && value !== false ){
-                return new TM.TypedMessage({
-                    level: TM.MessageLevel.C.ERROR,
-                    message: pwixI18n.label( I18N, 'clients.checks.enabled_invalid' )
-                });
-            }
+        if( value !== true && value !== false ){
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'clients.checks.enabled_invalid' )
+            });
         }
-        return null;
     },
 
     // the grant types used on the token endpoint
@@ -313,7 +319,7 @@ ClientsRecords.checks = {
             });
         } else {
             return new TM.TypedMessage({
-                level: TM.MessageLevel.C.ERROR,
+                level: TM.MessageLevel.C.WARNING,
                 message: pwixI18n.label( I18N, 'clients.checks.identity_access_mode_unset' )
             });
         }
@@ -335,7 +341,7 @@ ClientsRecords.checks = {
             });
         } else {
             return new TM.TypedMessage({
-                level: TM.MessageLevel.C.ERROR,
+                level: TM.MessageLevel.C.WARNING,
                 message: pwixI18n.label( I18N, 'clients.checks.identity_auth_mode_unset' )
             });
         }
@@ -432,7 +438,10 @@ ClientsRecords.checks = {
                 message: pwixI18n.label( I18N, 'clients.checks.profile_invalid' )
             });
         }
-        return null;
+        return value ? null : new TM.TypedMessage({
+            level: TM.MessageLevel.C.ERROR,
+            message: pwixI18n.label( I18N, 'clients.checks.profile_unset' )
+        });
     },
 
     // redirect_uris, optional in the UI
@@ -491,7 +500,10 @@ ClientsRecords.checks = {
         if( opts.update !== false ){
             item.software_id = value;
         }
-        return null;
+        return value ? null : new TM.TypedMessage({
+            level: TM.MessageLevel.C.NOTICE,
+            message: pwixI18n.label( I18N, 'clients.checks.software_id_unset' )
+        });
     },
 
     async software_version( value, data, opts ){
@@ -500,7 +512,10 @@ ClientsRecords.checks = {
         if( opts.update !== false ){
             item.software_version = value;
         }
-        return null;
+        return value ? null : new TM.TypedMessage({
+            level: TM.MessageLevel.C.NOTICE,
+            message: pwixI18n.label( I18N, 'clients.checks.software_version_unset' )
+        });
     },
 
     // the authentification method againt the token endpoint
@@ -514,7 +529,7 @@ ClientsRecords.checks = {
         //console.debug( 'item.token_endpoint_auth_method', item.token_endpoint_auth_method );
         if( value ){
             const def = AuthMethod.byId( value );
-            return def ? null : TM.TypedMessage({
+            return def ? null : new TM.TypedMessage({
                 level: TM.MessageLevel.C.ERROR,
                 message: pwixI18n.label( I18N, 'clients.checks.authmethod_invalid' )
             });

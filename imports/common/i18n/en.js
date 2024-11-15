@@ -147,16 +147,16 @@ Meteor.APP.i18n = {
             clients: {
                 checks: {
                     application_type_invalid: 'The application type is unknown or not valid',
-                    atdate_closest_done: 'The closest record seems OK. You may want change its validity period to make it actually operational',
-                    atdate_none: 'No validity period is valid at date',
-                    atdate_next: 'Other checks will be done on the closest record',
+                    application_type_unset: 'The application type is not set',
                     authmethod_invalid: 'The token endpoint Authentication Method is not valid',
                     authmethod_unset: 'The token endpoint Authentication Method is not set',
+                    author_unset: 'The author is not set',
                     client_type_invalid: 'The client type is unknown or not valid',
                     client_type_unset: 'The client type is not set',
                     clientid_unset: 'The client identifier is not set',
                     contact_invalid: 'The contact email address is not valid',
                     contact_unset: 'An email address must be provided',
+                    description_unset: 'The description is not set',
                     enabled_invalid: 'The enabled status is invalid',
                     home_host: 'The home URL wants a hostname',
                     home_https: 'The home URL wants only HTTPS scheme',
@@ -177,6 +177,7 @@ Meteor.APP.i18n = {
                     privacy_https: 'The privacy policy URL wants only HTTPS scheme',
                     privacy_invalid: 'The privacy policy URL is not valid',
                     profile_invalid: 'The chosen profile is unknown or not valid',
+                    profile_unset: 'The profile is not set',
                     redirect_fragment: 'The redirect URL contains a fragment component, which is forbidden',
                     redirect_host: 'Redirect URLs want a hostname',
                     redirect_http: 'Redirect URLs cannot use HTTP scheme for security reasons',
@@ -184,6 +185,8 @@ Meteor.APP.i18n = {
                     redirect_needed: 'The defined grant flow wants at least one redirection URL',
                     redirect_unset: 'The redirect URL is not set',
                     secret_unset: 'The client needs a secret but not secret has been defined',
+                    software_id_unset: 'The software identifier is not set',
+                    software_version_unset: 'The software version is not set',
                     tos_host: 'The terms of service URL wants a hostname',
                     tos_https: 'The terms of service URL wants only HTTPS scheme',
                     tos_invalid: 'The terms of service URL is not valid'
@@ -1258,14 +1261,20 @@ Meteor.APP.i18n = {
                     preamble: 'Register and manage here the accounts allowed to connect to the izIAM Identity and Access Manager.',
                     tab_title: 'Accounts Management'
                 },
-                checks: {
-                    errors_count: 'Found %s error(s), %s warning(s)',
-                },
                 organizations: {
                     preamble: 'Register and manage here the involved organizations.<br />'
                         +'Organizations can take advantage of validity periods.<br />'
                         +'Do not omit to define at least one manager per organization so that he/she can later be autonomous.<br />',
                     tab_title: 'Organizations Management'
+                }
+            },
+            operational: {
+                checks: {
+                    atdate_done: '"at date" record checked',
+                    atdate_preamble: 'Checking the "at date" record',
+                    closest_done: 'Closest record checked',
+                    closest_preamble: 'No period is valid at date. Checking on the closest record',
+                    counts: 'Found %s error(s), %s warning(s)',
                 }
             },
             organizations: {
@@ -1275,9 +1284,6 @@ Meteor.APP.i18n = {
                         +'as soon as they are authentified.'
                 },
                 checks: {
-                    atdate_closest_done: 'The closest record seems OK. You may want change its validity period to make it actually operational',
-                    atdate_none: 'No validity period is valid at date',
-                    atdate_next: 'Other checks will be done on the closest record',
                     authorization_absolute: 'The authorization endpoint must be provided as an absolute path',
                     authorization_exists: 'The authorization endpoint is already registered for "%s"',
                     authorization_unset: 'The authorization endpoint is not set',
@@ -1287,6 +1293,9 @@ Meteor.APP.i18n = {
                     baseurl_reserved: 'The candidate REST Base URL is a reserved path',
                     baseurl_short: 'The REST Base URL is too short',
                     baseurl_starts: 'The REST Base URL must be an absolute path (must start with \'/\')',
+                    dynamic_confidential_invalid: 'The dynamic regisration by confidential client indicator is not valid',
+                    dynamic_public_invalid: 'The dynamic regisration by public client indicator is not valid',
+                    dynamic_user_invalid: 'The dynamic regisration by authenticated user indicator is not valid',
                     email_identifier_invalid: 'The email identifier flag is invalid',
                     email_max_count_invalid: 'The maximum count you fixes to your email addresses is invalid',
                     email_max_how_invalid: 'The way you define your maximum count of email addresses is invalid',
@@ -1298,26 +1307,31 @@ Meteor.APP.i18n = {
                     email_min_how_unset: 'Your minimum way of count the email addresses is not set',
                     end_session_absolute: 'The introspection endpoint must be provided as an absolute path',
                     end_session_exists: 'The end session endpoint is already registered for "%s"',
+                    end_session_unset: 'The end session endpoint is not set',
                     identities_noid: 'The configured identities do not have any identifier, this will prevent you to define any new identity',
                     introspection_absolute: 'The introspection endpoint must be provided as an absolute path',
                     introspection_exists: 'The introspection endpoint is already registered for "%s"',
+                    introspection_unset: 'The introspection endpoint is not set',
                     issuer_hostname: 'The issuer hostname is malformed',
                     issuer_https: 'The issuer must use a HTTPS schema',
                     issuer_invalid: 'The issuer URL is not valid',
                     issuer_unset: 'The issuer is not set though should have at least a settings value',
                     issuer_warning: 'The issuer is not set though should have at least a settings value',
-                    jwks_absolute: 'The JWKS document URI must be provided as an absolute path',
+                    jwks_absolute: 'The JWKS URL must be provided as an absolute path',
                     jwks_exists: 'The JWKS path is already registered for "%s"',
-                    jwks_no_but_jwk: 'No JWKS URI is yet defined while at least one JWK exists',
+                    jwks_no_but_jwk: 'No JWKS URL is yet defined while at least one JWK exists',
                     jwks_unset: 'No JSON Web Key Set is defined',
-                    jwks_uri_wo_jwk: 'A JWKS URI is specified, but no JWK is defined (yet ?)',
+                    jwks_uri_unset: 'The JWKS URL is not set',
+                    jwks_uri_wo_jwk: 'A JWKS URL is specified, but no JWK is defined (yet ?)',
                     keygrips_unset: 'No cookie keygrip is defined',
                     provider_unknown: 'The "%s" provider is not registered',
                     provider_unset: 'There is no selected feature providers, but this is needed',
                     registration_absolute: 'The registration endpoint must be provided as an absolute path',
                     registration_exists: 'The registration endpoint is already registered for "%s"',
+                    registration_unset: 'The registration endpoint is not set',
                     revocation_absolute: 'The revocation endpoint must be provided as an absolute path',
                     revocation_exists: 'The revocation endpoint is already registered for "%s"',
+                    revocation_unset: 'The revocation endpoint is not set',
                     token_absolute: 'The token endpoint must be provided as an absolute path',
                     token_exists: 'The token endpoint is already registered for "%s"',
                     token_unset: 'The token endpoint is not set',
@@ -1338,7 +1352,8 @@ Meteor.APP.i18n = {
                     username_min_count_invalid: 'The minimum count you fixes to your usernames is invalid',
                     username_min_how_invalid: 'The way you define your minimum count of usernames is invalid',
                     username_max_how_notfor: 'The way you define your mainimum count of usernames is not suitable fo this use',
-                    username_min_how_unset: 'Your minimum way of count the usernames is not set'
+                    username_min_how_unset: 'Your minimum way of count the usernames is not set',
+                    wants_pkce_invalid: 'The wantsPkce indicator is not valid'
                 },
                 clients: {
                     list_preamble: 'The list of clients defined by and for the organization.<br />'

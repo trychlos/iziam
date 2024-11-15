@@ -227,6 +227,12 @@ Organizations.checks = {
             item.dynamicRegistrationByConfidential = Boolean( value );
             data.entity.set( entity );
         }
+        if( value !== true && value !== false ){
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'organizations.checks.dynamic_confidential_invalid' )
+            });
+        }
         return null;
     },
 
@@ -239,6 +245,12 @@ Organizations.checks = {
             item.dynamicRegistrationByPublic = Boolean( value );
             data.entity.set( entity );
         }
+        if( value !== true && value !== false ){
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'organizations.checks.dynamic_public_invalid' )
+            });
+        }
         return null;
     },
 
@@ -250,6 +262,12 @@ Organizations.checks = {
         if( opts.update !== false ){
             item.dynamicRegistrationByUser = Boolean( value );
             data.entity.set( entity );
+        }
+        if( value !== true && value !== false ){
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'organizations.checks.dynamic_user_invalid' )
+            });
         }
         return null;
     },
@@ -275,7 +293,11 @@ Organizations.checks = {
                 return _check_endpoint( value, { prefix: 'end_session', field: 'end_session_endpoint', record: item });
             }
         }
-        return null;
+        // should be set
+        return new TM.TypedMessage({
+            level: TM.MessageLevel.C.WARNING,
+            message: pwixI18n.label( I18N, 'organizations.checks.end_session_unset' )
+        });
     },
 
     // are email addresses an identifier ?
@@ -563,7 +585,10 @@ Organizations.checks = {
                 return _check_endpoint( value, { prefix: 'introspection', field: 'introspection_endpoint', record: item });
             }
         }
-        return null;
+        return new TM.TypedMessage({
+            level: TM.MessageLevel.C.NOTICE,
+            message: pwixI18n.label( I18N, 'organizations.checks.introspection_unset' )
+        });
     },
 
     // the issuer this organization may wants identify itself
@@ -622,7 +647,7 @@ Organizations.checks = {
     },
 
     // JWKS document
-    // must be provided as an absolute path
+    // must be provided as an absolute pathn, should be set
     async jwks_uri( value, data, opts ){
         _assert_data_entityrv( 'Organizations.checks.jwks_uri()', data );
         let entity = data.entity.get();
@@ -641,7 +666,10 @@ Organizations.checks = {
                 return _check_endpoint( value, { prefix: 'jwks', field: 'jwks_uri', record: item });
             }
         }
-        return null;
+        return new TM.TypedMessage({
+            level: TM.MessageLevel.C.WARNING,
+            message: pwixI18n.label( I18N, 'organizations.checks.jwks_uri_unset' )
+        });
     },
 
     // dynamic registration endpoint
@@ -664,7 +692,10 @@ Organizations.checks = {
                 return _check_endpoint( value, { prefix: 'registration', field: 'registration_endpoint', record: item });
             }
         }
-        return null;
+        return new TM.TypedMessage({
+            level: TM.MessageLevel.C.NOTICE,
+            message: pwixI18n.label( I18N, 'organizations.checks.registration_unset' )
+        });
     },
 
     // revocation endpoint
@@ -688,7 +719,10 @@ Organizations.checks = {
                 return _check_endpoint( value, { prefix: 'revocation', field: 'revocation_endpoint', record: item });
             }
         }
-        return null;
+        return new TM.TypedMessage({
+            level: TM.MessageLevel.C.NOTICE,
+            message: pwixI18n.label( I18N, 'organizations.checks.revocation_unset' )
+        });
     },
 
     // selectedProviders
@@ -891,7 +925,10 @@ Organizations.checks = {
                 return _check_endpoint( value, { prefix: 'userinfo', field: 'userinfo_endpoint', record: item });
             }
         }
-        return null;
+        return new TM.TypedMessage({
+            level: TM.MessageLevel.C.WARNING,
+            message: pwixI18n.label( I18N, 'organizations.checks.userinfo_unset' )
+        });
     },
 
     // whether the organization wants all clients use PKCE (rfc7636)
@@ -902,6 +939,12 @@ Organizations.checks = {
         if( opts.update !== false ){
             item.wantsPkce = Boolean( value );
             data.entity.set( entity );
+        }
+        if( value !== true && value !== false ){
+            return new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'organizations.checks.wants_pkce_invalid' )
+            });
         }
         return null;
     }

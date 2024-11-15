@@ -17,6 +17,8 @@ import { Tracker } from 'meteor/tracker';
 
 import { Clients } from '/imports/common/collections/clients/index.js';
 
+import { Operational } from '/imports/common/helpers/operational.js';
+
 import { ISearchableLabel } from '/imports/common/interfaces/isearchable-label.iface.js';
 
 import { izRegistrar } from './iz-registrar.class.js';
@@ -97,7 +99,7 @@ export class ClientsRegistrar extends mix( izRegistrar ).with( ISearchableLabel 
         // install the auto operational check on client side
         Tracker.autorun(() => {
             self.get().forEach(( it ) => {
-                Clients.setupOperational( it );
+                Operational.setup( it, Clients.isOperational );
             });
         });    
     }
