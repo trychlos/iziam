@@ -3,13 +3,13 @@
         "environments": {
             "comments": [
                 "An environment is identified by its key name (e.g. 'dev.1').",
-                "Because some JS packages may rely only on 'development' or 'production', the type qualifies our environment.",
+                "Because some JS packages may rely only on 'development' or 'production', the 'type' qualifies our environment.",
                 "",
                 "The application reads its current running environment from the APP_ENV variable",
                 "(see maintainer/docs/Environment for a rationale).",
                 "As a consequence, the data adressed per environment is only available on the server (as the APP_ENV variable is a server variable).",
                 "",
-                "Other used variables:",
+                "Other used environment variables:",
                 "   - MONGO_URL: the MongoDB URI.",
                 "   - ROOT_URL: the public root URL of our application.",
                 "   - NODE_ENV: development|staging|production",
@@ -23,8 +23,9 @@
 				"- hasTESwitch: whether this environment has a edition toggle switch, defaulting to false",
 				"   only considered is 'editable' above is true",
 				"",
-				"CAUTION: the environment content (below) may be returned to the client via the 'settings.environment()' method call.",
-				" You MUST take care of not putting any sensible information here."
+				"CAUTION: the environment content (below) may be returned to the client depending of the configuration.",
+				" You MUST take care of not putting any sensible information here unless under a 'private' key.",
+                ""
             ],
             "dev:0": {
                 "type": "development",
@@ -43,7 +44,7 @@
                     "A way to present the current development state to the outside as a showcase."
                 ],
                 "sender": "izIAM AppAdmin <noreply@trychlos.org",
-                "contact": "p.wieser@trychlos.org",
+                "contact": "iziam@trychlos.org",
                 "title": "<span class=\"iziam\">izIAM</span> <i>[pre:0]</i>",
                 "issuer": "https://iziampre0.trychlos.org",
                 "proxy": true
@@ -53,8 +54,8 @@
                 "comments": [
                     "The production environment."
                 ],
-                "sender": "izIAM AppAdmin <noreply@pwi-consulting.fr",
-                "contact": "pierre@pwi-consulting.fr",
+                "sender": "izIAM AppAdmin <noreply@trychlos.org",
+                "contact": "iziam@trychlos.org",
                 "title": "izIAM Production",
                 "issuer": "https://iziam.trychlos.org"
             }

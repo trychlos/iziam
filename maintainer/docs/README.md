@@ -8,6 +8,14 @@
 
 Port 3003 is not absolutely required. What MUST actually be set is another port than 3000. This is because it is expected that the client applications runs itself on port 3000, which is also the target of the local nginx which redirect https://slim14.trychlos.lan to localhost:3000.
 
+Env
+    dev:0
+        APP_ADMIN
+            aaaa@aaa.aa xxxx
+    pre:0
+        APP_ADMIN
+            aaaa@aaa.aa -Camel:555
+
 ## Software architecture
 
 An APP_ADMIN account is created at the first startup in standard (local) Accounts collection.
@@ -211,6 +219,6 @@ Use case 1
 
 curl --no-progress-meter --verbose http://localhost:3003/v1/ident | jq
 
-curl --no-progress-meter --verbose http://localhost:3003/iziam/openid-configuration | jq
+curl --no-progress-meter --verbose http://localhost:3003/dev/.well-known/openid-configuration | jq
 
-curl --no-progress-meter --verbose https://iziampre0.trychlos.org/devs/openid-configuration | jq
+curl --no-progress-meter --verbose https://iziampre0.trychlos.org/devs/.well-known/openid-configuration | jq
