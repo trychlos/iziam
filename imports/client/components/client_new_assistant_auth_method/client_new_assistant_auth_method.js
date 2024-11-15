@@ -48,7 +48,7 @@ Template.client_new_assistant_auth_method.onRendered( function(){
         const dataDict = Template.currentData().parentAPP.assistantStatus;
         if( dataDict.get( 'activePane' ) === 'auth' ){
             const authMethod = dataDict.get( 'token_endpoint_auth_method' ) || null;
-            self.$( '.c-client-new-assistant-auth-method' ).trigger( 'assistant-do-action-set', { action: 'next',  enable: authMethod !== null });
+            self.$( '.c-client-new-assistant-auth-method' ).trigger( 'assistant-do-action-set', { action: 'next',  enable: Boolean( authMethod !== null )});
         }
     });
 });
@@ -65,6 +65,7 @@ Template.client_new_assistant_auth_method.helpers({
             ...this,
             entity: this.parentAPP.entity,
             index: 0,
+            enableChecks: false,
             isAssistant: true
         };
     }
@@ -78,6 +79,7 @@ Template.client_new_assistant_auth_method.events({
     },
     'assistant-pane-shown .c-client-new-assistant-auth-method'( event, instance, data ){
         instance.$( event.currentTarget ).trigger( 'assistant-do-action-set', { action: 'prev', enable: true });
+        instance.$( '.c-client-auth-method-panel' ).trigger( 'iz-enable-checks', true );
     },
     // the panel advertises of its current selection
     'iz-auth-method .c-client-new-assistant-auth-method'( event, instance, data ){

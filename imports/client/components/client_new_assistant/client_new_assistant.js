@@ -47,7 +47,6 @@ import './client_new_assistant.html';
 
 Template.client_new_assistant.onCreated( function(){
     const self = this;
-    console.debug( this );
 
     self.APP = {
         // the global Checker for this modal

@@ -129,8 +129,6 @@ Template.client_grant_types_panel.onRendered( function(){
         if( parentChecker && !checker ){
             self.APP.checker.set( new Forms.Checker( self, {
                 parent: parentChecker,
-                //fieldTypeShow: Forms.FieldType.C.NONE,
-                //fieldStatusShow: Forms.C.ShowStatus.NONE,
                 enabled: Template.currentData().enableChecks !== false
             }));
         }

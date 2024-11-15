@@ -93,6 +93,7 @@ Template.client_auth_method_panel.onCreated( function(){
 
     // available auth method depends of the client type
     // make sure these two are compatible
+    // pwi 2024-11-15 no more force the auth_method if we have something
     self.autorun(() => {
         const recordRv = Template.currentData().entity.get().DYN.records[Template.currentData().index];
         const isAssistant = Template.currentData().isAssistant === true;
@@ -103,7 +104,8 @@ Template.client_auth_method_panel.onCreated( function(){
             if( typeDef ){
                 const authMethod = record.token_endpoint_auth_method;
                 const defaultMethods = ClientType.defaultAuthMethods( typeDef );
-                if( !authMethod || ( isAssistant && !defaultMethods.includes( authMethod ))){
+                //if( !authMethod || ( isAssistant && !defaultMethods.includes( authMethod ))){
+                if( defaultMethods.length && !authMethod ){
                     record.token_endpoint_auth_method = defaultMethods[0];
                     recordRv.set( record );
                 }
@@ -211,5 +213,17 @@ Template.client_auth_method_panel.helpers({
 Template.client_auth_method_panel.events({
     // ask for clear the panel
     'iz-clear-panel .c-client-auth-method-panel'( event, instance ){
-    }
+    },
+
+    // ask for enabling the checker (when this panel is used inside of an assistant)
+    'iz-enable-checks .c-client-auth-method-panel'( event, instance, enabled ){
+        const checker = instance.APP.checker.get();
+        if( checker ){
+            checker.enabled( enabled );
+            if( enabled ){
+                checker.check({ update: false });
+            }
+        }
+        return false;
+    },
 });

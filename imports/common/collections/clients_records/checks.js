@@ -491,6 +491,7 @@ ClientsRecords.checks = {
             item.token_endpoint_auth_method = value;
             data.entity.get().DYN.records[data.index].set( item );
         }
+        //console.debug( 'item.token_endpoint_auth_method', item.token_endpoint_auth_method );
         if( value ){
             const def = AuthMethod.byId( value );
             return def ? null : TM.TypedMessage({
@@ -498,7 +499,7 @@ ClientsRecords.checks = {
                 message: pwixI18n.label( I18N, 'clients.checks.authmethod_invalid' )
             });
         }
-        new TM.TypedMessage({
+        return new TM.TypedMessage({
             level: TM.MessageLevel.C.ERROR,
             message: pwixI18n.label( I18N, 'clients.checks.authmethod_unset' )
         });
