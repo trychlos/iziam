@@ -50,7 +50,8 @@
 |      | 2024-11-15 | should actually be an organization import |
 |  133 | 2024-11-15 | client configuration subtabs should be aligned with other tabs - no more special configuration tab |
 |  135 | 2024-11-15 | organization configuration subtabs should be aligned with other tabs - no more special configuration tab |
-|  136 |  |  |
+|  136 | 2024-11-16 | ClientsGroups/IdentitiesGroups: count the groups rather than the documents |
+|  137 |  |  |
 
 ---
 ## Done

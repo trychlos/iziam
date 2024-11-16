@@ -22,6 +22,8 @@ import { WebApp } from 'meteor/webapp';
 
 import { Organizations } from '/imports/common/collections/organizations/index.js';
 
+import { Operational } from '/imports/common/helpers/operational.js';
+
 import { IRequestable } from '/imports/common/interfaces/irequestable.iface.js';
 
 import { RequestServer } from '/imports/server/classes/request-server.class.js';
@@ -149,15 +151,14 @@ Tracker.autorun(() => {
     TenantsManager.list.get().forEach( async ( it ) => {
         //console.debug( 'it._id', it._id );
         let obj = requestServersByEntities[it._id];
+        await Operational.setup( it, Organizations.isOperational );
+        const operational = Boolean( it.DYN.operational.errors + it.DYN.operational.warnings === 0 );
         const atdate = Validity.atDateByRecords( it.DYN.records );
         let organization = null;
-        let operational = false;
         if( atdate ){
             const entity = { ...it };
             delete entity.DYN;
             organization = { entity: entity, record: atdate };
-            const tms = await Organizations.isOperational( organization );
-            operational = ( tms === null );
         }
         //console.debug( 'obj', obj ? 'set':'null', 'operational', operational );
         // we may or may not have a suitable object

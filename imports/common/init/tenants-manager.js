@@ -45,8 +45,11 @@ Permissions.set({
                 async delete( userId, item ){
                     return await Permissions.isAllowed( 'pwix.tenants_manager.fn.delete_tenant', userId, item );
                 },
-                async edit( userId, user ){
+                async edit( userId, item ){
                     return await Roles.userIsInRoles( userId, 'TENANT_EDIT' );
+                },
+                async roles( userId, scope ){
+                    return await Roles.userIsInRoles( userId, 'TENANT_EDIT' ) || await Roles.userIsInRoles( userId, 'SCOPED_TENANT_MANAGER', { scope: scope });
                 },
                 async new( userId ){
                     return await Roles.userIsInRoles( userId, 'TENANT_CREATE' );
