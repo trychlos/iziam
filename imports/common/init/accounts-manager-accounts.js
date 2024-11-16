@@ -54,6 +54,7 @@ Meteor.APP.AccountsManager.accounts = new AccountsManager.amClass({
         }]
     },
     allowFn: Permissions.isAllowed,
+    //closeAfterNew: true,
     hideDisabled: false,
     //hideDisabled: true,
     //tabularActiveCheckboxes: false,
