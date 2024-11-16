@@ -62,6 +62,7 @@ Tracker.autorun(() => {
                     {
                         where: Tabular.C.Where.AFTER,
                         buttons: [
+                            'client_export_button',
                             'client_operational_badge'
                         ]
                     }

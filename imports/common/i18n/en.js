@@ -563,6 +563,8 @@ Meteor.APP.i18n = {
                     edit_button_title: 'Edit the "%s" client',
                     enabled_th: 'Enabled',
                     entity_notes_th: 'Client notes',
+                    export_button_title: 'Export the "%s" client data',
+                    export_dialog_title: 'Exporting the "%s" client data',
                     info_button_title: 'Informations about the "%s" client',
                     info_modal_title: 'Informations about the "%s" client',
                     label_th: 'Label',
@@ -851,6 +853,14 @@ Meteor.APP.i18n = {
                 },
                 zoneinfo: {
                     select_text: 'Choose the user\'s zoneinfo'
+                }
+            },
+            exporter: {
+                result: {
+                    success: 'The entity has been successfully exported as "%s"'
+                },
+                types: {
+                    json_description: 'JSON file'
                 }
             },
             groups: {
@@ -1550,6 +1560,8 @@ Meteor.APP.i18n = {
                     identities_th: 'Identities',
                     baseurl_th: 'Base URL',
                     clients_th: 'Clients',
+                    export_button_title: 'Export the "%s" organization data',
+                    export_dialog_title: 'Exporting the "%s" organization',
                     operational_dialog_title: 'Operational status',
                     operational_invalid_title: 'The organization is not operational! Please fix that',
                     operational_valid_title: 'The organization is fully operational',

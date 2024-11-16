@@ -48,9 +48,7 @@
 |      | 2024-11-15 | should actually be a client import |
 |  131 | 2024-11-14 | organization private/public keys should be importable |
 |      | 2024-11-15 | should actually be an organization import |
-|  132 | 2024-11-15 | export client |
 |  133 | 2024-11-15 | client configuration subtabs should be aligned with other tabs - no more special configuration tab |
-|  134 | 2024-11-15 | export organization |
 |  135 | 2024-11-15 | organization configuration subtabs should be aligned with other tabs - no more special configuration tab |
 |  136 |  |  |
 
@@ -296,6 +294,10 @@
 |      | 2024-11-15 | obsoleted as client should be importable - see #128 |
 |  130 | 2024-11-14 | client public key should be importable |
 |      | 2024-11-15 | obsoleted as client should be importable - see #128 |
+|  132 | 2024-11-15 | export client |
+|      | 2024-11-16 | done |
+|  134 | 2024-11-15 | export organization |
+|      | 2024-11-16 | done |
 
 ---
 P. Wieser

@@ -80,6 +80,7 @@ Organizations.tabularButtons = function(){
         {
             where: Tabular.C.Where.AFTER,
             buttons: [
+                'organization_export_button',
                 'organization_operational_badge'
             ]
         }
