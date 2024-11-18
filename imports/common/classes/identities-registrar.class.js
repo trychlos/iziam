@@ -81,8 +81,8 @@ export class IdentitiesRegistrar extends izRegistrar {
             hideDisabled: false,
             preferredLabel: Identities.fn.preferredLabel,
             tabularFieldsDef: Identities.tabularFieldsDef( organization ),
-            serverAllExtend: Meteor.isServer && Identities.s.allExtend,
-            serverTabularExtend: Meteor.isServer && Identities.s.tabularExtend
+            serverAllExtend: Meteor.isServer ? Identities.s.allExtend : null, // have null instead of false on client side as AccountsHub makes use of pwix:options
+            serverTabularExtend: Meteor.isServer ? Identities.s.tabularExtend : null
         });
 
         // common code

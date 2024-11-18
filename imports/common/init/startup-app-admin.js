@@ -5,9 +5,10 @@
 import _ from 'lodash';
 import { strict as assert } from 'node:assert';
 
-if( Package['pwix:startup-app-admin'] ){
-    Package['pwix:startup-app-admin'].SAA.configure({
-        adminRole: Meteor.APP.C.appAdmin,
-        //verbosity: Package['pwix:startup-app-admin'].SAA.C.Verbose.CONFIGURE
-    });
-}
+import { SAA } from 'meteor/pwix:startup-app-admin';
+
+SAA.configure({
+    adminRole: Meteor.APP.C.appAdmin,
+    verbosity: SAA.C.Verbose.CONFIGURE | SAA.C.Verbose.COUNTS,
+    //verbosity: Package['pwix:startup-app-admin'].SAA.C.Verbose.CONFIGURE
+});
