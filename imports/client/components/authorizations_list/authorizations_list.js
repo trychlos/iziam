@@ -78,7 +78,6 @@ Template.authorizations_list.events({
                 mdBody: 'authorization_edit_dialog',
                 mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
                 mdClasses: 'modal-lg',
-                //mdClassesContent: Meteor.APP.runContext.pageUIClasses().join( ' ' ),
                 mdTitle: pwixI18n.label( I18N, 'authorizations.edit.edit_dialog_title', item.label || item.DYN.computed_label || item._id )
             });
         }

@@ -99,7 +99,6 @@ Template.identities_group_select.events({
             mdBody: 'group_select_dialog',
             mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
             mdClasses: 'modal-lg',
-            //mdClassesContent: Meteor.APP.runContext.pageUIClasses().join( ' ' ),
             mdTitle: pwixI18n.label( I18N, 'identities_groups.select.dialog_title' )
         });
     }

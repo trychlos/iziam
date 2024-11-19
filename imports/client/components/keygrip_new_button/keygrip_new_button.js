@@ -69,7 +69,6 @@ Template.keygrip_new_button.events({
             mdBody: 'keygrip_edit_dialog',
             mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
             mdClasses: 'modal-xl',
-            mdClassesContent: Meteor.APP.runContext.pageUIClasses().join( ' ' ),
             mdTitle: pwixI18n.label( I18N, 'keygrips.edit.new_dialog_title' ),
             item: null
         });

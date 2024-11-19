@@ -38,7 +38,6 @@ Template.client_operational_badge.onCreated( function(){
                     mdBody: 'operational_dialog',
                     mdButtons: [ Modal.C.Button.CLOSE ],
                     mdClasses: 'modal-lg',
-                    mdClassesContent: Meteor.APP.runContext.pageUIClasses().join( ' ' ),
                     mdTitle: pwixI18n.label( I18N, 'clients.tabular.operational_dialog_title' )
                 });
             } else {

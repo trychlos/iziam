@@ -120,7 +120,6 @@ Template.clients_list.events({
                 mdBody: 'client_edit_dialog',
                 mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
                 mdClasses: 'modal-xxl',
-                //mdClassesContent: Meteor.APP.runContext.pageUIClasses().join( ' ' ),
                 mdTitle: pwixI18n.label( I18N, 'clients.edit.modal_title', item.DYN.closest.label )
             });
         }

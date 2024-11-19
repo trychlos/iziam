@@ -77,7 +77,6 @@ Template.resources_list.events({
                 mdBody: 'resource_edit_dialog',
                 mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
                 mdClasses: 'modal-lg',
-                mdClassesContent: Meteor.APP.runContext.pageUIClasses().join( ' ' ),
                 mdTitle: pwixI18n.label( I18N, 'resources.edit.modal_title', item.label || item.name )
             });
         }

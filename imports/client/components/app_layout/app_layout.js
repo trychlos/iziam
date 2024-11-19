@@ -55,7 +55,7 @@ Template.app_layout.events({
         switch( id ){
             case 'app-roles-item':
                 Blaze.renderWithData( Template.prView, {
-                    mdClassesContent: Meteor.APP.runContext.ipageablePage().get( 'theme' ),
+                    //mdClassesContent: Meteor.APP.runContext.ipageablePage().get( 'theme' ),
                 }, $( 'body' )[0] );
                 done = true;
                 break;
@@ -74,7 +74,7 @@ Template.app_layout.events({
             const parms = {
                 mdBody: page.get( 'template' ),
                 mdClasses: 'modal-lg',
-                mdClassesContent: page.get( 'theme' )
+                //mdClassesContent: page.get( 'theme' )
             };
             const parms_a = page.get( 'templateParms' );
             const parms_b = parms_a ? ( _.isFunction( parms_a ) ? parms_a() : parms_a ) : null;

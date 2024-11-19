@@ -78,7 +78,6 @@ Template.keygrip_secret_new_button.events({
             mdBody: 'keygrip_secret_edit_dialog',
             mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
             mdClasses: 'modal-lg',
-            mdClassesContent: Meteor.APP.runContext.pageUIClasses().join( ' ' ),
             mdTitle: pwixI18n.label( I18N, 'keygrips.edit.secret_new_dialog_title' ),
             item: null
         });

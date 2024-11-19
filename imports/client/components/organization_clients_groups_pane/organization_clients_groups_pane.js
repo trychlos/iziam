@@ -82,7 +82,6 @@ Template.organization_clients_groups_pane.events({
             mdBody: 'clients_groups_edit_dialog',
             mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
             mdClasses: 'modal-lg',
-            mdClassesContent: Meteor.APP.runContext.pageUIClasses().join( ' ' ),
             mdTitle: pwixI18n.label( I18N, 'groups.edit.clients_groups_dialog_title' )
         });
     }

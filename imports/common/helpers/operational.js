@@ -126,10 +126,12 @@ export const Operational = {
                 }));
                 // have a global status
                 const total = item.DYN.operational.errors + item.DYN.operational.warnings;
-                if( atdate ){
-                    item.DYN.operational.status.set( total ? Forms.FieldStatus.C.UNCOMPLETE : Forms.FieldStatus.C.VALID );
-                } else {
-                    item.DYN.operational.status.set( Forms.FieldStatus.C.INVALID );
+                if( Meteor.isClient ){
+                    if( atdate ){
+                        item.DYN.operational.status.set( total ? Forms.FieldStatus.C.UNCOMPLETE : Forms.FieldStatus.C.VALID );
+                    } else {
+                        item.DYN.operational.status.set( Forms.FieldStatus.C.INVALID );
+                    }
                 }
             });
         }

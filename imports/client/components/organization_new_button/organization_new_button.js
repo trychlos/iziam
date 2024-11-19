@@ -72,7 +72,6 @@ Template.organization_new_button.events({
             mdBody: 'organization_new_assistant',
             mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
             mdClasses: 'modal-xxl',
-            mdClassesContent: Meteor.APP.runContext.pageUIClasses().join( ' ' ),
             mdTitle: pwixI18n.label( I18N, 'organizations.new.assistant_title' )
         });
         return false;

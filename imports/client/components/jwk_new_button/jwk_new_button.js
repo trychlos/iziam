@@ -100,7 +100,6 @@ Template.jwk_new_button.events({
             mdBody: 'jwk_edit_dialog',
             mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
             mdClasses: 'modal-lg',
-            mdClassesContent: Meteor.APP.runContext.pageUIClasses().join( ' ' ),
             mdTitle: pwixI18n.label( I18N, 'jwks.edit.new_dialog_title' ),
             item: null
         });

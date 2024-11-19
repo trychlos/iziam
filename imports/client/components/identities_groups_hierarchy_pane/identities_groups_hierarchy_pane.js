@@ -122,7 +122,6 @@ Template.identities_groups_hierarchy_pane.events({
             mdBody: 'identities_select_dialog',
             mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
             mdClasses: 'modal-lg',
-            mdClassesContent: Meteor.APP.runContext.pageUIClasses().join( ' ' ),
             mdTitle: pwixI18n.label( I18N, 'identities.select.dialog_title' )
         });
         return false;
@@ -137,7 +136,6 @@ Template.identities_groups_hierarchy_pane.events({
             mdBody: 'identity_group_edit_dialog',
             mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
             mdClasses: 'modal-lg',
-            mdClassesContent: Meteor.APP.runContext.pageUIClasses().join( ' ' ),
             mdTitle: pwixI18n.label( I18N, 'groups.new.identity_dialog_title' ),
             item: null
         });
@@ -154,7 +152,6 @@ Template.identities_groups_hierarchy_pane.events({
             mdBody: 'identity_group_edit_dialog',
             mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
             mdClasses: 'modal-lg',
-            mdClassesContent: Meteor.APP.runContext.pageUIClasses().join( ' ' ),
             mdTitle: pwixI18n.label( I18N, 'groups.edit.identity_dialog_title', item.label ),
             item: item
         });

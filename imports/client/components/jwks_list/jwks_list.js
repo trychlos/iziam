@@ -72,7 +72,6 @@ Template.jwks_list.events({
             mdBody: 'jwk_edit_dialog',
             mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
             mdClasses: 'modal-lg',
-            mdClassesContent: Meteor.APP.runContext.pageUIClasses().join( ' ' ),
             mdTitle: pwixI18n.label( I18N, 'jwks.edit.edit_dialog_title', data.item.label || data.item._id )
         });
     }

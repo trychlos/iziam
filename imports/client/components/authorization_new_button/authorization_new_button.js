@@ -65,7 +65,6 @@ Template.authorization_new_button.events({
             mdBody: 'authorization_edit_dialog',
             mdButtons: [ Modal.C.Button.CANCEL, Modal.C.Button.OK ],
             mdClasses: 'modal-lg',
-            //mdClassesContent: Meteor.APP.runContext.pageUIClasses().join( ' ' ),
             mdTitle: pwixI18n.label( I18N, 'authorizations.edit.new_dialog_title' )
         });
         return false;

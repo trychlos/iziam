@@ -46,7 +46,7 @@ Template.app_header.helpers({
             name: 'iziam:app-header:user-login',
             initialDisplay: AccountsUI.C.Display.DROPDOWNBUTTON,
             loggedItemsAfter: Meteor.APP.AccountsUI.loggedItemsAfter(),
-            mdClassesContent: Meteor.APP.runContext.pageUIClasses().join( ' ' ),
+            //mdClassesContent: Meteor.APP.runContext.pageUIClasses().join( ' ' ),
         };
     },
 
