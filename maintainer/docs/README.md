@@ -227,4 +227,4 @@ curl --no-progress-meter --verbose https://iziampre0.trychlos.org/devs/.well-kno
 
 ### `id_token_signed_response_alg must not be provided (no values are allowed)`
 
-Is resolved by defining at least one signing JWK key for the organization and for the client.
+Is resolved by defining at least one signing JWK key for the organization.

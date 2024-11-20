@@ -1282,6 +1282,7 @@ Meteor.APP.i18n = {
                 checks: {
                     atdate_done: '"at date" record checked',
                     atdate_preamble: 'Checking the "at date" record',
+                    checkable_unset: 'Unable to find a checkable record',
                     closest_done: 'Closest record checked',
                     closest_preamble: 'No period is valid at date. Checking on the closest record',
                     counts: 'Found %s error(s), %s warning(s)',

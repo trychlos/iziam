@@ -22,7 +22,6 @@
 |   66 | 2024- 1-11 | auth server: have a button to display the .well-known/openid-configuration |
 |      | 2024-10-29 | same for client: be able to display the metadata |
 |   77 | 2024- 1-12 | multiple-select: review the select box size to align with standard bootstrap select boxes |
-|   86 | 2024- 1-13 | keygrip_secret: ask for user confirmation when removing an item and also when validating the dialog |
 |   89 | 2024- 1-14 | have a tool to identify unused strings from i18n/en.js |
 |   96 | 2024- 1-17 | client_new_assistant: implement JWT authentification per private key |
 |   97 | 2024- 1-17 | client_new_assistant: implement JWT authentification per shared secret |
@@ -31,6 +30,7 @@
 |  106 | 2024- 1-18 | client_new_assistant: have allowed scopes |
 |  109 | 2024- 1-20 | set removeUnsetValues be a collection behavior (item timestampable) |
 |      | 2024-10-29 | removeUnsetValues is no more used - but setUndef values is needed for Notes |
+|      | 2024-11-20 | note that setUndef() function requires Forms.FieldSet class - so this may be not always available |
 |  112 | 2024- 6-24 | customize the new account mail to verify the address |
 |  115 | 2024- 9-22 | move Jwks.fn.generateKeys() to server-side, using a method to address it from the client |
 |      | 2024- 9-24 | nb: jose doesn't provide the same data when executed server-side so maybe have to change the library ? |
@@ -51,7 +51,9 @@
 |  133 | 2024-11-15 | client configuration subtabs should be aligned with other tabs - no more special configuration tab |
 |  135 | 2024-11-15 | organization configuration subtabs should be aligned with other tabs - no more special configuration tab |
 |  136 | 2024-11-16 | ClientsGroups/IdentitiesGroups: count the groups rather than the documents |
-|  137 |  |  |
+|  137 | 2024-11-20 | Have an interaction to let identities change their password - and more generally update themselves their profile |
+|  138 | 2024-11-20 | when deleting a document, maitain the data model (i.e; delete clients of a deleted tenant, delete identities, and so on..) |
+|  139 |  |  |
 
 ---
 ## Done
@@ -228,6 +230,8 @@
 |      | 2024- 9-13 | obsoleted as new UI doesn't use documents |
 |   85 | 2024- 1-13 | jwks_pane: ask for user confirmation when removing an item and also when validating the dialog |
 |      | 2024- 9-22 | done in new architecture |
+|   86 | 2024- 1-13 | keygrip_secret: ask for user confirmation when removing an item and also when validating the dialog |
+|      | 2024-11-20 | all deletion require user confirmation |
 |   87 | 2024- 1-13 | seems that acUserLogin used when creating a new local account doesn't check for existing email address ? |
 |      | 2024- 9-13 | has been fixed in accounts-ui |
 |   88 | 2024- 1-14 | app-scope is not a good name. Maybe validity context or running context ? -> OrganizationContext ? |

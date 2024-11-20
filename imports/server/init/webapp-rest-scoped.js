@@ -146,9 +146,10 @@ WebApp.handlers.use( async ( req, res, next ) => {
 */
 
 // predefine routes for each operational organization
-Tracker.autorun(() => {
+Tracker.autorun( async () => {
     //console.debug( 'scanning tenants list', TenantsManager.list.get().length );
-    TenantsManager.list.get().forEach( async ( it ) => {
+    //console.debug( 'begin: requestServersByEntities', requestServersByEntities, Object.keys( requestServersByEntities ).length );
+    for await ( const it of TenantsManager.list.get()){
         //console.debug( 'it._id', it._id );
         let obj = requestServersByEntities[it._id];
         await Operational.setup( it, Organizations.isOperational );
@@ -160,7 +161,7 @@ Tracker.autorun(() => {
             delete entity.DYN;
             organization = { entity: entity, record: atdate };
         }
-        //console.debug( 'obj', obj ? 'set':'null', 'operational', operational );
+        //console.debug( 'label', it.DYN.closest?.label, 'obj', obj ? 'set':'null', 'operational', operational, 'organization', organization );
         // we may or may not have a suitable object
         if( obj ){
             if( operational && _.isEqual( organization, obj.organization )){
@@ -183,15 +184,15 @@ Tracker.autorun(() => {
             });
             if( server ){
                 assert( server instanceof RequestServer, 'expects an instance of RequestServer, got '+server );
-                if( await server.init()){
-                    requestServersByEntities[it._id] = {
-                        organization: organization,
-                        server: server
-                    };
-                }
+                await server.init();
+                requestServersByEntities[it._id] = {
+                    organization: organization,
+                    server: server
+                };
             }
         }
-    });
+    };
+    //console.debug( 'end: requestServersByEntities', requestServersByEntities, Object.keys( requestServersByEntities ).length );
 });
 
 // remove routes for disappeared organizations

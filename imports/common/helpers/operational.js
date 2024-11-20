@@ -20,6 +20,7 @@ export const Operational = {
 
     // counts the registered TypedMessage's
     _counts( item ){
+        item.DYN.operational.errswarns = [];
         item.DYN.operational.results.forEach(( it ) => {
             switch( it.iTypedMessageLevel()){
                 // all critical, urgent and alerts are counted as errors
@@ -27,20 +28,29 @@ export const Operational = {
                 case TM.MessageLevel.C.ALERT:
                 case TM.MessageLevel.C.CRIT:
                 case TM.MessageLevel.C.ERR:
+                case TM.MessageLevel.C.ERROR:
                     item.DYN.operational.errors += 1;
+                    item.DYN.operational.errswarns.push( it.iTypedMessageMessage());
                     break;
                 case TM.MessageLevel.C.WARNING:
                     item.DYN.operational.warnings += 1;
+                    item.DYN.operational.errswarns.push( it.iTypedMessageMessage());
                     break;
                 case TM.MessageLevel.C.NOTICE:
                     item.DYN.operational.notices += 1;
                     break;
+                case TM.MessageLevel.C.LOG:
                 case TM.MessageLevel.C.INFO:
                 case TM.MessageLevel.C.DEBUG:
                     item.DYN.operational.infos += 1;
                     break;
             }
         });
+    },
+
+    // dump the message which are errors or warnings
+    _dumpResults( item ){
+        return item.DYN.operational.errswarns;
     },
 
     // make sure we only have unique messages
@@ -99,41 +109,46 @@ export const Operational = {
             checkable = item.DYN.closest;
         }
         if( checkable ){
-            checkFn({ entity: entity, record: checkable }).then(( res ) => {
-                if( res ){
-                    res = _.isArray( res ) ? res : [ res ];
+            let res = await checkFn({ entity: entity, record: checkable });
+            if( res ){
+                res = _.isArray( res ) ? res : [ res ];
+            } else {
+                res = [];
+            }
+            // sort and filter unique messages
+            res = Operational._filter( res );
+            // have a preamble
+            res.unshift( new TM.TypedMessage({
+                level: TM.MessageLevel.C.INFO,
+                message: pwixI18n.label( I18N, atdate ? 'operational.checks.atdate_preamble' : 'operational.checks.closest_preamble' )
+            }));
+            // have a conclusion
+            res.push( new TM.TypedMessage({
+                level: TM.MessageLevel.C.INFO,
+                message: pwixI18n.label( I18N, atdate ? 'operational.checks.atdate_done' : 'operational.checks.closest_done' )
+            }));
+            item.DYN.operational.results = res;
+            // have counters
+            Operational._counts( item );
+            item.DYN.operational.results.push( new TM.TypedMessage({
+                level: TM.MessageLevel.C.INFO,
+                message: pwixI18n.label( I18N, 'operational.checks.counts', item.DYN.operational.errors, item.DYN.operational.warnings )
+            }));
+            // have a global status
+            if( Meteor.isClient ){
+                if( atdate ){
+                    const total = item.DYN.operational.errors + item.DYN.operational.warnings;
+                    item.DYN.operational.status.set( total ? Forms.FieldStatus.C.UNCOMPLETE : Forms.FieldStatus.C.VALID );
                 } else {
-                    res = [];
+                    item.DYN.operational.status.set( Forms.FieldStatus.C.INVALID );
                 }
-                // sort and filter unique messages
-                res = Operational._filter( res );
-                // have a preamble
-                res.unshift( new TM.TypedMessage({
-                    level: TM.MessageLevel.C.INFO,
-                    message: pwixI18n.label( I18N, atdate ? 'operational.checks.atdate_preamble' : 'operational.checks.closest_preamble' )
-                }));
-                // have a conclusion
-                res.push( new TM.TypedMessage({
-                    level: TM.MessageLevel.C.INFO,
-                    message: pwixI18n.label( I18N, atdate ? 'operational.checks.atdate_done' : 'operational.checks.closest_done' )
-                }));
-                item.DYN.operational.results = res;
-                // have counters
-                Operational._counts( item );
-                res.push( new TM.TypedMessage({
-                    level: TM.MessageLevel.C.INFO,
-                    message: pwixI18n.label( I18N, 'operational.checks.counts', item.DYN.operational.errors, item.DYN.operational.warnings )
-                }));
-                // have a global status
-                const total = item.DYN.operational.errors + item.DYN.operational.warnings;
-                if( Meteor.isClient ){
-                    if( atdate ){
-                        item.DYN.operational.status.set( total ? Forms.FieldStatus.C.UNCOMPLETE : Forms.FieldStatus.C.VALID );
-                    } else {
-                        item.DYN.operational.status.set( Forms.FieldStatus.C.INVALID );
-                    }
-                }
-            });
+            }
+            //console.debug( 'checkable', checkable.label, item.DYN.operational.errors, item.DYN.operational.warnings, Operational._dumpResults( item ));
+        } else {
+            item.DYN.operational.results.push( new TM.TypedMessage({
+                level: TM.MessageLevel.C.INFO,
+                message: pwixI18n.label( I18N, 'operational.checks.checkable_unset' )
+            }));
         }
     }
 };
