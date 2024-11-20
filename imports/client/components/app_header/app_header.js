@@ -58,5 +58,10 @@ Template.app_header.helpers({
     // whether we want display the page header
     wantHeader(){
         return Meteor.APP.runContext.wantHeader();
+    },
+
+    // whether we want a language switch
+    wantLanguageSwitch(){
+        return Meteor.APP.runContext.wantLanguageSwitch();
     }
 });

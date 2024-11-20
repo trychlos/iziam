@@ -20,7 +20,7 @@
                 "",
 				"- uploadUrl: teEditor configuration",
 				"- editable: whether this environment let the user edit the documents through the teEditor, defaulting to false",
-				"- hasTESwitch: whether this environment has a edition toggle switch, defaulting to false",
+				"- wantEditionSwitch: whether this environment has a edition toggle switch, defaulting to false",
 				"   only considered is 'editable' above is true",
 				"",
 				"CAUTION: the environment content (below) may be returned to the client depending of the configuration.",
@@ -36,6 +36,7 @@
                 "contact": "DevFakeContact",
                 "title": "<span class=\"iziam\">izIAM</span> <i>[dev:0]</i>",
                 "wantEditionSwitch": true,
+                "wantLanguageSwitch": true,
                 "issuer": "https://localhost:3003"
             },
             "pre:0": {

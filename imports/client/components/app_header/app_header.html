@@ -30,8 +30,12 @@
                     {{> app_menu_button }}
                 {{/if}}
 
-                <div class="ui-ml05"></div>
-                {{> piLanguageSelector (parmsLanguageSelector) }}
+                {{#unless uiSMView }}
+                    {{#if wantLanguageSwitch }}
+                        <div class="ui-ml05"></div>
+                        {{> piLanguageSelector (parmsLanguageSelector) }}
+                    {{/if}}
+                {{/unless}}
             </div>
 
         {{/if}}
