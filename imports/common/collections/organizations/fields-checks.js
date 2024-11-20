@@ -1,5 +1,10 @@
 /*
  * /import/common/collections/organizations/fields-checks.js
+ *
+ * UI: the optional fields are first seen empty, only checked when there is something
+ *  this way, Forms doesn't put any field status
+ * 
+ * Operational check: emit a notice in this case
  */
 
 import _ from 'lodash';
@@ -56,17 +61,46 @@ const _check_endpoint = function( value, opts={} ){
     const prefix = opts.prefix || 'endpoint';
     const field = opts.field || '';
     let res = null;
-    OpenID.fn.endpointAllNames().every(( it ) => {
-        if( it !== field ){
-            if( opts.record[it] === value ){
-                res = new TM.TypedMessage({
-                    level: TM.MessageLevel.C.ERROR,
-                    message: pwixI18n.label( I18N, 'organizations.checks.'+prefix+'_exists', it )
-                });
+    if( value.substr( 0, 1 ) !== '/' ){ 
+        return new TM.TypedMessage({
+            level: TM.MessageLevel.C.ERROR,
+            message: pwixI18n.label( I18N, 'organizations.checks.'+prefix+'_absolute' )
+        });
+    } else if( value.length < 2 ){
+        return new TM.TypedMessage({
+            level: TM.MessageLevel.C.ERROR,
+            message: pwixI18n.label( I18N, 'organizations.checks.'+prefix+'_short' )
+        });
+    } else {
+        // first level mus tbe empty (and this has already been checked above)
+        // other levels must be set (no empty other level)
+        const w = value.split( '/' );
+        let levelsSet = true;
+        for( let i=1 ; i<w.length ; ++i ){
+            if( !w[i] ){
+                levelsSet = false;
+                break;
             }
         }
-        return !res;
-    });
+        if( !levelsSet ){
+            new TM.TypedMessage({
+                level: TM.MessageLevel.C.ERROR,
+                message: pwixI18n.label( I18N, 'organizations.checks.'+prefix+'_level', it )
+            });
+        }
+        // check that the endpoint is unique inside of the tenant
+        OpenID.fn.endpointAllNames().every(( it ) => {
+            if( it !== field ){
+                if( opts.record[it] === value ){
+                    res = new TM.TypedMessage({
+                        level: TM.MessageLevel.C.ERROR,
+                        message: pwixI18n.label( I18N, 'organizations.checks.'+prefix+'_exists', it )
+                    });
+                }
+            }
+            return !res;
+        });
+    }
     return res;
 }
 
@@ -149,14 +183,7 @@ Organizations.checks = {
             data.entity.set( entity );
         }
         if( value ){
-            if( value.substr( 0, 1 ) !== '/' ){
-                return new TM.TypedMessage({
-                    level: TM.MessageLevel.C.ERROR,
-                    message: pwixI18n.label( I18N, 'organizations.checks.authorization_absolute' )
-                });
-            } else {
-                return _check_endpoint( value, { prefix: 'authorization', field: 'authorization_endpoint', record: item });
-            }
+            return _check_endpoint( value, { prefix: 'authorization', field: 'authorization_endpoint', record: item });
         // value is optional in the UI, but must be set for the organization be operational
         } else {
             return new TM.TypedMessage({
@@ -164,7 +191,6 @@ Organizations.checks = {
                 message: pwixI18n.label( I18N, 'organizations.checks.authorization_unset' )
             });
         }
-        return null;
     },
 
     // the REST Base URL
@@ -284,14 +310,7 @@ Organizations.checks = {
             data.entity.set( entity );
         }
         if( value ){
-            if( value.substr( 0, 1 ) !== '/' ){ 
-                return new TM.TypedMessage({
-                    level: TM.MessageLevel.C.ERROR,
-                    message: pwixI18n.label( I18N, 'organizations.checks.end_session_absolute' )
-                });
-            } else {
-                return _check_endpoint( value, { prefix: 'end_session', field: 'end_session_endpoint', record: item });
-            }
+            return _check_endpoint( value, { prefix: 'end_session', field: 'end_session_endpoint', record: item });
         }
         // should be set
         return new TM.TypedMessage({
@@ -576,19 +595,13 @@ Organizations.checks = {
             data.entity.set( entity );
         }
         if( value ){
-            if( value.substr( 0, 1 ) !== '/' ){ 
-                return new TM.TypedMessage({
-                    level: TM.MessageLevel.C.ERROR,
-                    message: pwixI18n.label( I18N, 'organizations.checks.introspection_absolute' )
-                });
-            } else {
-                return _check_endpoint( value, { prefix: 'introspection', field: 'introspection_endpoint', record: item });
-            }
+            return _check_endpoint( value, { prefix: 'introspection', field: 'introspection_endpoint', record: item });
         }
-        return new TM.TypedMessage({
+        // this is optional
+        return opts.opCheck ? new TM.TypedMessage({
             level: TM.MessageLevel.C.NOTICE,
             message: pwixI18n.label( I18N, 'organizations.checks.introspection_unset' )
-        });
+        }) : null;
     },
 
     // the issuer this organization may wants identify itself
@@ -657,14 +670,7 @@ Organizations.checks = {
             data.entity.set( entity );
         }
         if( value ){
-            if( value.substr( 0, 1 ) !== '/' ){ 
-                return new TM.TypedMessage({
-                    level: TM.MessageLevel.C.ERROR,
-                    message: pwixI18n.label( I18N, 'organizations.checks.jwks_absolute' )
-                });
-            } else {
-                return _check_endpoint( value, { prefix: 'jwks', field: 'jwks_uri', record: item });
-            }
+            return _check_endpoint( value, { prefix: 'jwks_uri', field: 'jwks_uri', record: item });
         }
         return new TM.TypedMessage({
             level: TM.MessageLevel.C.WARNING,
@@ -683,19 +689,13 @@ Organizations.checks = {
             data.entity.set( entity );
         }
         if( value ){
-            if( value.substr( 0, 1 ) !== '/' ){ 
-                return new TM.TypedMessage({
-                    level: TM.MessageLevel.C.ERROR,
-                    message: pwixI18n.label( I18N, 'organizations.checks.registration_absolute' )
-                });
-            } else {
-                return _check_endpoint( value, { prefix: 'registration', field: 'registration_endpoint', record: item });
-            }
+            return _check_endpoint( value, { prefix: 'registration', field: 'registration_endpoint', record: item });
         }
-        return new TM.TypedMessage({
+        // this is optional
+        return opts.opCheck ? new TM.TypedMessage({
             level: TM.MessageLevel.C.NOTICE,
             message: pwixI18n.label( I18N, 'organizations.checks.registration_unset' )
-        });
+        }) : null;
     },
 
     // revocation endpoint
@@ -710,19 +710,13 @@ Organizations.checks = {
             data.entity.set( entity );
         }
         if( value ){
-            if( value.substr( 0, 1 ) !== '/' ){ 
-                return new TM.TypedMessage({
-                    level: TM.MessageLevel.C.ERROR,
-                    message: pwixI18n.label( I18N, 'organizations.checks.revocation_absolute' )
-                });
-            } else {
-                return _check_endpoint( value, { prefix: 'revocation', field: 'revocation_endpoint', record: item });
-            }
+            return _check_endpoint( value, { prefix: 'revocation', field: 'revocation_endpoint', record: item });
         }
-        return new TM.TypedMessage({
+        // this is optional
+        return opts.opCheck ? new TM.TypedMessage({
             level: TM.MessageLevel.C.NOTICE,
             message: pwixI18n.label( I18N, 'organizations.checks.revocation_unset' )
-        });
+        }) : null;
     },
 
     // selectedProviders
@@ -767,22 +761,13 @@ Organizations.checks = {
             data.entity.set( entity );
         }
         if( value ){
-            if( value.substr( 0, 1 ) !== '/' ){ 
-                return new TM.TypedMessage({
-                    level: TM.MessageLevel.C.ERROR,
-                    message: pwixI18n.label( I18N, 'organizations.checks.token_absolute' )
-                });
-            } else {
-                return _check_endpoint( value, { prefix: 'token', field: 'token_endpoint', record: item });
-            }
+            return _check_endpoint( value, { prefix: 'token', field: 'token_endpoint', record: item });
         // value is optional in the UI, but must be set for the organization be operational
-        } else {
-            return new TM.TypedMessage({
-                level: opts.opCheck ? TM.MessageLevel.C.ERROR : TM.MessageLevel.C.WARNING,
-                message: pwixI18n.label( I18N, 'organizations.checks.token_unset' )
-            });
         }
-        return null;
+        return new TM.TypedMessage({
+            level: opts.opCheck ? TM.MessageLevel.C.ERROR : TM.MessageLevel.C.WARNING,
+            message: pwixI18n.label( I18N, 'organizations.checks.token_unset' )
+        });
     },
 
     // ttl_AccessToken
@@ -916,15 +901,9 @@ Organizations.checks = {
             data.entity.set( entity );
         }
         if( value ){
-            if( value.substr( 0, 1 ) !== '/' ){ 
-                return new TM.TypedMessage({
-                    level: TM.MessageLevel.C.ERROR,
-                    message: pwixI18n.label( I18N, 'organizations.checks.userinfo_absolute' )
-                });
-            } else {
-                return _check_endpoint( value, { prefix: 'userinfo', field: 'userinfo_endpoint', record: item });
-            }
+            return _check_endpoint( value, { prefix: 'userinfo', field: 'userinfo_endpoint', record: item });
         }
+        // should be set
         return new TM.TypedMessage({
             level: TM.MessageLevel.C.WARNING,
             message: pwixI18n.label( I18N, 'organizations.checks.userinfo_unset' )

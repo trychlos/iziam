@@ -155,7 +155,7 @@ Clients.isOperational = async function( client ){
         }
     } else {
         errors.push( new TM.TypedMessage({
-            level: TM.MessageLevel.C.WARNING,
+            level: TM.MessageLevel.C.NOTICE,
             message: pwixI18n.label( I18N, 'clients.checks.jwks_unset' )
         }));
     }
@@ -164,13 +164,18 @@ Clients.isOperational = async function( client ){
     promises.push( fnRecordCheck( 'policy_uri', client.record.policy_uri ));
     promises.push( fnRecordCheck( 'profile', client.record.profile ));
     const logouts = client.record.post_logout_redirect_uris;
-    if( logouts.length ){
+    if( logouts && logouts.length ){
         for( const it of logouts ){
             promises.push( logoutCheck( 'post_logout_redirect_uri', it, 'uri' ));
         }
+    } else {
+        errors.push( new TM.TypedMessage({
+            level: TM.MessageLevel.C.NOTICE,
+            message: pwixI18n.label( I18N, 'clients.checks.logouts_unset' )
+        }));
     }
     const redirects = client.record.redirect_uris;
-    if( redirects.length ){
+    if( redirects && redirects.length ){
         for( const it of redirects ){
             promises.push( redirectCheck( 'redirect_uri', it, 'uri' ));
         }

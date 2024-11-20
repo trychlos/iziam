@@ -2,6 +2,11 @@
  * /imports/common/collections/clients_records/checks.js
  *
  * The clients registered with an organization.
+ *
+ * UI: the optional fields are first seen empty, only checked when there is something
+ *  this way, Forms doesn't put any field status
+ * 
+ * Operational check: emit a notice in this case
  */
 
 import _ from 'lodash';
@@ -146,11 +151,13 @@ const _validUrl = function( value, opts ){
                 });
             }
         }
-    } else if( opts.acceptUnset === false ){
-        return new TM.TypedMessage({
-            level: TM.MessageLevel.C.ERROR,
-            message: pwixI18n.label( I18N, opts.prefix+'_unset' )
-        });
+    } else {
+        if( opts.acceptUnset === false || opts.opCheck ){
+            return new TM.TypedMessage({
+                level: opts.acceptUnset === false ? TM.MessageLevel.C.ERROR : TM.MessageLevel.C.NOTICE,
+                message: pwixI18n.label( I18N, opts.prefix+'_unset' )
+            });
+        }
     }
     return null;
 };
@@ -192,10 +199,10 @@ ClientsRecords.checks = {
                 message: pwixI18n.label( I18N, 'clients.checks.application_type_invalid' )
             });
         }
-        return new TM.TypedMessage({
+        return opts.opCheck ? new TM.TypedMessage({
             level: TM.MessageLevel.C.NOTICE,
             message: pwixI18n.label( I18N, 'clients.checks.application_type_unset' )
-        });
+        }) : null;
     },
 
     async author( value, data, opts ){
@@ -204,10 +211,10 @@ ClientsRecords.checks = {
         if( opts.update !== false ){
             item.author = value;
         }
-        return value ? null : new TM.TypedMessage({
+        return value ? null : ( opts.opCheck ? new TM.TypedMessage({
             level: TM.MessageLevel.C.NOTICE,
             message: pwixI18n.label( I18N, 'clients.checks.author_unset' )
-        });
+        }) : null );
     },
 
     // client type: mandatory, must exist
@@ -237,7 +244,7 @@ ClientsRecords.checks = {
         if( opts.update !== false ){
             item.client_uri = value;
         }
-        return _validUrl( value, { prefix: 'clients.checks.home', acceptHttp: false });
+        return _validUrl( value, { prefix: 'clients.checks.home', acceptHttp: false, opCheck: opts.opCheck === true });
     },
 
     // contact_email, optional in the UI
@@ -262,10 +269,10 @@ ClientsRecords.checks = {
         if( opts.update !== false ){
             item.description = value;
         }
-        return value ? null : new TM.TypedMessage({
+        return value ? null : ( opts.opCheck ? new TM.TypedMessage({
             level: TM.MessageLevel.C.NOTICE,
             message: pwixI18n.label( I18N, 'clients.checks.description_unset' )
-        });
+        }) : null );
     },
 
     async enabled( value, data, opts ){
@@ -280,6 +287,7 @@ ClientsRecords.checks = {
                 message: pwixI18n.label( I18N, 'clients.checks.enabled_invalid' )
             });
         }
+        return null;
     },
 
     // the grant types used on the token endpoint
@@ -392,7 +400,7 @@ ClientsRecords.checks = {
             item.logo_uri = value;
             data.entity.get().DYN.records[data.index].set( item );
         }
-        return _validUrl( value, { prefix: 'clients.checks.logo', acceptOthers: false });
+        return _validUrl( value, { prefix: 'clients.checks.logo', acceptOthers: false, opCheck: opts.opCheck === true });
     },
 
     async policy_uri( value, data, opts ){
@@ -401,7 +409,7 @@ ClientsRecords.checks = {
         if( opts.update !== false ){
             item.policy_uri = value;
         }
-        return _validUrl( value, { prefix: 'clients.checks.privacy', acceptOthers: false });
+        return _validUrl( value, { prefix: 'clients.checks.privacy', acceptOthers: false, opCheck: opts.opCheck === true });
     },
 
     // post-logout redirect_uris, optional in the UI
@@ -421,7 +429,7 @@ ClientsRecords.checks = {
             }
             item.post_logout_redirect_uris[index].uri = value;
         }
-        return _validUrl( value, { prefix: 'clients.checks.redirect', acceptUnset: false, acceptFragment: false });
+        return _validUrl( value, { prefix: 'clients.checks.redirect', acceptUnset: false, acceptFragment: false, opCheck: opts.opCheck === true });
     },
 
     // client profile: optional, must exist
@@ -438,10 +446,10 @@ ClientsRecords.checks = {
                 message: pwixI18n.label( I18N, 'clients.checks.profile_invalid' )
             });
         }
-        return value ? null : new TM.TypedMessage({
+        return value ? null : ( opts.opCheck ? new TM.TypedMessage({
             level: TM.MessageLevel.C.ERROR,
             message: pwixI18n.label( I18N, 'clients.checks.profile_unset' )
-        });
+        }) : null );
     },
 
     // redirect_uris, optional in the UI
@@ -461,7 +469,7 @@ ClientsRecords.checks = {
             }
             item.redirect_uris[index].uri = value;
         }
-        return _validUrl( value, { prefix: 'clients.checks.redirect', acceptUnset: false, acceptFragment: false });
+        return _validUrl( value, { prefix: 'clients.checks.redirect', acceptUnset: false, acceptFragment: false, opCheck: opts.opCheck === true });
     },
 
     /*
@@ -500,10 +508,10 @@ ClientsRecords.checks = {
         if( opts.update !== false ){
             item.software_id = value;
         }
-        return value ? null : new TM.TypedMessage({
+        return value ? null : ( opts.opCheck ? new TM.TypedMessage({
             level: TM.MessageLevel.C.NOTICE,
             message: pwixI18n.label( I18N, 'clients.checks.software_id_unset' )
-        });
+        }) : null );
     },
 
     async software_version( value, data, opts ){
@@ -512,10 +520,10 @@ ClientsRecords.checks = {
         if( opts.update !== false ){
             item.software_version = value;
         }
-        return value ? null : new TM.TypedMessage({
+        return value ? null : ( opts.opCheck ? new TM.TypedMessage({
             level: TM.MessageLevel.C.NOTICE,
             message: pwixI18n.label( I18N, 'clients.checks.software_version_unset' )
-        });
+        }) : null );
     },
 
     // the authentification method againt the token endpoint
@@ -546,6 +554,6 @@ ClientsRecords.checks = {
         if( opts.update !== false ){
             item.tos_uri = value;
         }
-        return _validUrl( value, { prefix: 'clients.checks.tos', acceptOthers: false });
+        return _validUrl( value, { prefix: 'clients.checks.tos', acceptOthers: false, opCheck: opts.opCheck === true });
     },
 };
